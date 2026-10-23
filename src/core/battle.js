@@ -262,7 +262,7 @@ function confusedAction(engine,source){
   const {data:d,state:s}=engine,b=s.battle,enemySource=Boolean(source.instance),candidates=[];
   const friends=(enemySource?b.enemies:s.members.map(id=>s.actors[id])).filter(a=>battleAlive(s,a));
   const foes=(enemySource?s.members.map(id=>s.actors[id]):b.enemies).filter(a=>battleAlive(s,a)),all=[...friends,...foes];
-  const ids=enemySource?[...new Set(source.ai.map(rule=>rule.skill))]:engine.skills(source.id);
+  const ids=enemySource?availableEnemySkills(engine,source):engine.skills(source.id);
   for(const skillId of ids){
     const skill=enemySource?d.skills[skillId]:effectiveSkill(d,s,source.id,skillId);
     if(!skill||statusAbilityReason(d,s,source,skillId)||dungeonAbilityReason(d,s,skillId,'battle.skill')||effectsProblem(d,skill,s))continue;
@@ -326,6 +326,11 @@ function supportTargets(engine,rule){
 function enemyContext(engine,enemy){
   const b=engine.state.battle;
   return {self:{...enemy,hp_ratio:enemy.hp/enemy.stats.hp,round:b.round,buffs:b.buffs.filter(entry=>entry.target===unitKey(enemy)&&entry.remaining>0).map(entry=>entry.id)}};
+}
+function availableEnemySkills(engine,enemy){
+  // Confusion changes the choice and target, but cannot skip a windup or other
+  // authored use condition. A shared skill is available if any rule allows it.
+  return [...new Set(enemy.ai.filter(rule=>!rule.condition||engine.value(rule.condition,enemyContext(engine,enemy))).map(rule=>rule.skill))];
 }
 function enemyAction(engine,enemy){
   return consumeEnemyActionBuffs(engine,enemy,()=>performEnemyAction(engine,enemy));
@@ -472,7 +477,7 @@ function gridEnemyChoices(engine,enemy,skillId,{anySide=false,origin=null}={}){
 }
 function gridConfusedAction(engine,source){
   const {state:s,data:d}=engine,enemy=Boolean(source.instance),choices=[];
-  for(const id of enemy?[...new Set(source.ai.map(r=>r.skill))]:engine.skills(source.id)){
+  for(const id of enemy?availableEnemySkills(engine,source):engine.skills(source.id)){
     if(enemy)choices.push(...gridEnemyChoices(engine,source,id,{anySide:true}));
     else{const skill=effectiveSkill(d,s,source.id,id);for(const p of targetSelections(engine,source,skill,id,{anySide:true})){const plan=battleSkillPlan(engine,source.id,id,p.id,{anySide:true});if(plan.ok)choices.push({...plan,skillId:id});}}
   }

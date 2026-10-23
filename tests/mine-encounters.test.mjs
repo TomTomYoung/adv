@@ -36,6 +36,12 @@ for(const mode of ['classic','grid','frontline']){
    assert.ok(!g.state.battle.log.some(t=>t.includes('低位の貫通突進')));assert.equal(g.state.battle.buffs.filter(b=>b.id==='mine_drill_ready').length,0);saved(g);
   }
  });
+ test(`${mode}: confusion cannot bypass the mole's preparation condition`,()=>{
+  const g=start(mode,'mine_mole_lesson');applyStatus(g.data,g.state,g.state.battle.enemies[0],'confusion',undefined,3);g.random=()=>0;
+  enemyTurn(g,0);assert.ok(g.state.battle.log.some(t=>t.includes('こんらん')));assert.ok(!g.state.battle.log.some(t=>t.includes('低位の貫通突進')));assert.equal(enemyStats(g,g.state.battle.enemies[0]).vit,14);saved(g);
+  const prepared=start(mode,'mine_mole_lesson');atRound(prepared,2);enemyTurn(prepared,0);atRound(prepared,3);applyStatus(prepared.data,prepared.state,prepared.state.battle.enemies[0],'confusion',undefined,3);prepared.random=()=>0;enemyTurn(prepared,0);
+  assert.ok(prepared.state.battle.log.some(t=>t.includes('低位の貫通突進')));assert.equal(prepared.state.battle.buffs.filter(b=>b.id==='mine_drill_ready').length,0);saved(prepared);
+ });
  test(`${mode}: partial defense penetration still respects guard`,()=>{
   const g=start(mode,'mine_mole_lesson'),source=g.state.battle.enemies[0],target=g.state.actors.ada,skill=data.skills.mine_drill_charge;
   const hp=target.hp;clearGuard(g.state.battle,target);const normal=applySkill(g,source,target,skill,'mine_drill_charge',true,null,false);target.hp=hp;
