@@ -1,12 +1,12 @@
 # 魔物一覧と戦闘画像
 
-作品版1.27.0。配布中の敵は74定義、遭遇編成は105定義、敵が参照する画像ファイルは25点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
+作品版1.28.0。配布中の敵は75定義、遭遇編成は106定義、敵が参照する画像ファイルは25点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
 
 敵・技能・画像・通常ロードのマップと迷宮・スクリプトから全文を生成します。数値を重ねて手書きせず、原稿を更新してから `npm run build:docs` で反映します。
 
 [固有環境の敵](#固有環境の敵)：6定義。
 [個別デザインの通常魔物](#個別デザインの通常魔物)：20定義。
-[依頼に追加した敵](#依頼に追加した敵)：28定義。
+[依頼に追加した敵](#依頼に追加した敵)：29定義。
 [地域の迷宮獣と守護者](#地域の迷宮獣と守護者)：20定義。
 
 ## 現在の読み方
@@ -193,7 +193,7 @@ AIの選択順：
 遭遇と参照先：
 
 wild_waterwheel_beaver：水車ビーバー×1。逃走可。
-通常遭遇候補：灯守の地下水道・上層・入口操作室 (region_1_f1)、重み40 / 灯守の地下水道・下層・操作室 (region_1_f2)、重み40 / 灯守の地下水道・上層・第一水路 (region_1_canal_a)、重み40 / 灯守の地下水道・上層・荷揚げ場 (region_1_landing)、重み40 / 灯守の地下水道・上層・排水支路 (region_1_canal_b)、重み40 / 灯守の地下水道・上層・鐘と浮子の点検室 (region_1_inspection)、重み40 / 灯守の地下水道・下層・給金箱の水路 (region_1_canal_c)、重み40 / 灯守の地下水道・下層・棺の待避場 (region_1_lower_landing)、重み40 / 灯守の地下水道・下層・避難水路 (region_1_canal_d)、重み40 / 灯守の地下水道・下層・奥の水門詰所 (region_1_gatehouse)、重み40。
+通常遭遇候補：灯守の地下水道・1F 入口操作室 (region_1_f1)、重み40 / 灯守の地下水道・6F 操作室 (region_1_f2)、重み40 / 灯守の地下水道・2F 第一水路 (region_1_canal_a)、重み40 / 灯守の地下水道・3F 荷揚げ場 (region_1_landing)、重み40 / 灯守の地下水道・4F 排水支路 (region_1_canal_b)、重み40 / 灯守の地下水道・5F 鐘と浮子の点検室 (region_1_inspection)、重み40 / 灯守の地下水道・7F 給金箱の水路 (region_1_canal_c)、重み40 / 灯守の地下水道・8F 棺の待避場 (region_1_lower_landing)、重み40 / 灯守の地下水道・9F 避難水路 (region_1_canal_d)、重み40 / 灯守の地下水道・10F 奥の水門詰所 (region_1_gatehouse)、重み40。
 
 wild_pair_1：水車ビーバー×1・水門ワニ×1。逃走可。
 通常ロードのマップ候補・有効な仕掛け・戦闘開始命令からの参照なし。遭遇定義のみ保持しています。
@@ -203,7 +203,7 @@ wild_pair_1：水車ビーバー×1・水門ワニ×1。逃走可。
 <img src="../../assets/images/monsters/sluice_crocodile.webp" width="160" alt="水門ワニ">
 
 画像ID：monster_sluice_crocodile。実ファイル：[assets/images/monsters/sluice_crocodile.webp](../../assets/images/monsters/sluice_crocodile.webp)。
-画像共有：他の敵定義との共有なし。
+画像共有：水門獣。
 
 発想：ワニ＋水門。参照：M024。地域分類：灯守の地下水道。
 
@@ -224,7 +224,7 @@ AIの選択順：
 遭遇と参照先：
 
 wild_sluice_crocodile：水門ワニ×1。逃走可。
-通常遭遇候補：灯守の地下水道・上層・入口操作室 (region_1_f1)、重み40 / 灯守の地下水道・下層・操作室 (region_1_f2)、重み40 / 灯守の地下水道・上層・第一水路 (region_1_canal_a)、重み40 / 灯守の地下水道・上層・荷揚げ場 (region_1_landing)、重み40 / 灯守の地下水道・上層・排水支路 (region_1_canal_b)、重み40 / 灯守の地下水道・上層・鐘と浮子の点検室 (region_1_inspection)、重み40 / 灯守の地下水道・下層・給金箱の水路 (region_1_canal_c)、重み40 / 灯守の地下水道・下層・棺の待避場 (region_1_lower_landing)、重み40 / 灯守の地下水道・下層・避難水路 (region_1_canal_d)、重み40 / 灯守の地下水道・下層・奥の水門詰所 (region_1_gatehouse)、重み40。
+通常遭遇候補：灯守の地下水道・1F 入口操作室 (region_1_f1)、重み40 / 灯守の地下水道・6F 操作室 (region_1_f2)、重み40 / 灯守の地下水道・2F 第一水路 (region_1_canal_a)、重み40 / 灯守の地下水道・3F 荷揚げ場 (region_1_landing)、重み40 / 灯守の地下水道・4F 排水支路 (region_1_canal_b)、重み40 / 灯守の地下水道・5F 鐘と浮子の点検室 (region_1_inspection)、重み40 / 灯守の地下水道・7F 給金箱の水路 (region_1_canal_c)、重み40 / 灯守の地下水道・8F 棺の待避場 (region_1_lower_landing)、重み40 / 灯守の地下水道・9F 避難水路 (region_1_canal_d)、重み40 / 灯守の地下水道・10F 奥の水門詰所 (region_1_gatehouse)、重み40。
 
 wild_pair_1：水車ビーバー×1・水門ワニ×1。逃走可。
 通常ロードのマップ候補・有効な仕掛け・戦闘開始命令からの参照なし。遭遇定義のみ保持しています。
@@ -1425,6 +1425,28 @@ kagaribi_ossuary_bones：納骨堂の残骸兵×1。逃走可。
 kagaribi_ossuary_deep_pair：納骨堂の残骸兵×1・炭焼き場の灰積み×1。逃走可。
 通常遭遇候補：篝火の迷宮・9F 帰らずの納骨堂 (kagaribi_ossuary)、重み15。
 
+### 水門獣 (waterway_sluice_beast)
+
+<img src="../../assets/images/monsters/sluice_crocodile.webp" width="160" alt="水門獣">
+
+画像ID：monster_sluice_crocodile。実ファイル：[assets/images/monsters/sluice_crocodile.webp](../../assets/images/monsters/sluice_crocodile.webp)。
+画像共有：水門ワニ。
+
+基礎能力：HP 800 / MP 120 / STR 34 / VIT 24 / AGI 8 / INT 30。報酬：100G / 600EXP。
+宝箱：傷薬 1個 / 12.5％。
+属性倍率：physical 1 / water 0.6 / lightning 1.2。
+
+AIの選択順：
+
+1. 優先度20、奇数ラウンド：防御 (guard)、MP0、対象は自身。
+2. 優先度10、条件なし：水門落とし (gate_slam)、MP3、対象は探索隊の生存者からランダムに1人。
+3. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+waterway_sluice_guardian：水門獣×1。逃走可。
+戦闘開始命令：1スクリプト。waterway.sluice_beast。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
+
 ## 地域の迷宮獣と守護者
 
 ### 灯守の地下水道の迷宮獣 (guard_1)
@@ -1447,7 +1469,7 @@ AIの選択順：
 遭遇と参照先：
 
 roaming_1：灯守の地下水道の迷宮獣×1。逃走可。
-通常遭遇候補：灯守の地下水道・上層・入口操作室 (region_1_f1)、重み20 / 灯守の地下水道・下層・操作室 (region_1_f2)、重み20 / 灯守の地下水道・上層・第一水路 (region_1_canal_a)、重み20 / 灯守の地下水道・上層・荷揚げ場 (region_1_landing)、重み20 / 灯守の地下水道・上層・排水支路 (region_1_canal_b)、重み20 / 灯守の地下水道・上層・鐘と浮子の点検室 (region_1_inspection)、重み20 / 灯守の地下水道・下層・給金箱の水路 (region_1_canal_c)、重み20 / 灯守の地下水道・下層・棺の待避場 (region_1_lower_landing)、重み20 / 灯守の地下水道・下層・避難水路 (region_1_canal_d)、重み20 / 灯守の地下水道・下層・奥の水門詰所 (region_1_gatehouse)、重み20。
+通常遭遇候補：灯守の地下水道・1F 入口操作室 (region_1_f1)、重み20 / 灯守の地下水道・6F 操作室 (region_1_f2)、重み20 / 灯守の地下水道・2F 第一水路 (region_1_canal_a)、重み20 / 灯守の地下水道・3F 荷揚げ場 (region_1_landing)、重み20 / 灯守の地下水道・4F 排水支路 (region_1_canal_b)、重み20 / 灯守の地下水道・5F 鐘と浮子の点検室 (region_1_inspection)、重み20 / 灯守の地下水道・7F 給金箱の水路 (region_1_canal_c)、重み20 / 灯守の地下水道・8F 棺の待避場 (region_1_lower_landing)、重み20 / 灯守の地下水道・9F 避難水路 (region_1_canal_d)、重み20 / 灯守の地下水道・10F 奥の水門詰所 (region_1_gatehouse)、重み20。
 
 guard_1：灯守の地下水道の迷宮獣×2。逃走可。
 戦闘開始命令：18スクリプト。q002.v11.entry・q004.v11.force_entry・q005.decision・q005.review・q006.decision・q006.review ほか12件。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。

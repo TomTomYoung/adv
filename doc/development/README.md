@@ -37,3 +37,5 @@
 手書きの説明が現在の実装と一致するかは、自動検査だけでは判定しません。操作範囲・配置数・実装済み機能が変わったときは、担当の仕様書と解説原稿に加え、[現状](../CURRENT_STATUS.md)、[文書の入口](../README.md)、分野別の入口、[引き継ぎ](../HANDOFF.md)の説明も照合します。設計上の予定は現在の対応範囲と区別し、保存原文や過去の検証結果は実施時の内容を保持します。
 
 ゲーム側の変更は `npm run check` と必要な実画面確認を行い、結果をPROGRESSへまとめます。古い結果は実施時の版・条件を保持し、今回再実行した結果へ混ぜません。現在の方針と次工程は[HANDOFF.md](../HANDOFF.md)へ一度だけ記載します。
+
+2026-10-22の地下水道実攻略は `node tools/measure-waterway-campaign.mjs --matrix` で再現します。[12条件の測定値](WATERWAY_ROUTE_MEASUREMENTS.json)と[条件・範囲](../dungeons/WATERWAY_TEN_FLOORS.md)を参照してください。

@@ -2,9 +2,9 @@
 
 [個別ページ一覧](README.md) ／ [カタログへ戻る](../QUEST_CATALOG.md#q009-鼠の避難路) ／ [シナリオ本文](#q009-鼠の避難路) ／ [行為の条件と状態変化](#行為の条件と状態変化) ／ [配置イベント](#配置イベントと操作条件)
 
-作品版 1.27.0。配布JSONから生成した作者向けページ。真相と結末を含む。本編3場面・3結末。
+作品版 1.28.0。配布JSONから生成した作者向けページ。真相と結末を含む。本編3場面・3結末。
 
-<!-- quest-page-source:bbb665b7630d75a941dc4d27c27ae3f626e8e88462d6eb5848d1d7559d9b6b92 -->
+<!-- quest-page-source:5af8f6cb4c75f677799f683b2c4b679959d8f8b907de4b4ac3693451fcdf13f9 -->
 
 ## 依頼の焦点と分岐の意味
 
@@ -102,7 +102,7 @@ contractは外室の群れを追い払う。compromiseは共同倉庫の受入�
 
 鼠の避難路：現場の痕跡。実行ID `q009_clue_a`、起動 `interact`、スクリプト `q009.clue_a`。
 
-配置：灯守の地下水道 (`region_1`) / 灯守の地下水道・下層・棺の待避場・B2 (`region_1_lower_landing`) / (7, 1) / イベント `q009_clue_a`。[ダンジョン定義](../../../data/dungeons.json)。
+配置：灯守の地下水道 (`region_1`) / 灯守の地下水道・8F 棺の待避場・B8 (`region_1_lower_landing`) / (7, 1) / イベント `q009_clue_a`。[ダンジョン定義](../../../data/dungeons.json)。
 
 表示条件：`{"op":"and","args":[{"op":"eq","left":{"ref":"quests.q009.stage"},"right":"active"},{"op":"eq","left":{"ref":"flags.legacyQuestRoutes.q009"},"right":true}]}`。操作条件：`true`。
 
@@ -132,7 +132,7 @@ contractは外室の群れを追い払う。compromiseは共同倉庫の受入�
 
 鼠の避難路：記録と証言。実行ID `q009_clue_b`、起動 `interact`、スクリプト `q009.clue_b`。
 
-配置：灯守の地下水道 (`region_1`) / 灯守の地下水道・下層・避難水路・B2 (`region_1_canal_d`) / (4, 1) / イベント `q009_clue_b`。[ダンジョン定義](../../../data/dungeons.json)。
+配置：灯守の地下水道 (`region_1`) / 灯守の地下水道・9F 避難水路・B9 (`region_1_canal_d`) / (4, 1) / イベント `q009_clue_b`。[ダンジョン定義](../../../data/dungeons.json)。
 
 表示条件：`{"op":"and","args":[{"op":"eq","left":{"ref":"quests.q009.stage"},"right":"active"},{"op":"eq","left":{"ref":"flags.legacyQuestRoutes.q009"},"right":true}]}`。操作条件：`true`。
 
@@ -163,7 +163,7 @@ contractは外室の群れを追い払う。compromiseは共同倉庫の受入�
 
 鼠の避難路：決着の場。実行ID `q009_decision`、起動 `interact`、スクリプト `q009.v11.visit`。
 
-配置：灯守の地下水道 (`region_1`) / 灯守の地下水道・下層・奥の水門詰所・B2 (`region_1_gatehouse`) / (5, 1) / イベント `q009_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+配置：灯守の地下水道 (`region_1`) / 灯守の地下水道・10F 奥の水門詰所・B10 (`region_1_gatehouse`) / (5, 1) / イベント `q009_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 表示条件：`{"op":"or","args":[{"op":"eq","left":{"ref":"quests.q009.stage"},"right":"active"},{"op":"eq","left":{"ref":"quests.q009.stage"},"right":"completed"}]}`。操作条件：`true`。
 
@@ -179,11 +179,11 @@ contractは外室の群れを追い払う。compromiseは共同倉庫の受入�
 
 モデル: 1.1。実装: [JSON](../../../data/quests/q009.json)。場面 3、結末 3。物語状態の改訂 1。
 
-実配置: 灯守の地下水道 (`region_1`) / 灯守の地下水道・下層・棺の待避場・B2 (`region_1_lower_landing`) / (7, 1) / イベント `q009_clue_a`。[ダンジョン定義](../../../data/dungeons.json)。鼠の避難路：現場の痕跡。現地イベント。
+実配置: 灯守の地下水道 (`region_1`) / 灯守の地下水道・8F 棺の待避場・B8 (`region_1_lower_landing`) / (7, 1) / イベント `q009_clue_a`。[ダンジョン定義](../../../data/dungeons.json)。鼠の避難路：現場の痕跡。現地イベント。
 
-実配置: 灯守の地下水道 (`region_1`) / 灯守の地下水道・下層・避難水路・B2 (`region_1_canal_d`) / (4, 1) / イベント `q009_clue_b`。[ダンジョン定義](../../../data/dungeons.json)。鼠の避難路：記録と証言。現地イベント。
+実配置: 灯守の地下水道 (`region_1`) / 灯守の地下水道・9F 避難水路・B9 (`region_1_canal_d`) / (4, 1) / イベント `q009_clue_b`。[ダンジョン定義](../../../data/dungeons.json)。鼠の避難路：記録と証言。現地イベント。
 
-実配置: 灯守の地下水道 (`region_1`) / 灯守の地下水道・下層・奥の水門詰所・B2 (`region_1_gatehouse`) / (5, 1) / イベント `q009_decision`。[ダンジョン定義](../../../data/dungeons.json)。鼠の避難路：決着の場。現地イベント。
+実配置: 灯守の地下水道 (`region_1`) / 灯守の地下水道・10F 奥の水門詰所・B10 (`region_1_gatehouse`) / (5, 1) / イベント `q009_decision`。[ダンジョン定義](../../../data/dungeons.json)。鼠の避難路：決着の場。現地イベント。
 
 固定された過去: 清掃組合が石灰を使った清掃を広い区画で同時に行い、鼠は餌場と巣の臭いを失った。追い出された群れは地上の穀倉へ移動したが、穀倉番が内扉を閉めており、穀物のある室内へはまだ入っていない。鼠の移動と崩落は無関係である。
 
@@ -660,7 +660,15 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
           "x": 1,
           "y": 1,
           "facing": "east"
-        }
+        },
+        "condition": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.waterway.dryStairOpen"
+          },
+          "right": true
+        },
+        "requirement": "6F操作室側から階段の掛け金を外すと、3F荷揚げ場へ直接戻れる。"
       },
       {
         "id": "lower_inlet",
@@ -728,6 +736,23 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
           "x": 1,
           "y": 1,
           "side": "west"
+        }
+      },
+      {
+        "id": "inspection_stair",
+        "name": "点検室の保守階段",
+        "kind": "stairs",
+        "a": {
+          "map": "region_1_inspection",
+          "x": 9,
+          "y": 7,
+          "facing": "north"
+        },
+        "b": {
+          "map": "region_1_f2",
+          "x": 9,
+          "y": 7,
+          "facing": "north"
         }
       }
     ]
@@ -822,7 +847,7 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
 
 ### region_1_f1 の全マップJSON
 
-灯守の地下水道・上層・入口操作室・B1、11×9セル。[配布JSON](../../../data/maps/region_1_f1.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
+灯守の地下水道・1F 入口操作室・B1、11×9セル。[配布JSON](../../../data/maps/region_1_f1.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
 
 <details>
 <summary>共通マップの全データ</summary>
@@ -850,7 +875,7 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
   ],
   "dungeon": "region_1",
   "id": "region_1_f1",
-  "name": "灯守の地下水道・上層・入口操作室",
+  "name": "灯守の地下水道・1F 入口操作室",
   "floor": 1,
   "tiles": [
     "###########",
@@ -982,7 +1007,7 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
 
 ### region_1_canal_a の全マップJSON
 
-灯守の地下水道・上層・第一水路・B1、11×7セル。[配布JSON](../../../data/maps/region_1_canal_a.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
+灯守の地下水道・2F 第一水路・B2、11×7セル。[配布JSON](../../../data/maps/region_1_canal_a.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
 
 <details>
 <summary>共通マップの全データ</summary>
@@ -1010,8 +1035,8 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
   ],
   "dungeon": "region_1",
   "id": "region_1_canal_a",
-  "name": "灯守の地下水道・上層・第一水路",
-  "floor": 1,
+  "name": "灯守の地下水道・2F 第一水路",
+  "floor": 2,
   "tiles": [
     "###########",
     "#.........#",
@@ -1069,7 +1094,7 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
 
 ### region_1_landing の全マップJSON
 
-灯守の地下水道・上層・荷揚げ場・B1、17×9セル。[配布JSON](../../../data/maps/region_1_landing.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
+灯守の地下水道・3F 荷揚げ場・B3、17×9セル。[配布JSON](../../../data/maps/region_1_landing.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
 
 <details>
 <summary>共通マップの全データ</summary>
@@ -1097,8 +1122,8 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
   ],
   "dungeon": "region_1",
   "id": "region_1_landing",
-  "name": "灯守の地下水道・上層・荷揚げ場",
-  "floor": 1,
+  "name": "灯守の地下水道・3F 荷揚げ場",
+  "floor": 3,
   "tiles": [
     "#################",
     "#.........#######",
@@ -1110,7 +1135,32 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
     "#.....###.#.....#",
     "#################"
   ],
-  "objects": [],
+  "objects": [
+    {
+      "id": "supply_rope",
+      "name": "配管固定用の備品箱",
+      "x": 1,
+      "y": 1,
+      "kind": "chest",
+      "trigger": "interact",
+      "interactionRange": "here",
+      "safe": true,
+      "script": "treasure.package.region_1_landing.supply_rope",
+      "treasure": {
+        "kind": "chest",
+        "uses": 1,
+        "reset": "never",
+        "rewards": {
+          "items": {
+            "rope": 1
+          }
+        },
+        "afterText": "予備のロープは受け取り済みだ。",
+        "message": "配管修理用のロープを1本受け取った。使い切った場合は町の旅道具店で補充できる。"
+      },
+      "once": false
+    }
+  ],
   "entrance": {
     "x": 1,
     "y": 1,
@@ -1160,7 +1210,7 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
 
 ### region_1_f2 の全マップJSON
 
-灯守の地下水道・下層・操作室・B2、11×9セル。[配布JSON](../../../data/maps/region_1_f2.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
+灯守の地下水道・6F 操作室・B6、11×9セル。[配布JSON](../../../data/maps/region_1_f2.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
 
 <details>
 <summary>共通マップの全データ</summary>
@@ -1188,8 +1238,8 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
   ],
   "dungeon": "region_1",
   "id": "region_1_f2",
-  "name": "灯守の地下水道・下層・操作室",
-  "floor": 2,
+  "name": "灯守の地下水道・6F 操作室",
+  "floor": 6,
   "tiles": [
     "###########",
     "#.........#",
@@ -1258,6 +1308,17 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
         }
       },
       "interactionRange": "front"
+    },
+    {
+      "id": "dry_stair_latch",
+      "x": 1,
+      "y": 1,
+      "name": "乾いた階段の掛け金",
+      "kind": "clue",
+      "trigger": "interact",
+      "interactionRange": "here",
+      "safe": true,
+      "script": "waterway.dry_stair_latch"
     }
   ],
   "entrance": {
@@ -1309,7 +1370,7 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
 
 ### region_1_canal_c の全マップJSON
 
-灯守の地下水道・下層・給金箱の水路・B2、11×7セル。[配布JSON](../../../data/maps/region_1_canal_c.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
+灯守の地下水道・7F 給金箱の水路・B7、11×7セル。[配布JSON](../../../data/maps/region_1_canal_c.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
 
 <details>
 <summary>共通マップの全データ</summary>
@@ -1337,8 +1398,8 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
   ],
   "dungeon": "region_1",
   "id": "region_1_canal_c",
-  "name": "灯守の地下水道・下層・給金箱の水路",
-  "floor": 2,
+  "name": "灯守の地下水道・7F 給金箱の水路",
+  "floor": 7,
   "tiles": [
     "###########",
     "#.........#",
@@ -1348,7 +1409,32 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
     "#.........#",
     "###########"
   ],
-  "objects": [],
+  "objects": [
+    {
+      "id": "supply_rope",
+      "name": "配管固定用の備品箱",
+      "x": 1,
+      "y": 5,
+      "kind": "chest",
+      "trigger": "interact",
+      "interactionRange": "here",
+      "safe": true,
+      "script": "treasure.package.region_1_canal_c.supply_rope",
+      "treasure": {
+        "kind": "chest",
+        "uses": 1,
+        "reset": "never",
+        "rewards": {
+          "items": {
+            "rope": 1
+          }
+        },
+        "afterText": "予備のロープは受け取り済みだ。",
+        "message": "配管修理用のロープを1本受け取った。使い切った場合は町の旅道具店で補充できる。"
+      },
+      "once": false
+    }
+  ],
   "entrance": {
     "x": 1,
     "y": 1,
@@ -1396,7 +1482,7 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
 
 ### region_1_lower_landing の全マップJSON
 
-灯守の地下水道・下層・棺の待避場・B2、11×9セル。[配布JSON](../../../data/maps/region_1_lower_landing.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
+灯守の地下水道・8F 棺の待避場・B8、11×9セル。[配布JSON](../../../data/maps/region_1_lower_landing.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
 
 <details>
 <summary>共通マップの全データ</summary>
@@ -1424,8 +1510,8 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
   ],
   "dungeon": "region_1",
   "id": "region_1_lower_landing",
-  "name": "灯守の地下水道・下層・棺の待避場",
-  "floor": 2,
+  "name": "灯守の地下水道・8F 棺の待避場",
+  "floor": 8,
   "tiles": [
     "###########",
     "#.........#",
@@ -1437,7 +1523,32 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
     "#.........#",
     "###########"
   ],
-  "objects": [],
+  "objects": [
+    {
+      "id": "supply_rope",
+      "name": "配管固定用の備品箱",
+      "x": 1,
+      "y": 1,
+      "kind": "chest",
+      "trigger": "interact",
+      "interactionRange": "here",
+      "safe": true,
+      "script": "treasure.package.region_1_lower_landing.supply_rope",
+      "treasure": {
+        "kind": "chest",
+        "uses": 1,
+        "reset": "never",
+        "rewards": {
+          "items": {
+            "rope": 1
+          }
+        },
+        "afterText": "予備のロープは受け取り済みだ。",
+        "message": "配管修理用のロープを1本受け取った。使い切った場合は町の旅道具店で補充できる。"
+      },
+      "once": false
+    }
+  ],
   "entrance": {
     "x": 1,
     "y": 1,
@@ -1487,7 +1598,7 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
 
 ### region_1_canal_d の全マップJSON
 
-灯守の地下水道・下層・避難水路・B2、11×7セル。[配布JSON](../../../data/maps/region_1_canal_d.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
+灯守の地下水道・9F 避難水路・B9、11×7セル。[配布JSON](../../../data/maps/region_1_canal_d.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
 
 <details>
 <summary>共通マップの全データ</summary>
@@ -1515,8 +1626,8 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
   ],
   "dungeon": "region_1",
   "id": "region_1_canal_d",
-  "name": "灯守の地下水道・下層・避難水路",
-  "floor": 2,
+  "name": "灯守の地下水道・9F 避難水路",
+  "floor": 9,
   "tiles": [
     "###########",
     "#.........#",
@@ -1574,7 +1685,7 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
 
 ### region_1_gatehouse の全マップJSON
 
-灯守の地下水道・下層・奥の水門詰所・B2、11×9セル。[配布JSON](../../../data/maps/region_1_gatehouse.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
+灯守の地下水道・10F 奥の水門詰所・B10、11×9セル。[配布JSON](../../../data/maps/region_1_gatehouse.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
 
 <details>
 <summary>共通マップの全データ</summary>
@@ -1602,8 +1713,8 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
   ],
   "dungeon": "region_1",
   "id": "region_1_gatehouse",
-  "name": "灯守の地下水道・下層・奥の水門詰所",
-  "floor": 2,
+  "name": "灯守の地下水道・10F 奥の水門詰所",
+  "floor": 10,
   "tiles": [
     "###########",
     "#.........#",
@@ -1615,7 +1726,43 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
     "#.........#",
     "###########"
   ],
-  "objects": [],
+  "objects": [
+    {
+      "id": "sluice_beast",
+      "x": 5,
+      "y": 3,
+      "name": "水門獣",
+      "kind": "clue",
+      "trigger": "interact",
+      "interactionRange": "here",
+      "safe": true,
+      "script": "waterway.sluice_beast"
+    },
+    {
+      "id": "supply_rope",
+      "name": "配管固定用の備品箱",
+      "x": 3,
+      "y": 1,
+      "kind": "chest",
+      "trigger": "interact",
+      "interactionRange": "here",
+      "safe": true,
+      "script": "treasure.package.region_1_gatehouse.supply_rope",
+      "treasure": {
+        "kind": "chest",
+        "uses": 1,
+        "reset": "never",
+        "rewards": {
+          "items": {
+            "rope": 1
+          }
+        },
+        "afterText": "予備のロープは受け取り済みだ。",
+        "message": "配管修理用のロープを1本受け取った。使い切った場合は町の旅道具店で補充できる。"
+      },
+      "once": false
+    }
+  ],
   "entrance": {
     "x": 1,
     "y": 1,

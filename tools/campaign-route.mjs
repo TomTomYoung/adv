@@ -1,4 +1,4 @@
-// Measurement-only navigation over the authored Kagaribi floor plan. Unlike
+// Measurement-only navigation over authored Kagaribi / waterway floor plans. Unlike
 // the purchased survey, this knows the map in advance; it never reveals cells.
 // Every returned move must still be dispatched through the real game engine.
 import assert from 'node:assert/strict';
@@ -9,7 +9,7 @@ const key=p=>`${p.map}/${p.x},${p.y}`;
 const directions=[['east',1,0],['west',-1,0],['south',0,1],['north',0,-1]];
 export function campaignRoute(g,target){
  const definition=g.data.dungeons[g.state.dungeons.active.id];
- assert.equal(definition.id,'kagaribi','this policy measures Kagaribi only');
+ assert.ok(['kagaribi','region_1'].includes(definition.id),'this policy measures Kagaribi and the waterway only');
  const links=definition.systems.connections.links,queue=[{at:{...g.state.location},parent:-1}],seen=new Set([key(g.state.location)]);
  for(let i=0;i<queue.length;i++){
   const {at}=queue[i];

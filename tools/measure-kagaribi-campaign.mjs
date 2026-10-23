@@ -84,7 +84,7 @@ export class Campaign {
  upkeep(){
   const g=this.g;if(g.state.waiting||g.state.battle||g.state.quests.q001.stage!=='completed')return;
   if(this.options.fieldTraining&&g.state.expedition.learned.sera?.exp_oil_spark&&!this.report.skillUses.exp_oil_spark&&g.state.actors.sera.mp>=18)this.act({type:'job.action',actor:'sera',ability:'exp_oil_spark'});
-  const lamp=g.state.dungeons.active?.systems.fires.portable;
+  const lamp=g.state.dungeons.active?.systems.fires?.portable;
   if(lamp&&lamp.fuel<15&&g.state.expedition.reserve>0)this.act({type:'dungeon.action',system:'fires',action:lamp.lit?'refuel':'ignite',target:'portable'});
   for(const id of g.state.members){const a=g.state.actors[id];if(a.statuses.includes('poison')&&g.state.inventory.antidote>0)this.act({type:'item',item:'antidote',actor:id});if(a.hp>0&&a.hp<g.stats(id).hp*.45&&g.state.inventory.potion>0)this.act({type:'item',item:'potion',actor:id});}
   if(g.state.inventory.ration>0&&(g.state.members.some(id=>['priest','mage'].includes(g.state.actors[id].job)&&g.state.actors[id].hp>0&&g.state.actors[id].mp<8)||g.state.members.some(id=>g.state.actors[id].hp<g.stats(id).hp*.5)))this.act({type:'item',item:'ration',actor:'ada'});

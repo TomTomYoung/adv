@@ -21,9 +21,13 @@ function game(){
   delete g.data.quests.q001.story;g.accept('q001');g.complete('q001','informed');drain(g);
   g.random=()=>.99;return g;
 }
-const at=(g,camp='kagaribi_gate')=>{const c=g.data.expedition.camps.find(c=>c.id===camp);g.teleport(c.map,c.x,c.y,c.facing);return c;};
+const at=(g,camp='kagaribi_gate')=>{
+ const c=g.data.expedition.camps.find(c=>c.id===camp),water=g.data.dungeons[c.dungeon].systems.water,zone=water?.use==='compartment_water'&&water.zones.find(z=>z.map===c.map);
+ if(zone){const handle=water.controls.find(p=>p.id===zone.control);g.teleport(handle.map,handle.x,handle.y);if(g.state.dungeons.persistent[c.dungeon].systems.water.controls[zone.control])assert.ok(g.dispatch({type:'dungeon.action',system:'water',action:'close',target:zone.control}));}
+ g.teleport(c.map,c.x,c.y,c.facing);return c;
+};
 const action=(g,action,camp='kagaribi_gate')=>g.dispatch({type:'expedition.action',action,camp});
-const repair=(g,camp='kagaribi_gate')=>{if(camp==='kagaribi_relay')g.state.flags.kagaribi={...g.state.flags.kagaribi,kilnGate:true};if(camp==='kagaribi_central')g.state.flags.kagaribi={...g.state.flags.kagaribi,altarGuardianWon:true};if(camp==='kagaribi_crossroads'&&!g.state.expedition.camps.kagaribi_manifold?.supply){g.give('rope',1);repair(g,'kagaribi_manifold');}at(g,camp);assert.ok(action(g,'repair',camp));};
+const repair=(g,camp='kagaribi_gate')=>{if(camp==='kagaribi_relay')g.state.flags.kagaribi={...g.state.flags.kagaribi,kilnGate:true};if(camp==='kagaribi_central')g.state.flags.kagaribi={...g.state.flags.kagaribi,altarGuardianWon:true};if(camp==='kagaribi_crossroads'&&!g.state.expedition.camps.kagaribi_manifold?.supply){g.give('rope',1);repair(g,'kagaribi_manifold');}if(camp==='water_bridge'&&!g.state.expedition.camps.water_branch?.supply){g.give('rope',1);repair(g,'water_branch');}if(camp==='water_central')g.state.flags.waterway={...g.state.flags.waterway,sluiceBeastWon:true};at(g,camp);assert.ok(action(g,'repair',camp));};
 const roundtrip=g=>{const saved=g.save();assert.deepEqual(validateSave(JSON.parse(saved),g.data),[]);g.load(saved);assert.equal(g.save(),saved);};
 const town=g=>{assert.ok(g.returnTown());goTownLocation(g,g.data.expedition.shopLocation);};
 function equipped(g,actor,item){g.give(item,1);assert.ok(g.dispatch({type:'equip',actor,item}));}

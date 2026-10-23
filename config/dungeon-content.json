@@ -212,6 +212,58 @@
           "priority": 1
         }
       ]
+    },
+    "waterway_sluice_beast": {
+      "id": "waterway_sluice_beast",
+      "name": "水門獣",
+      "sprite": "monster_sluice_crocodile",
+      "stats": {
+        "hp": 800,
+        "mp": 120,
+        "str": 34,
+        "vit": 24,
+        "agi": 8,
+        "int": 30
+      },
+      "resist": {
+        "physical": 1,
+        "water": 0.6,
+        "lightning": 1.2
+      },
+      "rewards": {
+        "gold": 100,
+        "xp": 600
+      },
+      "ai": [
+        {
+          "priority": 20,
+          "skill": "guard",
+          "target": "self",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "op": "mod",
+              "args": [
+                {
+                  "ref": "self.round"
+                },
+                2
+              ]
+            },
+            "right": 1
+          }
+        },
+        {
+          "priority": 10,
+          "skill": "gate_slam",
+          "target": "random"
+        },
+        {
+          "priority": 0,
+          "skill": "attack",
+          "target": "random"
+        }
+      ]
     }
   },
   "encounters": {
@@ -267,6 +319,15 @@
       ],
       "escape": true,
       "text": "ソルトイーターが装備に積もった塩を嗅ぎつけた。"
+    },
+    "waterway_sluice_guardian": {
+      "id": "waterway_sluice_guardian",
+      "name": "大水門の水門獣",
+      "enemies": [
+        "waterway_sluice_beast"
+      ],
+      "text": "奇数巡は殻を閉じて防御し、偶数巡は殻を開いて単体を打つ。水路の給排水とは別の動きだ。",
+      "escape": true
     }
   },
   "statuses": {
@@ -931,6 +992,131 @@
       "commands": [
         {
           "op": "town.return"
+        }
+      ]
+    },
+    "waterway.dry_stair_latch": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.waterway.dryStairOpen"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "階段の掛け金は外れている。3F荷揚げ場と6F操作室を直接行き来できる。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "階段は下側から留められている。掛け金を外せば3F荷揚げ場へ戻れる。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "open",
+                  "text": "掛け金を外して近道を開く",
+                  "commands": [
+                    {
+                      "op": "flag.set",
+                      "key": "waterway.dryStairOpen",
+                      "value": true
+                    },
+                    {
+                      "op": "audio.se",
+                      "asset": "se_door"
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "乾いた階段が開いた。次の探索でもこの近道を使える。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "waterway.sluice_beast": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.waterway.sluiceBeastWon"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "水門獣は退いた。北の通路沿いにある中央ポンプで給油管とリフトを復旧できる。武器引換券は町の旅道具店で使える。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "中央ポンプの前で水門獣が殻を閉じた。奇数巡は防御、偶数巡は殻を開いて一人を打つ。給排水盤とは別の機構で、戦闘によって水路の水位は変わらない。奥への通路は設備の脇を通る。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "fight",
+                  "text": "水門獣に挑む",
+                  "commands": [
+                    {
+                      "op": "battle.start",
+                      "encounter": "waterway_sluice_guardian",
+                      "on_win": [
+                        {
+                          "op": "flag.set",
+                          "key": "waterway.sluiceBeastWon",
+                          "value": true
+                        },
+                        {
+                          "op": "item.give",
+                          "item": "exp_t2_ticket",
+                          "count": 1
+                        },
+                        {
+                          "op": "narrate",
+                          "text": "水門獣が退いた。第2段階の武器引換券を1枚受け取った。北の通路沿いにある中央ポンプを復旧できる。"
+                        }
+                      ],
+                      "on_lose": [],
+                      "on_escape": [
+                        {
+                          "op": "narrate",
+                          "text": "水門獣は中央ポンプへ戻った。準備を整えて再挑戦できる。"
+                        }
+                      ],
+                      "on_interrupt": []
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ]
         }
       ]
     }

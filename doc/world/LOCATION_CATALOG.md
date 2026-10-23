@@ -130,7 +130,7 @@
 
 背景: [location_checkpoint](../../assets/images/locations/checkpoint.webp)。
 
-入退室地点: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (13, 3)。[ダンジョン定義](../../data/dungeons.json)。入室・退出は明示的な選択肢で行う。
+入退室地点: 灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (13, 3)。[ダンジョン定義](../../data/dungeons.json)。入室・退出は明示的な選択肢で行う。
 
 参照場面: q004「二枚目の通行証」 / duplicate。
 

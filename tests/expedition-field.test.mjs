@@ -36,7 +36,7 @@ test('exploration instruction has personal camp/job/weapon gates and grants only
  assert.equal(skillPurchasePlan(g.data,g.state,'sera','exp_oil_spark',1).ok,false);
  assert.equal(skillPurchasePlan(g.data,g.state,'nio','exp_route_survey',1).ok,false);
  repair(g,'kagaribi_relay');town(g);assert.equal(skillPurchasePlan(g.data,g.state,'sera','exp_oil_spark',1).ok,false);
- repair(g,'water_landing');assert.ok(g.dispatch({type:'expedition.action',camp:'water_landing',action:'relay'}));town(g);assert.equal(skillPurchasePlan(g.data,g.state,'sera','exp_oil_spark',1).ok,false,'a different dungeon relay cannot substitute for 7F');
+ repair(g,'mine_upper');assert.ok(g.dispatch({type:'expedition.action',camp:'mine_upper',action:'relay'}));town(g);assert.equal(skillPurchasePlan(g.data,g.state,'sera','exp_oil_spark',1).ok,false,'a different dungeon relay cannot substitute for 7F');
  g.teleport('kagaribi_relay',1,1);assert.ok(g.dispatch({type:'expedition.action',camp:'kagaribi_relay',action:'relay'}));repair(g,'kagaribi_central');town(g);
  assert.equal(skillPurchasePlan(g.data,g.state,'ada','exp_oil_spark',1).ok,false);
  assert.ok(g.dispatch({type:'unequip',actor:'sera',slot:'weapon'}));assert.equal(skillPurchasePlan(g.data,g.state,'sera','exp_oil_spark',1).ok,false);
