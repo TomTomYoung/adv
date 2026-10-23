@@ -113,7 +113,7 @@ export function validateJobs(data){
   }
   }
   for(const [id,enemy] of Object.entries(data.enemies))if(enemy.undead!==undefined&&typeof enemy.undead!=='boolean')fail(id,'不死者指定不正');
-  for(const [id,enemy] of Object.entries(data.enemies))for(const rule of enemy.ai)if([...(data.skills[rule.skill]?.effects??[]),...(data.skills[rule.skill]?.selfEffects??[])].some(e=>['buff','cover','analyze','repel'].includes(e.type)))fail(id,'職業専用効果は敵AIへ割り当てられません');
+  for(const [id,enemy] of Object.entries(data.enemies))for(const rule of enemy.ai)if([...(data.skills[rule.skill]?.effects??[]),...(data.skills[rule.skill]?.selfEffects??[])].some(e=>['cover','analyze','repel'].includes(e.type)))fail(id,'職業専用効果は敵AIへ割り当てられません');
   return errors;
 }
 export function validateJobState(data,state){
@@ -135,12 +135,16 @@ export function validateJobState(data,state){
   const seen=new Set();
   for(const record of b.buffs){
     if(!isRecord(record)){fail('戦闘補正不正');continue;}
-    const definition=data.buffs[record.id],skill=source(record),key=`${record.target}/${record.id}`;
+    const enemy=Object.hasOwn(record,'sourceEnemy')&&b.enemies.find(e=>e?.instance===record.sourceEnemy);
+    const enemySkill=enemy&&data.enemies[enemy.id]?.ai.some(r=>r.skill===record.sourceSkill)&&data.skills[record.sourceSkill];
+    const definition=data.buffs[record.id],skill=Object.hasOwn(record,'sourceEnemy')?enemySkill:source(record),key=`${record.target}/${record.id}`;
     if(!definition||!skill||!targets.has(record.target)||!integer(record.remaining,1,definition?.turns??0)||seen.has(key)){fail('バフ期限・対象・付与元不正');continue;}seen.add(key);
-    const main=skill.effects.some(e=>e.type==='buff'&&e.buff===record.id),self=skill.selfEffects?.some(e=>e.type==='buff'&&e.buff===record.id)&&record.target===`actor:${record.sourceActor}`;
-    const side=['enemy','all_enemies'].includes(skill.target)?enemyKeys:skill.target==='self'?[`actor:${record.sourceActor}`]:actorKeys;
+    const origin=enemy?`enemy:${record.sourceEnemy}`:`actor:${record.sourceActor}`;
+    const main=skill.effects.some(e=>e.type==='buff'&&e.buff===record.id),self=skill.selfEffects?.some(e=>e.type==='buff'&&e.buff===record.id)&&record.target===origin;
+    const side=['enemy','all_enemies'].includes(skill.target)?(enemy?actorKeys:enemyKeys):skill.target==='self'?[origin]:(enemy?enemyKeys:actorKeys);
     if(!(self||main&&side.includes(record.target)))fail('バフ権限不正');
-    if(Object.keys(record).some(k=>!['id','target','sourceActor','sourceJob','sourceSkill','remaining'].includes(k)))fail('未知のバフ状態項目');
+    const originFields=enemy?['sourceEnemy']:['sourceActor','sourceJob'];
+    if(Object.keys(record).some(k=>!['id','target',...originFields,'sourceSkill','remaining'].includes(k)))fail('未知のバフ状態項目');
   }
   const coveredBy=new Set();
   for(const record of b.covers){

@@ -1672,7 +1672,15 @@ export const referenceData={
       },
       "maps": [
         "region_2_f1",
-        "region_2_f2"
+        "region_2_f2",
+        "region_2_f3",
+        "region_2_f4",
+        "region_2_f5",
+        "region_2_f6",
+        "region_2_f7",
+        "region_2_f8",
+        "region_2_f9",
+        "region_2_f10"
       ],
       "systems": {
         "salt": {
@@ -1693,6 +1701,96 @@ export const referenceData={
               "map": "region_2_f2",
               "x": 4,
               "y": 1
+            },
+            {
+              "map": "region_2_f1",
+              "x": 13,
+              "y": 12
+            },
+            {
+              "map": "region_2_f2",
+              "x": 3,
+              "y": 13
+            },
+            {
+              "map": "region_2_f2",
+              "x": 13,
+              "y": 13
+            },
+            {
+              "map": "region_2_f3",
+              "x": 3,
+              "y": 1
+            },
+            {
+              "map": "region_2_f4",
+              "x": 3,
+              "y": 1
+            },
+            {
+              "map": "region_2_f5",
+              "x": 3,
+              "y": 1
+            },
+            {
+              "map": "region_2_f6",
+              "x": 3,
+              "y": 1
+            },
+            {
+              "map": "region_2_f7",
+              "x": 3,
+              "y": 1
+            },
+            {
+              "map": "region_2_f8",
+              "x": 3,
+              "y": 1
+            },
+            {
+              "map": "region_2_f9",
+              "x": 3,
+              "y": 1
+            },
+            {
+              "map": "region_2_f10",
+              "x": 3,
+              "y": 1
+            },
+            {
+              "map": "region_2_f3",
+              "x": 9,
+              "y": 7
+            },
+            {
+              "map": "region_2_f4",
+              "x": 9,
+              "y": 7
+            },
+            {
+              "map": "region_2_f5",
+              "x": 9,
+              "y": 7
+            },
+            {
+              "map": "region_2_f6",
+              "x": 9,
+              "y": 7
+            },
+            {
+              "map": "region_2_f7",
+              "x": 9,
+              "y": 7
+            },
+            {
+              "map": "region_2_f8",
+              "x": 9,
+              "y": 7
+            },
+            {
+              "map": "region_2_f9",
+              "x": 9,
+              "y": 7
             }
           ]
         },
@@ -1824,6 +1922,200 @@ export const referenceData={
                 "y": 1,
                 "facing": "east"
               }
+            },
+            {
+              "id": "floor_2_3",
+              "name": "3F 砕石場への階段",
+              "kind": "stairs",
+              "a": {
+                "map": "region_2_f2",
+                "x": 13,
+                "y": 13,
+                "facing": "east"
+              },
+              "b": {
+                "map": "region_2_f3",
+                "x": 1,
+                "y": 1,
+                "facing": "east"
+              }
+            },
+            {
+              "id": "floor_3_4",
+              "name": "4F 選鉱詰所への階段",
+              "kind": "stairs",
+              "a": {
+                "map": "region_2_f3",
+                "x": 9,
+                "y": 7,
+                "facing": "east"
+              },
+              "b": {
+                "map": "region_2_f4",
+                "x": 1,
+                "y": 1,
+                "facing": "east"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.mine.supportSecured"
+                },
+                "right": true
+              },
+              "requirement": "向こう側の設備を復旧すると通れる。"
+            },
+            {
+              "id": "floor_4_5",
+              "name": "5F 塩の吹溜まりへの階段",
+              "kind": "stairs",
+              "a": {
+                "map": "region_2_f4",
+                "x": 9,
+                "y": 7,
+                "facing": "east"
+              },
+              "b": {
+                "map": "region_2_f5",
+                "x": 1,
+                "y": 1,
+                "facing": "east"
+              }
+            },
+            {
+              "id": "floor_5_6",
+              "name": "6F 旧運搬線への階段",
+              "kind": "stairs",
+              "a": {
+                "map": "region_2_f5",
+                "x": 9,
+                "y": 7,
+                "facing": "east"
+              },
+              "b": {
+                "map": "region_2_f6",
+                "x": 1,
+                "y": 1,
+                "facing": "east"
+              }
+            },
+            {
+              "id": "floor_6_7",
+              "name": "7F 巻上詰所への階段",
+              "kind": "stairs",
+              "a": {
+                "map": "region_2_f6",
+                "x": 9,
+                "y": 7,
+                "facing": "east"
+              },
+              "b": {
+                "map": "region_2_f7",
+                "x": 1,
+                "y": 1,
+                "facing": "east"
+              }
+            },
+            {
+              "id": "floor_7_8",
+              "name": "8F 割晶坑への階段",
+              "kind": "stairs",
+              "a": {
+                "map": "region_2_f7",
+                "x": 9,
+                "y": 7,
+                "facing": "east"
+              },
+              "b": {
+                "map": "region_2_f8",
+                "x": 1,
+                "y": 1,
+                "facing": "east"
+              }
+            },
+            {
+              "id": "floor_8_9",
+              "name": "9F 試錐場への階段",
+              "kind": "stairs",
+              "a": {
+                "map": "region_2_f8",
+                "x": 9,
+                "y": 7,
+                "facing": "east"
+              },
+              "b": {
+                "map": "region_2_f9",
+                "x": 1,
+                "y": 1,
+                "facing": "east"
+              }
+            },
+            {
+              "id": "floor_9_10",
+              "name": "10F 大選鉱室への階段",
+              "kind": "stairs",
+              "a": {
+                "map": "region_2_f9",
+                "x": 9,
+                "y": 7,
+                "facing": "east"
+              },
+              "b": {
+                "map": "region_2_f10",
+                "x": 1,
+                "y": 1,
+                "facing": "east"
+              }
+            },
+            {
+              "id": "haul_cart",
+              "name": "6Fから2Fへ続く手押し台車路",
+              "kind": "stairs",
+              "a": {
+                "map": "region_2_f6",
+                "x": 5,
+                "y": 1,
+                "facing": "east"
+              },
+              "b": {
+                "map": "region_2_f2",
+                "x": 3,
+                "y": 13,
+                "facing": "east"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.mine.cartOpen"
+                },
+                "right": true
+              },
+              "requirement": "向こう側の設備を復旧すると通れる。"
+            },
+            {
+              "id": "sorting_lift",
+              "name": "10Fから4Fへ続く選鉱搬送路",
+              "kind": "stairs",
+              "a": {
+                "map": "region_2_f10",
+                "x": 9,
+                "y": 1,
+                "facing": "east"
+              },
+              "b": {
+                "map": "region_2_f4",
+                "x": 9,
+                "y": 1,
+                "facing": "east"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.mine.liftOpen"
+                },
+                "right": true
+              },
+              "requirement": "向こう側の設備を復旧すると通れる。"
             }
           ]
         }
@@ -5038,6 +5330,66 @@ export const referenceData={
       ],
       "kind": "scripts",
       "id": "waterway.supply_rope.region_1_gatehouse"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f1",
+        "objects",
+        5,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "mine.supply_rope.1"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f2",
+        "objects",
+        4,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "mine.supply_rope.2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f4",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "mine.supply_rope.4"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f7",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "mine.supply_rope.7"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f10",
+        "objects",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "mine.supply_rope.10"
     },
     {
       "file": "jobs.json",
@@ -16119,6 +16471,16 @@ export const referenceData={
       "id": "potion"
     },
     {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "mine_shellbreaker",
+        "item"
+      ],
+      "kind": "items",
+      "id": "potion"
+    },
+    {
       "file": "cell-layers.json",
       "path": [
         "presets",
@@ -17425,6 +17787,64 @@ export const referenceData={
     {
       "file": "dungeon-content.json",
       "path": [
+        "enemies",
+        "mine_shellbreaker",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_ceramic_armadillo"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_shellbreaker",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "guard"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_shellbreaker",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "mine_shell_recover"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_shellbreaker",
+        "ai",
+        2,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "mine_shell_charge"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_shellbreaker",
+        "ai",
+        3,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
         "encounters",
         "market_enforcers",
         "enemies",
@@ -17520,6 +17940,17 @@ export const referenceData={
       ],
       "kind": "enemies",
       "id": "waterway_sluice_beast"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_shell_guardian",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "mine_shellbreaker"
     },
     {
       "file": "dungeon-content.json",
@@ -17680,6 +18111,1030 @@ export const referenceData={
     {
       "file": "dungeon-content.json",
       "path": [
+        "maps",
+        "region_2_f1",
+        "background"
+      ],
+      "kind": "images",
+      "id": "corridor"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f1",
+        "music"
+      ],
+      "kind": "audio",
+      "id": "exploration"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f1",
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "roaming_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f1",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "region_2_f1.exit"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f1",
+        "objects",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "region_2_f1.cache"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f1",
+        "objects",
+        2,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "region_2_f1.fountain"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f1",
+        "objects",
+        3,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "region_2_f1.trap"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f1",
+        "objects",
+        4,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "region_2_f1.door"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f1",
+        "objects",
+        5,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "mine.supply_rope.1"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f1",
+        "encounterPool",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "roaming_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f1",
+        "encounterPool",
+        1,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_drill_mole"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f1",
+        "encounterPool",
+        2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_ceramic_armadillo"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f1",
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f2",
+        "background"
+      ],
+      "kind": "images",
+      "id": "corridor"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f2",
+        "music"
+      ],
+      "kind": "audio",
+      "id": "exploration"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f2",
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "roaming_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f2",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "region_2_f2.cache"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f2",
+        "objects",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "region_2_f2.fountain"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f2",
+        "objects",
+        2,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "region_2_f2.trap"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f2",
+        "objects",
+        3,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "region_2_f2.door"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f2",
+        "objects",
+        4,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "mine.supply_rope.2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f2",
+        "encounterPool",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "roaming_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f2",
+        "encounterPool",
+        1,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_drill_mole"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f2",
+        "encounterPool",
+        2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_ceramic_armadillo"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f2",
+        "encounterPool",
+        3,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f2",
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f3",
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f3",
+        "background"
+      ],
+      "kind": "images",
+      "id": "corridor"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f3",
+        "music"
+      ],
+      "kind": "audio",
+      "id": "exploration"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f3",
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f3",
+        "encounterPool",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_drill_mole"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f3",
+        "encounterPool",
+        1,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_ceramic_armadillo"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f3",
+        "encounterPool",
+        2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f3",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "mine.support_brace.3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f4",
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f4",
+        "background"
+      ],
+      "kind": "images",
+      "id": "corridor"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f4",
+        "music"
+      ],
+      "kind": "audio",
+      "id": "exploration"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f4",
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f4",
+        "encounterPool",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_drill_mole"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f4",
+        "encounterPool",
+        1,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_ceramic_armadillo"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f4",
+        "encounterPool",
+        2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f4",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "mine.supply_rope.4"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f5",
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f5",
+        "background"
+      ],
+      "kind": "images",
+      "id": "corridor"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f5",
+        "music"
+      ],
+      "kind": "audio",
+      "id": "exploration"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f5",
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f5",
+        "encounterPool",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_drill_mole"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f5",
+        "encounterPool",
+        1,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_ceramic_armadillo"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f5",
+        "encounterPool",
+        2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f5",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "mine.salt_warning.5"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f6",
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f6",
+        "background"
+      ],
+      "kind": "images",
+      "id": "corridor"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f6",
+        "music"
+      ],
+      "kind": "audio",
+      "id": "exploration"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f6",
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f6",
+        "encounterPool",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_drill_mole"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f6",
+        "encounterPool",
+        1,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_ceramic_armadillo"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f6",
+        "encounterPool",
+        2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f6",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "mine.cart_latch.6"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f7",
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f7",
+        "background"
+      ],
+      "kind": "images",
+      "id": "corridor"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f7",
+        "music"
+      ],
+      "kind": "audio",
+      "id": "exploration"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f7",
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f7",
+        "encounterPool",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_drill_mole"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f7",
+        "encounterPool",
+        1,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_ceramic_armadillo"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f7",
+        "encounterPool",
+        2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f7",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "mine.supply_rope.7"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f8",
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f8",
+        "background"
+      ],
+      "kind": "images",
+      "id": "corridor"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f8",
+        "music"
+      ],
+      "kind": "audio",
+      "id": "exploration"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f8",
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f8",
+        "encounterPool",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_drill_mole"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f8",
+        "encounterPool",
+        1,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_ceramic_armadillo"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f8",
+        "encounterPool",
+        2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f8",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "mine.crystal_record.8"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f9",
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f9",
+        "background"
+      ],
+      "kind": "images",
+      "id": "corridor"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f9",
+        "music"
+      ],
+      "kind": "audio",
+      "id": "exploration"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f9",
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f9",
+        "encounterPool",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_drill_mole"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f9",
+        "encounterPool",
+        1,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_ceramic_armadillo"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f9",
+        "encounterPool",
+        2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f9",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "mine.charge_record.9"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f10",
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f10",
+        "background"
+      ],
+      "kind": "images",
+      "id": "corridor"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f10",
+        "music"
+      ],
+      "kind": "audio",
+      "id": "exploration"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f10",
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f10",
+        "encounterPool",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_drill_mole"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f10",
+        "encounterPool",
+        1,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_ceramic_armadillo"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f10",
+        "encounterPool",
+        2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f10",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "mine.lift_latch.10"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f10",
+        "objects",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "mine.supply_rope.10"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f10",
+        "objects",
+        2,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "mine.shellbreaker.10"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
         "scripts",
         "waterway.dry_stair_latch",
         "commands",
@@ -17732,6 +19187,24 @@ export const referenceData={
       ],
       "kind": "items",
       "id": "exp_t2_ticket"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "mine.shellbreaker.10",
+        "commands",
+        0,
+        "else",
+        1,
+        "options",
+        0,
+        "commands",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "mine_shell_guardian"
     },
     {
       "file": "dungeon-content.json",
@@ -19116,6 +20589,66 @@ export const referenceData={
       ],
       "kind": "maps",
       "id": "region_1_gatehouse"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        15,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_2"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        15,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f4"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        16,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_2"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        16,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f7"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        17,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_2"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        17,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f10"
     },
     {
       "file": "jobs.json",
@@ -21917,6 +23450,42 @@ export const referenceData={
       ],
       "kind": "formulas",
       "id": "exp_purging_pursuit"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_shell_charge",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heavy"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_shell_charge",
+        "selfEffects",
+        0,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "mine_open_shell"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_shell_recover",
+        "effects",
+        0,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "mine_recover_shell"
     },
     {
       "file": "jobs.json",
@@ -29525,6 +31094,78 @@ export const referenceData={
     {
       "file": "dungeons/region_2.json",
       "path": [
+        "maps",
+        2
+      ],
+      "kind": "maps",
+      "id": "region_2_f3"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "maps",
+        3
+      ],
+      "kind": "maps",
+      "id": "region_2_f4"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "maps",
+        4
+      ],
+      "kind": "maps",
+      "id": "region_2_f5"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "maps",
+        5
+      ],
+      "kind": "maps",
+      "id": "region_2_f6"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "maps",
+        6
+      ],
+      "kind": "maps",
+      "id": "region_2_f7"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "maps",
+        7
+      ],
+      "kind": "maps",
+      "id": "region_2_f8"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "maps",
+        8
+      ],
+      "kind": "maps",
+      "id": "region_2_f9"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "maps",
+        9
+      ],
+      "kind": "maps",
+      "id": "region_2_f10"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
         "systems",
         "salt",
         "eater",
@@ -29567,6 +31208,222 @@ export const referenceData={
       ],
       "kind": "maps",
       "id": "region_2_f2"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "salt",
+        "washZones",
+        2,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f1"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "salt",
+        "washZones",
+        3,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f2"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "salt",
+        "washZones",
+        4,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f2"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "salt",
+        "washZones",
+        5,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f3"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "salt",
+        "washZones",
+        6,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f4"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "salt",
+        "washZones",
+        7,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f5"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "salt",
+        "washZones",
+        8,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f6"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "salt",
+        "washZones",
+        9,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f7"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "salt",
+        "washZones",
+        10,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f8"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "salt",
+        "washZones",
+        11,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f9"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "salt",
+        "washZones",
+        12,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f10"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "salt",
+        "washZones",
+        13,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f3"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "salt",
+        "washZones",
+        14,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f4"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "salt",
+        "washZones",
+        15,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f5"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "salt",
+        "washZones",
+        16,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f6"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "salt",
+        "washZones",
+        17,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f7"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "salt",
+        "washZones",
+        18,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f8"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "salt",
+        "washZones",
+        19,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f9"
     },
     {
       "file": "dungeons/region_2.json",
@@ -29745,6 +31602,266 @@ export const referenceData={
       ],
       "kind": "maps",
       "id": "region_2_f2"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        1,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f2"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        1,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f3"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        2,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f3"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        2,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f4"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        3,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f4"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        3,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f5"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        4,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f5"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        4,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f6"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        5,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f6"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        5,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f7"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        6,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f7"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        6,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f8"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        7,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f8"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        7,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f9"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        8,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f9"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        8,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f10"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        9,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f6"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        9,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f2"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        10,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f10"
+    },
+    {
+      "file": "dungeons/region_2.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        10,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_2_f4"
     },
     {
       "file": "dungeons/region_3.json",
@@ -35541,7 +37658,15 @@ export const referenceData={
     "data/maps/region_1_landing.json",
     "data/maps/region_1_lower_landing.json",
     "data/maps/region_2_f1.json",
+    "data/maps/region_2_f10.json",
     "data/maps/region_2_f2.json",
+    "data/maps/region_2_f3.json",
+    "data/maps/region_2_f4.json",
+    "data/maps/region_2_f5.json",
+    "data/maps/region_2_f6.json",
+    "data/maps/region_2_f7.json",
+    "data/maps/region_2_f8.json",
+    "data/maps/region_2_f9.json",
     "data/maps/region_3_f1.json",
     "data/maps/region_3_f2.json",
     "data/maps/region_4_f1.json",
@@ -36263,6 +38388,12 @@ export const referenceData={
       },
       "exp_purging_pursuit": {
         "name": "祓いの追撃"
+      },
+      "mine_shell_charge": {
+        "name": "殻砕きの突進"
+      },
+      "mine_shell_recover": {
+        "name": "殻を開いて息継ぎ"
       }
     },
     "items": {
@@ -36759,6 +38890,10 @@ export const referenceData={
       "waterway_sluice_beast": {
         "name": "水門獣",
         "sprite": "monster_sluice_crocodile"
+      },
+      "mine_shellbreaker": {
+        "name": "殻砕き獣",
+        "sprite": "monster_ceramic_armadillo"
       }
     },
     "encounters": {
@@ -37079,6 +39214,9 @@ export const referenceData={
       },
       "waterway_sluice_guardian": {
         "name": "大水門の水門獣"
+      },
+      "mine_shell_guardian": {
+        "name": "大選鉱室の殻砕き獣"
       }
     },
     "statuses": {
@@ -37559,6 +39697,12 @@ export const referenceData={
       },
       "exp_parry70": {
         "name": "受け流し（物理1回）"
+      },
+      "mine_open_shell": {
+        "name": "開いた殻"
+      },
+      "mine_recover_shell": {
+        "name": "殻を開いた息継ぎ"
       }
     },
     "fieldAbilities": {
@@ -40251,7 +42395,13 @@ export const referenceData={
       "height": 15,
       "dungeon": "region_2",
       "file": "data/maps/region_2_f1.json",
-      "owner": null
+      "owner": {
+        "file": "dungeon-content.json",
+        "path": [
+          "maps",
+          "region_2_f1"
+        ]
+      }
     },
     "region_2_f2": {
       "id": "region_2_f2",
@@ -40260,7 +42410,13 @@ export const referenceData={
       "height": 15,
       "dungeon": "region_2",
       "file": "data/maps/region_2_f2.json",
-      "owner": null
+      "owner": {
+        "file": "dungeon-content.json",
+        "path": [
+          "maps",
+          "region_2_f2"
+        ]
+      }
     },
     "region_3_f1": {
       "id": "region_3_f1",
@@ -40703,6 +42859,126 @@ export const referenceData={
         "path": [
           "maps",
           "kagaribi_manifold"
+        ]
+      }
+    },
+    "region_2_f3": {
+      "id": "region_2_f3",
+      "name": "塩哭きの廃坑・3F 砕石場",
+      "width": 11,
+      "height": 9,
+      "dungeon": "region_2",
+      "file": "data/maps/region_2_f3.json",
+      "owner": {
+        "file": "dungeon-content.json",
+        "path": [
+          "maps",
+          "region_2_f3"
+        ]
+      }
+    },
+    "region_2_f4": {
+      "id": "region_2_f4",
+      "name": "塩哭きの廃坑・4F 選鉱詰所",
+      "width": 11,
+      "height": 9,
+      "dungeon": "region_2",
+      "file": "data/maps/region_2_f4.json",
+      "owner": {
+        "file": "dungeon-content.json",
+        "path": [
+          "maps",
+          "region_2_f4"
+        ]
+      }
+    },
+    "region_2_f5": {
+      "id": "region_2_f5",
+      "name": "塩哭きの廃坑・5F 塩の吹溜まり",
+      "width": 11,
+      "height": 9,
+      "dungeon": "region_2",
+      "file": "data/maps/region_2_f5.json",
+      "owner": {
+        "file": "dungeon-content.json",
+        "path": [
+          "maps",
+          "region_2_f5"
+        ]
+      }
+    },
+    "region_2_f6": {
+      "id": "region_2_f6",
+      "name": "塩哭きの廃坑・6F 旧運搬線",
+      "width": 11,
+      "height": 9,
+      "dungeon": "region_2",
+      "file": "data/maps/region_2_f6.json",
+      "owner": {
+        "file": "dungeon-content.json",
+        "path": [
+          "maps",
+          "region_2_f6"
+        ]
+      }
+    },
+    "region_2_f7": {
+      "id": "region_2_f7",
+      "name": "塩哭きの廃坑・7F 巻上詰所",
+      "width": 11,
+      "height": 9,
+      "dungeon": "region_2",
+      "file": "data/maps/region_2_f7.json",
+      "owner": {
+        "file": "dungeon-content.json",
+        "path": [
+          "maps",
+          "region_2_f7"
+        ]
+      }
+    },
+    "region_2_f8": {
+      "id": "region_2_f8",
+      "name": "塩哭きの廃坑・8F 割晶坑",
+      "width": 11,
+      "height": 9,
+      "dungeon": "region_2",
+      "file": "data/maps/region_2_f8.json",
+      "owner": {
+        "file": "dungeon-content.json",
+        "path": [
+          "maps",
+          "region_2_f8"
+        ]
+      }
+    },
+    "region_2_f9": {
+      "id": "region_2_f9",
+      "name": "塩哭きの廃坑・9F 試錐場",
+      "width": 11,
+      "height": 9,
+      "dungeon": "region_2",
+      "file": "data/maps/region_2_f9.json",
+      "owner": {
+        "file": "dungeon-content.json",
+        "path": [
+          "maps",
+          "region_2_f9"
+        ]
+      }
+    },
+    "region_2_f10": {
+      "id": "region_2_f10",
+      "name": "塩哭きの廃坑・10F 大選鉱室",
+      "width": 11,
+      "height": 9,
+      "dungeon": "region_2",
+      "file": "data/maps/region_2_f10.json",
+      "owner": {
+        "file": "dungeon-content.json",
+        "path": [
+          "maps",
+          "region_2_f10"
         ]
       }
     }
@@ -49501,6 +51777,10 @@ export const referenceData={
     "flags.legacyStoryRoutes.q008",
     "flags.legacyStoryRoutes.q009",
     "flags.legacyStoryRoutes.q010",
+    "flags.mine.cartOpen",
+    "flags.mine.liftOpen",
+    "flags.mine.shellbreakerWon",
+    "flags.mine.supportSecured",
     "flags.quest.q005.disclosed",
     "flags.quest.q005.questioned",
     "flags.quest.q006.disclosed",
@@ -51322,6 +53602,34 @@ export const referenceData={
       "name": "waterway.sluice_beast",
       "file": "config/dungeon-content.json"
     },
+    "mine.support_brace.3": {
+      "name": "mine.support_brace.3",
+      "file": "config/dungeon-content.json"
+    },
+    "mine.cart_latch.6": {
+      "name": "mine.cart_latch.6",
+      "file": "config/dungeon-content.json"
+    },
+    "mine.lift_latch.10": {
+      "name": "mine.lift_latch.10",
+      "file": "config/dungeon-content.json"
+    },
+    "mine.salt_warning.5": {
+      "name": "塩4以上の装備はソルトイーターに食われることがある。戦闘ごとに塩が1増える。階段",
+      "file": "config/dungeon-content.json"
+    },
+    "mine.crystal_record.8": {
+      "name": "陶器の殻には術と貫通が有効だ。ここに新しい武器は残っていない。塩を洗いながら、手",
+      "file": "config/dungeon-content.json"
+    },
+    "mine.charge_record.9": {
+      "name": "殻砕き獣は三巡を繰り返す。一巡目は身を固め、二巡目に一人へ突進、三巡目は殻を開い",
+      "file": "config/dungeon-content.json"
+    },
+    "mine.shellbreaker.10": {
+      "name": "mine.shellbreaker.10",
+      "file": "config/dungeon-content.json"
+    },
     "cell.poison_step": {
       "name": "毒の沼地を踏んだ。",
       "file": "config/cell-layers.json"
@@ -51349,6 +53657,14 @@ export const referenceData={
     "cell.package.trap_drip": {
       "name": "落滴が発生した。",
       "file": "data/scripts/cell-events.json"
+    },
+    "treasure.package.region_2_f1.supply_rope": {
+      "name": "treasure.package.region_2_f1.supply_rope",
+      "file": "data/scripts/dungeon-packages.json"
+    },
+    "treasure.package.region_2_f2.supply_rope": {
+      "name": "treasure.package.region_2_f2.supply_rope",
+      "file": "data/scripts/dungeon-packages.json"
     },
     "treasure.package.kagaribi_f1.supply_rope": {
       "name": "treasure.package.kagaribi_f1.supply_rope",
@@ -51396,6 +53712,18 @@ export const referenceData={
     },
     "treasure.package.kagaribi_manifold.supply_rope": {
       "name": "treasure.package.kagaribi_manifold.supply_rope",
+      "file": "data/scripts/dungeon-packages.json"
+    },
+    "treasure.package.region_2_f4.supply_rope": {
+      "name": "treasure.package.region_2_f4.supply_rope",
+      "file": "data/scripts/dungeon-packages.json"
+    },
+    "treasure.package.region_2_f7.supply_rope": {
+      "name": "treasure.package.region_2_f7.supply_rope",
+      "file": "data/scripts/dungeon-packages.json"
+    },
+    "treasure.package.region_2_f10.supply_rope": {
+      "name": "treasure.package.region_2_f10.supply_rope",
       "file": "data/scripts/dungeon-packages.json"
     },
     "q001.v11.entry": {
@@ -61555,6 +63883,55 @@ export const referenceData={
         "waterway.sluice_beast"
       ]
     },
+    "mine.support_brace.3": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "mine.support_brace.3"
+      ]
+    },
+    "mine.cart_latch.6": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "mine.cart_latch.6"
+      ]
+    },
+    "mine.lift_latch.10": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "mine.lift_latch.10"
+      ]
+    },
+    "mine.salt_warning.5": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "mine.salt_warning.5"
+      ]
+    },
+    "mine.crystal_record.8": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "mine.crystal_record.8"
+      ]
+    },
+    "mine.charge_record.9": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "mine.charge_record.9"
+      ]
+    },
+    "mine.shellbreaker.10": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "mine.shellbreaker.10"
+      ]
+    },
     "kagaribi.exit": {
       "file": "kagaribi-content.json",
       "path": [
@@ -61935,6 +64312,13 @@ export const referenceData={
         "waterway_sluice_beast"
       ]
     },
+    "enemies/mine_shellbreaker": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_shellbreaker"
+      ]
+    },
     "encounters/market_enforcers": {
       "file": "dungeon-content.json",
       "path": [
@@ -61989,6 +64373,13 @@ export const referenceData={
       "path": [
         "encounters",
         "waterway_sluice_guardian"
+      ]
+    },
+    "encounters/mine_shell_guardian": {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_shell_guardian"
       ]
     },
     "actors/ada": {
@@ -63012,6 +65403,20 @@ export const referenceData={
         "exp_purging_pursuit"
       ]
     },
+    "skills/mine_shell_charge": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_shell_charge"
+      ]
+    },
+    "skills/mine_shell_recover": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_shell_recover"
+      ]
+    },
     "fieldAbilities/survey": {
       "file": "jobs.json",
       "path": [
@@ -63367,6 +65772,20 @@ export const referenceData={
       "path": [
         "buffs",
         "exp_parry70"
+      ]
+    },
+    "buffs/mine_open_shell": {
+      "file": "jobs.json",
+      "path": [
+        "buffs",
+        "mine_open_shell"
+      ]
+    },
+    "buffs/mine_recover_shell": {
+      "file": "jobs.json",
+      "path": [
+        "buffs",
+        "mine_recover_shell"
       ]
     },
     "items/kagaribi_torch": {
@@ -67988,6 +70407,55 @@ export const referenceData={
         "waterway.sluice_beast"
       ]
     },
+    "scripts/mine.support_brace.3": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "mine.support_brace.3"
+      ]
+    },
+    "scripts/mine.cart_latch.6": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "mine.cart_latch.6"
+      ]
+    },
+    "scripts/mine.lift_latch.10": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "mine.lift_latch.10"
+      ]
+    },
+    "scripts/mine.salt_warning.5": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "mine.salt_warning.5"
+      ]
+    },
+    "scripts/mine.crystal_record.8": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "mine.crystal_record.8"
+      ]
+    },
+    "scripts/mine.charge_record.9": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "mine.charge_record.9"
+      ]
+    },
+    "scripts/mine.shellbreaker.10": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "mine.shellbreaker.10"
+      ]
+    },
     "scripts/kagaribi.exit": {
       "file": "kagaribi-content.json",
       "path": [
@@ -68247,6 +70715,20 @@ export const referenceData={
         "region_1_f2"
       ]
     },
+    "maps/region_2_f1": {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f1"
+      ]
+    },
+    "maps/region_2_f2": {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f2"
+      ]
+    },
     "maps/kagaribi_f1": {
       "file": "kagaribi-content.json",
       "path": [
@@ -68385,6 +70867,62 @@ export const referenceData={
       "path": [
         "maps",
         "kagaribi_manifold"
+      ]
+    },
+    "maps/region_2_f3": {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f3"
+      ]
+    },
+    "maps/region_2_f4": {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f4"
+      ]
+    },
+    "maps/region_2_f5": {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f5"
+      ]
+    },
+    "maps/region_2_f6": {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f6"
+      ]
+    },
+    "maps/region_2_f7": {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f7"
+      ]
+    },
+    "maps/region_2_f8": {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f8"
+      ]
+    },
+    "maps/region_2_f9": {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f9"
+      ]
+    },
+    "maps/region_2_f10": {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f10"
       ]
     },
     "locations/hikarigaeri_square": {

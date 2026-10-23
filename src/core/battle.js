@@ -323,7 +323,8 @@ function enemyAction(engine,enemy){
     else if(skill.target==='ally')targets=[b.enemies.filter(e=>battleAlive(s,e)).sort((a,c)=>a.hp/a.stats.hp-c.hp/c.stats.hp)[0]];
     else targets=[coveredTarget(engine,s.actors[targetId],skill)];
     if(!skill.effects.length)b.log.push(`${enemy.name}は${skill.name}。`);
-    useSkill(engine,enemy,targets,skill,rule.skill,true);
+    const activated=useSkill(engine,enemy,targets,skill,rule.skill,true);
+    if(activated&&skill.selfEffects?.length)applySkill(engine,enemy,enemy,{...skill,effects:skill.selfEffects},rule.skill,true,null,false);
 }
 // The mixed queue is a snapshot of the living units' AGI at each round start.
 // Equal AGI is stable: party order first, then encounter order.

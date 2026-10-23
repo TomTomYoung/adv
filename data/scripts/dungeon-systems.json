@@ -138,6 +138,269 @@
           ]
         }
       ]
+    },
+    "mine.support_brace.3": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.mine.supportSecured"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "設備は開通している。帰り道にも利用できる。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "崩れた支柱の脇に、再使用できる留め金が残っている。留め金を固定すれば4Fへの階段を安全に通れる。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "open",
+                  "text": "坑道支柱を復旧する",
+                  "commands": [
+                    {
+                      "op": "flag.set",
+                      "key": "mine.supportSecured",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "設備を固定した。次の探索でも使える。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "mine.cart_latch.6": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.mine.cartOpen"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "設備は開通している。帰り道にも利用できる。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "線路の留め金を戻すと、2Fの南の待避場へ台車を押して通れる。帰りも同じ道を歩ける。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "open",
+                  "text": "手押し台車路を復旧する",
+                  "commands": [
+                    {
+                      "op": "flag.set",
+                      "key": "mine.cartOpen",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "設備を固定した。次の探索でも使える。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "mine.lift_latch.10": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.mine.liftOpen"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "設備は開通している。帰り道にも利用できる。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "錘を掛け直すと4F選鉱詰所へ戻れる。主に挑む前にも開けておける帰路だ。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "open",
+                  "text": "選鉱搬送路を復旧する",
+                  "commands": [
+                    {
+                      "op": "flag.set",
+                      "key": "mine.liftOpen",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "設備を固定した。次の探索でも使える。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "mine.salt_warning.5": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "塩4以上の装備はソルトイーターに食われることがある。戦闘ごとに塩が1増える。階段脇の水に入れば全装備を洗えるが、HP・MPは戻らない。装備の塩は迷宮の状態で確認できる。"
+        }
+      ]
+    },
+    "mine.crystal_record.8": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "陶器の殻には術と貫通が有効だ。ここに新しい武器は残っていない。塩を洗いながら、手持ちの武器と術を使い分ける。"
+        }
+      ]
+    },
+    "mine.charge_record.9": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "殻砕き獣は三巡を繰り返す。一巡目は身を固め、二巡目に一人へ突進、三巡目は殻を開いて息を継ぐ。突進後は防御が三割下がる。10Fの主の二歩手前に洗浄槽がある。"
+        }
+      ]
+    },
+    "mine.shellbreaker.10": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.mine.shellbreakerWon"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "殻砕き獣は退いた。東の中央給油所を復旧できる。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "殻砕き獣は防御、単体突進、息継ぎの三巡を繰り返す。突進後は防御が三割下がる。西二歩の洗浄槽で塩を落とし、東の搬送路を先に開いておくこともできる。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "fight",
+                  "text": "殻砕き獣に挑む",
+                  "commands": [
+                    {
+                      "op": "battle.start",
+                      "encounter": "mine_shell_guardian",
+                      "on_win": [
+                        {
+                          "op": "flag.set",
+                          "key": "mine.shellbreakerWon",
+                          "value": true
+                        },
+                        {
+                          "op": "narrate",
+                          "text": "殻砕き獣が退いた。東の中央給油所を修理できる。洗浄槽で装備の塩を落としてから帰ろう。"
+                        }
+                      ],
+                      "on_lose": [],
+                      "on_escape": [
+                        {
+                          "op": "narrate",
+                          "text": "殻砕き獣は選鉱機へ戻った。西の洗浄槽と北通路の搬送路を使い、準備して再挑戦できる。"
+                        }
+                      ],
+                      "on_interrupt": [],
+                      "events": [
+                        {
+                          "id": "charge_warning",
+                          "triggers": [
+                            "round_start"
+                          ],
+                          "condition": {
+                            "op": "eq",
+                            "left": {
+                              "ref": "battle.round"
+                            },
+                            "right": 2
+                          },
+                          "commands": [
+                            {
+                              "op": "narrate",
+                              "text": "殻砕き獣が頭を低くした。この巡は一人へ突進する。次の巡は殻が開いて防御が下がる。以後も三巡ごとに同じ動きを繰り返す。"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   }
 }

@@ -41,7 +41,8 @@ test('unmigrated quest effects remain exact apart from narration, journeys and e
   if(['region_1_f1','region_1_f2','waterworks_shaft'].includes(map))continue;
   const replacedStairs=['kagaribi_f1','kagaribi_f2','kagaribi_f3','region_2_f1','region_2_f2','region_3_f1','region_3_f2'].includes(map);
   // 1.25 adds a route sign and the altar-side shortcut; their interactions are covered by kagaribi-expansion.test.mjs.
-  const added={kagaribi_f2:['route_sign'],kagaribi_f3:['altar_latch','altar_keeper','supply_rope'],kagaribi_f1:['supply_rope']};
+  // Mine supply ropes are new non-quest objects, covered by mine-progression.test.mjs.
+  const added={kagaribi_f2:['route_sign'],kagaribi_f3:['altar_latch','altar_keeper','supply_rope'],kagaribi_f1:['supply_rope'],region_2_f1:['supply_rope'],region_2_f2:['supply_rope']};
   const current=data.maps[map].objects.filter(o=>!['q001','q003','q004'].includes(o.quest)&&!(o.quest&&data.quests[o.quest].number>200)&&!added[map]?.includes(o.id));
   assert.equal(current.length,Object.keys(objects).filter(id=>!id.startsWith('q001_')&&!id.startsWith('q003_')&&!id.startsWith('q004_')&&!(replacedStairs&&['stairs','up','down'].includes(id))).length,map);
   // Only the new placement metadata is excluded from this historical script/state baseline.

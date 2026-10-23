@@ -30,6 +30,8 @@
 
 `tools/browser-runtime-smoke.mjs` は実 `index.html` を `/adv/` 以下で配信し、長期キャッシュを保持した通常再読み込みでJS依存先・CSS・JSONが一緒に更新されることと、セーブが同一であることを確認します。燃料補充後の南帰路イベント、配信情報・JS・CSS・JSONの欠落／不一致時の保存保持、390pxでの起動も検証します。不一致の解消後はキャッシュを消さず同じブラウザで再読み込みし、保存した位置から再開できることも確認します。
 
+[廃坑の実攻略測定](MINE_ROUTE_MEASUREMENTS.json)は篝火後12条件、[実装と制限](../dungeons/MINE_TEN_FLOORS.md)に洗浄・帰路・旧保存の条件を記録しています。
+
 ## 検査と履歴
 
 `npm run check:docs` はフォルダ索引、Markdown・画像・編集画面のリンク、生成一覧と配置図、配布データの指紋、旧原文のハッシュを照合します。`npm run check:config` は237原稿と対応HTMLを検査します。

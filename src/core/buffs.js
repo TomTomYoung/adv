@@ -21,7 +21,8 @@ export function buffResistance(data,battle,target,element){
 export function addBuff(engine,id,target,source,skill){
   const b=engine.state.battle,def=engine.data.buffs[id];
   if(!def||!b)throw new Error(`未登録の戦闘補正: ${id}`);
-  const record={id,target:unitKey(target),sourceActor:source.id,sourceJob:source.job,sourceSkill:skill,remaining:def.turns};
+  const origin=source.instance?{sourceEnemy:source.instance}:{sourceActor:source.id,sourceJob:source.job};
+  const record={id,target:unitKey(target),...origin,sourceSkill:skill,remaining:def.turns};
   const at=b.buffs.findIndex(x=>x.id===id&&x.target===record.target);
   if(at<0)b.buffs.push(record);else b.buffs[at]=record;
 }

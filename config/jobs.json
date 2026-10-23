@@ -2316,6 +2316,24 @@
       "resist": {},
       "physicalTaken": 0.7,
       "consume": "physical_hit"
+    },
+    "mine_open_shell": {
+      "id": "mine_open_shell",
+      "name": "開いた殻",
+      "turns": 2,
+      "stats": {
+        "vit": 0.7
+      },
+      "resist": {}
+    },
+    "mine_recover_shell": {
+      "id": "mine_recover_shell",
+      "name": "殻を開いた息継ぎ",
+      "turns": 1,
+      "stats": {
+        "vit": 0.7
+      },
+      "resist": {}
     }
   },
   "fieldAbilities": {
@@ -4076,6 +4094,37 @@
       ],
       "description": "MP7。敵1体への光攻撃。前中後衛では場に残る戦闘不能の不死者を除去できます。生存者や味方は除去しません。",
       "maxSkillLevel": 1
+    },
+    "mine_shell_charge": {
+      "name": "殻砕きの突進",
+      "mp": 0,
+      "target": "enemy",
+      "effects": [
+        {
+          "type": "damage",
+          "formula": "heavy",
+          "element": "physical"
+        }
+      ],
+      "selfEffects": [
+        {
+          "type": "buff",
+          "buff": "mine_open_shell"
+        }
+      ],
+      "description": "単体へ突進。攻撃後、次の巡まで自身の防御が30%低下する。"
+    },
+    "mine_shell_recover": {
+      "name": "殻を開いて息継ぎ",
+      "mp": 0,
+      "target": "self",
+      "effects": [
+        {
+          "type": "buff",
+          "buff": "mine_recover_shell"
+        }
+      ],
+      "description": "殻を開いて息を継ぐ。防御が30%低下し、この行動では攻撃しない。"
     }
   },
   "formulas": {
@@ -5599,7 +5648,9 @@
     "exp_linked_ward": "guard",
     "exp_second_breath": "guard",
     "exp_parry_command": "guard",
-    "exp_purging_pursuit": "light"
+    "exp_purging_pursuit": "light",
+    "mine_shell_charge": "attack",
+    "mine_shell_recover": "guard"
   },
   "gridProfiles": {
     "power": {
@@ -6686,6 +6737,30 @@
         "shape": "single"
       },
       "trajectory": "piercing",
+      "friendlyFire": false
+    },
+    "mine_shell_charge": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 3
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "direct",
+      "friendlyFire": false
+    },
+    "mine_shell_recover": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
       "friendlyFire": false
     }
   },
@@ -8932,6 +9007,54 @@
         "alive",
         "down"
       ]
+    },
+    "mine_shell_charge": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "mine_shell_recover": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
     }
   }
 }

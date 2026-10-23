@@ -9,7 +9,7 @@ function equipmentStats(ctx,_item,stats,actor,slot){
 }
 function battleStart(ctx){
  let count=0;for(const actor of ctx.state.members.filter(id=>battleAlive(ctx.state,ctx.state.actors[id])))for(const id of Object.values(ctx.state.gear.equipped[actor]??{})){ctx.state.gear.items[id].salt+=ctx.spec.perBattle;count++;}
- clamp(ctx);if(count)ctx.engine.notify(`装備ごとに塩が${ctx.spec.perBattle}累積しました。水没区画で洗うか、廃坑を出ると回復します。`);
+ clamp(ctx);if(count)ctx.engine.notify(`装備ごとに塩が${ctx.spec.perBattle}累積しました。塩${ctx.spec.eater.threshold}以上の装備はソルトイーターに食われることがあります。水没区画で洗うか、廃坑を出ると塩を落とせます。洗浄ではHP・MPは回復しません。`);
 }
 function clamp(ctx){for(const a of Object.values(ctx.state.actors)){const stats=ctx.engine.stats(a.id);a.hp=Math.min(a.hp,stats.hp);a.mp=Math.min(a.mp,stats.mp);}}
 function wash(ctx){let changed=false;for(const [,copy] of copies(ctx))if(copy.salt){copy.salt=0;changed=true;}return changed;}

@@ -3628,5 +3628,78 @@
       "item": "potion",
       "chance": 0.125
     }
+  },
+  "mine_shellbreaker": {
+    "id": "mine_shellbreaker",
+    "name": "殻砕き獣",
+    "sprite": "monster_ceramic_armadillo",
+    "stats": {
+      "hp": 850,
+      "mp": 0,
+      "str": 40,
+      "vit": 30,
+      "agi": 8,
+      "int": 18
+    },
+    "resist": {
+      "physical": 1,
+      "ice": 1.2
+    },
+    "rewards": {
+      "xp": 650,
+      "gold": 110
+    },
+    "ai": [
+      {
+        "priority": 30,
+        "skill": "guard",
+        "target": "self",
+        "condition": {
+          "op": "eq",
+          "left": {
+            "op": "mod",
+            "args": [
+              {
+                "ref": "self.round"
+              },
+              3
+            ]
+          },
+          "right": 1
+        }
+      },
+      {
+        "priority": 20,
+        "skill": "mine_shell_recover",
+        "target": "self",
+        "condition": {
+          "op": "eq",
+          "left": {
+            "op": "mod",
+            "args": [
+              {
+                "ref": "self.round"
+              },
+              3
+            ]
+          },
+          "right": 0
+        }
+      },
+      {
+        "priority": 10,
+        "skill": "mine_shell_charge",
+        "target": "random"
+      },
+      {
+        "priority": 0,
+        "skill": "attack",
+        "target": "random"
+      }
+    ],
+    "drop": {
+      "item": "potion",
+      "chance": 0.125
+    }
   }
 }

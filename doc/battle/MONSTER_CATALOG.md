@@ -1,12 +1,12 @@
 # 魔物一覧と戦闘画像
 
-作品版1.28.0。配布中の敵は75定義、遭遇編成は106定義、敵が参照する画像ファイルは25点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
+作品版1.29.0。配布中の敵は76定義、遭遇編成は107定義、敵が参照する画像ファイルは25点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
 
 敵・技能・画像・通常ロードのマップと迷宮・スクリプトから全文を生成します。数値を重ねて手書きせず、原稿を更新してから `npm run build:docs` で反映します。
 
 [固有環境の敵](#固有環境の敵)：6定義。
 [個別デザインの通常魔物](#個別デザインの通常魔物)：20定義。
-[依頼に追加した敵](#依頼に追加した敵)：29定義。
+[依頼に追加した敵](#依頼に追加した敵)：30定義。
 [地域の迷宮獣と守護者](#地域の迷宮獣と守護者)：20定義。
 
 ## 現在の読み方
@@ -254,17 +254,17 @@ AIの選択順：
 遭遇と参照先：
 
 wild_drill_mole：ドリルモグラ×1。逃走可。
-通常遭遇候補：塩哭きの廃坑・地下1層 (region_2_f1)、重み40 / 塩哭きの廃坑・地下2層 (region_2_f2)、重み35。
+通常遭遇候補：塩哭きの廃坑・地下1層 (region_2_f1)、重み40 / 塩哭きの廃坑・地下2層 (region_2_f2)、重み35 / 塩哭きの廃坑・3F 砕石場 (region_2_f3)、重み40 / 塩哭きの廃坑・4F 選鉱詰所 (region_2_f4)、重み40 / 塩哭きの廃坑・5F 塩の吹溜まり (region_2_f5)、重み40 / 塩哭きの廃坑・6F 旧運搬線 (region_2_f6)、重み40 / 塩哭きの廃坑・7F 巻上詰所 (region_2_f7)、重み40 / 塩哭きの廃坑・8F 割晶坑 (region_2_f8)、重み40 / 塩哭きの廃坑・9F 試錐場 (region_2_f9)、重み40 / 塩哭きの廃坑・10F 大選鉱室 (region_2_f10)、重み40。
 
 wild_pair_2：ドリルモグラ×1・陶器アルマジロ×1。逃走可。
-通常遭遇候補：塩哭きの廃坑・地下2層 (region_2_f2)、重み10。
+通常遭遇候補：塩哭きの廃坑・地下2層 (region_2_f2)、重み10 / 塩哭きの廃坑・3F 砕石場 (region_2_f3)、重み20 / 塩哭きの廃坑・4F 選鉱詰所 (region_2_f4)、重み20 / 塩哭きの廃坑・5F 塩の吹溜まり (region_2_f5)、重み20 / 塩哭きの廃坑・6F 旧運搬線 (region_2_f6)、重み20 / 塩哭きの廃坑・7F 巻上詰所 (region_2_f7)、重み20 / 塩哭きの廃坑・8F 割晶坑 (region_2_f8)、重み20 / 塩哭きの廃坑・9F 試錐場 (region_2_f9)、重み20 / 塩哭きの廃坑・10F 大選鉱室 (region_2_f10)、重み20。
 
 ### 陶器アルマジロ (ceramic_armadillo)
 
 <img src="../../assets/images/monsters/ceramic_armadillo.webp" width="160" alt="陶器アルマジロ">
 
 画像ID：monster_ceramic_armadillo。実ファイル：[assets/images/monsters/ceramic_armadillo.webp](../../assets/images/monsters/ceramic_armadillo.webp)。
-画像共有：他の敵定義との共有なし。
+画像共有：殻砕き獣。
 
 発想：アルマジロ＋陶器。参照：M008。地域分類：塩哭きの廃坑。
 
@@ -285,10 +285,10 @@ AIの選択順：
 遭遇と参照先：
 
 wild_ceramic_armadillo：陶器アルマジロ×1。逃走可。
-通常遭遇候補：塩哭きの廃坑・地下1層 (region_2_f1)、重み40 / 塩哭きの廃坑・地下2層 (region_2_f2)、重み35。
+通常遭遇候補：塩哭きの廃坑・地下1層 (region_2_f1)、重み40 / 塩哭きの廃坑・地下2層 (region_2_f2)、重み35 / 塩哭きの廃坑・3F 砕石場 (region_2_f3)、重み40 / 塩哭きの廃坑・4F 選鉱詰所 (region_2_f4)、重み40 / 塩哭きの廃坑・5F 塩の吹溜まり (region_2_f5)、重み40 / 塩哭きの廃坑・6F 旧運搬線 (region_2_f6)、重み40 / 塩哭きの廃坑・7F 巻上詰所 (region_2_f7)、重み40 / 塩哭きの廃坑・8F 割晶坑 (region_2_f8)、重み40 / 塩哭きの廃坑・9F 試錐場 (region_2_f9)、重み40 / 塩哭きの廃坑・10F 大選鉱室 (region_2_f10)、重み40。
 
 wild_pair_2：ドリルモグラ×1・陶器アルマジロ×1。逃走可。
-通常遭遇候補：塩哭きの廃坑・地下2層 (region_2_f2)、重み10。
+通常遭遇候補：塩哭きの廃坑・地下2層 (region_2_f2)、重み10 / 塩哭きの廃坑・3F 砕石場 (region_2_f3)、重み20 / 塩哭きの廃坑・4F 選鉱詰所 (region_2_f4)、重み20 / 塩哭きの廃坑・5F 塩の吹溜まり (region_2_f5)、重み20 / 塩哭きの廃坑・6F 旧運搬線 (region_2_f6)、重み20 / 塩哭きの廃坑・7F 巻上詰所 (region_2_f7)、重み20 / 塩哭きの廃坑・8F 割晶坑 (region_2_f8)、重み20 / 塩哭きの廃坑・9F 試錐場 (region_2_f9)、重み20 / 塩哭きの廃坑・10F 大選鉱室 (region_2_f10)、重み20。
 
 ### 蜜蝋ランプバチ (candle_bee)
 
@@ -1446,6 +1446,29 @@ AIの選択順：
 
 waterway_sluice_guardian：水門獣×1。逃走可。
 戦闘開始命令：1スクリプト。waterway.sluice_beast。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
+
+### 殻砕き獣 (mine_shellbreaker)
+
+<img src="../../assets/images/monsters/ceramic_armadillo.webp" width="160" alt="殻砕き獣">
+
+画像ID：monster_ceramic_armadillo。実ファイル：[assets/images/monsters/ceramic_armadillo.webp](../../assets/images/monsters/ceramic_armadillo.webp)。
+画像共有：陶器アルマジロ。
+
+基礎能力：HP 850 / MP 0 / STR 40 / VIT 30 / AGI 8 / INT 18。報酬：110G / 650EXP。
+宝箱：傷薬 1個 / 12.5％。
+属性倍率：physical 1 / ice 1.2。
+
+AIの選択順：
+
+1. 優先度30、条件式 {"op":"eq","left":{"op":"mod","args":[{"ref":"self.round"},3]},"right":1}：防御 (guard)、MP0、対象は自身。
+2. 優先度20、条件式 {"op":"eq","left":{"op":"mod","args":[{"ref":"self.round"},3]},"right":0}：殻を開いて息継ぎ (mine_shell_recover)、MP0、対象は自身。
+3. 優先度10、条件なし：殻砕きの突進 (mine_shell_charge)、MP0、対象は探索隊の生存者からランダムに1人。
+4. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+mine_shell_guardian：殻砕き獣×1。逃走可。
+戦闘開始命令：1スクリプト。mine.shellbreaker.10。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
 
 ## 地域の迷宮獣と守護者
 
