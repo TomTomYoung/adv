@@ -5729,6 +5729,18 @@ export const referenceData={
       "file": "dungeon-content.json",
       "path": [
         "maps",
+        "region_2_f9",
+        "objects",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "mine.workshop_parts.9"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
         "region_2_f10",
         "objects",
         1,
@@ -16991,6 +17003,56 @@ export const referenceData={
       "id": "soft_fiber"
     },
     {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "mine_low_armadillo",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "mine_low_mole",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "mine_low_crab",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "mine_low_sentinel",
+        "item"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "mine_low_scissors",
+        "item"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
       "file": "cell-layers.json",
       "path": [
         "presets",
@@ -18600,6 +18662,188 @@ export const referenceData={
     {
       "file": "dungeon-content.json",
       "path": [
+        "enemies",
+        "mine_low_armadillo",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "guard"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_armadillo",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_armadillo",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_ceramic_armadillo"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_mole",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "mine_drill_charge"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_mole",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "mine_drill_ready"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_mole",
+        "ai",
+        2,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_mole",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_drill_mole"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_crab",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "mine_salt_bolt"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_crab",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "mine_shard_shot"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_crab",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "construct"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_sentinel",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "mine_vein_ward"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_sentinel",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "mine_shard_shot"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_sentinel",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "construct"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_scissors",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "mine_crystal_claw"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_scissors",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "mine_light_claw"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_scissors",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "construct"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
         "encounters",
         "market_enforcers",
         "enemies",
@@ -18850,6 +19094,138 @@ export const referenceData={
       ],
       "kind": "enemies",
       "id": "waterway_low_clam"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_mole_lesson",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "mine_low_mole"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_shallow_a",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "mine_low_armadillo"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_shallow_a",
+        "enemies",
+        1
+      ],
+      "kind": "enemies",
+      "id": "mine_low_mole"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_shallow_a",
+        "enemies",
+        2
+      ],
+      "kind": "enemies",
+      "id": "mine_low_crab"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_shallow_b",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "mine_low_armadillo"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_shallow_b",
+        "enemies",
+        1
+      ],
+      "kind": "enemies",
+      "id": "mine_low_armadillo"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_shallow_b",
+        "enemies",
+        2
+      ],
+      "kind": "enemies",
+      "id": "mine_low_crab"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_shallow_b",
+        "enemies",
+        3
+      ],
+      "kind": "enemies",
+      "id": "mine_low_sentinel"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_shallow_c",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "mine_low_mole"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_shallow_c",
+        "enemies",
+        1
+      ],
+      "kind": "enemies",
+      "id": "mine_low_scissors"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_shallow_c",
+        "enemies",
+        2
+      ],
+      "kind": "enemies",
+      "id": "mine_low_crab"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_shallow_c",
+        "enemies",
+        3
+      ],
+      "kind": "enemies",
+      "id": "mine_low_sentinel"
     },
     {
       "file": "dungeon-content.json",
@@ -19605,7 +19981,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_pair_2"
+      "id": "mine_mole_lesson"
     },
     {
       "file": "dungeon-content.json",
@@ -19629,19 +20005,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_ceramic_armadillo"
-    },
-    {
-      "file": "dungeon-content.json",
-      "path": [
-        "maps",
-        "region_2_f6",
-        "encounterPool",
-        2,
-        "encounter"
-      ],
-      "kind": "encounters",
-      "id": "wild_pair_2"
+      "id": "mine_mole_lesson"
     },
     {
       "file": "dungeon-content.json",
@@ -19693,7 +20057,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_pair_2"
+      "id": "mine_shallow_a"
     },
     {
       "file": "dungeon-content.json",
@@ -19705,7 +20069,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_drill_mole"
+      "id": "wild_pair_2"
     },
     {
       "file": "dungeon-content.json",
@@ -19717,19 +20081,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_ceramic_armadillo"
-    },
-    {
-      "file": "dungeon-content.json",
-      "path": [
-        "maps",
-        "region_2_f7",
-        "encounterPool",
-        2,
-        "encounter"
-      ],
-      "kind": "encounters",
-      "id": "wild_pair_2"
+      "id": "mine_shallow_a"
     },
     {
       "file": "dungeon-content.json",
@@ -19781,7 +20133,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_pair_2"
+      "id": "mine_shallow_b"
     },
     {
       "file": "dungeon-content.json",
@@ -19793,7 +20145,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_drill_mole"
+      "id": "mine_shallow_a"
     },
     {
       "file": "dungeon-content.json",
@@ -19805,19 +20157,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_ceramic_armadillo"
-    },
-    {
-      "file": "dungeon-content.json",
-      "path": [
-        "maps",
-        "region_2_f8",
-        "encounterPool",
-        2,
-        "encounter"
-      ],
-      "kind": "encounters",
-      "id": "wild_pair_2"
+      "id": "mine_shallow_b"
     },
     {
       "file": "dungeon-content.json",
@@ -19869,7 +20209,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_pair_2"
+      "id": "mine_shallow_c"
     },
     {
       "file": "dungeon-content.json",
@@ -19881,7 +20221,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_drill_mole"
+      "id": "mine_shallow_b"
     },
     {
       "file": "dungeon-content.json",
@@ -19893,19 +20233,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_ceramic_armadillo"
-    },
-    {
-      "file": "dungeon-content.json",
-      "path": [
-        "maps",
-        "region_2_f9",
-        "encounterPool",
-        2,
-        "encounter"
-      ],
-      "kind": "encounters",
-      "id": "wild_pair_2"
+      "id": "mine_shallow_c"
     },
     {
       "file": "dungeon-content.json",
@@ -19918,6 +20246,18 @@ export const referenceData={
       ],
       "kind": "scripts",
       "id": "mine.charge_record.9"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f9",
+        "objects",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "mine.workshop_parts.9"
     },
     {
       "file": "dungeon-content.json",
@@ -26308,6 +26648,102 @@ export const referenceData={
       ],
       "kind": "buffs",
       "id": "waterway_tail_ready"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_drill_ready",
+        "effects",
+        0,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "mine_drill_ready"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_drill_charge",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "mine_drill_charge"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_drill_charge",
+        "selfEffects",
+        0,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "mine_drill_exposed"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_salt_bolt",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "mine_salt_bolt"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_shard_shot",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "mine_shard_shot"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_vein_ward",
+        "effects",
+        0,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "mine_vein_ward"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_crystal_claw",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "mine_crystal_claw"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_light_claw",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "mine_shard_shot"
     },
     {
       "file": "jobs.json",
@@ -41450,6 +41886,18 @@ export const referenceData={
       },
       "waterway_spit": {
         "name": "waterway_spit"
+      },
+      "mine_drill_charge": {
+        "name": "mine_drill_charge"
+      },
+      "mine_salt_bolt": {
+        "name": "mine_salt_bolt"
+      },
+      "mine_shard_shot": {
+        "name": "mine_shard_shot"
+      },
+      "mine_crystal_claw": {
+        "name": "mine_crystal_claw"
       }
     },
     "skills": {
@@ -41749,6 +42197,27 @@ export const referenceData={
       },
       "waterway_filter": {
         "name": "泥濾し"
+      },
+      "mine_drill_ready": {
+        "name": "低く身構える（次は突進）"
+      },
+      "mine_drill_charge": {
+        "name": "低位の貫通突進"
+      },
+      "mine_salt_bolt": {
+        "name": "塩晶弾"
+      },
+      "mine_shard_shot": {
+        "name": "細い晶片投げ"
+      },
+      "mine_vein_ward": {
+        "name": "鉱脈の補強"
+      },
+      "mine_crystal_claw": {
+        "name": "結晶の強爪"
+      },
+      "mine_light_claw": {
+        "name": "結晶の小爪"
       }
     },
     "items": {
@@ -42281,6 +42750,26 @@ export const referenceData={
       "waterway_low_clam": {
         "name": "泥濾し貝（低位）",
         "sprite": "slime"
+      },
+      "mine_low_armadillo": {
+        "name": "厚殻アルマジロ（低位）",
+        "sprite": "monster_ceramic_armadillo"
+      },
+      "mine_low_mole": {
+        "name": "深掘りモグラ（低位）",
+        "sprite": "monster_drill_mole"
+      },
+      "mine_low_crab": {
+        "name": "塩噴き蟹（低位）",
+        "sprite": "construct"
+      },
+      "mine_low_sentinel": {
+        "name": "鉱脈の見張り（低位）",
+        "sprite": "construct"
+      },
+      "mine_low_scissors": {
+        "name": "結晶ハサミ（低位）",
+        "sprite": "construct"
       }
     },
     "encounters": {
@@ -42619,6 +43108,18 @@ export const referenceData={
       },
       "waterway_shallow_b": {
         "name": "低位の水車と泥濾し"
+      },
+      "mine_mole_lesson": {
+        "name": "深掘りモグラの構え"
+      },
+      "mine_shallow_a": {
+        "name": "低位の殻と掘削班"
+      },
+      "mine_shallow_b": {
+        "name": "低位の鉱脈守り"
+      },
+      "mine_shallow_c": {
+        "name": "低位の試錐群"
       }
     },
     "statuses": {
@@ -43111,6 +43612,15 @@ export const referenceData={
       },
       "waterway_tail_ready": {
         "name": "尾の構え（次の攻撃は強打）"
+      },
+      "mine_drill_ready": {
+        "name": "低い構え（次は貫通突進）"
+      },
+      "mine_drill_exposed": {
+        "name": "突進後の隙"
+      },
+      "mine_vein_ward": {
+        "name": "鉱脈の補強"
       }
     },
     "fieldAbilities": {
@@ -57171,11 +57681,11 @@ export const referenceData={
       "file": "config/dungeon-content.json"
     },
     "mine.crystal_record.8": {
-      "name": "陶器の殻には術と貫通が有効だ。10Fの殻砕き獣を退ければ、第2段階の武器引換券と",
+      "name": "厚殻アルマジロは初回だけ防御し、火に弱い。見張りの防御補強は二巡で切れ、重複しな",
       "file": "config/dungeon-content.json"
     },
     "mine.charge_record.9": {
-      "name": "殻砕き獣は三巡を繰り返す。一巡目は身を固め、二巡目に一人へ突進、三巡目は殻を開い",
+      "name": "深掘りモグラは構えの次に突進し、その後は防御が三割下がる。防御やスタンで対処でき",
       "file": "config/dungeon-content.json"
     },
     "mine.shellbreaker.10": {
@@ -57320,6 +57830,10 @@ export const referenceData={
     },
     "treasure.package.region_2_f7.supply_rope": {
       "name": "treasure.package.region_2_f7.supply_rope",
+      "file": "data/scripts/dungeon-packages.json"
+    },
+    "treasure.package.region_2_f9.workshop_parts": {
+      "name": "treasure.package.region_2_f9.workshop_parts",
       "file": "data/scripts/dungeon-packages.json"
     },
     "treasure.package.region_2_f10.supply_rope": {
@@ -68058,6 +68572,41 @@ export const referenceData={
         "waterway_low_clam"
       ]
     },
+    "enemies/mine_low_armadillo": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_armadillo"
+      ]
+    },
+    "enemies/mine_low_mole": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_mole"
+      ]
+    },
+    "enemies/mine_low_crab": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_crab"
+      ]
+    },
+    "enemies/mine_low_sentinel": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_sentinel"
+      ]
+    },
+    "enemies/mine_low_scissors": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_scissors"
+      ]
+    },
     "encounters/market_enforcers": {
       "file": "dungeon-content.json",
       "path": [
@@ -68154,6 +68703,34 @@ export const referenceData={
       "path": [
         "encounters",
         "waterway_shallow_b"
+      ]
+    },
+    "encounters/mine_mole_lesson": {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_mole_lesson"
+      ]
+    },
+    "encounters/mine_shallow_a": {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_shallow_a"
+      ]
+    },
+    "encounters/mine_shallow_b": {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_shallow_b"
+      ]
+    },
+    "encounters/mine_shallow_c": {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_shallow_c"
       ]
     },
     "actors/ada": {
@@ -69233,6 +69810,55 @@ export const referenceData={
         "waterway_filter"
       ]
     },
+    "skills/mine_drill_ready": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_drill_ready"
+      ]
+    },
+    "skills/mine_drill_charge": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_drill_charge"
+      ]
+    },
+    "skills/mine_salt_bolt": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_salt_bolt"
+      ]
+    },
+    "skills/mine_shard_shot": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_shard_shot"
+      ]
+    },
+    "skills/mine_vein_ward": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_vein_ward"
+      ]
+    },
+    "skills/mine_crystal_claw": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_crystal_claw"
+      ]
+    },
+    "skills/mine_light_claw": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_light_claw"
+      ]
+    },
     "fieldAbilities/survey": {
       "file": "jobs.json",
       "path": [
@@ -69623,6 +70249,27 @@ export const referenceData={
       "path": [
         "buffs",
         "waterway_tail_ready"
+      ]
+    },
+    "buffs/mine_drill_ready": {
+      "file": "jobs.json",
+      "path": [
+        "buffs",
+        "mine_drill_ready"
+      ]
+    },
+    "buffs/mine_drill_exposed": {
+      "file": "jobs.json",
+      "path": [
+        "buffs",
+        "mine_drill_exposed"
+      ]
+    },
+    "buffs/mine_vein_ward": {
+      "file": "jobs.json",
+      "path": [
+        "buffs",
+        "mine_vein_ward"
       ]
     },
     "items/kagaribi_torch": {

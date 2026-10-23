@@ -8,7 +8,7 @@
 
 [Classic/Grid戦闘と開始陣形](GRID_BATTLE.md)：方式切替、陣形編集、射程・範囲・移動、奥行き表示と保存。
 
-現行確認日: 2026-10-23。作品版1.33.0。初版の確認は2026-09-25、作品版1.20.0です。[文書全体へ戻る](../README.md)。
+現行確認日: 2026-10-23。作品版1.34.0。初版の確認は2026-09-25、作品版1.20.0です。[文書全体へ戻る](../README.md)。
 
 [PROGRESSION_AND_REWARDS.md](PROGRESSION_AND_REWARDS.md)：個別経験値、勝利リザルト、魔物別宝箱、戦闘外の回復。
 
@@ -36,7 +36,7 @@
 
 [COMPANION_CATALOG.md](COMPANION_CATALOG.md)：仲間10人、初期能力と酒場の編成。
 
-[MONSTER_CATALOG.md](MONSTER_CATALOG.md)：敵84定義、画像と共有先・能力・AIの全規則・出現経路。
+[MONSTER_CATALOG.md](MONSTER_CATALOG.md)：敵89定義、画像と共有先・能力・AIの全規則・出現経路。
 
 [BALANCE_PLAN.md](BALANCE_PLAN.md)：調整対象、測定条件、旧測定と未実施項目。
 

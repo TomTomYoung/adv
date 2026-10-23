@@ -7,7 +7,7 @@ import {campaignRoute} from './campaign-route.mjs';
 import {data,goTownLocation} from '../tests/helpers.mjs';
 import {oilTotal} from '../src/core/expedition-oil.js';
 
-export function measureMine({seed=1907,size=4,mode='classic',loadout='standard'}={}){
+export function measureMine({seed=1907,size=4,mode='classic',loadout='standard',materials=false}={}){
  const c=new Campaign({seed,size,mode,loadout,route:'shortcuts'});c.run();const g=c.g;
  c.act({type:'equip',actor:'ada',item:'exp_t2_sword'});goTownLocation(g,data.game.world.townRoot);
  const start={steps:g.state.steps,battles:c.report.battles.length,gold:g.state.gold,gems:g.state.expedition.gems,oil:c.report.oilSpentWalking,gear:Object.keys(g.state.gear.items),consumed:{...c.report.consumed},actors:g.state.members.map(id=>({id,level:g.state.actors[id].level,xp:g.state.actors[id].xp}))};
@@ -43,21 +43,24 @@ export function measureMine({seed=1907,size=4,mode='classic',loadout='standard'}
  supply('mine_upper');supply('mine_lower');
  go('region_2_f3',5,3);c.object('support_brace');c.choose('open');supply('mine_sorting');
  go('region_2_f6',5,1);c.object('cart_latch');c.choose('open');supply('mine_hoist');
+ let recoveredMaterials=null;
+ if(materials){go('region_2_f9',5,5);const before={...g.state.inventory};c.object('workshop_parts');recoveredMaterials=Object.fromEntries(['machine_part','soft_fiber'].map(id=>[id,(g.state.inventory[id]??0)-(before[id]??0)]));c.checkpoint('mine materials');}
  go('region_2_f10',9,1);c.object('lift_latch');c.choose('open');
  go('region_2_f10',3,1);assert.equal(salt(),0);go('region_2_f10',5,1);c.object('shellbreaker');c.choose('fight');
  assert.equal(g.state.flags.mine.shellbreakerWon,true);supply('mine_central');
  const at10={steps:g.state.steps-start.steps,actors:g.state.members.map(id=>({id,level:g.state.actors[id].level,xp:g.state.actors[id].xp}))};
  const beforeReturn=g.state.steps;go('region_2_f1',1,1);c.object('exit');assert.equal(g.state.mode,'town');c.checkpoint('mine returned');
  const battles=c.report.battles.slice(start.battles);
- return {seed,size,mode,loadout,startingActors:start.actors,at10,stepsReturned:g.state.steps-start.steps,returnSteps:g.state.steps-beforeReturn,
+ return {seed,size,mode,loadout,materials,recoveredMaterials,startingActors:start.actors,at10,stepsReturned:g.state.steps-start.steps,returnSteps:g.state.steps-beforeReturn,
   minOil,walkingOil:c.report.oilSpentWalking-start.oil,remainingOil:oilTotal(data,g.state),checkpoints,washes,maxSalt,
-  lostGear:start.gear.filter(id=>!g.state.gear.items[id]).length,battles:battles.length,bossRounds:battles.find(b=>b.encounter==='mine_shell_guardian').rounds,
+  lostGear:start.gear.filter(id=>!g.state.gear.items[id]).length,battles:battles.length,battleDetails:battles,bossRounds:battles.find(b=>b.encounter==='mine_shell_guardian').rounds,
   battleMpSpent:battles.reduce((n,b)=>n+b.mp,0),goldEarned:g.state.gold-start.gold,gemsEarned:g.state.expedition.gems-start.gems,
   consumed:Object.fromEntries(Object.entries(c.report.consumed).map(([k,n])=>[k,n-(start.consumed[k]??0)])),losses:g.state.records.losses};
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){
  const runs=[];
- if(process.argv.includes('--matrix'))for(const size of [4,5])for(const mode of ['classic','grid','frontline'])for(const loadout of ['standard','bow'])runs.push(measureMine({size,mode,loadout}));
+ if(process.argv.includes('--shallow'))for(const seed of [1907,42,2026])for(const size of [4,5])for(const mode of ['classic','grid','frontline'])for(const loadout of ['standard','bow'])for(const materials of [false,true])runs.push(measureMine({seed,size,mode,loadout,materials}));
+ else if(process.argv.includes('--matrix'))for(const size of [4,5])for(const mode of ['classic','grid','frontline'])for(const loadout of ['standard','bow'])runs.push(measureMine({size,mode,loadout}));
  else runs.push(measureMine({size:Number(process.argv[2]??4),mode:process.argv[3]??'classic',loadout:process.argv[4]??'standard'}));
- console.log(JSON.stringify({command:'node tools/measure-mine-campaign.mjs --matrix',contentVersion:data.game.version,runs},null,2));
+ console.log(JSON.stringify({command:`node tools/measure-mine-campaign.mjs ${process.argv.includes('--shallow')?'--shallow':'--matrix'}`,contentVersion:data.game.version,runs},null,2));
 }
