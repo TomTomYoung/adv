@@ -5657,6 +5657,18 @@ export const referenceData={
       "file": "connected-maps.json",
       "path": [
         "maps",
+        "region_1_canal_d",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "waterway.workshop_parts"
+    },
+    {
+      "file": "connected-maps.json",
+      "path": [
+        "maps",
         "region_1_gatehouse",
         "objects",
         1,
@@ -5712,6 +5724,18 @@ export const referenceData={
       ],
       "kind": "scripts",
       "id": "mine.supply_rope.7"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f9",
+        "objects",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "mine.workshop_parts.9"
     },
     {
       "file": "dungeon-content.json",
@@ -5796,6 +5820,18 @@ export const referenceData={
       ],
       "kind": "scripts",
       "id": "garden.seed_reserve.7"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f10",
+        "objects",
+        2,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "garden.supply_rope.7"
     },
     {
       "file": "jobs.json",
@@ -16887,6 +16923,136 @@ export const referenceData={
       "id": "potion"
     },
     {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "garden_great_pruner",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "garden_root_shell",
+        "item"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "garden_nectar_bee",
+        "item"
+      ],
+      "kind": "items",
+      "id": "torch"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "waterway_young_eel",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "waterway_low_crocodile",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "waterway_low_beaver",
+        "item"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "waterway_low_eel",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "waterway_low_clam",
+        "item"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "mine_low_armadillo",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "mine_low_mole",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "mine_low_crab",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "mine_low_sentinel",
+        "item"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "mine_low_scissors",
+        "item"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
       "file": "cell-layers.json",
       "path": [
         "presets",
@@ -17423,7 +17589,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "roaming_1"
+      "id": "waterway_eel_lesson"
     },
     {
       "file": "connected-maps.json",
@@ -17435,7 +17601,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "roaming_1"
+      "id": "wild_waterwheel_beaver"
     },
     {
       "file": "connected-maps.json",
@@ -17447,19 +17613,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_waterwheel_beaver"
-    },
-    {
-      "file": "connected-maps.json",
-      "path": [
-        "maps",
-        "region_1_f2",
-        "encounterPool",
-        2,
-        "encounter"
-      ],
-      "kind": "encounters",
-      "id": "wild_sluice_crocodile"
+      "id": "waterway_eel_lesson"
     },
     {
       "file": "connected-maps.json",
@@ -17559,7 +17713,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "roaming_1"
+      "id": "waterway_croc_eel"
     },
     {
       "file": "connected-maps.json",
@@ -17571,7 +17725,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "roaming_1"
+      "id": "wild_sluice_crocodile"
     },
     {
       "file": "connected-maps.json",
@@ -17583,19 +17737,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_waterwheel_beaver"
-    },
-    {
-      "file": "connected-maps.json",
-      "path": [
-        "maps",
-        "region_1_canal_c",
-        "encounterPool",
-        2,
-        "encounter"
-      ],
-      "kind": "encounters",
-      "id": "wild_sluice_crocodile"
+      "id": "waterway_croc_eel"
     },
     {
       "file": "connected-maps.json",
@@ -17647,7 +17789,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "roaming_1"
+      "id": "waterway_shallow_a"
     },
     {
       "file": "connected-maps.json",
@@ -17659,7 +17801,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "roaming_1"
+      "id": "waterway_croc_eel"
     },
     {
       "file": "connected-maps.json",
@@ -17671,19 +17813,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_waterwheel_beaver"
-    },
-    {
-      "file": "connected-maps.json",
-      "path": [
-        "maps",
-        "region_1_lower_landing",
-        "encounterPool",
-        2,
-        "encounter"
-      ],
-      "kind": "encounters",
-      "id": "wild_sluice_crocodile"
+      "id": "waterway_shallow_a"
     },
     {
       "file": "connected-maps.json",
@@ -17735,7 +17865,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "roaming_1"
+      "id": "waterway_shallow_b"
     },
     {
       "file": "connected-maps.json",
@@ -17747,7 +17877,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "roaming_1"
+      "id": "waterway_shallow_a"
     },
     {
       "file": "connected-maps.json",
@@ -17759,19 +17889,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_waterwheel_beaver"
-    },
-    {
-      "file": "connected-maps.json",
-      "path": [
-        "maps",
-        "region_1_canal_d",
-        "encounterPool",
-        2,
-        "encounter"
-      ],
-      "kind": "encounters",
-      "id": "wild_sluice_crocodile"
+      "id": "waterway_shallow_b"
     },
     {
       "file": "connected-maps.json",
@@ -17782,6 +17900,18 @@ export const referenceData={
       ],
       "kind": "dungeons",
       "id": "region_1"
+    },
+    {
+      "file": "connected-maps.json",
+      "path": [
+        "maps",
+        "region_1_canal_d",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "waterway.workshop_parts"
     },
     {
       "file": "connected-maps.json",
@@ -18251,6 +18381,469 @@ export const referenceData={
     {
       "file": "dungeon-content.json",
       "path": [
+        "enemies",
+        "garden_great_pruner",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_saw_mantis"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "garden_great_pruner",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "garden_prune"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "garden_root_shell",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_ceramic_armadillo"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "garden_root_shell",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "guard"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "garden_root_shell",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "garden_nectar_bee",
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "wax_flame"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "garden_nectar_bee",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_candle_bee"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "garden_nectar_bee",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "wax_flame"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "garden_nectar_bee",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "garden_nectar_bee",
+        "drop",
+        "item"
+      ],
+      "kind": "items",
+      "id": "torch"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_young_eel",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "waterway_spark"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_young_eel",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "waterway_spit"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_young_eel",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "slime"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_crocodile",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "guard"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_crocodile",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_crocodile",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_sluice_crocodile"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_beaver",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "waterway_tail_ready"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_beaver",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_beaver",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_waterwheel_beaver"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_eel",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "waterway_spark"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_eel",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "waterway_spit"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_eel",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "slime"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_clam",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "waterway_filter"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_clam",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "waterway_spit"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_clam",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "slime"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_armadillo",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "guard"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_armadillo",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_armadillo",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_ceramic_armadillo"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_mole",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "mine_drill_charge"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_mole",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "mine_drill_ready"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_mole",
+        "ai",
+        2,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_mole",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_drill_mole"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_crab",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "mine_salt_bolt"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_crab",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "mine_shard_shot"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_crab",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "construct"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_sentinel",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "mine_vein_ward"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_sentinel",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "mine_shard_shot"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_sentinel",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "construct"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_scissors",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "mine_crystal_claw"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_scissors",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "mine_light_claw"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_scissors",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "construct"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
         "encounters",
         "market_enforcers",
         "enemies",
@@ -18357,6 +18950,282 @@ export const referenceData={
       ],
       "kind": "enemies",
       "id": "mine_shellbreaker"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "garden_root_guardian",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "garden_great_pruner"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "garden_root_guardian",
+        "enemies",
+        1
+      ],
+      "kind": "enemies",
+      "id": "garden_root_shell"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "garden_root_guardian",
+        "reinforcements",
+        0,
+        "enemy"
+      ],
+      "kind": "enemies",
+      "id": "garden_nectar_bee"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "waterway_eel_lesson",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "waterway_young_eel"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "waterway_croc_eel",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "sluice_crocodile"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "waterway_croc_eel",
+        "enemies",
+        1
+      ],
+      "kind": "enemies",
+      "id": "waterway_young_eel"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "waterway_shallow_a",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "waterway_low_crocodile"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "waterway_shallow_a",
+        "enemies",
+        1
+      ],
+      "kind": "enemies",
+      "id": "waterway_low_crocodile"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "waterway_shallow_a",
+        "enemies",
+        2
+      ],
+      "kind": "enemies",
+      "id": "waterway_low_eel"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "waterway_shallow_b",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "waterway_low_crocodile"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "waterway_shallow_b",
+        "enemies",
+        1
+      ],
+      "kind": "enemies",
+      "id": "waterway_low_beaver"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "waterway_shallow_b",
+        "enemies",
+        2
+      ],
+      "kind": "enemies",
+      "id": "waterway_low_eel"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "waterway_shallow_b",
+        "enemies",
+        3
+      ],
+      "kind": "enemies",
+      "id": "waterway_low_clam"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_mole_lesson",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "mine_low_mole"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_shallow_a",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "mine_low_armadillo"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_shallow_a",
+        "enemies",
+        1
+      ],
+      "kind": "enemies",
+      "id": "mine_low_mole"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_shallow_a",
+        "enemies",
+        2
+      ],
+      "kind": "enemies",
+      "id": "mine_low_crab"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_shallow_b",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "mine_low_armadillo"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_shallow_b",
+        "enemies",
+        1
+      ],
+      "kind": "enemies",
+      "id": "mine_low_armadillo"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_shallow_b",
+        "enemies",
+        2
+      ],
+      "kind": "enemies",
+      "id": "mine_low_crab"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_shallow_b",
+        "enemies",
+        3
+      ],
+      "kind": "enemies",
+      "id": "mine_low_sentinel"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_shallow_c",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "mine_low_mole"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_shallow_c",
+        "enemies",
+        1
+      ],
+      "kind": "enemies",
+      "id": "mine_low_scissors"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_shallow_c",
+        "enemies",
+        2
+      ],
+      "kind": "enemies",
+      "id": "mine_low_crab"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_shallow_c",
+        "enemies",
+        3
+      ],
+      "kind": "enemies",
+      "id": "mine_low_sentinel"
     },
     {
       "file": "dungeon-content.json",
@@ -19112,7 +19981,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_pair_2"
+      "id": "mine_mole_lesson"
     },
     {
       "file": "dungeon-content.json",
@@ -19136,19 +20005,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_ceramic_armadillo"
-    },
-    {
-      "file": "dungeon-content.json",
-      "path": [
-        "maps",
-        "region_2_f6",
-        "encounterPool",
-        2,
-        "encounter"
-      ],
-      "kind": "encounters",
-      "id": "wild_pair_2"
+      "id": "mine_mole_lesson"
     },
     {
       "file": "dungeon-content.json",
@@ -19200,7 +20057,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_pair_2"
+      "id": "mine_shallow_a"
     },
     {
       "file": "dungeon-content.json",
@@ -19212,7 +20069,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_drill_mole"
+      "id": "wild_pair_2"
     },
     {
       "file": "dungeon-content.json",
@@ -19224,19 +20081,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_ceramic_armadillo"
-    },
-    {
-      "file": "dungeon-content.json",
-      "path": [
-        "maps",
-        "region_2_f7",
-        "encounterPool",
-        2,
-        "encounter"
-      ],
-      "kind": "encounters",
-      "id": "wild_pair_2"
+      "id": "mine_shallow_a"
     },
     {
       "file": "dungeon-content.json",
@@ -19288,7 +20133,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_pair_2"
+      "id": "mine_shallow_b"
     },
     {
       "file": "dungeon-content.json",
@@ -19300,7 +20145,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_drill_mole"
+      "id": "mine_shallow_a"
     },
     {
       "file": "dungeon-content.json",
@@ -19312,19 +20157,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_ceramic_armadillo"
-    },
-    {
-      "file": "dungeon-content.json",
-      "path": [
-        "maps",
-        "region_2_f8",
-        "encounterPool",
-        2,
-        "encounter"
-      ],
-      "kind": "encounters",
-      "id": "wild_pair_2"
+      "id": "mine_shallow_b"
     },
     {
       "file": "dungeon-content.json",
@@ -19376,7 +20209,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_pair_2"
+      "id": "mine_shallow_c"
     },
     {
       "file": "dungeon-content.json",
@@ -19388,7 +20221,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_drill_mole"
+      "id": "mine_shallow_b"
     },
     {
       "file": "dungeon-content.json",
@@ -19400,19 +20233,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_ceramic_armadillo"
-    },
-    {
-      "file": "dungeon-content.json",
-      "path": [
-        "maps",
-        "region_2_f9",
-        "encounterPool",
-        2,
-        "encounter"
-      ],
-      "kind": "encounters",
-      "id": "wild_pair_2"
+      "id": "mine_shallow_c"
     },
     {
       "file": "dungeon-content.json",
@@ -19425,6 +20246,18 @@ export const referenceData={
       ],
       "kind": "scripts",
       "id": "mine.charge_record.9"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_2_f9",
+        "objects",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "mine.workshop_parts.9"
     },
     {
       "file": "dungeon-content.json",
@@ -20601,6 +21434,18 @@ export const referenceData={
     {
       "file": "dungeon-content.json",
       "path": [
+        "maps",
+        "region_3_f10",
+        "objects",
+        2,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "garden.supply_rope.7"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
         "scripts",
         "waterway.dry_stair_latch",
         "commands",
@@ -20661,6 +21506,42 @@ export const referenceData={
         "mine.shellbreaker.10",
         "commands",
         0,
+        "then",
+        1,
+        "else",
+        0,
+        "condition",
+        "arg",
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "mine.shellbreaker.10",
+        "commands",
+        0,
+        "then",
+        1,
+        "else",
+        0,
+        "then",
+        0,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "mine.shellbreaker.10",
+        "commands",
+        0,
         "else",
         1,
         "options",
@@ -20671,6 +21552,156 @@ export const referenceData={
       ],
       "kind": "encounters",
       "id": "mine_shell_guardian"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "mine.shellbreaker.10",
+        "commands",
+        0,
+        "else",
+        1,
+        "options",
+        0,
+        "commands",
+        0,
+        "on_win",
+        2,
+        "else",
+        0,
+        "condition",
+        "arg",
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "mine.shellbreaker.10",
+        "commands",
+        0,
+        "else",
+        1,
+        "options",
+        0,
+        "commands",
+        0,
+        "on_win",
+        2,
+        "else",
+        0,
+        "then",
+        0,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "garden.root_gate.10",
+        "commands",
+        0,
+        "then",
+        1,
+        "else",
+        0,
+        "condition",
+        "arg",
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "garden.root_gate.10",
+        "commands",
+        0,
+        "then",
+        1,
+        "else",
+        0,
+        "then",
+        0,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "garden.root_gate.10",
+        "commands",
+        0,
+        "else",
+        1,
+        "options",
+        0,
+        "commands",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "garden_root_guardian"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "garden.root_gate.10",
+        "commands",
+        0,
+        "else",
+        1,
+        "options",
+        0,
+        "commands",
+        0,
+        "on_win",
+        2,
+        "else",
+        0,
+        "condition",
+        "arg",
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "garden.root_gate.10",
+        "commands",
+        0,
+        "else",
+        1,
+        "options",
+        0,
+        "commands",
+        0,
+        "on_win",
+        2,
+        "else",
+        0,
+        "then",
+        0,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
     },
     {
       "file": "dungeon-content.json",
@@ -20801,6 +21832,96 @@ export const referenceData={
       ],
       "kind": "items",
       "id": "diving_kit"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "shopGoods",
+        13,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_sword"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "shopGoods",
+        14,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_axe"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "shopGoods",
+        15,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_spear"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "shopGoods",
+        16,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_dagger"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "shopGoods",
+        17,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_fist"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "shopGoods",
+        18,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_bow"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "shopGoods",
+        19,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_staff"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "shopGoods",
+        20,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_tool"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "shopGoods",
+        21,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_instrument"
     },
     {
       "file": "dungeon-content.json",
@@ -22155,6 +23276,469 @@ export const referenceData={
       ],
       "kind": "maps",
       "id": "region_3_f7"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        20,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_3"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        20,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f10"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "capacity",
+        "duplicate",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_sword",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_sword",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_axe",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_axe",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_spear",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_spear",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_dagger",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_dagger",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_fist",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_fist",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_bow",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_bow",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_staff",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_staff",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_tool",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_tool",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_instrument",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_instrument",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_sword",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_sword",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_axe",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_axe",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_spear",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_spear",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_dagger",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_dagger",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_fist",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_fist",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_bow",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_bow",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_staff",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_staff",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_tool",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_tool",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_instrument",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_instrument",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
     },
     {
       "file": "jobs.json",
@@ -24992,6 +26576,174 @@ export const referenceData={
       ],
       "kind": "buffs",
       "id": "mine_recover_shell"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_root_bind",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "exp_root_bind"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_root_bind",
+        "effects",
+        1,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "exp_rooted"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "garden_prune",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heavy"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "waterway_spark",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "waterway_spark"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "waterway_spit",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "waterway_spit"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "waterway_tail_ready",
+        "effects",
+        0,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "waterway_tail_ready"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_drill_ready",
+        "effects",
+        0,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "mine_drill_ready"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_drill_charge",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "mine_drill_charge"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_drill_charge",
+        "selfEffects",
+        0,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "mine_drill_exposed"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_salt_bolt",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "mine_salt_bolt"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_shard_shot",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "mine_shard_shot"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_vein_ward",
+        "effects",
+        0,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "mine_vein_ward"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_crystal_claw",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "mine_crystal_claw"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_light_claw",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "mine_shard_shot"
     },
     {
       "file": "jobs.json",
@@ -40125,6 +41877,27 @@ export const referenceData={
       },
       "exp_purging_pursuit": {
         "name": "exp_purging_pursuit"
+      },
+      "exp_root_bind": {
+        "name": "exp_root_bind"
+      },
+      "waterway_spark": {
+        "name": "waterway_spark"
+      },
+      "waterway_spit": {
+        "name": "waterway_spit"
+      },
+      "mine_drill_charge": {
+        "name": "mine_drill_charge"
+      },
+      "mine_salt_bolt": {
+        "name": "mine_salt_bolt"
+      },
+      "mine_shard_shot": {
+        "name": "mine_shard_shot"
+      },
+      "mine_crystal_claw": {
+        "name": "mine_crystal_claw"
       }
     },
     "skills": {
@@ -40406,6 +42179,45 @@ export const referenceData={
       },
       "mine_shell_recover": {
         "name": "殻を開いて息継ぎ"
+      },
+      "exp_root_bind": {
+        "name": "根留め"
+      },
+      "garden_prune": {
+        "name": "大枝刈り"
+      },
+      "waterway_spark": {
+        "name": "水路の放電"
+      },
+      "waterway_spit": {
+        "name": "細い水弾"
+      },
+      "waterway_tail_ready": {
+        "name": "尾を引く構え（次は強打）"
+      },
+      "waterway_filter": {
+        "name": "泥濾し"
+      },
+      "mine_drill_ready": {
+        "name": "低く身構える（次は突進）"
+      },
+      "mine_drill_charge": {
+        "name": "低位の貫通突進"
+      },
+      "mine_salt_bolt": {
+        "name": "塩晶弾"
+      },
+      "mine_shard_shot": {
+        "name": "細い晶片投げ"
+      },
+      "mine_vein_ward": {
+        "name": "鉱脈の補強"
+      },
+      "mine_crystal_claw": {
+        "name": "結晶の強爪"
+      },
+      "mine_light_claw": {
+        "name": "結晶の小爪"
       }
     },
     "items": {
@@ -40906,6 +42718,58 @@ export const referenceData={
       "mine_shellbreaker": {
         "name": "殻砕き獣",
         "sprite": "monster_ceramic_armadillo"
+      },
+      "garden_great_pruner": {
+        "name": "大剪定虫",
+        "sprite": "monster_saw_mantis"
+      },
+      "garden_root_shell": {
+        "name": "根殻甲",
+        "sprite": "monster_ceramic_armadillo"
+      },
+      "garden_nectar_bee": {
+        "name": "蜜蝋ランプバチ",
+        "sprite": "monster_candle_bee"
+      },
+      "waterway_young_eel": {
+        "name": "通電ウナギの幼体",
+        "sprite": "slime"
+      },
+      "waterway_low_crocodile": {
+        "name": "深水門ワニ（低位）",
+        "sprite": "monster_sluice_crocodile"
+      },
+      "waterway_low_beaver": {
+        "name": "大水車ビーバー（低位）",
+        "sprite": "monster_waterwheel_beaver"
+      },
+      "waterway_low_eel": {
+        "name": "通電ウナギ（低位）",
+        "sprite": "slime"
+      },
+      "waterway_low_clam": {
+        "name": "泥濾し貝（低位）",
+        "sprite": "slime"
+      },
+      "mine_low_armadillo": {
+        "name": "厚殻アルマジロ（低位）",
+        "sprite": "monster_ceramic_armadillo"
+      },
+      "mine_low_mole": {
+        "name": "深掘りモグラ（低位）",
+        "sprite": "monster_drill_mole"
+      },
+      "mine_low_crab": {
+        "name": "塩噴き蟹（低位）",
+        "sprite": "construct"
+      },
+      "mine_low_sentinel": {
+        "name": "鉱脈の見張り（低位）",
+        "sprite": "construct"
+      },
+      "mine_low_scissors": {
+        "name": "結晶ハサミ（低位）",
+        "sprite": "construct"
       }
     },
     "encounters": {
@@ -41229,6 +43093,33 @@ export const referenceData={
       },
       "mine_shell_guardian": {
         "name": "大選鉱室の殻砕き獣"
+      },
+      "garden_root_guardian": {
+        "name": "根門の大剪定虫"
+      },
+      "waterway_eel_lesson": {
+        "name": "下層の幼ウナギ"
+      },
+      "waterway_croc_eel": {
+        "name": "岸のワニと幼ウナギ"
+      },
+      "waterway_shallow_a": {
+        "name": "低位の水門守り"
+      },
+      "waterway_shallow_b": {
+        "name": "低位の水車と泥濾し"
+      },
+      "mine_mole_lesson": {
+        "name": "深掘りモグラの構え"
+      },
+      "mine_shallow_a": {
+        "name": "低位の殻と掘削班"
+      },
+      "mine_shallow_b": {
+        "name": "低位の鉱脈守り"
+      },
+      "mine_shallow_c": {
+        "name": "低位の試錐群"
       }
     },
     "statuses": {
@@ -41715,6 +43606,21 @@ export const referenceData={
       },
       "mine_recover_shell": {
         "name": "殻を開いた息継ぎ"
+      },
+      "exp_rooted": {
+        "name": "根留め"
+      },
+      "waterway_tail_ready": {
+        "name": "尾の構え（次の攻撃は強打）"
+      },
+      "mine_drill_ready": {
+        "name": "低い構え（次は貫通突進）"
+      },
+      "mine_drill_exposed": {
+        "name": "突進後の隙"
+      },
+      "mine_vein_ward": {
+        "name": "鉱脈の補強"
       }
     },
     "fieldAbilities": {
@@ -41783,6 +43689,9 @@ export const referenceData={
       },
       "exp_route_survey": {
         "name": "帰路測定"
+      },
+      "exp_wax_care": {
+        "name": "封蝋手当"
       }
     },
     "characters": {
@@ -42256,6 +44165,9 @@ export const referenceData={
       },
       "enemyGems": {
         "name": "enemyGems"
+      },
+      "workshop": {
+        "name": "workshop"
       }
     },
     "quests": {
@@ -53795,6 +55707,8 @@ export const referenceData={
     "flags.flow.q200.node",
     "flags.garden.intakeOpen",
     "flags.garden.liftOpen",
+    "flags.garden.prunerWon",
+    "flags.garden.t2Granted",
     "flags.garden.walkOpen",
     "flags.kagaribi.altarGate",
     "flags.kagaribi.altarGuardianWon",
@@ -53928,6 +55842,7 @@ export const referenceData={
     "flags.mine.liftOpen",
     "flags.mine.shellbreakerWon",
     "flags.mine.supportSecured",
+    "flags.mine.t2Granted",
     "flags.quest.q005.disclosed",
     "flags.quest.q005.questioned",
     "flags.quest.q006.disclosed",
@@ -55766,11 +57681,11 @@ export const referenceData={
       "file": "config/dungeon-content.json"
     },
     "mine.crystal_record.8": {
-      "name": "陶器の殻には術と貫通が有効だ。ここに新しい武器は残っていない。塩を洗いながら、手",
+      "name": "厚殻アルマジロは初回だけ防御し、火に弱い。見張りの防御補強は二巡で切れ、重複しな",
       "file": "config/dungeon-content.json"
     },
     "mine.charge_record.9": {
-      "name": "殻砕き獣は三巡を繰り返す。一巡目は身を固め、二巡目に一人へ突進、三巡目は殻を開い",
+      "name": "深掘りモグラは構えの次に突進し、その後は防御が三割下がる。防御やスタンで対処でき",
       "file": "config/dungeon-content.json"
     },
     "mine.shellbreaker.10": {
@@ -55810,7 +57725,7 @@ export const referenceData={
       "file": "config/dungeon-content.json"
     },
     "garden.root_gate.10": {
-      "name": "重なった根が奥の温室を閉ざしている。前庭の東には4Fへ戻る苗床運搬路がある。",
+      "name": "garden.root_gate.10",
       "file": "config/dungeon-content.json"
     },
     "cell.poison_step": {
@@ -55881,6 +57796,10 @@ export const referenceData={
       "name": "treasure.package.region_1_lower_landing.supply_rope",
       "file": "data/scripts/dungeon-packages.json"
     },
+    "treasure.package.region_1_canal_d.workshop_parts": {
+      "name": "treasure.package.region_1_canal_d.workshop_parts",
+      "file": "data/scripts/dungeon-packages.json"
+    },
     "treasure.package.region_1_gatehouse.supply_rope": {
       "name": "treasure.package.region_1_gatehouse.supply_rope",
       "file": "data/scripts/dungeon-packages.json"
@@ -55913,6 +57832,10 @@ export const referenceData={
       "name": "treasure.package.region_2_f7.supply_rope",
       "file": "data/scripts/dungeon-packages.json"
     },
+    "treasure.package.region_2_f9.workshop_parts": {
+      "name": "treasure.package.region_2_f9.workshop_parts",
+      "file": "data/scripts/dungeon-packages.json"
+    },
     "treasure.package.region_2_f10.supply_rope": {
       "name": "treasure.package.region_2_f10.supply_rope",
       "file": "data/scripts/dungeon-packages.json"
@@ -55931,6 +57854,10 @@ export const referenceData={
     },
     "treasure.package.region_3_f7.seed_reserve": {
       "name": "treasure.package.region_3_f7.seed_reserve",
+      "file": "data/scripts/dungeon-packages.json"
+    },
+    "treasure.package.region_3_f10.supply_rope": {
+      "name": "treasure.package.region_3_f10.supply_rope",
       "file": "data/scripts/dungeon-packages.json"
     },
     "q001.v11.entry": {
@@ -66589,6 +68516,97 @@ export const referenceData={
         "mine_shellbreaker"
       ]
     },
+    "enemies/garden_great_pruner": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "garden_great_pruner"
+      ]
+    },
+    "enemies/garden_root_shell": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "garden_root_shell"
+      ]
+    },
+    "enemies/garden_nectar_bee": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "garden_nectar_bee"
+      ]
+    },
+    "enemies/waterway_young_eel": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_young_eel"
+      ]
+    },
+    "enemies/waterway_low_crocodile": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_crocodile"
+      ]
+    },
+    "enemies/waterway_low_beaver": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_beaver"
+      ]
+    },
+    "enemies/waterway_low_eel": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_eel"
+      ]
+    },
+    "enemies/waterway_low_clam": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_clam"
+      ]
+    },
+    "enemies/mine_low_armadillo": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_armadillo"
+      ]
+    },
+    "enemies/mine_low_mole": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_mole"
+      ]
+    },
+    "enemies/mine_low_crab": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_crab"
+      ]
+    },
+    "enemies/mine_low_sentinel": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_sentinel"
+      ]
+    },
+    "enemies/mine_low_scissors": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "mine_low_scissors"
+      ]
+    },
     "encounters/market_enforcers": {
       "file": "dungeon-content.json",
       "path": [
@@ -66650,6 +68668,69 @@ export const referenceData={
       "path": [
         "encounters",
         "mine_shell_guardian"
+      ]
+    },
+    "encounters/garden_root_guardian": {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "garden_root_guardian"
+      ]
+    },
+    "encounters/waterway_eel_lesson": {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "waterway_eel_lesson"
+      ]
+    },
+    "encounters/waterway_croc_eel": {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "waterway_croc_eel"
+      ]
+    },
+    "encounters/waterway_shallow_a": {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "waterway_shallow_a"
+      ]
+    },
+    "encounters/waterway_shallow_b": {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "waterway_shallow_b"
+      ]
+    },
+    "encounters/mine_mole_lesson": {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_mole_lesson"
+      ]
+    },
+    "encounters/mine_shallow_a": {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_shallow_a"
+      ]
+    },
+    "encounters/mine_shallow_b": {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_shallow_b"
+      ]
+    },
+    "encounters/mine_shallow_c": {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "mine_shallow_c"
       ]
     },
     "actors/ada": {
@@ -67687,6 +69768,97 @@ export const referenceData={
         "mine_shell_recover"
       ]
     },
+    "skills/exp_root_bind": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_root_bind"
+      ]
+    },
+    "skills/garden_prune": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "garden_prune"
+      ]
+    },
+    "skills/waterway_spark": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "waterway_spark"
+      ]
+    },
+    "skills/waterway_spit": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "waterway_spit"
+      ]
+    },
+    "skills/waterway_tail_ready": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "waterway_tail_ready"
+      ]
+    },
+    "skills/waterway_filter": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "waterway_filter"
+      ]
+    },
+    "skills/mine_drill_ready": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_drill_ready"
+      ]
+    },
+    "skills/mine_drill_charge": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_drill_charge"
+      ]
+    },
+    "skills/mine_salt_bolt": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_salt_bolt"
+      ]
+    },
+    "skills/mine_shard_shot": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_shard_shot"
+      ]
+    },
+    "skills/mine_vein_ward": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_vein_ward"
+      ]
+    },
+    "skills/mine_crystal_claw": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_crystal_claw"
+      ]
+    },
+    "skills/mine_light_claw": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "mine_light_claw"
+      ]
+    },
     "fieldAbilities/survey": {
       "file": "jobs.json",
       "path": [
@@ -67839,6 +70011,13 @@ export const referenceData={
       "path": [
         "fieldAbilities",
         "exp_route_survey"
+      ]
+    },
+    "fieldAbilities/exp_wax_care": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "exp_wax_care"
       ]
     },
     "buffs/battle_cry": {
@@ -68056,6 +70235,41 @@ export const referenceData={
       "path": [
         "buffs",
         "mine_recover_shell"
+      ]
+    },
+    "buffs/exp_rooted": {
+      "file": "jobs.json",
+      "path": [
+        "buffs",
+        "exp_rooted"
+      ]
+    },
+    "buffs/waterway_tail_ready": {
+      "file": "jobs.json",
+      "path": [
+        "buffs",
+        "waterway_tail_ready"
+      ]
+    },
+    "buffs/mine_drill_ready": {
+      "file": "jobs.json",
+      "path": [
+        "buffs",
+        "mine_drill_ready"
+      ]
+    },
+    "buffs/mine_drill_exposed": {
+      "file": "jobs.json",
+      "path": [
+        "buffs",
+        "mine_drill_exposed"
+      ]
+    },
+    "buffs/mine_vein_ward": {
+      "file": "jobs.json",
+      "path": [
+        "buffs",
+        "mine_vein_ward"
       ]
     },
     "items/kagaribi_torch": {

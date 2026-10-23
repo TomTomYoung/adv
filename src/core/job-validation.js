@@ -32,11 +32,12 @@ export function skillDefinitionErrors(data,skill){
     if(effect.itemHealing!==undefined&&typeof effect.itemHealing!=='boolean')fail('道具回復指定不正');
     if(effect.type==='buff'&&!own(data.buffs,effect.buff))fail('バフ参照不正');
     if(effect.type==='status'&&!own(data.statuses,effect.status))fail('状態異常参照不正');
+    if(effect.statuses!==undefined&&(effect.type!=='cleanse'||effect.status!==undefined||!list(effect.statuses)||!effect.statuses.length||effect.statuses.some(id=>!own(data.statuses,id)||data.statuses[id].beneficial)))fail('単一解除の状態異常候補不正');
     if(['status','guard'].includes(effect.type)&&effect.level!==undefined&&!integer(effect.level,1,3))fail('状態異常Lv不正');
     if(['damage','heal','drain_mp','restore_mp'].includes(effect.type)&&effect.formula===undefined&&effect.amount===undefined)fail('効果量未定義');
     if(effect.type==='stun'&&(!integer(effect.count??1,1,20)||effect.stack!==undefined&&!['refresh','add'].includes(effect.stack)))fail('スタン回数・重複指定不正');
     if(effect.type==='frontline_knockback'&&(!integer(effect.distance,1,3)||!integer(effect.collisionDamage,0,1000000)))fail('ノックバック距離・衝突ダメージ不正');
-    const common=['type','formula','amount','scale','chance','element','itemHealing','buff','status','level',...(effect.type==='stun'?['count','stack']:[]),...(effect.type==='frontline_knockback'?['distance','collisionDamage']:[])];
+    const common=['type','formula','amount','scale','chance','element','itemHealing','buff','status','level',...(effect.type==='cleanse'?['statuses']:[]),...(effect.type==='stun'?['count','stack']:[]),...(effect.type==='frontline_knockback'?['distance','collisionDamage']:[])];
     if(Object.keys(effect).some(key=>!common.includes(key)))fail('未知の効果項目');
   }
   if(skill.effects?.some(e=>e.type==='repel')&&(skill.target!=='self'||skill.effects.length!==1||skill.selfEffects?.length||typeof skill.fireEffect!=='string'))fail('撃退技能の対象・効果が不正です');
@@ -95,13 +96,14 @@ export function validateJobs(data){
     if(!isRecord(buff.stats)||Object.entries(buff.stats).some(([key,n])=>!['str','vit','agi','int'].includes(key)||!finite(n,.1,3)))fail(id,'バフ能力不正');
     if(!isRecord(buff.resist)||Object.entries(buff.resist).some(([key,n])=>!ELEMENTS.includes(key)||!finite(n,0,1)))fail(id,'バフ耐性不正');
     if(buff.physicalPower!==undefined&&(!finite(buff.physicalPower,1,3)||buff.consume!=='next_action')||buff.physicalTaken!==undefined&&(!finite(buff.physicalTaken,0,1)||buff.consume!=='physical_hit')||buff.consume!==undefined&&!['next_action','physical_hit'].includes(buff.consume))fail(id,'一回補正の倍率・消費条件不正');
-    if(Object.keys(buff).some(key=>!['id','name','turns','stats','resist','physicalPower','physicalTaken','consume'].includes(key)))fail(id,'未知のバフ項目');
+    if(buff.blocksMovement!==undefined&&typeof buff.blocksMovement!=='boolean'||buff.classicAccuracyPenalty!==undefined&&!finite(buff.classicAccuracyPenalty,0,1))fail(id,'移動・命中補正不正');
+    if(Object.keys(buff).some(key=>!['id','name','turns','stats','resist','physicalPower','physicalTaken','consume','blocksMovement','classicAccuracyPenalty'].includes(key)))fail(id,'未知のバフ項目');
   }
   for(const [id,skill] of Object.entries(data.skills)){for(const m of skillLevelDefinitionErrors(data,id,skill))fail(id,m);for(const variant of levelVariants(skill))for(const message of skillDefinitionErrors(data,variant))fail(`skills.${id}`,message);}
   for(const [id,spec] of Object.entries(data.fieldAbilities??{})){for(const m of skillLevelDefinitionErrors(data,id,spec))fail(id,m);for(const a of levelVariants(spec)){
     for(const m of scoutDefinitionErrors(a))fail(id,m);
     if(!isRecord(a)||a.id!==id||!FIELD_APIS.has(a.api)||typeof a.name!=='string'||!integer(a.mp,0,999)||!integer(a.hp??0,0,999)||!list(a.modes)||!a.modes.length||a.modes.some(m=>!['town','dungeon'].includes(m))){fail(id,'探索特技構造不正');continue;}
-    if(['party.oil_saving','camp.route'].includes(a.api)&&(a.target!=='location'||a.modes.includes('town')||a.output!==undefined||!Array.isArray(a.weaponTypes)||!a.weaponTypes.length||a.weaponTypes.some(w=>!profile.equipmentTypes.weapon.includes(w))))fail(id,'遠征教習の対象・武器が不正です');
+    if(['party.oil_saving','camp.route','gear.wax'].includes(a.api)&&(a.target!=='location'||a.modes.includes('town')||a.output!==undefined||!Array.isArray(a.weaponTypes)||!a.weaponTypes.length||a.weaponTypes.some(w=>!profile.equipmentTypes.weapon.includes(w))))fail(id,'遠征教習の対象・武器が不正です');
     if(a.api==='fire.kindling'&&(a.target!=='location'||typeof a.effect!=='string'||a.modes.includes('town')))fail(id,'点火特技の対象が不正です');
     if(a.api==='wall.break'&&(a.target!=='location'||a.modes.includes('town')||a.output!==undefined))fail(id,'壁破壊特技の対象が不正です');
     if(a.api==='voxel.traverse'&&(a.target!=='location'||a.modes.includes('town')||a.output!==undefined))fail(id,'立体移動技能が不正です');

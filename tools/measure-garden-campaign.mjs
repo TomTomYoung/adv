@@ -1,5 +1,5 @@
 // Real earned Kagaribi party followed by the garden's route, cultivation and
-// return facilities. The root-gate boss is not implemented or measured here.
+// return facilities, the root-gate boss and restored central supply.
 import assert from 'node:assert/strict';
 import {pathToFileURL} from 'node:url';
 import {Campaign} from './measure-kagaribi-campaign.mjs';
@@ -53,18 +53,18 @@ export function measureGarden({seed=1907,size=4,mode='classic',loadout='standard
  bed('pollinator_vine','stair_vine');
  if(cultivate){act('climb','pollinator_vine');go('region_3_f8',3,3);act('harvest','pollinator_vine');}
  bed('herb_bed','cool_spore',true);
- go('region_3_f10',5,5);c.object('root_gate');go('region_3_f10',9,1);c.object('lift_latch');c.choose('open');c.checkpoint('garden root forecourt');
+ go('region_3_f10',5,5);c.upkeep();c.object('root_gate');c.choose('fight');supply('garden_central');go('region_3_f10',9,1);c.object('lift_latch');c.choose('open');c.checkpoint('garden root forecourt');
  const at10={steps:g.state.steps-start.steps,actors:g.state.members.map(id=>({id,level:g.state.actors[id].level,xp:g.state.actors[id].xp}))};
  const beforeReturn=g.state.steps;go('region_3_f1',1,1);c.object('exit');assert.equal(g.state.mode,'town');c.checkpoint('garden returned');
  const battles=c.report.battles.slice(start.battles);
  return {seed,size,mode,loadout,cultivate,startingActors:start.actors,at10,stepsReturned:g.state.steps-start.steps,returnSteps:g.state.steps-beforeReturn,
   minOil,walkingOil:c.report.oilSpentWalking-start.oil,remainingOil:oilTotal(data,g.state),checkpoints,waits,plantHealingWhileWaiting:plantHealing,
-  battles:battles.length,battleMpSpent:battles.reduce((n,b)=>n+b.mp,0),goldEarned:g.state.gold-start.gold,gemsEarned:g.state.expedition.gems-start.gems,
+  battles:battles.length,bossRounds:battles.find(b=>b.encounter==='garden_root_guardian').rounds,bossReinforcements:battles.find(b=>b.encounter==='garden_root_guardian').reinforcements,battleMpSpent:battles.reduce((n,b)=>n+b.mp,0),goldEarned:g.state.gold-start.gold,gemsEarned:g.state.expedition.gems-start.gems,
   consumed:Object.fromEntries(Object.entries(c.report.consumed).map(([k,n])=>[k,n-(start.consumed[k]??0)])),losses:g.state.records.losses};
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){
  const runs=[];
  if(process.argv.includes('--matrix'))for(const size of [4,5])for(const mode of ['classic','grid','frontline'])for(const loadout of ['standard','bow'])for(const cultivate of [false,true])runs.push(measureGarden({size,mode,loadout,cultivate}));
  else runs.push(measureGarden({size:Number(process.argv[2]??4),mode:process.argv[3]??'classic',loadout:process.argv[4]??'standard',cultivate:process.argv.includes('--cultivate')}));
- console.log(JSON.stringify({command:'node tools/measure-garden-campaign.mjs --matrix',scope:'1–10F routes and cultivation, no root-gate boss or 10F supply yet',contentVersion:data.game.version,runs},null,2));
+ console.log(JSON.stringify({command:'node tools/measure-garden-campaign.mjs --matrix',scope:'Earned Kagaribi party, garden 1–10F, finite boss reinforcement, five supplies and walking return',contentVersion:data.game.version,runs},null,2));
 }

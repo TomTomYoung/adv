@@ -43,3 +43,5 @@ Grid開始時にコピーした `battle.grid.positions` は個体キー→全体
 Core/保存の試験は `tests/battle-grid.test.mjs`、両画面の操作は `tests/battle-grid-view.test.mjs`、実Chromiumの両画面・1280/390/320pxは `tools/browser-grid-smoke.mjs` です。既存Classicの職業・技能・状態・イベント・保存の回帰試験も維持します。実行結果は[検証記録](../development/PROGRESS.md)へ記録します。
 
 初期の射程・範囲は定義済みですが、実戦の敵編成・移動回数・MP消耗のバランス監査は継続します。大型敵の複数セル占有、障害物地形、高低差、陣営越え移動、突進・ノックバック等の強制移動技能はGridでは未実装です。Frontlineには別の専用効果としてノックバックを実装しています。
+
+戦闘中の有限増援は[共通仕様](REINFORCEMENTS.md)を参照してください。登場済み編成だけを報酬と保存の対象とし、庭園10Fへ接続しています。根留めの移動/命中補正と期限も同文書に定義します。

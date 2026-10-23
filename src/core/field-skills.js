@@ -2,6 +2,7 @@ import {statusAbilityReason} from './status-effects.js';
 import {effectiveSkill,recordSkillUse} from './skill-levels.js';
 import {permission,costProblem,payCost} from './jobs.js';
 import {applySkill} from './battle.js';
+import {cleanseCandidates} from './status-effects.js';
 import {dungeonEffectActive} from './dungeons.js';
 
 function unneededRecoveryReason(data,skill){
@@ -28,7 +29,7 @@ export function fieldSkillPlan(engine,actorId,skillId,targetId){
   if(skill.selection==='lowest_hp_ratio')ids=[...ids].sort((a,b)=>s.actors[a].hp/engine.stats(a).hp-s.actors[b].hp/engine.stats(b).hp);
   ids=ids.slice(0,Math.min(grant.maxTargets,skill.maxTargets??grant.maxTargets));
   if(!ids.length)return fail(skill.target==='all_allies'?'対象になる生存中の仲間がいません。':s.members.includes(targetId)&&s.actors[targetId].hp<=0?'戦闘不能の仲間には使えません。':'出撃中の仲間を選んでください。','target');
-  const useful=ids.some(id=>{const a=s.actors[id],stats=engine.stats(id);return skill.effects.some(e=>e.type==='heal'?a.hp<stats.hp:e.type==='restore_mp'?a.mp<stats.mp:a.statuses.some(status=>!e.status||status===e.status));});
+  const useful=ids.some(id=>{const a=s.actors[id],stats=engine.stats(id);return skill.effects.some(e=>e.type==='heal'?a.hp<stats.hp:e.type==='restore_mp'?a.mp<stats.mp:cleanseCandidates(a,e).length>0);});
   if(!useful)return fail(unneededRecoveryReason(d,skill),'target');
   return {ok:true,skill,targets:ids.map(id=>s.actors[id])};
 }

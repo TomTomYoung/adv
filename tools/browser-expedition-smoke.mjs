@@ -106,6 +106,29 @@ try{
   assert.equal(await page.evaluate(()=>g.state.expedition.route.path.length-1),1);assert.equal(await page.evaluate(()=>g.state.expedition.oilSaving.remaining),59);
   await page.evaluate(()=>{const saved=g.save();g.load(saved);show();});
   await openCamp(page,'節油の種火');await page.screenshot({path:path.join(output,`oil-remaining-${layout}-${width}.png`)});
+  // Workshop UI fixtures: resources/flags are supplied here; Core and campaign tests cover earning them.
+  await page.getByRole('button',{name:'対象一覧へ戻る',exact:true}).click();await page.getByRole('button',{name:'離れる',exact:true}).click();
+  await page.evaluate(()=>{for(const id of ['mine_sorting','mine_hoist']){const c=g.data.expedition.camps.find(c=>c.id===id);g.teleport(c.map,c.x,c.y);g.give('rope',1);g.dispatch({type:'expedition.action',action:'repair',camp:id});}refreshView();});
+  await openCamp(page,'7F 巻上詰所の給油所');await page.getByRole('button',{name:'330容量の製法を受け取る',exact:true}).click();
+  assert.deepEqual(await page.evaluate(()=>g.state.expedition.workshop.claims),['mine_hoist']);await finishText(page);
+  await page.evaluate(()=>{g.returnTown();g.dispatch({type:'location.move',id:'hikarigaeri_shop'});g.state.gold=1000;g.give('machine_part',4);g.give('soft_fiber',4);refreshView();view.tab='shop';view.shopItem='exp_t2_sword';show();});
+  const workshopBefore=await page.evaluate(()=>({gold:g.state.gold,oil:g.state.expedition.reserve+g.state.expedition.lamp.fuel+(g.state.inventory.torch??0)*90,count:g.state.inventory.exp_t2_sword}));
+  await page.getByRole('button',{name:'水切り剣を1個製作',exact:true}).click();
+  assert.equal(await page.evaluate(()=>g.state.gold),workshopBefore.gold-170);assert.equal(await page.evaluate(()=>g.state.inventory.exp_t2_sword),workshopBefore.count+1);
+  await page.screenshot({path:path.join(output,`workshop-${layout}-${width}.png`)});
+  await page.getByRole('button',{name:'携行容量330へ改修 — 120G',exact:true}).click();assert.equal(await page.evaluate(()=>g.state.expedition.capacity),330);assert.equal(await page.evaluate(()=>g.state.gold),workshopBefore.gold-290);
+  assert.equal(await page.evaluate(()=>g.state.expedition.reserve+g.state.expedition.lamp.fuel+(g.state.inventory.torch??0)*90),workshopBefore.oil);
+  assert.equal(await page.getByRole('button',{name:'携行容量330へ改修 — 120G',exact:true}).isDisabled(),true);
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'workshop horizontal overflow');
+  await page.evaluate(()=>{g.state.flags.mine={shellbreakerWon:true};g.teleport('region_2_f10',7,1);g.give('rope',1);g.dispatch({type:'expedition.action',action:'repair',camp:'mine_central'});g.returnTown();g.dispatch({type:'location.move',id:'hikarigaeri_shop'});g.dispatch({type:'job.change',actor:'sera',job:'apothecary'});g.give('medicine_kit',1);g.dispatch({type:'equip',actor:'sera',item:'medicine_kit'});g.healAll();refreshView();view.tab='shop';view.skillShopActor='sera';show();});
+  await lesson('封蝋手当').getByRole('button',{name:/Lv1を習得/}).click();
+  await page.evaluate(()=>{g.teleport('region_2_f9',1,1);refreshView();view.tab='party';view.partySelection={party:'sera'};view.partyPages={party:'skills'};show();});
+  const waxCard=page.locator('.profile-entry').filter({has:page.getByRole('heading',{name:/^封蝋手当/})});
+  const target=await page.evaluate(()=>g.state.gear.bag.exp_t2_sword.at(-1)),waxBefore=await page.evaluate(()=>g.state.actors.sera.mp);
+  await waxCard.locator(`[data-focus="profile:party:use:exp_wax_care:${target}"]`).click();assert.equal(await page.evaluate(target=>g.state.gear.items[target].wax,target),true);assert.equal(await page.evaluate(()=>g.state.actors.sera.mp),waxBefore-6);
+  assert.equal(await waxCard.locator(`[data-focus="profile:party:use:exp_wax_care:${target}"]`).isDisabled(),true);
+  await page.screenshot({path:path.join(output,`wax-${layout}-${width}.png`)});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'wax targets horizontal overflow');
+  await page.evaluate(()=>{const saved=g.save();g.load(saved);show();});
   await page.close();console.log(`EXPEDITION BROWSER OK: ${layout} ${width}`);
  }
  assert.deepEqual(errors,[]);

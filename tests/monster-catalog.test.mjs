@@ -43,4 +43,7 @@ test('encounter definitions distinguish current references from retired water en
   assert.ok(entry('kuragari').includes('assets/images/monsters/wraith.webp'));
   assert.ok(entry('kuragari').includes('腐肉鬼'));
   assert.ok(entry('salt_eater').includes('corrosion.battleRound'));
+  assert.ok(entry('garden_nectar_bee').includes('garden_root_guardian'));
+  assert.ok(entry('garden_nectar_bee').includes('有限増援予定：蜜蝋ランプバチ'));
+  assert.ok(entry('garden_nectar_bee').includes('garden.root_gate.10'));
 });

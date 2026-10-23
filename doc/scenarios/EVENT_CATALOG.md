@@ -1,6 +1,6 @@
 # フィールドイベント・戦闘中イベント一覧
 
-作品版 1.30.0。配布データから生成する実装一覧。[q001の位置・全文](quests/QUEST_Q001.md) ／ [イベント仕様](EVENT_SYSTEM.md) ／ [命令仕様](SCRIPT_REFERENCE.md) ／ [セル照明](../dungeons/FIELD_LIGHTING.md)。
+作品版 1.34.0。配布データから生成する実装一覧。[q001の位置・全文](quests/QUEST_Q001.md) ／ [イベント仕様](EVENT_SYSTEM.md) ／ [命令仕様](SCRIPT_REFERENCE.md) ／ [セル照明](../dungeons/FIELD_LIGHTING.md)。
 
 ## 実装した処理
 
@@ -2096,6 +2096,8 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 
 ### region_1_canal_d 灯守の地下水道・9F 避難水路
 
+`region_1_canal_d/workshop_parts`：(5, 5) `chest`、起動 `interact` → `treasure.package.region_1_canal_d.workshop_parts`。[定義](../../data/maps/region_1_canal_d.json)。
+
 ### region_1_gatehouse 灯守の地下水道・10F 奥の水門詰所
 
 `region_1_gatehouse/sluice_beast`：(5, 3) `clue`、起動 `interact` → `waterway.sluice_beast`。[定義](../../data/maps/region_1_gatehouse.json)。
@@ -2182,6 +2184,8 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 
 `region_2_f9/charge_record`：(3, 1) `clue`、起動 `interact` → `mine.charge_record.9`。[定義](../../data/maps/region_2_f9.json)。
 
+`region_2_f9/workshop_parts`：(5, 5) `chest`、起動 `interact` → `treasure.package.region_2_f9.workshop_parts`。[定義](../../data/maps/region_2_f9.json)。
+
 ### region_2_f10 塩哭きの廃坑・10F 大選鉱室
 
 `region_2_f10/lift_latch`：(9, 1) `clue`、起動 `interact` → `mine.lift_latch.10`。[定義](../../data/maps/region_2_f10.json)。
@@ -2229,6 +2233,8 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 `region_3_f10/lift_latch`：(9, 1) `clue`、起動 `interact` → `garden.lift_latch.10`。[定義](../../data/maps/region_3_f10.json)。
 
 `region_3_f10/root_gate`：(5, 5) `clue`、起動 `interact` → `garden.root_gate.10`。[定義](../../data/maps/region_3_f10.json)。
+
+`region_3_f10/supply_rope`：(7, 1) `chest`、起動 `interact` → `treasure.package.region_3_f10.supply_rope`。[定義](../../data/maps/region_3_f10.json)。
 
 ## battle.startの定義位置
 
@@ -2909,6 +2915,8 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 `waterway.sluice_beast/commands.0.else.1.options.0.commands.0`：`waterway.sluice_beast` / `commands.0.else.1.options.0.commands.0` → `waterway_sluice_guardian`。
 
 `mine.shellbreaker.10/commands.0.else.1.options.0.commands.0`：`mine.shellbreaker.10` / `commands.0.else.1.options.0.commands.0` → `mine_shell_guardian`、戦闘中イベント `charge_warning`。
+
+`garden.root_gate.10/commands.0.else.1.options.0.commands.0`：`garden.root_gate.10` / `commands.0.else.1.options.0.commands.0` → `garden_root_guardian`。
 
 ## 再生成
 

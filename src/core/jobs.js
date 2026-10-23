@@ -114,7 +114,7 @@ export function fieldActionPlan(data,state,id,abilityId,target){
   if(ability.api==='fire.kindling'){const plan=fireSkillPlan(data,state,id,abilityId);if(!plan.ok)return plan;}
   if(['wall.break','archive.unlock','voxel.traverse','water.traverse'].includes(ability.api))return {...dungeonFieldPlan(data,state,id,abilityId),ability};
   const scouting=SCOUT_APIS.includes(ability.api)?scoutingPlan(data,state,id,ability,target):{};if(scouting.ok===false)return scouting;
-  const expedition=EXPEDITION_FIELD_APIS.includes(ability.api)?expeditionFieldPlan(data,state,ability):{};if(expedition.ok===false)return expedition;
+  const expedition=EXPEDITION_FIELD_APIS.includes(ability.api)?expeditionFieldPlan(data,state,ability,target):{};if(expedition.ok===false)return expedition;
   const inventory={...state.inventory};
   for(const [item,count] of Object.entries(ability.materials??{}))inventory[item]-=count;
   for(const [item,count] of Object.entries(ability.output??{})){

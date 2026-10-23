@@ -74,11 +74,11 @@ test('four supplies and two seed reserves pay once; repair, relay, oil, HP growt
  assert.equal(g.state.expedition.capacity,180);g.returnTown();goTownLocation(g,data.game.world.townRoot);const oil=oilTotal(data,g.state);assert.ok(g.dispatch({type:'checkpoint.travel',camp:'garden_rest'}));assert.equal(oilTotal(data,g.state),oil);saved(g);
 });
 
-test('nectar and moss apply locally; 10F forecourt is outside all plant effects and grants no boss rewards',()=>{
+test('nectar and moss apply locally; 10F forecourt is outside plant effects and declining the boss grants no rewards',()=>{
  const g=ready();act(g,'supplies');plant(g,'nectar_bed','red_nectar');assert.equal(dungeonEncounter(data,g.state).rate,2);
  plant(g,'quiet_bed','quiet_moss');assert.equal(dungeonEncounter(data,g.state).rate,.5);
  g.teleport('region_3_f6',5,3);assert.equal(dungeonEncounter(data,g.state).rate,1);
- g.teleport('region_3_f10',5,5);assert.equal(dungeonEncounter(data,g.state).rate,1);const old=structuredClone({xp:g.state.actors.ada.xp,gems:g.state.expedition.gems,battles:g.state.records.battles});inspect(g,'root_gate');drain(g);assert.deepEqual({xp:g.state.actors.ada.xp,gems:g.state.expedition.gems,battles:g.state.records.battles},old);assert.equal(data.expedition.camps.some(c=>c.dungeon==='region_3'&&data.maps[c.map].floor===10),false);
+ g.teleport('region_3_f10',5,5);assert.equal(dungeonEncounter(data,g.state).rate,1);const old=structuredClone({xp:g.state.actors.ada.xp,gems:g.state.expedition.gems,battles:g.state.records.battles});inspect(g,'root_gate');drain(g);choose(g,'leave');assert.deepEqual({xp:g.state.actors.ada.xp,gems:g.state.expedition.gems,battles:g.state.records.battles},old);assert.equal(data.expedition.camps.some(c=>c.dungeon==='region_3'&&data.maps[c.map].floor===10),true);
 });
 
 test('actual 1.29 garden save retains plant ages, old relay, supplies and progress without new rewards',()=>{
@@ -88,7 +88,7 @@ test('actual 1.29 garden save retains plant ages, old relay, supplies and progre
  }
 });
 for(const options of [{size:4,mode:'grid',cultivate:false},{size:5,mode:'frontline',loadout:'bow',cultivate:true}])test(`earned garden route ${JSON.stringify(options)}`,()=>{
- const r=measureGarden(options);assert.equal(r.losses,0);assert.ok(r.minOil>27);assert.equal(r.checkpoints.length,4);assert.ok(r.returnSteps<100);assert.equal(r.waits>0,options.cultivate);assert.equal(r.walkingOil,r.stepsReturned);
+ const r=measureGarden(options);assert.equal(r.losses,0);assert.ok(r.minOil>27);assert.equal(r.checkpoints.length,5);assert.ok(r.returnSteps<100);assert.equal(r.waits>0,options.cultivate);assert.equal(r.walkingOil,r.stepsReturned);
 });
 
 test('every new walkable garden cell retains a route to its permanent shore under all terrain plants',()=>{

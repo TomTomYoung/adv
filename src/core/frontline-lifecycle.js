@@ -29,7 +29,7 @@ export function syncFrontlineDefeats(engine){
 // Only displaced bodies move, nearest lane (left on ties), then rearward rows.
 export function displaceFrontlineDown(s,enemy,moves){
  const f=s.battle.frontline,bodies=units(s).filter(u=>Boolean(u.instance)===enemy&&frontlineState(s,u)==='down');
- const occupied=moves.map(m=>m.to),displaced=[];
+ const occupied=[...moves.map(m=>m.to),...units(s).filter(u=>Boolean(u.instance)===enemy&&battleAlive(s,u)&&!moves.some(m=>m.unit===key(u))).map(u=>position(s,u))],displaced=[];
  for(const u of bodies){const p=position(s,u);if(occupied.some(q=>same(p,q)))displaced.push(u);else occupied.push(p);}
  const result=[];
  for(const u of displaced){
