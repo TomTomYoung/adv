@@ -20860,6 +20860,42 @@ export const referenceData={
         "mine.shellbreaker.10",
         "commands",
         0,
+        "then",
+        1,
+        "else",
+        0,
+        "condition",
+        "arg",
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "mine.shellbreaker.10",
+        "commands",
+        0,
+        "then",
+        1,
+        "else",
+        0,
+        "then",
+        0,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "mine.shellbreaker.10",
+        "commands",
+        0,
         "else",
         1,
         "options",
@@ -20870,6 +20906,90 @@ export const referenceData={
       ],
       "kind": "encounters",
       "id": "mine_shell_guardian"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "mine.shellbreaker.10",
+        "commands",
+        0,
+        "else",
+        1,
+        "options",
+        0,
+        "commands",
+        0,
+        "on_win",
+        2,
+        "else",
+        0,
+        "condition",
+        "arg",
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "mine.shellbreaker.10",
+        "commands",
+        0,
+        "else",
+        1,
+        "options",
+        0,
+        "commands",
+        0,
+        "on_win",
+        2,
+        "else",
+        0,
+        "then",
+        0,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "garden.root_gate.10",
+        "commands",
+        0,
+        "then",
+        1,
+        "else",
+        0,
+        "condition",
+        "arg",
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "garden.root_gate.10",
+        "commands",
+        0,
+        "then",
+        1,
+        "else",
+        0,
+        "then",
+        0,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
     },
     {
       "file": "dungeon-content.json",
@@ -20888,6 +21008,54 @@ export const referenceData={
       ],
       "kind": "encounters",
       "id": "garden_root_guardian"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "garden.root_gate.10",
+        "commands",
+        0,
+        "else",
+        1,
+        "options",
+        0,
+        "commands",
+        0,
+        "on_win",
+        2,
+        "else",
+        0,
+        "condition",
+        "arg",
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "garden.root_gate.10",
+        "commands",
+        0,
+        "else",
+        1,
+        "options",
+        0,
+        "commands",
+        0,
+        "on_win",
+        2,
+        "else",
+        0,
+        "then",
+        0,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_ticket"
     },
     {
       "file": "dungeon-content.json",
@@ -21018,6 +21186,96 @@ export const referenceData={
       ],
       "kind": "items",
       "id": "diving_kit"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "shopGoods",
+        13,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_sword"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "shopGoods",
+        14,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_axe"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "shopGoods",
+        15,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_spear"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "shopGoods",
+        16,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_dagger"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "shopGoods",
+        17,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_fist"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "shopGoods",
+        18,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_bow"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "shopGoods",
+        19,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_staff"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "shopGoods",
+        20,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_tool"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "shopGoods",
+        21,
+        "item"
+      ],
+      "kind": "items",
+      "id": "exp_t2_instrument"
     },
     {
       "file": "dungeon-content.json",
@@ -22392,6 +22650,449 @@ export const referenceData={
       ],
       "kind": "maps",
       "id": "region_3_f10"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "capacity",
+        "duplicate",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_sword",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_sword",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_axe",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_axe",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_spear",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_spear",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_dagger",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_dagger",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_fist",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_fist",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_bow",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_bow",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_staff",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_staff",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_tool",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_tool",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_instrument",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t1_instrument",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_sword",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_sword",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_axe",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_axe",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_spear",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_spear",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_dagger",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_dagger",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_fist",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_fist",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_bow",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_bow",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_staff",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_staff",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_tool",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_tool",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_instrument",
+        "materials",
+        "machine_part"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "workshop",
+        "recipes",
+        "exp_t2_instrument",
+        "materials",
+        "soft_fiber"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
     },
     {
       "file": "jobs.json",
@@ -42083,6 +42784,9 @@ export const referenceData={
       },
       "exp_route_survey": {
         "name": "帰路測定"
+      },
+      "exp_wax_care": {
+        "name": "封蝋手当"
       }
     },
     "characters": {
@@ -42556,6 +43260,9 @@ export const referenceData={
       },
       "enemyGems": {
         "name": "enemyGems"
+      },
+      "workshop": {
+        "name": "workshop"
       }
     },
     "quests": {
@@ -54096,6 +54803,7 @@ export const referenceData={
     "flags.garden.intakeOpen",
     "flags.garden.liftOpen",
     "flags.garden.prunerWon",
+    "flags.garden.t2Granted",
     "flags.garden.walkOpen",
     "flags.kagaribi.altarGate",
     "flags.kagaribi.altarGuardianWon",
@@ -54229,6 +54937,7 @@ export const referenceData={
     "flags.mine.liftOpen",
     "flags.mine.shellbreakerWon",
     "flags.mine.supportSecured",
+    "flags.mine.t2Granted",
     "flags.quest.q005.disclosed",
     "flags.quest.q005.questioned",
     "flags.quest.q006.disclosed",
@@ -56067,7 +56776,7 @@ export const referenceData={
       "file": "config/dungeon-content.json"
     },
     "mine.crystal_record.8": {
-      "name": "陶器の殻には術と貫通が有効だ。ここに新しい武器は残っていない。塩を洗いながら、手",
+      "name": "陶器の殻には術と貫通が有効だ。10Fの殻砕き獣を退ければ、第2段階の武器引換券と",
       "file": "config/dungeon-content.json"
     },
     "mine.charge_record.9": {
@@ -68186,6 +68895,13 @@ export const referenceData={
       "path": [
         "fieldAbilities",
         "exp_route_survey"
+      ]
+    },
+    "fieldAbilities/exp_wax_care": {
+      "file": "jobs.json",
+      "path": [
+        "fieldAbilities",
+        "exp_wax_care"
       ]
     },
     "buffs/battle_cry": {

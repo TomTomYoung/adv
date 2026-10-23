@@ -32,7 +32,7 @@ export function gearErrors(data,state){
  for(const [item,n] of Object.entries(state.inventory))if(data.items[item]?.slot&&(g.bag[item]?.length??0)!==n)errors.push('装備袋が不足しています');
  for(const [actor,a] of Object.entries(state.actors))for(const [slot,item] of Object.entries(a.equipment)){const id=g.equipped[actor]?.[slot];check(id,item);if(g.items[id]?.holder!==undefined)errors.push('装備中の品物が持ち物にも存在します');}
  for(const [actor,slots] of Object.entries(g.equipped))for(const slot of Object.keys(slots))if(!state.actors[actor]?.equipment[slot])errors.push('所在不明の装備です');
- for(const [id,c] of Object.entries(g.items))if(!/^gear_[1-9]\d*$/.test(id)||Number(id.slice(5))>=g.next||!data.items[c.item]?.slot||!Number.isSafeInteger(c.salt)||c.salt<0||c.salt>1e9||!seen.has(id))errors.push('装備個体・塩状態が不正です');
+ for(const [id,c] of Object.entries(g.items))if(!/^gear_[1-9]\d*$/.test(id)||Number(id.slice(5))>=g.next||!data.items[c.item]?.slot||!Number.isSafeInteger(c.salt)||c.salt<0||c.salt>1e9||c.wax!==undefined&&c.wax!==true||!seen.has(id))errors.push('装備個体・塩状態が不正です');
  for(const c of Object.values(g.items))if(c.holder!==undefined&&!state.members.includes(c.holder))errors.push('装備の保持者が不正です');
  return errors;
 }

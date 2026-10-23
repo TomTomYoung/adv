@@ -3134,7 +3134,7 @@
       "commands": [
         {
           "op": "narrate",
-          "text": "塩4以上の装備はソルトイーターに食われることがある。戦闘ごとに塩が1増える。階段脇の水に入れば全装備を洗えるが、HP・MPは戻らない。装備の塩は迷宮の状態で確認できる。"
+          "text": "塩4以上の装備はソルトイーターに食われることがある。戦闘ごとに塩が1増える。階段脇の水に入れば全装備を洗えるが、HP・MPは戻らない。装備の塩は迷宮の状態で確認できる。 製法のある武器は町で再製作できる。第2段階の製法は、いずれかの10F主を退けると残る。"
         }
       ]
     },
@@ -3142,7 +3142,7 @@
       "commands": [
         {
           "op": "narrate",
-          "text": "陶器の殻には術と貫通が有効だ。ここに新しい武器は残っていない。塩を洗いながら、手持ちの武器と術を使い分ける。"
+          "text": "陶器の殻には術と貫通が有効だ。10Fの殻砕き獣を退ければ、第2段階の武器引換券と9種の永久製法が残る。失った武器も町で機関部品・柔らかな植物繊維と工賃から再製作できる。"
         }
       ]
     },
@@ -3169,6 +3169,52 @@
             {
               "op": "narrate",
               "text": "殻砕き獣は退いた。東の中央給油所を復旧できる。"
+            },
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.mine.t2Granted"
+                },
+                "right": true
+              },
+              "then": [],
+              "else": [
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "exp_t2_ticket",
+                      "count": 99
+                    }
+                  },
+                  "then": [
+                    {
+                      "op": "item.give",
+                      "item": "exp_t2_ticket",
+                      "count": 1
+                    },
+                    {
+                      "op": "flag.set",
+                      "key": "mine.t2Granted",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "第2段階の武器引換券を1枚受け取った。9種の製法も永久に記録した。町の旅道具店で完成品の購入や素材からの再製作ができる。"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "narrate",
+                      "text": "引換券の袋がいっぱいだ。空きを作ってここを調べれば、初回の1枚を受け取れる。製法は記録済みだ。"
+                    }
+                  ]
+                }
+              ]
             }
           ],
           "else": [
@@ -3195,6 +3241,52 @@
                         {
                           "op": "narrate",
                           "text": "殻砕き獣が退いた。東の中央給油所を修理できる。洗浄槽で装備の塩を落としてから帰ろう。"
+                        },
+                        {
+                          "op": "if",
+                          "condition": {
+                            "op": "eq",
+                            "left": {
+                              "ref": "flags.mine.t2Granted"
+                            },
+                            "right": true
+                          },
+                          "then": [],
+                          "else": [
+                            {
+                              "op": "if",
+                              "condition": {
+                                "op": "not",
+                                "arg": {
+                                  "op": "has_item",
+                                  "item": "exp_t2_ticket",
+                                  "count": 99
+                                }
+                              },
+                              "then": [
+                                {
+                                  "op": "item.give",
+                                  "item": "exp_t2_ticket",
+                                  "count": 1
+                                },
+                                {
+                                  "op": "flag.set",
+                                  "key": "mine.t2Granted",
+                                  "value": true
+                                },
+                                {
+                                  "op": "narrate",
+                                  "text": "第2段階の武器引換券を1枚受け取った。9種の製法も永久に記録した。町の旅道具店で完成品の購入や素材からの再製作ができる。"
+                                }
+                              ],
+                              "else": [
+                                {
+                                  "op": "narrate",
+                                  "text": "引換券の袋がいっぱいだ。空きを作ってここを調べれば、初回の1枚を受け取れる。製法は記録済みだ。"
+                                }
+                              ]
+                            }
+                          ]
                         }
                       ],
                       "on_lose": [],
@@ -3448,6 +3540,52 @@
             {
               "op": "narrate",
               "text": "大剪定虫は退き、根門に光が差している。北の種床設備で給油と中継を整えられる。"
+            },
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.garden.t2Granted"
+                },
+                "right": true
+              },
+              "then": [],
+              "else": [
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "exp_t2_ticket",
+                      "count": 99
+                    }
+                  },
+                  "then": [
+                    {
+                      "op": "item.give",
+                      "item": "exp_t2_ticket",
+                      "count": 1
+                    },
+                    {
+                      "op": "flag.set",
+                      "key": "garden.t2Granted",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "第2段階の武器引換券を1枚受け取った。9種の製法も永久に記録した。町の旅道具店で完成品の購入や素材からの再製作ができる。"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "narrate",
+                      "text": "引換券の袋がいっぱいだ。空きを作ってここを調べれば、初回の1枚を受け取れる。製法は記録済みだ。"
+                    }
+                  ]
+                }
+              ]
             }
           ],
           "else": [
@@ -3474,6 +3612,52 @@
                         {
                           "op": "narrate",
                           "text": "大剪定虫が退いた。北の種床設備を修理できる。復旧後は根留めを技能宝石180個で人物ごとに学べる。"
+                        },
+                        {
+                          "op": "if",
+                          "condition": {
+                            "op": "eq",
+                            "left": {
+                              "ref": "flags.garden.t2Granted"
+                            },
+                            "right": true
+                          },
+                          "then": [],
+                          "else": [
+                            {
+                              "op": "if",
+                              "condition": {
+                                "op": "not",
+                                "arg": {
+                                  "op": "has_item",
+                                  "item": "exp_t2_ticket",
+                                  "count": 99
+                                }
+                              },
+                              "then": [
+                                {
+                                  "op": "item.give",
+                                  "item": "exp_t2_ticket",
+                                  "count": 1
+                                },
+                                {
+                                  "op": "flag.set",
+                                  "key": "garden.t2Granted",
+                                  "value": true
+                                },
+                                {
+                                  "op": "narrate",
+                                  "text": "第2段階の武器引換券を1枚受け取った。9種の製法も永久に記録した。町の旅道具店で完成品の購入や素材からの再製作ができる。"
+                                }
+                              ],
+                              "else": [
+                                {
+                                  "op": "narrate",
+                                  "text": "引換券の袋がいっぱいだ。空きを作ってここを調べれば、初回の1枚を受け取れる。製法は記録済みだ。"
+                                }
+                              ]
+                            }
+                          ]
                         }
                       ],
                       "on_lose": [],
@@ -3551,6 +3735,348 @@
     {
       "item": "diving_kit",
       "price": 45
+    },
+    {
+      "item": "exp_t2_sword",
+      "price": 260,
+      "condition": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.kagaribi.altarGuardianWon"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.waterway.sluiceBeastWon"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.mine.shellbreakerWon"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.garden.prunerWon"
+            },
+            "right": true
+          }
+        ]
+      },
+      "requirement": "いずれかの10F主を退けると、第2段階9種の製法を記録できます。"
+    },
+    {
+      "item": "exp_t2_axe",
+      "price": 260,
+      "condition": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.kagaribi.altarGuardianWon"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.waterway.sluiceBeastWon"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.mine.shellbreakerWon"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.garden.prunerWon"
+            },
+            "right": true
+          }
+        ]
+      },
+      "requirement": "いずれかの10F主を退けると、第2段階9種の製法を記録できます。"
+    },
+    {
+      "item": "exp_t2_spear",
+      "price": 260,
+      "condition": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.kagaribi.altarGuardianWon"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.waterway.sluiceBeastWon"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.mine.shellbreakerWon"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.garden.prunerWon"
+            },
+            "right": true
+          }
+        ]
+      },
+      "requirement": "いずれかの10F主を退けると、第2段階9種の製法を記録できます。"
+    },
+    {
+      "item": "exp_t2_dagger",
+      "price": 260,
+      "condition": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.kagaribi.altarGuardianWon"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.waterway.sluiceBeastWon"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.mine.shellbreakerWon"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.garden.prunerWon"
+            },
+            "right": true
+          }
+        ]
+      },
+      "requirement": "いずれかの10F主を退けると、第2段階9種の製法を記録できます。"
+    },
+    {
+      "item": "exp_t2_fist",
+      "price": 260,
+      "condition": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.kagaribi.altarGuardianWon"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.waterway.sluiceBeastWon"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.mine.shellbreakerWon"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.garden.prunerWon"
+            },
+            "right": true
+          }
+        ]
+      },
+      "requirement": "いずれかの10F主を退けると、第2段階9種の製法を記録できます。"
+    },
+    {
+      "item": "exp_t2_bow",
+      "price": 260,
+      "condition": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.kagaribi.altarGuardianWon"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.waterway.sluiceBeastWon"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.mine.shellbreakerWon"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.garden.prunerWon"
+            },
+            "right": true
+          }
+        ]
+      },
+      "requirement": "いずれかの10F主を退けると、第2段階9種の製法を記録できます。"
+    },
+    {
+      "item": "exp_t2_staff",
+      "price": 260,
+      "condition": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.kagaribi.altarGuardianWon"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.waterway.sluiceBeastWon"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.mine.shellbreakerWon"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.garden.prunerWon"
+            },
+            "right": true
+          }
+        ]
+      },
+      "requirement": "いずれかの10F主を退けると、第2段階9種の製法を記録できます。"
+    },
+    {
+      "item": "exp_t2_tool",
+      "price": 260,
+      "condition": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.kagaribi.altarGuardianWon"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.waterway.sluiceBeastWon"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.mine.shellbreakerWon"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.garden.prunerWon"
+            },
+            "right": true
+          }
+        ]
+      },
+      "requirement": "いずれかの10F主を退けると、第2段階9種の製法を記録できます。"
+    },
+    {
+      "item": "exp_t2_instrument",
+      "price": 260,
+      "condition": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.kagaribi.altarGuardianWon"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.waterway.sluiceBeastWon"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.mine.shellbreakerWon"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.garden.prunerWon"
+            },
+            "right": true
+          }
+        ]
+      },
+      "requirement": "いずれかの10F主を退けると、第2段階9種の製法を記録できます。"
     }
   ],
   "mapOpenings": [

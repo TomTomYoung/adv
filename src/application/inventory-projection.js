@@ -1,3 +1,4 @@
+import {weaponCraftPlan} from '../core/expedition-workshop.js';
 import {fieldItemUser} from '../core/status-effects.js';
 import {canEquip} from '../core/jobs.js';
 import {dungeonAbilityReason,dungeonEffectActive} from '../core/dungeons.js';
@@ -21,7 +22,8 @@ export function projectInventory(engine){
   }).filter(Boolean)}));
   const shop=d.shops.goods.map(g=>{
     const item=details(g.item,s.inventory[g.item]??0),plan=purchasePlan(engine,g.item);
-    return {...item,price:engine.price(g.price),basePrice:g.price,canBuy:plan.ok,reason:plan.reason??'',sharedCount:heldCount(d,s,g.item),recipients:s.members.map(actor=>({actor,equipAllowed:item.slot?canEquip(d,s,actor,g.item):null,count:heldCount(d,s,g.item,actor),equippedCount:Object.values(s.actors[actor].equipment).filter(id=>id===g.item).length}))};
+    const recipe=d.expedition?.workshop?.recipes[g.item],craft=recipe?{price:recipe.price,materials:Object.entries(recipe.materials).map(([id,count])=>({name:d.items[id].name,count,held:s.inventory[id]??0})),...weaponCraftPlan(d,s,g.item)}:null;
+    return {...item,craft,price:engine.price(g.price),basePrice:g.price,canBuy:plan.ok,reason:plan.reason??'',sharedCount:heldCount(d,s,g.item),recipients:s.members.map(actor=>({actor,equipAllowed:item.slot?canEquip(d,s,actor,g.item):null,count:heldCount(d,s,g.item,actor),equippedCount:Object.values(s.actors[actor].equipment).filter(id=>id===g.item).length}))};
   });
   return {inventory,inventoryHolders,shop};
 }

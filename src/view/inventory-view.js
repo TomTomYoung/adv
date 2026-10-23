@@ -68,6 +68,7 @@ export function renderShop(view,parent,m){
     row.append(make('span','',item.name),make('span','shop-price',`${item.price.toLocaleString('ja-JP')} G`));list.append(row);
   }
   const details=make('section','shop-details');details.setAttribute('aria-label','選択中の品物');details.append(description(item),make('p','muted',`共通の袋：${item.sharedCount??0}個`));
+  if(item.craft){const c=item.craft;details.append(make('p','muted',`製法による再製作：${c.price}G ＋ ${c.materials.map(m=>`${m.name}${m.count}個（所持${m.held}）`).join('、')}。完成品は共通の袋へ。`),button(`${item.name}を1個製作`,()=>view.act({type:'weapon.craft',item:item.id}),`shop:craft:${item.id}`,!c.ok));if(!c.ok)details.append(make('p','requirement',c.reason));}
   if(!item.canBuy)details.append(make('p','requirement',item.reason));
   if(m.notice)details.append(make('p','inventory-notice',m.notice));contents.append(list,details);section.append(contents);
   const targets=make('section','shop-recipients'+(view.inventoryAction?.kind==='buy'?' inventory-choice':''));targets.setAttribute('aria-label','購入先を選ぶ');
