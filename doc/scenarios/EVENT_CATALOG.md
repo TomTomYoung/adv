@@ -1,6 +1,6 @@
 # フィールドイベント・戦闘中イベント一覧
 
-作品版 1.27.0。配布データから生成する実装一覧。[q001の位置・全文](quests/QUEST_Q001.md) ／ [イベント仕様](EVENT_SYSTEM.md) ／ [命令仕様](SCRIPT_REFERENCE.md) ／ [セル照明](../dungeons/FIELD_LIGHTING.md)。
+作品版 1.34.0。配布データから生成する実装一覧。[q001の位置・全文](quests/QUEST_Q001.md) ／ [イベント仕様](EVENT_SYSTEM.md) ／ [命令仕様](SCRIPT_REFERENCE.md) ／ [セル照明](../dungeons/FIELD_LIGHTING.md)。
 
 ## 実装した処理
 
@@ -69,6 +69,8 @@ power_gridの守護者は系統操作・部品接続・戦闘対象装置ID・�
 `q001-B-rookie`：`q001.v11.outage` / `commands.3`。判定 `round_start` / `before_end`。条件 `{"op":"or","args":[{"op":"gte","left":{"ref":"battle.round"},"right":2},{"op":"in","left":{"ref":"battle.pendingResult"},"right":["win","escape","repel"]}]}`。命令 `scene.cast` → `say` → `story.action` → `fire.portable.set` → `battle.end`。
 
 `fire_warning`：`kagaribi.altar_keeper` / `commands.0.else.1.options.0.commands.0`。判定 `round_start`。条件 `{"op":"eq","left":{"ref":"battle.round"},"right":3}`。命令 `narrate`。
+
+`charge_warning`：`mine.shellbreaker.10` / `commands.0.else.1.options.0.commands.0`。判定 `round_start`。条件 `{"op":"eq","left":{"ref":"battle.round"},"right":2}`。命令 `narrate`。
 
 ## フィールドのクエスト配置一覧
 
@@ -1782,7 +1784,7 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 
 ## マップ共通の配置一覧
 
-### region_1_f1 灯守の地下水道・上層・入口操作室
+### region_1_f1 灯守の地下水道・1F 入口操作室
 
 `region_1_f1/exit`：(1, 1) `exit`、起動 `interact` → `region_1_f1.exit`。[定義](../../data/maps/region_1_f1.json)。
 
@@ -1794,7 +1796,7 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 
 `region_1_f1/door`：(9, 3) `door`、起動 `interact` → `region_1_f1.door`。[定義](../../data/maps/region_1_f1.json)。
 
-### region_1_f2 灯守の地下水道・下層・操作室
+### region_1_f2 灯守の地下水道・6F 操作室
 
 `region_1_f2/cache`：(1, 3) `chest`、起動 `interact` → `region_1_f2.cache`。[定義](../../data/maps/region_1_f2.json)。
 
@@ -1803,6 +1805,8 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 `region_1_f2/trap`：(7, 3) `trap`、起動 `enter` → `region_1_f2.trap`。[定義](../../data/maps/region_1_f2.json)。
 
 `region_1_f2/door`：(9, 3) `door`、起動 `interact` → `region_1_f2.door`。[定義](../../data/maps/region_1_f2.json)。
+
+`region_1_f2/dry_stair_latch`：(1, 1) `clue`、起動 `interact` → `waterway.dry_stair_latch`。[定義](../../data/maps/region_1_f2.json)。
 
 ### region_2_f1 塩哭きの廃坑・地下1層
 
@@ -1816,6 +1820,8 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 
 `region_2_f1/door`：(11, 13) `door`、起動 `interact` → `region_2_f1.door`。[定義](../../data/maps/region_2_f1.json)。
 
+`region_2_f1/supply_rope`：(1, 1) `chest`、起動 `interact` → `treasure.package.region_2_f1.supply_rope`。[定義](../../data/maps/region_2_f1.json)。
+
 ### region_2_f2 塩哭きの廃坑・地下2層
 
 `region_2_f2/cache`：(1, 4) `chest`、起動 `interact` → `region_2_f2.cache`。[定義](../../data/maps/region_2_f2.json)。
@@ -1825,6 +1831,8 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 `region_2_f2/trap`：(3, 10) `trap`、起動 `enter` → `region_2_f2.trap`。[定義](../../data/maps/region_2_f2.json)。
 
 `region_2_f2/door`：(15, 11) `door`、起動 `interact` → `region_2_f2.door`。[定義](../../data/maps/region_2_f2.json)。
+
+`region_2_f2/supply_rope`：(1, 1) `chest`、起動 `interact` → `treasure.package.region_2_f2.supply_rope`。[定義](../../data/maps/region_2_f2.json)。
 
 ### region_3_f1 根喰みの地下庭園・地下1層
 
@@ -1838,6 +1846,10 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 
 `region_3_f1/door`：(17, 11) `door`、起動 `interact` → `region_3_f1.door`。[定義](../../data/maps/region_3_f1.json)。
 
+`region_3_f1/shore_sign`：(5, 1) `clue`、起動 `interact` → `garden.shore_sign.1`。[定義](../../data/maps/region_3_f1.json)。
+
+`region_3_f1/supply_rope`：(1, 1) `chest`、起動 `interact` → `treasure.package.region_3_f1.supply_rope`。[定義](../../data/maps/region_3_f1.json)。
+
 ### region_3_f2 根喰みの地下庭園・地下2層
 
 `region_3_f2/cache`：(1, 4) `chest`、起動 `interact` → `region_3_f2.cache`。[定義](../../data/maps/region_3_f2.json)。
@@ -1847,6 +1859,8 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 `region_3_f2/trap`：(4, 9) `trap`、起動 `enter` → `region_3_f2.trap`。[定義](../../data/maps/region_3_f2.json)。
 
 `region_3_f2/door`：(17, 13) `door`、起動 `interact` → `region_3_f2.door`。[定義](../../data/maps/region_3_f2.json)。
+
+`region_3_f2/supply_rope`：(1, 1) `chest`、起動 `interact` → `treasure.package.region_3_f2.supply_rope`。[定義](../../data/maps/region_3_f2.json)。
 
 ### region_4_f1 鏡沈みの礼拝堂・地下1層
 
@@ -2060,21 +2074,35 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 
 `moving_village_f1/exit`：(1, 1) `exit`、起動 `interact` → `moving_village.exit`。[定義](../../data/maps/moving_village_f1.json)。
 
-### region_1_canal_a 灯守の地下水道・上層・第一水路
+### region_1_canal_a 灯守の地下水道・2F 第一水路
 
-### region_1_landing 灯守の地下水道・上層・荷揚げ場
+### region_1_landing 灯守の地下水道・3F 荷揚げ場
 
-### region_1_canal_b 灯守の地下水道・上層・排水支路
+`region_1_landing/supply_rope`：(1, 1) `chest`、起動 `interact` → `treasure.package.region_1_landing.supply_rope`。[定義](../../data/maps/region_1_landing.json)。
 
-### region_1_inspection 灯守の地下水道・上層・鐘と浮子の点検室
+### region_1_canal_b 灯守の地下水道・4F 排水支路
 
-### region_1_canal_c 灯守の地下水道・下層・給金箱の水路
+`region_1_canal_b/supply_rope`：(1, 5) `chest`、起動 `interact` → `treasure.package.region_1_canal_b.supply_rope`。[定義](../../data/maps/region_1_canal_b.json)。
 
-### region_1_lower_landing 灯守の地下水道・下層・棺の待避場
+### region_1_inspection 灯守の地下水道・5F 鐘と浮子の点検室
 
-### region_1_canal_d 灯守の地下水道・下層・避難水路
+### region_1_canal_c 灯守の地下水道・7F 給金箱の水路
 
-### region_1_gatehouse 灯守の地下水道・下層・奥の水門詰所
+`region_1_canal_c/supply_rope`：(1, 5) `chest`、起動 `interact` → `treasure.package.region_1_canal_c.supply_rope`。[定義](../../data/maps/region_1_canal_c.json)。
+
+### region_1_lower_landing 灯守の地下水道・8F 棺の待避場
+
+`region_1_lower_landing/supply_rope`：(1, 1) `chest`、起動 `interact` → `treasure.package.region_1_lower_landing.supply_rope`。[定義](../../data/maps/region_1_lower_landing.json)。
+
+### region_1_canal_d 灯守の地下水道・9F 避難水路
+
+`region_1_canal_d/workshop_parts`：(5, 5) `chest`、起動 `interact` → `treasure.package.region_1_canal_d.workshop_parts`。[定義](../../data/maps/region_1_canal_d.json)。
+
+### region_1_gatehouse 灯守の地下水道・10F 奥の水門詰所
+
+`region_1_gatehouse/sluice_beast`：(5, 3) `clue`、起動 `interact` → `waterway.sluice_beast`。[定義](../../data/maps/region_1_gatehouse.json)。
+
+`region_1_gatehouse/supply_rope`：(3, 1) `chest`、起動 `interact` → `treasure.package.region_1_gatehouse.supply_rope`。[定義](../../data/maps/region_1_gatehouse.json)。
 
 ### kagaribi_oilstore 篝火の迷宮・2F 油蔵
 
@@ -2127,6 +2155,86 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 ### kagaribi_manifold 篝火の迷宮・3F 配油分岐室
 
 `kagaribi_manifold/supply_rope`：(7, 5) `chest`、起動 `interact` → `treasure.package.kagaribi_manifold.supply_rope`。[定義](../../data/maps/kagaribi_manifold.json)。
+
+### region_2_f3 塩哭きの廃坑・3F 砕石場
+
+`region_2_f3/support_brace`：(5, 3) `clue`、起動 `interact` → `mine.support_brace.3`。[定義](../../data/maps/region_2_f3.json)。
+
+### region_2_f4 塩哭きの廃坑・4F 選鉱詰所
+
+`region_2_f4/supply_rope`：(1, 1) `chest`、起動 `interact` → `treasure.package.region_2_f4.supply_rope`。[定義](../../data/maps/region_2_f4.json)。
+
+### region_2_f5 塩哭きの廃坑・5F 塩の吹溜まり
+
+`region_2_f5/salt_warning`：(3, 1) `clue`、起動 `interact` → `mine.salt_warning.5`。[定義](../../data/maps/region_2_f5.json)。
+
+### region_2_f6 塩哭きの廃坑・6F 旧運搬線
+
+`region_2_f6/cart_latch`：(5, 1) `clue`、起動 `interact` → `mine.cart_latch.6`。[定義](../../data/maps/region_2_f6.json)。
+
+### region_2_f7 塩哭きの廃坑・7F 巻上詰所
+
+`region_2_f7/supply_rope`：(1, 1) `chest`、起動 `interact` → `treasure.package.region_2_f7.supply_rope`。[定義](../../data/maps/region_2_f7.json)。
+
+### region_2_f8 塩哭きの廃坑・8F 割晶坑
+
+`region_2_f8/crystal_record`：(5, 3) `clue`、起動 `interact` → `mine.crystal_record.8`。[定義](../../data/maps/region_2_f8.json)。
+
+### region_2_f9 塩哭きの廃坑・9F 試錐場
+
+`region_2_f9/charge_record`：(3, 1) `clue`、起動 `interact` → `mine.charge_record.9`。[定義](../../data/maps/region_2_f9.json)。
+
+`region_2_f9/workshop_parts`：(5, 5) `chest`、起動 `interact` → `treasure.package.region_2_f9.workshop_parts`。[定義](../../data/maps/region_2_f9.json)。
+
+### region_2_f10 塩哭きの廃坑・10F 大選鉱室
+
+`region_2_f10/lift_latch`：(9, 1) `clue`、起動 `interact` → `mine.lift_latch.10`。[定義](../../data/maps/region_2_f10.json)。
+
+`region_2_f10/supply_rope`：(7, 1) `chest`、起動 `interact` → `treasure.package.region_2_f10.supply_rope`。[定義](../../data/maps/region_2_f10.json)。
+
+`region_2_f10/shellbreaker`：(5, 1) `clue`、起動 `interact` → `mine.shellbreaker.10`。[定義](../../data/maps/region_2_f10.json)。
+
+### region_3_f3 根喰みの地下庭園・3F 灌漑溝
+
+`region_3_f3/intake`：(5, 3) `clue`、起動 `interact` → `garden.intake.3`。[定義](../../data/maps/region_3_f3.json)。
+
+### region_3_f4 根喰みの地下庭園・4F 苗床詰所
+
+`region_3_f4/supply_rope`：(1, 1) `chest`、起動 `interact` → `treasure.package.region_3_f4.supply_rope`。[定義](../../data/maps/region_3_f4.json)。
+
+`region_3_f4/seed_reserve`：(3, 1) `chest`、起動 `interact` → `treasure.package.region_3_f4.seed_reserve`。[定義](../../data/maps/region_3_f4.json)。
+
+### region_3_f5 根喰みの地下庭園・5F 絡み根の道
+
+`region_3_f5/harvest_sign`：(3, 1) `clue`、起動 `interact` → `garden.harvest_sign.5`。[定義](../../data/maps/region_3_f5.json)。
+
+### region_3_f6 根喰みの地下庭園・6F 蜜の回廊
+
+`region_3_f6/walk_latch`：(5, 1) `clue`、起動 `interact` → `garden.walk_latch.6`。[定義](../../data/maps/region_3_f6.json)。
+
+`region_3_f6/pollination_record`：(3, 3) `clue`、起動 `interact` → `garden.pollination_record.6`。[定義](../../data/maps/region_3_f6.json)。
+
+### region_3_f7 根喰みの地下庭園・7F 庭師の休憩所
+
+`region_3_f7/supply_rope`：(1, 1) `chest`、起動 `interact` → `treasure.package.region_3_f7.supply_rope`。[定義](../../data/maps/region_3_f7.json)。
+
+`region_3_f7/seed_reserve`：(3, 1) `chest`、起動 `interact` → `treasure.package.region_3_f7.seed_reserve`。[定義](../../data/maps/region_3_f7.json)。
+
+### region_3_f8 根喰みの地下庭園・8F 虫媒棚
+
+`region_3_f8/pruning_record`：(7, 3) `clue`、起動 `interact` → `garden.pruning_record.8`。[定義](../../data/maps/region_3_f8.json)。
+
+### region_3_f9 根喰みの地下庭園・9F 薬草温室
+
+`region_3_f9/herb_record`：(7, 3) `clue`、起動 `interact` → `garden.herb_record.9`。[定義](../../data/maps/region_3_f9.json)。
+
+### region_3_f10 根喰みの地下庭園・10F 根門前庭
+
+`region_3_f10/lift_latch`：(9, 1) `clue`、起動 `interact` → `garden.lift_latch.10`。[定義](../../data/maps/region_3_f10.json)。
+
+`region_3_f10/root_gate`：(5, 5) `clue`、起動 `interact` → `garden.root_gate.10`。[定義](../../data/maps/region_3_f10.json)。
+
+`region_3_f10/supply_rope`：(7, 1) `chest`、起動 `interact` → `treasure.package.region_3_f10.supply_rope`。[定義](../../data/maps/region_3_f10.json)。
 
 ## battle.startの定義位置
 
@@ -2803,6 +2911,12 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 `kagaribi.kiln_hunt/commands.0.else.1.options.0.commands.1`：`kagaribi.kiln_hunt` / `commands.0.else.1.options.0.commands.1` → `kagaribi_kiln_guard`。
 
 `kagaribi.altar_keeper/commands.0.else.1.options.0.commands.0`：`kagaribi.altar_keeper` / `commands.0.else.1.options.0.commands.0` → `kagaribi_altar_guardian`、戦闘中イベント `fire_warning`。
+
+`waterway.sluice_beast/commands.0.else.1.options.0.commands.0`：`waterway.sluice_beast` / `commands.0.else.1.options.0.commands.0` → `waterway_sluice_guardian`。
+
+`mine.shellbreaker.10/commands.0.else.1.options.0.commands.0`：`mine.shellbreaker.10` / `commands.0.else.1.options.0.commands.0` → `mine_shell_guardian`、戦闘中イベント `charge_warning`。
+
+`garden.root_gate.10/commands.0.else.1.options.0.commands.0`：`garden.root_gate.10` / `commands.0.else.1.options.0.commands.0` → `garden_root_guardian`。
 
 ## 再生成
 

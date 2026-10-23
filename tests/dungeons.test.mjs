@@ -18,7 +18,7 @@ const roundtrip=g=>{assert.deepEqual(validateSave(JSON.parse(g.save()),g.data),[
 const mutable=()=>{const g=begin();g.data=structuredClone(g.data);return g;};
 
 test('13 independent dungeon definitions retain 10 regions and all 200 quests',()=>{
-  assert.equal(Object.keys(data.dungeons).length,13);assert.equal(data.regions.length,10);assert.equal(Object.keys(data.maps).length,40);
+  assert.equal(Object.keys(data.dungeons).length,13);assert.equal(data.regions.length,10);assert.equal(Object.keys(data.maps).length,56);
   const g=begin();assert.equal(g.state.inventory.kagaribi_torch,1);assert.equal(flame(g).effect,'ward');assert.equal(flame(g).fuel,90);
   assert.ok(fireEnvironment(fireContext(data,g.state)).protected);assert.ok(g.state.discovered.kagaribi_f1.includes('13,3'));assert.ok(!g.state.discovered.kagaribi_f2?.includes('13,7'));
   assert.equal(projectGame(g).dungeons.find(d=>d.id==='kagaribi').name,'篝火の迷宮');roundtrip(g);

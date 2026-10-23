@@ -2,9 +2,9 @@
 
 [個別ページ一覧](README.md) ／ [クエストカタログへ戻る](../QUEST_CATALOG.md#q002-骨の荷札) ／ [シナリオ本文](#q002-骨の荷札) ／ [配置イベント](#配置イベントと操作条件) ／ [マップデータ](#マップデータと接続定義)
 
-作品版 1.27.0。配布JSONから生成した作者向けページ。真相と結末を含む。
+作品版 1.34.0。配布JSONから生成した作者向けページ。真相と結末を含む。
 
-<!-- quest-page-source:bbb665b7630d75a941dc4d27c27ae3f626e8e88462d6eb5848d1d7559d9b6b92 -->
+<!-- quest-page-source:cc44f63a69c6c5b3e76d00d0eb17680b5e1f6ae2fd55f9955e24f4f878a35585 -->
 
 本編は8場面・3結末、物語状態の改訂2。地下水道の荷揚げ場、医学校の標本室、保険審査所を往復する。6本の移動行為は出発後に実際の場所へ到着して確定する。
 
@@ -57,15 +57,15 @@ flowchart TD
 
 ## マップとイベント配置
 
-![灯守の地下水道・上層・入口操作室の座標とイベントID](../quest-maps/q002-region_1_f1.svg)
+![灯守の地下水道・1F 入口操作室の座標とイベントID](../quest-maps/q002-region_1_f1.svg)
 
 図の全セルは [region_1_f1.json](../../../data/maps/region_1_f1.json) と一致する。
 
-![灯守の地下水道・上層・第一水路の座標とイベントID](../quest-maps/q002-region_1_canal_a.svg)
+![灯守の地下水道・2F 第一水路の座標とイベントID](../quest-maps/q002-region_1_canal_a.svg)
 
 図の全セルは [region_1_canal_a.json](../../../data/maps/region_1_canal_a.json) と一致する。
 
-![灯守の地下水道・上層・荷揚げ場の座標とイベントID](../quest-maps/q002-region_1_landing.svg)
+![灯守の地下水道・3F 荷揚げ場の座標とイベントID](../quest-maps/q002-region_1_landing.svg)
 
 図の全セルは [region_1_landing.json](../../../data/maps/region_1_landing.json) と一致する。
 
@@ -73,7 +73,7 @@ flowchart TD
 
 ## 本編イベントの順序と実移動
 
-[q002-S-entry](#q002--entry--引き揚げ場)：灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+[q002-S-entry](#q002--entry--引き揚げ場)：灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 選択 `lift` → `q002-S-box`。行為 `entry_lift`。同じ地点で作業・受け渡しを確定する。
 
@@ -81,13 +81,13 @@ flowchart TD
 
 選択 `school` → `q002-S-school`。行為 `entry_school` で出発し、医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../../data/locations.json) に実際に到着して自動続行する。同行：探索隊のみ。
 
-[q002-S-box](#q002--box--引き揚げ場)：灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+[q002-S-box](#q002--box--引き揚げ場)：灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 選択 `school` → `q002-S-school`。行為 `box_school` で出発し、医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../../data/locations.json) に実際に到着して自動続行する。同行：探索隊のみ。
 
 選択 `tags` → `q002-E-contract`。行為 `box_tags`。同じ地点で作業・受け渡しを確定する。
 
-[q002-S-tags](#q002--tags--引き揚げ場)：灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+[q002-S-tags](#q002--tags--引き揚げ場)：灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 選択 `deliver` → `q002-E-contract`。行為 `tags_deliver`。同じ地点で作業・受け渡しを確定する。
 
@@ -95,7 +95,7 @@ flowchart TD
 
 [q002-S-school](#q002--school--医学校の標本室)：医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../../data/locations.json)。
 
-選択 `recover` → `q002-S-recovery`。行為 `school_recover` で出発し、灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json) に実際に到着して自動続行する。同行：運搬人。
+選択 `recover` → `q002-S-recovery`。行為 `school_recover` で出発し、灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json) に実際に到着して自動続行する。同行：運搬人。
 
 選択 `return` → `q002-S-returned`。行為 `school_return`。同じ地点で作業・受け渡しを確定する。
 
@@ -109,11 +109,11 @@ flowchart TD
 
 選択 `file` → `q002-E-informed`。行為 `hearing_file`。同じ地点で作業・受け渡しを確定する。
 
-[q002-S-recovery](#q002--recovery--引き揚げ場)：灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+[q002-S-recovery](#q002--recovery--引き揚げ場)：灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 選択 `lift` → `q002-S-recovered`。行為 `recovery_lift`。同じ地点で作業・受け渡しを確定する。
 
-[q002-S-recovered](#q002--recovered--引き揚げ場)：灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+[q002-S-recovered](#q002--recovered--引き揚げ場)：灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 選択 `return` → `q002-S-returned`。行為 `recovered_return` で出発し、医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../../data/locations.json) に実際に到着して自動続行する。同行：運搬人。
 
@@ -127,7 +127,7 @@ flowchart TD
 
 骨の荷札：地下水道の引き揚げ場。実行ID `q002_decision`、スクリプト `q002.v11.visit`、起動 `interact`。
 
-配置：灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+配置：灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 表示条件：`{"op":"and","args":[{"op":"eq","left":{"ref":"journey"},"right":null},{"op":"or","args":[{"op":"eq","left":{"ref":"quests.q002.stage"},"right":"completed"},{"op":"and","args":[{"op":"eq","left":{"ref":"quests.q002.stage"},"right":"active"},{"op":"or","args":[{"op":"not","arg":{"op":"exists","value":{"ref":"stories.q002"}}},{"op":"eq","left":{"ref":"stories.q002.values.partyAt"},"right":"landing"}]}]}]}]}`。操作条件：`true`。
 
@@ -145,7 +145,7 @@ flowchart TD
 
 モデル: 1.1。実装: [JSON](../../../data/quests/q002.json)。場面 8、結末 3。物語状態の改訂 2。
 
-実配置: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。骨の荷札：地下水道の引き揚げ場。現地イベント。
+実配置: 灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。骨の荷札：地下水道の引き揚げ場。現地イベント。
 
 参照施設: `school` → 医学校・標本室 (`hikarigaeri_medical_specimens`)。[ロケーション定義](../../../data/locations.json)。
 
@@ -181,7 +181,7 @@ flowchart TD
 
 イベントID: `q002-S-entry`。
 
-場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 登場: ベルト。
 
@@ -241,7 +241,7 @@ flowchart TD
 
 イベントID: `q002-S-box`。
 
-場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 登場: ベルト。
 
@@ -265,7 +265,7 @@ flowchart TD
 
 イベントID: `q002-S-tags`。
 
-場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 登場: ベルト。
 
@@ -299,7 +299,7 @@ flowchart TD
 
 選択条件: `{"op":"eq","left":{"ref":"stories.q002.values.boxAt"},"right":"water"}`
 
-出発: `school_recover`。移動先: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+出発: `school_recover`。移動先: 灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 出発の条件: `{"op":"eq","left":{"ref":"stories.q002.values.boxAt"},"right":"water"}`
 
@@ -367,7 +367,7 @@ flowchart TD
 
 イベントID: `q002-S-recovery`。
 
-場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 登場: 運搬人。
 
@@ -385,7 +385,7 @@ flowchart TD
 
 イベントID: `q002-S-recovered`。
 
-場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・上層・荷揚げ場・B1 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+場面の現在地: 灯守の地下水道 (`region_1`) / 灯守の地下水道・3F 荷揚げ場・B3 (`region_1_landing`) / (5, 1) / イベント `q002_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 登場: 運搬人。
 
@@ -456,7 +456,7 @@ flowchart TD
   ],
   "dungeon": "region_1",
   "id": "region_1_f1",
-  "name": "灯守の地下水道・上層・入口操作室",
+  "name": "灯守の地下水道・1F 入口操作室",
   "floor": 1,
   "tiles": [
     "###########",
@@ -609,8 +609,8 @@ flowchart TD
   ],
   "dungeon": "region_1",
   "id": "region_1_canal_a",
-  "name": "灯守の地下水道・上層・第一水路",
-  "floor": 1,
+  "name": "灯守の地下水道・2F 第一水路",
+  "floor": 2,
   "tiles": [
     "###########",
     "#.........#",
@@ -689,8 +689,8 @@ flowchart TD
   ],
   "dungeon": "region_1",
   "id": "region_1_landing",
-  "name": "灯守の地下水道・上層・荷揚げ場",
-  "floor": 1,
+  "name": "灯守の地下水道・3F 荷揚げ場",
+  "floor": 3,
   "tiles": [
     "#################",
     "#.........#######",
@@ -702,7 +702,32 @@ flowchart TD
     "#.....###.#.....#",
     "#################"
   ],
-  "objects": [],
+  "objects": [
+    {
+      "id": "supply_rope",
+      "name": "配管固定用の備品箱",
+      "x": 1,
+      "y": 1,
+      "kind": "chest",
+      "trigger": "interact",
+      "interactionRange": "here",
+      "safe": true,
+      "script": "treasure.package.region_1_landing.supply_rope",
+      "treasure": {
+        "kind": "chest",
+        "uses": 1,
+        "reset": "never",
+        "rewards": {
+          "items": {
+            "rope": 1
+          }
+        },
+        "afterText": "予備のロープは受け取り済みだ。",
+        "message": "配管修理用のロープを1本受け取った。使い切った場合は町の旅道具店で補充できる。"
+      },
+      "once": false
+    }
+  ],
   "entrance": {
     "x": 1,
     "y": 1,
@@ -1101,7 +1126,15 @@ flowchart TD
           "x": 1,
           "y": 1,
           "facing": "east"
-        }
+        },
+        "condition": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.waterway.dryStairOpen"
+          },
+          "right": true
+        },
+        "requirement": "6F操作室側から階段の掛け金を外すと、3F荷揚げ場へ直接戻れる。"
       },
       {
         "id": "lower_inlet",
@@ -1169,6 +1202,23 @@ flowchart TD
           "x": 1,
           "y": 1,
           "side": "west"
+        }
+      },
+      {
+        "id": "inspection_stair",
+        "name": "点検室の保守階段",
+        "kind": "stairs",
+        "a": {
+          "map": "region_1_inspection",
+          "x": 9,
+          "y": 7,
+          "facing": "north"
+        },
+        "b": {
+          "map": "region_1_f2",
+          "x": 9,
+          "y": 7,
+          "facing": "north"
         }
       }
     ]

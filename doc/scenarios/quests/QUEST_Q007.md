@@ -2,9 +2,9 @@
 
 [個別ページ一覧](README.md) ／ [カタログへ戻る](../QUEST_CATALOG.md#q007-声を返す壁) ／ [シナリオ本文](#q007-声を返す壁) ／ [行為の条件と状態変化](#行為の条件と状態変化) ／ [配置イベント](#配置イベントと操作条件)
 
-作品版 1.27.0。配布JSONから生成した作者向けページ。真相と結末を含む。本編5場面・3結末。
+作品版 1.34.0。配布JSONから生成した作者向けページ。真相と結末を含む。本編5場面・3結末。
 
-<!-- quest-page-source:bbb665b7630d75a941dc4d27c27ae3f626e8e88462d6eb5848d1d7559d9b6b92 -->
+<!-- quest-page-source:cc44f63a69c6c5b3e76d00d0eb17680b5e1f6ae2fd55f9955e24f4f878a35585 -->
 
 ## 依頼の焦点と分岐の意味
 
@@ -94,7 +94,7 @@ contractはミレの同意で伝声口を塞ぐ。compromiseは手紙だけを�
 
 声を返す壁：現場の痕跡。実行ID `q007_clue_a`、起動 `interact`、スクリプト `q007.clue_a`。
 
-配置：灯守の地下水道 (`region_1`) / 灯守の地下水道・下層・給金箱の水路・B2 (`region_1_canal_c`) / (5, 1) / イベント `q007_clue_a`。[ダンジョン定義](../../../data/dungeons.json)。
+配置：灯守の地下水道 (`region_1`) / 灯守の地下水道・7F 給金箱の水路・B7 (`region_1_canal_c`) / (5, 1) / イベント `q007_clue_a`。[ダンジョン定義](../../../data/dungeons.json)。
 
 表示条件：`{"op":"and","args":[{"op":"eq","left":{"ref":"quests.q007.stage"},"right":"active"},{"op":"eq","left":{"ref":"flags.legacyQuestRoutes.q007"},"right":true}]}`。操作条件：`true`。
 
@@ -124,7 +124,7 @@ contractはミレの同意で伝声口を塞ぐ。compromiseは手紙だけを�
 
 声を返す壁：記録と証言。実行ID `q007_clue_b`、起動 `interact`、スクリプト `q007.clue_b`。
 
-配置：灯守の地下水道 (`region_1`) / 灯守の地下水道・下層・棺の待避場・B2 (`region_1_lower_landing`) / (3, 3) / イベント `q007_clue_b`。[ダンジョン定義](../../../data/dungeons.json)。
+配置：灯守の地下水道 (`region_1`) / 灯守の地下水道・8F 棺の待避場・B8 (`region_1_lower_landing`) / (3, 3) / イベント `q007_clue_b`。[ダンジョン定義](../../../data/dungeons.json)。
 
 表示条件：`{"op":"and","args":[{"op":"eq","left":{"ref":"quests.q007.stage"},"right":"active"},{"op":"eq","left":{"ref":"flags.legacyQuestRoutes.q007"},"right":true}]}`。操作条件：`true`。
 
@@ -155,7 +155,7 @@ contractはミレの同意で伝声口を塞ぐ。compromiseは手紙だけを�
 
 声を返す壁：決着の場。実行ID `q007_decision`、起動 `interact`、スクリプト `q007.v11.visit`。
 
-配置：灯守の地下水道 (`region_1`) / 灯守の地下水道・下層・棺の待避場・B2 (`region_1_lower_landing`) / (5, 3) / イベント `q007_decision`。[ダンジョン定義](../../../data/dungeons.json)。
+配置：灯守の地下水道 (`region_1`) / 灯守の地下水道・8F 棺の待避場・B8 (`region_1_lower_landing`) / (5, 3) / イベント `q007_decision`。[ダンジョン定義](../../../data/dungeons.json)。
 
 表示条件：`{"op":"or","args":[{"op":"eq","left":{"ref":"quests.q007.stage"},"right":"active"},{"op":"eq","left":{"ref":"quests.q007.stage"},"right":"completed"}]}`。操作条件：`true`。
 
@@ -171,11 +171,11 @@ contractはミレの同意で伝声口を塞ぐ。compromiseは手紙だけを�
 
 モデル: 1.1。実装: [JSON](../../../data/quests/q007.json)。場面 5、結末 3。物語状態の改訂 1。
 
-実配置: 灯守の地下水道 (`region_1`) / 灯守の地下水道・下層・給金箱の水路・B2 (`region_1_canal_c`) / (5, 1) / イベント `q007_clue_a`。[ダンジョン定義](../../../data/dungeons.json)。声を返す壁：現場の痕跡。現地イベント。
+実配置: 灯守の地下水道 (`region_1`) / 灯守の地下水道・7F 給金箱の水路・B7 (`region_1_canal_c`) / (5, 1) / イベント `q007_clue_a`。[ダンジョン定義](../../../data/dungeons.json)。声を返す壁：現場の痕跡。現地イベント。
 
-実配置: 灯守の地下水道 (`region_1`) / 灯守の地下水道・下層・棺の待避場・B2 (`region_1_lower_landing`) / (3, 3) / イベント `q007_clue_b`。[ダンジョン定義](../../../data/dungeons.json)。声を返す壁：記録と証言。現地イベント。
+実配置: 灯守の地下水道 (`region_1`) / 灯守の地下水道・8F 棺の待避場・B8 (`region_1_lower_landing`) / (3, 3) / イベント `q007_clue_b`。[ダンジョン定義](../../../data/dungeons.json)。声を返す壁：記録と証言。現地イベント。
 
-実配置: 灯守の地下水道 (`region_1`) / 灯守の地下水道・下層・棺の待避場・B2 (`region_1_lower_landing`) / (5, 3) / イベント `q007_decision`。[ダンジョン定義](../../../data/dungeons.json)。声を返す壁：決着の場。現地イベント。
+実配置: 灯守の地下水道 (`region_1`) / 灯守の地下水道・8F 棺の待避場・B8 (`region_1_lower_landing`) / (5, 3) / イベント `q007_decision`。[ダンジョン定義](../../../data/dungeons.json)。声を返す壁：決着の場。現地イベント。
 
 固定された過去: ミレの夫は亡くなっている。遺品を整理した夫の弟は、兄が渡せなかった手紙を見つけたが、自分が届ければミレに拒まれることを恐れた。弟は廃番所の伝声室から手紙を読み、兄に似た自分の声を故人の話し方へ寄せて、壁越しにミレへ聞かせていた。
 
@@ -592,7 +592,15 @@ AI向け注釈: 以下の事実はq007を成立させる世界設定上の制約
           "x": 1,
           "y": 1,
           "facing": "east"
-        }
+        },
+        "condition": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.waterway.dryStairOpen"
+          },
+          "right": true
+        },
+        "requirement": "6F操作室側から階段の掛け金を外すと、3F荷揚げ場へ直接戻れる。"
       },
       {
         "id": "lower_inlet",
@@ -660,6 +668,23 @@ AI向け注釈: 以下の事実はq007を成立させる世界設定上の制約
           "x": 1,
           "y": 1,
           "side": "west"
+        }
+      },
+      {
+        "id": "inspection_stair",
+        "name": "点検室の保守階段",
+        "kind": "stairs",
+        "a": {
+          "map": "region_1_inspection",
+          "x": 9,
+          "y": 7,
+          "facing": "north"
+        },
+        "b": {
+          "map": "region_1_f2",
+          "x": 9,
+          "y": 7,
+          "facing": "north"
         }
       }
     ]
@@ -754,7 +779,7 @@ AI向け注釈: 以下の事実はq007を成立させる世界設定上の制約
 
 ### region_1_f1 の全マップJSON
 
-灯守の地下水道・上層・入口操作室・B1、11×9セル。[配布JSON](../../../data/maps/region_1_f1.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
+灯守の地下水道・1F 入口操作室・B1、11×9セル。[配布JSON](../../../data/maps/region_1_f1.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
 
 <details>
 <summary>共通マップの全データ</summary>
@@ -782,7 +807,7 @@ AI向け注釈: 以下の事実はq007を成立させる世界設定上の制約
   ],
   "dungeon": "region_1",
   "id": "region_1_f1",
-  "name": "灯守の地下水道・上層・入口操作室",
+  "name": "灯守の地下水道・1F 入口操作室",
   "floor": 1,
   "tiles": [
     "###########",
@@ -914,7 +939,7 @@ AI向け注釈: 以下の事実はq007を成立させる世界設定上の制約
 
 ### region_1_canal_a の全マップJSON
 
-灯守の地下水道・上層・第一水路・B1、11×7セル。[配布JSON](../../../data/maps/region_1_canal_a.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
+灯守の地下水道・2F 第一水路・B2、11×7セル。[配布JSON](../../../data/maps/region_1_canal_a.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
 
 <details>
 <summary>共通マップの全データ</summary>
@@ -942,8 +967,8 @@ AI向け注釈: 以下の事実はq007を成立させる世界設定上の制約
   ],
   "dungeon": "region_1",
   "id": "region_1_canal_a",
-  "name": "灯守の地下水道・上層・第一水路",
-  "floor": 1,
+  "name": "灯守の地下水道・2F 第一水路",
+  "floor": 2,
   "tiles": [
     "###########",
     "#.........#",
@@ -1001,7 +1026,7 @@ AI向け注釈: 以下の事実はq007を成立させる世界設定上の制約
 
 ### region_1_landing の全マップJSON
 
-灯守の地下水道・上層・荷揚げ場・B1、17×9セル。[配布JSON](../../../data/maps/region_1_landing.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
+灯守の地下水道・3F 荷揚げ場・B3、17×9セル。[配布JSON](../../../data/maps/region_1_landing.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
 
 <details>
 <summary>共通マップの全データ</summary>
@@ -1029,8 +1054,8 @@ AI向け注釈: 以下の事実はq007を成立させる世界設定上の制約
   ],
   "dungeon": "region_1",
   "id": "region_1_landing",
-  "name": "灯守の地下水道・上層・荷揚げ場",
-  "floor": 1,
+  "name": "灯守の地下水道・3F 荷揚げ場",
+  "floor": 3,
   "tiles": [
     "#################",
     "#.........#######",
@@ -1042,7 +1067,32 @@ AI向け注釈: 以下の事実はq007を成立させる世界設定上の制約
     "#.....###.#.....#",
     "#################"
   ],
-  "objects": [],
+  "objects": [
+    {
+      "id": "supply_rope",
+      "name": "配管固定用の備品箱",
+      "x": 1,
+      "y": 1,
+      "kind": "chest",
+      "trigger": "interact",
+      "interactionRange": "here",
+      "safe": true,
+      "script": "treasure.package.region_1_landing.supply_rope",
+      "treasure": {
+        "kind": "chest",
+        "uses": 1,
+        "reset": "never",
+        "rewards": {
+          "items": {
+            "rope": 1
+          }
+        },
+        "afterText": "予備のロープは受け取り済みだ。",
+        "message": "配管修理用のロープを1本受け取った。使い切った場合は町の旅道具店で補充できる。"
+      },
+      "once": false
+    }
+  ],
   "entrance": {
     "x": 1,
     "y": 1,
@@ -1092,7 +1142,7 @@ AI向け注釈: 以下の事実はq007を成立させる世界設定上の制約
 
 ### region_1_f2 の全マップJSON
 
-灯守の地下水道・下層・操作室・B2、11×9セル。[配布JSON](../../../data/maps/region_1_f2.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
+灯守の地下水道・6F 操作室・B6、11×9セル。[配布JSON](../../../data/maps/region_1_f2.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
 
 <details>
 <summary>共通マップの全データ</summary>
@@ -1102,26 +1152,22 @@ AI向け注釈: 以下の事実はq007を成立させる世界設定上の制約
   "region": 1,
   "background": "corridor",
   "music": "exploration",
-  "encounter": "roaming_1",
+  "encounter": "waterway_eel_lesson",
   "encounterRate": 0.18,
   "encounterPool": [
-    {
-      "encounter": "roaming_1",
-      "weight": 20
-    },
     {
       "encounter": "wild_waterwheel_beaver",
       "weight": 40
     },
     {
-      "encounter": "wild_sluice_crocodile",
-      "weight": 40
+      "encounter": "waterway_eel_lesson",
+      "weight": 60
     }
   ],
   "dungeon": "region_1",
   "id": "region_1_f2",
-  "name": "灯守の地下水道・下層・操作室",
-  "floor": 2,
+  "name": "灯守の地下水道・6F 操作室",
+  "floor": 6,
   "tiles": [
     "###########",
     "#.........#",
@@ -1190,6 +1236,17 @@ AI向け注釈: 以下の事実はq007を成立させる世界設定上の制約
         }
       },
       "interactionRange": "front"
+    },
+    {
+      "id": "dry_stair_latch",
+      "x": 1,
+      "y": 1,
+      "name": "乾いた階段の掛け金",
+      "kind": "clue",
+      "trigger": "interact",
+      "interactionRange": "here",
+      "safe": true,
+      "script": "waterway.dry_stair_latch"
     }
   ],
   "entrance": {
@@ -1241,7 +1298,7 @@ AI向け注釈: 以下の事実はq007を成立させる世界設定上の制約
 
 ### region_1_canal_c の全マップJSON
 
-灯守の地下水道・下層・給金箱の水路・B2、11×7セル。[配布JSON](../../../data/maps/region_1_canal_c.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
+灯守の地下水道・7F 給金箱の水路・B7、11×7セル。[配布JSON](../../../data/maps/region_1_canal_c.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
 
 <details>
 <summary>共通マップの全データ</summary>
@@ -1251,26 +1308,22 @@ AI向け注釈: 以下の事実はq007を成立させる世界設定上の制約
   "region": 1,
   "background": "corridor",
   "music": "exploration",
-  "encounter": "roaming_1",
+  "encounter": "waterway_croc_eel",
   "encounterRate": 0.18,
   "encounterPool": [
     {
-      "encounter": "roaming_1",
-      "weight": 20
-    },
-    {
-      "encounter": "wild_waterwheel_beaver",
-      "weight": 40
-    },
-    {
       "encounter": "wild_sluice_crocodile",
-      "weight": 40
+      "weight": 30
+    },
+    {
+      "encounter": "waterway_croc_eel",
+      "weight": 70
     }
   ],
   "dungeon": "region_1",
   "id": "region_1_canal_c",
-  "name": "灯守の地下水道・下層・給金箱の水路",
-  "floor": 2,
+  "name": "灯守の地下水道・7F 給金箱の水路",
+  "floor": 7,
   "tiles": [
     "###########",
     "#.........#",
@@ -1280,7 +1333,32 @@ AI向け注釈: 以下の事実はq007を成立させる世界設定上の制約
     "#.........#",
     "###########"
   ],
-  "objects": [],
+  "objects": [
+    {
+      "id": "supply_rope",
+      "name": "配管固定用の備品箱",
+      "x": 1,
+      "y": 5,
+      "kind": "chest",
+      "trigger": "interact",
+      "interactionRange": "here",
+      "safe": true,
+      "script": "treasure.package.region_1_canal_c.supply_rope",
+      "treasure": {
+        "kind": "chest",
+        "uses": 1,
+        "reset": "never",
+        "rewards": {
+          "items": {
+            "rope": 1
+          }
+        },
+        "afterText": "予備のロープは受け取り済みだ。",
+        "message": "配管修理用のロープを1本受け取った。使い切った場合は町の旅道具店で補充できる。"
+      },
+      "once": false
+    }
+  ],
   "entrance": {
     "x": 1,
     "y": 1,
@@ -1328,7 +1406,7 @@ AI向け注釈: 以下の事実はq007を成立させる世界設定上の制約
 
 ### region_1_lower_landing の全マップJSON
 
-灯守の地下水道・下層・棺の待避場・B2、11×9セル。[配布JSON](../../../data/maps/region_1_lower_landing.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
+灯守の地下水道・8F 棺の待避場・B8、11×9セル。[配布JSON](../../../data/maps/region_1_lower_landing.json)。左上(0,0)、xは右、yは下。通行と水位は配布データと迷宮システムの判定に従う。
 
 <details>
 <summary>共通マップの全データ</summary>
@@ -1338,26 +1416,22 @@ AI向け注釈: 以下の事実はq007を成立させる世界設定上の制約
   "region": 1,
   "background": "corridor",
   "music": "exploration",
-  "encounter": "roaming_1",
+  "encounter": "waterway_shallow_a",
   "encounterRate": 0.18,
   "encounterPool": [
     {
-      "encounter": "roaming_1",
-      "weight": 20
+      "encounter": "waterway_croc_eel",
+      "weight": 35
     },
     {
-      "encounter": "wild_waterwheel_beaver",
-      "weight": 40
-    },
-    {
-      "encounter": "wild_sluice_crocodile",
-      "weight": 40
+      "encounter": "waterway_shallow_a",
+      "weight": 65
     }
   ],
   "dungeon": "region_1",
   "id": "region_1_lower_landing",
-  "name": "灯守の地下水道・下層・棺の待避場",
-  "floor": 2,
+  "name": "灯守の地下水道・8F 棺の待避場",
+  "floor": 8,
   "tiles": [
     "###########",
     "#.........#",
@@ -1369,7 +1443,32 @@ AI向け注釈: 以下の事実はq007を成立させる世界設定上の制約
     "#.........#",
     "###########"
   ],
-  "objects": [],
+  "objects": [
+    {
+      "id": "supply_rope",
+      "name": "配管固定用の備品箱",
+      "x": 1,
+      "y": 1,
+      "kind": "chest",
+      "trigger": "interact",
+      "interactionRange": "here",
+      "safe": true,
+      "script": "treasure.package.region_1_lower_landing.supply_rope",
+      "treasure": {
+        "kind": "chest",
+        "uses": 1,
+        "reset": "never",
+        "rewards": {
+          "items": {
+            "rope": 1
+          }
+        },
+        "afterText": "予備のロープは受け取り済みだ。",
+        "message": "配管修理用のロープを1本受け取った。使い切った場合は町の旅道具店で補充できる。"
+      },
+      "once": false
+    }
+  ],
   "entrance": {
     "x": 1,
     "y": 1,

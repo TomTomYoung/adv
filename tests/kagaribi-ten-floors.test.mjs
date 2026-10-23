@@ -68,7 +68,7 @@ for(const mode of ['classic','grid','frontline'])test(`${mode}: guardian preview
  assert.ok(g.state.battle.firedEvents.includes('fire_warning'));assert.ok(g.state.battle.log.some(t=>t.includes('炎嵐')));checkpoint(g);
  if(mode==='classic')fight(g);else {for(const e of g.state.battle.enemies)e.hp=0;g.finishBattle('win');drain(g);}
  assert.equal(g.state.flags.kagaribi.altarGuardianWon,true);assert.equal(g.state.inventory.exp_t2_ticket,1);
- at(g,'kagaribi_central');g.give('rope',1);const xp=g.state.actors.ada.xp;assert.ok(act(g,'kagaribi_central','repair'));assert.ok(act(g,'kagaribi_central','relay'));assert.equal(g.state.actors.ada.xp,xp+1800);
+ at(g,'kagaribi_central');g.give('rope',1);const xp=g.state.actors.ada.xp;assert.ok(act(g,'kagaribi_central','repair'));assert.ok(act(g,'kagaribi_central','relay'));assert.equal(g.state.actors.ada.xp,xp+2000);
  assert.equal(act(g,'kagaribi_central','repair'),false);checkpoint(g);
  g.teleport('kagaribi_f3',5,1);inspect(g,'altar_keeper');drain(g);assert.equal(g.state.battle,null);assert.equal(g.state.inventory.exp_t2_ticket,1);
 });

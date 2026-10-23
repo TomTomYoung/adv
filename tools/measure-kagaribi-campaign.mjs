@@ -13,6 +13,7 @@ import {unitKey} from '../src/core/buffs.js';
 import {stunned} from '../src/core/battle-turns.js';
 import {oilTotal} from '../src/core/expedition-oil.js';
 import {validateSave} from '../src/core/save.js';
+import {campaignRoute} from './campaign-route.mjs';
 
 const choices={q001:{entry:'talk',dark:'inspect',empty:'follow',old:'support',outage:'call',rescue:'home',gate:'report',post:'repair'},q201:{entry:'ask',witness:'take',reason:'correct'},q202:{entry:'walk',lesson:'test',result:'visual'},q203:{entry:'carry',inspect:'pour',portion:'burn',result:'public'},q206:{entry:'carry',offer:'gift',gift:'hand'},q207:{entry:'check',calibrated:'go',measure:'read',result:'joint'},q209:{entry:'battle',challenge:'fight',witness:'sign'}};
 const quests=['q201','q202','q203','q209','q206','q207'];
@@ -31,18 +32,20 @@ export function campaignGridMove(g,a){
  return null;
 }
 export class Campaign {
- constructor({seed=1907,size=4,mode='classic',optional=true,training=false,fieldTraining=false}={}){
-  this.options={seed,size,mode,optional,training,fieldTraining};this.g=new GameEngine(data,seed);drain(this.g);
-  this.report={...this.options,skillUses:{},checkpoints:[],battles:[],purchases:[],consumed:{},mpSpent:0,rests:0,spentGold:0,spentGems:0,minOil:180};
-  this.visited=new Set();this.supplying=false;
+ constructor({seed=1907,size=4,mode='classic',optional=true,training=false,fieldTraining=false,route='standard',questOrder='standard',loadout='standard'}={}){
+  assert.ok(['standard','shortcuts'].includes(route));assert.ok(['standard','reverse'].includes(questOrder));assert.ok(['standard','bow'].includes(loadout));
+  this.options={seed,size,mode,optional,training,fieldTraining,route,questOrder,loadout};this.g=new GameEngine(data,seed);drain(this.g);
+  this.report={...this.options,skillUses:{},checkpoints:[],battles:[],purchases:[],consumed:{},returns:[],connections:{},opened:[],oilSpentWalking:0,mpSpent:0,rests:0,spentGold:0,spentGems:0,minOil:180};
+  this.supplying=false;
  }
  act(intent){
-  const g=this.g,before={gold:g.state.gold,item:g.state.inventory[intent.item]??0};
+  const g=this.g,before={gold:g.state.gold,item:g.state.inventory[intent.item]??0,steps:g.state.steps,oil:oilTotal(data,g.state),managed:g.state.expedition.managed};
   assert.ok(g.dispatch(intent),JSON.stringify({intent,notice:g.state.notice,location:g.state.location,waiting:g.state.waiting}));
   if(intent.type==='battle'&&intent.action==='skill'||intent.type==='job.action'){const id=intent.skill??intent.ability;this.report.skillUses[id]=(this.report.skillUses[id]??0)+1;}
   if(intent.type==='item'||intent.type==='battle'&&intent.action==='item')this.report.consumed[intent.item]=(this.report.consumed[intent.item]??0)+Math.max(0,before.item-(g.state.inventory[intent.item]??0));
   this.report.spentGold+=Math.max(0,before.gold-g.state.gold);drain(g);
-  if(intent.type==='move'&&intent.direction==='forward'&&g.state.mode==='dungeon'&&g.state.expedition.managed)this.report.minOil=Math.min(this.report.minOil,oilTotal(data,g.state));
+  if(g.state.steps>before.steps&&g.state.mode==='dungeon'&&g.state.expedition.managed){this.report.minOil=Math.min(this.report.minOil,oilTotal(data,g.state));if(before.managed)this.report.oilSpentWalking+=Math.max(0,before.oil-oilTotal(data,g.state));}
+  if(intent.type==='dungeon.action'&&intent.system==='connections')this.report.connections[intent.target]=(this.report.connections[intent.target]??0)+1;
  }
  battle(){
   const g=this.g,b=g.state.battle;if(!b)return;const losses=g.state.records.losses;
@@ -76,12 +79,13 @@ export class Campaign {
    }
    if(to){this.act({type:'battle',action:'move',to});row.moves++;}else this.act({type:'battle',action:'skill',skill:'guard'});
   }
+  if(b.reinforcements)row.reinforcements=structuredClone(b.reinforcements);
   drain(g);this.report.battles.push(row);assert.equal(g.state.records.losses,losses,`party defeated: ${JSON.stringify(row)}`);
  }
  upkeep(){
   const g=this.g;if(g.state.waiting||g.state.battle||g.state.quests.q001.stage!=='completed')return;
   if(this.options.fieldTraining&&g.state.expedition.learned.sera?.exp_oil_spark&&!this.report.skillUses.exp_oil_spark&&g.state.actors.sera.mp>=18)this.act({type:'job.action',actor:'sera',ability:'exp_oil_spark'});
-  const lamp=g.state.dungeons.active?.systems.fires.portable;
+  const lamp=g.state.dungeons.active?.systems.fires?.portable;
   if(lamp&&lamp.fuel<15&&g.state.expedition.reserve>0)this.act({type:'dungeon.action',system:'fires',action:lamp.lit?'refuel':'ignite',target:'portable'});
   for(const id of g.state.members){const a=g.state.actors[id];if(a.statuses.includes('poison')&&g.state.inventory.antidote>0)this.act({type:'item',item:'antidote',actor:id});if(a.hp>0&&a.hp<g.stats(id).hp*.45&&g.state.inventory.potion>0)this.act({type:'item',item:'potion',actor:id});}
   if(g.state.inventory.ration>0&&(g.state.members.some(id=>['priest','mage'].includes(g.state.actors[id].job)&&g.state.actors[id].hp>0&&g.state.actors[id].mp<8)||g.state.members.some(id=>g.state.actors[id].hp<g.stats(id).hp*.5)))this.act({type:'item',item:'ration',actor:'ada'});
@@ -107,12 +111,38 @@ export class Campaign {
    this.act({type:'dungeon.action',system:'connections',action:'cross',target:edge.l.id});this.battle();this.supply();
   }
  }
- go(map,x,y){this.map(map);if(!this.g.state.waiting)this.walk(x,y);}
+ go(map,x,y){
+  if(this.options.route==='standard'){this.map(map);if(!this.g.state.waiting)this.walk(x,y);return;}
+  const g=this.g;this.supply();if(g.state.waiting)return;
+  // Supply detours and opening latches can change the next route.
+  for(let n=0;n<100;n++){
+   const path=campaignRoute(g,{map,x,y});if(!path.length)return;
+   for(const step of path){
+    this.upkeep();
+    if(step.connection)this.act({type:'dungeon.action',system:'connections',action:'cross',target:step.connection});
+    else{while(g.state.location.facing!==step.direction)this.act({type:'move',direction:'right'});this.act({type:'move',direction:'forward'});}
+    this.battle();if(g.state.waiting)return;
+    assert.equal(g.state.location.map,step.at.map);assert.equal(g.state.location.x,step.at.x);assert.equal(g.state.location.y,step.at.y);
+    if(step.connection){this.supply();if(g.state.waiting)return;break;}
+   }
+  }
+  throw Error(`campaign route stalled: ${map}/${x},${y}`);
+ }
+ shortcuts(map){
+  if(this.options.route!=='shortcuts')return;
+  const g=this.g,flags=g.state.flags.kagaribi??{};
+  const open=(id,flag)=>{const o=g.map().objects.find(o=>o.id===id);this.walk(o.x,o.y);if(g.state.waiting)return;while(o.edge&&g.state.location.facing!==o.edge)this.act({type:'move',direction:'right'});this.object(id);this.choose('open');assert.equal(g.state.flags.kagaribi[flag],true);this.report.opened.push(flag);};
+  if(map==='kagaribi_oilstore'&&!flags.cartCleared){this.walk(3,9);if(g.state.waiting)return;this.object('tools');this.walk(11,5);if(g.state.waiting)return;this.object('cart');this.choose('repair');assert.equal(g.state.flags.kagaribi.cartCleared,true);}
+  if(map==='kagaribi_crossroads'&&flags.cartCleared&&!flags.cargoGate)open('cargo_latch','cargoGate');
+  if(map==='kagaribi_relay'&&!flags.relayGate){this.walk(7,5);if(g.state.waiting)return;if(!g.state.dungeons.persistent.kagaribi.systems.fires.fixtures.relay_main.lit)this.act({type:'dungeon.action',system:'fires',action:'ignite',target:'relay_main'});open('relay_latch','relayGate');}
+  if(map==='kagaribi_f3'&&!flags.altarGate)open('altar_latch','altarGate');
+ }
  supply(){
   const g=this.g;if(this.supplying||g.state.waiting||g.state.quests.q001.stage!=='completed')return;
   this.supplying=true;try{
-   const map=g.state.location.map,first=!this.visited.has(map);this.visited.add(map);
-   if(first&&map==='kagaribi_kilns'){this.walk(7,1);while(g.state.location.facing!=='north')this.act({type:'move',direction:'right'});this.object('kiln_latch');this.choose('open');}
+   const map=g.state.location.map;
+   if(map==='kagaribi_kilns'&&!g.state.flags.kagaribi?.kilnGate){this.walk(7,1);if(g.state.waiting)return;while(g.state.location.facing!=='north')this.act({type:'move',direction:'right'});this.object('kiln_latch');this.choose('open');}
+   this.shortcuts(map);if(g.state.waiting)return;
    const c=data.expedition.camps.find(c=>c.map===map);
    if(!c||c.id==='kagaribi_central'&&!g.state.flags.kagaribi?.altarGuardianWon)return;
    this.walk(c.x,c.y);if(g.state.waiting)return;
@@ -122,7 +152,9 @@ export class Campaign {
  }
  exit(){
   const g=this.g;if(g.state.mode==='town')return;
+  const before={map:g.state.location.map,steps:g.state.steps,battles:this.report.battles.length,oil:this.report.oilSpentWalking};
   this.go('kagaribi_f1',1,1);this.object('exit');assert.equal(g.state.mode,'town');
+  this.report.returns.push({from:before.map,steps:g.state.steps-before.steps,battles:this.report.battles.length-before.battles,oilSpentWalking:this.report.oilSpentWalking-before.oil});
  }
  town(){
   const g=this.g;this.exit();goTownLocation(g,'hikarigaeri_tavern');
@@ -130,7 +162,7 @@ export class Campaign {
   if(g.state.members.some(id=>g.state.actors[id].hp<g.stats(id).hp||g.state.actors[id].mp<g.stats(id).mp)){this.act({type:'service',id:'inn'});this.report.rests++;}
   goTownLocation(g,'hikarigaeri_shop');
   if(g.state.expedition.camps.kagaribi_crossroads?.supply){
-   for(const actor of g.state.members){const item=`exp_t1_${this.options.fieldTraining&&actor==='nio'?'bow':weapons[actor]}`;if(g.state.actors[actor].equipment.weapon===item)continue;if(g.state.gold<124)break;this.act({type:'buy',item});this.act({type:'equip',actor,item});this.report.purchases.push({actor,item});}
+   for(const actor of g.state.members){const item=`exp_t1_${(this.options.fieldTraining||this.options.loadout==='bow')&&actor==='nio'?'bow':weapons[actor]}`;if(g.state.actors[actor].equipment.weapon===item)continue;if(g.state.gold<124)break;this.act({type:'buy',item});this.act({type:'equip',actor,item});this.report.purchases.push({actor,item});}
    for(const [actor,skill] of this.options.fieldTraining?[['sera','exp_oil_spark'],['nio','exp_route_survey']]:this.options.training?[['ada','exp_second_breath'],['sera','exp_purging_pursuit']]:[['ada','exp_row_sweep'],['il','exp_chain_flame'],['sera','exp_paired_aid']])if(!g.state.expedition.learned[actor]?.[skill]&&g.state.expedition.gems>=data.expedition.products[skill].price){const before=g.state.expedition.gems;if(g.dispatch({type:'skill.buy',actor,skill,level:1})){this.report.spentGems+=before-g.state.expedition.gems;this.report.purchases.push({actor,skill});}}
   }
   for(const actor of g.state.members){const item=actor==='berg'?'mail':['sera','il'].includes(actor)?'robe':'leather';if(g.state.actors[actor].equipment.armor===item||!g.state.expedition.camps.kagaribi_crossroads?.supply||g.state.gold<204)continue;this.act({type:'buy',item});this.act({type:'equip',actor,item});this.report.purchases.push({actor,item});}
@@ -155,7 +187,7 @@ export class Campaign {
  run(){
   const g=this.g;this.act({type:'battle.mode.set',mode:this.options.mode});
   this.quest('q001');this.town();if(this.options.size===5){goTownLocation(g,'hikarigaeri_tavern');this.act({type:'party',action:'join',actor:'berg'});goTownLocation(g,data.game.world.townRoot);}
-  if(this.options.optional)for(const id of quests){this.quest(id);this.town();}
+  if(this.options.optional)for(const id of this.options.questOrder==='reverse'?[...quests].reverse():quests){this.quest(id);this.town();}
   if(this.options.training){this.act({type:'travel',dungeon:'kagaribi'});this.go('kagaribi_ossuary',1,1);this.town();this.checkpoint('9F training');}
   this.act({type:'travel',dungeon:'kagaribi'});this.go('kagaribi_f3',5,1);this.object('altar_keeper');this.choose('fight');assert.equal(g.state.flags.kagaribi.altarGuardianWon,true);this.supply();this.checkpoint('10F');this.town();
   goTownLocation(g,'hikarigaeri_shop');
@@ -166,13 +198,31 @@ export class Campaign {
  }
 }
 export const measureCampaign=options=>new Campaign(options).run();
+export function summarizeCampaigns(rows){
+ return {command:'node tools/measure-kagaribi-campaign.mjs --routes --summary',contentVersion:data.game.version,centralRepairXp:data.expedition.camps.find(c=>c.id==='kagaribi_central').xp,runs:rows.map(r=>{
+  const at10=r.checkpoints.find(c=>c.label==='10F'),end=r.checkpoints.at(-1);
+  return {seed:r.seed,size:r.size,mode:r.mode,route:r.route,questOrder:r.questOrder,loadout:r.loadout,losses:r.losses,
+   actorsAt10F:at10.actors.map(({id,level,xp})=>({id,level,xp})),stepsAt10F:at10.steps,stepsReturned:end.steps,
+   battles:r.battles.length,guardianRounds:r.battles.find(b=>b.encounter==='kagaribi_altar_guardian').rounds,
+   gold:{earned:r.earnedGold,spent:r.spentGold,remaining:end.gold},gems:{earned:r.earnedGems,spent:r.spentGems,remaining:end.gems},
+   battleMpSpent:r.mpSpent,rests:r.rests,consumed:r.consumed,minOil:r.minOil,oilSpentWalking:r.oilSpentWalking,opened:r.opened,finalReturn:r.returns.at(-1)};
+ })};
+}
 if(process.argv[1]?.endsWith('measure-kagaribi-campaign.mjs')){
- if(process.argv[2]==='--matrix'){
+ if(process.argv[2]==='--routes'){
+  const rows=[];
+  for(const seed of [1907,42,2026])for(const size of [4,5])for(const mode of ['classic','grid','frontline']){
+   rows.push(measureCampaign({seed,size,mode}));
+   for(const questOrder of ['standard','reverse'])rows.push(measureCampaign({seed,size,mode,route:'shortcuts',questOrder}));
+   if(seed===1907)rows.push(measureCampaign({seed,size,mode,route:'shortcuts',loadout:'bow'}));
+  }
+  console.log(JSON.stringify(process.argv.includes('--summary')?summarizeCampaigns(rows):rows,null,2));
+ }else if(process.argv[2]==='--matrix'){
   const rows=[];
   for(const seed of [1907,42,2026])for(const size of [4,5])for(const mode of ['classic','grid','frontline'])rows.push(measureCampaign({seed,size,mode}));
   console.log(JSON.stringify(rows,null,2));
  }else{
-  const [seed='1907',size='4',mode='classic',optional='yes']=process.argv.slice(2);
-  console.log(JSON.stringify(measureCampaign({seed:Number(seed),size:Number(size),mode,optional:optional!=='no'}),null,2));
+  const [seed='1907',size='4',mode='classic',optional='yes',route='standard',questOrder='standard',loadout='standard']=process.argv.slice(2);
+  console.log(JSON.stringify(measureCampaign({seed:Number(seed),size:Number(size),mode,optional:optional!=='no',route,questOrder,loadout}),null,2));
  }
 }
