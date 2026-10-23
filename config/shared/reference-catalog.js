@@ -2138,7 +2138,15 @@ export const referenceData={
       },
       "maps": [
         "region_3_f1",
-        "region_3_f2"
+        "region_3_f2",
+        "region_3_f3",
+        "region_3_f4",
+        "region_3_f5",
+        "region_3_f6",
+        "region_3_f7",
+        "region_3_f8",
+        "region_3_f9",
+        "region_3_f10"
       ],
       "systems": {
         "garden": {
@@ -2415,6 +2423,121 @@ export const referenceData={
                   "facing": "south"
                 }
               }
+            },
+            {
+              "id": "nursery_bed",
+              "name": "苗床詰所の植床",
+              "map": "region_3_f4",
+              "x": 3,
+              "y": 3,
+              "terrain": {}
+            },
+            {
+              "id": "root_crossing",
+              "name": "切れ目の橋床",
+              "map": "region_3_f5",
+              "x": 4,
+              "y": 3,
+              "terrain": {
+                "bridge": [
+                  {
+                    "map": "region_3_f5",
+                    "x": 5,
+                    "y": 3,
+                    "tile": ".",
+                    "layers": {
+                      "visual": {
+                        "wall": false,
+                        "floor": true,
+                        "opaque": false,
+                        "material": "floor"
+                      },
+                      "parameters": {
+                        "illumination": 0,
+                        "water_passable": true
+                      },
+                      "events": []
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "side_thorns",
+              "name": "中央脇道の茨床",
+              "map": "region_3_f5",
+              "x": 4,
+              "y": 5,
+              "terrain": {
+                "barrier": [
+                  {
+                    "map": "region_3_f5",
+                    "x": 5,
+                    "y": 5,
+                    "tile": "#",
+                    "layers": {
+                      "visual": {
+                        "wall": true,
+                        "floor": false,
+                        "opaque": true,
+                        "material": "wall"
+                      },
+                      "parameters": {
+                        "illumination": 0,
+                        "water_passable": false
+                      },
+                      "events": []
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "nectar_bed",
+              "name": "北の誘引床",
+              "map": "region_3_f6",
+              "x": 3,
+              "y": 1,
+              "terrain": {}
+            },
+            {
+              "id": "quiet_bed",
+              "name": "南東の回避床",
+              "map": "region_3_f6",
+              "x": 7,
+              "y": 5,
+              "terrain": {}
+            },
+            {
+              "id": "rest_bed",
+              "name": "休憩所の植床",
+              "map": "region_3_f7",
+              "x": 3,
+              "y": 3,
+              "terrain": {}
+            },
+            {
+              "id": "pollinator_vine",
+              "name": "虫媒棚の蔓床",
+              "map": "region_3_f8",
+              "x": 3,
+              "y": 3,
+              "terrain": {
+                "vine": {
+                  "map": "region_3_f6",
+                  "x": 7,
+                  "y": 1,
+                  "facing": "east"
+                }
+              }
+            },
+            {
+              "id": "herb_bed",
+              "name": "薬草温室の植床",
+              "map": "region_3_f9",
+              "x": 3,
+              "y": 3,
+              "terrain": {}
             }
           ],
           "supply": {
@@ -2453,6 +2576,217 @@ export const referenceData={
                 "y": 1,
                 "facing": "east"
               }
+            },
+            {
+              "id": "upper_shore",
+              "name": "1F入口側と2F東岸を結ぶ石段",
+              "kind": "stairs",
+              "a": {
+                "map": "region_3_f1",
+                "x": 5,
+                "y": 1,
+                "facing": "east"
+              },
+              "b": {
+                "map": "region_3_f2",
+                "x": 3,
+                "y": 1,
+                "facing": "east"
+              }
+            },
+            {
+              "id": "floor_2_3",
+              "name": "3F 灌漑溝への岸道",
+              "kind": "stairs",
+              "a": {
+                "map": "region_3_f2",
+                "x": 13,
+                "y": 13,
+                "facing": "east"
+              },
+              "b": {
+                "map": "region_3_f3",
+                "x": 1,
+                "y": 1,
+                "facing": "east"
+              }
+            },
+            {
+              "id": "floor_3_4",
+              "name": "4F 苗床詰所への岸道",
+              "kind": "stairs",
+              "a": {
+                "map": "region_3_f3",
+                "x": 9,
+                "y": 7,
+                "facing": "east"
+              },
+              "b": {
+                "map": "region_3_f4",
+                "x": 1,
+                "y": 1,
+                "facing": "east"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.garden.intakeOpen"
+                },
+                "right": true
+              },
+              "requirement": "現地の設備を復旧すると通れる。"
+            },
+            {
+              "id": "floor_4_5",
+              "name": "5F 絡み根の道への岸道",
+              "kind": "stairs",
+              "a": {
+                "map": "region_3_f4",
+                "x": 9,
+                "y": 7,
+                "facing": "east"
+              },
+              "b": {
+                "map": "region_3_f5",
+                "x": 1,
+                "y": 1,
+                "facing": "east"
+              }
+            },
+            {
+              "id": "floor_5_6",
+              "name": "6F 蜜の回廊への岸道",
+              "kind": "stairs",
+              "a": {
+                "map": "region_3_f5",
+                "x": 9,
+                "y": 7,
+                "facing": "east"
+              },
+              "b": {
+                "map": "region_3_f6",
+                "x": 1,
+                "y": 1,
+                "facing": "east"
+              }
+            },
+            {
+              "id": "floor_6_7",
+              "name": "7F 庭師の休憩所への岸道",
+              "kind": "stairs",
+              "a": {
+                "map": "region_3_f6",
+                "x": 9,
+                "y": 7,
+                "facing": "east"
+              },
+              "b": {
+                "map": "region_3_f7",
+                "x": 1,
+                "y": 1,
+                "facing": "east"
+              }
+            },
+            {
+              "id": "floor_7_8",
+              "name": "8F 虫媒棚への岸道",
+              "kind": "stairs",
+              "a": {
+                "map": "region_3_f7",
+                "x": 9,
+                "y": 7,
+                "facing": "east"
+              },
+              "b": {
+                "map": "region_3_f8",
+                "x": 1,
+                "y": 1,
+                "facing": "east"
+              }
+            },
+            {
+              "id": "floor_8_9",
+              "name": "9F 薬草温室への岸道",
+              "kind": "stairs",
+              "a": {
+                "map": "region_3_f8",
+                "x": 9,
+                "y": 7,
+                "facing": "east"
+              },
+              "b": {
+                "map": "region_3_f9",
+                "x": 1,
+                "y": 1,
+                "facing": "east"
+              }
+            },
+            {
+              "id": "floor_9_10",
+              "name": "10F 根門前庭への岸道",
+              "kind": "stairs",
+              "a": {
+                "map": "region_3_f9",
+                "x": 9,
+                "y": 7,
+                "facing": "east"
+              },
+              "b": {
+                "map": "region_3_f10",
+                "x": 1,
+                "y": 1,
+                "facing": "east"
+              }
+            },
+            {
+              "id": "irrigation_walk",
+              "name": "6Fから2Fへ続く灌漑歩廊",
+              "kind": "stairs",
+              "a": {
+                "map": "region_3_f6",
+                "x": 5,
+                "y": 1,
+                "facing": "east"
+              },
+              "b": {
+                "map": "region_3_f2",
+                "x": 11,
+                "y": 13,
+                "facing": "east"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.garden.walkOpen"
+                },
+                "right": true
+              },
+              "requirement": "現地の設備を復旧すると通れる。"
+            },
+            {
+              "id": "garden_lift",
+              "name": "10Fから4Fへ続く苗床運搬路",
+              "kind": "stairs",
+              "a": {
+                "map": "region_3_f10",
+                "x": 9,
+                "y": 1,
+                "facing": "east"
+              },
+              "b": {
+                "map": "region_3_f4",
+                "x": 9,
+                "y": 1,
+                "facing": "east"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.garden.liftOpen"
+                },
+                "right": true
+              },
+              "requirement": "現地の設備を復旧すると通れる。"
             }
           ]
         }
@@ -5390,6 +5724,78 @@ export const referenceData={
       ],
       "kind": "scripts",
       "id": "mine.supply_rope.10"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f1",
+        "objects",
+        6,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "garden.supply_rope.1"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f2",
+        "objects",
+        4,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "garden.supply_rope.2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f4",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "garden.supply_rope.4"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f4",
+        "objects",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "garden.seed_reserve.4"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f7",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "garden.supply_rope.7"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f7",
+        "objects",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "garden.seed_reserve.7"
     },
     {
       "file": "jobs.json",
@@ -19135,6 +19541,1066 @@ export const referenceData={
     {
       "file": "dungeon-content.json",
       "path": [
+        "maps",
+        "region_3_f1",
+        "background"
+      ],
+      "kind": "images",
+      "id": "corridor"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f1",
+        "music"
+      ],
+      "kind": "audio",
+      "id": "exploration"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f1",
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "roaming_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f1",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "region_3_f1.exit"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f1",
+        "objects",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "region_3_f1.cache"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f1",
+        "objects",
+        2,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "region_3_f1.fountain"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f1",
+        "objects",
+        3,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "region_3_f1.trap"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f1",
+        "objects",
+        4,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "region_3_f1.door"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f1",
+        "objects",
+        5,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "garden.shore_sign.1"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f1",
+        "objects",
+        6,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "garden.supply_rope.1"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f1",
+        "encounterPool",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "roaming_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f1",
+        "encounterPool",
+        1,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_candle_bee"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f1",
+        "encounterPool",
+        2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_saw_mantis"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f1",
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f2",
+        "background"
+      ],
+      "kind": "images",
+      "id": "corridor"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f2",
+        "music"
+      ],
+      "kind": "audio",
+      "id": "exploration"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f2",
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "roaming_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f2",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "region_3_f2.cache"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f2",
+        "objects",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "region_3_f2.fountain"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f2",
+        "objects",
+        2,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "region_3_f2.trap"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f2",
+        "objects",
+        3,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "region_3_f2.door"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f2",
+        "objects",
+        4,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "garden.supply_rope.2"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f2",
+        "encounterPool",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "roaming_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f2",
+        "encounterPool",
+        1,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_candle_bee"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f2",
+        "encounterPool",
+        2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_saw_mantis"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f2",
+        "encounterPool",
+        3,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f2",
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f3",
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f3",
+        "background"
+      ],
+      "kind": "images",
+      "id": "corridor"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f3",
+        "music"
+      ],
+      "kind": "audio",
+      "id": "exploration"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f3",
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f3",
+        "encounterPool",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_candle_bee"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f3",
+        "encounterPool",
+        1,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_saw_mantis"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f3",
+        "encounterPool",
+        2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f3",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "garden.intake.3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f4",
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f4",
+        "background"
+      ],
+      "kind": "images",
+      "id": "corridor"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f4",
+        "music"
+      ],
+      "kind": "audio",
+      "id": "exploration"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f4",
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f4",
+        "encounterPool",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_candle_bee"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f4",
+        "encounterPool",
+        1,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_saw_mantis"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f4",
+        "encounterPool",
+        2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f4",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "garden.supply_rope.4"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f4",
+        "objects",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "garden.seed_reserve.4"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f5",
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f5",
+        "background"
+      ],
+      "kind": "images",
+      "id": "corridor"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f5",
+        "music"
+      ],
+      "kind": "audio",
+      "id": "exploration"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f5",
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f5",
+        "encounterPool",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_candle_bee"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f5",
+        "encounterPool",
+        1,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_saw_mantis"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f5",
+        "encounterPool",
+        2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f5",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "garden.harvest_sign.5"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f6",
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f6",
+        "background"
+      ],
+      "kind": "images",
+      "id": "corridor"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f6",
+        "music"
+      ],
+      "kind": "audio",
+      "id": "exploration"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f6",
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f6",
+        "encounterPool",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_candle_bee"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f6",
+        "encounterPool",
+        1,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_saw_mantis"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f6",
+        "encounterPool",
+        2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f6",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "garden.walk_latch.6"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f6",
+        "objects",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "garden.pollination_record.6"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f7",
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f7",
+        "background"
+      ],
+      "kind": "images",
+      "id": "corridor"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f7",
+        "music"
+      ],
+      "kind": "audio",
+      "id": "exploration"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f7",
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f7",
+        "encounterPool",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_candle_bee"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f7",
+        "encounterPool",
+        1,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_saw_mantis"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f7",
+        "encounterPool",
+        2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f7",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "garden.supply_rope.7"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f7",
+        "objects",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "garden.seed_reserve.7"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f8",
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f8",
+        "background"
+      ],
+      "kind": "images",
+      "id": "corridor"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f8",
+        "music"
+      ],
+      "kind": "audio",
+      "id": "exploration"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f8",
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f8",
+        "encounterPool",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_candle_bee"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f8",
+        "encounterPool",
+        1,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_saw_mantis"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f8",
+        "encounterPool",
+        2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f8",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "garden.pruning_record.8"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f9",
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f9",
+        "background"
+      ],
+      "kind": "images",
+      "id": "corridor"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f9",
+        "music"
+      ],
+      "kind": "audio",
+      "id": "exploration"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f9",
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f9",
+        "encounterPool",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_candle_bee"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f9",
+        "encounterPool",
+        1,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_saw_mantis"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f9",
+        "encounterPool",
+        2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f9",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "garden.herb_record.9"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f10",
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f10",
+        "background"
+      ],
+      "kind": "images",
+      "id": "corridor"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f10",
+        "music"
+      ],
+      "kind": "audio",
+      "id": "exploration"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f10",
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f10",
+        "encounterPool",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_candle_bee"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f10",
+        "encounterPool",
+        1,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_saw_mantis"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f10",
+        "encounterPool",
+        2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "wild_pair_3"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f10",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "garden.lift_latch.10"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f10",
+        "objects",
+        1,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "garden.root_gate.10"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
         "scripts",
         "waterway.dry_stair_latch",
         "commands",
@@ -20649,6 +22115,46 @@ export const referenceData={
       ],
       "kind": "maps",
       "id": "region_2_f10"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        18,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_3"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        18,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f4"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        19,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_3"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        19,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f7"
     },
     {
       "file": "jobs.json",
@@ -31894,6 +33400,78 @@ export const referenceData={
     {
       "file": "dungeons/region_3.json",
       "path": [
+        "maps",
+        2
+      ],
+      "kind": "maps",
+      "id": "region_3_f3"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "maps",
+        3
+      ],
+      "kind": "maps",
+      "id": "region_3_f4"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "maps",
+        4
+      ],
+      "kind": "maps",
+      "id": "region_3_f5"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "maps",
+        5
+      ],
+      "kind": "maps",
+      "id": "region_3_f6"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "maps",
+        6
+      ],
+      "kind": "maps",
+      "id": "region_3_f7"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "maps",
+        7
+      ],
+      "kind": "maps",
+      "id": "region_3_f8"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "maps",
+        8
+      ],
+      "kind": "maps",
+      "id": "region_3_f9"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "maps",
+        9
+      ],
+      "kind": "maps",
+      "id": "region_3_f10"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
         "systems",
         "garden",
         "species",
@@ -32446,6 +34024,146 @@ export const referenceData={
       "path": [
         "systems",
         "garden",
+        "plots",
+        6,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f4"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "garden",
+        "plots",
+        7,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f5"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "garden",
+        "plots",
+        7,
+        "terrain",
+        "bridge",
+        0,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f5"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "garden",
+        "plots",
+        8,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f5"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "garden",
+        "plots",
+        8,
+        "terrain",
+        "barrier",
+        0,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f5"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "garden",
+        "plots",
+        9,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f6"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "garden",
+        "plots",
+        10,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f6"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "garden",
+        "plots",
+        11,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f7"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "garden",
+        "plots",
+        12,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f8"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "garden",
+        "plots",
+        12,
+        "terrain",
+        "vine",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f6"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "garden",
+        "plots",
+        13,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f9"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "garden",
         "supply",
         "map"
       ],
@@ -32554,6 +34272,292 @@ export const referenceData={
       ],
       "kind": "maps",
       "id": "region_3_f2"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        1,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f1"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        1,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f2"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        2,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f2"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        2,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f3"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        3,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f3"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        3,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f4"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        4,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f4"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        4,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f5"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        5,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f5"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        5,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f6"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        6,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f6"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        6,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f7"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        7,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f7"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        7,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f8"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        8,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f8"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        8,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f9"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        9,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f9"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        9,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f10"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        10,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f6"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        10,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f2"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        11,
+        "a",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f10"
+    },
+    {
+      "file": "dungeons/region_3.json",
+      "path": [
+        "systems",
+        "connections",
+        "links",
+        11,
+        "b",
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f4"
     },
     {
       "file": "dungeons/region_4.json",
@@ -37668,7 +39672,15 @@ export const referenceData={
     "data/maps/region_2_f8.json",
     "data/maps/region_2_f9.json",
     "data/maps/region_3_f1.json",
+    "data/maps/region_3_f10.json",
     "data/maps/region_3_f2.json",
+    "data/maps/region_3_f3.json",
+    "data/maps/region_3_f4.json",
+    "data/maps/region_3_f5.json",
+    "data/maps/region_3_f6.json",
+    "data/maps/region_3_f7.json",
+    "data/maps/region_3_f8.json",
+    "data/maps/region_3_f9.json",
     "data/maps/region_4_f1.json",
     "data/maps/region_4_f2.json",
     "data/maps/region_5_f1.json",
@@ -42425,7 +44437,13 @@ export const referenceData={
       "height": 15,
       "dungeon": "region_3",
       "file": "data/maps/region_3_f1.json",
-      "owner": null
+      "owner": {
+        "file": "dungeon-content.json",
+        "path": [
+          "maps",
+          "region_3_f1"
+        ]
+      }
     },
     "region_3_f2": {
       "id": "region_3_f2",
@@ -42434,7 +44452,13 @@ export const referenceData={
       "height": 15,
       "dungeon": "region_3",
       "file": "data/maps/region_3_f2.json",
-      "owner": null
+      "owner": {
+        "file": "dungeon-content.json",
+        "path": [
+          "maps",
+          "region_3_f2"
+        ]
+      }
     },
     "region_4_f1": {
       "id": "region_4_f1",
@@ -42979,6 +45003,126 @@ export const referenceData={
         "path": [
           "maps",
           "region_2_f10"
+        ]
+      }
+    },
+    "region_3_f3": {
+      "id": "region_3_f3",
+      "name": "根喰みの地下庭園・3F 灌漑溝",
+      "width": 11,
+      "height": 9,
+      "dungeon": "region_3",
+      "file": "data/maps/region_3_f3.json",
+      "owner": {
+        "file": "dungeon-content.json",
+        "path": [
+          "maps",
+          "region_3_f3"
+        ]
+      }
+    },
+    "region_3_f4": {
+      "id": "region_3_f4",
+      "name": "根喰みの地下庭園・4F 苗床詰所",
+      "width": 11,
+      "height": 9,
+      "dungeon": "region_3",
+      "file": "data/maps/region_3_f4.json",
+      "owner": {
+        "file": "dungeon-content.json",
+        "path": [
+          "maps",
+          "region_3_f4"
+        ]
+      }
+    },
+    "region_3_f5": {
+      "id": "region_3_f5",
+      "name": "根喰みの地下庭園・5F 絡み根の道",
+      "width": 11,
+      "height": 9,
+      "dungeon": "region_3",
+      "file": "data/maps/region_3_f5.json",
+      "owner": {
+        "file": "dungeon-content.json",
+        "path": [
+          "maps",
+          "region_3_f5"
+        ]
+      }
+    },
+    "region_3_f6": {
+      "id": "region_3_f6",
+      "name": "根喰みの地下庭園・6F 蜜の回廊",
+      "width": 11,
+      "height": 9,
+      "dungeon": "region_3",
+      "file": "data/maps/region_3_f6.json",
+      "owner": {
+        "file": "dungeon-content.json",
+        "path": [
+          "maps",
+          "region_3_f6"
+        ]
+      }
+    },
+    "region_3_f7": {
+      "id": "region_3_f7",
+      "name": "根喰みの地下庭園・7F 庭師の休憩所",
+      "width": 11,
+      "height": 9,
+      "dungeon": "region_3",
+      "file": "data/maps/region_3_f7.json",
+      "owner": {
+        "file": "dungeon-content.json",
+        "path": [
+          "maps",
+          "region_3_f7"
+        ]
+      }
+    },
+    "region_3_f8": {
+      "id": "region_3_f8",
+      "name": "根喰みの地下庭園・8F 虫媒棚",
+      "width": 11,
+      "height": 9,
+      "dungeon": "region_3",
+      "file": "data/maps/region_3_f8.json",
+      "owner": {
+        "file": "dungeon-content.json",
+        "path": [
+          "maps",
+          "region_3_f8"
+        ]
+      }
+    },
+    "region_3_f9": {
+      "id": "region_3_f9",
+      "name": "根喰みの地下庭園・9F 薬草温室",
+      "width": 11,
+      "height": 9,
+      "dungeon": "region_3",
+      "file": "data/maps/region_3_f9.json",
+      "owner": {
+        "file": "dungeon-content.json",
+        "path": [
+          "maps",
+          "region_3_f9"
+        ]
+      }
+    },
+    "region_3_f10": {
+      "id": "region_3_f10",
+      "name": "根喰みの地下庭園・10F 根門前庭",
+      "width": 11,
+      "height": 9,
+      "dungeon": "region_3",
+      "file": "data/maps/region_3_f10.json",
+      "owner": {
+        "file": "dungeon-content.json",
+        "path": [
+          "maps",
+          "region_3_f10"
         ]
       }
     }
@@ -51649,6 +53793,9 @@ export const referenceData={
     "flags.flow.q200.homeConsent",
     "flags.flow.q200.intent",
     "flags.flow.q200.node",
+    "flags.garden.intakeOpen",
+    "flags.garden.liftOpen",
+    "flags.garden.walkOpen",
     "flags.kagaribi.altarGate",
     "flags.kagaribi.altarGuardianWon",
     "flags.kagaribi.cargoGate",
@@ -53630,6 +55777,42 @@ export const referenceData={
       "name": "mine.shellbreaker.10",
       "file": "config/dungeon-content.json"
     },
+    "garden.intake.3": {
+      "name": "garden.intake.3",
+      "file": "config/dungeon-content.json"
+    },
+    "garden.walk_latch.6": {
+      "name": "garden.walk_latch.6",
+      "file": "config/dungeon-content.json"
+    },
+    "garden.lift_latch.10": {
+      "name": "garden.lift_latch.10",
+      "file": "config/dungeon-content.json"
+    },
+    "garden.shore_sign.1": {
+      "name": "2Fの東岸へ続く石段。入口の茨が育っていても通れる。橋草やツタを採取した帰りは、",
+      "file": "config/dungeon-content.json"
+    },
+    "garden.harvest_sign.5": {
+      "name": "中央の切れ目には橋草を育てられる。収穫すると橋は消えるが、北と南の石の岸道は残る",
+      "file": "config/dungeon-content.json"
+    },
+    "garden.pollination_record.6": {
+      "name": "北の植床には赤蜜花、南東の植床には静謐苔を育てられる。生長後、同じ階の植床から三",
+      "file": "config/dungeon-content.json"
+    },
+    "garden.pruning_record.8": {
+      "name": "蜜蝋ランプバチには氷、鋸刃カマキリには火が通る。棚のツタは6Fへ降りられる。収穫",
+      "file": "config/dungeon-content.json"
+    },
+    "garden.herb_record.9": {
+      "name": "解熱胞子は生長すると同じ階の三歩以内でHPを少しずつ戻す。待機でも育ち、油は減ら",
+      "file": "config/dungeon-content.json"
+    },
+    "garden.root_gate.10": {
+      "name": "重なった根が奥の温室を閉ざしている。前庭の東には4Fへ戻る苗床運搬路がある。",
+      "file": "config/dungeon-content.json"
+    },
     "cell.poison_step": {
       "name": "毒の沼地を踏んだ。",
       "file": "config/cell-layers.json"
@@ -53664,6 +55847,14 @@ export const referenceData={
     },
     "treasure.package.region_2_f2.supply_rope": {
       "name": "treasure.package.region_2_f2.supply_rope",
+      "file": "data/scripts/dungeon-packages.json"
+    },
+    "treasure.package.region_3_f1.supply_rope": {
+      "name": "treasure.package.region_3_f1.supply_rope",
+      "file": "data/scripts/dungeon-packages.json"
+    },
+    "treasure.package.region_3_f2.supply_rope": {
+      "name": "treasure.package.region_3_f2.supply_rope",
       "file": "data/scripts/dungeon-packages.json"
     },
     "treasure.package.kagaribi_f1.supply_rope": {
@@ -53724,6 +55915,22 @@ export const referenceData={
     },
     "treasure.package.region_2_f10.supply_rope": {
       "name": "treasure.package.region_2_f10.supply_rope",
+      "file": "data/scripts/dungeon-packages.json"
+    },
+    "treasure.package.region_3_f4.supply_rope": {
+      "name": "treasure.package.region_3_f4.supply_rope",
+      "file": "data/scripts/dungeon-packages.json"
+    },
+    "treasure.package.region_3_f4.seed_reserve": {
+      "name": "treasure.package.region_3_f4.seed_reserve",
+      "file": "data/scripts/dungeon-packages.json"
+    },
+    "treasure.package.region_3_f7.supply_rope": {
+      "name": "treasure.package.region_3_f7.supply_rope",
+      "file": "data/scripts/dungeon-packages.json"
+    },
+    "treasure.package.region_3_f7.seed_reserve": {
+      "name": "treasure.package.region_3_f7.seed_reserve",
       "file": "data/scripts/dungeon-packages.json"
     },
     "q001.v11.entry": {
@@ -63932,6 +66139,69 @@ export const referenceData={
         "mine.shellbreaker.10"
       ]
     },
+    "garden.intake.3": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "garden.intake.3"
+      ]
+    },
+    "garden.walk_latch.6": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "garden.walk_latch.6"
+      ]
+    },
+    "garden.lift_latch.10": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "garden.lift_latch.10"
+      ]
+    },
+    "garden.shore_sign.1": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "garden.shore_sign.1"
+      ]
+    },
+    "garden.harvest_sign.5": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "garden.harvest_sign.5"
+      ]
+    },
+    "garden.pollination_record.6": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "garden.pollination_record.6"
+      ]
+    },
+    "garden.pruning_record.8": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "garden.pruning_record.8"
+      ]
+    },
+    "garden.herb_record.9": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "garden.herb_record.9"
+      ]
+    },
+    "garden.root_gate.10": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "garden.root_gate.10"
+      ]
+    },
     "kagaribi.exit": {
       "file": "kagaribi-content.json",
       "path": [
@@ -70456,6 +72726,69 @@ export const referenceData={
         "mine.shellbreaker.10"
       ]
     },
+    "scripts/garden.intake.3": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "garden.intake.3"
+      ]
+    },
+    "scripts/garden.walk_latch.6": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "garden.walk_latch.6"
+      ]
+    },
+    "scripts/garden.lift_latch.10": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "garden.lift_latch.10"
+      ]
+    },
+    "scripts/garden.shore_sign.1": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "garden.shore_sign.1"
+      ]
+    },
+    "scripts/garden.harvest_sign.5": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "garden.harvest_sign.5"
+      ]
+    },
+    "scripts/garden.pollination_record.6": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "garden.pollination_record.6"
+      ]
+    },
+    "scripts/garden.pruning_record.8": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "garden.pruning_record.8"
+      ]
+    },
+    "scripts/garden.herb_record.9": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "garden.herb_record.9"
+      ]
+    },
+    "scripts/garden.root_gate.10": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "garden.root_gate.10"
+      ]
+    },
     "scripts/kagaribi.exit": {
       "file": "kagaribi-content.json",
       "path": [
@@ -70729,6 +73062,20 @@ export const referenceData={
         "region_2_f2"
       ]
     },
+    "maps/region_3_f1": {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f1"
+      ]
+    },
+    "maps/region_3_f2": {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f2"
+      ]
+    },
     "maps/kagaribi_f1": {
       "file": "kagaribi-content.json",
       "path": [
@@ -70923,6 +73270,62 @@ export const referenceData={
       "path": [
         "maps",
         "region_2_f10"
+      ]
+    },
+    "maps/region_3_f3": {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f3"
+      ]
+    },
+    "maps/region_3_f4": {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f4"
+      ]
+    },
+    "maps/region_3_f5": {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f5"
+      ]
+    },
+    "maps/region_3_f6": {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f6"
+      ]
+    },
+    "maps/region_3_f7": {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f7"
+      ]
+    },
+    "maps/region_3_f8": {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f8"
+      ]
+    },
+    "maps/region_3_f9": {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f9"
+      ]
+    },
+    "maps/region_3_f10": {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f10"
       ]
     },
     "locations/hikarigaeri_square": {

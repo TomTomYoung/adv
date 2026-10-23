@@ -1,6 +1,6 @@
 # フィールドイベント・戦闘中イベント一覧
 
-作品版 1.29.0。配布データから生成する実装一覧。[q001の位置・全文](quests/QUEST_Q001.md) ／ [イベント仕様](EVENT_SYSTEM.md) ／ [命令仕様](SCRIPT_REFERENCE.md) ／ [セル照明](../dungeons/FIELD_LIGHTING.md)。
+作品版 1.30.0。配布データから生成する実装一覧。[q001の位置・全文](quests/QUEST_Q001.md) ／ [イベント仕様](EVENT_SYSTEM.md) ／ [命令仕様](SCRIPT_REFERENCE.md) ／ [セル照明](../dungeons/FIELD_LIGHTING.md)。
 
 ## 実装した処理
 
@@ -1846,6 +1846,10 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 
 `region_3_f1/door`：(17, 11) `door`、起動 `interact` → `region_3_f1.door`。[定義](../../data/maps/region_3_f1.json)。
 
+`region_3_f1/shore_sign`：(5, 1) `clue`、起動 `interact` → `garden.shore_sign.1`。[定義](../../data/maps/region_3_f1.json)。
+
+`region_3_f1/supply_rope`：(1, 1) `chest`、起動 `interact` → `treasure.package.region_3_f1.supply_rope`。[定義](../../data/maps/region_3_f1.json)。
+
 ### region_3_f2 根喰みの地下庭園・地下2層
 
 `region_3_f2/cache`：(1, 4) `chest`、起動 `interact` → `region_3_f2.cache`。[定義](../../data/maps/region_3_f2.json)。
@@ -1855,6 +1859,8 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 `region_3_f2/trap`：(4, 9) `trap`、起動 `enter` → `region_3_f2.trap`。[定義](../../data/maps/region_3_f2.json)。
 
 `region_3_f2/door`：(17, 13) `door`、起動 `interact` → `region_3_f2.door`。[定義](../../data/maps/region_3_f2.json)。
+
+`region_3_f2/supply_rope`：(1, 1) `chest`、起動 `interact` → `treasure.package.region_3_f2.supply_rope`。[定義](../../data/maps/region_3_f2.json)。
 
 ### region_4_f1 鏡沈みの礼拝堂・地下1層
 
@@ -2183,6 +2189,46 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 `region_2_f10/supply_rope`：(7, 1) `chest`、起動 `interact` → `treasure.package.region_2_f10.supply_rope`。[定義](../../data/maps/region_2_f10.json)。
 
 `region_2_f10/shellbreaker`：(5, 1) `clue`、起動 `interact` → `mine.shellbreaker.10`。[定義](../../data/maps/region_2_f10.json)。
+
+### region_3_f3 根喰みの地下庭園・3F 灌漑溝
+
+`region_3_f3/intake`：(5, 3) `clue`、起動 `interact` → `garden.intake.3`。[定義](../../data/maps/region_3_f3.json)。
+
+### region_3_f4 根喰みの地下庭園・4F 苗床詰所
+
+`region_3_f4/supply_rope`：(1, 1) `chest`、起動 `interact` → `treasure.package.region_3_f4.supply_rope`。[定義](../../data/maps/region_3_f4.json)。
+
+`region_3_f4/seed_reserve`：(3, 1) `chest`、起動 `interact` → `treasure.package.region_3_f4.seed_reserve`。[定義](../../data/maps/region_3_f4.json)。
+
+### region_3_f5 根喰みの地下庭園・5F 絡み根の道
+
+`region_3_f5/harvest_sign`：(3, 1) `clue`、起動 `interact` → `garden.harvest_sign.5`。[定義](../../data/maps/region_3_f5.json)。
+
+### region_3_f6 根喰みの地下庭園・6F 蜜の回廊
+
+`region_3_f6/walk_latch`：(5, 1) `clue`、起動 `interact` → `garden.walk_latch.6`。[定義](../../data/maps/region_3_f6.json)。
+
+`region_3_f6/pollination_record`：(3, 3) `clue`、起動 `interact` → `garden.pollination_record.6`。[定義](../../data/maps/region_3_f6.json)。
+
+### region_3_f7 根喰みの地下庭園・7F 庭師の休憩所
+
+`region_3_f7/supply_rope`：(1, 1) `chest`、起動 `interact` → `treasure.package.region_3_f7.supply_rope`。[定義](../../data/maps/region_3_f7.json)。
+
+`region_3_f7/seed_reserve`：(3, 1) `chest`、起動 `interact` → `treasure.package.region_3_f7.seed_reserve`。[定義](../../data/maps/region_3_f7.json)。
+
+### region_3_f8 根喰みの地下庭園・8F 虫媒棚
+
+`region_3_f8/pruning_record`：(7, 3) `clue`、起動 `interact` → `garden.pruning_record.8`。[定義](../../data/maps/region_3_f8.json)。
+
+### region_3_f9 根喰みの地下庭園・9F 薬草温室
+
+`region_3_f9/herb_record`：(7, 3) `clue`、起動 `interact` → `garden.herb_record.9`。[定義](../../data/maps/region_3_f9.json)。
+
+### region_3_f10 根喰みの地下庭園・10F 根門前庭
+
+`region_3_f10/lift_latch`：(9, 1) `clue`、起動 `interact` → `garden.lift_latch.10`。[定義](../../data/maps/region_3_f10.json)。
+
+`region_3_f10/root_gate`：(5, 5) `clue`、起動 `interact` → `garden.root_gate.10`。[定義](../../data/maps/region_3_f10.json)。
 
 ## battle.startの定義位置
 

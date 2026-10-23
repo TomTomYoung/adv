@@ -1,6 +1,6 @@
 # 探索・ダンジョン
 
-現行1.29.0：[篝火1〜10Fの接続・設備・主・武器・実測台帳](KAGARIBI_TEN_FLOORS.md)。[地下水道1〜10Fの経路・設備・主・保存移行](WATERWAY_TEN_FLOORS.md)も接続済みです。[廃坑1〜10Fの洗浄・帰路・設備・主](MINE_TEN_FLOORS.md)を追加しました。以下の日付付き項目は各時点の記録です。
+現行1.30.0：[篝火1〜10Fの接続・設備・主・武器・実測台帳](KAGARIBI_TEN_FLOORS.md)。[地下水道1〜10Fの経路・設備・主・保存移行](WATERWAY_TEN_FLOORS.md)も接続済みです。[廃坑1〜10Fの洗浄・帰路・設備・主](MINE_TEN_FLOORS.md)を追加しました。[庭園1〜10Fの栽培経路・4/7F設備・固定帰路](GARDEN_SHALLOW_ROUTES.md)も追加しました。庭園10Fの主と中継は未実装です。以下の日付付き項目は各時点の記録です。
 
 2026-10-15: [給油・中継所・技能教習を実装（1.26.0）](EXPEDITION_IMPLEMENTATION.md)。9か所の修理設備、容量管理、途中出発、技能宝石と人物別教習を追加しました。
 
@@ -18,7 +18,7 @@
 
 2026-09-26: [水路拡張と地下関所](WATERWAY_EXPANSION.md)を実装済み。
 
-現行確認日: 2026-10-23。作品版1.29.0。前回の確認は2026-10-10、作品版1.25.0です。[文書全体へ戻る](../README.md)。
+現行確認日: 2026-10-23。作品版1.30.0。前回の確認は2026-10-10、作品版1.25.0です。[文書全体へ戻る](../README.md)。
 
 [CELL_LAYERS.md](CELL_LAYERS.md)：セル種30種類・共有エッジ4種類、作用タイミング、進入イベントの再発方式と地点ごとの上書き。
 
@@ -30,7 +30,7 @@
 
 [MAP_CELLS_AND_BOUNDARIES.md](MAP_CELLS_AND_BOUNDARIES.md)：四辺の通行・境界、退避3Dと拡張の区別。
 
-[CONNECTED_2D_MAPS.md](CONNECTED_2D_MAPS.md)：48件の2Dマップ、条件付き接続口・水密扉・区画給排水。
+[CONNECTED_2D_MAPS.md](CONNECTED_2D_MAPS.md)：56件の2Dマップ、条件付き接続口・水密扉・区画給排水。
 
 [FIELD_LIGHTING.md](FIELD_LIGHTING.md)：距離減衰・遮光・画面とミニマップの照度。
 

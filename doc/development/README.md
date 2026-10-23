@@ -32,6 +32,8 @@
 
 [廃坑の実攻略測定](MINE_ROUTE_MEASUREMENTS.json)は篝火後12条件、[実装と制限](../dungeons/MINE_TEN_FLOORS.md)に洗浄・帰路・旧保存の条件を記録しています。
 
+庭園の栽培あり/なしの比較は `node tools/measure-garden-campaign.mjs --matrix` で再現します。[24条件の測定値](GARDEN_ROUTE_MEASUREMENTS.json)と[栽培経路の条件・範囲](../dungeons/GARDEN_SHALLOW_ROUTES.md)を参照してください。10F主は測定に含みません。
+
 ## 検査と履歴
 
 `npm run check:docs` はフォルダ索引、Markdown・画像・編集画面のリンク、生成一覧と配置図、配布データの指紋、旧原文のハッシュを照合します。`npm run check:config` は237原稿と対応HTMLを検査します。
