@@ -1,4 +1,5 @@
 import {joinReinforcements} from './battle-reinforcements.js';
+import {cleanseCandidates} from './status-effects.js';
 import {battleAlive,frontlinePresent,frontlineState,removeFrontline,knockbackFrontline,syncFrontlineDefeats} from './frontline-lifecycle.js';
 import {isFrontline,frontPosition,frontlineUnits,frontlineMovePlan,moveFrontline,prepareFrontlineRound,traceFrontline,frontlineRevivePosition} from './battle-frontline.js';
 import {frontlineTargetPlan,frontlineSelections,frontlineProfile} from './frontline-targeting.js';
@@ -166,7 +167,10 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
     if(effect.type==='status'&&dungeonEffectActive(engine.data,s,'status',effect.status)&&(target.hp>0||isFrontline(s)&&frontlineState(s,target)==='down')&&engine.random()<(effect.chance??1)&&applyStatus(engine.data,s,target,effect.status,effect.duration,effect.level??1)){
       (b?.log??s.log).push(`${targetName}は${engine.data.statuses[effect.status].name}になりました。`);
     }
-    if(effect.type==='cleanse')removeStatus(target,effect.status);
+    if(effect.type==='cleanse'){
+      if(effect.statuses){for(const id of cleanseCandidates(target,effect)){removeStatus(target,id);(b?.log??s.log).push(`${targetName}：${skill.name}で${engine.data.statuses[id].name}を解除した。`);}}
+      else removeStatus(target,effect.status);
+    }
   }
   syncFrontlineDefeats(engine);return damageTotal;
 }
@@ -308,18 +312,29 @@ function actionOverridden(engine,source){
   if(confused){engine.state.battle.log.push(`${name}は${engine.data.statuses[confused].name}で勝手に行動した。`);confusedAction(engine,source);return true;}
   return false;
 }
+function afflictedTargets(engine,skill){
+  return engine.state.battle.enemies.filter(t=>battleAlive(engine.state,t)&&skill.effects.some(e=>e.type==='cleanse'&&cleanseCandidates(t,e).length));
+}
 function enemyAction(engine,enemy){
+  return consumeEnemyActionBuffs(engine,enemy,()=>performEnemyAction(engine,enemy));
+}
+function consumeEnemyActionBuffs(engine,enemy,act){
+  const b=engine.state.battle,consumed=actionBuffs(engine.data,b,unitKey(enemy));
+  try{return act();}finally{b.buffs=b.buffs.filter(entry=>!consumed.includes(entry));}
+}
+function performEnemyAction(engine,enemy){
   const s=engine.state,b=s.battle;
     if(!battleAlive(s,enemy))return;clearGuard(b,enemy);if(consumeStun(engine,enemy)||actionOverridden(engine,enemy))return;
     if(isFrontline(s)){frontlineEnemyAction(engine,enemy);return;}
     if(isGrid(s)){gridEnemyAction(engine,enemy);return;}
     const alive=s.members.filter(id=>battleAlive(s,s.actors[id]));if(!alive.length)return;
-    const rule=[...enemy.ai].sort((a,c)=>c.priority-a.priority).find(r=>!statusAbilityReason(engine.data,s,enemy,r.skill)&&!dungeonAbilityReason(engine.data,s,r.skill,'battle.skill')&&(!r.condition||engine.value(r.condition,{self:{...enemy,hp_ratio:enemy.hp/enemy.stats.hp,round:b.round}}))&&enemy.mp>=engine.data.skills[r.skill].mp);
+    const rule=[...enemy.ai].sort((a,c)=>c.priority-a.priority).find(r=>!statusAbilityReason(engine.data,s,enemy,r.skill)&&!dungeonAbilityReason(engine.data,s,r.skill,'battle.skill')&&(!r.condition||engine.value(r.condition,{self:{...enemy,hp_ratio:enemy.hp/enemy.stats.hp,round:b.round}}))&&enemy.mp>=engine.data.skills[r.skill].mp&&(r.target!=='afflicted'||afflictedTargets(engine,engine.data.skills[r.skill]).length));
     if(!rule){b.log.push(`${enemy.name}は使える行動がない。`);return;}
     const skill=engine.data.skills[rule.skill];enemy.mp-=skill.mp;
     const targetId=rule.target==='weakest'?alive.reduce((a,c)=>s.actors[c].hp<s.actors[a].hp?c:a):alive[Math.floor(engine.random()*alive.length)];
     let targets;
-    if(skill.target==='all_enemies')targets=alive.map(id=>s.actors[id]);
+    if(rule.target==='afflicted')targets=afflictedTargets(engine,skill).slice(0,1);
+    else if(skill.target==='all_enemies')targets=alive.map(id=>s.actors[id]);
     else if(skill.target==='all_allies')targets=b.enemies.filter(e=>battleAlive(s,e));
     else if(rule.target==='self'||skill.target==='self')targets=[enemy];
     else if(skill.target==='ally')targets=[b.enemies.filter(e=>battleAlive(s,e)).sort((a,c)=>a.hp/a.stats.hp-c.hp/c.stats.hp)[0]];
@@ -463,6 +478,7 @@ function gridEnemyAction(engine,enemy){
     if(rule.condition&&!engine.value(rule.condition,{self:{...enemy,hp_ratio:enemy.hp/enemy.stats.hp,round:b.round}}))continue;
     let choices=gridEnemyChoices(engine,enemy,rule.skill);
     if(rule.target==='self')choices=choices.filter(p=>p.targets.length===1&&p.targets[0]===enemy);
+    if(rule.target==='afflicted'){const valid=afflictedTargets(engine,d.skills[rule.skill]);choices=choices.filter(p=>p.targets.length===1&&valid.includes(p.targets[0]));}
     if(!choices.length)continue;
     if(rule.target==='weakest')choices.sort((a,c)=>Math.min(...a.targets.map(t=>t.hp))-Math.min(...c.targets.map(t=>t.hp)));
     performSkill(engine,enemy,choices[rule.target==='random'?Math.floor(engine.random()*choices.length):0]);return;
@@ -504,6 +520,7 @@ function frontlineEnemyAction(engine,enemy){
  for(const rule of [...enemy.ai].sort((a,c)=>c.priority-a.priority)){
   if(rule.condition&&!engine.value(rule.condition,{self:{...enemy,hp_ratio:enemy.hp/enemy.stats.hp,round:b.round}}))continue;
   let choices=gridEnemyChoices(engine,enemy,rule.skill);if(rule.target==='self')choices=choices.filter(p=>p.targets.length===1&&p.targets[0]===enemy);
+  if(rule.target==='afflicted'){const valid=afflictedTargets(engine,engine.data.skills[rule.skill]);choices=choices.filter(p=>p.targets.length===1&&valid.includes(p.targets[0]));}
   if(!choices.length)continue;if(rule.target==='weakest')choices.sort((a,c)=>Math.min(...a.targets.map(t=>t.hp))-Math.min(...c.targets.map(t=>t.hp)));
   performSkill(engine,enemy,choices[rule.target==='random'?Math.floor(engine.random()*choices.length):0]);return;
  }
@@ -519,7 +536,7 @@ export function stepBattle(engine,intent={}){
  const enemy=b.preemptive?.side==='enemies'?[...b.enemies].filter(e=>battleAlive(s,e)).sort((a,c)=>enemyStats(engine,c).agi-enemyStats(engine,a).agi)[0]:b.enemies.find(e=>unitKey(e)===b.turnQueue?.[b.turnIndex]);
  if(!enemy)return false;
  let selected;if(intent.skill){selected=gridEnemyChoices(engine,enemy,intent.skill).find(p=>p.id===intent.target);if(!selected)return false;}
- const act=()=>{if(!selected)enemyAction(engine,enemy);else{clearGuard(b,enemy);if(!consumeStun(engine,enemy)&&!actionOverridden(engine,enemy))performSkill(engine,enemy,selected);}};
+ const act=()=>{if(!selected)enemyAction(engine,enemy);else consumeEnemyActionBuffs(engine,enemy,()=>{clearGuard(b,enemy);if(!consumeStun(engine,enemy)&&!actionOverridden(engine,enemy))performSkill(engine,enemy,selected);});};
  if(b.preemptive){act();if(--b.preemptive.remaining===0)delete b.preemptive;}
  else{b.turnIndex++;act();}
  if(s.battle!==b)return true;

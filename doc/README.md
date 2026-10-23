@@ -1,6 +1,6 @@
 # adv ドキュメント
 
-現行説明の照合日: 2026-10-23。作品版1.32.0。[現在の状態](CURRENT_STATUS.md)、[現行仕様](SPEC.md)、[採用仕様と次工程](HANDOFF.md)、[浅層工房と封蝋](dungeons/SHALLOW_WORKSHOP.md)から確認してください。実施時点の履歴は[検証記録](development/PROGRESS.md)、整理前の本文は[保存原文](legacy/2026-10-20/README.md)に分けます。
+現行説明の照合日: 2026-10-23。作品版1.33.0。[現在の状態](CURRENT_STATUS.md)、[現行仕様](SPEC.md)、[採用仕様と次工程](HANDOFF.md)、[浅層工房と封蝋](dungeons/SHALLOW_WORKSHOP.md)から確認してください。実施時点の履歴は[検証記録](development/PROGRESS.md)、整理前の本文は[保存原文](legacy/2026-10-20/README.md)に分けます。
 
 ## 現在の実装と続く設計
 

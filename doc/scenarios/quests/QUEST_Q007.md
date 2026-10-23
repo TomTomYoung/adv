@@ -2,9 +2,9 @@
 
 [個別ページ一覧](README.md) ／ [カタログへ戻る](../QUEST_CATALOG.md#q007-声を返す壁) ／ [シナリオ本文](#q007-声を返す壁) ／ [行為の条件と状態変化](#行為の条件と状態変化) ／ [配置イベント](#配置イベントと操作条件)
 
-作品版 1.32.0。配布JSONから生成した作者向けページ。真相と結末を含む。本編5場面・3結末。
+作品版 1.33.0。配布JSONから生成した作者向けページ。真相と結末を含む。本編5場面・3結末。
 
-<!-- quest-page-source:b7d15c762b8d887d59491323f8ee0d501cc7a4aeef1e06beaf68a4e9c2e277f4 -->
+<!-- quest-page-source:2f26eeee8374c1da91367d0425f7224c81ec7c690f6cc0a6123c545ace0df9be -->
 
 ## 依頼の焦点と分岐の意味
 
@@ -1152,20 +1152,16 @@ AI向け注釈: 以下の事実はq007を成立させる世界設定上の制約
   "region": 1,
   "background": "corridor",
   "music": "exploration",
-  "encounter": "roaming_1",
+  "encounter": "waterway_eel_lesson",
   "encounterRate": 0.18,
   "encounterPool": [
-    {
-      "encounter": "roaming_1",
-      "weight": 20
-    },
     {
       "encounter": "wild_waterwheel_beaver",
       "weight": 40
     },
     {
-      "encounter": "wild_sluice_crocodile",
-      "weight": 40
+      "encounter": "waterway_eel_lesson",
+      "weight": 60
     }
   ],
   "dungeon": "region_1",
@@ -1312,20 +1308,16 @@ AI向け注釈: 以下の事実はq007を成立させる世界設定上の制約
   "region": 1,
   "background": "corridor",
   "music": "exploration",
-  "encounter": "roaming_1",
+  "encounter": "waterway_croc_eel",
   "encounterRate": 0.18,
   "encounterPool": [
     {
-      "encounter": "roaming_1",
-      "weight": 20
-    },
-    {
-      "encounter": "wild_waterwheel_beaver",
-      "weight": 40
-    },
-    {
       "encounter": "wild_sluice_crocodile",
-      "weight": 40
+      "weight": 30
+    },
+    {
+      "encounter": "waterway_croc_eel",
+      "weight": 70
     }
   ],
   "dungeon": "region_1",
@@ -1424,20 +1416,16 @@ AI向け注釈: 以下の事実はq007を成立させる世界設定上の制約
   "region": 1,
   "background": "corridor",
   "music": "exploration",
-  "encounter": "roaming_1",
+  "encounter": "waterway_shallow_a",
   "encounterRate": 0.18,
   "encounterPool": [
     {
-      "encounter": "roaming_1",
-      "weight": 20
+      "encounter": "waterway_croc_eel",
+      "weight": 35
     },
     {
-      "encounter": "wild_waterwheel_beaver",
-      "weight": 40
-    },
-    {
-      "encounter": "wild_sluice_crocodile",
-      "weight": 40
+      "encounter": "waterway_shallow_a",
+      "weight": 65
     }
   ],
   "dungeon": "region_1",

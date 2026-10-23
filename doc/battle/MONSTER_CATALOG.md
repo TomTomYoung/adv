@@ -1,12 +1,12 @@
 # 魔物一覧と戦闘画像
 
-作品版1.32.0。配布中の敵は79定義、遭遇編成は108定義、敵が参照する画像ファイルは25点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
+作品版1.33.0。配布中の敵は84定義、遭遇編成は112定義、敵が参照する画像ファイルは25点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
 
 敵・技能・画像・通常ロードのマップと迷宮・スクリプトから全文を生成します。数値を重ねて手書きせず、原稿を更新してから `npm run build:docs` で反映します。
 
 [固有環境の敵](#固有環境の敵)：6定義。
 [個別デザインの通常魔物](#個別デザインの通常魔物)：21定義。
-[依頼に追加した敵](#依頼に追加した敵)：32定義。
+[依頼に追加した敵](#依頼に追加した敵)：37定義。
 [地域の迷宮獣と守護者](#地域の迷宮獣と守護者)：20定義。
 
 ## 現在の読み方
@@ -21,7 +21,7 @@ AIは優先度の高い順に、条件成立・MP充足・環境による使用�
 
 同日の第2便で残る `dragon` も換装し、このIDを共有する7定義へ反映しました。前日の `wraith` を含む共通5画像の更新が完了し、現行の敵が参照する旧共通PNGは0点です。旧PNGとAIPaint原稿は保持しています。[第2便の適用・透過検査記録](../../assets/source/monsters/refresh-2026-09-25-batch2.json)と[生成プロンプト](../../assets/source/monsters/refresh-2026-09-25-batch2-prompts.json)。
 
-正常な1.25.0〜1.31.0のセーブを現行版へ検証後に移行し、その他の内容版や破損セーブは受け付けません。地域の迷宮獣・守護者は現行の依頼戦・通常遭遇から参照されているため残っています。保存方針は[SPEC.md](../SPEC.md)、調整と旧測定は[BALANCE_PLAN.md](BALANCE_PLAN.md)を参照してください。
+正常な1.25.0〜1.32.0のセーブを現行版へ検証後に移行し、その他の内容版や破損セーブは受け付けません。地域の迷宮獣・守護者は現行の依頼戦・通常遭遇から参照されているため残っています。保存方針は[SPEC.md](../SPEC.md)、調整と旧測定は[BALANCE_PLAN.md](BALANCE_PLAN.md)を参照してください。
 
 ## 編集元
 
@@ -83,7 +83,7 @@ valley_roamers：境渡りの呪詠み×1。逃走可。
 <img src="../../assets/images/monsters/slime.webp" width="160" alt="水路の小魚">
 
 画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム。
+画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム・通電ウナギの幼体・通電ウナギ（低位）・泥濾し貝（低位）。
 
 旧地下水道の水位に応じて使う魚です。現在の2D区画給排水はこの水位別遭遇を使用しません。敵と遭遇定義は配布DBに残っていますが、退避した旧水道の通常出現と現行の水路を混同しません。
 
@@ -105,7 +105,7 @@ water_small：水路の小魚×1。逃走可。
 <img src="../../assets/images/monsters/slime.webp" width="160" alt="水路の牙魚">
 
 画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・大水喰い・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム。
+画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・大水喰い・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム・通電ウナギの幼体・通電ウナギ（低位）・泥濾し貝（低位）。
 
 旧地下水道の水位に応じて使う魚です。現在の2D区画給排水はこの水位別遭遇を使用しません。敵と遭遇定義は配布DBに残っていますが、退避した旧水道の通常出現と現行の水路を混同しません。
 
@@ -127,7 +127,7 @@ water_predator：水路の牙魚×1。逃走可。
 <img src="../../assets/images/monsters/slime.webp" width="160" alt="大水喰い">
 
 画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム。
+画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム・通電ウナギの幼体・通電ウナギ（低位）・泥濾し貝（低位）。
 
 旧地下水道の水位に応じて使う魚です。現在の2D区画給排水はこの水位別遭遇を使用しません。敵と遭遇定義は配布DBに残っていますが、退避した旧水道の通常出現と現行の水路を混同しません。
 
@@ -149,7 +149,7 @@ water_giant：大水喰い×1。逃走可。
 <img src="../../assets/images/monsters/slime.webp" width="160" alt="ソルトイーター">
 
 画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・燭蝋スライム・油蔵の燭蝋スライム。
+画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・燭蝋スライム・油蔵の燭蝋スライム・通電ウナギの幼体・通電ウナギ（低位）・泥濾し貝（低位）。
 
 塩の蓄積した装備個体があると、廃坑の腐食部品が遭遇候補を切り替えます。敵ラウンド開始時、この敵が生存していれば閾値以上で塩が最も多い装備個体を1個消失させます。これは下記AIの攻撃とは別の `corrosion.battleRound` 処理です。[塩の仕様](../dungeons/WATERWAYS_SALT_MINE.md)。
 
@@ -173,7 +173,7 @@ salt_eater_feeding：ソルトイーター×1。逃走可。
 <img src="../../assets/images/monsters/waterwheel_beaver.webp" width="160" alt="水車ビーバー">
 
 画像ID：monster_waterwheel_beaver。実ファイル：[assets/images/monsters/waterwheel_beaver.webp](../../assets/images/monsters/waterwheel_beaver.webp)。
-画像共有：他の敵定義との共有なし。
+画像共有：大水車ビーバー（低位）。
 
 発想：ビーバー＋水車。参照：M006。地域分類：灯守の地下水道。
 
@@ -193,7 +193,7 @@ AIの選択順：
 遭遇と参照先：
 
 wild_waterwheel_beaver：水車ビーバー×1。逃走可。
-通常遭遇候補：灯守の地下水道・1F 入口操作室 (region_1_f1)、重み40 / 灯守の地下水道・6F 操作室 (region_1_f2)、重み40 / 灯守の地下水道・2F 第一水路 (region_1_canal_a)、重み40 / 灯守の地下水道・3F 荷揚げ場 (region_1_landing)、重み40 / 灯守の地下水道・4F 排水支路 (region_1_canal_b)、重み40 / 灯守の地下水道・5F 鐘と浮子の点検室 (region_1_inspection)、重み40 / 灯守の地下水道・7F 給金箱の水路 (region_1_canal_c)、重み40 / 灯守の地下水道・8F 棺の待避場 (region_1_lower_landing)、重み40 / 灯守の地下水道・9F 避難水路 (region_1_canal_d)、重み40 / 灯守の地下水道・10F 奥の水門詰所 (region_1_gatehouse)、重み40。
+通常遭遇候補：灯守の地下水道・1F 入口操作室 (region_1_f1)、重み40 / 灯守の地下水道・6F 操作室 (region_1_f2)、重み40 / 灯守の地下水道・2F 第一水路 (region_1_canal_a)、重み40 / 灯守の地下水道・3F 荷揚げ場 (region_1_landing)、重み40 / 灯守の地下水道・4F 排水支路 (region_1_canal_b)、重み40 / 灯守の地下水道・5F 鐘と浮子の点検室 (region_1_inspection)、重み40 / 灯守の地下水道・10F 奥の水門詰所 (region_1_gatehouse)、重み40。
 
 wild_pair_1：水車ビーバー×1・水門ワニ×1。逃走可。
 通常ロードのマップ候補・有効な仕掛け・戦闘開始命令からの参照なし。遭遇定義のみ保持しています。
@@ -203,7 +203,7 @@ wild_pair_1：水車ビーバー×1・水門ワニ×1。逃走可。
 <img src="../../assets/images/monsters/sluice_crocodile.webp" width="160" alt="水門ワニ">
 
 画像ID：monster_sluice_crocodile。実ファイル：[assets/images/monsters/sluice_crocodile.webp](../../assets/images/monsters/sluice_crocodile.webp)。
-画像共有：水門獣。
+画像共有：水門獣・深水門ワニ（低位）。
 
 発想：ワニ＋水門。参照：M024。地域分類：灯守の地下水道。
 
@@ -224,10 +224,13 @@ AIの選択順：
 遭遇と参照先：
 
 wild_sluice_crocodile：水門ワニ×1。逃走可。
-通常遭遇候補：灯守の地下水道・1F 入口操作室 (region_1_f1)、重み40 / 灯守の地下水道・6F 操作室 (region_1_f2)、重み40 / 灯守の地下水道・2F 第一水路 (region_1_canal_a)、重み40 / 灯守の地下水道・3F 荷揚げ場 (region_1_landing)、重み40 / 灯守の地下水道・4F 排水支路 (region_1_canal_b)、重み40 / 灯守の地下水道・5F 鐘と浮子の点検室 (region_1_inspection)、重み40 / 灯守の地下水道・7F 給金箱の水路 (region_1_canal_c)、重み40 / 灯守の地下水道・8F 棺の待避場 (region_1_lower_landing)、重み40 / 灯守の地下水道・9F 避難水路 (region_1_canal_d)、重み40 / 灯守の地下水道・10F 奥の水門詰所 (region_1_gatehouse)、重み40。
+通常遭遇候補：灯守の地下水道・1F 入口操作室 (region_1_f1)、重み40 / 灯守の地下水道・2F 第一水路 (region_1_canal_a)、重み40 / 灯守の地下水道・3F 荷揚げ場 (region_1_landing)、重み40 / 灯守の地下水道・4F 排水支路 (region_1_canal_b)、重み40 / 灯守の地下水道・5F 鐘と浮子の点検室 (region_1_inspection)、重み40 / 灯守の地下水道・7F 給金箱の水路 (region_1_canal_c)、重み30 / 灯守の地下水道・10F 奥の水門詰所 (region_1_gatehouse)、重み40。
 
 wild_pair_1：水車ビーバー×1・水門ワニ×1。逃走可。
 通常ロードのマップ候補・有効な仕掛け・戦闘開始命令からの参照なし。遭遇定義のみ保持しています。
+
+waterway_croc_eel：水門ワニ×1・通電ウナギの幼体×1。逃走可。
+通常遭遇候補：灯守の地下水道・7F 給金箱の水路 (region_1_canal_c)、重み70 / 灯守の地下水道・8F 棺の待避場 (region_1_lower_landing)、重み35。
 
 ### ドリルモグラ (drill_mole)
 
@@ -964,7 +967,7 @@ story_129：砦の守護獣×1。逃走可。
 <img src="../../assets/images/monsters/slime.webp" width="160" alt="苔冠の小魔">
 
 画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム。
+画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム・通電ウナギの幼体・通電ウナギ（低位）・泥濾し貝（低位）。
 
 基礎能力：HP 49 / MP 8 / STR 14 / VIT 6 / AGI 8 / INT 12。報酬：11G / 17EXP。
 宝箱：薬効葉 1個 / 12.5％。
@@ -1123,7 +1126,7 @@ kagaribi_manifold_pair：煤ネズミ×1・灯蛾×1。逃走可。
 <img src="../../assets/images/monsters/slime.webp" width="160" alt="燭蝋スライム">
 
 画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・油蔵の燭蝋スライム。
+画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・油蔵の燭蝋スライム・通電ウナギの幼体・通電ウナギ（低位）・泥濾し貝（低位）。
 
 基礎能力：HP 31 / MP 0 / STR 9 / VIT 4 / AGI 4 / INT 5。報酬：5G / 11EXP。
 宝箱：傷薬 1個 / 12.5％。
@@ -1313,7 +1316,7 @@ kagaribi_shallow_manifold_pair：油染みの煤ネズミ×1・煤けた灯蛾×
 <img src="../../assets/images/monsters/slime.webp" width="160" alt="油蔵の燭蝋スライム">
 
 画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム。
+画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム・通電ウナギの幼体・通電ウナギ（低位）・泥濾し貝（低位）。
 
 基礎能力：HP 65 / MP 0 / STR 11 / VIT 5 / AGI 4 / INT 5。報酬：14G / 60EXP。
 宝箱：傷薬 1個 / 12.5％。
@@ -1458,7 +1461,7 @@ kagaribi_ossuary_deep_pair：納骨堂の残骸兵×1・炭焼き場の灰積み
 <img src="../../assets/images/monsters/sluice_crocodile.webp" width="160" alt="水門獣">
 
 画像ID：monster_sluice_crocodile。実ファイル：[assets/images/monsters/sluice_crocodile.webp](../../assets/images/monsters/sluice_crocodile.webp)。
-画像共有：水門ワニ。
+画像共有：水門ワニ・深水門ワニ（低位）。
 
 基礎能力：HP 800 / MP 120 / STR 34 / VIT 24 / AGI 8 / INT 30。報酬：100G / 600EXP。
 宝箱：傷薬 1個 / 12.5％。
@@ -1541,6 +1544,120 @@ garden_root_guardian：大剪定虫×1・根殻甲×1。逃走可。
 有限増援予定：蜜蝋ランプバチ（最短3巡、enemy_1撃破後、enemy_0生存中）。初期配置には含めません。
 戦闘開始命令：1スクリプト。garden.root_gate.10。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
 
+### 通電ウナギの幼体 (waterway_young_eel)
+
+<img src="../../assets/images/monsters/slime.webp" width="160" alt="通電ウナギの幼体">
+
+画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
+画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム・通電ウナギ（低位）・泥濾し貝（低位）。
+
+基礎能力：HP 38 / MP 12 / STR 9 / VIT 5 / AGI 10 / INT 13。報酬：8G / 20EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：lightning 0.6 / ice 1.3。
+
+AIの選択順：
+
+1. 優先度10、条件なし：水路の放電 (waterway_spark)、MP4、対象は探索隊の生存者からランダムに1人。
+2. 優先度0、条件なし：細い水弾 (waterway_spit)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+waterway_eel_lesson：通電ウナギの幼体×1。逃走可。
+通常遭遇候補：灯守の地下水道・6F 操作室 (region_1_f2)、重み60。
+
+waterway_croc_eel：水門ワニ×1・通電ウナギの幼体×1。逃走可。
+通常遭遇候補：灯守の地下水道・7F 給金箱の水路 (region_1_canal_c)、重み70 / 灯守の地下水道・8F 棺の待避場 (region_1_lower_landing)、重み35。
+
+### 深水門ワニ（低位） (waterway_low_crocodile)
+
+<img src="../../assets/images/monsters/sluice_crocodile.webp" width="160" alt="深水門ワニ（低位）">
+
+画像ID：monster_sluice_crocodile。実ファイル：[assets/images/monsters/sluice_crocodile.webp](../../assets/images/monsters/sluice_crocodile.webp)。
+画像共有：水門ワニ・水門獣。
+
+基礎能力：HP 115 / MP 12 / STR 24 / VIT 25 / AGI 6 / INT 7。報酬：12G / 45EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：physical 0.8 / fire 1.2。
+
+AIの選択順：
+
+1. 優先度30、第1ラウンド：防御 (guard)、MP0、対象は自身。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+waterway_shallow_a：深水門ワニ（低位）×2・通電ウナギ（低位）×1。逃走可。
+通常遭遇候補：灯守の地下水道・8F 棺の待避場 (region_1_lower_landing)、重み65 / 灯守の地下水道・9F 避難水路 (region_1_canal_d)、重み40。
+
+waterway_shallow_b：深水門ワニ（低位）×1・大水車ビーバー（低位）×1・通電ウナギ（低位）×1・泥濾し貝（低位）×1。逃走可。
+通常遭遇候補：灯守の地下水道・9F 避難水路 (region_1_canal_d)、重み60。
+
+### 大水車ビーバー（低位） (waterway_low_beaver)
+
+<img src="../../assets/images/monsters/waterwheel_beaver.webp" width="160" alt="大水車ビーバー（低位）">
+
+画像ID：monster_waterwheel_beaver。実ファイル：[assets/images/monsters/waterwheel_beaver.webp](../../assets/images/monsters/waterwheel_beaver.webp)。
+画像共有：水車ビーバー。
+
+基礎能力：HP 79 / MP 18 / STR 31 / VIT 14 / AGI 11 / INT 9。報酬：12G / 40EXP。
+宝箱：柔らかな植物繊維 1個 / 12.5％。
+属性倍率：water 0.7 / lightning 1.3。
+
+AIの選択順：
+
+1. 優先度20、条件式 {"op":"eq","left":{"op":"mod","args":[{"ref":"self.round"},3]},"right":2}：尾を引く構え（次は強打） (waterway_tail_ready)、MP0、対象は自身。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+waterway_shallow_b：深水門ワニ（低位）×1・大水車ビーバー（低位）×1・通電ウナギ（低位）×1・泥濾し貝（低位）×1。逃走可。
+通常遭遇候補：灯守の地下水道・9F 避難水路 (region_1_canal_d)、重み60。
+
+### 通電ウナギ（低位） (waterway_low_eel)
+
+<img src="../../assets/images/monsters/slime.webp" width="160" alt="通電ウナギ（低位）">
+
+画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
+画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム・通電ウナギの幼体・泥濾し貝（低位）。
+
+基礎能力：HP 60 / MP 36 / STR 16 / VIT 12 / AGI 16 / INT 28。報酬：12G / 40EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：lightning 0.6 / ice 1.3。
+
+AIの選択順：
+
+1. 優先度10、条件なし：水路の放電 (waterway_spark)、MP4、対象は探索隊の生存者からランダムに1人。
+2. 優先度0、条件なし：細い水弾 (waterway_spit)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+waterway_shallow_a：深水門ワニ（低位）×2・通電ウナギ（低位）×1。逃走可。
+通常遭遇候補：灯守の地下水道・8F 棺の待避場 (region_1_lower_landing)、重み65 / 灯守の地下水道・9F 避難水路 (region_1_canal_d)、重み40。
+
+waterway_shallow_b：深水門ワニ（低位）×1・大水車ビーバー（低位）×1・通電ウナギ（低位）×1・泥濾し貝（低位）×1。逃走可。
+通常遭遇候補：灯守の地下水道・9F 避難水路 (region_1_canal_d)、重み60。
+
+### 泥濾し貝（低位） (waterway_low_clam)
+
+<img src="../../assets/images/monsters/slime.webp" width="160" alt="泥濾し貝（低位）">
+
+画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
+画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム・通電ウナギの幼体・通電ウナギ（低位）。
+
+基礎能力：HP 63 / MP 32 / STR 15 / VIT 12 / AGI 9 / INT 24。報酬：10G / 35EXP。
+宝箱：柔らかな植物繊維 1個 / 12.5％。
+属性倍率：water 0.7。
+
+AIの選択順：
+
+1. 優先度20、偶数ラウンド：泥濾し (waterway_filter)、MP4、対象は敵側の生存者のうち、解除可能な状態異常を持つ1体（遭遇順）。
+2. 優先度0、条件なし：細い水弾 (waterway_spit)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+waterway_shallow_b：深水門ワニ（低位）×1・大水車ビーバー（低位）×1・通電ウナギ（低位）×1・泥濾し貝（低位）×1。逃走可。
+通常遭遇候補：灯守の地下水道・9F 避難水路 (region_1_canal_d)、重み60。
+
 ## 地域の迷宮獣と守護者
 
 ### 灯守の地下水道の迷宮獣 (guard_1)
@@ -1548,7 +1665,7 @@ garden_root_guardian：大剪定虫×1・根殻甲×1。逃走可。
 <img src="../../assets/images/monsters/slime.webp" width="160" alt="灯守の地下水道の迷宮獣">
 
 画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム。
+画像共有：灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム・通電ウナギの幼体・通電ウナギ（低位）・泥濾し貝（低位）。
 
 基礎能力：HP 31 / MP 8 / STR 10 / VIT 4 / AGI 6 / INT 8。報酬：7G / 11EXP。
 宝箱：傷薬 1個 / 12.5％。
@@ -1563,7 +1680,7 @@ AIの選択順：
 遭遇と参照先：
 
 roaming_1：灯守の地下水道の迷宮獣×1。逃走可。
-通常遭遇候補：灯守の地下水道・1F 入口操作室 (region_1_f1)、重み20 / 灯守の地下水道・6F 操作室 (region_1_f2)、重み20 / 灯守の地下水道・2F 第一水路 (region_1_canal_a)、重み20 / 灯守の地下水道・3F 荷揚げ場 (region_1_landing)、重み20 / 灯守の地下水道・4F 排水支路 (region_1_canal_b)、重み20 / 灯守の地下水道・5F 鐘と浮子の点検室 (region_1_inspection)、重み20 / 灯守の地下水道・7F 給金箱の水路 (region_1_canal_c)、重み20 / 灯守の地下水道・8F 棺の待避場 (region_1_lower_landing)、重み20 / 灯守の地下水道・9F 避難水路 (region_1_canal_d)、重み20 / 灯守の地下水道・10F 奥の水門詰所 (region_1_gatehouse)、重み20。
+通常遭遇候補：灯守の地下水道・1F 入口操作室 (region_1_f1)、重み20 / 灯守の地下水道・2F 第一水路 (region_1_canal_a)、重み20 / 灯守の地下水道・3F 荷揚げ場 (region_1_landing)、重み20 / 灯守の地下水道・4F 排水支路 (region_1_canal_b)、重み20 / 灯守の地下水道・5F 鐘と浮子の点検室 (region_1_inspection)、重み20 / 灯守の地下水道・10F 奥の水門詰所 (region_1_gatehouse)、重み20。
 
 guard_1：灯守の地下水道の迷宮獣×2。逃走可。
 戦闘開始命令：18スクリプト。q002.v11.entry・q004.v11.force_entry・q005.decision・q005.review・q006.decision・q006.review ほか12件。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
@@ -1576,7 +1693,7 @@ boss_1：灯守の地下水道の守護者×1・灯守の地下水道の迷宮�
 <img src="../../assets/images/monsters/slime.webp" width="160" alt="灯守の地下水道の守護者">
 
 画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム。
+画像共有：灯守の地下水道の迷宮獣・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム・通電ウナギの幼体・通電ウナギ（低位）・泥濾し貝（低位）。
 
 基礎能力：HP 74 / MP 20 / STR 13 / VIT 4 / AGI 6 / INT 8。報酬：7G / 11EXP。
 宝箱：野営糧食 1個 / 12.5％。
@@ -1650,7 +1767,7 @@ boss_2：塩哭きの廃坑の守護者×1・塩哭きの廃坑の迷宮獣×1�
 <img src="../../assets/images/monsters/slime.webp" width="160" alt="根喰みの地下庭園の迷宮獣">
 
 画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム。
+画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム・通電ウナギの幼体・通電ウナギ（低位）・泥濾し貝（低位）。
 
 基礎能力：HP 49 / MP 8 / STR 14 / VIT 6 / AGI 8 / INT 12。報酬：11G / 17EXP。
 宝箱：傷薬 1個 / 12.5％。
@@ -1678,7 +1795,7 @@ boss_3：根喰みの地下庭園の守護者×1・根喰みの地下庭園の�
 <img src="../../assets/images/monsters/slime.webp" width="160" alt="根喰みの地下庭園の守護者">
 
 画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
-画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム。
+画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム・通電ウナギの幼体・通電ウナギ（低位）・泥濾し貝（低位）。
 
 基礎能力：HP 118 / MP 20 / STR 17 / VIT 6 / AGI 8 / INT 12。報酬：11G / 17EXP。
 宝箱：野営糧食 1個 / 12.5％。

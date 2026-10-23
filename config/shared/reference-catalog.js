@@ -5657,6 +5657,18 @@ export const referenceData={
       "file": "connected-maps.json",
       "path": [
         "maps",
+        "region_1_canal_d",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "waterway.workshop_parts"
+    },
+    {
+      "file": "connected-maps.json",
+      "path": [
+        "maps",
         "region_1_gatehouse",
         "objects",
         1,
@@ -16929,6 +16941,56 @@ export const referenceData={
       "id": "torch"
     },
     {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "waterway_young_eel",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "waterway_low_crocodile",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "waterway_low_beaver",
+        "item"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "waterway_low_eel",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "waterway_low_clam",
+        "item"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
       "file": "cell-layers.json",
       "path": [
         "presets",
@@ -17465,7 +17527,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "roaming_1"
+      "id": "waterway_eel_lesson"
     },
     {
       "file": "connected-maps.json",
@@ -17477,7 +17539,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "roaming_1"
+      "id": "wild_waterwheel_beaver"
     },
     {
       "file": "connected-maps.json",
@@ -17489,19 +17551,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_waterwheel_beaver"
-    },
-    {
-      "file": "connected-maps.json",
-      "path": [
-        "maps",
-        "region_1_f2",
-        "encounterPool",
-        2,
-        "encounter"
-      ],
-      "kind": "encounters",
-      "id": "wild_sluice_crocodile"
+      "id": "waterway_eel_lesson"
     },
     {
       "file": "connected-maps.json",
@@ -17601,7 +17651,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "roaming_1"
+      "id": "waterway_croc_eel"
     },
     {
       "file": "connected-maps.json",
@@ -17613,7 +17663,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "roaming_1"
+      "id": "wild_sluice_crocodile"
     },
     {
       "file": "connected-maps.json",
@@ -17625,19 +17675,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_waterwheel_beaver"
-    },
-    {
-      "file": "connected-maps.json",
-      "path": [
-        "maps",
-        "region_1_canal_c",
-        "encounterPool",
-        2,
-        "encounter"
-      ],
-      "kind": "encounters",
-      "id": "wild_sluice_crocodile"
+      "id": "waterway_croc_eel"
     },
     {
       "file": "connected-maps.json",
@@ -17689,7 +17727,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "roaming_1"
+      "id": "waterway_shallow_a"
     },
     {
       "file": "connected-maps.json",
@@ -17701,7 +17739,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "roaming_1"
+      "id": "waterway_croc_eel"
     },
     {
       "file": "connected-maps.json",
@@ -17713,19 +17751,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_waterwheel_beaver"
-    },
-    {
-      "file": "connected-maps.json",
-      "path": [
-        "maps",
-        "region_1_lower_landing",
-        "encounterPool",
-        2,
-        "encounter"
-      ],
-      "kind": "encounters",
-      "id": "wild_sluice_crocodile"
+      "id": "waterway_shallow_a"
     },
     {
       "file": "connected-maps.json",
@@ -17777,7 +17803,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "roaming_1"
+      "id": "waterway_shallow_b"
     },
     {
       "file": "connected-maps.json",
@@ -17789,7 +17815,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "roaming_1"
+      "id": "waterway_shallow_a"
     },
     {
       "file": "connected-maps.json",
@@ -17801,19 +17827,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "wild_waterwheel_beaver"
-    },
-    {
-      "file": "connected-maps.json",
-      "path": [
-        "maps",
-        "region_1_canal_d",
-        "encounterPool",
-        2,
-        "encounter"
-      ],
-      "kind": "encounters",
-      "id": "wild_sluice_crocodile"
+      "id": "waterway_shallow_b"
     },
     {
       "file": "connected-maps.json",
@@ -17824,6 +17838,18 @@ export const referenceData={
       ],
       "kind": "dungeons",
       "id": "region_1"
+    },
+    {
+      "file": "connected-maps.json",
+      "path": [
+        "maps",
+        "region_1_canal_d",
+        "objects",
+        0,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "waterway.workshop_parts"
     },
     {
       "file": "connected-maps.json",
@@ -18404,6 +18430,176 @@ export const referenceData={
     {
       "file": "dungeon-content.json",
       "path": [
+        "enemies",
+        "waterway_young_eel",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "waterway_spark"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_young_eel",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "waterway_spit"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_young_eel",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "slime"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_crocodile",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "guard"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_crocodile",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_crocodile",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_sluice_crocodile"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_beaver",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "waterway_tail_ready"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_beaver",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_beaver",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_waterwheel_beaver"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_eel",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "waterway_spark"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_eel",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "waterway_spit"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_eel",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "slime"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_clam",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "waterway_filter"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_clam",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "waterway_spit"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_clam",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "slime"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
         "encounters",
         "market_enforcers",
         "enemies",
@@ -18544,6 +18740,116 @@ export const referenceData={
       ],
       "kind": "enemies",
       "id": "garden_nectar_bee"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "waterway_eel_lesson",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "waterway_young_eel"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "waterway_croc_eel",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "sluice_crocodile"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "waterway_croc_eel",
+        "enemies",
+        1
+      ],
+      "kind": "enemies",
+      "id": "waterway_young_eel"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "waterway_shallow_a",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "waterway_low_crocodile"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "waterway_shallow_a",
+        "enemies",
+        1
+      ],
+      "kind": "enemies",
+      "id": "waterway_low_crocodile"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "waterway_shallow_a",
+        "enemies",
+        2
+      ],
+      "kind": "enemies",
+      "id": "waterway_low_eel"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "waterway_shallow_b",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "waterway_low_crocodile"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "waterway_shallow_b",
+        "enemies",
+        1
+      ],
+      "kind": "enemies",
+      "id": "waterway_low_beaver"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "waterway_shallow_b",
+        "enemies",
+        2
+      ],
+      "kind": "enemies",
+      "id": "waterway_low_eel"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "waterway_shallow_b",
+        "enemies",
+        3
+      ],
+      "kind": "enemies",
+      "id": "waterway_low_clam"
     },
     {
       "file": "dungeon-content.json",
@@ -25966,6 +26272,42 @@ export const referenceData={
       ],
       "kind": "formulas",
       "id": "heavy"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "waterway_spark",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "waterway_spark"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "waterway_spit",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "waterway_spit"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "waterway_tail_ready",
+        "effects",
+        0,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "waterway_tail_ready"
     },
     {
       "file": "jobs.json",
@@ -41102,6 +41444,12 @@ export const referenceData={
       },
       "exp_root_bind": {
         "name": "exp_root_bind"
+      },
+      "waterway_spark": {
+        "name": "waterway_spark"
+      },
+      "waterway_spit": {
+        "name": "waterway_spit"
       }
     },
     "skills": {
@@ -41389,6 +41737,18 @@ export const referenceData={
       },
       "garden_prune": {
         "name": "大枝刈り"
+      },
+      "waterway_spark": {
+        "name": "水路の放電"
+      },
+      "waterway_spit": {
+        "name": "細い水弾"
+      },
+      "waterway_tail_ready": {
+        "name": "尾を引く構え（次は強打）"
+      },
+      "waterway_filter": {
+        "name": "泥濾し"
       }
     },
     "items": {
@@ -41901,6 +42261,26 @@ export const referenceData={
       "garden_nectar_bee": {
         "name": "蜜蝋ランプバチ",
         "sprite": "monster_candle_bee"
+      },
+      "waterway_young_eel": {
+        "name": "通電ウナギの幼体",
+        "sprite": "slime"
+      },
+      "waterway_low_crocodile": {
+        "name": "深水門ワニ（低位）",
+        "sprite": "monster_sluice_crocodile"
+      },
+      "waterway_low_beaver": {
+        "name": "大水車ビーバー（低位）",
+        "sprite": "monster_waterwheel_beaver"
+      },
+      "waterway_low_eel": {
+        "name": "通電ウナギ（低位）",
+        "sprite": "slime"
+      },
+      "waterway_low_clam": {
+        "name": "泥濾し貝（低位）",
+        "sprite": "slime"
       }
     },
     "encounters": {
@@ -42227,6 +42607,18 @@ export const referenceData={
       },
       "garden_root_guardian": {
         "name": "根門の大剪定虫"
+      },
+      "waterway_eel_lesson": {
+        "name": "下層の幼ウナギ"
+      },
+      "waterway_croc_eel": {
+        "name": "岸のワニと幼ウナギ"
+      },
+      "waterway_shallow_a": {
+        "name": "低位の水門守り"
+      },
+      "waterway_shallow_b": {
+        "name": "低位の水車と泥濾し"
       }
     },
     "statuses": {
@@ -42716,6 +43108,9 @@ export const referenceData={
       },
       "exp_rooted": {
         "name": "根留め"
+      },
+      "waterway_tail_ready": {
+        "name": "尾の構え（次の攻撃は強打）"
       }
     },
     "fieldAbilities": {
@@ -56891,6 +57286,10 @@ export const referenceData={
       "name": "treasure.package.region_1_lower_landing.supply_rope",
       "file": "data/scripts/dungeon-packages.json"
     },
+    "treasure.package.region_1_canal_d.workshop_parts": {
+      "name": "treasure.package.region_1_canal_d.workshop_parts",
+      "file": "data/scripts/dungeon-packages.json"
+    },
     "treasure.package.region_1_gatehouse.supply_rope": {
       "name": "treasure.package.region_1_gatehouse.supply_rope",
       "file": "data/scripts/dungeon-packages.json"
@@ -67624,6 +68023,41 @@ export const referenceData={
         "garden_nectar_bee"
       ]
     },
+    "enemies/waterway_young_eel": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_young_eel"
+      ]
+    },
+    "enemies/waterway_low_crocodile": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_crocodile"
+      ]
+    },
+    "enemies/waterway_low_beaver": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_beaver"
+      ]
+    },
+    "enemies/waterway_low_eel": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_eel"
+      ]
+    },
+    "enemies/waterway_low_clam": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "waterway_low_clam"
+      ]
+    },
     "encounters/market_enforcers": {
       "file": "dungeon-content.json",
       "path": [
@@ -67692,6 +68126,34 @@ export const referenceData={
       "path": [
         "encounters",
         "garden_root_guardian"
+      ]
+    },
+    "encounters/waterway_eel_lesson": {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "waterway_eel_lesson"
+      ]
+    },
+    "encounters/waterway_croc_eel": {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "waterway_croc_eel"
+      ]
+    },
+    "encounters/waterway_shallow_a": {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "waterway_shallow_a"
+      ]
+    },
+    "encounters/waterway_shallow_b": {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "waterway_shallow_b"
       ]
     },
     "actors/ada": {
@@ -68743,6 +69205,34 @@ export const referenceData={
         "garden_prune"
       ]
     },
+    "skills/waterway_spark": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "waterway_spark"
+      ]
+    },
+    "skills/waterway_spit": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "waterway_spit"
+      ]
+    },
+    "skills/waterway_tail_ready": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "waterway_tail_ready"
+      ]
+    },
+    "skills/waterway_filter": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "waterway_filter"
+      ]
+    },
     "fieldAbilities/survey": {
       "file": "jobs.json",
       "path": [
@@ -69126,6 +69616,13 @@ export const referenceData={
       "path": [
         "buffs",
         "exp_rooted"
+      ]
+    },
+    "buffs/waterway_tail_ready": {
+      "file": "jobs.json",
+      "path": [
+        "buffs",
+        "waterway_tail_ready"
       ]
     },
     "items/kagaribi_torch": {

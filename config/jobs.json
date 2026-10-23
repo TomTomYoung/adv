@@ -2343,6 +2343,15 @@
       "resist": {},
       "blocksMovement": true,
       "classicAccuracyPenalty": 0.1
+    },
+    "waterway_tail_ready": {
+      "id": "waterway_tail_ready",
+      "name": "尾の構え（次の攻撃は強打）",
+      "turns": 2,
+      "stats": {},
+      "resist": {},
+      "physicalPower": 1.6,
+      "consume": "next_action"
     }
   },
   "fieldAbilities": {
@@ -4185,6 +4194,77 @@
         }
       ],
       "description": "剪定の大顎で一人を狙う。"
+    },
+    "waterway_spark": {
+      "name": "水路の放電",
+      "mp": 4,
+      "target": "enemy",
+      "effects": [
+        {
+          "type": "damage",
+          "formula": "waterway_spark",
+          "element": "lightning"
+        }
+      ],
+      "description": "MP4。敵1体へ雷術。濡れ自体は付けない。"
+    },
+    "waterway_spit": {
+      "name": "細い水弾",
+      "mp": 0,
+      "target": "enemy",
+      "effects": [
+        {
+          "type": "damage",
+          "formula": "waterway_spit",
+          "element": "physical"
+        }
+      ],
+      "description": "MP0。敵1体へ山なりの弱い遠隔物理攻撃。前衛越しに届く。"
+    },
+    "waterway_tail_ready": {
+      "name": "尾を引く構え（次は強打）",
+      "mp": 0,
+      "target": "self",
+      "effects": [
+        {
+          "type": "buff",
+          "buff": "waterway_tail_ready"
+        }
+      ],
+      "description": "次の行動の物理威力が1.6倍。構えの手番では攻撃しない。"
+    },
+    "waterway_filter": {
+      "name": "泥濾し",
+      "mp": 4,
+      "target": "ally",
+      "effects": [
+        {
+          "type": "cleanse",
+          "statuses": [
+            "poison",
+            "hollow_curse",
+            "wet",
+            "weakened",
+            "enfeebled",
+            "arcane_malaise",
+            "virulent_poison",
+            "curse_poison",
+            "paralysis",
+            "blindness",
+            "spell_seal",
+            "skill_seal",
+            "item_seal",
+            "confusion",
+            "sleep",
+            "sluggish",
+            "berserk",
+            "misfire",
+            "critical_vulnerability",
+            "guaranteed_critical_vulnerability"
+          ]
+        }
+      ],
+      "description": "MP4。生存する仲間1体から、指定順の通常状態異常を一つ解除。HP回復・戦闘補助の解除はしない。"
     }
   },
   "formulas": {
@@ -5173,6 +5253,86 @@
           ]
         }
       ]
+    },
+    "waterway_spark": {
+      "op": "max",
+      "args": [
+        2,
+        {
+          "op": "sub",
+          "args": [
+            {
+              "op": "add",
+              "args": [
+                {
+                  "op": "mul",
+                  "args": [
+                    {
+                      "ref": "source.stats.int"
+                    },
+                    0.8
+                  ]
+                },
+                4
+              ]
+            },
+            {
+              "op": "floor",
+              "args": [
+                {
+                  "op": "div",
+                  "args": [
+                    {
+                      "ref": "target.stats.vit"
+                    },
+                    4
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "waterway_spit": {
+      "op": "max",
+      "args": [
+        2,
+        {
+          "op": "sub",
+          "args": [
+            {
+              "op": "add",
+              "args": [
+                {
+                  "op": "mul",
+                  "args": [
+                    {
+                      "ref": "source.stats.str"
+                    },
+                    0.7
+                  ]
+                },
+                2
+              ]
+            },
+            {
+              "op": "floor",
+              "args": [
+                {
+                  "op": "div",
+                  "args": [
+                    {
+                      "ref": "target.stats.vit"
+                    },
+                    2
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   },
   "items": {
@@ -5733,7 +5893,11 @@
     "mine_shell_charge": "attack",
     "mine_shell_recover": "guard",
     "exp_root_bind": "power",
-    "garden_prune": "attack"
+    "garden_prune": "attack",
+    "waterway_spark": "lightning",
+    "waterway_spit": "attack",
+    "waterway_tail_ready": "guard",
+    "waterway_filter": "cleanse"
   },
   "gridProfiles": {
     "power": {
@@ -6869,6 +7033,54 @@
         "shape": "single"
       },
       "trajectory": "direct",
+      "friendlyFire": false
+    },
+    "waterway_spark": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "waterway_spit": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "lob",
+      "friendlyFire": false
+    },
+    "waterway_tail_ready": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "waterway_filter": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
       "friendlyFire": false
     }
   },
@@ -9193,6 +9405,102 @@
       "range": {
         "min": 1,
         "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "waterway_spark": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "waterway_spit": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "waterway_tail_ready": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "waterway_filter": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
       },
       "allyRange": {
         "min": 0,
