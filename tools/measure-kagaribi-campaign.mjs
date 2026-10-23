@@ -79,6 +79,7 @@ export class Campaign {
    }
    if(to){this.act({type:'battle',action:'move',to});row.moves++;}else this.act({type:'battle',action:'skill',skill:'guard'});
   }
+  if(b.reinforcements)row.reinforcements=structuredClone(b.reinforcements);
   drain(g);this.report.battles.push(row);assert.equal(g.state.records.losses,losses,`party defeated: ${JSON.stringify(row)}`);
  }
  upkeep(){

@@ -1,3 +1,4 @@
+import {reinforcementRoster} from './battle-reinforcements.js';
 import {freshExpedition,expeditionSaveErrors,campTier} from './expedition.js';
 import {migrateFrontlineLifecycle} from './frontline-lifecycle.js';
 import {frontlineSaveErrors} from './battle-frontline.js';
@@ -102,7 +103,7 @@ function migrateContentSave(original,data){
     if(validateSave(previous,legacy).length)return original;
     const save=clone(previous);save.contentVersion=data.game.version;save.state.contentVersion=data.game.version;save.state.expedition=freshExpedition();return preserveWaterwayRoutes(migration.kagaribiRevision?preserveKagaribiRoutes(save):save,migration);
   }
-  if(migration.kagaribiRevision===1||migration.waterwayRevision===1||migration.mineRevision===1){
+  if(migration.kagaribiRevision===1||migration.waterwayRevision===1||migration.mineRevision===1||migration.gardenRevision===1||migration.workshopRevision===1||migration.waterwayEncountersRevision===1||migration.mineEncountersRevision===1){
     const legacy={...data,game:{...data.game,version:original.contentVersion}};
     const previous=migrateSave(original,legacy);
     if(validateSave(previous,legacy).length)return original;
@@ -180,7 +181,7 @@ export function migrateSave(original,data){
     }
   }
   if(!data.game.dungeonVersion||migrated?.contentVersion!==data.game.version||original?.contentVersion===data.game.version)return migrated;
-  if(data.game.migrations?.[original?.contentVersion]?.environmentRevision||data.game.migrations?.[original?.contentVersion]?.expeditionRevision||data.game.migrations?.[original?.contentVersion]?.kagaribiRevision||data.game.migrations?.[original?.contentVersion]?.waterwayRevision||data.game.migrations?.[original?.contentVersion]?.mineRevision)return migrated;
+  if(data.game.migrations?.[original?.contentVersion]?.environmentRevision||data.game.migrations?.[original?.contentVersion]?.expeditionRevision||data.game.migrations?.[original?.contentVersion]?.kagaribiRevision||data.game.migrations?.[original?.contentVersion]?.waterwayRevision||data.game.migrations?.[original?.contentVersion]?.mineRevision||data.game.migrations?.[original?.contentVersion]?.gardenRevision||data.game.migrations?.[original?.contentVersion]?.workshopRevision||data.game.migrations?.[original?.contentVersion]?.waterwayEncountersRevision||data.game.migrations?.[original?.contentVersion]?.mineEncountersRevision)return migrated;
   const save=clone(migrated);save.state.dungeons=freshDungeons();
   if(save.state.mode==='dungeon')enterDungeon({data,state:save.state,notify:()=>{}},save.state.location.map);
   return save;
@@ -293,13 +294,14 @@ export function validateSave(save,data){
   }
   errors.push(...battleResultErrors(data,s));
   if(s.battle!==null){
-    const b=s.battle,e=data.encounters[b?.encounter];
-    if(!isRecord(b)||!e||!Array.isArray(b.enemies)||b.enemies.length!==e.enemies.length||!Array.isArray(b.acted)||!Array.isArray(b.guards)||!Array.isArray(b.log)||!integer(b.round,1,1e6)){fail('戦闘状態不正');}
+    const b=s.battle,e=data.encounters[b?.encounter],roster=reinforcementRoster(e,b?.reinforcements,b?.round);
+    if(!isRecord(b)||!e||!Array.isArray(b.enemies)||!roster||b.enemies.length!==roster.length||!Array.isArray(b.acted)||!Array.isArray(b.guards)||!Array.isArray(b.log)||!integer(b.round,1,1e6)){fail('戦闘状態不正');}
     else{
+      if(e.reinforcements&&b.enemies.filter(u=>u?.hp>0&&!b.frontline?.removed?.[`enemy:${u.instance}`]).length>5)fail('増援戦の生存数超過');
       if(b.enemyScale!==undefined&&(!Number.isFinite(b.enemyScale)||b.enemyScale<.1||b.enemyScale>5))fail('敵の環境倍率不正');
       if(data.game.recordVersion===1&&(!Array.isArray(b.recordedKills)||new Set(b.recordedKills).size!==b.recordedKills.length||b.recordedKills.some(id=>!b.enemies.some(e=>e?.instance===id&&(e.hp===0||b.mode==='frontline')))))fail('撃破記録不正');
       if(new Set(b.acted).size!==b.acted.length||new Set(b.guards).size!==b.guards.length||b.acted.some(id=>!s.members.includes(id))||b.guards.some(id=>!s.members.includes(id)))fail('行動済み隊員不正');
-      b.enemies.forEach((enemy,i)=>{if(Array.isArray(enemy?.statuses))errors.push(...statusStateErrors(data,enemy));const def=scaledEnemy(data.enemies[e.enemies[i]],i,b.enemyScale??1);if(!isRecord(enemy)||enemy.id!==def.id||enemy.frontlineDefeat!==def.frontlineDefeat||enemy.instance!==`enemy_${i}`||JSON.stringify(enemy.stats)!==JSON.stringify(def.stats)||JSON.stringify(enemy.resist)!==JSON.stringify(def.resist)||JSON.stringify(enemy.ai)!==JSON.stringify(def.ai)||JSON.stringify(enemy.rewards)!==JSON.stringify(def.rewards)||!integer(enemy.hp,0,def.stats.hp)||!integer(enemy.mp,0,def.stats.mp)||!Array.isArray(enemy.statuses)||enemy.statuses.some(x=>!data.statuses[x]))fail('敵状態不正');});
+      b.enemies.forEach((enemy,i)=>{if(Array.isArray(enemy?.statuses))errors.push(...statusStateErrors(data,enemy));const def=scaledEnemy(data.enemies[roster[i]],i,b.enemyScale??1);if(!isRecord(enemy)||enemy.id!==def.id||enemy.frontlineDefeat!==def.frontlineDefeat||enemy.instance!==`enemy_${i}`||JSON.stringify(enemy.stats)!==JSON.stringify(def.stats)||JSON.stringify(enemy.resist)!==JSON.stringify(def.resist)||JSON.stringify(enemy.ai)!==JSON.stringify(def.ai)||JSON.stringify(enemy.rewards)!==JSON.stringify(def.rewards)||!integer(enemy.hp,0,def.stats.hp)||!integer(enemy.mp,0,def.stats.mp)||!Array.isArray(enemy.statuses)||enemy.statuses.some(x=>!data.statuses[x]))fail('敵状態不正');});
       const c=b.continuations;
       if(!isRecord(c))fail('戦闘継続不正');
       else if(c.frame){try{const cmd=commandsAt(data,c.frame)[c.index];if(cmd?.op!=='battle.start'||cmd.encounter!==b.encounter||c.win!=='on_win'||c.lose!=='on_lose'||c.escape!=='on_escape')throw Error();}catch{fail('戦闘継続不正');}}

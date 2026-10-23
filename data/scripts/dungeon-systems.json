@@ -296,7 +296,7 @@
       "commands": [
         {
           "op": "narrate",
-          "text": "塩4以上の装備はソルトイーターに食われることがある。戦闘ごとに塩が1増える。階段脇の水に入れば全装備を洗えるが、HP・MPは戻らない。装備の塩は迷宮の状態で確認できる。"
+          "text": "塩4以上の装備はソルトイーターに食われることがある。戦闘ごとに塩が1増える。階段脇の水に入れば全装備を洗えるが、HP・MPは戻らない。装備の塩は迷宮の状態で確認できる。 製法のある武器は町で再製作できる。第2段階の製法は、いずれかの10F主を退けると残る。"
         }
       ]
     },
@@ -304,7 +304,7 @@
       "commands": [
         {
           "op": "narrate",
-          "text": "陶器の殻には術と貫通が有効だ。ここに新しい武器は残っていない。塩を洗いながら、手持ちの武器と術を使い分ける。"
+          "text": "厚殻アルマジロは初回だけ防御し、火に弱い。見張りの防御補強は二巡で切れ、重複しない。10Fの殻砕き獣を退ければ、第2段階の武器引換券と9種の永久製法が残る。失った武器も町で機関部品・柔らかな植物繊維と工賃から再製作できる。9F西の試錐台に一回分の修理材が残っている。"
         }
       ]
     },
@@ -312,7 +312,7 @@
       "commands": [
         {
           "op": "narrate",
-          "text": "殻砕き獣は三巡を繰り返す。一巡目は身を固め、二巡目に一人へ突進、三巡目は殻を開いて息を継ぐ。突進後は防御が三割下がる。10Fの主の二歩手前に洗浄槽がある。"
+          "text": "深掘りモグラは構えの次に突進し、その後は防御が三割下がる。防御やスタンで対処できる。結晶ハサミは強打の次に弱い爪を使う。どちらも装備を壊さず、塩を追加しない。10Fの殻砕き獣は一巡目に防御、二巡目に突進、三巡目に息継ぎを繰り返す。主の二歩手前に洗浄槽がある。"
         }
       ]
     },
@@ -331,6 +331,52 @@
             {
               "op": "narrate",
               "text": "殻砕き獣は退いた。東の中央給油所を復旧できる。"
+            },
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.mine.t2Granted"
+                },
+                "right": true
+              },
+              "then": [],
+              "else": [
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "exp_t2_ticket",
+                      "count": 99
+                    }
+                  },
+                  "then": [
+                    {
+                      "op": "item.give",
+                      "item": "exp_t2_ticket",
+                      "count": 1
+                    },
+                    {
+                      "op": "flag.set",
+                      "key": "mine.t2Granted",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "第2段階の武器引換券を1枚受け取った。9種の製法も永久に記録した。町の旅道具店で完成品の購入や素材からの再製作ができる。"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "narrate",
+                      "text": "引換券の袋がいっぱいだ。空きを作ってここを調べれば、初回の1枚を受け取れる。製法は記録済みだ。"
+                    }
+                  ]
+                }
+              ]
             }
           ],
           "else": [
@@ -357,6 +403,52 @@
                         {
                           "op": "narrate",
                           "text": "殻砕き獣が退いた。東の中央給油所を修理できる。洗浄槽で装備の塩を落としてから帰ろう。"
+                        },
+                        {
+                          "op": "if",
+                          "condition": {
+                            "op": "eq",
+                            "left": {
+                              "ref": "flags.mine.t2Granted"
+                            },
+                            "right": true
+                          },
+                          "then": [],
+                          "else": [
+                            {
+                              "op": "if",
+                              "condition": {
+                                "op": "not",
+                                "arg": {
+                                  "op": "has_item",
+                                  "item": "exp_t2_ticket",
+                                  "count": 99
+                                }
+                              },
+                              "then": [
+                                {
+                                  "op": "item.give",
+                                  "item": "exp_t2_ticket",
+                                  "count": 1
+                                },
+                                {
+                                  "op": "flag.set",
+                                  "key": "mine.t2Granted",
+                                  "value": true
+                                },
+                                {
+                                  "op": "narrate",
+                                  "text": "第2段階の武器引換券を1枚受け取った。9種の製法も永久に記録した。町の旅道具店で完成品の購入や素材からの再製作ができる。"
+                                }
+                              ],
+                              "else": [
+                                {
+                                  "op": "narrate",
+                                  "text": "引換券の袋がいっぱいだ。空きを作ってここを調べれば、初回の1枚を受け取れる。製法は記録済みだ。"
+                                }
+                              ]
+                            }
+                          ]
                         }
                       ],
                       "on_lose": [],
@@ -388,6 +480,356 @@
                           ]
                         }
                       ]
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "garden.intake.3": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.garden.intakeOpen"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "設備は固定されている。植物を収穫しても、この道は残る。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "取水口に落ち葉が詰まっている。掃除して留め金を固定すれば4Fへの岸道を通れる。種や土は使わない。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "open",
+                  "text": "取水口の留め金を復旧する",
+                  "commands": [
+                    {
+                      "op": "flag.set",
+                      "key": "garden.intakeOpen",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "設備を固定した。次の探索でも使える。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "garden.walk_latch.6": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.garden.walkOpen"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "設備は固定されている。植物を収穫しても、この道は残る。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "枯れた蔓の裏に石造りの歩廊がある。掛け金を固定すると2F南東の岸道まで戻れる。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "open",
+                  "text": "灌漑歩廊の掛け金を復旧する",
+                  "commands": [
+                    {
+                      "op": "flag.set",
+                      "key": "garden.walkOpen",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "設備を固定した。次の探索でも使える。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "garden.lift_latch.10": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.garden.liftOpen"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "設備は固定されている。植物を収穫しても、この道は残る。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "錘を掛け直すと4F苗床詰所へ戻れる。植物の生長や収穫に左右されない帰路だ。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "open",
+                  "text": "苗床運搬路の錘を復旧する",
+                  "commands": [
+                    {
+                      "op": "flag.set",
+                      "key": "garden.liftOpen",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "設備を固定した。次の探索でも使える。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "garden.shore_sign.1": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "2Fの東岸へ続く石段。入口の茨が育っていても通れる。橋草やツタを採取した帰りは、この固定の石段を使おう。"
+        }
+      ]
+    },
+    "garden.harvest_sign.5": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "中央の切れ目には橋草を育てられる。収穫すると橋は消えるが、北と南の石の岸道は残る。塞道茨も中央の脇道だけをふさぐ。階段は外周の岸道でつながっている。"
+        }
+      ]
+    },
+    "garden.pollination_record.6": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "北の植床には赤蜜花、南東の植床には静謐苔を育てられる。生長後、同じ階の植床から三歩以内で遭遇率が変わる。赤蜜花は二倍、静謐苔は半分。採取すれば効果は消える。"
+        }
+      ]
+    },
+    "garden.pruning_record.8": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "蜜蝋ランプバチには氷、鋸刃カマキリには火が通る。棚のツタは6Fへ降りられる。収穫した後も階段と灌漑歩廊を使って戻れる。"
+        }
+      ]
+    },
+    "garden.herb_record.9": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "解熱胞子は生長すると同じ階の三歩以内でHPを少しずつ戻す。待機でも育ち、油は減らない。戦闘不能やMPは回復しない。薬草は採取して持ち帰れる。"
+        }
+      ]
+    },
+    "garden.root_gate.10": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.garden.prunerWon"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "大剪定虫は退き、根門に光が差している。北の種床設備で給油と中継を整えられる。"
+            },
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.garden.t2Granted"
+                },
+                "right": true
+              },
+              "then": [],
+              "else": [
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "exp_t2_ticket",
+                      "count": 99
+                    }
+                  },
+                  "then": [
+                    {
+                      "op": "item.give",
+                      "item": "exp_t2_ticket",
+                      "count": 1
+                    },
+                    {
+                      "op": "flag.set",
+                      "key": "garden.t2Granted",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "第2段階の武器引換券を1枚受け取った。9種の製法も永久に記録した。町の旅道具店で完成品の購入や素材からの再製作ができる。"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "narrate",
+                      "text": "引換券の袋がいっぱいだ。空きを作ってここを調べれば、初回の1枚を受け取れる。製法は記録済みだ。"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "根門の大剪定虫が根殻甲を従えている。根殻には火が効く。根殻を倒すと3巡目以降に蜂が一体現れる。蜂には氷が効く。先に本体を倒すと蜂は現れない。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "fight",
+                  "text": "根門の主に挑む",
+                  "commands": [
+                    {
+                      "op": "battle.start",
+                      "encounter": "garden_root_guardian",
+                      "on_win": [
+                        {
+                          "op": "flag.set",
+                          "key": "garden.prunerWon",
+                          "value": true
+                        },
+                        {
+                          "op": "narrate",
+                          "text": "大剪定虫が退いた。北の種床設備を修理できる。復旧後は根留めを技能宝石180個で人物ごとに学べる。"
+                        },
+                        {
+                          "op": "if",
+                          "condition": {
+                            "op": "eq",
+                            "left": {
+                              "ref": "flags.garden.t2Granted"
+                            },
+                            "right": true
+                          },
+                          "then": [],
+                          "else": [
+                            {
+                              "op": "if",
+                              "condition": {
+                                "op": "not",
+                                "arg": {
+                                  "op": "has_item",
+                                  "item": "exp_t2_ticket",
+                                  "count": 99
+                                }
+                              },
+                              "then": [
+                                {
+                                  "op": "item.give",
+                                  "item": "exp_t2_ticket",
+                                  "count": 1
+                                },
+                                {
+                                  "op": "flag.set",
+                                  "key": "garden.t2Granted",
+                                  "value": true
+                                },
+                                {
+                                  "op": "narrate",
+                                  "text": "第2段階の武器引換券を1枚受け取った。9種の製法も永久に記録した。町の旅道具店で完成品の購入や素材からの再製作ができる。"
+                                }
+                              ],
+                              "else": [
+                                {
+                                  "op": "narrate",
+                                  "text": "引換券の袋がいっぱいだ。空きを作ってここを調べれば、初回の1枚を受け取れる。製法は記録済みだ。"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "on_lose": [],
+                      "on_escape": [
+                        {
+                          "op": "narrate",
+                          "text": "主は根門へ戻った。苗床運搬路で4Fへ戻り、栽培と給油を整えて再挑戦できる。"
+                        }
+                      ],
+                      "on_interrupt": []
                     }
                   ]
                 },

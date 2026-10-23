@@ -1,6 +1,6 @@
 import {battleAlive,frontlinePresent,frontlineState,frontlineRows,traceFrontline,syncFrontlineDefeats,displaceFrontlineDown,shrinkFrontline,frontlineObjectErrors} from './frontline-lifecycle.js';
 export {traceFrontline} from './frontline-lifecycle.js';
-import {unitKey} from './buffs.js';
+import {unitKey,movementBlockReason} from './buffs.js';
 import {clone,isRecord} from './expression.js';
 import {ENEMY_CELLS,nextFormation,formationPlan} from './battle-formation.js';
 export const isFrontline=s=>s.battle?.mode==='frontline';
@@ -37,21 +37,31 @@ export function prepareFrontlineRound(engine,react=()=>{}){
   for(let step=1;step<=2;step++){
    const units=frontlineUnits(s).filter(u=>Boolean(u.instance)===enemy&&battleAlive(s,u));
    if(!units.length||units.some(u=>frontPosition(s,u).depth===0))break;
-   const moves=units.map(u=>({unit:unitKey(u),from:{...frontPosition(s,u)},to:{...frontPosition(s,u),depth:frontPosition(s,u).depth-1}}));
+   let moving=units.filter(u=>!movementBlockReason(engine.data,b,u));
+   // A bound survivor keeps its cell. Resolve blockers before moving anybody;
+   // another survivor may advance only if its destination is vacated too.
+   for(let pass=0;pass<units.length;pass++){
+    const stationary=units.filter(u=>!moving.includes(u));
+    const next=moving.filter(u=>!stationary.some(v=>frontPosition(s,v).lane===frontPosition(s,u).lane&&frontPosition(s,v).depth===frontPosition(s,u).depth-1));
+    if(next.length===moving.length)break;moving=next;
+   }
+   if(!moving.length)break;
+   const moves=moving.map(u=>({unit:unitKey(u),from:{...frontPosition(s,u)},to:{...frontPosition(s,u),depth:frontPosition(s,u).depth-1}}));
    const retreats=displaceFrontlineDown(s,enemy,moves);
    for(const m of moves)b.frontline.positions[m.unit]=m.to;
    if(retreats.length)traceFrontline(engine,'retreat',{side:enemy?'enemies':'allies',step,moves:retreats});
    traceFrontline(engine,'advance',{side:enemy?'enemies':'allies',step,moves});
    b.log.push(`${enemy?'敵':'味方'}の前衛不在：${moves.map(m=>`${depthNames[m.from.depth]}→${depthNames[m.to.depth]}`).filter((v,i,a)=>a.indexOf(v)===i).join('・')}（${step}歩目）。`);
-   for(const u of units)react(u,'onAdvance',null);
+   for(const u of moving)react(u,'onAdvance',null);
    syncFrontlineDefeats(engine);
   }
  }
  shrinkFrontline(engine);
 }
-export function frontlineMovePlan(s,unit,to){
+export function frontlineMovePlan(s,unit,to,data){
  const fail=reason=>({ok:false,reason});
  if(!isFrontline(s)||!battleAlive(s,unit)||!isRecord(to)||Object.keys(to).some(k=>k!=='depth')||!integer(to.depth,0,2))return fail('移動先の前衛・中衛・後衛を選んでください。');
+ const blocked=movementBlockReason(data,s.battle,unit);if(blocked)return fail(blocked);
  const from=frontPosition(s,unit);
  if(!unit.instance&&to.depth>from.depth&&s.members.filter(id=>battleAlive(s,s.actors[id])).length===1)return fail('味方が1人だけの間は後退できません。');
  if(from.depth===to.depth)return fail('現在とは異なる段を選んでください。');
@@ -79,8 +89,13 @@ export function frontlineSaveErrors(s,data){
  for(const side of [false,true]){const ps=units.filter(u=>frontlinePresent(s,u)&&Boolean(u.instance)===side).map(u=>g.positions[unitKey(u)]);if(!validPositions(ps,ps.length))errors.push('前中後衛の占有重複');}
  errors.push(...frontReactionErrors(g.reactions,data));
  if(Object.keys(g.reactions).some(k=>!keys.includes(k)))errors.push('反応個体がありません');
- if(g.events.some(e=>isRecord(e)&&e.rows!==undefined&&(!integer(e.rows,1,3)||!isRecord(e.removed)||Object.entries(e.removed).some(([k,r])=>!keys.includes(k)||!['defeated','shrink','skill'].includes(r))||!isRecord(e.states)||Object.keys(e.states).length!==keys.length||keys.some(k=>!['alive','down','removed'].includes(e.states[k])))))errors.push('前中後衛の状態履歴不正');
- if(g.events.some((e,i)=>!isRecord(e)||!integer(e.id,1,g.eventSerial)||i>0&&g.events[i-1].id>=e.id||!integer(e.round,1,b.round)||typeof e.type!=='string'||!isRecord(e.positions)||keys.some(k=>!validFrontPosition(e.positions[k]))||!isRecord(e.hp)||keys.some(k=>!integer(e.hp[k],0,1e9))))errors.push('前中後衛のイベント履歴不正');
+ const initial=data.encounters[b.encounter]?.enemies.length??b.enemies.length;
+ const joins=Array.isArray(b.reinforcements)?b.reinforcements:[];
+ // Historical snapshots contain only units that had joined by that round.
+ const eventKeys=e=>keys.filter(k=>!k.startsWith('enemy:')||Number(k.slice(12))<initial||(joins[Number(k.slice(12))-initial]?.round??Infinity)<=e.round);
+ const exact=(o,ks)=>isRecord(o)&&Object.keys(o).length===ks.length&&ks.every(k=>Object.hasOwn(o,k));
+ if(g.events.some(e=>isRecord(e)&&e.rows!==undefined&&(!integer(e.rows,1,3)||!isRecord(e.removed)||Object.entries(e.removed).some(([k,r])=>!eventKeys(e).includes(k)||!['defeated','shrink','skill'].includes(r))||!exact(e.states,eventKeys(e))||eventKeys(e).some(k=>!['alive','down','removed'].includes(e.states[k])))))errors.push('前中後衛の状態履歴不正');
+ if(g.events.some((e,i)=>!isRecord(e)||!integer(e.id,1,g.eventSerial)||i>0&&g.events[i-1].id>=e.id||!integer(e.round,1,b.round)||typeof e.type!=='string'||!exact(e.positions,eventKeys(e))||eventKeys(e).some(k=>!validFrontPosition(e.positions[k]))||!exact(e.hp,eventKeys(e))||eventKeys(e).some(k=>!integer(e.hp[k],0,1e9))))errors.push('前中後衛のイベント履歴不正');
  return errors;
 }
 export function frontlineDefinitionErrors(data){

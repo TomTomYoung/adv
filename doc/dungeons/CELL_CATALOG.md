@@ -1,6 +1,6 @@
 # セルレイヤー・状態・境界・配置物カタログ
 
-確認日: 2026-10-23。作品版1.29.0。通常ロードする48マップは2Dのセルレイヤーへ移行済みです。退避3Dの定義は保守資料として区別します。
+確認日: 2026-10-23。作品版1.33.0。通常ロードする56マップは2Dのセルレイヤーへ移行済みです。退避3Dの定義は保守資料として区別します。
 
 `.` と `#` は通行可否だけを表します。床・壁・画像・遮光・水密は記号に含めません。セル種は通行、表示、フィールドイベント参照、照度などのパラメータをまとめたプリセットです。一地点の例外はレイヤーや項目を上書きし、セル種を増やさず表します。宝箱・人物・火台・レバーはオブジェクト、扉・水門・壁面はエッジ側の定義です。
 
@@ -243,9 +243,9 @@ npm run check:docs
 
 ## 配布データから生成した配置索引
 
-作品版1.29.0。以下の件数と配置例は npm run build:docs で更新します。配置定義を数えるため、条件不成立・過去経路のオブジェクトも含みます。通行可・不可の件数は元の通行投影、足場と水深は初期地形状態です。探索後の地形や同時に有効なイベント数ではありません。
+作品版1.34.0。以下の件数と配置例は npm run build:docs で更新します。配置定義を数えるため、条件不成立・過去経路のオブジェクトも含みます。通行可・不可の件数は元の通行投影、足場と水深は初期地形状態です。探索後の地形や同時に有効なイベント数ではありません。
 
-2D 48マップ、3D 0マップ、計48マップ。2Dの通行可は3976セル、通行不可は4798セルです。
+2D 56マップ、3D 0マップ、計56マップ。2Dの通行可は4337セル、通行不可は5229セルです。
 
 ### セル種プリセット
 
@@ -407,13 +407,29 @@ npm run check:docs
 
 [region_2_f10](../../data/maps/region_2_f10.json) 塩哭きの廃坑・10F 大選鉱室：2D、通行可46・通行不可53。
 
+[region_3_f3](../../data/maps/region_3_f3.json) 根喰みの地下庭園・3F 灌漑溝：2D、通行可44・通行不可55。
+
+[region_3_f4](../../data/maps/region_3_f4.json) 根喰みの地下庭園・4F 苗床詰所：2D、通行可44・通行不可55。
+
+[region_3_f5](../../data/maps/region_3_f5.json) 根喰みの地下庭園・5F 絡み根の道：2D、通行可45・通行不可54。
+
+[region_3_f6](../../data/maps/region_3_f6.json) 根喰みの地下庭園・6F 蜜の回廊：2D、通行可45・通行不可54。
+
+[region_3_f7](../../data/maps/region_3_f7.json) 根喰みの地下庭園・7F 庭師の休憩所：2D、通行可46・通行不可53。
+
+[region_3_f8](../../data/maps/region_3_f8.json) 根喰みの地下庭園・8F 虫媒棚：2D、通行可46・通行不可53。
+
+[region_3_f9](../../data/maps/region_3_f9.json) 根喰みの地下庭園・9F 薬草温室：2D、通行可45・通行不可54。
+
+[region_3_f10](../../data/maps/region_3_f10.json) 根喰みの地下庭園・10F 根門前庭：2D、通行可46・通行不可53。
+
 ### セル上のイベント種別
 
-マップ固有とクエストから投影した map.objects は計574定義、8種、配置座標は570か所です。件数はイベント定義数で、別の種別が同じ座標にある場合があります。safe は通常のランダム遭遇判定の抑止であり、仕掛けやスクリプトによる戦闘まで無効にする値ではありません。
+マップ固有とクエストから投影した map.objects は計592定義、8種、配置座標は586か所です。件数はイベント定義数で、別の種別が同じ座標にある場合があります。safe は通常のランダム遭遇判定の抑止であり、仕掛けやスクリプトによる戦闘まで無効にする値ではありません。
 
-`chest`：37定義。進入時0／調べる37、blocking指定0、safe指定37、once指定20。配置例：`cache` region_1_f1 (1,3) ／ `cache` region_1_f2 (1,3)。
+`chest`：46定義。進入時0／調べる46、blocking指定0、safe指定46、once指定20。配置例：`cache` region_1_f1 (1,3) ／ `cache` region_1_f2 (1,3)。
 
-`clue`：215定義。進入時0／調べる215、blocking指定0、safe指定204、once指定0。配置例：`dry_stair_latch` region_1_f2 (1,1) ／ `q006_clue_a` region_1_f2 (4,3)。
+`clue`：224定義。進入時0／調べる224、blocking指定0、safe指定213、once指定0。配置例：`dry_stair_latch` region_1_f2 (1,1) ／ `q006_clue_a` region_1_f2 (4,3)。
 
 `decision`：231定義。進入時4／調べる227、blocking指定0、safe指定205、once指定0。配置例：`q101_scene` region_1_f1 (2,1) ／ `q102_scene` region_1_f1 (3,1)。
 
@@ -611,19 +627,19 @@ npm run check:docs
 
 部品 `garden` / `plant_garden` 有効。
 
-植床6か所、育苗箱region_3_f1 (1,1)。`bridge_1` region_3_f1 (1,3) ／ `barrier_1` region_3_f1 (2,3) ／ `vine_1` region_3_f1 (5,2) ／ `bridge_2` region_3_f2 (1,2) ／ `barrier_2` region_3_f2 (1,3) ／ `vine_2` region_3_f2 (1,5)。
+植床14か所、育苗箱region_3_f1 (1,1)。`bridge_1` region_3_f1 (1,3) ／ `barrier_1` region_3_f1 (2,3) ／ `vine_1` region_3_f1 (5,2) ／ `bridge_2` region_3_f2 (1,2) ／ `barrier_2` region_3_f2 (1,3) ／ `vine_2` region_3_f2 (1,5) ／ `nursery_bed` region_3_f4 (3,3) ／ `root_crossing` region_3_f5 (4,3) ／ `side_thorns` region_3_f5 (4,5) ／ `nectar_bed` region_3_f6 (3,1) ／ `quiet_bed` region_3_f6 (7,5) ／ `rest_bed` region_3_f7 (3,3) ／ `pollinator_vine` region_3_f8 (3,3) ／ `herb_bed` region_3_f9 (3,3)。
 
-`cool_spore` 解熱胞子：生長3回、半径3、生長後の回復3／遭遇率×1、地形変更なし。対応植床6か所。
+`cool_spore` 解熱胞子：生長3回、半径3、生長後の回復3／遭遇率×1、地形変更なし。対応植床14か所。
 
-`red_nectar` 赤蜜花：生長4回、半径3、生長後の回復0／遭遇率×2、地形変更なし。対応植床6か所。
+`red_nectar` 赤蜜花：生長4回、半径3、生長後の回復0／遭遇率×2、地形変更なし。対応植床14か所。
 
-`quiet_moss` 静謐苔：生長3回、半径3、生長後の回復0／遭遇率×0.5、地形変更なし。対応植床6か所。
+`quiet_moss` 静謐苔：生長3回、半径3、生長後の回復0／遭遇率×0.5、地形変更なし。対応植床14か所。
 
-`root_bridge` 根橋草：生長5回、半径3、生長後の回復0／遭遇率×1、地形bridge。対応植床2か所。
+`root_bridge` 根橋草：生長5回、半径3、生長後の回復0／遭遇率×1、地形bridge。対応植床3か所。
 
-`thorn_wall` 塞道茨：生長4回、半径3、生長後の回復0／遭遇率×1、地形barrier。対応植床2か所。
+`thorn_wall` 塞道茨：生長4回、半径3、生長後の回復0／遭遇率×1、地形barrier。対応植床3か所。
 
-`stair_vine` 階渡りツタ：生長6回、半径3、生長後の回復0／遭遇率×1、地形vine。対応植床2か所。
+`stair_vine` 階渡りツタ：生長6回、半径3、生長後の回復0／遭遇率×1、地形vine。対応植床3か所。
 
 植床 `bridge_1` のbridge：region_3_f1 (1,2)を.。
 
@@ -637,9 +653,37 @@ npm run check:docs
 
 植床 `vine_2` のvine：region_3_f1 (1,1)へ移送。
 
+植床 `root_crossing` のbridge：region_3_f5 (5,3)を.。
+
+植床 `side_thorns` のbarrier：region_3_f5 (5,5)を#。
+
+植床 `pollinator_vine` のvine：region_3_f6 (7,1)へ移送。
+
 部品 `connections` / `map_connections` 有効。
 
 接続 `floor_1_2` 地下二層への階段：stairs、region_3_f1 (14,11) ↔ region_3_f2 (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `upper_shore` 1F入口側と2F東岸を結ぶ石段：stairs、region_3_f1 (5,1) ↔ region_3_f2 (3,1)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `floor_2_3` 3F 灌漑溝への岸道：stairs、region_3_f2 (13,13) ↔ region_3_f3 (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `floor_3_4` 4F 苗床詰所への岸道：stairs、region_3_f3 (9,7) ↔ region_3_f4 (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `floor_4_5` 5F 絡み根の道への岸道：stairs、region_3_f4 (9,7) ↔ region_3_f5 (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `floor_5_6` 6F 蜜の回廊への岸道：stairs、region_3_f5 (9,7) ↔ region_3_f6 (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `floor_6_7` 7F 庭師の休憩所への岸道：stairs、region_3_f6 (9,7) ↔ region_3_f7 (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `floor_7_8` 8F 虫媒棚への岸道：stairs、region_3_f7 (9,7) ↔ region_3_f8 (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `floor_8_9` 9F 薬草温室への岸道：stairs、region_3_f8 (9,7) ↔ region_3_f9 (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `floor_9_10` 10F 根門前庭への岸道：stairs、region_3_f9 (9,7) ↔ region_3_f10 (1,1)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `irrigation_walk` 6Fから2Fへ続く灌漑歩廊：stairs、region_3_f6 (5,1) ↔ region_3_f2 (11,13)。扉は壁面、階段は乾いた区画内の足場に配置。
+
+接続 `garden_lift` 10Fから4Fへ続く苗床運搬路：stairs、region_3_f10 (9,1) ↔ region_3_f4 (9,1)。扉は壁面、階段は乾いた区画内の足場に配置。
 
 #### 鏡沈みの礼拝堂 (region_4)
 

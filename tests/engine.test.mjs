@@ -8,7 +8,7 @@ import {evaluate,setPath} from '../src/core/expression.js';
 import {projectGame} from '../src/application/projection.js';
 
 test('registered unique authored quests with distinct endings, 40 connected maps and complete references',()=>{
-  assert.deepEqual(validateContent(data),[]);assert.equal(Object.keys(data.quests).length,data.questOrder.ids.length);assert.equal(new Set(Object.values(data.quests).map(q=>q.title)).size,data.questOrder.ids.length);assert.equal(new Set(Object.values(data.quests).flatMap(q=>Object.values(q.outcomes).map(o=>o.text))).size,Object.values(data.quests).reduce((n,q)=>n+Object.keys(q.outcomes).length,0));assert.equal(Object.keys(data.maps).length,48);
+  assert.deepEqual(validateContent(data),[]);assert.equal(Object.keys(data.quests).length,data.questOrder.ids.length);assert.equal(new Set(Object.values(data.quests).map(q=>q.title)).size,data.questOrder.ids.length);assert.equal(new Set(Object.values(data.quests).flatMap(q=>Object.values(q.outcomes).map(o=>o.text))).size,Object.values(data.quests).reduce((n,q)=>n+Object.keys(q.outcomes).length,0));assert.equal(Object.keys(data.maps).length,56);
 });
 test('safe expression trees reject code and prototype paths',()=>{
   assert.equal(evaluate({op:'add',args:[{ref:'gold'},3]},{gold:2}),5);

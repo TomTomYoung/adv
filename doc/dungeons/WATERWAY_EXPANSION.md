@@ -1,6 +1,6 @@
 # 地下水道の水張り凹床と地下関所
 
-確認日: 2026-10-23。作品版1.29.0。水道1〜10Fの追加は1.28.0で実施。地形拡張は2026-09-26に実施。[セル仕様](FLOOR_DEPRESSIONS.md)、[q004の実移動](../scenarios/Q004_WORLD_ROUTE.md)、[室内の共通仕様](../world/WORLD_LOCATIONS.md)。
+確認日: 2026-10-23。作品版1.33.0。水道1〜10Fの追加は1.28.0で実施。地形拡張は2026-09-26に実施。[セル仕様](FLOOR_DEPRESSIONS.md)、[q004の実移動](../scenarios/Q004_WORLD_ROUTE.md)、[室内の共通仕様](../world/WORLD_LOCATIONS.md)。
 
 1〜10Fの階数・4/7/10F設備・水門獣と旧セーブの対応は[現行台帳](WATERWAY_TEN_FLOORS.md)を参照してください。以下の地形・室内は保持しています。
 

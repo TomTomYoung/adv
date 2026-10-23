@@ -5,13 +5,15 @@ const elementLabels={physical:'物理',fire:'炎',ice:'氷',lightning:'雷',wate
 const categoryLabels={parameter:'パラメータ異常',magic:'魔術系',physical:'身体異常'};
 const trapSources={weakened:['針','矢'],enfeebled:['ガス'],arcane_malaise:['魔法陣']};
 
-const buffKind=def=>Object.values(def.stats??{}).some(n=>n<1)||Object.values(def.resist??{}).some(n=>n>1)?'debuff':'buff';
+const buffKind=def=>def.blocksMovement||def.classicAccuracyPenalty>0||Object.values(def.stats??{}).some(n=>n<1)||Object.values(def.resist??{}).some(n=>n>1)?'debuff':'buff';
 const buffEffect=def=>{
   const parts=[];
   for(const [key,n] of Object.entries(def.stats??{}))parts.push(`${statLabels[key]??key}×${n}`);
   for(const [element,n] of Object.entries(def.resist??{}))parts.push(`${elementLabels[element]??element}被ダメージ×${n}`);
   if(def.physicalPower!==undefined)parts.push(`次の行動の物理威力×${def.physicalPower}`);
   if(def.physicalTaken!==undefined)parts.push(`次の物理被害1回×${def.physicalTaken}`);
+  if(def.blocksMovement)parts.push('自発移動と次のFrontline自動前進を阻止');
+  if(def.classicAccuracyPenalty)parts.push(`Classic命中率−${def.classicAccuracyPenalty*100}ポイント`);
   return parts.join(' / ')||'数値補正なし';
 };
 const buffSources=(data,id)=>{
@@ -25,7 +27,7 @@ const buffSources=(data,id)=>{
 function modifierCatalog(data,kind,{date}={}){
   const entries=Object.entries(data.buffs??{}).filter(([,def])=>buffKind(def)===kind);
   const title=kind==='buff'?'バフ一覧':'デバフ一覧',lines=[`# ${title}`,'',`更新日: ${date??'未記録'}。作品版${data.game.version}。全${entries.length}件。`,'',
-    '正本は [data/buffs.json](../data/buffs.json)。戦闘中だけ存在する一時補正で、状態異常とは別系統です。同じ能力について強化は最も強い倍率1つ、弱体は最も強い倍率1つを採用します。持続の1ターンは、敵味方の混合AGIキューが一巡する全体ターンです。使用者だけの手番ではなく、全体ターン終了時に残り回数を1減らします。先制の各行動では減らしません。next_action補正だけは全体ターンで減らさず、付与後の次の本人の行動機会に消費します。physical_hit補正は正の物理被害を受けた1回で消費し、被害0や魔法では消費しません。',''];
+    '正本は [data/buffs.json](../data/buffs.json)。戦闘中だけ存在する一時補正で、状態異常とは別系統です。同じ能力について強化は最も強い倍率1つ、弱体は最も強い倍率1つを採用します。持続の1ターンは、敵味方の混合AGIキューが一巡する全体ターンです。使用者だけの手番ではなく、全体ターン終了時に残り回数を1減らします。移動阻止は次の巡の自動前進を判定した直後、行動キュー開始前に減らします。強制移動・戦闘不能者の退避は対象外です。先制の各行動では減らしません。next_action補正だけは全体ターンで減らさず、付与後の次の本人の行動機会に消費します。physical_hit補正は正の物理被害を受けた1回で消費し、被害0や魔法では消費しません。',''];
   for(const [id,def] of entries){
     lines.push(`## ${def.name} (${id})`,'',`分類：${kind==='buff'?'バフ':'デバフ'}。`,`効果：${buffEffect(def)}。`,`持続：${def.consume==='next_action'?'次の本人の行動機会まで（移動・防御・行動不能でも消費）':`${def.turns}ターン${def.consume==='physical_hit'?'以内の物理被害1回':''}`}。`,`付与元：${buffSources(data,id).join(' / ')||'直接定義'}。`,'');
   }

@@ -2334,6 +2334,51 @@
         "vit": 0.7
       },
       "resist": {}
+    },
+    "exp_rooted": {
+      "id": "exp_rooted",
+      "name": "根留め",
+      "turns": 1,
+      "stats": {},
+      "resist": {},
+      "blocksMovement": true,
+      "classicAccuracyPenalty": 0.1
+    },
+    "waterway_tail_ready": {
+      "id": "waterway_tail_ready",
+      "name": "尾の構え（次の攻撃は強打）",
+      "turns": 2,
+      "stats": {},
+      "resist": {},
+      "physicalPower": 1.6,
+      "consume": "next_action"
+    },
+    "mine_drill_ready": {
+      "id": "mine_drill_ready",
+      "name": "低い構え（次は貫通突進）",
+      "turns": 2,
+      "stats": {},
+      "resist": {},
+      "physicalPower": 1,
+      "consume": "next_action"
+    },
+    "mine_drill_exposed": {
+      "id": "mine_drill_exposed",
+      "name": "突進後の隙",
+      "turns": 2,
+      "stats": {
+        "vit": 0.7
+      },
+      "resist": {}
+    },
+    "mine_vein_ward": {
+      "id": "mine_vein_ward",
+      "name": "鉱脈の補強",
+      "turns": 2,
+      "stats": {
+        "vit": 1.3
+      },
+      "resist": {}
     }
   },
   "fieldAbilities": {
@@ -2968,6 +3013,22 @@
         "bow"
       ],
       "description": "発見済みで通行可能な道から、最寄りの修理済み給油設備への経路と歩数を測る。未知・閉鎖中の扉は通らない。移動に合わせて残り歩数を更新し、経路外・通行条件の変化時は再測定する。平面の迷宮で使用。",
+      "maxSkillLevel": 1
+    },
+    "exp_wax_care": {
+      "id": "exp_wax_care",
+      "name": "封蝋手当",
+      "api": "gear.wax",
+      "target": "location",
+      "modes": [
+        "dungeon"
+      ],
+      "mp": 6,
+      "weaponTypes": [
+        "staff",
+        "tool"
+      ],
+      "description": "選んだ装備1個体を封蝋し、次の塩蓄積を1回だけ防ぐ。袋の装備も選べる。同名の別個体には広がらず、既に蓄積した塩は洗浄が必要。封蝋済みの個体への重ね掛けはできない。",
       "maxSkillLevel": 1
     }
   },
@@ -4125,6 +4186,207 @@
         }
       ],
       "description": "殻を開いて息を継ぐ。防御が30%低下し、この行動では攻撃しない。"
+    },
+    "exp_root_bind": {
+      "name": "根留め",
+      "mp": 8,
+      "weaponTypes": [
+        "staff",
+        "tool"
+      ],
+      "target": "all_enemies",
+      "maxTargets": 2,
+      "effects": [
+        {
+          "type": "damage",
+          "formula": "exp_root_bind",
+          "element": "earth"
+        },
+        {
+          "type": "buff",
+          "buff": "exp_rooted"
+        }
+      ],
+      "description": "MP8。対象と上下左右から最大2体へ地属性の攻撃。今の巡の自発移動と次の自動前進を封じ、次巡の行動前に解除。Classicでは命中率を10ポイント低下。Classicの対象は遭遇順。"
+    },
+    "garden_prune": {
+      "name": "大枝刈り",
+      "mp": 0,
+      "target": "enemy",
+      "effects": [
+        {
+          "type": "damage",
+          "formula": "heavy",
+          "element": "physical"
+        }
+      ],
+      "description": "剪定の大顎で一人を狙う。"
+    },
+    "waterway_spark": {
+      "name": "水路の放電",
+      "mp": 4,
+      "target": "enemy",
+      "effects": [
+        {
+          "type": "damage",
+          "formula": "waterway_spark",
+          "element": "lightning"
+        }
+      ],
+      "description": "MP4。敵1体へ雷術。濡れ自体は付けない。"
+    },
+    "waterway_spit": {
+      "name": "細い水弾",
+      "mp": 0,
+      "target": "enemy",
+      "effects": [
+        {
+          "type": "damage",
+          "formula": "waterway_spit",
+          "element": "physical"
+        }
+      ],
+      "description": "MP0。敵1体へ山なりの弱い遠隔物理攻撃。前衛越しに届く。"
+    },
+    "waterway_tail_ready": {
+      "name": "尾を引く構え（次は強打）",
+      "mp": 0,
+      "target": "self",
+      "effects": [
+        {
+          "type": "buff",
+          "buff": "waterway_tail_ready"
+        }
+      ],
+      "description": "次の行動の物理威力が1.6倍。構えの手番では攻撃しない。"
+    },
+    "waterway_filter": {
+      "name": "泥濾し",
+      "mp": 4,
+      "target": "ally",
+      "effects": [
+        {
+          "type": "cleanse",
+          "statuses": [
+            "poison",
+            "hollow_curse",
+            "wet",
+            "weakened",
+            "enfeebled",
+            "arcane_malaise",
+            "virulent_poison",
+            "curse_poison",
+            "paralysis",
+            "blindness",
+            "spell_seal",
+            "skill_seal",
+            "item_seal",
+            "confusion",
+            "sleep",
+            "sluggish",
+            "berserk",
+            "misfire",
+            "critical_vulnerability",
+            "guaranteed_critical_vulnerability"
+          ]
+        }
+      ],
+      "description": "MP4。生存する仲間1体から、指定順の通常状態異常を一つ解除。HP回復・戦闘補助の解除はしない。"
+    },
+    "mine_drill_ready": {
+      "name": "低く身構える（次は突進）",
+      "mp": 0,
+      "target": "self",
+      "effects": [
+        {
+          "type": "buff",
+          "buff": "mine_drill_ready"
+        }
+      ],
+      "description": "この手番は攻撃せず、次の行動に貫通突進を準備する。スタンで構えを妨げるか、準備後の手番を止めると突進を使わない。"
+    },
+    "mine_drill_charge": {
+      "name": "低位の貫通突進",
+      "mp": 0,
+      "target": "enemy",
+      "effects": [
+        {
+          "type": "damage",
+          "formula": "mine_drill_charge",
+          "element": "physical"
+        }
+      ],
+      "description": "構えの次の行動で単体突進。防御値の差引を半分にするが防御行動は有効。突進後から次巡まで自身の防御が30%低下。",
+      "selfEffects": [
+        {
+          "type": "buff",
+          "buff": "mine_drill_exposed"
+        }
+      ]
+    },
+    "mine_salt_bolt": {
+      "name": "塩晶弾",
+      "mp": 4,
+      "target": "enemy",
+      "effects": [
+        {
+          "type": "damage",
+          "formula": "mine_salt_bolt",
+          "element": "earth"
+        }
+      ],
+      "description": "MP4。単体の土術。装備の塩を増やさない。"
+    },
+    "mine_shard_shot": {
+      "name": "細い晶片投げ",
+      "mp": 0,
+      "target": "enemy",
+      "effects": [
+        {
+          "type": "damage",
+          "formula": "mine_shard_shot",
+          "element": "physical"
+        }
+      ],
+      "description": "MP0。前衛越しに届く弱い遠隔物理攻撃。塩付与・装備破壊なし。"
+    },
+    "mine_vein_ward": {
+      "name": "鉱脈の補強",
+      "mp": 4,
+      "target": "ally",
+      "effects": [
+        {
+          "type": "buff",
+          "buff": "mine_vein_ward"
+        }
+      ],
+      "description": "MP4。生存する仲間一体の防御を二巡1.3倍。同じ補助は重複しない。"
+    },
+    "mine_crystal_claw": {
+      "name": "結晶の強爪",
+      "mp": 0,
+      "target": "enemy",
+      "effects": [
+        {
+          "type": "damage",
+          "formula": "mine_crystal_claw",
+          "element": "physical"
+        }
+      ],
+      "description": "単体の強い爪。次巡は弱い爪に戻る。塩付与・装備破壊なし。"
+    },
+    "mine_light_claw": {
+      "name": "結晶の小爪",
+      "mp": 0,
+      "target": "enemy",
+      "effects": [
+        {
+          "type": "damage",
+          "formula": "mine_shard_shot",
+          "element": "physical"
+        }
+      ],
+      "description": "単体の弱い爪。塩付与・装備破壊なし。"
     }
   },
   "formulas": {
@@ -5092,6 +5354,267 @@
           ]
         }
       ]
+    },
+    "exp_root_bind": {
+      "op": "max",
+      "args": [
+        2,
+        {
+          "op": "add",
+          "args": [
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "ref": "source.stats.int"
+                },
+                0.5
+              ]
+            },
+            6
+          ]
+        }
+      ]
+    },
+    "waterway_spark": {
+      "op": "max",
+      "args": [
+        2,
+        {
+          "op": "sub",
+          "args": [
+            {
+              "op": "add",
+              "args": [
+                {
+                  "op": "mul",
+                  "args": [
+                    {
+                      "ref": "source.stats.int"
+                    },
+                    0.8
+                  ]
+                },
+                4
+              ]
+            },
+            {
+              "op": "floor",
+              "args": [
+                {
+                  "op": "div",
+                  "args": [
+                    {
+                      "ref": "target.stats.vit"
+                    },
+                    4
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "waterway_spit": {
+      "op": "max",
+      "args": [
+        2,
+        {
+          "op": "sub",
+          "args": [
+            {
+              "op": "add",
+              "args": [
+                {
+                  "op": "mul",
+                  "args": [
+                    {
+                      "ref": "source.stats.str"
+                    },
+                    0.7
+                  ]
+                },
+                2
+              ]
+            },
+            {
+              "op": "floor",
+              "args": [
+                {
+                  "op": "div",
+                  "args": [
+                    {
+                      "ref": "target.stats.vit"
+                    },
+                    2
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "mine_drill_charge": {
+      "op": "max",
+      "args": [
+        2,
+        {
+          "op": "sub",
+          "args": [
+            {
+              "op": "add",
+              "args": [
+                {
+                  "op": "mul",
+                  "args": [
+                    {
+                      "ref": "source.stats.str"
+                    },
+                    1.5
+                  ]
+                },
+                0
+              ]
+            },
+            {
+              "op": "floor",
+              "args": [
+                {
+                  "op": "div",
+                  "args": [
+                    {
+                      "ref": "target.stats.vit"
+                    },
+                    4
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "mine_salt_bolt": {
+      "op": "max",
+      "args": [
+        2,
+        {
+          "op": "sub",
+          "args": [
+            {
+              "op": "add",
+              "args": [
+                {
+                  "op": "mul",
+                  "args": [
+                    {
+                      "ref": "source.stats.int"
+                    },
+                    0.8
+                  ]
+                },
+                4
+              ]
+            },
+            {
+              "op": "floor",
+              "args": [
+                {
+                  "op": "div",
+                  "args": [
+                    {
+                      "ref": "target.stats.vit"
+                    },
+                    4
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "mine_shard_shot": {
+      "op": "max",
+      "args": [
+        2,
+        {
+          "op": "sub",
+          "args": [
+            {
+              "op": "add",
+              "args": [
+                {
+                  "op": "mul",
+                  "args": [
+                    {
+                      "ref": "source.stats.str"
+                    },
+                    0.7
+                  ]
+                },
+                2
+              ]
+            },
+            {
+              "op": "floor",
+              "args": [
+                {
+                  "op": "div",
+                  "args": [
+                    {
+                      "ref": "target.stats.vit"
+                    },
+                    2
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "mine_crystal_claw": {
+      "op": "max",
+      "args": [
+        2,
+        {
+          "op": "sub",
+          "args": [
+            {
+              "op": "add",
+              "args": [
+                {
+                  "op": "mul",
+                  "args": [
+                    {
+                      "ref": "source.stats.str"
+                    },
+                    1.25
+                  ]
+                },
+                0
+              ]
+            },
+            {
+              "op": "floor",
+              "args": [
+                {
+                  "op": "div",
+                  "args": [
+                    {
+                      "ref": "target.stats.vit"
+                    },
+                    2
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   },
   "items": {
@@ -5650,7 +6173,20 @@
     "exp_parry_command": "guard",
     "exp_purging_pursuit": "light",
     "mine_shell_charge": "attack",
-    "mine_shell_recover": "guard"
+    "mine_shell_recover": "guard",
+    "exp_root_bind": "power",
+    "garden_prune": "attack",
+    "waterway_spark": "lightning",
+    "waterway_spit": "attack",
+    "waterway_tail_ready": "guard",
+    "waterway_filter": "cleanse",
+    "mine_drill_ready": "guard",
+    "mine_drill_charge": "attack",
+    "mine_salt_bolt": "power",
+    "mine_shard_shot": "attack",
+    "mine_vein_ward": "guard",
+    "mine_crystal_claw": "attack",
+    "mine_light_claw": "attack"
   },
   "gridProfiles": {
     "power": {
@@ -6761,6 +7297,163 @@
         "shape": "single"
       },
       "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "exp_root_bind": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "area": {
+        "shape": "cross",
+        "radius": 1
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "garden_prune": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 3
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "direct",
+      "friendlyFire": false
+    },
+    "waterway_spark": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "waterway_spit": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "lob",
+      "friendlyFire": false
+    },
+    "waterway_tail_ready": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "waterway_filter": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "mine_drill_ready": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "mine_drill_charge": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 3
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "direct",
+      "friendlyFire": false
+    },
+    "mine_salt_bolt": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "mine_shard_shot": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "lob",
+      "friendlyFire": false
+    },
+    "mine_vein_ward": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 4
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "mine_crystal_claw": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 3
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "direct",
+      "friendlyFire": false
+    },
+    "mine_light_claw": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 3
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "direct",
       "friendlyFire": false
     }
   },
@@ -9041,6 +9734,318 @@
       "allyRange": {
         "min": 0,
         "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "exp_root_bind": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "cross4"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "garden_prune": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "waterway_spark": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "waterway_spit": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "waterway_tail_ready": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "waterway_filter": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "mine_drill_ready": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 0
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 0
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "mine_drill_charge": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "mine_salt_bolt": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "mine_shard_shot": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "mine_vein_ward": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "mine_crystal_claw": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "mine_light_claw": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
       },
       "area": {
         "shape": "single"

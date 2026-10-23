@@ -1,3 +1,5 @@
+import {joinReinforcements} from './battle-reinforcements.js';
+import {cleanseCandidates} from './status-effects.js';
 import {battleAlive,frontlinePresent,frontlineState,removeFrontline,knockbackFrontline,syncFrontlineDefeats} from './frontline-lifecycle.js';
 import {isFrontline,frontPosition,frontlineUnits,frontlineMovePlan,moveFrontline,prepareFrontlineRound,traceFrontline,frontlineRevivePosition} from './battle-frontline.js';
 import {frontlineTargetPlan,frontlineSelections,frontlineProfile} from './frontline-targeting.js';
@@ -21,7 +23,7 @@ import {skillDefinitionErrors} from './job-validation.js';
 import {clone} from './expression.js';
 import {pushBranch,pump} from './script.js';
 import {passives,permission,costProblem,payCost} from './jobs.js';
-import {unitKey,buffStats,buffResistance,addBuff,tickBuffs,actionBuffs,actionPower,takePhysicalHit} from './buffs.js';
+import {buffAccuracy,unitKey,buffStats,buffResistance,addBuff,tickBuffs,actionBuffs,actionPower,takePhysicalHit} from './buffs.js';
 import {triggerBattleEvent} from './battle-events.js';
 import {consumeFieldBattleSignals} from './field-signals.js';
 import {describeTarget,playBattleCue} from './feedback.js';
@@ -37,6 +39,7 @@ export function startBattle(engine,id,continuations,options={}){
   if(options.enemyScale!==undefined&&options.enemyScale!==1)engine.state.battle.enemyScale=options.enemyScale;
   Object.assign(engine.state.battle,{firedEvents:[],event:null,pendingResult:null});
   if(options.manualTurns===true)engine.state.battle.manualTurns=true;
+  if(encounter.reinforcements)engine.state.battle.reinforcements=[];
   resolvePreemptive(engine,encounter,options);
   prepareFrontlineRound(engine,(u,on,attacker)=>frontlineReact(engine,u,on,attacker));
   engine.state.waiting={type:'battle'};engine.state.presentation.music='battle';engine.log(encounter.text);engine.eventCue('encounter');
@@ -118,8 +121,8 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
     if(isFrontline(s)&&target.instance&&engine.data.enemies[target.id]?.undead&&frontlineState(s,target)==='down'){removeFrontline(engine,target);b.log.push(`${target.name}の残骸を祓った。`);}
     return 0;
   }
-  const offensive=skill.effects.some(e=>['damage','drain_mp','stun','frontline_remove','frontline_knockback'].includes(e.type)||e.type==='status'&&!statusEffectAtLevel(engine.data,e.status,e.level??1)?.beneficial||e.type==='buff'&&(Object.values(engine.data.buffs[e.buff]?.stats??{}).some(n=>n<1)||Object.values(engine.data.buffs[e.buff]?.resist??{}).some(n=>n>1)));
-  const accuracy=offensive&&checkAccuracy?(series?.snapshot.accuracy??statusAccuracy(engine.data,s,source)):1;
+  const offensive=skill.effects.some(e=>['damage','drain_mp','stun','frontline_remove','frontline_knockback'].includes(e.type)||e.type==='status'&&!statusEffectAtLevel(engine.data,e.status,e.level??1)?.beneficial||e.type==='buff'&&(engine.data.buffs[e.buff]?.blocksMovement||engine.data.buffs[e.buff]?.classicAccuracyPenalty>0||Object.values(engine.data.buffs[e.buff]?.stats??{}).some(n=>n<1)||Object.values(engine.data.buffs[e.buff]?.resist??{}).some(n=>n>1)));
+  const accuracy=offensive&&checkAccuracy?(series?.snapshot.accuracy??buffAccuracy(engine.data,s.battle,source,statusAccuracy(engine.data,s,source))):1;
   if(accuracy<1&&engine.random()>=accuracy){if(series)series.didHit=false;(b?.log??s.log).push(`${source.name??engine.data.actors[source.id]?.name}の${skill.name}は${targetName}に当たらなかった。`);return 0;}
   for(const effect of skill.effects){
     if(effect.type==='frontline_remove'){removeFrontline(engine,target);break;}
@@ -164,7 +167,10 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
     if(effect.type==='status'&&dungeonEffectActive(engine.data,s,'status',effect.status)&&(target.hp>0||isFrontline(s)&&frontlineState(s,target)==='down')&&engine.random()<(effect.chance??1)&&applyStatus(engine.data,s,target,effect.status,effect.duration,effect.level??1)){
       (b?.log??s.log).push(`${targetName}は${engine.data.statuses[effect.status].name}になりました。`);
     }
-    if(effect.type==='cleanse')removeStatus(target,effect.status);
+    if(effect.type==='cleanse'){
+      if(effect.statuses){for(const id of cleanseCandidates(target,effect)){removeStatus(target,id);(b?.log??s.log).push(`${targetName}：${skill.name}で${engine.data.statuses[id].name}を解除した。`);}}
+      else removeStatus(target,effect.status);
+    }
   }
   syncFrontlineDefeats(engine);return damageTotal;
 }
@@ -256,7 +262,7 @@ function confusedAction(engine,source){
   const {data:d,state:s}=engine,b=s.battle,enemySource=Boolean(source.instance),candidates=[];
   const friends=(enemySource?b.enemies:s.members.map(id=>s.actors[id])).filter(a=>battleAlive(s,a));
   const foes=(enemySource?s.members.map(id=>s.actors[id]):b.enemies).filter(a=>battleAlive(s,a)),all=[...friends,...foes];
-  const ids=enemySource?[...new Set(source.ai.map(rule=>rule.skill))]:engine.skills(source.id);
+  const ids=enemySource?availableEnemySkills(engine,source):engine.skills(source.id);
   for(const skillId of ids){
     const skill=enemySource?d.skills[skillId]:effectiveSkill(d,s,source.id,skillId);
     if(!skill||statusAbilityReason(d,s,source,skillId)||dungeonAbilityReason(d,s,skillId,'battle.skill')||effectsProblem(d,skill,s))continue;
@@ -306,18 +312,46 @@ function actionOverridden(engine,source){
   if(confused){engine.state.battle.log.push(`${name}は${engine.data.statuses[confused].name}で勝手に行動した。`);confusedAction(engine,source);return true;}
   return false;
 }
+function afflictedTargets(engine,skill){
+  return engine.state.battle.enemies.filter(t=>battleAlive(engine.state,t)&&skill.effects.some(e=>e.type==='cleanse'&&cleanseCandidates(t,e).length));
+}
+function unbuffedTargets(engine,skill){
+  const {state:s}=engine,b=s.battle;
+  return b.enemies.filter(t=>battleAlive(s,t)&&skill.effects.every(e=>e.type==='buff'&&!b.buffs.some(entry=>entry.target===unitKey(t)&&entry.id===e.buff&&entry.remaining>0)));
+}
+function supportTargets(engine,rule){
+  const skill=engine.data.skills[rule.skill];
+  return rule.target==='afflicted'?afflictedTargets(engine,skill):rule.target==='unbuffed'?unbuffedTargets(engine,skill):null;
+}
+function enemyContext(engine,enemy){
+  const b=engine.state.battle;
+  return {self:{...enemy,hp_ratio:enemy.hp/enemy.stats.hp,round:b.round,buffs:b.buffs.filter(entry=>entry.target===unitKey(enemy)&&entry.remaining>0).map(entry=>entry.id)}};
+}
+function availableEnemySkills(engine,enemy){
+  // Confusion changes the choice and target, but cannot skip a windup or other
+  // authored use condition. A shared skill is available if any rule allows it.
+  return [...new Set(enemy.ai.filter(rule=>!rule.condition||engine.value(rule.condition,enemyContext(engine,enemy))).map(rule=>rule.skill))];
+}
 function enemyAction(engine,enemy){
+  return consumeEnemyActionBuffs(engine,enemy,()=>performEnemyAction(engine,enemy));
+}
+function consumeEnemyActionBuffs(engine,enemy,act){
+  const b=engine.state.battle,consumed=actionBuffs(engine.data,b,unitKey(enemy));
+  try{return act();}finally{b.buffs=b.buffs.filter(entry=>!consumed.includes(entry));}
+}
+function performEnemyAction(engine,enemy){
   const s=engine.state,b=s.battle;
     if(!battleAlive(s,enemy))return;clearGuard(b,enemy);if(consumeStun(engine,enemy)||actionOverridden(engine,enemy))return;
     if(isFrontline(s)){frontlineEnemyAction(engine,enemy);return;}
     if(isGrid(s)){gridEnemyAction(engine,enemy);return;}
     const alive=s.members.filter(id=>battleAlive(s,s.actors[id]));if(!alive.length)return;
-    const rule=[...enemy.ai].sort((a,c)=>c.priority-a.priority).find(r=>!statusAbilityReason(engine.data,s,enemy,r.skill)&&!dungeonAbilityReason(engine.data,s,r.skill,'battle.skill')&&(!r.condition||engine.value(r.condition,{self:{...enemy,hp_ratio:enemy.hp/enemy.stats.hp,round:b.round}}))&&enemy.mp>=engine.data.skills[r.skill].mp);
+    const rule=[...enemy.ai].sort((a,c)=>c.priority-a.priority).find(r=>!statusAbilityReason(engine.data,s,enemy,r.skill)&&!dungeonAbilityReason(engine.data,s,r.skill,'battle.skill')&&(!r.condition||engine.value(r.condition,enemyContext(engine,enemy)))&&enemy.mp>=engine.data.skills[r.skill].mp&&supportTargets(engine,r)?.length!==0);
     if(!rule){b.log.push(`${enemy.name}は使える行動がない。`);return;}
     const skill=engine.data.skills[rule.skill];enemy.mp-=skill.mp;
     const targetId=rule.target==='weakest'?alive.reduce((a,c)=>s.actors[c].hp<s.actors[a].hp?c:a):alive[Math.floor(engine.random()*alive.length)];
     let targets;
-    if(skill.target==='all_enemies')targets=alive.map(id=>s.actors[id]);
+    if(supportTargets(engine,rule))targets=supportTargets(engine,rule).slice(0,1);
+    else if(skill.target==='all_enemies')targets=alive.map(id=>s.actors[id]);
     else if(skill.target==='all_allies')targets=b.enemies.filter(e=>battleAlive(s,e));
     else if(rule.target==='self'||skill.target==='self')targets=[enemy];
     else if(skill.target==='ally')targets=[b.enemies.filter(e=>battleAlive(s,e)).sort((a,c)=>a.hp/a.stats.hp-c.hp/c.stats.hp)[0]];
@@ -353,7 +387,9 @@ function finishRound(engine){
   if(s.members.every(id=>!battleAlive(engine.state,s.actors[id]))){endBattle(engine,'lose');return;}
   for(const unit of [...s.members.map(id=>s.actors[id]),...b.enemies])if(battleAlive(s,unit)){tickStatuses(engine.data,s,unit,'turns');recoverStatuses(engine,unit);}
   tickBuffs(b,engine.data);b.acted=[];for(const id of [...b.guards])clearGuard(b,s.actors[id]);b.turnQueue=null;b.turnIndex=0;b.round++;b.log=b.log.slice(-30);
+  joinReinforcements(engine);
   prepareFrontlineRound(engine,(u,on,attacker)=>frontlineReact(engine,u,on,attacker));
+  tickBuffs(b,engine.data,'after_advance');
   triggerBattleEvent(engine,'round_start');
 }
 function advanceBattleTurns(engine){
@@ -410,7 +446,7 @@ export function battleAction(engine,intent){
   if(intent.action==='escape'){
     if(!engine.data.encounters[b.encounter].escape)return false;
   }else if(intent.action==='move'){
-    selection=isFrontline(s)?frontlineMovePlan(s,actor,intent.to):gridMovePlan(s,actor,intent.to);
+    selection=isFrontline(s)?frontlineMovePlan(s,actor,intent.to,engine.data):gridMovePlan(s,actor,intent.to,engine.data);
     if(!selection.ok){engine.notify(selection.reason);return false;}
   }else if(intent.action==='item'){
     selection=battleItemPlan(engine,actorId,intent.item,intent.target);
@@ -441,7 +477,7 @@ function gridEnemyChoices(engine,enemy,skillId,{anySide=false,origin=null}={}){
 }
 function gridConfusedAction(engine,source){
   const {state:s,data:d}=engine,enemy=Boolean(source.instance),choices=[];
-  for(const id of enemy?[...new Set(source.ai.map(r=>r.skill))]:engine.skills(source.id)){
+  for(const id of enemy?availableEnemySkills(engine,source):engine.skills(source.id)){
     if(enemy)choices.push(...gridEnemyChoices(engine,source,id,{anySide:true}));
     else{const skill=effectiveSkill(d,s,source.id,id);for(const p of targetSelections(engine,source,skill,id,{anySide:true})){const plan=battleSkillPlan(engine,source.id,id,p.id,{anySide:true});if(plan.ok)choices.push({...plan,skillId:id});}}
   }
@@ -456,9 +492,10 @@ function gridConfusedAction(engine,source){
 function gridEnemyAction(engine,enemy){
   const {state:s,data:d}=engine,b=s.battle;
   for(const rule of [...enemy.ai].sort((a,c)=>c.priority-a.priority)){
-    if(rule.condition&&!engine.value(rule.condition,{self:{...enemy,hp_ratio:enemy.hp/enemy.stats.hp,round:b.round}}))continue;
+    if(rule.condition&&!engine.value(rule.condition,enemyContext(engine,enemy)))continue;
     let choices=gridEnemyChoices(engine,enemy,rule.skill);
     if(rule.target==='self')choices=choices.filter(p=>p.targets.length===1&&p.targets[0]===enemy);
+    if(supportTargets(engine,rule)){const valid=supportTargets(engine,rule);choices=choices.filter(p=>p.targets.length===1&&valid.includes(p.targets[0]));}
     if(!choices.length)continue;
     if(rule.target==='weakest')choices.sort((a,c)=>Math.min(...a.targets.map(t=>t.hp))-Math.min(...c.targets.map(t=>t.hp)));
     performSkill(engine,enemy,choices[rule.target==='random'?Math.floor(engine.random()*choices.length):0]);return;
@@ -466,16 +503,16 @@ function gridEnemyAction(engine,enemy){
   // Score all legal steps without changing state or RNG. Prefer a step which
   // reaches any usable attack's distance band, then the closest opponent.
   const foes=s.members.map(id=>s.actors[id]).filter(a=>battleAlive(s,a)),from=position(s,enemy);
-  const skills=enemy.ai.filter(r=>(!r.condition||engine.value(r.condition,{self:{...enemy,hp_ratio:enemy.hp/enemy.stats.hp,round:b.round}}))&&!statusAbilityReason(d,s,enemy,r.skill)&&!dungeonAbilityReason(d,s,r.skill,'battle.skill')&&enemy.mp>=d.skills[r.skill].mp).map(r=>targetingProfile(d,enemy,d.skills[r.skill],r.skill));
-  const score=p=>enemy.ai.some(r=>(!r.condition||engine.value(r.condition,{self:{...enemy,hp_ratio:enemy.hp/enemy.stats.hp,round:b.round}}))&&gridEnemyChoices(engine,enemy,r.skill,{origin:p}).length)?-1:Math.min(...foes.flatMap(t=>skills.map(v=>{const n=distance(p,position(s,t));return Math.max(v.range.min-n,0,n-v.range.max)*10+n;})));
-  const steps=gridCells().map(p=>gridMovePlan(s,enemy,p)).filter(p=>p.ok).sort((a,c)=>score(a.to)-score(c.to));
+  const skills=enemy.ai.filter(r=>(!r.condition||engine.value(r.condition,enemyContext(engine,enemy)))&&!statusAbilityReason(d,s,enemy,r.skill)&&!dungeonAbilityReason(d,s,r.skill,'battle.skill')&&enemy.mp>=d.skills[r.skill].mp).map(r=>targetingProfile(d,enemy,d.skills[r.skill],r.skill));
+  const score=p=>enemy.ai.some(r=>(!r.condition||engine.value(r.condition,enemyContext(engine,enemy)))&&gridEnemyChoices(engine,enemy,r.skill,{origin:p}).length)?-1:Math.min(...foes.flatMap(t=>skills.map(v=>{const n=distance(p,position(s,t));return Math.max(v.range.min-n,0,n-v.range.max)*10+n;})));
+  const steps=gridCells().map(p=>gridMovePlan(s,enemy,p,engine.data)).filter(p=>p.ok).sort((a,c)=>score(a.to)-score(c.to));
   if(steps.length&&score(steps[0].to)<score(from)){b.grid.positions[unitKey(enemy)]=steps[0].to;b.log.push(`${enemy.name}は移動した。`);}
   else{applyGuard(b,enemy);b.log.push(`${enemy.name}は守りを固めた。`);}
 }
 
 function damageSnapshot(engine,source,target,enemySource){
  const {data:d,state:s}=engine;
- return {accuracy:statusAccuracy(d,s,source),sourceStats:clone(enemySource?enemyStats(engine,source):engine.stats(source.id)),targetStats:clone(target.instance?enemyStats(engine,target):engine.stats(target.id)),guardRate:guardDamageRate(d,guardLevel(s.battle,target)),taken:target.instance?1:passives(d,s,target.id).damageTaken??1,criticalChance:criticalChance(d,s,source,target),resist:Object.fromEntries(['physical','fire','ice','lightning','water','light','earth','dark'].map(e=>[e,(target.resist?.[e]??d.actors[target.id]?.resist?.[e]??1)*buffResistance(d,dungeonBuffs(d,s),unitKey(target),e)*(dungeonEffectActive(d,s,'status','wet')?wetResistance(d,target,e):1)]))};
+ return {accuracy:buffAccuracy(d,s.battle,source,statusAccuracy(d,s,source)),sourceStats:clone(enemySource?enemyStats(engine,source):engine.stats(source.id)),targetStats:clone(target.instance?enemyStats(engine,target):engine.stats(target.id)),guardRate:guardDamageRate(d,guardLevel(s.battle,target)),taken:target.instance?1:passives(d,s,target.id).damageTaken??1,criticalChance:criticalChance(d,s,source,target),resist:Object.fromEntries(['physical','fire','ice','lightning','water','light','earth','dark'].map(e=>[e,(target.resist?.[e]??d.actors[target.id]?.resist?.[e]??1)*buffResistance(d,dungeonBuffs(d,s),unitKey(target),e)*(dungeonEffectActive(d,s,'status','wet')?wetResistance(d,target,e):1)]))};
 }
 function frontlineReact(engine,reactor,on,attacker){
  const {data:d,state:s}=engine,b=s.battle;if(!isFrontline(s)||!battleAlive(s,reactor))return false;
@@ -498,8 +535,9 @@ function frontlineReact(engine,reactor,on,attacker){
 function frontlineEnemyAction(engine,enemy){
  const {state:s}=engine,b=s.battle;
  for(const rule of [...enemy.ai].sort((a,c)=>c.priority-a.priority)){
-  if(rule.condition&&!engine.value(rule.condition,{self:{...enemy,hp_ratio:enemy.hp/enemy.stats.hp,round:b.round}}))continue;
+  if(rule.condition&&!engine.value(rule.condition,enemyContext(engine,enemy)))continue;
   let choices=gridEnemyChoices(engine,enemy,rule.skill);if(rule.target==='self')choices=choices.filter(p=>p.targets.length===1&&p.targets[0]===enemy);
+  if(supportTargets(engine,rule)){const valid=supportTargets(engine,rule);choices=choices.filter(p=>p.targets.length===1&&valid.includes(p.targets[0]));}
   if(!choices.length)continue;if(rule.target==='weakest')choices.sort((a,c)=>Math.min(...a.targets.map(t=>t.hp))-Math.min(...c.targets.map(t=>t.hp)));
   performSkill(engine,enemy,choices[rule.target==='random'?Math.floor(engine.random()*choices.length):0]);return;
  }
@@ -515,7 +553,7 @@ export function stepBattle(engine,intent={}){
  const enemy=b.preemptive?.side==='enemies'?[...b.enemies].filter(e=>battleAlive(s,e)).sort((a,c)=>enemyStats(engine,c).agi-enemyStats(engine,a).agi)[0]:b.enemies.find(e=>unitKey(e)===b.turnQueue?.[b.turnIndex]);
  if(!enemy)return false;
  let selected;if(intent.skill){selected=gridEnemyChoices(engine,enemy,intent.skill).find(p=>p.id===intent.target);if(!selected)return false;}
- const act=()=>{if(!selected)enemyAction(engine,enemy);else{clearGuard(b,enemy);if(!consumeStun(engine,enemy)&&!actionOverridden(engine,enemy))performSkill(engine,enemy,selected);}};
+ const act=()=>{if(!selected)enemyAction(engine,enemy);else consumeEnemyActionBuffs(engine,enemy,()=>{clearGuard(b,enemy);if(!consumeStun(engine,enemy)&&!actionOverridden(engine,enemy))performSkill(engine,enemy,selected);});};
  if(b.preemptive){act();if(--b.preemptive.remaining===0)delete b.preemptive;}
  else{b.turnIndex++;act();}
  if(s.battle!==b)return true;

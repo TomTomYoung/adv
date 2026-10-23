@@ -2,9 +2,9 @@
 
 [個別ページ一覧](README.md) ／ [カタログへ戻る](../QUEST_CATALOG.md#q009-鼠の避難路) ／ [シナリオ本文](#q009-鼠の避難路) ／ [行為の条件と状態変化](#行為の条件と状態変化) ／ [配置イベント](#配置イベントと操作条件)
 
-作品版 1.29.0。配布JSONから生成した作者向けページ。真相と結末を含む。本編3場面・3結末。
+作品版 1.34.0。配布JSONから生成した作者向けページ。真相と結末を含む。本編3場面・3結末。
 
-<!-- quest-page-source:34ee6ea25f5d00ce290b84419d81d9d9d3438894a36d197be398201f1d873220 -->
+<!-- quest-page-source:cc44f63a69c6c5b3e76d00d0eb17680b5e1f6ae2fd55f9955e24f4f878a35585 -->
 
 ## 依頼の焦点と分岐の意味
 
@@ -1220,20 +1220,16 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
   "region": 1,
   "background": "corridor",
   "music": "exploration",
-  "encounter": "roaming_1",
+  "encounter": "waterway_eel_lesson",
   "encounterRate": 0.18,
   "encounterPool": [
-    {
-      "encounter": "roaming_1",
-      "weight": 20
-    },
     {
       "encounter": "wild_waterwheel_beaver",
       "weight": 40
     },
     {
-      "encounter": "wild_sluice_crocodile",
-      "weight": 40
+      "encounter": "waterway_eel_lesson",
+      "weight": 60
     }
   ],
   "dungeon": "region_1",
@@ -1380,20 +1376,16 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
   "region": 1,
   "background": "corridor",
   "music": "exploration",
-  "encounter": "roaming_1",
+  "encounter": "waterway_croc_eel",
   "encounterRate": 0.18,
   "encounterPool": [
     {
-      "encounter": "roaming_1",
-      "weight": 20
-    },
-    {
-      "encounter": "wild_waterwheel_beaver",
-      "weight": 40
-    },
-    {
       "encounter": "wild_sluice_crocodile",
-      "weight": 40
+      "weight": 30
+    },
+    {
+      "encounter": "waterway_croc_eel",
+      "weight": 70
     }
   ],
   "dungeon": "region_1",
@@ -1492,20 +1484,16 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
   "region": 1,
   "background": "corridor",
   "music": "exploration",
-  "encounter": "roaming_1",
+  "encounter": "waterway_shallow_a",
   "encounterRate": 0.18,
   "encounterPool": [
     {
-      "encounter": "roaming_1",
-      "weight": 20
+      "encounter": "waterway_croc_eel",
+      "weight": 35
     },
     {
-      "encounter": "wild_waterwheel_beaver",
-      "weight": 40
-    },
-    {
-      "encounter": "wild_sluice_crocodile",
-      "weight": 40
+      "encounter": "waterway_shallow_a",
+      "weight": 65
     }
   ],
   "dungeon": "region_1",
@@ -1608,20 +1596,16 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
   "region": 1,
   "background": "corridor",
   "music": "exploration",
-  "encounter": "roaming_1",
+  "encounter": "waterway_shallow_b",
   "encounterRate": 0.18,
   "encounterPool": [
     {
-      "encounter": "roaming_1",
-      "weight": 20
-    },
-    {
-      "encounter": "wild_waterwheel_beaver",
+      "encounter": "waterway_shallow_a",
       "weight": 40
     },
     {
-      "encounter": "wild_sluice_crocodile",
-      "weight": 40
+      "encounter": "waterway_shallow_b",
+      "weight": 60
     }
   ],
   "dungeon": "region_1",
@@ -1637,7 +1621,33 @@ zonesとholesの作業順を変えても、完了済みの作業が再実行さ�
     "#.........#",
     "###########"
   ],
-  "objects": [],
+  "objects": [
+    {
+      "id": "workshop_parts",
+      "name": "岸に残された修理材",
+      "x": 5,
+      "y": 5,
+      "kind": "chest",
+      "trigger": "interact",
+      "interactionRange": "here",
+      "safe": true,
+      "script": "treasure.package.region_1_canal_d.workshop_parts",
+      "treasure": {
+        "kind": "chest",
+        "uses": 1,
+        "reset": "never",
+        "rewards": {
+          "items": {
+            "machine_part": 4,
+            "soft_fiber": 4
+          }
+        },
+        "afterText": "修理材は回収済みだ。追加は町で買うか、水道の魔物が残す宝箱から補充できる。",
+        "message": "機関部品4個と柔らかな植物繊維4個を回収した。T2の再製作一回分。製法はどれかの10F主を倒すと町で使える。"
+      },
+      "once": false
+    }
+  ],
   "entrance": {
     "x": 1,
     "y": 1,

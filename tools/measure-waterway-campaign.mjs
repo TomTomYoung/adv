@@ -7,7 +7,7 @@ import {campaignRoute} from './campaign-route.mjs';
 import {data,goTownLocation} from '../tests/helpers.mjs';
 import {oilTotal} from '../src/core/expedition-oil.js';
 
-export function measureWaterway({seed=1907,size=4,mode='classic',loadout='standard'}={}){
+export function measureWaterway({seed=1907,size=4,mode='classic',loadout='standard',materials=false}={}){
  const c=new Campaign({seed,size,mode,loadout,route:'shortcuts'});c.run();const g=c.g;
  // The earned first ticket was exchanged by the Kagaribi campaign; equip it.
  c.act({type:'equip',actor:'ada',item:'exp_t2_sword'});goTownLocation(g,data.game.world.townRoot);
@@ -35,20 +35,24 @@ export function measureWaterway({seed=1907,size=4,mode='classic',loadout='standa
  drain('region_1_landing','upper_valve');supply('water_branch');
  go('region_1_f2',1,1);c.object('dry_stair_latch');c.choose('open');
  drain('region_1_f2','lower_gate');supply('water_bridge');supply('water_lower');
- drain('region_1_lower_landing','lower_valve');go('region_1_gatehouse',5,3);c.object('sluice_beast');c.choose('fight');
+ drain('region_1_lower_landing','lower_valve');
+ let recoveredMaterials=null;
+ if(materials){go('region_1_canal_d',5,5);const before={...g.state.inventory};c.object('workshop_parts');recoveredMaterials=Object.fromEntries(['machine_part','soft_fiber'].map(id=>[id,(g.state.inventory[id]??0)-(before[id]??0)]));c.checkpoint('waterway materials');}
+ go('region_1_gatehouse',5,3);c.object('sluice_beast');c.choose('fight');
  assert.equal(g.state.flags.waterway.sluiceBeastWon,true);supply('water_central');
  const at10={steps:g.state.steps-start.steps,actors:g.state.members.map(id=>({id,level:g.state.actors[id].level,xp:g.state.actors[id].xp}))};
  const beforeReturn=g.state.steps;go('region_1_f1',1,1);c.object('exit');assert.equal(g.state.mode,'town');
  c.checkpoint('waterway returned');
  const battles=c.report.battles.slice(start.battles);
- return {seed,size,mode,loadout,startingActors:start.actors,at10,stepsReturned:g.state.steps-start.steps,returnSteps:g.state.steps-beforeReturn,
+ return {seed,size,mode,loadout,materials,recoveredMaterials,startingActors:start.actors,at10,stepsReturned:g.state.steps-start.steps,returnSteps:g.state.steps-beforeReturn,
   minOil,walkingOil:c.report.oilSpentWalking-start.oil,remainingOil:oilTotal(data,g.state),checkpoints,
-  battles:battles.length,bossRounds:battles.find(b=>b.encounter==='waterway_sluice_guardian').rounds,battleMpSpent:battles.reduce((n,b)=>n+b.mp,0),
+  battles:battles.length,battleDetails:battles,bossRounds:battles.find(b=>b.encounter==='waterway_sluice_guardian').rounds,battleMpSpent:battles.reduce((n,b)=>n+b.mp,0),
   goldEarned:g.state.gold-start.gold,gemsEarned:g.state.expedition.gems-start.gems,consumed:Object.fromEntries(Object.entries(c.report.consumed).map(([k,n])=>[k,n-(start.consumed[k]??0)])),losses:g.state.records.losses};
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){
  const runs=[];
- if(process.argv.includes('--matrix'))for(const size of [4,5])for(const mode of ['classic','grid','frontline'])for(const loadout of ['standard','bow'])runs.push(measureWaterway({size,mode,loadout}));
+ if(process.argv.includes('--shallow'))for(const seed of [1907,42,2026])for(const size of [4,5])for(const mode of ['classic','grid','frontline'])for(const loadout of ['standard','bow'])for(const materials of [false,true])runs.push(measureWaterway({seed,size,mode,loadout,materials}));
+ else if(process.argv.includes('--matrix'))for(const size of [4,5])for(const mode of ['classic','grid','frontline'])for(const loadout of ['standard','bow'])runs.push(measureWaterway({size,mode,loadout}));
  else runs.push(measureWaterway({size:Number(process.argv[2]??4),mode:process.argv[3]??'classic',loadout:process.argv[4]??'standard'}));
- console.log(JSON.stringify({command:'node tools/measure-waterway-campaign.mjs --matrix',contentVersion:data.game.version,runs},null,2));
+ console.log(JSON.stringify({command:`node tools/measure-waterway-campaign.mjs ${process.argv.includes('--shallow')?'--shallow':'--matrix'}`,contentVersion:data.game.version,runs},null,2));
 }
