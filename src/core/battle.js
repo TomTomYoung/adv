@@ -315,6 +315,18 @@ function actionOverridden(engine,source){
 function afflictedTargets(engine,skill){
   return engine.state.battle.enemies.filter(t=>battleAlive(engine.state,t)&&skill.effects.some(e=>e.type==='cleanse'&&cleanseCandidates(t,e).length));
 }
+function unbuffedTargets(engine,skill){
+  const {state:s}=engine,b=s.battle;
+  return b.enemies.filter(t=>battleAlive(s,t)&&skill.effects.every(e=>e.type==='buff'&&!b.buffs.some(entry=>entry.target===unitKey(t)&&entry.id===e.buff&&entry.remaining>0)));
+}
+function supportTargets(engine,rule){
+  const skill=engine.data.skills[rule.skill];
+  return rule.target==='afflicted'?afflictedTargets(engine,skill):rule.target==='unbuffed'?unbuffedTargets(engine,skill):null;
+}
+function enemyContext(engine,enemy){
+  const b=engine.state.battle;
+  return {self:{...enemy,hp_ratio:enemy.hp/enemy.stats.hp,round:b.round,buffs:b.buffs.filter(entry=>entry.target===unitKey(enemy)&&entry.remaining>0).map(entry=>entry.id)}};
+}
 function enemyAction(engine,enemy){
   return consumeEnemyActionBuffs(engine,enemy,()=>performEnemyAction(engine,enemy));
 }
@@ -328,12 +340,12 @@ function performEnemyAction(engine,enemy){
     if(isFrontline(s)){frontlineEnemyAction(engine,enemy);return;}
     if(isGrid(s)){gridEnemyAction(engine,enemy);return;}
     const alive=s.members.filter(id=>battleAlive(s,s.actors[id]));if(!alive.length)return;
-    const rule=[...enemy.ai].sort((a,c)=>c.priority-a.priority).find(r=>!statusAbilityReason(engine.data,s,enemy,r.skill)&&!dungeonAbilityReason(engine.data,s,r.skill,'battle.skill')&&(!r.condition||engine.value(r.condition,{self:{...enemy,hp_ratio:enemy.hp/enemy.stats.hp,round:b.round}}))&&enemy.mp>=engine.data.skills[r.skill].mp&&(r.target!=='afflicted'||afflictedTargets(engine,engine.data.skills[r.skill]).length));
+    const rule=[...enemy.ai].sort((a,c)=>c.priority-a.priority).find(r=>!statusAbilityReason(engine.data,s,enemy,r.skill)&&!dungeonAbilityReason(engine.data,s,r.skill,'battle.skill')&&(!r.condition||engine.value(r.condition,enemyContext(engine,enemy)))&&enemy.mp>=engine.data.skills[r.skill].mp&&supportTargets(engine,r)?.length!==0);
     if(!rule){b.log.push(`${enemy.name}は使える行動がない。`);return;}
     const skill=engine.data.skills[rule.skill];enemy.mp-=skill.mp;
     const targetId=rule.target==='weakest'?alive.reduce((a,c)=>s.actors[c].hp<s.actors[a].hp?c:a):alive[Math.floor(engine.random()*alive.length)];
     let targets;
-    if(rule.target==='afflicted')targets=afflictedTargets(engine,skill).slice(0,1);
+    if(supportTargets(engine,rule))targets=supportTargets(engine,rule).slice(0,1);
     else if(skill.target==='all_enemies')targets=alive.map(id=>s.actors[id]);
     else if(skill.target==='all_allies')targets=b.enemies.filter(e=>battleAlive(s,e));
     else if(rule.target==='self'||skill.target==='self')targets=[enemy];
@@ -475,10 +487,10 @@ function gridConfusedAction(engine,source){
 function gridEnemyAction(engine,enemy){
   const {state:s,data:d}=engine,b=s.battle;
   for(const rule of [...enemy.ai].sort((a,c)=>c.priority-a.priority)){
-    if(rule.condition&&!engine.value(rule.condition,{self:{...enemy,hp_ratio:enemy.hp/enemy.stats.hp,round:b.round}}))continue;
+    if(rule.condition&&!engine.value(rule.condition,enemyContext(engine,enemy)))continue;
     let choices=gridEnemyChoices(engine,enemy,rule.skill);
     if(rule.target==='self')choices=choices.filter(p=>p.targets.length===1&&p.targets[0]===enemy);
-    if(rule.target==='afflicted'){const valid=afflictedTargets(engine,d.skills[rule.skill]);choices=choices.filter(p=>p.targets.length===1&&valid.includes(p.targets[0]));}
+    if(supportTargets(engine,rule)){const valid=supportTargets(engine,rule);choices=choices.filter(p=>p.targets.length===1&&valid.includes(p.targets[0]));}
     if(!choices.length)continue;
     if(rule.target==='weakest')choices.sort((a,c)=>Math.min(...a.targets.map(t=>t.hp))-Math.min(...c.targets.map(t=>t.hp)));
     performSkill(engine,enemy,choices[rule.target==='random'?Math.floor(engine.random()*choices.length):0]);return;
@@ -486,8 +498,8 @@ function gridEnemyAction(engine,enemy){
   // Score all legal steps without changing state or RNG. Prefer a step which
   // reaches any usable attack's distance band, then the closest opponent.
   const foes=s.members.map(id=>s.actors[id]).filter(a=>battleAlive(s,a)),from=position(s,enemy);
-  const skills=enemy.ai.filter(r=>(!r.condition||engine.value(r.condition,{self:{...enemy,hp_ratio:enemy.hp/enemy.stats.hp,round:b.round}}))&&!statusAbilityReason(d,s,enemy,r.skill)&&!dungeonAbilityReason(d,s,r.skill,'battle.skill')&&enemy.mp>=d.skills[r.skill].mp).map(r=>targetingProfile(d,enemy,d.skills[r.skill],r.skill));
-  const score=p=>enemy.ai.some(r=>(!r.condition||engine.value(r.condition,{self:{...enemy,hp_ratio:enemy.hp/enemy.stats.hp,round:b.round}}))&&gridEnemyChoices(engine,enemy,r.skill,{origin:p}).length)?-1:Math.min(...foes.flatMap(t=>skills.map(v=>{const n=distance(p,position(s,t));return Math.max(v.range.min-n,0,n-v.range.max)*10+n;})));
+  const skills=enemy.ai.filter(r=>(!r.condition||engine.value(r.condition,enemyContext(engine,enemy)))&&!statusAbilityReason(d,s,enemy,r.skill)&&!dungeonAbilityReason(d,s,r.skill,'battle.skill')&&enemy.mp>=d.skills[r.skill].mp).map(r=>targetingProfile(d,enemy,d.skills[r.skill],r.skill));
+  const score=p=>enemy.ai.some(r=>(!r.condition||engine.value(r.condition,enemyContext(engine,enemy)))&&gridEnemyChoices(engine,enemy,r.skill,{origin:p}).length)?-1:Math.min(...foes.flatMap(t=>skills.map(v=>{const n=distance(p,position(s,t));return Math.max(v.range.min-n,0,n-v.range.max)*10+n;})));
   const steps=gridCells().map(p=>gridMovePlan(s,enemy,p,engine.data)).filter(p=>p.ok).sort((a,c)=>score(a.to)-score(c.to));
   if(steps.length&&score(steps[0].to)<score(from)){b.grid.positions[unitKey(enemy)]=steps[0].to;b.log.push(`${enemy.name}は移動した。`);}
   else{applyGuard(b,enemy);b.log.push(`${enemy.name}は守りを固めた。`);}
@@ -518,9 +530,9 @@ function frontlineReact(engine,reactor,on,attacker){
 function frontlineEnemyAction(engine,enemy){
  const {state:s}=engine,b=s.battle;
  for(const rule of [...enemy.ai].sort((a,c)=>c.priority-a.priority)){
-  if(rule.condition&&!engine.value(rule.condition,{self:{...enemy,hp_ratio:enemy.hp/enemy.stats.hp,round:b.round}}))continue;
+  if(rule.condition&&!engine.value(rule.condition,enemyContext(engine,enemy)))continue;
   let choices=gridEnemyChoices(engine,enemy,rule.skill);if(rule.target==='self')choices=choices.filter(p=>p.targets.length===1&&p.targets[0]===enemy);
-  if(rule.target==='afflicted'){const valid=afflictedTargets(engine,engine.data.skills[rule.skill]);choices=choices.filter(p=>p.targets.length===1&&valid.includes(p.targets[0]));}
+  if(supportTargets(engine,rule)){const valid=supportTargets(engine,rule);choices=choices.filter(p=>p.targets.length===1&&valid.includes(p.targets[0]));}
   if(!choices.length)continue;if(rule.target==='weakest')choices.sort((a,c)=>Math.min(...a.targets.map(t=>t.hp))-Math.min(...c.targets.map(t=>t.hp)));
   performSkill(engine,enemy,choices[rule.target==='random'?Math.floor(engine.random()*choices.length):0]);return;
  }

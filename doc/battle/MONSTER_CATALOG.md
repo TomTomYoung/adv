@@ -1,12 +1,12 @@
 # 魔物一覧と戦闘画像
 
-作品版1.33.0。配布中の敵は84定義、遭遇編成は112定義、敵が参照する画像ファイルは25点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
+作品版1.34.0。配布中の敵は89定義、遭遇編成は116定義、敵が参照する画像ファイルは25点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
 
 敵・技能・画像・通常ロードのマップと迷宮・スクリプトから全文を生成します。数値を重ねて手書きせず、原稿を更新してから `npm run build:docs` で反映します。
 
 [固有環境の敵](#固有環境の敵)：6定義。
 [個別デザインの通常魔物](#個別デザインの通常魔物)：21定義。
-[依頼に追加した敵](#依頼に追加した敵)：37定義。
+[依頼に追加した敵](#依頼に追加した敵)：42定義。
 [地域の迷宮獣と守護者](#地域の迷宮獣と守護者)：20定義。
 
 ## 現在の読み方
@@ -21,7 +21,7 @@ AIは優先度の高い順に、条件成立・MP充足・環境による使用�
 
 同日の第2便で残る `dragon` も換装し、このIDを共有する7定義へ反映しました。前日の `wraith` を含む共通5画像の更新が完了し、現行の敵が参照する旧共通PNGは0点です。旧PNGとAIPaint原稿は保持しています。[第2便の適用・透過検査記録](../../assets/source/monsters/refresh-2026-09-25-batch2.json)と[生成プロンプト](../../assets/source/monsters/refresh-2026-09-25-batch2-prompts.json)。
 
-正常な1.25.0〜1.32.0のセーブを現行版へ検証後に移行し、その他の内容版や破損セーブは受け付けません。地域の迷宮獣・守護者は現行の依頼戦・通常遭遇から参照されているため残っています。保存方針は[SPEC.md](../SPEC.md)、調整と旧測定は[BALANCE_PLAN.md](BALANCE_PLAN.md)を参照してください。
+正常な1.25.0〜1.33.0のセーブを現行版へ検証後に移行し、その他の内容版や破損セーブは受け付けません。地域の迷宮獣・守護者は現行の依頼戦・通常遭遇から参照されているため残っています。保存方針は[SPEC.md](../SPEC.md)、調整と旧測定は[BALANCE_PLAN.md](BALANCE_PLAN.md)を参照してください。
 
 ## 編集元
 
@@ -237,7 +237,7 @@ waterway_croc_eel：水門ワニ×1・通電ウナギの幼体×1。逃走可。
 <img src="../../assets/images/monsters/drill_mole.webp" width="160" alt="ドリルモグラ">
 
 画像ID：monster_drill_mole。実ファイル：[assets/images/monsters/drill_mole.webp](../../assets/images/monsters/drill_mole.webp)。
-画像共有：他の敵定義との共有なし。
+画像共有：深掘りモグラ（低位）。
 
 発想：モグラ＋回転掘削器。参照：M002。地域分類：塩哭きの廃坑。
 
@@ -257,17 +257,17 @@ AIの選択順：
 遭遇と参照先：
 
 wild_drill_mole：ドリルモグラ×1。逃走可。
-通常遭遇候補：塩哭きの廃坑・地下1層 (region_2_f1)、重み40 / 塩哭きの廃坑・地下2層 (region_2_f2)、重み35 / 塩哭きの廃坑・3F 砕石場 (region_2_f3)、重み40 / 塩哭きの廃坑・4F 選鉱詰所 (region_2_f4)、重み40 / 塩哭きの廃坑・5F 塩の吹溜まり (region_2_f5)、重み40 / 塩哭きの廃坑・6F 旧運搬線 (region_2_f6)、重み40 / 塩哭きの廃坑・7F 巻上詰所 (region_2_f7)、重み40 / 塩哭きの廃坑・8F 割晶坑 (region_2_f8)、重み40 / 塩哭きの廃坑・9F 試錐場 (region_2_f9)、重み40 / 塩哭きの廃坑・10F 大選鉱室 (region_2_f10)、重み40。
+通常遭遇候補：塩哭きの廃坑・地下1層 (region_2_f1)、重み40 / 塩哭きの廃坑・地下2層 (region_2_f2)、重み35 / 塩哭きの廃坑・3F 砕石場 (region_2_f3)、重み40 / 塩哭きの廃坑・4F 選鉱詰所 (region_2_f4)、重み40 / 塩哭きの廃坑・5F 塩の吹溜まり (region_2_f5)、重み40 / 塩哭きの廃坑・6F 旧運搬線 (region_2_f6)、重み70 / 塩哭きの廃坑・10F 大選鉱室 (region_2_f10)、重み40。
 
 wild_pair_2：ドリルモグラ×1・陶器アルマジロ×1。逃走可。
-通常遭遇候補：塩哭きの廃坑・地下2層 (region_2_f2)、重み10 / 塩哭きの廃坑・3F 砕石場 (region_2_f3)、重み20 / 塩哭きの廃坑・4F 選鉱詰所 (region_2_f4)、重み20 / 塩哭きの廃坑・5F 塩の吹溜まり (region_2_f5)、重み20 / 塩哭きの廃坑・6F 旧運搬線 (region_2_f6)、重み20 / 塩哭きの廃坑・7F 巻上詰所 (region_2_f7)、重み20 / 塩哭きの廃坑・8F 割晶坑 (region_2_f8)、重み20 / 塩哭きの廃坑・9F 試錐場 (region_2_f9)、重み20 / 塩哭きの廃坑・10F 大選鉱室 (region_2_f10)、重み20。
+通常遭遇候補：塩哭きの廃坑・地下2層 (region_2_f2)、重み10 / 塩哭きの廃坑・3F 砕石場 (region_2_f3)、重み20 / 塩哭きの廃坑・4F 選鉱詰所 (region_2_f4)、重み20 / 塩哭きの廃坑・5F 塩の吹溜まり (region_2_f5)、重み20 / 塩哭きの廃坑・7F 巻上詰所 (region_2_f7)、重み40 / 塩哭きの廃坑・10F 大選鉱室 (region_2_f10)、重み20。
 
 ### 陶器アルマジロ (ceramic_armadillo)
 
 <img src="../../assets/images/monsters/ceramic_armadillo.webp" width="160" alt="陶器アルマジロ">
 
 画像ID：monster_ceramic_armadillo。実ファイル：[assets/images/monsters/ceramic_armadillo.webp](../../assets/images/monsters/ceramic_armadillo.webp)。
-画像共有：殻砕き獣・根殻甲。
+画像共有：殻砕き獣・根殻甲・厚殻アルマジロ（低位）。
 
 発想：アルマジロ＋陶器。参照：M008。地域分類：塩哭きの廃坑。
 
@@ -288,10 +288,10 @@ AIの選択順：
 遭遇と参照先：
 
 wild_ceramic_armadillo：陶器アルマジロ×1。逃走可。
-通常遭遇候補：塩哭きの廃坑・地下1層 (region_2_f1)、重み40 / 塩哭きの廃坑・地下2層 (region_2_f2)、重み35 / 塩哭きの廃坑・3F 砕石場 (region_2_f3)、重み40 / 塩哭きの廃坑・4F 選鉱詰所 (region_2_f4)、重み40 / 塩哭きの廃坑・5F 塩の吹溜まり (region_2_f5)、重み40 / 塩哭きの廃坑・6F 旧運搬線 (region_2_f6)、重み40 / 塩哭きの廃坑・7F 巻上詰所 (region_2_f7)、重み40 / 塩哭きの廃坑・8F 割晶坑 (region_2_f8)、重み40 / 塩哭きの廃坑・9F 試錐場 (region_2_f9)、重み40 / 塩哭きの廃坑・10F 大選鉱室 (region_2_f10)、重み40。
+通常遭遇候補：塩哭きの廃坑・地下1層 (region_2_f1)、重み40 / 塩哭きの廃坑・地下2層 (region_2_f2)、重み35 / 塩哭きの廃坑・3F 砕石場 (region_2_f3)、重み40 / 塩哭きの廃坑・4F 選鉱詰所 (region_2_f4)、重み40 / 塩哭きの廃坑・5F 塩の吹溜まり (region_2_f5)、重み40 / 塩哭きの廃坑・10F 大選鉱室 (region_2_f10)、重み40。
 
 wild_pair_2：ドリルモグラ×1・陶器アルマジロ×1。逃走可。
-通常遭遇候補：塩哭きの廃坑・地下2層 (region_2_f2)、重み10 / 塩哭きの廃坑・3F 砕石場 (region_2_f3)、重み20 / 塩哭きの廃坑・4F 選鉱詰所 (region_2_f4)、重み20 / 塩哭きの廃坑・5F 塩の吹溜まり (region_2_f5)、重み20 / 塩哭きの廃坑・6F 旧運搬線 (region_2_f6)、重み20 / 塩哭きの廃坑・7F 巻上詰所 (region_2_f7)、重み20 / 塩哭きの廃坑・8F 割晶坑 (region_2_f8)、重み20 / 塩哭きの廃坑・9F 試錐場 (region_2_f9)、重み20 / 塩哭きの廃坑・10F 大選鉱室 (region_2_f10)、重み20。
+通常遭遇候補：塩哭きの廃坑・地下2層 (region_2_f2)、重み10 / 塩哭きの廃坑・3F 砕石場 (region_2_f3)、重み20 / 塩哭きの廃坑・4F 選鉱詰所 (region_2_f4)、重み20 / 塩哭きの廃坑・5F 塩の吹溜まり (region_2_f5)、重み20 / 塩哭きの廃坑・7F 巻上詰所 (region_2_f7)、重み40 / 塩哭きの廃坑・10F 大選鉱室 (region_2_f10)、重み20。
 
 ### 蜜蝋ランプバチ (candle_bee)
 
@@ -901,7 +901,7 @@ story_125：荊角獣×1。逃走可。
 <img src="../../assets/images/monsters/construct.webp" width="160" alt="借証の泥人形">
 
 画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
-画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・砦の守護獣・詰所の擬態箱・石喰い獣・灰積みゴーレム・炭焼き場の灰積み。
+画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・砦の守護獣・詰所の擬態箱・石喰い獣・灰積みゴーレム・炭焼き場の灰積み・塩噴き蟹（低位）・鉱脈の見張り（低位）・結晶ハサミ（低位）。
 
 基礎能力：HP 49 / MP 8 / STR 14 / VIT 6 / AGI 8 / INT 12。報酬：11G / 17EXP。
 宝箱：傷薬 1個 / 12.5％。
@@ -945,7 +945,7 @@ story_128：鉄喰い蛾×1。逃走可。
 <img src="../../assets/images/monsters/construct.webp" width="160" alt="砦の守護獣">
 
 画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
-画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・詰所の擬態箱・石喰い獣・灰積みゴーレム・炭焼き場の灰積み。
+画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・詰所の擬態箱・石喰い獣・灰積みゴーレム・炭焼き場の灰積み・塩噴き蟹（低位）・鉱脈の見張り（低位）・結晶ハサミ（低位）。
 
 基礎能力：HP 49 / MP 8 / STR 14 / VIT 6 / AGI 8 / INT 12。報酬：11G / 17EXP。
 宝箱：鎖帷子 1個 / 3.125％。
@@ -989,7 +989,7 @@ story_130：苔冠の小魔×1。逃走可。
 <img src="../../assets/images/monsters/construct.webp" width="160" alt="詰所の擬態箱">
 
 画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
-画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・石喰い獣・灰積みゴーレム・炭焼き場の灰積み。
+画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・石喰い獣・灰積みゴーレム・炭焼き場の灰積み・塩噴き蟹（低位）・鉱脈の見張り（低位）・結晶ハサミ（低位）。
 
 基礎能力：HP 58 / MP 8 / STR 16 / VIT 7 / AGI 9 / INT 14。報酬：13G / 20EXP。
 宝箱：鉄の剣 1個 / 6.25％。
@@ -1011,7 +1011,7 @@ story_132：詰所の擬態箱×1。逃走可。
 <img src="../../assets/images/monsters/construct.webp" width="160" alt="石喰い獣">
 
 画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
-画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱・灰積みゴーレム・炭焼き場の灰積み。
+画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱・灰積みゴーレム・炭焼き場の灰積み・塩噴き蟹（低位）・鉱脈の見張り（低位）・結晶ハサミ（低位）。
 
 基礎能力：HP 85 / MP 8 / STR 22 / VIT 10 / AGI 12 / INT 20。報酬：19G / 29EXP。
 宝箱：発破薬 1個 / 6.25％。
@@ -1201,7 +1201,7 @@ kagaribi_patrol_pair：灯蛾×1・赤錆の番兵×1。逃走可。
 <img src="../../assets/images/monsters/construct.webp" width="160" alt="灰積みゴーレム">
 
 画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
-画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣・炭焼き場の灰積み。
+画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣・炭焼き場の灰積み・塩噴き蟹（低位）・鉱脈の見張り（低位）・結晶ハサミ（低位）。
 
 基礎能力：HP 70 / MP 0 / STR 14 / VIT 10 / AGI 3 / INT 5。報酬：12G / 25EXP。
 宝箱：傷薬 1個 / 12.5％。
@@ -1389,7 +1389,7 @@ kagaribi_shallow_patrol_pair：煤けた灯蛾×1・巡回路の赤錆番兵×1�
 <img src="../../assets/images/monsters/construct.webp" width="160" alt="炭焼き場の灰積み">
 
 画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
-画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣・灰積みゴーレム。
+画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣・灰積みゴーレム・塩噴き蟹（低位）・鉱脈の見張り（低位）・結晶ハサミ（低位）。
 
 基礎能力：HP 175 / MP 0 / STR 22 / VIT 13 / AGI 3 / INT 5。報酬：28G / 150EXP。
 宝箱：傷薬 1個 / 12.5％。
@@ -1483,7 +1483,7 @@ waterway_sluice_guardian：水門獣×1。逃走可。
 <img src="../../assets/images/monsters/ceramic_armadillo.webp" width="160" alt="殻砕き獣">
 
 画像ID：monster_ceramic_armadillo。実ファイル：[assets/images/monsters/ceramic_armadillo.webp](../../assets/images/monsters/ceramic_armadillo.webp)。
-画像共有：陶器アルマジロ・根殻甲。
+画像共有：陶器アルマジロ・根殻甲・厚殻アルマジロ（低位）。
 
 基礎能力：HP 850 / MP 0 / STR 40 / VIT 30 / AGI 8 / INT 18。報酬：110G / 650EXP。
 宝箱：傷薬 1個 / 12.5％。
@@ -1527,7 +1527,7 @@ garden_root_guardian：大剪定虫×1・根殻甲×1。逃走可。
 <img src="../../assets/images/monsters/ceramic_armadillo.webp" width="160" alt="根殻甲">
 
 画像ID：monster_ceramic_armadillo。実ファイル：[assets/images/monsters/ceramic_armadillo.webp](../../assets/images/monsters/ceramic_armadillo.webp)。
-画像共有：陶器アルマジロ・殻砕き獣。
+画像共有：陶器アルマジロ・殻砕き獣・厚殻アルマジロ（低位）。
 
 基礎能力：HP 160 / MP 0 / STR 24 / VIT 18 / AGI 7 / INT 8。報酬：24G / 100EXP。
 宝箱：柔らかな植物繊維 1個 / 12.5％。
@@ -1657,6 +1657,130 @@ AIの選択順：
 
 waterway_shallow_b：深水門ワニ（低位）×1・大水車ビーバー（低位）×1・通電ウナギ（低位）×1・泥濾し貝（低位）×1。逃走可。
 通常遭遇候補：灯守の地下水道・9F 避難水路 (region_1_canal_d)、重み60。
+
+### 厚殻アルマジロ（低位） (mine_low_armadillo)
+
+<img src="../../assets/images/monsters/ceramic_armadillo.webp" width="160" alt="厚殻アルマジロ（低位）">
+
+画像ID：monster_ceramic_armadillo。実ファイル：[assets/images/monsters/ceramic_armadillo.webp](../../assets/images/monsters/ceramic_armadillo.webp)。
+画像共有：陶器アルマジロ・殻砕き獣・根殻甲。
+
+基礎能力：HP 115 / MP 12 / STR 24 / VIT 25 / AGI 6 / INT 7。報酬：12G / 45EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：physical 0.6 / fire 1.4。
+
+AIの選択順：
+
+1. 優先度30、第1ラウンド：防御 (guard)、MP0、対象は自身。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+mine_shallow_a：厚殻アルマジロ（低位）×1・深掘りモグラ（低位）×1・塩噴き蟹（低位）×1。逃走可。
+通常遭遇候補：塩哭きの廃坑・7F 巻上詰所 (region_2_f7)、重み60 / 塩哭きの廃坑・8F 割晶坑 (region_2_f8)、重み40。
+
+mine_shallow_b：厚殻アルマジロ（低位）×2・塩噴き蟹（低位）×1・鉱脈の見張り（低位）×1。逃走可。
+通常遭遇候補：塩哭きの廃坑・8F 割晶坑 (region_2_f8)、重み60 / 塩哭きの廃坑・9F 試錐場 (region_2_f9)、重み40。
+
+### 深掘りモグラ（低位） (mine_low_mole)
+
+<img src="../../assets/images/monsters/drill_mole.webp" width="160" alt="深掘りモグラ（低位）">
+
+画像ID：monster_drill_mole。実ファイル：[assets/images/monsters/drill_mole.webp](../../assets/images/monsters/drill_mole.webp)。
+画像共有：ドリルモグラ。
+
+基礎能力：HP 79 / MP 18 / STR 31 / VIT 14 / AGI 11 / INT 9。報酬：12G / 40EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：ice 1.3。
+
+AIの選択順：
+
+1. 優先度30、自身に補助 mine_drill_ready がある間：低位の貫通突進 (mine_drill_charge)、MP0、対象は探索隊の生存者からランダムに1人。
+2. 優先度20、条件式 {"op":"eq","left":{"op":"mod","args":[{"ref":"self.round"},3]},"right":2}：低く身構える（次は突進） (mine_drill_ready)、MP0、対象は自身。
+3. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+mine_mole_lesson：深掘りモグラ（低位）×1。逃走可。
+通常遭遇候補：塩哭きの廃坑・6F 旧運搬線 (region_2_f6)、重み30。
+
+mine_shallow_a：厚殻アルマジロ（低位）×1・深掘りモグラ（低位）×1・塩噴き蟹（低位）×1。逃走可。
+通常遭遇候補：塩哭きの廃坑・7F 巻上詰所 (region_2_f7)、重み60 / 塩哭きの廃坑・8F 割晶坑 (region_2_f8)、重み40。
+
+mine_shallow_c：深掘りモグラ（低位）×1・結晶ハサミ（低位）×1・塩噴き蟹（低位）×1・鉱脈の見張り（低位）×1。逃走可。
+通常遭遇候補：塩哭きの廃坑・9F 試錐場 (region_2_f9)、重み60。
+
+### 塩噴き蟹（低位） (mine_low_crab)
+
+<img src="../../assets/images/monsters/construct.webp" width="160" alt="塩噴き蟹（低位）">
+
+画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
+画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣・灰積みゴーレム・炭焼き場の灰積み・鉱脈の見張り（低位）・結晶ハサミ（低位）。
+
+基礎能力：HP 60 / MP 36 / STR 16 / VIT 12 / AGI 16 / INT 28。報酬：12G / 40EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：ice 1.2。
+
+AIの選択順：
+
+1. 優先度10、条件なし：塩晶弾 (mine_salt_bolt)、MP4、対象は探索隊の生存者からランダムに1人。
+2. 優先度0、条件なし：細い晶片投げ (mine_shard_shot)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+mine_shallow_a：厚殻アルマジロ（低位）×1・深掘りモグラ（低位）×1・塩噴き蟹（低位）×1。逃走可。
+通常遭遇候補：塩哭きの廃坑・7F 巻上詰所 (region_2_f7)、重み60 / 塩哭きの廃坑・8F 割晶坑 (region_2_f8)、重み40。
+
+mine_shallow_b：厚殻アルマジロ（低位）×2・塩噴き蟹（低位）×1・鉱脈の見張り（低位）×1。逃走可。
+通常遭遇候補：塩哭きの廃坑・8F 割晶坑 (region_2_f8)、重み60 / 塩哭きの廃坑・9F 試錐場 (region_2_f9)、重み40。
+
+mine_shallow_c：深掘りモグラ（低位）×1・結晶ハサミ（低位）×1・塩噴き蟹（低位）×1・鉱脈の見張り（低位）×1。逃走可。
+通常遭遇候補：塩哭きの廃坑・9F 試錐場 (region_2_f9)、重み60。
+
+### 鉱脈の見張り（低位） (mine_low_sentinel)
+
+<img src="../../assets/images/monsters/construct.webp" width="160" alt="鉱脈の見張り（低位）">
+
+画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
+画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣・灰積みゴーレム・炭焼き場の灰積み・塩噴き蟹（低位）・結晶ハサミ（低位）。
+
+基礎能力：HP 63 / MP 32 / STR 15 / VIT 12 / AGI 9 / INT 24。報酬：10G / 35EXP。
+宝箱：柔らかな植物繊維 1個 / 12.5％。
+属性倍率：fire 1.2。
+
+AIの選択順：
+
+1. 優先度20、奇数ラウンド：鉱脈の補強 (mine_vein_ward)、MP4、対象は敵側の生存者のうち、技能が付ける補助を持たない1体（遭遇順）。
+2. 優先度0、条件なし：細い晶片投げ (mine_shard_shot)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+mine_shallow_b：厚殻アルマジロ（低位）×2・塩噴き蟹（低位）×1・鉱脈の見張り（低位）×1。逃走可。
+通常遭遇候補：塩哭きの廃坑・8F 割晶坑 (region_2_f8)、重み60 / 塩哭きの廃坑・9F 試錐場 (region_2_f9)、重み40。
+
+mine_shallow_c：深掘りモグラ（低位）×1・結晶ハサミ（低位）×1・塩噴き蟹（低位）×1・鉱脈の見張り（低位）×1。逃走可。
+通常遭遇候補：塩哭きの廃坑・9F 試錐場 (region_2_f9)、重み60。
+
+### 結晶ハサミ（低位） (mine_low_scissors)
+
+<img src="../../assets/images/monsters/construct.webp" width="160" alt="結晶ハサミ（低位）">
+
+画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
+画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣・灰積みゴーレム・炭焼き場の灰積み・塩噴き蟹（低位）・鉱脈の見張り（低位）。
+
+基礎能力：HP 60 / MP 24 / STR 27 / VIT 11 / AGI 19 / INT 14。報酬：12G / 40EXP。
+宝箱：柔らかな植物繊維 1個 / 12.5％。
+属性倍率：physical 0.9。
+
+AIの選択順：
+
+1. 優先度10、奇数ラウンド：結晶の強爪 (mine_crystal_claw)、MP0、対象は探索隊の生存者からランダムに1人。
+2. 優先度0、条件なし：結晶の小爪 (mine_light_claw)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+mine_shallow_c：深掘りモグラ（低位）×1・結晶ハサミ（低位）×1・塩噴き蟹（低位）×1・鉱脈の見張り（低位）×1。逃走可。
+通常遭遇候補：塩哭きの廃坑・9F 試錐場 (region_2_f9)、重み60。
 
 ## 地域の迷宮獣と守護者
 
@@ -1920,7 +2044,7 @@ boss_5：灰時計の書庫の守護者×1・灰時計の書庫の迷宮獣×1�
 <img src="../../assets/images/monsters/construct.webp" width="160" alt="眠れる地下市場の迷宮獣">
 
 画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
-画像共有：眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣・灰積みゴーレム・炭焼き場の灰積み。
+画像共有：眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣・灰積みゴーレム・炭焼き場の灰積み・塩噴き蟹（低位）・鉱脈の見張り（低位）・結晶ハサミ（低位）。
 
 基礎能力：HP 76 / MP 8 / STR 20 / VIT 9 / AGI 11 / INT 18。報酬：17G / 26EXP。
 宝箱：傷薬 1個 / 12.5％。
@@ -1951,7 +2075,7 @@ market_enforcers：眠れる地下市場の迷宮獣×2。逃走可。
 <img src="../../assets/images/monsters/construct.webp" width="160" alt="眠れる地下市場の守護者">
 
 画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
-画像共有：眠れる地下市場の迷宮獣・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣・灰積みゴーレム・炭焼き場の灰積み。
+画像共有：眠れる地下市場の迷宮獣・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣・灰積みゴーレム・炭焼き場の灰積み・塩噴き蟹（低位）・鉱脈の見張り（低位）・結晶ハサミ（低位）。
 
 基礎能力：HP 182 / MP 20 / STR 23 / VIT 9 / AGI 11 / INT 18。報酬：17G / 26EXP。
 宝箱：野営糧食 1個 / 12.5％。
@@ -2025,7 +2149,7 @@ boss_7：黒潮の沈没城の守護者×1・黒潮の沈没城の迷宮獣×1�
 <img src="../../assets/images/monsters/construct.webp" width="160" alt="鉄胎の機関廟の迷宮獣">
 
 画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
-画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣・灰積みゴーレム・炭焼き場の灰積み。
+画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣・灰積みゴーレム・炭焼き場の灰積み・塩噴き蟹（低位）・鉱脈の見張り（低位）・結晶ハサミ（低位）。
 
 基礎能力：HP 94 / MP 8 / STR 24 / VIT 11 / AGI 13 / INT 22。報酬：21G / 32EXP。
 宝箱：傷薬 1個 / 12.5％。
@@ -2056,7 +2180,7 @@ machine_sentry：鉄胎の機関廟の迷宮獣×1。逃走可。
 <img src="../../assets/images/monsters/construct.webp" width="160" alt="鉄胎の機関廟の守護者">
 
 画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
-画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣・灰積みゴーレム・炭焼き場の灰積み。
+画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣・灰積みゴーレム・炭焼き場の灰積み・塩噴き蟹（低位）・鉱脈の見張り（低位）・結晶ハサミ（低位）。
 
 基礎能力：HP 226 / MP 20 / STR 27 / VIT 11 / AGI 13 / INT 22。報酬：21G / 32EXP。
 宝箱：野営糧食 1個 / 12.5％。

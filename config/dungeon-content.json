@@ -660,6 +660,235 @@
         "gold": 10
       },
       "role": "偶数巡だけ、生存する仲間一体の通常状態異常を一つ解除。回復はしない。"
+    },
+    "mine_low_armadillo": {
+      "id": "mine_low_armadillo",
+      "name": "厚殻アルマジロ（低位）",
+      "region": 2,
+      "stats": {
+        "hp": 115,
+        "mp": 12,
+        "str": 24,
+        "vit": 25,
+        "agi": 6,
+        "int": 7
+      },
+      "resist": {
+        "physical": 0.6,
+        "fire": 1.4
+      },
+      "ai": [
+        {
+          "priority": 30,
+          "skill": "guard",
+          "target": "self",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "self.round"
+            },
+            "right": 1
+          }
+        },
+        {
+          "priority": 0,
+          "skill": "attack",
+          "target": "random"
+        }
+      ],
+      "sprite": "monster_ceramic_armadillo",
+      "rewards": {
+        "xp": 45,
+        "gold": 12
+      },
+      "role": "初回だけ防御。硬い殻には火が有効。"
+    },
+    "mine_low_mole": {
+      "id": "mine_low_mole",
+      "name": "深掘りモグラ（低位）",
+      "region": 2,
+      "stats": {
+        "hp": 79,
+        "mp": 18,
+        "str": 31,
+        "vit": 14,
+        "agi": 11,
+        "int": 9
+      },
+      "resist": {
+        "ice": 1.3
+      },
+      "ai": [
+        {
+          "priority": 30,
+          "skill": "mine_drill_charge",
+          "target": "random",
+          "condition": {
+            "op": "contains",
+            "left": {
+              "ref": "self.buffs"
+            },
+            "right": "mine_drill_ready"
+          }
+        },
+        {
+          "priority": 20,
+          "skill": "mine_drill_ready",
+          "target": "self",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "op": "mod",
+              "args": [
+                {
+                  "ref": "self.round"
+                },
+                3
+              ]
+            },
+            "right": 2
+          }
+        },
+        {
+          "priority": 0,
+          "skill": "attack",
+          "target": "random"
+        }
+      ],
+      "sprite": "monster_drill_mole",
+      "rewards": {
+        "xp": 40,
+        "gold": 12
+      },
+      "role": "2・5・8…巡目に構え、次の行動で防御の一部を貫く突進。防御行動は有効。突進後は次巡まで自身の防御が低下。"
+    },
+    "mine_low_crab": {
+      "id": "mine_low_crab",
+      "name": "塩噴き蟹（低位）",
+      "region": 2,
+      "stats": {
+        "hp": 60,
+        "mp": 36,
+        "str": 16,
+        "vit": 12,
+        "agi": 16,
+        "int": 28
+      },
+      "resist": {
+        "ice": 1.2
+      },
+      "ai": [
+        {
+          "priority": 10,
+          "skill": "mine_salt_bolt",
+          "target": "random"
+        },
+        {
+          "priority": 0,
+          "skill": "mine_shard_shot",
+          "target": "random"
+        }
+      ],
+      "sprite": "construct",
+      "rewards": {
+        "xp": 40,
+        "gold": 12
+      },
+      "role": "中列から単体の土術。MP切れは弱い晶片投げ。装備の塩は戦闘開始時以外に増やさない。"
+    },
+    "mine_low_sentinel": {
+      "id": "mine_low_sentinel",
+      "name": "鉱脈の見張り（低位）",
+      "region": 2,
+      "stats": {
+        "hp": 63,
+        "mp": 32,
+        "str": 15,
+        "vit": 12,
+        "agi": 9,
+        "int": 24
+      },
+      "resist": {
+        "fire": 1.2
+      },
+      "ai": [
+        {
+          "priority": 20,
+          "skill": "mine_vein_ward",
+          "target": "unbuffed",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "op": "mod",
+              "args": [
+                {
+                  "ref": "self.round"
+                },
+                2
+              ]
+            },
+            "right": 1
+          }
+        },
+        {
+          "priority": 0,
+          "skill": "mine_shard_shot",
+          "target": "random"
+        }
+      ],
+      "sprite": "construct",
+      "rewards": {
+        "xp": 35,
+        "gold": 10
+      },
+      "role": "奇数巡に未補強の生存者一体へ2巡の防御補助。同じ補助は重複せず、対象がなければ晶片投げ。"
+    },
+    "mine_low_scissors": {
+      "id": "mine_low_scissors",
+      "name": "結晶ハサミ（低位）",
+      "region": 2,
+      "stats": {
+        "hp": 60,
+        "mp": 24,
+        "str": 27,
+        "vit": 11,
+        "agi": 19,
+        "int": 14
+      },
+      "resist": {
+        "physical": 0.9
+      },
+      "ai": [
+        {
+          "priority": 10,
+          "skill": "mine_crystal_claw",
+          "target": "random",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "op": "mod",
+              "args": [
+                {
+                  "ref": "self.round"
+                },
+                2
+              ]
+            },
+            "right": 1
+          }
+        },
+        {
+          "priority": 0,
+          "skill": "mine_light_claw",
+          "target": "random"
+        }
+      ],
+      "sprite": "construct",
+      "rewards": {
+        "xp": 40,
+        "gold": 12
+      },
+      "role": "奇数巡は単体強打、偶数巡は弱い爪。装備を壊さず、塩を追加しない。"
     }
   },
   "encounters": {
@@ -914,6 +1143,162 @@
       ],
       "escape": true,
       "text": "ビーバーは尾を引いた次の攻撃が強打。中列のウナギは雷術、後列の貝は偶数巡に仲間の状態異常を一つ濾す。"
+    },
+    "mine_mole_lesson": {
+      "id": "mine_mole_lesson",
+      "name": "深掘りモグラの構え",
+      "enemies": [
+        "mine_low_mole"
+      ],
+      "enemyPositions": [
+        {
+          "x": 2,
+          "y": 2
+        }
+      ],
+      "frontlinePositions": [
+        {
+          "lane": 2,
+          "depth": 0
+        }
+      ],
+      "escape": true,
+      "text": "モグラは二巡目に身を低くする。次の突進は防御の一部を貫くが、防御や妨害で軽減できる。突進後は隙ができる。"
+    },
+    "mine_shallow_a": {
+      "id": "mine_shallow_a",
+      "name": "低位の殻と掘削班",
+      "enemies": [
+        "mine_low_armadillo",
+        "mine_low_mole",
+        "mine_low_crab"
+      ],
+      "enemyPositions": [
+        {
+          "x": 1,
+          "y": 2
+        },
+        {
+          "x": 3,
+          "y": 2
+        },
+        {
+          "x": 2,
+          "y": 1
+        }
+      ],
+      "frontlinePositions": [
+        {
+          "lane": 1,
+          "depth": 0
+        },
+        {
+          "lane": 3,
+          "depth": 0
+        },
+        {
+          "lane": 2,
+          "depth": 1
+        }
+      ],
+      "escape": true,
+      "text": "アルマジロは初回だけ防御する。モグラの構えの次に突進が来る。中列の蟹は塩晶弾を放つが、装備の塩を追加しない。"
+    },
+    "mine_shallow_b": {
+      "id": "mine_shallow_b",
+      "name": "低位の鉱脈守り",
+      "enemies": [
+        "mine_low_armadillo",
+        "mine_low_armadillo",
+        "mine_low_crab",
+        "mine_low_sentinel"
+      ],
+      "enemyPositions": [
+        {
+          "x": 1,
+          "y": 2
+        },
+        {
+          "x": 3,
+          "y": 2
+        },
+        {
+          "x": 2,
+          "y": 1
+        },
+        {
+          "x": 2,
+          "y": 0
+        }
+      ],
+      "frontlinePositions": [
+        {
+          "lane": 1,
+          "depth": 0
+        },
+        {
+          "lane": 3,
+          "depth": 0
+        },
+        {
+          "lane": 2,
+          "depth": 1
+        },
+        {
+          "lane": 2,
+          "depth": 2
+        }
+      ],
+      "escape": true,
+      "text": "前衛の殻は火に弱い。後列の見張りは奇数巡に一体の防御を二巡補強する。補強は重複せず、支援役から止めることもできる。"
+    },
+    "mine_shallow_c": {
+      "id": "mine_shallow_c",
+      "name": "低位の試錐群",
+      "enemies": [
+        "mine_low_mole",
+        "mine_low_scissors",
+        "mine_low_crab",
+        "mine_low_sentinel"
+      ],
+      "enemyPositions": [
+        {
+          "x": 1,
+          "y": 2
+        },
+        {
+          "x": 3,
+          "y": 2
+        },
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": 3,
+          "y": 0
+        }
+      ],
+      "frontlinePositions": [
+        {
+          "lane": 1,
+          "depth": 0
+        },
+        {
+          "lane": 3,
+          "depth": 0
+        },
+        {
+          "lane": 1,
+          "depth": 1
+        },
+        {
+          "lane": 3,
+          "depth": 2
+        }
+      ],
+      "escape": true,
+      "text": "モグラは構えてから突進、ハサミは強打の次に弱い爪。見張りは一体を補強する。次の攻撃を見て防御や集中攻撃を選べる。"
     }
   },
   "statuses": {
@@ -2036,20 +2421,16 @@
       },
       "background": "corridor",
       "music": "exploration",
-      "encounter": "wild_pair_2",
+      "encounter": "mine_mole_lesson",
       "encounterRate": 0.18,
       "encounterPool": [
         {
           "encounter": "wild_drill_mole",
-          "weight": 40
+          "weight": 70
         },
         {
-          "encounter": "wild_ceramic_armadillo",
-          "weight": 40
-        },
-        {
-          "encounter": "wild_pair_2",
-          "weight": 20
+          "encounter": "mine_mole_lesson",
+          "weight": 30
         }
       ],
       "objects": [
@@ -2090,20 +2471,16 @@
       },
       "background": "corridor",
       "music": "exploration",
-      "encounter": "wild_pair_2",
+      "encounter": "mine_shallow_a",
       "encounterRate": 0.18,
       "encounterPool": [
         {
-          "encounter": "wild_drill_mole",
-          "weight": 40
-        },
-        {
-          "encounter": "wild_ceramic_armadillo",
-          "weight": 40
-        },
-        {
           "encounter": "wild_pair_2",
-          "weight": 20
+          "weight": 40
+        },
+        {
+          "encounter": "mine_shallow_a",
+          "weight": 60
         }
       ],
       "objects": [
@@ -2156,20 +2533,16 @@
       },
       "background": "corridor",
       "music": "exploration",
-      "encounter": "wild_pair_2",
+      "encounter": "mine_shallow_b",
       "encounterRate": 0.18,
       "encounterPool": [
         {
-          "encounter": "wild_drill_mole",
+          "encounter": "mine_shallow_a",
           "weight": 40
         },
         {
-          "encounter": "wild_ceramic_armadillo",
-          "weight": 40
-        },
-        {
-          "encounter": "wild_pair_2",
-          "weight": 20
+          "encounter": "mine_shallow_b",
+          "weight": 60
         }
       ],
       "objects": [
@@ -2210,20 +2583,16 @@
       },
       "background": "corridor",
       "music": "exploration",
-      "encounter": "wild_pair_2",
+      "encounter": "mine_shallow_c",
       "encounterRate": 0.18,
       "encounterPool": [
         {
-          "encounter": "wild_drill_mole",
+          "encounter": "mine_shallow_b",
           "weight": 40
         },
         {
-          "encounter": "wild_ceramic_armadillo",
-          "weight": 40
-        },
-        {
-          "encounter": "wild_pair_2",
-          "weight": 20
+          "encounter": "mine_shallow_c",
+          "weight": 60
         }
       ],
       "objects": [
@@ -2237,6 +2606,30 @@
           "interactionRange": "here",
           "safe": true,
           "script": "mine.charge_record.9"
+        },
+        {
+          "id": "workshop_parts",
+          "name": "試錐台の修理材箱",
+          "x": 5,
+          "y": 5,
+          "kind": "chest",
+          "trigger": "interact",
+          "interactionRange": "here",
+          "safe": true,
+          "script": "mine.workshop_parts.9",
+          "treasure": {
+            "kind": "chest",
+            "uses": 1,
+            "reset": "never",
+            "rewards": {
+              "items": {
+                "machine_part": 4,
+                "soft_fiber": 4
+              }
+            },
+            "afterText": "修理材は受け取り済みだ。材料は町でも買い足せる。",
+            "message": "機関部品4個と柔らかな植物繊維4個を回収した。第2段階の武器一つを再製作する材料だ。製法は10Fの主を退けると残り、町では別に170Gの工賃が要る。"
+          }
         }
       ]
     },
@@ -3487,7 +3880,7 @@
       "commands": [
         {
           "op": "narrate",
-          "text": "陶器の殻には術と貫通が有効だ。10Fの殻砕き獣を退ければ、第2段階の武器引換券と9種の永久製法が残る。失った武器も町で機関部品・柔らかな植物繊維と工賃から再製作できる。"
+          "text": "厚殻アルマジロは初回だけ防御し、火に弱い。見張りの防御補強は二巡で切れ、重複しない。10Fの殻砕き獣を退ければ、第2段階の武器引換券と9種の永久製法が残る。失った武器も町で機関部品・柔らかな植物繊維と工賃から再製作できる。9F西の試錐台に一回分の修理材が残っている。"
         }
       ]
     },
@@ -3495,7 +3888,7 @@
       "commands": [
         {
           "op": "narrate",
-          "text": "殻砕き獣は三巡を繰り返す。一巡目は身を固め、二巡目に一人へ突進、三巡目は殻を開いて息を継ぐ。突進後は防御が三割下がる。10Fの主の二歩手前に洗浄槽がある。"
+          "text": "深掘りモグラは構えの次に突進し、その後は防御が三割下がる。防御やスタンで対処できる。結晶ハサミは強打の次に弱い爪を使う。どちらも装備を壊さず、塩を追加しない。10Fの殻砕き獣は一巡目に防御、二巡目に突進、三巡目に息継ぎを繰り返す。主の二歩手前に洗浄槽がある。"
         }
       ]
     },
