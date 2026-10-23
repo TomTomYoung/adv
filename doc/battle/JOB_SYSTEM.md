@@ -64,7 +64,7 @@ JobSpecとactor.job / actor.growthHistoryを分離します。職業変更はjob
 
 ## 現行30職の定義
 
-作品版1.31.0の data/jobs.json から生成。習得Lv・API・材料のある技能は使用時に個別検査します。
+作品版1.32.0の data/jobs.json から生成。習得Lv・API・材料のある技能は使用時に個別検査します。
 
 ### 戦士 (warrior)
 
@@ -336,7 +336,7 @@ JobSpecとactor.job / actor.growthHistoryを分離します。職業変更はjob
 習得：Lv1 手当の祈り (battle.skill) / Lv5 帰路の祈り (battle.skill) / Lv10 解毒 (battle.skill) / Lv1 旅の回復祈祷 (party.heal)。
 特性：{"retreatCost":0.5}。割引は帰還印のみで、敗北時の救援費は変わりません。
 
-## 探索特技22定義
+## 探索特技23定義
 
 ### 周辺測量 (survey)
 
@@ -460,6 +460,10 @@ MP2。水没していない場所で炎を使い、隊全員の濡れを解除�
 ### 帰路測定 (exp_route_survey)
 
 発見済みで通行可能な道から、最寄りの修理済み給油設備への経路と歩数を測る。未知・閉鎖中の扉は通らない。移動に合わせて残り歩数を更新し、経路外・通行条件の変化時は再測定する。平面の迷宮で使用。 API: camp.route。使用場所: dungeon。
+
+### 封蝋手当 (exp_wax_care)
+
+選んだ装備1個体を封蝋し、次の塩蓄積を1回だけ防ぐ。袋の装備も選べる。同名の別個体には広がらず、既に蓄積した塩は洗浄が必要。封蝋済みの個体への重ね掛けはできない。 API: gear.wax。使用場所: dungeon。
 
 <!-- /generated:jobs -->
 

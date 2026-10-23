@@ -15,6 +15,7 @@ export function renderSkillShop(view,parent,m){
     const b=button(a.maxed?'教習完了':`${a.name}がLv${a.level}を習得 — 宝石${a.price}個`,()=>view.act(a.intent),!a.enabled);b.dataset.focus=`skill-shop:${p.id}:${a.actor}`;card.append(b);
     if(a.reason)card.append(node('p','requirement',a.reason));section.append(card);
   }
+  if(e.upgrade){const u=e.upgrade;section.append(node('h3','','携行容器の改修'),node('p','',u.done?`容量${u.value}へ改修済みです。`:u.known?`製法を記録済みです。${u.price}Gで容量${u.value}へ改修します。油そのものは増えません。`:u.reason),button(`携行容量${u.value}へ改修 — ${u.price}G`,()=>view.act({type:'expedition.action',action:'upgrade_capacity'}),!u.ok));if(u.known&&!u.done&&!u.ok)section.append(node('p','requirement',u.reason));}
   section.append(node('h3','','補給所の保管油'),node('p','',`${e.storedOil}単位を保管しています。携行容量に収まらなかった灯油を受け取れます。`),button('空き容量まで保管油を受け取る',()=>view.act({type:'expedition.action',action:'withdraw'}),!e.canWithdraw));
   parent.append(section);
 }

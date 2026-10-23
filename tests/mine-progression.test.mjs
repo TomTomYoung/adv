@@ -81,5 +81,5 @@ for(const mode of ['classic','grid','frontline'])test(`${mode}: mine boss telegr
  // Lifecycle fixture only; the campaign separately uses earned party combat.
  for(const e of g.state.battle.enemies)e.hp=0;g.finishBattle('win');drain(g);assert.equal(g.state.flags.mine.shellbreakerWon,true);
  at(g,'mine_central');inspect(g,'supply_rope');drain(g);const xp=g.state.actors.ada.xp,gems=g.state.expedition.gems;assert.ok(action(g,'mine_central','repair'));assert.equal(g.state.actors.ada.xp,xp+600);assert.equal(g.state.expedition.gems,gems+70);assert.ok(action(g,'mine_central','relay'));saved(g);
- assert.equal(action(g,'mine_central','repair'),false);walk(g,5,1);inspect(g,'shellbreaker');drain(g);assert.equal(g.state.battle,null);assert.equal(g.state.inventory.exp_t2_ticket??0,0);
+ assert.equal(action(g,'mine_central','repair'),false);walk(g,5,1);inspect(g,'shellbreaker');drain(g);assert.equal(g.state.battle,null);assert.equal(g.state.inventory.exp_t2_ticket,1);
 });

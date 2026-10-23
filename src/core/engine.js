@@ -1,3 +1,4 @@
+import {craftWeapon} from './expedition-workshop.js';
 import {freshExpedition,expeditionAction,buySkill,travelCheckpoint,campSafe,addGems} from './expedition.js';
 import {rememberOil,restoreOil,balanceOil,managesOil} from './expedition-oil.js';
 import {setFrontFormation,syncFrontFormation} from './battle-frontline.js';
@@ -286,6 +287,7 @@ export class GameEngine {
     if(type==='battle')return battleAction(this,intent);
     if(this.state.waiting||this.state.battle)return false;
     if(type==='expedition.action')return expeditionAction(this,intent);
+    if(type==='weapon.craft')return craftWeapon(this,intent.item);
     if(type==='skill.buy')return buySkill(this,intent);
     if(type==='checkpoint.travel')return travelCheckpoint(this,intent.camp);
     if(type==='party.formation.set')return setFormation(this,intent.actor,intent.x,intent.y);

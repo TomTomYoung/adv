@@ -137,6 +137,7 @@ export function validateContent(data){
   for(const d of Object.values(data.dungeons??{}))errors.push(...fireHazardsErrors(data,d,expression));
   errors.push(...expeditionDefinitionErrors(data),...validatePresentation(data),...validateJobs(data),...validateStories(data,expression),...validateWorld(data));
   for(const c of data.expedition?.camps??[])if(c.condition!==undefined)expression(c.condition,`expedition.camps.${c.id}.condition`);
+  for(const [id,r] of Object.entries(data.expedition?.workshop?.recipes??{}))if(r?.condition!==undefined)expression(r.condition,`expedition.workshop.recipes.${id}.condition`);
   errors.push(...reinforcementDefinitionErrors(data),...gridDefinitionErrors(data),...frontlineDefinitionErrors(data));
   errors.push(...questOrderErrors(data));
   if(data.game.schemaVersion!==1)fail('game','schemaVersion未対応');

@@ -7,9 +7,10 @@ function equipmentStats(ctx,_item,stats,actor,slot){
  const id=ctx.state.gear.equipped[actor]?.[slot],salt=ctx.state.gear.items[id]?.salt??0;
  return Object.fromEntries(Object.entries(stats).map(([key,n])=>[key,n>0?n-salt:n]));
 }
+function accumulate(copy,amount){if(copy.wax){delete copy.wax;return;}copy.salt+=amount;}
 function battleStart(ctx){
- let count=0;for(const actor of ctx.state.members.filter(id=>battleAlive(ctx.state,ctx.state.actors[id])))for(const id of Object.values(ctx.state.gear.equipped[actor]??{})){ctx.state.gear.items[id].salt+=ctx.spec.perBattle;count++;}
- clamp(ctx);if(count)ctx.engine.notify(`装備ごとに塩が${ctx.spec.perBattle}累積しました。塩${ctx.spec.eater.threshold}以上の装備はソルトイーターに食われることがあります。水没区画で洗うか、廃坑を出ると塩を落とせます。洗浄ではHP・MPは回復しません。`);
+ let count=0;for(const actor of ctx.state.members.filter(id=>battleAlive(ctx.state,ctx.state.actors[id])))for(const id of Object.values(ctx.state.gear.equipped[actor]??{})){accumulate(ctx.state.gear.items[id],ctx.spec.perBattle);count++;}
+ clamp(ctx);if(count)ctx.engine.notify(`封蝋した個体は保護を1回消費し、それ以外の装備に塩が${ctx.spec.perBattle}累積しました。塩${ctx.spec.eater.threshold}以上の装備はソルトイーターに食われることがあります。水没区画で洗うか、廃坑を出ると塩を落とせます。洗浄ではHP・MPは回復しません。`);
 }
 function clamp(ctx){for(const a of Object.values(ctx.state.actors)){const stats=ctx.engine.stats(a.id);a.hp=Math.min(a.hp,stats.hp);a.mp=Math.min(a.mp,stats.mp);}}
 function wash(ctx){let changed=false;for(const [,copy] of copies(ctx))if(copy.salt){copy.salt=0;changed=true;}return changed;}
@@ -24,7 +25,7 @@ function project(ctx){
 }
 export const corrosion={
  createPersistent:()=>({}),createRun:()=>({}),battleStart,battleRound,equipmentStats,project,
- step(ctx){const l=ctx.state.location,p=authoredCellLayers(ctx.data,ctx.data.maps[l.map],l.x,l.y)?.parameters;if(ctx.movement&&p?.corrosion){for(const actor of ctx.state.members.filter(id=>battleAlive(ctx.state,ctx.state.actors[id])))for(const id of Object.values(ctx.state.gear.equipped[actor]??{}))ctx.state.gear.items[id].salt+=p.corrosion;clamp(ctx);ctx.engine.notify(`腐食床で装備の塩が${p.corrosion}増えた。`);}if(ctx.spec.washZones.some(p=>p.map===l.map&&p.x===l.x&&p.y===l.y)&&wash(ctx))ctx.engine.notify('水没区画の水で、装備に付いた塩を洗い流しました。');},
+ step(ctx){const l=ctx.state.location,p=authoredCellLayers(ctx.data,ctx.data.maps[l.map],l.x,l.y)?.parameters;if(ctx.movement&&p?.corrosion){for(const actor of ctx.state.members.filter(id=>battleAlive(ctx.state,ctx.state.actors[id])))for(const id of Object.values(ctx.state.gear.equipped[actor]??{}))accumulate(ctx.state.gear.items[id],p.corrosion);clamp(ctx);ctx.engine.notify(`腐食床で封蝋した個体は保護を1回消費し、それ以外の装備の塩が${p.corrosion}増えた。`);}if(ctx.spec.washZones.some(p=>p.map===l.map&&p.x===l.x&&p.y===l.y)&&wash(ctx))ctx.engine.notify('水没区画の水で、装備に付いた塩を洗い流しました。');},
  leave(ctx){wash(ctx);},
  waterDepth:(ctx,map,x,y)=>ctx.spec.washZones.some(p=>p.map===map.id&&p.x===x&&p.y===y)?1:0,
  encounter:ctx=>({rate:1,enemyScale:1,...(copies(ctx).some(([,c])=>c.salt>=ctx.spec.eater.threshold)?{encounter:ctx.spec.eater.encounter}:{})}),
