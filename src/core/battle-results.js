@@ -1,3 +1,4 @@
+import {reinforcementRoster} from './battle-reinforcements.js';
 import {battleGems,addGems} from './expedition.js';
 import {battleAlive} from './frontline-lifecycle.js';
 import {clone,isRecord} from './expression.js';
@@ -10,7 +11,7 @@ export function beginBattleResult(engine,battle){
   const recipients=s.members.filter(id=>battleAlive({...s,battle},s.actors[id]));
   const gems=battleGems(d,battle);addGems(s,gems);
   const levels=engine.award(gold,xp,recipients);
-  s.battleResult={encounter:battle.encounter,continuation:clone(battle.continuations),phase:'result',index:0,levels,drops:null,gems};
+  s.battleResult={encounter:battle.encounter,continuation:clone(battle.continuations),phase:'result',index:0,levels,drops:null,gems,...(battle.reinforcements?{reinforcements:clone(battle.reinforcements)}:{})};
   s.notice='';delete s.presentation.cast;delete s.presentation.message;
   show(engine,`戦いに勝った！\n${recipients.map(id=>d.actors[id].name).join('、')}は、それぞれ${xp}の経験値を獲得した。\n${gold}ゴールドを手に入れた。${gems?`\n技能宝石を${gems}個手に入れた。`:''}`,'戦闘リザルト');
 }
@@ -30,7 +31,7 @@ function nextLevel(engine){
 function treasure(engine){
   const r=engine.state.battleResult,counts={};
   // One independent lottery per defeated monster. A chest groups all winning items.
-  for(const id of engine.data.encounters[r.encounter].enemies){
+  for(const id of reinforcementRoster(engine.data.encounters[r.encounter],r.reinforcements)){
     const drop=engine.data.enemies[id].drop;
     if(drop&&drop.chance>0&&engine.random()<drop.chance)counts[drop.item]=(counts[drop.item]??0)+1;
   }
@@ -63,14 +64,15 @@ export function battleResultErrors(data,s){
   const r=s.battleResult,fail=()=>['戦闘リザルトの保存状態不正'];
   if(r===null)return s.waiting?.type==='battle_result'?fail():[];
   if(!isRecord(r)||s.battle||s.waiting?.type!=='battle_result'||typeof s.waiting.text!=='string'||typeof s.waiting.speaker!=='string'||!Object.hasOwn(data.encounters,r.encounter)||!['result','level','chest','item'].includes(r.phase)||!Number.isInteger(r.index)||r.index<0||!Array.isArray(r.levels)||r.levels.length>data.system.maxParty*(data.system.maxLevel-1))return fail();
+  const roster=reinforcementRoster(data.encounters[r.encounter],r.reinforcements);if(!roster)return fail();
   if(r.levels.some(row=>!isRecord(row)||!s.members.includes(row.actor)||!Number.isInteger(row.level)||row.level<2||row.level>s.actors[row.actor].level||!isRecord(row.growth)||Object.entries(row.growth).some(([key,n])=>!['hp','mp','str','vit','agi','int'].includes(key)||!Number.isInteger(n))||!Array.isArray(row.skills)||row.skills.some(id=>!data.skills[id]&&!data.fieldAbilities?.[id])))return fail();
   if(['result','level'].includes(r.phase)){
     if(r.drops!==null||r.phase==='result'&&r.index!==0||r.phase==='level'&&r.index>=r.levels.length)return fail();
   }else{
-    const possible={};for(const id of data.encounters[r.encounter].enemies){const drop=data.enemies[id].drop;if(drop?.chance>0)possible[drop.item]=(possible[drop.item]??0)+1;}
+    const possible={};for(const id of roster){const drop=data.enemies[id].drop;if(drop?.chance>0)possible[drop.item]=(possible[drop.item]??0)+1;}
     if(!Array.isArray(r.drops)||!r.drops.length||new Set(r.drops.map(v=>v?.item)).size!==r.drops.length||r.drops.some(v=>!isRecord(v)||!possible[v.item]||!Number.isInteger(v.count)||v.count<1||v.count>possible[v.item])||r.index>=r.drops.length||r.phase==='chest'&&r.index!==0)return fail();
   }
-  if(r.gems!==undefined&&(!Number.isSafeInteger(r.gems)||r.gems<0||r.gems>data.encounters[r.encounter].enemies.reduce((sum,id)=>sum+(data.expedition?.enemyGems[id]??0),0)))return fail();
+  if(r.gems!==undefined&&(!Number.isSafeInteger(r.gems)||r.gems<0||r.gems>roster.reduce((sum,id)=>sum+(data.expedition?.enemyGems[id]??0),0)))return fail();
   const c=r.continuation;if(!isRecord(c))return fail();
   if(c.frame){try{const cmd=commandsAt(data,c.frame)[c.index];if(cmd?.op!=='battle.start'||cmd.encounter!==r.encounter||c.win!=='on_win'||c.lose!=='on_lose'||c.escape!=='on_escape'||!s.vm.some(f=>f.script===c.frame.script&&f.scope===c.frame.scope&&f.index===c.index+1&&JSON.stringify(f.path)===JSON.stringify(c.frame.path)))return fail();}catch{return fail();}}
   return [];

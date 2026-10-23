@@ -56,6 +56,8 @@ const buffEffectText=(data,id)=>{
   for(const [element,n] of Object.entries(b.resist??{}))values.push(`${elementLabels[element]??element}被ダメージ ×${n}`);
   if(b.physicalPower!==undefined)values.push(`次の行動の物理威力 ×${b.physicalPower}`);
   if(b.physicalTaken!==undefined)values.push(`次の物理被害1回 ×${b.physicalTaken}`);
+  if(b.blocksMovement)values.push('自発移動と次のFrontline自動前進を阻止');
+  if(b.classicAccuracyPenalty)values.push(`Classic命中率−${b.classicAccuracyPenalty*100}ポイント`);
   values.push(b.consume==='next_action'?'次の本人の行動機会に消費':`持続 ${b.turns}ターン`);
   return values.join(' / ');
 };
@@ -75,6 +77,7 @@ function effectCalculation(data,skillId,effect,prefix='計算式'){
   if(effect.type==='drain_mp')return `${prefix}：MP減少量 = min(現在MP, floor(${base}))。`;
   if(effect.type==='status')return `${prefix}：状態異常「${data.statuses?.[effect.status]?.name??effect.status}」を ${chanceText(effect.chance)} で付与${effect.duration!==undefined?`、持続 ${effect.duration}`:''}。`;
   if(effect.type==='stun')return `${prefix}：次の行動機会を${effect.count??1}回消費（${effect.stack==='add'?'加算':'更新'}）、付与率${chanceText(effect.chance)}。`;
+  if(effect.type==='cleanse'&&effect.statuses)return `${prefix}：${effect.statuses.map(id=>data.statuses?.[id]?.name??id).join('・')}から指定順に一つ解除。`;
   if(effect.type==='cleanse')return `${prefix}：${effect.status?`状態異常「${data.statuses?.[effect.status]?.name??effect.status}」を解除`:'解除可能な状態異常を解除'}。`;
   if(effect.type==='buff')return `${prefix}：${buffEffectText(data,effect.buff)}。`;
   if(effect.type==='guard')return `${prefix}：防御Lv${effect.level??1}、ガード中の被ダメージ補正 = ×${guardDamageRate(data,effect.level??1)}。`;

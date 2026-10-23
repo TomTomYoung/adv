@@ -60,6 +60,12 @@ export function removeStatus(target,id){
   if(target.statusRecoveryTurns){if(id){delete target.statusRecoveryTurns[id];if(!Object.keys(target.statusRecoveryTurns).length)delete target.statusRecoveryTurns;}else delete target.statusRecoveryTurns;}
   if(target.statusLevels){if(id){delete target.statusLevels[id];if(!Object.keys(target.statusLevels).length)delete target.statusLevels;}else delete target.statusLevels;}
 }
+// An ordered list cleanses one matching status. Legacy omitted status still
+// means all statuses; selecting an empty list must never fall through to that.
+export function cleanseCandidates(target,effect){
+  const present=target.statuses??[];
+  return effect.statuses?effect.statuses.filter(id=>present.includes(id)).slice(0,1):effect.status?present.filter(id=>id===effect.status):[...present];
+}
 export function tickStatuses(data,state,target,clock){
   for(const [id,timer] of Object.entries(target.statusDurations??{})){
     if(!target.statuses.includes(id)){delete target.statusDurations[id];continue;}

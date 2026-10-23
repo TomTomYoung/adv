@@ -1,5 +1,5 @@
 import {frontlineStart} from './battle-frontline.js';
-import {unitKey} from './buffs.js';
+import {unitKey,movementBlockReason} from './buffs.js';
 import {isRecord} from './expression.js';
 import {PARTY_CELLS,ENEMY_CELLS,nextFormation,sameCell,validCell,formationErrors} from './battle-formation.js';
 export const isGrid=state=>state.battle?.mode==='grid';
@@ -20,10 +20,11 @@ export function gridStart(data,state,encounter,options={}){
   const formation=nextFormation(state.members,state.partyFormation);if(!formation)throw Error('味方出現配置不正');
   return {mode,grid:{movement,positions:Object.fromEntries([...state.members.map(id=>['actor:'+id,{x:formation[id].x,y:formation[id].y+3}]),...enemies.map((p,i)=>['enemy:enemy_'+i,{...p}])])}};
 }
-export function gridMovePlan(state,unit,to){
+export function gridMovePlan(state,unit,to,data){
   const fail=reason=>({ok:false,reason});
   if(!isGrid(state)||state.battle.grid.movement!=='step')return fail('この戦闘では移動できません。');
   if(!unit||unit.hp<=0||!validCell(to,unit.instance?0:3,unit.instance?2:5))return fail('自陣内のセルを選んでください。');
+ const blocked=movementBlockReason(data,state.battle,unit);if(blocked)return fail(blocked);
   if(distance(position(state,unit),to)!==1)return fail('移動できるのは隣接する1マスです。');
   if(battleUnits(state).some(u=>u.hp>0&&sameCell(position(state,u),to)))return fail('そのセルには生存するユニットがいます。');
   return {ok:true,to:{...to}};

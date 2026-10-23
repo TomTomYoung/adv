@@ -1,3 +1,4 @@
+import {reinforcementDefinitionErrors} from './battle-reinforcements.js';
 import {expeditionDefinitionErrors} from './expedition.js';
 import {questOrderErrors} from './quest-order.js';
 import {frontlineDefinitionErrors} from './battle-frontline.js';
@@ -136,7 +137,8 @@ export function validateContent(data){
   for(const d of Object.values(data.dungeons??{}))errors.push(...fireHazardsErrors(data,d,expression));
   errors.push(...expeditionDefinitionErrors(data),...validatePresentation(data),...validateJobs(data),...validateStories(data,expression),...validateWorld(data));
   for(const c of data.expedition?.camps??[])if(c.condition!==undefined)expression(c.condition,`expedition.camps.${c.id}.condition`);
-  errors.push(...gridDefinitionErrors(data),...frontlineDefinitionErrors(data));
+  for(const [id,r] of Object.entries(data.expedition?.workshop?.recipes??{}))if(r?.condition!==undefined)expression(r.condition,`expedition.workshop.recipes.${id}.condition`);
+  errors.push(...reinforcementDefinitionErrors(data),...gridDefinitionErrors(data),...frontlineDefinitionErrors(data));
   errors.push(...questOrderErrors(data));
   if(data.game.schemaVersion!==1)fail('game','schemaVersion未対応');
   reference(data.scripts,data.game.startScript,'game.startScript');
@@ -150,7 +152,7 @@ export function validateContent(data){
     for(const effect of skill.effects??[]){if(!['damage','heal','guard','status','cleanse','drain_mp','restore_mp','buff','cover','analyze','repel','purge_undead'].includes(effect.type))fail(id,'未知のスキル効果');if(effect.formula)reference(data.formulas,effect.formula,id);if(effect.status)reference(data.statuses,effect.status,id);if(effect.amount!==undefined&&(!Number.isFinite(effect.amount)||effect.amount<0))fail(id,'効果量が不正です');}
   }
   for(const [id,a] of Object.entries(data.actors)){for(const skill of a.skills)reference(data.skills,skill,id);if(a.portrait)reference(data.assets.images,a.portrait,id);}
-  for(const [id,e] of Object.entries(data.enemies)){if(!e.drop||!Object.hasOwn(data.items,e.drop.item)||!Number.isFinite(e.drop.chance)||e.drop.chance<0||e.drop.chance>1)fail(id,'宝箱のアイテム・確率不正');reference(data.assets.images,e.sprite,id);for(const rule of e.ai){reference(data.skills,rule.skill,id);if(!['self','random','weakest'].includes(rule.target))fail(id,'敵の対象選択が不正です');if(rule.condition)expression(rule.condition,id);}}
+  for(const [id,e] of Object.entries(data.enemies)){if(!e.drop||!Object.hasOwn(data.items,e.drop.item)||!Number.isFinite(e.drop.chance)||e.drop.chance<0||e.drop.chance>1)fail(id,'宝箱のアイテム・確率不正');reference(data.assets.images,e.sprite,id);for(const rule of e.ai){reference(data.skills,rule.skill,id);if(!['self','random','weakest','afflicted','unbuffed'].includes(rule.target))fail(id,'敵の対象選択が不正です');if(rule.target==='afflicted'&&(data.skills[rule.skill]?.target!=='ally'||!data.skills[rule.skill]?.effects?.length||data.skills[rule.skill].effects.some(e=>e.type!=='cleanse')))fail(id,'状態異常対象は単体解除技能だけに指定できます');if(rule.target==='unbuffed'&&(data.skills[rule.skill]?.target!=='ally'||!data.skills[rule.skill]?.effects?.length||data.skills[rule.skill].effects.some(e=>e.type!=='buff')))fail(id,'未補強対象は単体補助技能だけに指定できます');if(rule.condition)expression(rule.condition,id);}}
   if(data.game.tavern){const ids=data.game.tavern.candidates;if(!Array.isArray(ids)||new Set(ids).size!==ids.length)fail('tavern','候補一覧が不正です');else for(const id of ids)reference(data.actors,id,'tavern');}
   for(const [id,e] of Object.entries(data.encounters)){if(!e.enemies?.length)fail(id,'敵が必要です');for(const enemy of e.enemies??[])reference(data.enemies,enemy,id);}
   for(const [id,item] of Object.entries(data.items)){if(item.script)reference(data.scripts,item.script,id);if(item.battleSkill)reference(data.skills,item.battleSkill,id);}

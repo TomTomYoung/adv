@@ -21,7 +21,8 @@ export function buffResistance(data,battle,target,element){
 export function addBuff(engine,id,target,source,skill){
   const b=engine.state.battle,def=engine.data.buffs[id];
   if(!def||!b)throw new Error(`未登録の戦闘補正: ${id}`);
-  const record={id,target:unitKey(target),sourceActor:source.id,sourceJob:source.job,sourceSkill:skill,remaining:def.turns};
+  const origin=source.instance?{sourceEnemy:source.instance}:{sourceActor:source.id,sourceJob:source.job};
+  const record={id,target:unitKey(target),...origin,sourceSkill:skill,remaining:def.turns};
   const at=b.buffs.findIndex(x=>x.id===id&&x.target===record.target);
   if(at<0)b.buffs.push(record);else b.buffs[at]=record;
 }
@@ -33,10 +34,22 @@ export function takePhysicalHit(data,battle,target,damage,active=battle){
   if(battle)battle.buffs=battle.buffs.filter(b=>!buffs.includes(b));
   return Math.max(1,Math.floor(damage*rate));
 }
-export function tickBuffs(battle,data){
-  battle.buffs=battle.buffs.map(b=>({...b,remaining:b.remaining-(data?.buffs[b.id].consume==='next_action'?0:1)})).filter(b=>b.remaining>0);
-  battle.covers=battle.covers.map(b=>({...b,remaining:b.remaining-1})).filter(b=>b.remaining>0);
+export function tickBuffs(battle,data,phase='round_end'){
+  // Movement binds last through the next automatic advance, then expire before
+  // that round's first action. Other buffs retain their existing round-end clock.
+  battle.buffs=battle.buffs.map(b=>{const d=data?.buffs[b.id],tick=d?.consume!=='next_action'&&(Boolean(d?.blocksMovement)===(phase==='after_advance'));return {...b,remaining:b.remaining-(tick?1:0)};}).filter(b=>b.remaining>0);
+  if(phase==='round_end')battle.covers=battle.covers.map(b=>({...b,remaining:b.remaining-1})).filter(b=>b.remaining>0);
 }
 export function buffView(data,battle,target){
   return (battle?.buffs??[]).filter(b=>b.target===target).map(b=>({id:b.id,name:data.buffs[b.id].name,remaining:b.remaining,...(data.buffs[b.id].consume==='next_action'?{untilNextAction:true}:{}),sourceActor:b.sourceActor,sourceJob:b.sourceJob}));
+}
+
+export function movementBlockReason(data,battle,unit){
+ const entry=(battle?.buffs??[]).find(b=>b.target===unitKey(unit)&&b.remaining>0&&data?.buffs?.[b.id]?.blocksMovement);
+ return entry?`${data.buffs[entry.id].name}の間は移動できません。`:null;
+}
+export function buffAccuracy(data,battle,unit,base){
+ if(battle?.mode!=='classic')return base;
+ const penalty=Math.max(0,...(battle.buffs??[]).filter(b=>b.target===unitKey(unit)&&b.remaining>0).map(b=>data.buffs[b.id].classicAccuracyPenalty??0));
+ return Math.max(0,base-penalty);
 }
