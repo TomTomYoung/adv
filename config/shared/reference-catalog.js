@@ -5798,6 +5798,18 @@ export const referenceData={
       "id": "garden.seed_reserve.7"
     },
     {
+      "file": "dungeon-content.json",
+      "path": [
+        "maps",
+        "region_3_f10",
+        "objects",
+        2,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "garden.supply_rope.7"
+    },
+    {
       "file": "jobs.json",
       "path": [
         "fieldAbilities",
@@ -16887,6 +16899,36 @@ export const referenceData={
       "id": "potion"
     },
     {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "garden_great_pruner",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "garden_root_shell",
+        "item"
+      ],
+      "kind": "items",
+      "id": "soft_fiber"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "garden_nectar_bee",
+        "item"
+      ],
+      "kind": "items",
+      "id": "torch"
+    },
+    {
       "file": "cell-layers.json",
       "path": [
         "presets",
@@ -18251,6 +18293,117 @@ export const referenceData={
     {
       "file": "dungeon-content.json",
       "path": [
+        "enemies",
+        "garden_great_pruner",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_saw_mantis"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "garden_great_pruner",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "garden_prune"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "garden_root_shell",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_ceramic_armadillo"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "garden_root_shell",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "guard"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "garden_root_shell",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "garden_nectar_bee",
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "wax_flame"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "garden_nectar_bee",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_candle_bee"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "garden_nectar_bee",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "wax_flame"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "garden_nectar_bee",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "garden_nectar_bee",
+        "drop",
+        "item"
+      ],
+      "kind": "items",
+      "id": "torch"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
         "encounters",
         "market_enforcers",
         "enemies",
@@ -18357,6 +18510,40 @@ export const referenceData={
       ],
       "kind": "enemies",
       "id": "mine_shellbreaker"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "garden_root_guardian",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "garden_great_pruner"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "garden_root_guardian",
+        "enemies",
+        1
+      ],
+      "kind": "enemies",
+      "id": "garden_root_shell"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "garden_root_guardian",
+        "reinforcements",
+        0,
+        "enemy"
+      ],
+      "kind": "enemies",
+      "id": "garden_nectar_bee"
     },
     {
       "file": "dungeon-content.json",
@@ -20601,6 +20788,18 @@ export const referenceData={
     {
       "file": "dungeon-content.json",
       "path": [
+        "maps",
+        "region_3_f10",
+        "objects",
+        2,
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "garden.supply_rope.7"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
         "scripts",
         "waterway.dry_stair_latch",
         "commands",
@@ -20671,6 +20870,24 @@ export const referenceData={
       ],
       "kind": "encounters",
       "id": "mine_shell_guardian"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "garden.root_gate.10",
+        "commands",
+        0,
+        "else",
+        1,
+        "options",
+        0,
+        "commands",
+        0,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "garden_root_guardian"
     },
     {
       "file": "dungeon-content.json",
@@ -22155,6 +22372,26 @@ export const referenceData={
       ],
       "kind": "maps",
       "id": "region_3_f7"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        20,
+        "dungeon"
+      ],
+      "kind": "dungeons",
+      "id": "region_3"
+    },
+    {
+      "file": "expedition-content.json",
+      "path": [
+        "camps",
+        20,
+        "map"
+      ],
+      "kind": "maps",
+      "id": "region_3_f10"
     },
     {
       "file": "jobs.json",
@@ -24992,6 +25229,42 @@ export const referenceData={
       ],
       "kind": "buffs",
       "id": "mine_recover_shell"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_root_bind",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "exp_root_bind"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_root_bind",
+        "effects",
+        1,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "exp_rooted"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "garden_prune",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heavy"
     },
     {
       "file": "jobs.json",
@@ -40125,6 +40398,9 @@ export const referenceData={
       },
       "exp_purging_pursuit": {
         "name": "exp_purging_pursuit"
+      },
+      "exp_root_bind": {
+        "name": "exp_root_bind"
       }
     },
     "skills": {
@@ -40406,6 +40682,12 @@ export const referenceData={
       },
       "mine_shell_recover": {
         "name": "殻を開いて息継ぎ"
+      },
+      "exp_root_bind": {
+        "name": "根留め"
+      },
+      "garden_prune": {
+        "name": "大枝刈り"
       }
     },
     "items": {
@@ -40906,6 +41188,18 @@ export const referenceData={
       "mine_shellbreaker": {
         "name": "殻砕き獣",
         "sprite": "monster_ceramic_armadillo"
+      },
+      "garden_great_pruner": {
+        "name": "大剪定虫",
+        "sprite": "monster_saw_mantis"
+      },
+      "garden_root_shell": {
+        "name": "根殻甲",
+        "sprite": "monster_ceramic_armadillo"
+      },
+      "garden_nectar_bee": {
+        "name": "蜜蝋ランプバチ",
+        "sprite": "monster_candle_bee"
       }
     },
     "encounters": {
@@ -41229,6 +41523,9 @@ export const referenceData={
       },
       "mine_shell_guardian": {
         "name": "大選鉱室の殻砕き獣"
+      },
+      "garden_root_guardian": {
+        "name": "根門の大剪定虫"
       }
     },
     "statuses": {
@@ -41715,6 +42012,9 @@ export const referenceData={
       },
       "mine_recover_shell": {
         "name": "殻を開いた息継ぎ"
+      },
+      "exp_rooted": {
+        "name": "根留め"
       }
     },
     "fieldAbilities": {
@@ -53795,6 +54095,7 @@ export const referenceData={
     "flags.flow.q200.node",
     "flags.garden.intakeOpen",
     "flags.garden.liftOpen",
+    "flags.garden.prunerWon",
     "flags.garden.walkOpen",
     "flags.kagaribi.altarGate",
     "flags.kagaribi.altarGuardianWon",
@@ -55810,7 +56111,7 @@ export const referenceData={
       "file": "config/dungeon-content.json"
     },
     "garden.root_gate.10": {
-      "name": "重なった根が奥の温室を閉ざしている。前庭の東には4Fへ戻る苗床運搬路がある。",
+      "name": "garden.root_gate.10",
       "file": "config/dungeon-content.json"
     },
     "cell.poison_step": {
@@ -55931,6 +56232,10 @@ export const referenceData={
     },
     "treasure.package.region_3_f7.seed_reserve": {
       "name": "treasure.package.region_3_f7.seed_reserve",
+      "file": "data/scripts/dungeon-packages.json"
+    },
+    "treasure.package.region_3_f10.supply_rope": {
+      "name": "treasure.package.region_3_f10.supply_rope",
       "file": "data/scripts/dungeon-packages.json"
     },
     "q001.v11.entry": {
@@ -66589,6 +66894,27 @@ export const referenceData={
         "mine_shellbreaker"
       ]
     },
+    "enemies/garden_great_pruner": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "garden_great_pruner"
+      ]
+    },
+    "enemies/garden_root_shell": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "garden_root_shell"
+      ]
+    },
+    "enemies/garden_nectar_bee": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "garden_nectar_bee"
+      ]
+    },
     "encounters/market_enforcers": {
       "file": "dungeon-content.json",
       "path": [
@@ -66650,6 +66976,13 @@ export const referenceData={
       "path": [
         "encounters",
         "mine_shell_guardian"
+      ]
+    },
+    "encounters/garden_root_guardian": {
+      "file": "dungeon-content.json",
+      "path": [
+        "encounters",
+        "garden_root_guardian"
       ]
     },
     "actors/ada": {
@@ -67687,6 +68020,20 @@ export const referenceData={
         "mine_shell_recover"
       ]
     },
+    "skills/exp_root_bind": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "exp_root_bind"
+      ]
+    },
+    "skills/garden_prune": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "garden_prune"
+      ]
+    },
     "fieldAbilities/survey": {
       "file": "jobs.json",
       "path": [
@@ -68056,6 +68403,13 @@ export const referenceData={
       "path": [
         "buffs",
         "mine_recover_shell"
+      ]
+    },
+    "buffs/exp_rooted": {
+      "file": "jobs.json",
+      "path": [
+        "buffs",
+        "exp_rooted"
       ]
     },
     "items/kagaribi_torch": {

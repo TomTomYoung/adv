@@ -27,5 +27,5 @@ export function projectBattleGrid(engine,actorId){
   const s=engine.state;if(!isGrid(s))return null;
   const units=battleUnits(s),actor=s.actors[actorId];
   return {positions:clone(s.battle.grid.positions),movement:s.battle.grid.movement,enemyPresentation:clone(engine.data.presentation?.battleGrid?.enemyPresentation??{anchor:'bottom-center',rowScale:[.7,.85,1],maxOverlapRatio:.33,depthSort:'back-to-front'}),
-    cells:gridCells().map(p=>{const u=units.find(u=>u.hp>0&&position(s,u).x===p.x&&position(s,u).y===p.y),move=gridMovePlan(s,actor,p);return {...p,id:cellId(p),unit:u?unitKey(u):null,name:u?u.name??engine.data.actors[u.id].name:'',move:{enabled:move.ok,reason:move.reason??''}};})};
+    cells:gridCells().map(p=>{const u=units.find(u=>u.hp>0&&position(s,u).x===p.x&&position(s,u).y===p.y),move=gridMovePlan(s,actor,p,engine.data);return {...p,id:cellId(p),unit:u?unitKey(u):null,name:u?u.name??engine.data.actors[u.id].name:'',move:{enabled:move.ok,reason:move.reason??''}};})};
 }

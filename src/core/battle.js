@@ -1,3 +1,4 @@
+import {joinReinforcements} from './battle-reinforcements.js';
 import {battleAlive,frontlinePresent,frontlineState,removeFrontline,knockbackFrontline,syncFrontlineDefeats} from './frontline-lifecycle.js';
 import {isFrontline,frontPosition,frontlineUnits,frontlineMovePlan,moveFrontline,prepareFrontlineRound,traceFrontline,frontlineRevivePosition} from './battle-frontline.js';
 import {frontlineTargetPlan,frontlineSelections,frontlineProfile} from './frontline-targeting.js';
@@ -21,7 +22,7 @@ import {skillDefinitionErrors} from './job-validation.js';
 import {clone} from './expression.js';
 import {pushBranch,pump} from './script.js';
 import {passives,permission,costProblem,payCost} from './jobs.js';
-import {unitKey,buffStats,buffResistance,addBuff,tickBuffs,actionBuffs,actionPower,takePhysicalHit} from './buffs.js';
+import {buffAccuracy,unitKey,buffStats,buffResistance,addBuff,tickBuffs,actionBuffs,actionPower,takePhysicalHit} from './buffs.js';
 import {triggerBattleEvent} from './battle-events.js';
 import {consumeFieldBattleSignals} from './field-signals.js';
 import {describeTarget,playBattleCue} from './feedback.js';
@@ -37,6 +38,7 @@ export function startBattle(engine,id,continuations,options={}){
   if(options.enemyScale!==undefined&&options.enemyScale!==1)engine.state.battle.enemyScale=options.enemyScale;
   Object.assign(engine.state.battle,{firedEvents:[],event:null,pendingResult:null});
   if(options.manualTurns===true)engine.state.battle.manualTurns=true;
+  if(encounter.reinforcements)engine.state.battle.reinforcements=[];
   resolvePreemptive(engine,encounter,options);
   prepareFrontlineRound(engine,(u,on,attacker)=>frontlineReact(engine,u,on,attacker));
   engine.state.waiting={type:'battle'};engine.state.presentation.music='battle';engine.log(encounter.text);engine.eventCue('encounter');
@@ -118,8 +120,8 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
     if(isFrontline(s)&&target.instance&&engine.data.enemies[target.id]?.undead&&frontlineState(s,target)==='down'){removeFrontline(engine,target);b.log.push(`${target.name}の残骸を祓った。`);}
     return 0;
   }
-  const offensive=skill.effects.some(e=>['damage','drain_mp','stun','frontline_remove','frontline_knockback'].includes(e.type)||e.type==='status'&&!statusEffectAtLevel(engine.data,e.status,e.level??1)?.beneficial||e.type==='buff'&&(Object.values(engine.data.buffs[e.buff]?.stats??{}).some(n=>n<1)||Object.values(engine.data.buffs[e.buff]?.resist??{}).some(n=>n>1)));
-  const accuracy=offensive&&checkAccuracy?(series?.snapshot.accuracy??statusAccuracy(engine.data,s,source)):1;
+  const offensive=skill.effects.some(e=>['damage','drain_mp','stun','frontline_remove','frontline_knockback'].includes(e.type)||e.type==='status'&&!statusEffectAtLevel(engine.data,e.status,e.level??1)?.beneficial||e.type==='buff'&&(engine.data.buffs[e.buff]?.blocksMovement||engine.data.buffs[e.buff]?.classicAccuracyPenalty>0||Object.values(engine.data.buffs[e.buff]?.stats??{}).some(n=>n<1)||Object.values(engine.data.buffs[e.buff]?.resist??{}).some(n=>n>1)));
+  const accuracy=offensive&&checkAccuracy?(series?.snapshot.accuracy??buffAccuracy(engine.data,s.battle,source,statusAccuracy(engine.data,s,source))):1;
   if(accuracy<1&&engine.random()>=accuracy){if(series)series.didHit=false;(b?.log??s.log).push(`${source.name??engine.data.actors[source.id]?.name}の${skill.name}は${targetName}に当たらなかった。`);return 0;}
   for(const effect of skill.effects){
     if(effect.type==='frontline_remove'){removeFrontline(engine,target);break;}
@@ -353,7 +355,9 @@ function finishRound(engine){
   if(s.members.every(id=>!battleAlive(engine.state,s.actors[id]))){endBattle(engine,'lose');return;}
   for(const unit of [...s.members.map(id=>s.actors[id]),...b.enemies])if(battleAlive(s,unit)){tickStatuses(engine.data,s,unit,'turns');recoverStatuses(engine,unit);}
   tickBuffs(b,engine.data);b.acted=[];for(const id of [...b.guards])clearGuard(b,s.actors[id]);b.turnQueue=null;b.turnIndex=0;b.round++;b.log=b.log.slice(-30);
+  joinReinforcements(engine);
   prepareFrontlineRound(engine,(u,on,attacker)=>frontlineReact(engine,u,on,attacker));
+  tickBuffs(b,engine.data,'after_advance');
   triggerBattleEvent(engine,'round_start');
 }
 function advanceBattleTurns(engine){
@@ -410,7 +414,7 @@ export function battleAction(engine,intent){
   if(intent.action==='escape'){
     if(!engine.data.encounters[b.encounter].escape)return false;
   }else if(intent.action==='move'){
-    selection=isFrontline(s)?frontlineMovePlan(s,actor,intent.to):gridMovePlan(s,actor,intent.to);
+    selection=isFrontline(s)?frontlineMovePlan(s,actor,intent.to,engine.data):gridMovePlan(s,actor,intent.to,engine.data);
     if(!selection.ok){engine.notify(selection.reason);return false;}
   }else if(intent.action==='item'){
     selection=battleItemPlan(engine,actorId,intent.item,intent.target);
@@ -468,14 +472,14 @@ function gridEnemyAction(engine,enemy){
   const foes=s.members.map(id=>s.actors[id]).filter(a=>battleAlive(s,a)),from=position(s,enemy);
   const skills=enemy.ai.filter(r=>(!r.condition||engine.value(r.condition,{self:{...enemy,hp_ratio:enemy.hp/enemy.stats.hp,round:b.round}}))&&!statusAbilityReason(d,s,enemy,r.skill)&&!dungeonAbilityReason(d,s,r.skill,'battle.skill')&&enemy.mp>=d.skills[r.skill].mp).map(r=>targetingProfile(d,enemy,d.skills[r.skill],r.skill));
   const score=p=>enemy.ai.some(r=>(!r.condition||engine.value(r.condition,{self:{...enemy,hp_ratio:enemy.hp/enemy.stats.hp,round:b.round}}))&&gridEnemyChoices(engine,enemy,r.skill,{origin:p}).length)?-1:Math.min(...foes.flatMap(t=>skills.map(v=>{const n=distance(p,position(s,t));return Math.max(v.range.min-n,0,n-v.range.max)*10+n;})));
-  const steps=gridCells().map(p=>gridMovePlan(s,enemy,p)).filter(p=>p.ok).sort((a,c)=>score(a.to)-score(c.to));
+  const steps=gridCells().map(p=>gridMovePlan(s,enemy,p,engine.data)).filter(p=>p.ok).sort((a,c)=>score(a.to)-score(c.to));
   if(steps.length&&score(steps[0].to)<score(from)){b.grid.positions[unitKey(enemy)]=steps[0].to;b.log.push(`${enemy.name}は移動した。`);}
   else{applyGuard(b,enemy);b.log.push(`${enemy.name}は守りを固めた。`);}
 }
 
 function damageSnapshot(engine,source,target,enemySource){
  const {data:d,state:s}=engine;
- return {accuracy:statusAccuracy(d,s,source),sourceStats:clone(enemySource?enemyStats(engine,source):engine.stats(source.id)),targetStats:clone(target.instance?enemyStats(engine,target):engine.stats(target.id)),guardRate:guardDamageRate(d,guardLevel(s.battle,target)),taken:target.instance?1:passives(d,s,target.id).damageTaken??1,criticalChance:criticalChance(d,s,source,target),resist:Object.fromEntries(['physical','fire','ice','lightning','water','light','earth','dark'].map(e=>[e,(target.resist?.[e]??d.actors[target.id]?.resist?.[e]??1)*buffResistance(d,dungeonBuffs(d,s),unitKey(target),e)*(dungeonEffectActive(d,s,'status','wet')?wetResistance(d,target,e):1)]))};
+ return {accuracy:buffAccuracy(d,s.battle,source,statusAccuracy(d,s,source)),sourceStats:clone(enemySource?enemyStats(engine,source):engine.stats(source.id)),targetStats:clone(target.instance?enemyStats(engine,target):engine.stats(target.id)),guardRate:guardDamageRate(d,guardLevel(s.battle,target)),taken:target.instance?1:passives(d,s,target.id).damageTaken??1,criticalChance:criticalChance(d,s,source,target),resist:Object.fromEntries(['physical','fire','ice','lightning','water','light','earth','dark'].map(e=>[e,(target.resist?.[e]??d.actors[target.id]?.resist?.[e]??1)*buffResistance(d,dungeonBuffs(d,s),unitKey(target),e)*(dungeonEffectActive(d,s,'status','wet')?wetResistance(d,target,e):1)]))};
 }
 function frontlineReact(engine,reactor,on,attacker){
  const {data:d,state:s}=engine,b=s.battle;if(!isFrontline(s)||!battleAlive(s,reactor))return false;

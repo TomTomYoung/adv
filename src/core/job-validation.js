@@ -95,7 +95,8 @@ export function validateJobs(data){
     if(!isRecord(buff.stats)||Object.entries(buff.stats).some(([key,n])=>!['str','vit','agi','int'].includes(key)||!finite(n,.1,3)))fail(id,'バフ能力不正');
     if(!isRecord(buff.resist)||Object.entries(buff.resist).some(([key,n])=>!ELEMENTS.includes(key)||!finite(n,0,1)))fail(id,'バフ耐性不正');
     if(buff.physicalPower!==undefined&&(!finite(buff.physicalPower,1,3)||buff.consume!=='next_action')||buff.physicalTaken!==undefined&&(!finite(buff.physicalTaken,0,1)||buff.consume!=='physical_hit')||buff.consume!==undefined&&!['next_action','physical_hit'].includes(buff.consume))fail(id,'一回補正の倍率・消費条件不正');
-    if(Object.keys(buff).some(key=>!['id','name','turns','stats','resist','physicalPower','physicalTaken','consume'].includes(key)))fail(id,'未知のバフ項目');
+    if(buff.blocksMovement!==undefined&&typeof buff.blocksMovement!=='boolean'||buff.classicAccuracyPenalty!==undefined&&!finite(buff.classicAccuracyPenalty,0,1))fail(id,'移動・命中補正不正');
+    if(Object.keys(buff).some(key=>!['id','name','turns','stats','resist','physicalPower','physicalTaken','consume','blocksMovement','classicAccuracyPenalty'].includes(key)))fail(id,'未知のバフ項目');
   }
   for(const [id,skill] of Object.entries(data.skills)){for(const m of skillLevelDefinitionErrors(data,id,skill))fail(id,m);for(const variant of levelVariants(skill))for(const message of skillDefinitionErrors(data,variant))fail(`skills.${id}`,message);}
   for(const [id,spec] of Object.entries(data.fieldAbilities??{})){for(const m of skillLevelDefinitionErrors(data,id,spec))fail(id,m);for(const a of levelVariants(spec)){

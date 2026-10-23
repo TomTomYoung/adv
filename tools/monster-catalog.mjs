@@ -47,7 +47,7 @@ const escape=value=>String(value).replaceAll('&','&amp;').replaceAll('"','&quot;
 
 export function monsterCatalog(data) {
   const enemies=Object.values(data.enemies),refs=encounterReferences(data);
-  const idsIn=encounter=>encounter.enemies.map(e=>typeof e==='string'?e:e.id??e.enemy);
+  const idsIn=encounter=>[...encounter.enemies.map(e=>typeof e==='string'?e:e.id??e.enemy),...(encounter.reinforcements??[]).map(r=>r.enemy)];
   const special=['kuragari','salt_eater','valley_hexer','water_darter','water_predator','water_giant'];
   const groups=[
     ['固有環境の敵',enemies.filter(e=>special.includes(e.id))],
@@ -67,7 +67,7 @@ export function monsterCatalog(data) {
     '現在のくらがり画像は `wraith` が参照する `assets/images/monsters/wraith.webp` です。同じ画像を地域4・5・9の迷宮獣／守護者、腐肉鬼、足跡の追跡者も共有しています。くらがりだけの専用画像IDへ分離された状態ではありません。旧PNGの保存と現行の参照は[適用記録](../assets/source/characters/recovery-2026-09-24.json)で確認できます。','',
     '2026-09-25の素材更新第1便で、共通画像ID `slime`・`skeleton`・`construct` の3点を新しい魔物素材と同じタッチの透過WebPへ換装しました。同じIDを使う各敵も新画像へ切り替わります。[第1便の適用・透過検査記録](../assets/source/monsters/refresh-2026-09-25-batch1.json)と[生成プロンプト](../assets/source/monsters/refresh-2026-09-25-batch1-prompts.json)。','',
     '同日の第2便で残る `dragon` も換装し、このIDを共有する7定義へ反映しました。前日の `wraith` を含む共通5画像の更新が完了し、現行の敵が参照する旧共通PNGは0点です。旧PNGとAIPaint原稿は保持しています。[第2便の適用・透過検査記録](../assets/source/monsters/refresh-2026-09-25-batch2.json)と[生成プロンプト](../assets/source/monsters/refresh-2026-09-25-batch2-prompts.json)。','',
-    '正常な1.25.0のセーブは1.26.0へ移行し、その他の内容版や破損セーブは受け付けません。地域の迷宮獣・守護者は現行の依頼戦・通常遭遇から参照されているため残っています。保存方針は[SPEC.md](SPEC.md)、調整と旧測定は[BALANCE_PLAN.md](BALANCE_PLAN.md)を参照してください。','',
+    '正常な1.25.0〜1.30.0のセーブを現行版へ検証後に移行し、その他の内容版や破損セーブは受け付けません。地域の迷宮獣・守護者は現行の依頼戦・通常遭遇から参照されているため残っています。保存方針は[SPEC.md](SPEC.md)、調整と旧測定は[BALANCE_PLAN.md](BALANCE_PLAN.md)を参照してください。','',
     '## 編集元','',
     '[config/entities.json](../config/entities.json)：個別デザイン20種の名称・発想・外見・数値・代表技能。AIの組立は[build-entities.mjs](../tools/build-entities.mjs)です。参照した発想元は[RPGエンティティ生成モデル](https://app.notion.com/p/RPG-3d6c3c1966b380489592dbeafc72b9dd)と[魔物100](https://app.notion.com/p/3d6c3c1966b38172b0a6fd15e23be419)です。','',
     '[kagaribi-content.json](../config/kagaribi-content.json)：くらがり、篝火の迷宮の通常魔物6種と炉守りの亡霊。[dungeon-content.json](../config/dungeon-content.json)：水路の魚・ソルトイーター・境渡りの呪詠み。出現・特殊処理の設定は各 `config/dungeons/*.json` です。','',
@@ -92,8 +92,9 @@ export function monsterCatalog(data) {
       }
       out.push('','遭遇と参照先：','');
       for(const [id,encounter] of Object.entries(data.encounters).filter(([,c])=>idsIn(c).includes(e.id))){
-        const r=refs[id],members=idsIn(encounter),formation=[...new Set(members)].map(id=>`${data.enemies[id].name}×${members.filter(x=>x===id).length}`).join('・');
+        const r=refs[id],members=encounter.enemies,formation=[...new Set(members)].map(id=>`${data.enemies[id].name}×${members.filter(x=>x===id).length}`).join('・');
         out.push(`${id}：${formation}。逃走${encounter.escape?'可':'不可'}。`);
+        if(encounter.reinforcements)out.push(`有限増援予定：${encounter.reinforcements.map(row=>`${data.enemies[row.enemy].name}（最短${row.round}巡${row.afterDefeat?`、${row.afterDefeat}撃破後`:''}${row.whileAlive?`、${row.whileAlive}生存中`:''}）`).join(' / ')}。初期配置には含めません。`);
         if(r.maps.length)out.push(`通常遭遇候補：${r.maps.map(m=>`${m.name} (${m.id})、${m.weight===null?'単一候補':`重み${m.weight}`}`).join(' / ')}。`);
         if(r.systems.length)out.push(`仕掛けからの参照：${r.systems.join(' / ')}。`);
         if(r.scripts.length)out.push(`戦闘開始命令：${r.scripts.length}スクリプト。${shortList(r.scripts)}。全配置の照合は[イベント一覧](EVENT_CATALOG.md)を参照してください。`);

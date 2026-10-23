@@ -38,7 +38,7 @@ export function dungeonCatalog(data,{date=new Date().toISOString().slice(0,10)}=
  out.push('## 読み方と保守','',
  '掲載数値・配置は現在の配布JSONから生成しています。推奨Lvは迷宮全体の目安です。関連クエストの掲載は現地イベントの配置に基づき、全場面の実移動が接続済みであることを意味しません。物語内の行動を出発・到着へ全面接続した範囲はq001〜q004とq201〜q210です。','',
  `[解説原稿](../authoring/dungeon-page-notes.json)と配布データを更新し、${code('npm run build:docs')}でカタログと専用ページをまとめて再生成します。検査は${code('npm run check:docs')}です。ゲームデータを変更した場合は、先に${code('npm run build:dungeons')}等の対応する生成処理を実行してください。`,'',
- '[共通部品の設計](DUNGEON_SYSTEM_DESIGN.md)、[区画接続](CONNECTED_2D_MAPS.md)、[素材と現地調査](DUNGEON_ART_AND_SCENARIOS.md)を参照できます。旧3D・潮汐の退避原稿は現行マップへ数えません。正常な1.25.0・1.26.0のセーブを1.27.0へ検証後に移行し、既存進行と旧版で訪問済みの近道・設備・購入技能を保持します。1.25.0には遠征状態を追加します。その他の内容版は移行対象外で、読込に失敗した場合は新規開始します。','');
+ '[共通部品の設計](DUNGEON_SYSTEM_DESIGN.md)、[区画接続](CONNECTED_2D_MAPS.md)、[素材と現地調査](DUNGEON_ART_AND_SCENARIOS.md)を参照できます。旧3D・潮汐の退避原稿は現行マップへ数えません。正常な1.25.0〜1.30.0の保存を現行版へ検証後に移行します。植物・塩・設備・購入技能を保持し、1.28〜1.30では内容版だけを更新します。1.25には遠征状態、1.25〜1.27の旧下層到達済み保存には地下水道の帰路を補完します。その他の内容版は移行対象外で、読込に失敗した場合は新規開始します。','');
  return out.join('\n');
 }
 
@@ -137,7 +137,7 @@ export function dungeonPage(data,id,{date=new Date().toISOString().slice(0,10)}=
  for(const qid of ids){const q=data.quests[qid],es=events.filter(e=>e.quest===qid),maps=[...new Set(es.flatMap(e=>e.points.filter(p=>d.maps.includes(p.map)).map(p=>p.map)))];out.push(`表示${String(questDisplayNumber(data,q.id)).padStart(3,'0')} / ${questLink(q)}：${maps.map(mid=>mapName(data,mid)).join('・')}。`,'');}
  if(!ids.length)out.push('現地に配置された番号付き依頼はありません。','');
  for(const e of events.filter(e=>e.note))out.push(`現地調査「${e.title}」／${e.quest}：${e.note.text}`,'',`調査地点：${e.points.filter(p=>d.maps.includes(p.map)).map(p=>point(data,p)).join('、')}。現在の装置状態などが記録条件を満たす必要があります。`,'');
- out.push('## 保存と帰還','',n.persistent,'',`内容版${data.game.version}の同版セーブで再開します。正常な1.25.0・1.26.0のセーブを1.27.0へ検証後に移行し、既存進行と旧版で訪問済みの近道・設備・購入技能を保持します。1.25.0には遠征状態を追加します。その他の内容版は移行対象外で、読込失敗時は新規開始します。`,'',
+ out.push('## 保存と帰還','',n.persistent,'',`内容版${data.game.version}の同版セーブで再開します。正常な1.25.0〜1.30.0の保存を現行版へ検証後に移行します。植物・塩・設備・購入技能を保持し、1.28〜1.30では内容版だけを更新します。1.25には遠征状態、1.25〜1.27の旧下層到達済み保存には地下水道の帰路を補完します。その他の内容版は移行対象外で、読込失敗時は新規開始します。`,'',
  '## 編集元と関連仕様','',`迷宮の正本：[config/dungeons/${id}.json](../config/dungeons/${id}.json)。セル地形：[config/cell-layers.json](../config/cell-layers.json)。追加マップ・道具など：[${id==='kagaribi'?'篝火原稿':'追加コンテンツ原稿'}](../config/${id==='kagaribi'?'kagaribi-content':'dungeon-content'}.json)。${['region_1','region_2','region_3'].includes(id)?' 接続区画の配置は[接続マップ原稿](../config/connected-maps.json)で管理します。':''}`,'',
  'クエスト配置は各 `config/quests/qXXX.events.json`、室内は [config/locations.json](../config/locations.json) を編集します。生成済みの配布JSONと本ページを直接直すと、再生成で上書きされます。','',
  `${n.references.map(file=>`[${label(file)}](${file})`).join(' ／ ')}。`,'',

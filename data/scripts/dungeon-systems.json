@@ -598,8 +598,65 @@
     "garden.root_gate.10": {
       "commands": [
         {
-          "op": "narrate",
-          "text": "重なった根が奥の温室を閉ざしている。前庭の東には4Fへ戻る苗床運搬路がある。"
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.garden.prunerWon"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "大剪定虫は退き、根門に光が差している。北の種床設備で給油と中継を整えられる。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "根門の大剪定虫が根殻甲を従えている。根殻には火が効く。根殻を倒すと3巡目以降に蜂が一体現れる。蜂には氷が効く。先に本体を倒すと蜂は現れない。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "fight",
+                  "text": "根門の主に挑む",
+                  "commands": [
+                    {
+                      "op": "battle.start",
+                      "encounter": "garden_root_guardian",
+                      "on_win": [
+                        {
+                          "op": "flag.set",
+                          "key": "garden.prunerWon",
+                          "value": true
+                        },
+                        {
+                          "op": "narrate",
+                          "text": "大剪定虫が退いた。北の種床設備を修理できる。復旧後は根留めを技能宝石180個で人物ごとに学べる。"
+                        }
+                      ],
+                      "on_lose": [],
+                      "on_escape": [
+                        {
+                          "op": "narrate",
+                          "text": "主は根門へ戻った。苗床運搬路で4Fへ戻り、栽培と給油を整えて再挑戦できる。"
+                        }
+                      ],
+                      "on_interrupt": []
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ]
         }
       ]
     }

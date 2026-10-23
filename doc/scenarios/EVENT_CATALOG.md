@@ -1,6 +1,6 @@
 # フィールドイベント・戦闘中イベント一覧
 
-作品版 1.30.0。配布データから生成する実装一覧。[q001の位置・全文](quests/QUEST_Q001.md) ／ [イベント仕様](EVENT_SYSTEM.md) ／ [命令仕様](SCRIPT_REFERENCE.md) ／ [セル照明](../dungeons/FIELD_LIGHTING.md)。
+作品版 1.31.0。配布データから生成する実装一覧。[q001の位置・全文](quests/QUEST_Q001.md) ／ [イベント仕様](EVENT_SYSTEM.md) ／ [命令仕様](SCRIPT_REFERENCE.md) ／ [セル照明](../dungeons/FIELD_LIGHTING.md)。
 
 ## 実装した処理
 
@@ -2230,6 +2230,8 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 
 `region_3_f10/root_gate`：(5, 5) `clue`、起動 `interact` → `garden.root_gate.10`。[定義](../../data/maps/region_3_f10.json)。
 
+`region_3_f10/supply_rope`：(7, 1) `chest`、起動 `interact` → `treasure.package.region_3_f10.supply_rope`。[定義](../../data/maps/region_3_f10.json)。
+
 ## battle.startの定義位置
 
 現在の進行と旧進行の互換定義を含む全スクリプトの静的索引。ここに載るだけでは現在のクエスト経路から到達するとは限らない。q001の現行経路は上記専用IDを使う。
@@ -2909,6 +2911,8 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 `waterway.sluice_beast/commands.0.else.1.options.0.commands.0`：`waterway.sluice_beast` / `commands.0.else.1.options.0.commands.0` → `waterway_sluice_guardian`。
 
 `mine.shellbreaker.10/commands.0.else.1.options.0.commands.0`：`mine.shellbreaker.10` / `commands.0.else.1.options.0.commands.0` → `mine_shell_guardian`、戦闘中イベント `charge_warning`。
+
+`garden.root_gate.10/commands.0.else.1.options.0.commands.0`：`garden.root_gate.10` / `commands.0.else.1.options.0.commands.0` → `garden_root_guardian`。
 
 ## 再生成
 

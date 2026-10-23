@@ -1,12 +1,12 @@
 # 魔物一覧と戦闘画像
 
-作品版1.30.0。配布中の敵は76定義、遭遇編成は107定義、敵が参照する画像ファイルは25点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
+作品版1.31.0。配布中の敵は79定義、遭遇編成は108定義、敵が参照する画像ファイルは25点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
 
 敵・技能・画像・通常ロードのマップと迷宮・スクリプトから全文を生成します。数値を重ねて手書きせず、原稿を更新してから `npm run build:docs` で反映します。
 
 [固有環境の敵](#固有環境の敵)：6定義。
-[個別デザインの通常魔物](#個別デザインの通常魔物)：20定義。
-[依頼に追加した敵](#依頼に追加した敵)：30定義。
+[個別デザインの通常魔物](#個別デザインの通常魔物)：21定義。
+[依頼に追加した敵](#依頼に追加した敵)：32定義。
 [地域の迷宮獣と守護者](#地域の迷宮獣と守護者)：20定義。
 
 ## 現在の読み方
@@ -21,7 +21,7 @@ AIは優先度の高い順に、条件成立・MP充足・環境による使用�
 
 同日の第2便で残る `dragon` も換装し、このIDを共有する7定義へ反映しました。前日の `wraith` を含む共通5画像の更新が完了し、現行の敵が参照する旧共通PNGは0点です。旧PNGとAIPaint原稿は保持しています。[第2便の適用・透過検査記録](../../assets/source/monsters/refresh-2026-09-25-batch2.json)と[生成プロンプト](../../assets/source/monsters/refresh-2026-09-25-batch2-prompts.json)。
 
-正常な1.25.0のセーブは1.26.0へ移行し、その他の内容版や破損セーブは受け付けません。地域の迷宮獣・守護者は現行の依頼戦・通常遭遇から参照されているため残っています。保存方針は[SPEC.md](../SPEC.md)、調整と旧測定は[BALANCE_PLAN.md](BALANCE_PLAN.md)を参照してください。
+正常な1.25.0〜1.30.0のセーブを現行版へ検証後に移行し、その他の内容版や破損セーブは受け付けません。地域の迷宮獣・守護者は現行の依頼戦・通常遭遇から参照されているため残っています。保存方針は[SPEC.md](../SPEC.md)、調整と旧測定は[BALANCE_PLAN.md](BALANCE_PLAN.md)を参照してください。
 
 ## 編集元
 
@@ -264,7 +264,7 @@ wild_pair_2：ドリルモグラ×1・陶器アルマジロ×1。逃走可。
 <img src="../../assets/images/monsters/ceramic_armadillo.webp" width="160" alt="陶器アルマジロ">
 
 画像ID：monster_ceramic_armadillo。実ファイル：[assets/images/monsters/ceramic_armadillo.webp](../../assets/images/monsters/ceramic_armadillo.webp)。
-画像共有：殻砕き獣。
+画像共有：殻砕き獣・根殻甲。
 
 発想：アルマジロ＋陶器。参照：M008。地域分類：塩哭きの廃坑。
 
@@ -325,7 +325,7 @@ wild_pair_3：蜜蝋ランプバチ×1・鋸刃カマキリ×1。逃走可。
 <img src="../../assets/images/monsters/saw_mantis.webp" width="160" alt="鋸刃カマキリ">
 
 画像ID：monster_saw_mantis。実ファイル：[assets/images/monsters/saw_mantis.webp](../../assets/images/monsters/saw_mantis.webp)。
-画像共有：他の敵定義との共有なし。
+画像共有：大剪定虫。
 
 発想：カマキリ＋往復のこぎり。参照：M041。地域分類：根喰みの地下庭園。
 
@@ -774,6 +774,34 @@ wild_jackknife：ジャックナイフ×1。逃走可。
 
 wild_pair_10：月輪オオカミ×1・ジャックナイフ×1。逃走可。
 通常遭遇候補：帰還者の深淵・地下2層 (region_10_f2)、重み10。
+
+### 蜜蝋ランプバチ (garden_nectar_bee)
+
+<img src="../../assets/images/monsters/candle_bee.webp" width="160" alt="蜜蝋ランプバチ">
+
+画像ID：monster_candle_bee。実ファイル：[assets/images/monsters/candle_bee.webp](../../assets/images/monsters/candle_bee.webp)。
+画像共有：他の敵定義との共有なし。
+
+発想：ハチ＋蝋燭。参照：M042。地域分類：根喰みの地下庭園。
+
+外見：蜜蝋の腹と小さな琥珀の火。薄い羽と黒い脚。
+
+設計上の役割：灯った蜜蝋を飛ばす高速の炎術役
+
+基礎能力：HP 120 / MP 30 / STR 15 / VIT 9 / AGI 17 / INT 22。報酬：20G / 80EXP。
+宝箱：予備灯油 1個 / 12.5％。
+属性倍率：fire 0.65 / ice 1.4。
+
+AIの選択順：
+
+1. 優先度10、条件なし：蜜蝋の火 (wax_flame)、MP4、対象は探索隊の生存者からランダムに1人。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+garden_root_guardian：大剪定虫×1・根殻甲×1。逃走可。
+有限増援予定：蜜蝋ランプバチ（最短3巡、enemy_1撃破後、enemy_0生存中）。初期配置には含めません。
+戦闘開始命令：1スクリプト。garden.root_gate.10。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
 
 ## 依頼に追加した敵
 
@@ -1452,7 +1480,7 @@ waterway_sluice_guardian：水門獣×1。逃走可。
 <img src="../../assets/images/monsters/ceramic_armadillo.webp" width="160" alt="殻砕き獣">
 
 画像ID：monster_ceramic_armadillo。実ファイル：[assets/images/monsters/ceramic_armadillo.webp](../../assets/images/monsters/ceramic_armadillo.webp)。
-画像共有：陶器アルマジロ。
+画像共有：陶器アルマジロ・根殻甲。
 
 基礎能力：HP 850 / MP 0 / STR 40 / VIT 30 / AGI 8 / INT 18。報酬：110G / 650EXP。
 宝箱：傷薬 1個 / 12.5％。
@@ -1469,6 +1497,49 @@ AIの選択順：
 
 mine_shell_guardian：殻砕き獣×1。逃走可。
 戦闘開始命令：1スクリプト。mine.shellbreaker.10。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
+
+### 大剪定虫 (garden_great_pruner)
+
+<img src="../../assets/images/monsters/saw_mantis.webp" width="160" alt="大剪定虫">
+
+画像ID：monster_saw_mantis。実ファイル：[assets/images/monsters/saw_mantis.webp](../../assets/images/monsters/saw_mantis.webp)。
+画像共有：鋸刃カマキリ。
+
+基礎能力：HP 760 / MP 0 / STR 38 / VIT 20 / AGI 15 / INT 28。報酬：100G / 700EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：physical 1 / fire 1.1。
+
+AIの選択順：
+
+1. 優先度0、条件なし：大枝刈り (garden_prune)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+garden_root_guardian：大剪定虫×1・根殻甲×1。逃走可。
+有限増援予定：蜜蝋ランプバチ（最短3巡、enemy_1撃破後、enemy_0生存中）。初期配置には含めません。
+戦闘開始命令：1スクリプト。garden.root_gate.10。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
+
+### 根殻甲 (garden_root_shell)
+
+<img src="../../assets/images/monsters/ceramic_armadillo.webp" width="160" alt="根殻甲">
+
+画像ID：monster_ceramic_armadillo。実ファイル：[assets/images/monsters/ceramic_armadillo.webp](../../assets/images/monsters/ceramic_armadillo.webp)。
+画像共有：陶器アルマジロ・殻砕き獣。
+
+基礎能力：HP 160 / MP 0 / STR 24 / VIT 18 / AGI 7 / INT 8。報酬：24G / 100EXP。
+宝箱：柔らかな植物繊維 1個 / 12.5％。
+属性倍率：physical 0.8 / fire 1.3。
+
+AIの選択順：
+
+1. 優先度10、奇数ラウンド：防御 (guard)、MP0、対象は自身。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+garden_root_guardian：大剪定虫×1・根殻甲×1。逃走可。
+有限増援予定：蜜蝋ランプバチ（最短3巡、enemy_1撃破後、enemy_0生存中）。初期配置には含めません。
+戦闘開始命令：1スクリプト。garden.root_gate.10。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
 
 ## 地域の迷宮獣と守護者
 

@@ -56,6 +56,8 @@ const buffEffectText=(data,id)=>{
   for(const [element,n] of Object.entries(b.resist??{}))values.push(`${elementLabels[element]??element}被ダメージ ×${n}`);
   if(b.physicalPower!==undefined)values.push(`次の行動の物理威力 ×${b.physicalPower}`);
   if(b.physicalTaken!==undefined)values.push(`次の物理被害1回 ×${b.physicalTaken}`);
+  if(b.blocksMovement)values.push('自発移動と次のFrontline自動前進を阻止');
+  if(b.classicAccuracyPenalty)values.push(`Classic命中率−${b.classicAccuracyPenalty*100}ポイント`);
   values.push(b.consume==='next_action'?'次の本人の行動機会に消費':`持続 ${b.turns}ターン`);
   return values.join(' / ');
 };

@@ -333,6 +333,126 @@
           "target": "random"
         }
       ]
+    },
+    "garden_great_pruner": {
+      "id": "garden_great_pruner",
+      "name": "大剪定虫",
+      "sprite": "monster_saw_mantis",
+      "stats": {
+        "hp": 760,
+        "mp": 0,
+        "str": 38,
+        "vit": 20,
+        "agi": 15,
+        "int": 28
+      },
+      "resist": {
+        "physical": 1,
+        "fire": 1.1
+      },
+      "rewards": {
+        "xp": 700,
+        "gold": 100
+      },
+      "ai": [
+        {
+          "priority": 0,
+          "skill": "garden_prune",
+          "target": "random"
+        }
+      ]
+    },
+    "garden_root_shell": {
+      "id": "garden_root_shell",
+      "name": "根殻甲",
+      "sprite": "monster_ceramic_armadillo",
+      "stats": {
+        "hp": 160,
+        "mp": 0,
+        "str": 24,
+        "vit": 18,
+        "agi": 7,
+        "int": 8
+      },
+      "resist": {
+        "physical": 0.8,
+        "fire": 1.3
+      },
+      "rewards": {
+        "xp": 100,
+        "gold": 24
+      },
+      "ai": [
+        {
+          "priority": 10,
+          "skill": "guard",
+          "target": "self",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "op": "mod",
+              "args": [
+                {
+                  "ref": "self.round"
+                },
+                2
+              ]
+            },
+            "right": 1
+          }
+        },
+        {
+          "priority": 0,
+          "skill": "attack",
+          "target": "random"
+        }
+      ]
+    },
+    "garden_nectar_bee": {
+      "id": "garden_nectar_bee",
+      "name": "蜜蝋ランプバチ",
+      "region": 3,
+      "source": "M042",
+      "ideas": [
+        "ハチ",
+        "蝋燭"
+      ],
+      "appearance": "蜜蝋の腹と小さな琥珀の火。薄い羽と黒い脚。",
+      "role": "灯った蜜蝋を飛ばす高速の炎術役",
+      "stats": {
+        "hp": 120,
+        "mp": 30,
+        "str": 15,
+        "vit": 9,
+        "agi": 17,
+        "int": 22
+      },
+      "skill": "wax_flame",
+      "resist": {
+        "fire": 0.65,
+        "ice": 1.4
+      },
+      "rewards": {
+        "xp": 80,
+        "gold": 20
+      },
+      "sprite": "monster_candle_bee",
+      "ai": [
+        {
+          "priority": 10,
+          "skill": "wax_flame",
+          "target": "random"
+        },
+        {
+          "priority": 0,
+          "skill": "attack",
+          "target": "random"
+        }
+      ],
+      "drop": {
+        "item": "torch",
+        "chance": 0.125
+      }
     }
   },
   "encounters": {
@@ -406,6 +526,49 @@
       ],
       "escape": true,
       "text": "一巡目は防御、二巡目は単体突進、三巡目は息継ぎ。突進後は防御が30%低下する。三巡ごとに繰り返す。"
+    },
+    "garden_root_guardian": {
+      "id": "garden_root_guardian",
+      "name": "根門の大剪定虫",
+      "enemies": [
+        "garden_great_pruner",
+        "garden_root_shell"
+      ],
+      "escape": true,
+      "text": "大剪定虫の前に根殻甲が構える。根殻を倒すと、3巡目以降の巡の始めに蜂が一度だけ加わる。本体を先に倒せば蜂は現れない。",
+      "enemyPositions": [
+        {
+          "x": 2,
+          "y": 2
+        },
+        {
+          "x": 1,
+          "y": 2
+        }
+      ],
+      "frontlinePositions": [
+        {
+          "lane": 2,
+          "depth": 1
+        },
+        {
+          "lane": 1,
+          "depth": 0
+        }
+      ],
+      "reinforcements": [
+        {
+          "id": "nectar_bee",
+          "enemy": "garden_nectar_bee",
+          "round": 3,
+          "afterDefeat": "enemy_1",
+          "whileAlive": "enemy_0",
+          "position": {
+            "x": 3,
+            "y": 2
+          }
+        }
+      ]
     }
   },
   "statuses": {
@@ -2639,7 +2802,7 @@
         },
         {
           "id": "root_gate",
-          "name": "奥へ絡む根の門",
+          "name": "根門の大剪定虫",
           "x": 5,
           "y": 5,
           "kind": "clue",
@@ -2647,6 +2810,29 @@
           "interactionRange": "here",
           "safe": true,
           "script": "garden.root_gate.10"
+        },
+        {
+          "id": "supply_rope",
+          "name": "配管固定用の備品箱",
+          "x": 7,
+          "y": 1,
+          "kind": "chest",
+          "trigger": "interact",
+          "interactionRange": "here",
+          "safe": true,
+          "script": "garden.supply_rope.7",
+          "treasure": {
+            "kind": "chest",
+            "uses": 1,
+            "reset": "never",
+            "rewards": {
+              "items": {
+                "rope": 1
+              }
+            },
+            "afterText": "予備のロープは受け取り済みだ。",
+            "message": "配管修理用のロープを1本受け取った。給油と中継起動は、修理後に別々に操作する。"
+          }
         }
       ]
     }
@@ -3250,8 +3436,65 @@
     "garden.root_gate.10": {
       "commands": [
         {
-          "op": "narrate",
-          "text": "重なった根が奥の温室を閉ざしている。前庭の東には4Fへ戻る苗床運搬路がある。"
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.garden.prunerWon"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "大剪定虫は退き、根門に光が差している。北の種床設備で給油と中継を整えられる。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "根門の大剪定虫が根殻甲を従えている。根殻には火が効く。根殻を倒すと3巡目以降に蜂が一体現れる。蜂には氷が効く。先に本体を倒すと蜂は現れない。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "fight",
+                  "text": "根門の主に挑む",
+                  "commands": [
+                    {
+                      "op": "battle.start",
+                      "encounter": "garden_root_guardian",
+                      "on_win": [
+                        {
+                          "op": "flag.set",
+                          "key": "garden.prunerWon",
+                          "value": true
+                        },
+                        {
+                          "op": "narrate",
+                          "text": "大剪定虫が退いた。北の種床設備を修理できる。復旧後は根留めを技能宝石180個で人物ごとに学べる。"
+                        }
+                      ],
+                      "on_lose": [],
+                      "on_escape": [
+                        {
+                          "op": "narrate",
+                          "text": "主は根門へ戻った。苗床運搬路で4Fへ戻り、栽培と給油を整えて再挑戦できる。"
+                        }
+                      ],
+                      "on_interrupt": []
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ]
         }
       ]
     }
