@@ -1,6 +1,6 @@
 # フィールドイベント・戦闘中イベント一覧
 
-作品版 1.32.0。配布データから生成する実装一覧。[q001の位置・全文](quests/QUEST_Q001.md) ／ [イベント仕様](EVENT_SYSTEM.md) ／ [命令仕様](SCRIPT_REFERENCE.md) ／ [セル照明](../dungeons/FIELD_LIGHTING.md)。
+作品版 1.34.0。配布データから生成する実装一覧。[q001の位置・全文](quests/QUEST_Q001.md) ／ [イベント仕様](EVENT_SYSTEM.md) ／ [命令仕様](SCRIPT_REFERENCE.md) ／ [セル照明](../dungeons/FIELD_LIGHTING.md)。
 
 ## 実装した処理
 
@@ -2096,6 +2096,8 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 
 ### region_1_canal_d 灯守の地下水道・9F 避難水路
 
+`region_1_canal_d/workshop_parts`：(5, 5) `chest`、起動 `interact` → `treasure.package.region_1_canal_d.workshop_parts`。[定義](../../data/maps/region_1_canal_d.json)。
+
 ### region_1_gatehouse 灯守の地下水道・10F 奥の水門詰所
 
 `region_1_gatehouse/sluice_beast`：(5, 3) `clue`、起動 `interact` → `waterway.sluice_beast`。[定義](../../data/maps/region_1_gatehouse.json)。
@@ -2181,6 +2183,8 @@ IDはクエストIDと配置IDの組で一意。配置と起動条件の正本�
 ### region_2_f9 塩哭きの廃坑・9F 試錐場
 
 `region_2_f9/charge_record`：(3, 1) `clue`、起動 `interact` → `mine.charge_record.9`。[定義](../../data/maps/region_2_f9.json)。
+
+`region_2_f9/workshop_parts`：(5, 5) `chest`、起動 `interact` → `treasure.package.region_2_f9.workshop_parts`。[定義](../../data/maps/region_2_f9.json)。
 
 ### region_2_f10 塩哭きの廃坑・10F 大選鉱室
 

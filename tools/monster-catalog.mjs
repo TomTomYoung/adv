@@ -26,6 +26,7 @@ export function encounterReferences(data) {
 
 function conditionText(value) {
   if(value===undefined||value===null)return '条件なし';
+  if(value.op==='contains'&&value.left?.ref==='self.buffs')return `自身に補助 ${value.right} がある間`;
   if(value.op==='and')return value.args.map(conditionText).join('、かつ');
   if(value.op==='eq'&&value.left?.op==='mod'&&value.left.args?.[0]?.ref==='self.round'&&value.left.args[1]===2)return value.right===0?'偶数ラウンド':'奇数ラウンド';
   if(value.left?.ref==='self.round'&&value.op==='eq')return `第${value.right}ラウンド`;
@@ -37,6 +38,8 @@ function targetText(rule,skill) {
   if(skill.target==='all_enemies')return '探索隊の生存者全員';
   if(skill.target==='all_allies')return '敵側の生存者全員';
   if(rule.target==='self'||skill.target==='self')return '自身';
+  if(rule.target==='unbuffed')return '敵側の生存者のうち、技能が付ける補助を持たない1体（遭遇順）';
+  if(rule.target==='afflicted')return '敵側の生存者のうち、解除可能な状態異常を持つ1体（遭遇順）';
   if(skill.target==='ally')return '敵側でHP割合が最も低い1体';
   return rule.target==='weakest'?'探索隊で現在HPの実数が最も低い1人':'探索隊の生存者からランダムに1人';
 }
@@ -67,7 +70,7 @@ export function monsterCatalog(data) {
     '現在のくらがり画像は `wraith` が参照する `assets/images/monsters/wraith.webp` です。同じ画像を地域4・5・9の迷宮獣／守護者、腐肉鬼、足跡の追跡者も共有しています。くらがりだけの専用画像IDへ分離された状態ではありません。旧PNGの保存と現行の参照は[適用記録](../assets/source/characters/recovery-2026-09-24.json)で確認できます。','',
     '2026-09-25の素材更新第1便で、共通画像ID `slime`・`skeleton`・`construct` の3点を新しい魔物素材と同じタッチの透過WebPへ換装しました。同じIDを使う各敵も新画像へ切り替わります。[第1便の適用・透過検査記録](../assets/source/monsters/refresh-2026-09-25-batch1.json)と[生成プロンプト](../assets/source/monsters/refresh-2026-09-25-batch1-prompts.json)。','',
     '同日の第2便で残る `dragon` も換装し、このIDを共有する7定義へ反映しました。前日の `wraith` を含む共通5画像の更新が完了し、現行の敵が参照する旧共通PNGは0点です。旧PNGとAIPaint原稿は保持しています。[第2便の適用・透過検査記録](../assets/source/monsters/refresh-2026-09-25-batch2.json)と[生成プロンプト](../assets/source/monsters/refresh-2026-09-25-batch2-prompts.json)。','',
-    '正常な1.25.0〜1.31.0のセーブを現行版へ検証後に移行し、その他の内容版や破損セーブは受け付けません。地域の迷宮獣・守護者は現行の依頼戦・通常遭遇から参照されているため残っています。保存方針は[SPEC.md](SPEC.md)、調整と旧測定は[BALANCE_PLAN.md](BALANCE_PLAN.md)を参照してください。','',
+    '正常な1.25.0〜1.33.0のセーブを現行版へ検証後に移行し、その他の内容版や破損セーブは受け付けません。地域の迷宮獣・守護者は現行の依頼戦・通常遭遇から参照されているため残っています。保存方針は[SPEC.md](SPEC.md)、調整と旧測定は[BALANCE_PLAN.md](BALANCE_PLAN.md)を参照してください。','',
     '## 編集元','',
     '[config/entities.json](../config/entities.json)：個別デザイン20種の名称・発想・外見・数値・代表技能。AIの組立は[build-entities.mjs](../tools/build-entities.mjs)です。参照した発想元は[RPGエンティティ生成モデル](https://app.notion.com/p/RPG-3d6c3c1966b380489592dbeafc72b9dd)と[魔物100](https://app.notion.com/p/3d6c3c1966b38172b0a6fd15e23be419)です。','',
     '[kagaribi-content.json](../config/kagaribi-content.json)：くらがり、篝火の迷宮の通常魔物6種と炉守りの亡霊。[dungeon-content.json](../config/dungeon-content.json)：水路の魚・ソルトイーター・境渡りの呪詠み。出現・特殊処理の設定は各 `config/dungeons/*.json` です。','',

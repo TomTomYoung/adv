@@ -103,7 +103,7 @@ function migrateContentSave(original,data){
     if(validateSave(previous,legacy).length)return original;
     const save=clone(previous);save.contentVersion=data.game.version;save.state.contentVersion=data.game.version;save.state.expedition=freshExpedition();return preserveWaterwayRoutes(migration.kagaribiRevision?preserveKagaribiRoutes(save):save,migration);
   }
-  if(migration.kagaribiRevision===1||migration.waterwayRevision===1||migration.mineRevision===1||migration.gardenRevision===1||migration.workshopRevision===1){
+  if(migration.kagaribiRevision===1||migration.waterwayRevision===1||migration.mineRevision===1||migration.gardenRevision===1||migration.workshopRevision===1||migration.waterwayEncountersRevision===1||migration.mineEncountersRevision===1){
     const legacy={...data,game:{...data.game,version:original.contentVersion}};
     const previous=migrateSave(original,legacy);
     if(validateSave(previous,legacy).length)return original;
@@ -181,7 +181,7 @@ export function migrateSave(original,data){
     }
   }
   if(!data.game.dungeonVersion||migrated?.contentVersion!==data.game.version||original?.contentVersion===data.game.version)return migrated;
-  if(data.game.migrations?.[original?.contentVersion]?.environmentRevision||data.game.migrations?.[original?.contentVersion]?.expeditionRevision||data.game.migrations?.[original?.contentVersion]?.kagaribiRevision||data.game.migrations?.[original?.contentVersion]?.waterwayRevision||data.game.migrations?.[original?.contentVersion]?.mineRevision||data.game.migrations?.[original?.contentVersion]?.gardenRevision||data.game.migrations?.[original?.contentVersion]?.workshopRevision)return migrated;
+  if(data.game.migrations?.[original?.contentVersion]?.environmentRevision||data.game.migrations?.[original?.contentVersion]?.expeditionRevision||data.game.migrations?.[original?.contentVersion]?.kagaribiRevision||data.game.migrations?.[original?.contentVersion]?.waterwayRevision||data.game.migrations?.[original?.contentVersion]?.mineRevision||data.game.migrations?.[original?.contentVersion]?.gardenRevision||data.game.migrations?.[original?.contentVersion]?.workshopRevision||data.game.migrations?.[original?.contentVersion]?.waterwayEncountersRevision||data.game.migrations?.[original?.contentVersion]?.mineEncountersRevision)return migrated;
   const save=clone(migrated);save.state.dungeons=freshDungeons();
   if(save.state.mode==='dungeon')enterDungeon({data,state:save.state,notify:()=>{}},save.state.location.map);
   return save;
