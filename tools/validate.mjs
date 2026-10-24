@@ -3,8 +3,15 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import {loadContent} from '../src/core/loader.js';
 const root=path.resolve(import.meta.dirname,'..');
-const data=await loadContent(file=>fs.readFile(path.join(root,file),'utf8').then(JSON.parse));
+const read=file=>fs.readFile(path.join(root,file),'utf8').then(JSON.parse);
+const data=await loadContent(read);
+const editions=[data.scenarioEdition];
+for(const id of Object.keys(data.scenarioEditions.editions))if(id!==data.scenarioEdition){
+  const resolved=await loadContent(read,{edition:id});
+  if(Object.keys(resolved.quests).length!==Object.keys(data.quests).length)throw Error(`Scenario edition ${id} changed the quest set`);
+  editions.push(id);
+}
 for(const file of [...Object.values(data.assets.images),...Object.values(data.assets.audio)]){const buffer=await fs.readFile(path.join(root,file));if(!buffer.length)throw Error(`Empty asset ${file}`);}
 for(const [id,effect] of Object.entries(data.effects??{}))for(const track of effect.tracks)if(track.kind==='sprite'){const file=data.assets.images[track.asset];if(file.endsWith('.png')){const b=await fs.readFile(path.join(root,file));if(b.readUInt32BE(16)!==track.columns*track.cell||b.readUInt32BE(20)!==Math.ceil(track.frames/track.columns)*track.cell)throw Error(`Sprite sheet size mismatch: ${id}`);}}
 await buildQuestOrder(root,{check:true});
-console.log(`VALID: ${Object.keys(data.quests).length} quests, ${Object.keys(data.maps).length} maps, ${Object.keys(data.scripts).length} scripts, all assets present`);
+console.log(`VALID: ${Object.keys(data.quests).length} quests, ${Object.keys(data.maps).length} maps, ${Object.keys(data.scripts).length} scripts, editions ${editions.join('/')}, all assets present`);

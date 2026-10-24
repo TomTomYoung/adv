@@ -79,7 +79,7 @@ test('unbuffed AI accepts only single-ally skills with nonempty buff effects',()
  for(const edit of [d=>d.enemies.mine_low_sentinel.ai[0].skill='attack',d=>d.skills.mine_vein_ward.target='all_allies',d=>d.skills.mine_vein_ward.effects=[],d=>d.skills.mine_vein_ward.effects.push({type:'heal',amount:10})]){const d=structuredClone(data);edit(d);assert.ok(validateContent(d).some(e=>e.includes('単体補助')));}
 });
 test('1.33 actual earned campaign save migrates only its version and rejects invalid equipment',()=>{
- const g=ready(),expected=structuredClone(old.state);expected.contentVersion=data.game.version;assert.deepEqual(g.state,expected);saved(g);
+ const g=ready(),expected=structuredClone(old.state);expected.contentVersion=data.game.version;expected.scenarioEdition='e1';assert.deepEqual(g.state,expected);saved(g);
  const bad=structuredClone(old);bad.state.gear.items[bad.state.gear.equipped.ada.weapon].salt=-1;const before=g.save();assert.throws(()=>g.load(JSON.stringify(bad)));assert.equal(g.save(),before);
 });
 test('9F repair materials require a physical detour, remain atomic when full and cannot be collected twice',()=>{

@@ -6,9 +6,11 @@
 
 [設定JSONの編集画面](config/index.html) ／ [編集・出力の使い方](doc/authoring/CONFIG_EDITORS.md)。
 
-作品版1.34.0（現行説明の照合日: 2026-10-24）。町12か所・ダンジョン室内3か所・13ダンジョン・56件の2Dマップを接続しています。篝火の迷宮は既存9区画のIDと依頼位置を維持して3F配油分岐室を追加し、1〜10Fへ接続しました。4・7・10Fの中継出発、10Fの主、武器18種を追加しています。地下水道も既存10区画を1〜10Fへ接続し、4/7/10F設備と10F水門獣に加え、6〜9Fの術役・低位混成5種/4編成と9Fの修理材を接続しました。[水道の現行台帳](doc/dungeons/WATERWAY_TEN_FLOORS.md)。廃坑も既存1/2Fを残して3〜10F、洗浄点、4/7/10F設備、10F殻砕き獣、2本の帰路、6〜9Fの低位5種/4編成と9F修理材を追加しました。[廃坑の現行台帳](doc/dungeons/MINE_TEN_FLOORS.md)。庭園には3〜10F地形・8植床・4/7F設備・固定帰路を追加しました。10Fの大剪定虫・有限増援・種床設備・根留めも接続しました。[庭園の現行台帳](doc/dungeons/GARDEN_SHALLOW_ROUTES.md)。[ダンジョンカタログと専用ページ](doc/dungeons/DUNGEON_CATALOG.md) ／ [篝火の迷宮の拡張](doc/dungeons/KAGARIBI_EXPANSION.md) ／ [現状](doc/CURRENT_STATUS.md) ／ [シナリオ・クエスト文書](doc/scenarios/README.md)。
+作品版1.34.0（現行説明の照合日: 2026-10-25）。町12か所・ダンジョン室内3か所・13ダンジョン・56件の2Dマップを接続しています。篝火の迷宮は既存9区画のIDと依頼位置を維持して3F配油分岐室を追加し、1〜10Fへ接続しました。4・7・10Fの中継出発、10Fの主、武器18種を追加しています。地下水道も既存10区画を1〜10Fへ接続し、4/7/10F設備と10F水門獣に加え、6〜9Fの術役・低位混成5種/4編成と9Fの修理材を接続しました。[水道の現行台帳](doc/dungeons/WATERWAY_TEN_FLOORS.md)。廃坑も既存1/2Fを残して3〜10F、洗浄点、4/7/10F設備、10F殻砕き獣、2本の帰路、6〜9Fの低位5種/4編成と9F修理材を追加しました。[廃坑の現行台帳](doc/dungeons/MINE_TEN_FLOORS.md)。庭園には3〜10F地形・8植床・4/7F設備・固定帰路を追加しました。10Fの大剪定虫・有限増援・種床設備・根留めも接続しました。[庭園の現行台帳](doc/dungeons/GARDEN_SHALLOW_ROUTES.md)。[ダンジョンカタログと専用ページ](doc/dungeons/DUNGEON_CATALOG.md) ／ [篝火の迷宮の拡張](doc/dungeons/KAGARIBI_EXPANSION.md) ／ [現状](doc/CURRENT_STATUS.md) ／ [シナリオ・クエスト文書](doc/scenarios/README.md)。
 
 ## 遊ぶ
+
+「記録」でシナリオの初版と第2版を切り替えられます。新規開始の初期値は最新版（第2版）、旧セーブは初版として再開し、版ごとに進行と保存枠を保持します。第2版はq001をGAMEBOOKモデルv1.2bで改稿し、ほかの209件を初版から継承します。[仕様と原稿](doc/scenarios/SCENARIO_EDITIONS.md)。
 
 [公開版を開く](https://tomtomyoung.github.io/adv/)。手元で配信する場合はリポジトリのルートをHTTPで配信します。実行時のnpm依存、外部CDN、APIキー、サーバー側処理はありません。
 
@@ -107,9 +109,11 @@ node --test tests/*.test.mjs
 
 q001の原稿は `authoring/story-q001.mjs`、q002は `authoring/story-q002.mjs`、q004は `authoring/story-q004.mjs`、残るq003〜q010は `authoring/stories-v11-*.mjs`、追加q201〜q210は `authoring/story-q201.mjs`〜`story-q210.mjs` を `authoring/stories-kagaribi.mjs` で集約します。既存人物は `authoring/characters.mjs`、追加20人は `stories-kagaribi.mjs` の `castCards` が正本です。`npm run build:characters` は旧AIPaint素材を再生成し、新しい画像生成肖像への参照を維持します。画像生成用の英語・日本語プロンプトは `assets/source/characters/imagegen-prompts.json` に保存しています。
 
+第2版の改稿は `npm run build:editions`、原稿と配布の一致検査は `npm run check:editions` です。初版原稿を上書きしません。
+
 全210件の再生成は `npm run build:scenarios` です。既存原稿・魔物・演出・職業を生成し、互換用進行、新しい個別進行、マップ配置、一覧、Schemaを順に適用します。`build-content`、`build-entities`、`build-presentation`、`build-jobs` 単体では版やデータが途中段階になるため、通常は `npm run build:scenarios` 全体を実行してください。画面用の表示例は `node tools/build-fixtures.mjs` で更新します。生成先へ直接加えた変更は、再生成前に原稿へ反映してください。
 
-正常な1.25.0〜1.33.0のセーブを1.34.0へ検証後に移行し、既存進行・植物の成長・装備の塩・設備・購入技能を保持します。1.25〜1.27で地下水道の旧下層へ到達済みなら乾いた階段を開通済みにします。1.28/1.29/1.30/1.31/1.32/1.33からは内容版だけを更新し、新しい設備・帰路・報酬を付与しません。1.25.0には遠征状態を追加します。既知の追加依頼q201〜q210が全て未登録ならその状態も補完します。その他の内容版と破損セーブは移行せず、自動保存・スロット・ファイルの読込に失敗した場合は新しい旅を始めます。正常な同版の記録は会話・戦闘を含め再開できます。
+正常な1.25.0〜1.33.0のセーブを1.34.0へ検証後に移行し、既存進行・植物の成長・装備の塩・設備・購入技能を保持します。1.25〜1.27で地下水道の旧下層へ到達済みなら乾いた階段を開通済みにします。1.28/1.29/1.30/1.31/1.32/1.33からは内容版だけを更新し、新しい設備・帰路・報酬を付与しません。1.25.0には遠征状態を追加します。既知の追加依頼q201〜q210が全て未登録ならその状態も補完します。その他の内容版と破損セーブは移行しません。読込失敗時は現在の進行と保存原文を保持し、自動的に新規開始の保存で上書きしません。正常な同版の記録は会話・戦闘を含め再開できます。
 
 元のPhaser屋敷デモはGit履歴に保存されています。旧セーブ `phaserAdventureGameSave` は変更しませんが、新ゲームへは移行しません。
 

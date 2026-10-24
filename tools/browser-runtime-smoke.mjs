@@ -57,9 +57,9 @@ try{
   browser=await chromium.launch({executablePath:process.env.ADV_BROWSER_EXECUTABLE,headless:true,args:['--no-sandbox','--disable-gpu']});
   const origin=`http://127.0.0.1:${server.address().port}`,context=await browser.newContext();
   let page=await context.newPage();
+  await page.addInitScript(saved=>{if(!localStorage.getItem('lantern-archive:v1:auto'))localStorage.setItem('lantern-archive:v1:auto',saved);},saved);
   await page.goto(origin+'/adv/');
   await page.waitForSelector('.scene-stage');
-  await page.evaluate(saved=>localStorage.setItem('lantern-archive:v1:auto',saved),saved);
   await page.reload();await page.waitForSelector('.movement-pad .forward');
   assert.equal(await page.evaluate(()=>runtimeProbe),'old');
   assert.ok((await page.locator('#app').innerText()).includes('(old)'));
@@ -77,7 +77,8 @@ try{
   checks.push('warm-cache normal reload updates transitive JS, CSS and JSON without changing saves');
   console.log(checks.at(-1));
   await page.locator('.movement-pad .forward').click();await page.locator('.movement-pad .forward').click();
-  const after=JSON.parse(await page.evaluate(()=>localStorage.getItem('lantern-archive:v1:auto')));
+  const after=JSON.parse(await page.evaluate(()=>JSON.parse(localStorage.getItem('lantern-archive:v1:scenario:saves')).editions.e1.auto));
+  assert.equal(await page.evaluate(()=>localStorage.getItem('lantern-archive:v1:auto')),saved,'legacy raw save remains untouched after playing');
   assert.equal(after.state.stories.q001.scene,'outage');assert.equal(after.state.location.x,13);assert.equal(after.state.location.y,5);
   checks.push('after a warm-cache update, refuelling still enters the southern Q001 forced event');
   await page.screenshot({path:path.join(output,'updated-q001.png')});

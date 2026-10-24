@@ -151,7 +151,7 @@ export function validateStories(data,expression=()=>{}){
   for(const [id,q] of Object.entries(data.quests)){
     const d=q.story;if(!d)continue;
     try{
-      if(d.version!==1||d.modelVersion!=='1.1'||q.model?.standard?.version!=='1.1'||!q.model.standard.source||!d.registry||!d.scenes?.entry||!d.entities?.party)throw Error('モデル情報または物語の構成が不足しています');
+      if(d.version!==1||d.modelVersion!=='1.1'||!['1.1','1.2b'].includes(q.model?.standard?.version)||!q.model.standard.source||!d.registry||!d.scenes?.entry||!d.entities?.party)throw Error('モデル情報または物語の構成が不足しています');
       if(d.revision!==undefined&&(!Number.isInteger(d.revision)||d.revision<1))throw Error('物語の改訂版が不正です');
       const guard=(v,path)=>{
         expression(v,`${id}.story.${path}`);

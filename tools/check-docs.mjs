@@ -60,6 +60,7 @@ check(await fs.readFile(path.join(folder,docPath('EVENT_CATALOG.md')),'utf8')===
 check(await fs.readFile(path.join(folder,docPath('CHARACTERS.md')),'utf8')===relocateDoc(characterCatalog(data),'CHARACTERS.md'),'CHARACTERS: generated portraits or sprites differ');
 check(await fs.readFile(path.join(folder,docPath('MONSTER_CATALOG.md')),'utf8')===relocateDoc(monsterCatalog(data),'MONSTER_CATALOG.md'),'MONSTER_CATALOG: generated AI, images or encounter references differ');
 check(snapshot.contentVersion===data.game.version,'DATA_SNAPSHOT: content version differs');
+check(snapshot.scenarioEdition===data.scenarioEdition&&snapshot.latestScenarioEdition===data.scenarioEditions.latest,'DATA_SNAPSHOT: scenario editions differ');
 const catalog=await fs.readFile(path.join(folder,docPath('QUEST_CATALOG.md')),'utf8');
 check(await fs.readFile(path.join(folder,'scenarios/quests/README.md'),'utf8')===relocateDoc(questPageIndex(data),'scenarios/quests/README.md'),'quest page index differs');
 check(catalog.includes(`<!-- quest-catalog-source:${catalogContentHash(data)} -->`),'QUEST_CATALOG: implementation changed; review catalog edits, then run npm run build:catalog');
@@ -91,7 +92,7 @@ check(snapshot.questEvents===questEvents(data).length,'DATA_SNAPSHOT: quest even
 check(snapshot.questObservations===questEvents(data).filter(e=>e.note).length,'DATA_SNAPSHOT: quest observations differ');
 check(snapshot.questEventPlacements===questEvents(data).filter(e=>!['action','auto'].includes(e.trigger)).reduce((n,e)=>n+e.points.length,0),'DATA_SNAPSHOT: quest placements differ');
 for(const [label,actual] of [['commands',[...COMMANDS]],['operators',[...EXPRESSION_OPS]],['migrationVersions',Object.keys(data.game.migrations)]])check(JSON.stringify(snapshot[label])===JSON.stringify(actual),`DATA_SNAPSHOT: ${label} differ`);
-const files=[...new Set(['data/game.json',...Object.values(data.game.files.databases),...data.game.files.maps,...data.game.files.quests,...data.game.files.scripts])].sort();
+const files=[...new Set(['data/game.json',...Object.values(data.game.files.databases),...data.game.files.maps,...data.game.files.quests,...data.game.files.scripts,...Object.values(data.scenarioEditions.editions).flatMap(edition=>Object.values(edition.questOverrides))])].sort();
 check(JSON.stringify(files)===JSON.stringify(snapshot.files),'DATA_SNAPSHOT: manifest files differ');
 const digest=createHash('sha256');for(const file of files){digest.update(file+'\n');digest.update(await fs.readFile(path.join(root,file)));}
 const expectedContentSha256=digest.digest('hex');check(snapshot.contentSha256===expectedContentSha256,`DATA_SNAPSHOT: content changed; expected ${expectedContentSha256}; run npm run build:docs`);

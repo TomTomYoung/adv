@@ -78,7 +78,7 @@ test('field usefulness uses the same ordered cure candidates without spending MP
 });
 
 test('1.32 migration preserves actual earned equipment, progression and oil without free materials',()=>{
- const g=ready();const expected=structuredClone(old.state);expected.contentVersion=data.game.version;assert.deepEqual(g.state,expected);saved(g);
+ const g=ready();const expected=structuredClone(old.state);expected.contentVersion=data.game.version;expected.scenarioEdition='e1';assert.deepEqual(g.state,expected);saved(g);
  const bad=structuredClone(old);bad.state.expedition.capacity=450;const before=g.save();assert.throws(()=>g.load(JSON.stringify(bad)));assert.equal(g.save(),before);
 });
 

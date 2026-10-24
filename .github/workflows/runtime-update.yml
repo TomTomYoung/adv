@@ -9,6 +9,7 @@ on:
       - 'assets/**'
       - 'tools/build-runtime.mjs'
       - 'tools/browser-runtime-smoke.mjs'
+      - 'tools/browser-scenario-editions-smoke.mjs'
       - '.github/workflows/runtime-update.yml'
   workflow_dispatch:
 permissions:
@@ -30,10 +31,14 @@ jobs:
           npx playwright install --with-deps chromium --only-shell
       - name: Verify warm-cache updates and partial deployments
         run: node tools/browser-runtime-smoke.mjs
+      - name: Verify scenario selection and independent saves
+        run: node tools/browser-scenario-editions-smoke.mjs
       - name: Keep update checkpoints
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: runtime-update-checkpoints
-          path: /tmp/adv-runtime-browser
+          path: |
+            /tmp/adv-runtime-browser
+            /tmp/adv-editions-browser
           if-no-files-found: ignore
