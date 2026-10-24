@@ -10,7 +10,7 @@ import {projectGame} from '../src/application/projection.js';
 import {corrosion} from '../src/core/systems/corrosion.js';
 import {installDOM} from './view-dom.mjs';
 import {renderShop} from '../src/view/inventory-view.js';
-import {renderSkillShop} from '../src/view/expedition-view.js';
+import {renderSupplyShop} from '../src/view/expedition-view.js';
 const setup=()=>{const g=newGame();g.data=structuredClone(data);delete g.data.quests.q001.story;g.accept('q001');g.complete('q001','informed');drain(g);g.award(1000,8400);return g;};
 const act=(g,action,camp)=>g.dispatch({type:'expedition.action',action,camp});
 function camp(g,id){
@@ -80,7 +80,7 @@ for(const [script,key,flag,encounter,map,x,y] of [['mine.shellbreaker.10','mine'
   old.give('exp_t2_ticket',-1);old.run(script);drain(old);assert.equal(old.state.inventory.exp_t2_ticket,99);save(old);old.run(script);drain(old);assert.equal(old.state.inventory.exp_t2_ticket,99);
  });
 }
-function waxUser(){const g=setup();camp(g,'mine_central');town(g);assert.ok(g.dispatch({type:'job.change',actor:'sera',job:'apothecary'}));g.give('medicine_kit',1);assert.ok(g.dispatch({type:'equip',actor:'sera',item:'medicine_kit'}));g.state.expedition.gems=180;assert.ok(g.dispatch({type:'skill.buy',actor:'sera',skill:'exp_wax_care',level:1}));assert.equal(g.state.expedition.gems,0);assert.equal(g.dispatch({type:'skill.buy',actor:'sera',skill:'exp_wax_care',level:2}),false);return g;}
+function waxUser(){const g=setup();camp(g,'mine_central');town(g);goTownLocation(g,g.data.expedition.skillShopLocation);assert.ok(g.dispatch({type:'job.change',actor:'sera',job:'apothecary'}));g.give('medicine_kit',1);assert.ok(g.dispatch({type:'equip',actor:'sera',item:'medicine_kit'}));g.state.expedition.gems=180;assert.ok(g.dispatch({type:'skill.buy',actor:'sera',skill:'exp_wax_care',level:1}));assert.equal(g.state.expedition.gems,0);assert.equal(g.dispatch({type:'skill.buy',actor:'sera',skill:'exp_wax_care',level:2}),false);return g;}
 const wax=(g,target)=>g.dispatch({type:'job.action',actor:'sera',ability:'exp_wax_care',target});
 test('wax selection names individual copies, spends6MP only on confirmation, rejects wrong/stale/already-protected targets',()=>{
  const g=waxUser();g.give('exp_t2_sword',2);const [one,two]=g.state.gear.bag.exp_t2_sword;const mp=g.state.actors.sera.mp;assert.equal(wax(g,one),false);g.teleport('region_2_f9',1,1);
@@ -113,6 +113,6 @@ test('shop detail follows selected weapon, browsing consumes nothing, craft butt
   const g=setup();camp(g,'mine_hoist');assert.ok(act(g,'recipe','mine_hoist'));(g.state.flags.mine??={}).shellbreakerWon=true;town(g);materials(g);
   const view={shopItem:'exp_t2_sword',inventoryAction:null,root:document.createElement('main'),act:i=>g.dispatch(i),portrait:()=>document.createElement('img')};let model=projectGame(g);view.model=model;
   const before=g.save();renderShop(view,view.root,model);assert.equal(g.save(),before);const craft=view.root.querySelector('[data-focus="shop:craft:exp_t2_sword"]');assert.ok(craft);assert.equal(craft.disabled,false);craft.click();assert.equal(g.state.inventory.exp_t2_sword,1);
-  model=projectGame(g);const parent=document.createElement('div');renderSkillShop(view,parent,model);const upgrade=[...parent.querySelectorAll('button')].find(b=>b.textContent.includes('330へ改修'));assert.ok(upgrade);upgrade.click();assert.equal(g.state.expedition.capacity,330);save(g);
+  model=projectGame(g);const parent=document.createElement('div');renderSupplyShop(view,parent,model);const upgrade=[...parent.querySelectorAll('button')].find(b=>b.textContent.includes('330へ改修'));assert.ok(upgrade);upgrade.click();assert.equal(g.state.expedition.capacity,330);save(g);
  }finally{dom.restore();}
 });

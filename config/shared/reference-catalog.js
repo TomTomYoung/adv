@@ -29838,6 +29838,24 @@ export const referenceData={
     {
       "file": "locations.json",
       "path": [
+        "hikarigaeri_skill_shop",
+        "parent"
+      ],
+      "kind": "locations",
+      "id": "hikarigaeri_square"
+    },
+    {
+      "file": "locations.json",
+      "path": [
+        "hikarigaeri_skill_shop",
+        "background"
+      ],
+      "kind": "images",
+      "id": "location_guild"
+    },
+    {
+      "file": "locations.json",
+      "path": [
         "hikarigaeri_tavern",
         "parent"
       ],
@@ -43981,6 +43999,9 @@ export const referenceData={
       "hikarigaeri_shop": {
         "name": "旅道具店"
       },
+      "hikarigaeri_skill_shop": {
+        "name": "スキル屋"
+      },
       "hikarigaeri_tavern": {
         "name": "帰り火亭"
       },
@@ -44156,6 +44177,9 @@ export const referenceData={
       },
       "shopLocation": {
         "name": "shopLocation"
+      },
+      "skillShopLocation": {
+        "name": "skillShopLocation"
       },
       "camps": {
         "name": "camps"
@@ -75552,6 +75576,12 @@ export const referenceData={
       "file": "locations.json",
       "path": [
         "hikarigaeri_shop"
+      ]
+    },
+    "locations/hikarigaeri_skill_shop": {
+      "file": "locations.json",
+      "path": [
+        "hikarigaeri_skill_shop"
       ]
     },
     "locations/hikarigaeri_tavern": {

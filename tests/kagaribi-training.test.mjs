@@ -16,12 +16,12 @@ function shop(){
  const g=newGame();g.data=structuredClone(data);delete g.data.quests.q001.story;g.accept('q001');g.complete('q001','informed');drain(g);
  g.give('rope',5);
  for(const id of ['kagaribi_manifold','kagaribi_crossroads'])repair(g,id);
- assert.ok(g.returnTown());goTownLocation(g,'hikarigaeri_shop');g.state.expedition.gems=10000;
+ assert.ok(g.returnTown());goTownLocation(g,g.data.expedition.skillShopLocation);g.state.expedition.gems=10000;
  for(const [actor,item] of [['ada','iron_sword'],['sera','staff']]){g.give(item,1);assert.ok(g.dispatch({type:'equip',actor,item}));}
  return g;
 }
 function repair(g,id){const c=g.data.expedition.camps.find(c=>c.id===id);g.teleport(c.map,c.x,c.y,c.facing);assert.ok(g.dispatch({type:'expedition.action',action:'repair',camp:id}));}
-const town=g=>{assert.ok(g.returnTown());goTownLocation(g,'hikarigaeri_shop');};
+const town=g=>{assert.ok(g.returnTown());goTownLocation(g,g.data.expedition.skillShopLocation);};
 function start(g,mode='classic'){
  g.state.battleModePreference=mode;
  // Controlled combat fixture: enough HP for repeated hits, guard-only opponent.

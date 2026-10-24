@@ -4,7 +4,7 @@ import {messagePages,pageAtOffset} from './message-pages.js';
 import {captureFocus} from './focus.js';
 const make=(tag,className,text)=>{const e=document.createElement(tag);if(className)e.className=className;if(text!==undefined)e.textContent=text;return e;};
 const button=(text,fn,className='')=>{const e=make('button',className,text);e.type='button';e.addEventListener('click',fn);return e;};
-const panelNames={profile:'キャラクタープロフィール',bag:'旅支度',shop:'ショップ',party:'隊の状態',journal:'冒険手帳',quests:'依頼掲示板',regions:'迷宮へ',map:'測量図'};
+const panelNames={profile:'キャラクタープロフィール',bag:'旅支度',shop:'ショップ',skills:'スキル屋',supply:'補給・工房',party:'隊の状態',journal:'冒険手帳',quests:'依頼掲示板',regions:'迷宮へ',map:'測量図'};
 const focusable='button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), a[href], summary';
 
 export class SceneView extends GameView{
@@ -96,7 +96,7 @@ export class SceneView extends GameView{
     const key=JSON.stringify([model.mode,model.town?.id,model.dungeon?.location,model.dialog,model.battle?.event]);
     if(this.sceneKey!==null&&this.sceneKey!==key)this.tab=model.mode==='town'?'location':'explore';
     this.sceneKey=key;this.model=model;
-    const allowed=[...(model.mode==='town'?['profile']:[]),'bag','party','journal',...(model.town?.shop?['shop']:[]),...(model.dungeon?['map']:[]),...(model.town?.quests?['quests']:[]),...(model.town?.dungeons.length?['regions']:[])];
+    const allowed=[...(model.mode==='town'?['profile']:[]),'bag','party','journal',...(model.town?.shop?['shop']:[]),...(model.expedition?.shop?['supply']:[]),...(model.expedition?.skillShop?['skills']:[]),...(model.dungeon?['map']:[]),...(model.town?.quests?['quests']:[]),...(model.town?.dungeons.length?['regions']:[])];
     if(!allowed.includes(this.tab))this.tab=model.mode==='town'?'location':'explore';
     if(model.mode!=='dungeon'||model.busy||model.dialog||model.battle||this.tab!=='explore')this.windowsHidden=false;
     if(this.inventoryAction&&(this.inventoryAction.kind==='buy'?this.tab!=='shop':this.tab!=='bag'))this.inventoryAction=null;
