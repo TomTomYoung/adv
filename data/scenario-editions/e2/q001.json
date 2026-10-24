@@ -1,0 +1,3263 @@
+{
+  "schemaVersion": 1,
+  "id": "q001",
+  "number": 1,
+  "title": "帰らない灯番",
+  "client": "灯番組合のリネ",
+  "brief": "巡灯から戻る時刻を過ぎても、老灯番と見習いの二人が詰所へ戻らない。篝火の迷宮の巡灯路で二人を捜し、灯番詰所まで連れ帰ってほしい。",
+  "region": 1,
+  "type": "authored_progression",
+  "recommendedLevel": 1,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。",
+  "events": [
+    {
+      "id": "q001_decision",
+      "title": "入口で待つ新人",
+      "points": [
+        {
+          "map": "kagaribi_f1",
+          "x": 2,
+          "y": 1,
+          "dungeon": "kagaribi"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "enter",
+      "script": "q001.v11.visit",
+      "visibleWhen": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q001.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      },
+      "role": "decision",
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q001.stage"
+        },
+        "right": "active"
+      },
+      "dungeon": "kagaribi"
+    },
+    {
+      "id": "q001_return",
+      "title": "油切れの巡灯路",
+      "points": [
+        {
+          "map": "kagaribi_f1",
+          "x": 9,
+          "y": 1,
+          "dungeon": "kagaribi"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "enter",
+      "script": "q001.v11.visit",
+      "visibleWhen": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q001.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      },
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q001.stage"
+        },
+        "right": "active"
+      },
+      "dungeon": "kagaribi"
+    },
+    {
+      "id": "q001_return_south",
+      "title": "帰路の南側の曲がり角",
+      "points": [
+        {
+          "map": "kagaribi_f1",
+          "x": 13,
+          "y": 5,
+          "dungeon": "kagaribi"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "enter",
+      "script": "q001.v11.visit",
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q001.stage"
+        },
+        "right": "active"
+      },
+      "dungeon": "kagaribi"
+    },
+    {
+      "id": "q001_elder",
+      "title": "最後の灯の下の老人",
+      "points": [
+        {
+          "map": "kagaribi_f1",
+          "x": 13,
+          "y": 3,
+          "dungeon": "kagaribi"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "enter",
+      "script": "q001.v11.visit",
+      "visibleWhen": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q001.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      },
+      "condition": {
+        "op": "eq",
+        "left": {
+          "ref": "quests.q001.stage"
+        },
+        "right": "active"
+      },
+      "dungeon": "kagaribi"
+    },
+    {
+      "id": "q001_empty_west",
+      "title": "西の壁松明",
+      "points": [
+        {
+          "map": "kagaribi_f1",
+          "x": 8,
+          "y": 1,
+          "edge": "north",
+          "dungeon": "kagaribi"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "script": "q001.wall.q001_empty_west",
+      "initialState": "empty",
+      "visibleWhen": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q001.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      },
+      "fire": {
+        "effect": "ward",
+        "radius": 1,
+        "litStates": [
+          "lit",
+          "low"
+        ]
+      },
+      "dungeon": "kagaribi"
+    },
+    {
+      "id": "q001_empty_east",
+      "title": "東の壁松明",
+      "points": [
+        {
+          "map": "kagaribi_f1",
+          "x": 11,
+          "y": 1,
+          "edge": "north",
+          "dungeon": "kagaribi"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "script": "q001.wall.q001_empty_east",
+      "initialState": "empty",
+      "visibleWhen": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q001.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      },
+      "fire": {
+        "effect": "ward",
+        "radius": 1,
+        "litStates": [
+          "lit",
+          "low"
+        ]
+      },
+      "dungeon": "kagaribi"
+    },
+    {
+      "id": "q001_last_lamp",
+      "title": "老人を守る最後の壁松明",
+      "points": [
+        {
+          "map": "kagaribi_f1",
+          "x": 13,
+          "y": 3,
+          "edge": "east",
+          "dungeon": "kagaribi"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "script": "q001.wall.q001_last_lamp",
+      "initialState": "low",
+      "visibleWhen": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q001.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      },
+      "fire": {
+        "effect": "ward",
+        "radius": 1,
+        "litStates": [
+          "lit",
+          "low"
+        ]
+      },
+      "dungeon": "kagaribi"
+    },
+    {
+      "id": "kagaribi",
+      "title": "灯を受け渡す準備",
+      "dungeon": "kagaribi",
+      "points": [
+        {
+          "map": "kagaribi_f1",
+          "x": 1,
+          "y": 1,
+          "dungeon": "kagaribi"
+        }
+      ],
+      "trigger": "action",
+      "script": "dungeon.scene.kagaribi.v2",
+      "condition": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q001.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      },
+      "requirement": "関連する依頼を受けると調査できる。",
+      "note": {
+        "text": "入口の篝火と携行松明がくらがりを遠ざける。老灯番の捜索先は篝火の迷宮の巡灯路。消えた壁灯は油切れであり、点火だけでは戻らない。",
+        "when": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.dungeonNotes.kagaribi"
+          },
+          "right": true
+        }
+      }
+    }
+  ],
+  "locations": [
+    {
+      "map": "kagaribi_f1",
+      "x": 2,
+      "y": 1,
+      "object": "q001_decision",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "gold": 57,
+      "xp": 68,
+      "label": "経路図と、ほどけた指",
+      "text": "一行は灯番詰所へ戻った。探索隊は油切れの壁灯と支道の位置を修繕班へ申し送り、リネが二人の休養を引き受けた。修繕の準備が始まる傍ら、新人は温かい椀を両手で包んでいた。"
+    },
+    "compromise": {
+      "gold": 37,
+      "xp": 51,
+      "label": "並んだ二つの空瓶",
+      "text": "一行は灯番詰所へ戻った。修繕班への申し送りをリネに任せ、探索隊は二人のそばに残った。新人は老人へ椀を差し出し、今度は自分も温かいものを飲んだ。机の端には、空の油瓶が二つ並んでいた。"
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/story-q001.mjs",
+    "world": {
+      "truth": "巡灯路の壁松明が油切れで消えた。老灯番は自分の残りの油を新人へ渡して入口に帰し、自分は最後に灯る壁松明の下に残った。新人は老人の油で灯した松明を持って入口へ戻ったが、暗闇への恐怖で引き返せずにいる。",
+      "history": [
+        {
+          "id": "fixed_0",
+          "text": "巡灯路の壁松明が油切れで消えた。老灯番は自分の残りの油を新人へ渡して入口に帰し、自分は最後に灯る壁松明の下に残った。新人は老人の油で灯した松明を持って入口へ戻ったが、暗闇への恐怖で引き返せずにいる。"
+        }
+      ],
+      "initialState": "story.registry の initial。",
+      "authoringNotes": {
+        "notice": "以下は作者用の採用設定と実装範囲であり、そのまま会話へ挿入しない。",
+        "facts": [
+          "初版の固定過去、当直と見習いの関係、油の収支、救助と実移動を継承する。",
+          "入口の追加選択は小さな役割の約束。救助の成否や報酬の優劣を約束しない。",
+          "呼び声への返事を頼んだ場合だけ、帰路と救助後にその約束へ言及する。",
+          "修繕の申し送りと付き添いは、今どちらを先に引き受けるかの選択。救助と修繕が両立不能とは扱わない。",
+          "リネが組合側の手配を担う。結末は申し送り・準備までで、修繕工事の完了や将来の無事故を断定しない。",
+          "初版から引き継ぐ固定の消灯・救援イベントは継続する。燃料値の強制変更を、プレイヤーの補充操作から自然に導かれた結果とは説明しない。"
+        ]
+      }
+    },
+    "agents": [
+      {
+        "id": "elder",
+        "character": "elder",
+        "name": "老灯番",
+        "goal": "新人を安全な入口へ帰し、自分も生きて戻る",
+        "initialLocation": "branch"
+      },
+      {
+        "id": "rookie",
+        "character": "rookie",
+        "name": "新人灯番",
+        "goal": "暗闇が怖い。それでも老人と探索隊を助けたい",
+        "initialLocation": "entry"
+      },
+      {
+        "id": "rine",
+        "character": "rine",
+        "name": "リネ",
+        "goal": "帰還者を名前で数え、取り残しを防ぐ",
+        "initialLocation": "post"
+      }
+    ],
+    "conflict": {
+      "request": "巡灯から戻る時刻を過ぎても、老灯番と見習いの二人が詰所へ戻らない。篝火の迷宮の巡灯路で二人を捜し、灯番詰所まで連れ帰ってほしい。",
+      "progression": "入口に残った新人へ、灯を守るか呼び声へ応じるかを頼む。消えた壁灯と空の瓶をたどり、老人を介助する。帰路の戦闘で新人が救助に踏み出し、約束への返事を聞く。一行で詰所へ戻り、修繕班への申し送りと二人への付き添いのどちらを先に引き受けるか選ぶ。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q001.v11.entry",
+          "assertion": {
+            "title": "篝火の迷宮・入口の灯",
+            "place": "entry",
+            "cast": [
+              {
+                "entity": "rookie",
+                "display": {
+                  "position": "center"
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "dark",
+          "script": "q001.v11.dark",
+          "assertion": {
+            "title": "油の尽きた巡灯路",
+            "place": "dark",
+            "cast": [],
+            "requires": true
+          }
+        },
+        {
+          "id": "empty",
+          "script": "q001.v11.empty",
+          "assertion": {
+            "title": "油の尽きた巡灯路",
+            "place": "dark",
+            "cast": [],
+            "requires": true
+          }
+        },
+        {
+          "id": "old",
+          "script": "q001.v11.old",
+          "assertion": {
+            "title": "支道の最後の壁灯",
+            "place": "branch",
+            "cast": [
+              {
+                "entity": "elder",
+                "display": {
+                  "position": "left"
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "outage",
+          "script": "q001.v11.outage",
+          "assertion": {
+            "title": "油の尽きた巡灯路",
+            "place": "dark",
+            "cast": [
+              {
+                "entity": "elder",
+                "display": {
+                  "position": "left"
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "rescue",
+          "script": "q001.v11.rescue",
+          "assertion": {
+            "title": "油の尽きた巡灯路",
+            "place": "dark",
+            "cast": [
+              {
+                "entity": "elder",
+                "display": {
+                  "x": 30,
+                  "layer": 1
+                }
+              },
+              {
+                "entity": "rookie",
+                "display": {
+                  "x": 67,
+                  "flip": true,
+                  "layer": 2
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "gate",
+          "script": "q001.v11.gate",
+          "assertion": {
+            "title": "篝火の迷宮・入口の灯",
+            "place": "entry",
+            "cast": [
+              {
+                "entity": "elder",
+                "display": {
+                  "x": 30,
+                  "layer": 1
+                }
+              },
+              {
+                "entity": "rookie",
+                "display": {
+                  "x": 67,
+                  "flip": true,
+                  "layer": 2
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "post",
+          "script": "q001.v11.post",
+          "assertion": {
+            "title": "灯番詰所",
+            "place": "post",
+            "cast": [
+              {
+                "entity": "elder",
+                "display": {
+                  "x": 23,
+                  "layer": 1
+                }
+              },
+              {
+                "entity": "rookie",
+                "display": {
+                  "x": 40,
+                  "flip": true,
+                  "layer": 2
+                }
+              },
+              {
+                "entity": "rine",
+                "display": {
+                  "x": 76,
+                  "layer": 3
+                }
+              }
+            ],
+            "requires": true
+          }
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "巡灯から戻る時刻を過ぎても、老灯番と見習いの二人が詰所へ戻らない。篝火の迷宮の巡灯路で二人を捜し、灯番詰所まで連れ帰ってほしい。",
+      "openQuestion": "入口に足を止めた新人へ、何を任せられるか。助け合って帰った後、誰のそばで今夜の仕事を引き受けるか。"
+    },
+    "reveal": {
+      "operator": "reinterpretation",
+      "newInformation": "老人が渡した油瓶と、新人が運んできた火が同じ場面にそろう。新人の怖さは消えないが、老人は今度、新人の示す明かりへ足を出す。",
+      "retroactiveTargets": [
+        "entry",
+        "old",
+        "rescue",
+        "gate"
+      ],
+      "gate": null,
+      "window": "story.actions の observe が情報源への接触を確認し、story.knowledge へ記録する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q001.v11.entry",
+        "assertion": {
+          "title": "篝火の迷宮・入口の灯",
+          "place": "entry",
+          "cast": [
+            {
+              "entity": "rookie",
+              "display": {
+                "position": "center"
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "dark",
+        "script": "q001.v11.dark",
+        "assertion": {
+          "title": "油の尽きた巡灯路",
+          "place": "dark",
+          "cast": [],
+          "requires": true
+        }
+      },
+      {
+        "id": "empty",
+        "script": "q001.v11.empty",
+        "assertion": {
+          "title": "油の尽きた巡灯路",
+          "place": "dark",
+          "cast": [],
+          "requires": true
+        }
+      },
+      {
+        "id": "old",
+        "script": "q001.v11.old",
+        "assertion": {
+          "title": "支道の最後の壁灯",
+          "place": "branch",
+          "cast": [
+            {
+              "entity": "elder",
+              "display": {
+                "position": "left"
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "outage",
+        "script": "q001.v11.outage",
+        "assertion": {
+          "title": "油の尽きた巡灯路",
+          "place": "dark",
+          "cast": [
+            {
+              "entity": "elder",
+              "display": {
+                "position": "left"
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "rescue",
+        "script": "q001.v11.rescue",
+        "assertion": {
+          "title": "油の尽きた巡灯路",
+          "place": "dark",
+          "cast": [
+            {
+              "entity": "elder",
+              "display": {
+                "x": 30,
+                "layer": 1
+              }
+            },
+            {
+              "entity": "rookie",
+              "display": {
+                "x": 67,
+                "flip": true,
+                "layer": 2
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "gate",
+        "script": "q001.v11.gate",
+        "assertion": {
+          "title": "篝火の迷宮・入口の灯",
+          "place": "entry",
+          "cast": [
+            {
+              "entity": "elder",
+              "display": {
+                "x": 30,
+                "layer": 1
+              }
+            },
+            {
+              "entity": "rookie",
+              "display": {
+                "x": 67,
+                "flip": true,
+                "layer": 2
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "post",
+        "script": "q001.v11.post",
+        "assertion": {
+          "title": "灯番詰所",
+          "place": "post",
+          "cast": [
+            {
+              "entity": "elder",
+              "display": {
+                "x": 23,
+                "layer": 1
+              }
+            },
+            {
+              "entity": "rookie",
+              "display": {
+                "x": 40,
+                "flip": true,
+                "layer": 2
+              }
+            },
+            {
+              "entity": "rine",
+              "display": {
+                "x": 76,
+                "layer": 3
+              }
+            }
+          ],
+          "requires": true
+        }
+      }
+    ],
+    "revision": "scenario-edition-e2-q001-r1",
+    "stateRegistry": [
+      {
+        "path": "stories.q001.values.partyAt",
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "dark",
+          "branch",
+          "post",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "第2版の保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.elderAt",
+        "type": "enum",
+        "initial": "branch",
+        "values": [
+          "entry",
+          "dark",
+          "branch",
+          "post",
+          "transit"
+        ],
+        "meaning": "elder の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "第2版の保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.rookieAt",
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "dark",
+          "branch",
+          "post",
+          "transit"
+        ],
+        "meaning": "rookie の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "第2版の保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.rineAt",
+        "type": "enum",
+        "initial": "post",
+        "values": [
+          "entry",
+          "dark",
+          "branch",
+          "post",
+          "transit"
+        ],
+        "meaning": "rine の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "第2版の保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.oldBottleAt",
+        "type": "enum",
+        "initial": "elder",
+        "values": [
+          "entry",
+          "dark",
+          "branch",
+          "post",
+          "transit",
+          "party",
+          "elder",
+          "rookie",
+          "rine",
+          "newBottle"
+        ],
+        "meaning": "oldBottle の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "第2版の保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.newBottleAt",
+        "type": "enum",
+        "initial": "rookie",
+        "values": [
+          "entry",
+          "dark",
+          "branch",
+          "post",
+          "transit",
+          "party",
+          "elder",
+          "rookie",
+          "rine",
+          "oldBottle"
+        ],
+        "meaning": "newBottle の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "第2版の保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.elderMobility",
+        "type": "enum",
+        "initial": "assisted",
+        "values": [
+          "assisted",
+          "mobile"
+        ],
+        "meaning": "老人の帰還には介助が必要",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "第2版の保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.afraid",
+        "type": "boolean",
+        "initial": true,
+        "meaning": "新人は暗闇を恐れたまま",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "第2版の保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.steppedForward",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "新人が自分の意思で救助に踏み出した",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "第2版の保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.reported",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "reported",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "第2版の保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.routeClosed",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "routeClosed",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "第2版の保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.repairsRequested",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "repairsRequested",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "第2版の保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.restRequested",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "restRequested",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "第2版の保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.darkness",
+        "type": "enum",
+        "initial": "watching",
+        "values": [
+          "watching",
+          "attacking",
+          "repelled"
+        ],
+        "meaning": "くらがりの行動",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "第2版の保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.partyTorch",
+        "type": "enum",
+        "initial": "lit",
+        "values": [
+          "lit",
+          "low",
+          "extinguished"
+        ],
+        "meaning": "探索隊の携行松明",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "第2版の保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.rookieTorch",
+        "type": "enum",
+        "initial": "lit",
+        "values": [
+          "lit"
+        ],
+        "meaning": "老人の油で灯した新人の松明",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "第2版の保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.oldOil",
+        "type": "integer",
+        "initial": 0,
+        "min": 0,
+        "max": 2,
+        "meaning": "老人の瓶は空",
+        "container": "oldBottle",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "第2版の保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.newOil",
+        "type": "integer",
+        "initial": 1,
+        "min": 0,
+        "max": 2,
+        "meaning": "新人の瓶に残る老人の油",
+        "container": "newBottle",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "第2版の保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.oilUsed",
+        "type": "integer",
+        "initial": 1,
+        "min": 0,
+        "max": 2,
+        "meaning": "入口への帰還と救助の火に使った油",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "第2版の保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q001.values.signalAgreed",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "入口で呼び声への返事を新人に頼み、引き受けてもらった",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "第2版の保存・再開・完了後まで保持"
+      }
+    ],
+    "choiceContract": {
+      "resources": "物語物品は entities、共通の縄・松明・金は cost。戦闘作業は勝利時だけ一括確定する。",
+      "residue": "現在の所在・所持・合意・観察・到着を保存し、結末条件を検証する。",
+      "interruption": "中断・逃走・敗北中は物語時刻を止める。現場に戻ると最後の場面から再開する。"
+    },
+    "progression": "入口に残った新人へ、灯を守るか呼び声へ応じるかを頼む。消えた壁灯と空の瓶をたどり、老人を介助する。帰路の戦闘で新人が救助に踏み出し、約束への返事を聞く。一行で詰所へ戻り、修繕班への申し送りと二人への付き添いのどちらを先に引き受けるか選ぶ。",
+    "flowVersion": 3,
+    "entryScript": "q001.v11.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": [
+          "入口の篝火のそばに、油瓶を抱えた若い灯番がいた。松明を握る指が白い。こちらに気づくと、膝に引きつけていた瓶を持ち上げた。",
+          "新人灯番「先生が、これを。『入口で火を絶やすな』って。僕の瓶に、残りを全部。」",
+          "明かりの外で、何かが石をこすった。新人が炎を差し出すと、その音が一つ遠のいた。",
+          "新人灯番「この火なら、あれは寄ってきません。壁の灯もあったのに、奥の二つが消えて……。先生は支道の灯の下です。足を痛めてます。」",
+          "入口から一歩出かけた靴が、同じ石の上へ戻る。",
+          "新人灯番「一緒に行かなきゃ。でも、脚が……。ここからでも、何かできませんか。」"
+        ],
+        "options": [
+          {
+            "id": "talk",
+            "text": "入口の火を守り、戻るこちらの足元を照らしてほしい",
+            "to": "dark",
+            "action": "entry_talk"
+          },
+          {
+            "id": "signal",
+            "text": "呼びかけたら答えてほしい。入口の位置が分かるように",
+            "to": "dark",
+            "action": "entry_signal"
+          }
+        ]
+      },
+      {
+        "id": "dark",
+        "text": [
+          "通路に、黒い壁松明が二つ見えた。手元の火が揺れると、奥から聞こえる音も動く。近づきはしない。",
+          "油受けの縁に、乾いた筋が一本垂れていた。"
+        ],
+        "options": [
+          {
+            "id": "inspect",
+            "text": "消えた壁松明へ火を寄せ、油受けを確かめる",
+            "to": "empty",
+            "action": "dark_inspect"
+          }
+        ]
+      },
+      {
+        "id": "empty",
+        "text": [
+          "芯へ火を近づける。先だけが赤くなり、すぐに暗くなった。油受けの乾いた底には、黒い輪が幾重も残っている。もう一つの壁灯も同じだった。",
+          "奥で、杖が石を打った。間を置いて、もう一度。火を掲げると、支道の壁に小さな明かりが見えた。"
+        ],
+        "options": [
+          {
+            "id": "follow",
+            "text": "松明を掲げ、杖の音のする支道へ進む",
+            "to": "old",
+            "action": "empty_follow"
+          }
+        ]
+      },
+      {
+        "id": "old",
+        "text": [
+          "老人は壁灯の真下に腰を下ろしていた。そばの油瓶を傾けても、何も落ちない。",
+          "老灯番「来たか。……あの子は、入口におるな。」",
+          "待っていると答えると、老人は瓶に栓を戻した。空の瓶が、軽い音を立てた。",
+          "老灯番「あれまで暗くなったら、あの子の足が止まる。油は持たせた。」",
+          "靴の縁から、腫れた足首がのぞいている。立ちかけた老人の膝が折れ、杖先が滑った。携行松明の炎も短くなっている。",
+          "老灯番「この足では手間をかける。肩を借りてもいいか。」"
+        ],
+        "options": [
+          {
+            "id": "support",
+            "text": "肩を貸し、入口の灯へ一緒に戻る",
+            "to": "outage",
+            "action": "old_support"
+          }
+        ]
+      },
+      {
+        "id": "outage",
+        "text": [
+          "老人の歩幅に合わせて進むうち、手元の炎が細くなった。芯の赤も消える。老人を支える腕に重さがかかり、足音だけが通路へ残った。",
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q001.values.signalAgreed"
+              },
+              "right": true
+            },
+            "yes": [
+              "入口へ呼びかけると、返事が来た。細い声は途中で途切れ、靴音に変わった。"
+            ],
+            "no": [
+              "入口の明かりは、曲がり角の向こうだ。老人の杖が石を打つ。暗い通路で、別の音がそれに重なった。"
+            ]
+          },
+          "さっきまで火の外にいたものが、すぐ前まで来ている。老人を壁へ寄せ、武器を抜いた。"
+        ],
+        "automatic": true,
+        "options": [
+          {
+            "id": "call",
+            "text": "新人が運んできた火を受け、老人を支える",
+            "to": "rescue",
+            "action": "outage_call"
+          }
+        ]
+      },
+      {
+        "id": "rescue",
+        "text": [
+          "通路の先で火が跳ねた。くらがりが身をよじり、明かりの外へ退く。新人は足を踏ん張り、松明をこちらへ差し出していた。腰には、入口で見た油瓶が揺れている。",
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q001.values.signalAgreed"
+              },
+              "right": true
+            },
+            "yes": [
+              "新人灯番「声が聞こえたから。返事だけして、待っていられませんでした。」"
+            ],
+            "no": [
+              "新人灯番「戦う音が聞こえて。帰り道を照らすなら、ここまで行かなきゃって。」"
+            ]
+          },
+          "新人灯番「怖いです。まだ。だから、早く一緒に帰ってください。」",
+          "老灯番「松明を、少し下げてくれ。足元が見える。」",
+          "新人が灯を下げると、老人はその明かりへ足を出した。空の油瓶が、新人の瓶へこつんと当たった。"
+        ],
+        "options": [
+          {
+            "id": "home",
+            "text": "新人の灯で足元を確かめ、二人を連れて入口へ戻る",
+            "to": "gate",
+            "action": "rescue_home"
+          }
+        ]
+      },
+      {
+        "id": "gate",
+        "text": [
+          "入口の篝火が、一行の影を階段へ伸ばした。老人が手すりをつかむ。新人は、その足先へ松明を寄せた。",
+          "老灯番「そこだ。一段、上げるぞ。」",
+          "新人灯番「詰所まで、僕が灯を持ちます。」",
+          "階段の上から、町の話し声が聞こえてきた。老人の腕を支え直し、灯番詰所へ向かう。"
+        ],
+        "options": [
+          {
+            "id": "report",
+            "text": "老人を支えて階段を上り、灯番詰所へ連れ帰る",
+            "to": "post",
+            "action": "gate_report"
+          }
+        ]
+      },
+      {
+        "id": "post",
+        "text": [
+          "リネが扉を開け、老人へ椅子を引いた。新人は松明を壁の受け金具へ掛けようとして、二度、外した。",
+          "リネ「二人とも、座って。巡灯路は今夜、閉めます。」",
+          "老人が立ちかけると、リネがその杖を椅子へ立てかけた。",
+          "リネ「修繕班は私が手配します。見た場所を伝えてもらえると助かる。二人には、少し誰かがついていてほしいけれど。」",
+          "老灯番「灯の位置なら、わしが……。」",
+          "新人灯番「今日は、ここにいてください。先生。」",
+          "老人は口を閉じ、靴の紐をほどき始めた。机の上には経路図と、湯の入った椀が並んでいる。",
+          "リネ「付き添いを頼むなら、申し送りは私から。修繕班へ直接話してくれるなら、手当を足します。どちらでも、この二人は休ませましょう。」"
+        ],
+        "options": [
+          {
+            "id": "repair",
+            "text": "修繕班へ、見た壁灯の位置を申し送る",
+            "to": "@informed",
+            "action": "post_repair"
+          },
+          {
+            "id": "rest",
+            "text": "二人のそばに残り、温かいものを渡す",
+            "to": "@compromise",
+            "action": "post_rest"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "https://github.com/TomTomYoung/GAMEBOOK/blob/main/doc/SCENARIO_MODEL_V1_2B.md",
+      "adapter": "adv-story-state/1",
+      "revision": "2026-10-25",
+      "scope": "quest-episode"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "design": {
+      "experienceIntent": "足の止まった新人にできる役割を頼み、助けに来た本人の返事を受け取る。救助後に、現場の申し送りか二人への付き添いを引き受ける。",
+      "dramaticKernel": "老人を捜し、介助して帰す共同救助。入口で支えられる側だった新人の火が、帰路では老人の足元を示す。最後に残るのは今夜どの仕事を引き受けるかであり、修繕と休養の二者択一ではない。",
+      "agency": "徒歩経路、入口で新人へ頼む役割、帰還後に先に引き受ける仕事を選ぶ。固定の帰路戦闘と新人の救援は共通。入口の約束は関係・会話の差であり、戦術的有利さや新結末を約束しない。",
+      "choices": [
+        {
+          "id": "entry_talk",
+          "visibleMotive": "新人の「ここからでも、何かできませんか」に応じ、入口の火と帰る方向を任せる。",
+          "payoff": [
+            "entryの返事",
+            "戦闘中の「入口だけ照らしていても」",
+            "rescueの「帰り道を照らすなら、ここまで行かなきゃ」"
+          ]
+        },
+        {
+          "id": "entry_signal",
+          "visibleMotive": "新人は足を出せないが、声を出す役割なら引き受ける。入口の方向を知る助けとして頼む。",
+          "payoff": [
+            "entryの「必ず、返事をします」",
+            "outageの返事と靴音",
+            "戦闘中の「聞こえました」",
+            "rescueの「返事だけして、待っていられませんでした」"
+          ]
+        },
+        {
+          "id": "post_repair",
+          "visibleMotive": "油切れの二箇所を実際に見た探索隊が直接伝える。リネが付き添いを引き受け、追加手当の申し出がある。",
+          "payoff": [
+            "修繕班が図の印を受け取る",
+            "リネが二人を座らせる",
+            "椀を持つ指"
+          ]
+        },
+        {
+          "id": "post_rest",
+          "visibleMotive": "新人は松明を掛けられず、老人も休もうとしない。二人のそばへ残り、申し送りをリネへ任せる。",
+          "payoff": [
+            "リネが修繕班へ申し送る",
+            "新人が老人へ椀を差し出す",
+            "空瓶が並ぶ"
+          ]
+        }
+      ],
+      "counterfactuals": [
+        {
+          "id": "wait",
+          "result": "会話を読む現実時間で老人の死亡を判定しない。支道の灯の消灯は帰路イベントで確定し、残り何秒という期限を本文に置かない。"
+        },
+        {
+          "id": "delegate",
+          "result": "帰還後の修繕班の手配と申し送りはリネへ委任できる。付き添いを選んでも修繕を放置する結末にしない。"
+        },
+        {
+          "id": "both",
+          "result": "修繕の準備と二人の休養はどちらの結末でも進む。選ぶのは探索隊が先に担う役割であり、偽の両立不能を提示しない。"
+        },
+        {
+          "id": "refuel",
+          "result": "初版から継承する固定消灯イベントは、途中の燃料補充にかかわらず発生する。操作で回避できる自由な燃料シミュレーションとしては未対応。本文は消灯を観測し、補充量からの自然枯渇という原因を断定しない。"
+        },
+        {
+          "id": "defeat",
+          "result": "救助前の敗北は既存checkpointで老人の場面へ戻す。実際に受けた戦闘損失は共有エンジンの規則に従い、新人の油は消費しない。"
+        }
+      ],
+      "additions": [
+        "入口で新人へ呼び声の返事を頼む会話と、それへの承諾。",
+        "リネは帰還時に椅子と温かい椀を用意し、探索隊が担当しない方の仕事を引き受ける。",
+        "既存の修繕結末の追加報酬は直接申し送りの手当として選択前に示す。"
+      ],
+      "openIssues": [
+        {
+          "id": "q001-fixed-outage",
+          "checks": [
+            "V12-MECHANISM",
+            "V12B-ALTERNATIVE-RETURN"
+          ],
+          "status": "needs_review",
+          "text": "既存の固定消灯・救援演出を保持した。老人場面の燃料8、帰路の0、救援の25への代入は、補充を含む自由な火の運用と統合した物語規則として未再設計。新たな風や呪いを後付けして矛盾を覆わない。第2版をv1.2b全項目準拠とは表示しない。"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "q001.v11.entry": {
+      "storyQuest": "q001",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q001",
+          "scene": "entry"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "ne",
+            "left": {
+              "ref": "flags.worldSceneEffects.q001.entry"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "fire.portable.set",
+              "fuel": 25,
+              "effect": "ward"
+            },
+            {
+              "op": "set",
+              "target": "flags.worldSceneEffects.q001.entry",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "narrate",
+          "text": "入口の篝火のそばに、油瓶を抱えた若い灯番がいた。松明を握る指が白い。こちらに気づくと、膝に引きつけていた瓶を持ち上げた。"
+        },
+        {
+          "op": "say",
+          "character": "rookie",
+          "text": "先生が、これを。『入口で火を絶やすな』って。僕の瓶に、残りを全部。"
+        },
+        {
+          "op": "narrate",
+          "text": "明かりの外で、何かが石をこすった。新人が炎を差し出すと、その音が一つ遠のいた。"
+        },
+        {
+          "op": "say",
+          "character": "rookie",
+          "text": "この火なら、あれは寄ってきません。壁の灯もあったのに、奥の二つが消えて……。先生は支道の灯の下です。足を痛めてます。"
+        },
+        {
+          "op": "narrate",
+          "text": "入口から一歩出かけた靴が、同じ石の上へ戻る。"
+        },
+        {
+          "op": "say",
+          "character": "rookie",
+          "text": "一緒に行かなきゃ。でも、脚が……。ここからでも、何かできませんか。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "talk",
+              "text": "入口の火を守り、戻るこちらの足元を照らしてほしい",
+              "storyAction": {
+                "quest": "q001",
+                "action": "entry_talk"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "say",
+                  "character": "rookie",
+                  "text": "はい。帰ってくる方を、ちゃんと見てます。"
+                },
+                {
+                  "op": "story.journey",
+                  "quest": "q001",
+                  "action": "entry_talk"
+                }
+              ]
+            },
+            {
+              "id": "signal",
+              "text": "呼びかけたら答えてほしい。入口の位置が分かるように",
+              "storyAction": {
+                "quest": "q001",
+                "action": "entry_signal"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "say",
+                  "character": "rookie",
+                  "text": "声なら、出せます。呼んでください。必ず、返事をします。"
+                },
+                {
+                  "op": "story.journey",
+                  "quest": "q001",
+                  "action": "entry_signal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q001.v11.dark": {
+      "storyQuest": "q001",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q001",
+          "scene": "dark"
+        },
+        {
+          "op": "narrate",
+          "text": "通路に、黒い壁松明が二つ見えた。手元の火が揺れると、奥から聞こえる音も動く。近づきはしない。"
+        },
+        {
+          "op": "narrate",
+          "text": "油受けの縁に、乾いた筋が一本垂れていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "inspect",
+              "text": "消えた壁松明へ火を寄せ、油受けを確かめる",
+              "storyAction": {
+                "quest": "q001",
+                "action": "dark_inspect"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q001",
+                  "action": "dark_inspect"
+                },
+                {
+                  "op": "jump",
+                  "script": "q001.v11.empty"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q001.v11.empty": {
+      "storyQuest": "q001",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q001",
+          "scene": "empty"
+        },
+        {
+          "op": "narrate",
+          "text": "芯へ火を近づける。先だけが赤くなり、すぐに暗くなった。油受けの乾いた底には、黒い輪が幾重も残っている。もう一つの壁灯も同じだった。"
+        },
+        {
+          "op": "narrate",
+          "text": "奥で、杖が石を打った。間を置いて、もう一度。火を掲げると、支道の壁に小さな明かりが見えた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "follow",
+              "text": "松明を掲げ、杖の音のする支道へ進む",
+              "storyAction": {
+                "quest": "q001",
+                "action": "empty_follow"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q001",
+                  "action": "empty_follow"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q001.v11.old": {
+      "storyQuest": "q001",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q001",
+          "scene": "old"
+        },
+        {
+          "op": "event.checkpoint.begin",
+          "id": "q001.elder_rescue",
+          "quest": "q001",
+          "scene": "old",
+          "dungeon": "kagaribi",
+          "flags": [
+            "worldSceneEffects.q001.old",
+            "worldSceneEffects.q001.outage"
+          ],
+          "objects": [
+            "kagaribi_f1/q001_last_lamp"
+          ],
+          "eventKeys": [
+            "kagaribi_f1/q001_elder",
+            "kagaribi_f1/q001_return"
+          ],
+          "restrictionSources": [
+            "q001.elder_rescue"
+          ]
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "ne",
+            "left": {
+              "ref": "flags.worldSceneEffects.q001.old"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "fire.portable.set",
+              "fuel": 8,
+              "effect": "ward"
+            },
+            {
+              "op": "dungeon.restriction.set",
+              "dungeon": "kagaribi",
+              "action": "return",
+              "source": "q001.elder_rescue",
+              "reason": "帰還印が封印されている。老人と帰路の巡灯路へ向かおう。"
+            },
+            {
+              "op": "set",
+              "target": "flags.worldSceneEffects.q001.old",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "narrate",
+          "text": "老人は壁灯の真下に腰を下ろしていた。そばの油瓶を傾けても、何も落ちない。"
+        },
+        {
+          "op": "say",
+          "character": "elder",
+          "text": "来たか。……あの子は、入口におるな。"
+        },
+        {
+          "op": "narrate",
+          "text": "待っていると答えると、老人は瓶に栓を戻した。空の瓶が、軽い音を立てた。"
+        },
+        {
+          "op": "say",
+          "character": "elder",
+          "text": "あれまで暗くなったら、あの子の足が止まる。油は持たせた。"
+        },
+        {
+          "op": "narrate",
+          "text": "靴の縁から、腫れた足首がのぞいている。立ちかけた老人の膝が折れ、杖先が滑った。携行松明の炎も短くなっている。"
+        },
+        {
+          "op": "say",
+          "character": "elder",
+          "text": "この足では手間をかける。肩を借りてもいいか。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "support",
+              "text": "肩を貸し、入口の灯へ一緒に戻る",
+              "storyAction": {
+                "quest": "q001",
+                "action": "old_support"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q001",
+                  "action": "old_support"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q001.v11.outage": {
+      "storyQuest": "q001",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q001",
+          "scene": "outage"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "ne",
+            "left": {
+              "ref": "flags.worldSceneEffects.q001.outage"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "object.state.set",
+              "map": "kagaribi_f1",
+              "object": "q001_last_lamp",
+              "state": "extinguished"
+            },
+            {
+              "op": "fire.portable.set",
+              "fuel": 0,
+              "effect": null
+            },
+            {
+              "op": "set",
+              "target": "flags.worldSceneEffects.q001.outage",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "narrate",
+          "text": "老人の歩幅に合わせて進むうち、手元の炎が細くなった。芯の赤も消える。老人を支える腕に重さがかかり、足音だけが通路へ残った。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q001.values.signalAgreed"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "入口へ呼びかけると、返事が来た。細い声は途中で途切れ、靴音に変わった。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "入口の明かりは、曲がり角の向こうだ。老人の杖が石を打つ。暗い通路で、別の音がそれに重なった。"
+            }
+          ]
+        },
+        {
+          "op": "narrate",
+          "text": "さっきまで火の外にいたものが、すぐ前まで来ている。老人を壁へ寄せ、武器を抜いた。"
+        },
+        {
+          "op": "battle.start",
+          "id": "q001-F-kuragari",
+          "encounter": "kuragari_hunt",
+          "events": [
+            {
+              "id": "q001-B-rookie",
+              "triggers": [
+                "round_start",
+                "before_end"
+              ],
+              "condition": {
+                "op": "or",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "battle.round"
+                    },
+                    "right": 2
+                  },
+                  {
+                    "op": "in",
+                    "left": {
+                      "ref": "battle.pendingResult"
+                    },
+                    "right": [
+                      "win",
+                      "escape",
+                      "repel"
+                    ]
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "scene.cast",
+                  "transition": {
+                    "enter": 400,
+                    "move": 300,
+                    "easing": "ease-out"
+                  },
+                  "cast": [
+                    {
+                      "character": "elder",
+                      "display": {
+                        "position": "left"
+                      }
+                    },
+                    {
+                      "character": "rookie",
+                      "display": {
+                        "position": "right",
+                        "flip": true
+                      }
+                    }
+                  ]
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q001.values.signalAgreed"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "character": "rookie",
+                      "text": "聞こえました！ こっちへ……いえ、僕がそっちへ行きます。灯を、受け取って！"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "say",
+                      "character": "rookie",
+                      "text": "争う音がして……入口だけ照らしていても、だめだと思って。そこにいてください、今、行きます！"
+                    }
+                  ]
+                },
+                {
+                  "op": "story.action",
+                  "quest": "q001",
+                  "action": "outage_call"
+                },
+                {
+                  "op": "fire.portable.set",
+                  "fuel": 25,
+                  "effect": "ward"
+                },
+                {
+                  "op": "battle.end"
+                }
+              ]
+            }
+          ],
+          "on_interrupt": [
+            {
+              "op": "dungeon.restriction.clear",
+              "dungeon": "kagaribi",
+              "action": "return",
+              "source": "q001.elder_rescue"
+            },
+            {
+              "op": "event.checkpoint.commit",
+              "id": "q001.elder_rescue"
+            },
+            {
+              "op": "jump",
+              "script": "q001.v11.rescue"
+            }
+          ],
+          "on_win": [],
+          "on_escape": [],
+          "on_lose": []
+        }
+      ]
+    },
+    "q001.v11.rescue": {
+      "storyQuest": "q001",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q001",
+          "scene": "rescue"
+        },
+        {
+          "op": "narrate",
+          "text": "通路の先で火が跳ねた。くらがりが身をよじり、明かりの外へ退く。新人は足を踏ん張り、松明をこちらへ差し出していた。腰には、入口で見た油瓶が揺れている。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q001.values.signalAgreed"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "say",
+              "character": "rookie",
+              "text": "声が聞こえたから。返事だけして、待っていられませんでした。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "character": "rookie",
+              "text": "戦う音が聞こえて。帰り道を照らすなら、ここまで行かなきゃって。"
+            }
+          ]
+        },
+        {
+          "op": "say",
+          "character": "rookie",
+          "text": "怖いです。まだ。だから、早く一緒に帰ってください。"
+        },
+        {
+          "op": "say",
+          "character": "elder",
+          "text": "松明を、少し下げてくれ。足元が見える。"
+        },
+        {
+          "op": "narrate",
+          "text": "新人が灯を下げると、老人はその明かりへ足を出した。空の油瓶が、新人の瓶へこつんと当たった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "home",
+              "text": "新人の灯で足元を確かめ、二人を連れて入口へ戻る",
+              "storyAction": {
+                "quest": "q001",
+                "action": "rescue_home"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q001",
+                  "action": "rescue_home"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q001.v11.gate": {
+      "storyQuest": "q001",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q001",
+          "scene": "gate"
+        },
+        {
+          "op": "narrate",
+          "text": "入口の篝火が、一行の影を階段へ伸ばした。老人が手すりをつかむ。新人は、その足先へ松明を寄せた。"
+        },
+        {
+          "op": "say",
+          "character": "elder",
+          "text": "そこだ。一段、上げるぞ。"
+        },
+        {
+          "op": "say",
+          "character": "rookie",
+          "text": "詰所まで、僕が灯を持ちます。"
+        },
+        {
+          "op": "narrate",
+          "text": "階段の上から、町の話し声が聞こえてきた。老人の腕を支え直し、灯番詰所へ向かう。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "report",
+              "text": "老人を支えて階段を上り、灯番詰所へ連れ帰る",
+              "storyAction": {
+                "quest": "q001",
+                "action": "gate_report"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q001",
+                  "action": "gate_report"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q001.v11.post": {
+      "storyQuest": "q001",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q001",
+          "scene": "post"
+        },
+        {
+          "op": "narrate",
+          "text": "リネが扉を開け、老人へ椅子を引いた。新人は松明を壁の受け金具へ掛けようとして、二度、外した。"
+        },
+        {
+          "op": "say",
+          "character": "rine",
+          "text": "二人とも、座って。巡灯路は今夜、閉めます。"
+        },
+        {
+          "op": "narrate",
+          "text": "老人が立ちかけると、リネがその杖を椅子へ立てかけた。"
+        },
+        {
+          "op": "say",
+          "character": "rine",
+          "text": "修繕班は私が手配します。見た場所を伝えてもらえると助かる。二人には、少し誰かがついていてほしいけれど。"
+        },
+        {
+          "op": "say",
+          "character": "elder",
+          "text": "灯の位置なら、わしが……。"
+        },
+        {
+          "op": "say",
+          "character": "rookie",
+          "text": "今日は、ここにいてください。先生。"
+        },
+        {
+          "op": "narrate",
+          "text": "老人は口を閉じ、靴の紐をほどき始めた。机の上には経路図と、湯の入った椀が並んでいる。"
+        },
+        {
+          "op": "say",
+          "character": "rine",
+          "text": "付き添いを頼むなら、申し送りは私から。修繕班へ直接話してくれるなら、手当を足します。どちらでも、この二人は休ませましょう。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "repair",
+              "text": "修繕班へ、見た壁灯の位置を申し送る",
+              "storyAction": {
+                "quest": "q001",
+                "action": "post_repair"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q001",
+                  "action": "post_repair"
+                },
+                {
+                  "op": "jump",
+                  "script": "q001.v11.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "rest",
+              "text": "二人のそばに残り、温かいものを渡す",
+              "storyAction": {
+                "quest": "q001",
+                "action": "post_rest"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q001",
+                  "action": "post_rest"
+                },
+                {
+                  "op": "jump",
+                  "script": "q001.v11.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q001.v11.end.informed": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q001",
+          "outcome": "informed"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "say",
+          "character": "rine",
+          "text": "ここは私が。二人とも、もう立たないこと。"
+        },
+        {
+          "op": "narrate",
+          "text": "詰所へ来た修繕班に、消えた二つの壁灯と、老人のいた支道を伝える。班長は経路図の印をなぞり、油を積んだ台車を戸口へ寄せた。巡灯再開の札は、まだ裏返しのままだ。"
+        },
+        {
+          "op": "narrate",
+          "text": "振り返ると、新人は椀を両手で抱えていた。松明を握っていた指の白さが、少しずつ引いていった。"
+        }
+      ]
+    },
+    "q001.v11.end.compromise": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q001",
+          "outcome": "compromise"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "say",
+          "character": "rine",
+          "text": "では、図は私が預かります。何かあったら、すぐ呼んで。"
+        },
+        {
+          "op": "narrate",
+          "text": "リネは戸口で修繕班への申し送りを始めた。巡灯再開の札は裏返されたまま、戸に掛かっている。椀を受け取った新人は、ひと口飲む前に老人の方へ傾けた。"
+        },
+        {
+          "op": "say",
+          "character": "elder",
+          "text": "お前の分だ。わしには、もう来てくれたろう。"
+        },
+        {
+          "op": "narrate",
+          "text": "新人は小さく頷き、今度は自分の口へ椀を運んだ。机の端で、空の瓶が二つ、肩を寄せていた。"
+        }
+      ]
+    },
+    "q001.v11.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q001.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q001.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "一行は灯番詰所へ戻った。探索隊は油切れの壁灯と支道の位置を修繕班へ申し送り、リネが二人の休養を引き受けた。修繕の準備が始まる傍ら、新人は温かい椀を両手で包んでいた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "一行は灯番詰所へ戻った。修繕班への申し送りをリネに任せ、探索隊は二人のそばに残った。新人は老人へ椀を差し出し、今度は自分も温かいものを飲んだ。机の端には、空の油瓶が二つ並んでいた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "story.init",
+              "quest": "q001"
+            },
+            {
+              "op": "switch",
+              "value": {
+                "ref": "stories.q001.scene"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q001.v11.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "dark",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q001.v11.dark"
+                    }
+                  ]
+                },
+                {
+                  "equals": "empty",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q001.v11.empty"
+                    }
+                  ]
+                },
+                {
+                  "equals": "old",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q001.v11.old"
+                    }
+                  ]
+                },
+                {
+                  "equals": "outage",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q001.v11.outage"
+                    }
+                  ]
+                },
+                {
+                  "equals": "rescue",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q001.v11.rescue"
+                    }
+                  ]
+                },
+                {
+                  "equals": "gate",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q001.v11.gate"
+                    }
+                  ]
+                },
+                {
+                  "equals": "post",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q001.v11.post"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q001.v11.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q001.wall.q001_empty_west": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "op": "object_state",
+            "map": "kagaribi_f1",
+            "object": "q001_empty_west",
+            "default": "empty"
+          },
+          "cases": [
+            {
+              "equals": "extinguished",
+              "commands": [
+                {
+                  "op": "narrate",
+                  "text": "芯は黒く、油受けの底まで見えている。火は消えている。"
+                }
+              ]
+            },
+            {
+              "equals": "lit",
+              "commands": [
+                {
+                  "op": "narrate",
+                  "text": "壁松明が石の床を照らしている。"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "narrate",
+              "text": "油受けの底は乾き、古い油の輪だけが残っている。芯へ火を寄せると、先が赤くなって消えた。"
+            }
+          ]
+        }
+      ]
+    },
+    "q001.wall.q001_empty_east": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "op": "object_state",
+            "map": "kagaribi_f1",
+            "object": "q001_empty_east",
+            "default": "empty"
+          },
+          "cases": [
+            {
+              "equals": "extinguished",
+              "commands": [
+                {
+                  "op": "narrate",
+                  "text": "芯は黒く、油受けの底まで見えている。火は消えている。"
+                }
+              ]
+            },
+            {
+              "equals": "lit",
+              "commands": [
+                {
+                  "op": "narrate",
+                  "text": "壁松明が石の床を照らしている。"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "narrate",
+              "text": "油受けの底は乾き、古い油の輪だけが残っている。芯へ火を寄せると、先が赤くなって消えた。"
+            }
+          ]
+        }
+      ]
+    },
+    "q001.wall.q001_last_lamp": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "op": "object_state",
+            "map": "kagaribi_f1",
+            "object": "q001_last_lamp",
+            "default": "low"
+          },
+          "cases": [
+            {
+              "equals": "extinguished",
+              "commands": [
+                {
+                  "op": "narrate",
+                  "text": "芯は黒く、油受けの底まで見えている。火は消えている。"
+                }
+              ]
+            },
+            {
+              "equals": "lit",
+              "commands": [
+                {
+                  "op": "narrate",
+                  "text": "壁松明が石の床を照らしている。"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "narrate",
+              "text": "油受けの底に、小さな炎が映っている。壁を背にすれば、火の届く範囲に身体を寄せられそうだ。"
+            }
+          ]
+        }
+      ]
+    },
+    "dungeon.scene.kagaribi.v2": {
+      "dungeonScene": "kagaribi",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "入口の篝火が、通路の石を赤く照らしている。明かりの縁より奥で、何かが石をこすった。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "dungeons.active.systems.fires.portable.lit"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "携帯松明にも火がある。柄を持ち直すと、明かりが手元と一緒に動いた。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "入口の火と、持ち歩く灯を手帳に記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.kagaribi"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.kagaribi",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "篝火の位置と、携帯松明の残量を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "携帯松明は消えている。入口の篝火を調べれば、火を移せる。"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "legacyOutcomes": {
+    "informed": {
+      "label": "二人に油を分け、帰り道を一緒に点灯する",
+      "text": "灯番は新人を叱らず、油の配り方から教え直した。夜番には必ず二瓶持つ規則が残る。",
+      "gold": 57,
+      "xp": 68
+    },
+    "contract": {
+      "label": "老人だけの救出として始末書を出す",
+      "text": "道は通ったが新人は名乗れず、灯番は自分の不始末として始末書を書いた。",
+      "gold": 77,
+      "xp": 47
+    },
+    "compromise": {
+      "label": "二人の位置を救助隊へ知らせる",
+      "text": "夜明けに二人は帰還した。あなたの地図が救助隊の足を早めた。",
+      "gold": 37,
+      "xp": 51
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "篝火の迷宮・入口の灯",
+      "dark": "油の尽きた巡灯路",
+      "branch": "支道の最後の壁灯",
+      "post": "灯番詰所",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "entry",
+        "dark"
+      ],
+      [
+        "dark",
+        "branch"
+      ],
+      [
+        "entry",
+        "post"
+      ],
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "dark"
+      ],
+      [
+        "transit",
+        "branch"
+      ],
+      [
+        "transit",
+        "post"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "dark",
+          "branch",
+          "post",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "elderAt": {
+        "type": "enum",
+        "initial": "branch",
+        "values": [
+          "entry",
+          "dark",
+          "branch",
+          "post",
+          "transit"
+        ],
+        "meaning": "elder の所在または保持者"
+      },
+      "rookieAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "dark",
+          "branch",
+          "post",
+          "transit"
+        ],
+        "meaning": "rookie の所在または保持者"
+      },
+      "rineAt": {
+        "type": "enum",
+        "initial": "post",
+        "values": [
+          "entry",
+          "dark",
+          "branch",
+          "post",
+          "transit"
+        ],
+        "meaning": "rine の所在または保持者"
+      },
+      "oldBottleAt": {
+        "type": "enum",
+        "initial": "elder",
+        "values": [
+          "entry",
+          "dark",
+          "branch",
+          "post",
+          "transit",
+          "party",
+          "elder",
+          "rookie",
+          "rine",
+          "newBottle"
+        ],
+        "meaning": "oldBottle の所在または保持者"
+      },
+      "newBottleAt": {
+        "type": "enum",
+        "initial": "rookie",
+        "values": [
+          "entry",
+          "dark",
+          "branch",
+          "post",
+          "transit",
+          "party",
+          "elder",
+          "rookie",
+          "rine",
+          "oldBottle"
+        ],
+        "meaning": "newBottle の所在または保持者"
+      },
+      "elderMobility": {
+        "type": "enum",
+        "initial": "assisted",
+        "values": [
+          "assisted",
+          "mobile"
+        ],
+        "meaning": "老人の帰還には介助が必要"
+      },
+      "afraid": {
+        "type": "boolean",
+        "initial": true,
+        "meaning": "新人は暗闇を恐れたまま"
+      },
+      "steppedForward": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "新人が自分の意思で救助に踏み出した"
+      },
+      "reported": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "reported"
+      },
+      "routeClosed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "routeClosed"
+      },
+      "repairsRequested": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "repairsRequested"
+      },
+      "restRequested": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "restRequested"
+      },
+      "darkness": {
+        "type": "enum",
+        "initial": "watching",
+        "values": [
+          "watching",
+          "attacking",
+          "repelled"
+        ],
+        "meaning": "くらがりの行動"
+      },
+      "partyTorch": {
+        "type": "enum",
+        "initial": "lit",
+        "values": [
+          "lit",
+          "low",
+          "extinguished"
+        ],
+        "meaning": "探索隊の携行松明"
+      },
+      "rookieTorch": {
+        "type": "enum",
+        "initial": "lit",
+        "values": [
+          "lit"
+        ],
+        "meaning": "老人の油で灯した新人の松明"
+      },
+      "oldOil": {
+        "type": "integer",
+        "initial": 0,
+        "min": 0,
+        "max": 2,
+        "meaning": "老人の瓶は空",
+        "container": "oldBottle"
+      },
+      "newOil": {
+        "type": "integer",
+        "initial": 1,
+        "min": 0,
+        "max": 2,
+        "meaning": "新人の瓶に残る老人の油",
+        "container": "newBottle"
+      },
+      "oilUsed": {
+        "type": "integer",
+        "initial": 1,
+        "min": 0,
+        "max": 2,
+        "meaning": "入口への帰還と救助の火に使った油"
+      },
+      "signalAgreed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "入口で呼び声への返事を新人に頼み、引き受けてもらった"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "elder": {
+        "holder": "elderAt",
+        "kind": "person",
+        "character": "elder",
+        "mobility": "elderMobility"
+      },
+      "rookie": {
+        "holder": "rookieAt",
+        "kind": "person",
+        "character": "rookie"
+      },
+      "rine": {
+        "holder": "rineAt",
+        "kind": "person",
+        "character": "rine"
+      },
+      "oldBottle": {
+        "holder": "oldBottleAt",
+        "kind": "item"
+      },
+      "newBottle": {
+        "holder": "newBottleAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "rule": {
+        "text": "壁灯かくらがり除けの携行松明の火がある間、くらがりは寄れない"
+      },
+      "gift": {
+        "text": "老人は自分の油を新人に渡し、入口へ帰した"
+      },
+      "empty": {
+        "text": "巡灯路の壁松明は油切れで、点火だけでは灯らない"
+      },
+      "position": {
+        "text": "老人は油の少ない壁灯の下で待つ"
+      },
+      "returningFire": {
+        "text": "老人が渡した油の火で、新人が二人を救った"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [
+      {
+        "id": "oil_total",
+        "condition": {
+          "op": "eq",
+          "left": {
+            "op": "add",
+            "args": [
+              {
+                "ref": "stories.q001.values.oldOil"
+              },
+              {
+                "ref": "stories.q001.values.newOil"
+              },
+              {
+                "ref": "stories.q001.values.oilUsed"
+              }
+            ]
+          },
+          "right": 2
+        },
+        "message": "老人が渡した油は増えない"
+      },
+      {
+        "id": "fear_remains",
+        "condition": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q001.values.afraid"
+          },
+          "right": true
+        },
+        "message": "救助の行動は恐怖の消滅を意味しない"
+      }
+    ],
+    "scenes": {
+      "entry": {
+        "title": "篝火の迷宮・入口の灯",
+        "place": "entry",
+        "cast": [
+          {
+            "entity": "rookie",
+            "display": {
+              "position": "center"
+            }
+          }
+        ],
+        "requires": true
+      },
+      "dark": {
+        "title": "油の尽きた巡灯路",
+        "place": "dark",
+        "cast": [],
+        "requires": true
+      },
+      "empty": {
+        "title": "油の尽きた巡灯路",
+        "place": "dark",
+        "cast": [],
+        "requires": true
+      },
+      "old": {
+        "title": "支道の最後の壁灯",
+        "place": "branch",
+        "cast": [
+          {
+            "entity": "elder",
+            "display": {
+              "position": "left"
+            }
+          }
+        ],
+        "requires": true
+      },
+      "outage": {
+        "title": "油の尽きた巡灯路",
+        "place": "dark",
+        "cast": [
+          {
+            "entity": "elder",
+            "display": {
+              "position": "left"
+            }
+          }
+        ],
+        "requires": true
+      },
+      "rescue": {
+        "title": "油の尽きた巡灯路",
+        "place": "dark",
+        "cast": [
+          {
+            "entity": "elder",
+            "display": {
+              "x": 30,
+              "layer": 1
+            }
+          },
+          {
+            "entity": "rookie",
+            "display": {
+              "x": 67,
+              "flip": true,
+              "layer": 2
+            }
+          }
+        ],
+        "requires": true
+      },
+      "gate": {
+        "title": "篝火の迷宮・入口の灯",
+        "place": "entry",
+        "cast": [
+          {
+            "entity": "elder",
+            "display": {
+              "x": 30,
+              "layer": 1
+            }
+          },
+          {
+            "entity": "rookie",
+            "display": {
+              "x": 67,
+              "flip": true,
+              "layer": 2
+            }
+          }
+        ],
+        "requires": true
+      },
+      "post": {
+        "title": "灯番詰所",
+        "place": "post",
+        "cast": [
+          {
+            "entity": "elder",
+            "display": {
+              "x": 23,
+              "layer": 1
+            }
+          },
+          {
+            "entity": "rookie",
+            "display": {
+              "x": 40,
+              "flip": true,
+              "layer": 2
+            }
+          },
+          {
+            "entity": "rine",
+            "display": {
+              "x": 76,
+              "layer": 3
+            }
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_talk": {
+        "from": [
+          "entry"
+        ],
+        "to": "dark",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "dark"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "dark",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "rule",
+            "source": "rookie",
+            "requires": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "gift",
+            "source": "rookie",
+            "requires": true
+          }
+        ]
+      },
+      "dark_inspect": {
+        "from": [
+          "dark"
+        ],
+        "to": "empty",
+        "requires": true,
+        "effects": [
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "empty",
+            "source": "dark",
+            "requires": true
+          }
+        ],
+        "once": true
+      },
+      "empty_follow": {
+        "from": [
+          "empty"
+        ],
+        "to": "old",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "branch"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "position",
+            "source": "elder",
+            "requires": true
+          },
+          {
+            "op": "set",
+            "key": "partyTorch",
+            "value": "low"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "branch",
+          "companions": []
+        },
+        "depart": []
+      },
+      "old_support": {
+        "from": [
+          "old"
+        ],
+        "to": "outage",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "elder"
+            ],
+            "path": [
+              "transit",
+              "dark"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "partyTorch",
+            "value": "extinguished"
+          },
+          {
+            "op": "set",
+            "key": "darkness",
+            "value": "attacking"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "dark",
+          "companions": [
+            "elder"
+          ],
+          "arrival": {
+            "points": [
+              {
+                "map": "kagaribi_f1",
+                "x": 13,
+                "y": 5,
+                "event": "q001_return_south"
+              }
+            ],
+            "encounters": [
+              "kuragari_hunt"
+            ]
+          }
+        },
+        "depart": []
+      },
+      "outage_call": {
+        "from": [
+          "outage"
+        ],
+        "to": "rescue",
+        "requires": true,
+        "effects": [
+          {
+            "op": "consume",
+            "key": "newOil",
+            "amount": 1,
+            "sink": "oilUsed"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "rookie"
+            ],
+            "path": [
+              "entry",
+              "dark"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "steppedForward",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "darkness",
+            "value": "repelled"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "returningFire",
+            "source": "rookie",
+            "requires": true
+          }
+        ],
+        "once": true
+      },
+      "rescue_home": {
+        "from": [
+          "rescue"
+        ],
+        "to": "gate",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "elder",
+              "rookie"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "elder",
+            "rookie"
+          ]
+        },
+        "depart": []
+      },
+      "gate_report": {
+        "from": [
+          "gate"
+        ],
+        "to": "post",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "elder",
+              "rookie"
+            ],
+            "path": [
+              "transit",
+              "post"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "reported",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "routeClosed",
+            "value": true
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "post",
+          "companions": [
+            "elder",
+            "rookie"
+          ]
+        },
+        "depart": []
+      },
+      "post_repair": {
+        "from": [
+          "post"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "repairsRequested",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "post_rest": {
+        "from": [
+          "post"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "restRequested",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "entry_signal": {
+        "from": [
+          "entry"
+        ],
+        "to": "dark",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "dark"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "dark",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "rule",
+            "source": "rookie",
+            "requires": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "gift",
+            "source": "rookie",
+            "requires": true
+          },
+          {
+            "op": "set",
+            "key": "signalAgreed",
+            "value": true
+          }
+        ]
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q001.values.elderAt"
+                },
+                "right": "post"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q001.values.rookieAt"
+                },
+                "right": "post"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q001.values.steppedForward"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q001.values.afraid"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q001.values.darkness"
+                },
+                "right": "repelled"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q001.values.reported"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q001.values.repairsRequested"
+            },
+            "right": true
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q001.values.elderAt"
+                },
+                "right": "post"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q001.values.rookieAt"
+                },
+                "right": "post"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q001.values.steppedForward"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q001.values.afraid"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q001.values.darkness"
+                },
+                "right": "repelled"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q001.values.reported"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q001.values.restRequested"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    "revision": 1,
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "kagaribi",
+        "map": "kagaribi_f1",
+        "x": 2,
+        "y": 1,
+        "event": "q001_decision"
+      },
+      "dark": {
+        "kind": "dungeon",
+        "dungeon": "kagaribi",
+        "map": "kagaribi_f1",
+        "x": 9,
+        "y": 1,
+        "event": "q001_return"
+      },
+      "branch": {
+        "kind": "dungeon",
+        "dungeon": "kagaribi",
+        "map": "kagaribi_f1",
+        "x": 13,
+        "y": 3,
+        "event": "q001_elder"
+      },
+      "post": {
+        "kind": "town",
+        "location": "hikarigaeri_lamplighter_post"
+      }
+    }
+  }
+}

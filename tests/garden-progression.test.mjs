@@ -82,7 +82,7 @@ test('nectar and moss apply locally; 10F forecourt is outside plant effects and 
 });
 
 test('actual 1.29 garden save retains plant ages, old relay, supplies and progress without new rewards',()=>{
- const g=newGame();g.load(JSON.stringify(fixture));const s=structuredClone(g.state);s.contentVersion=fixture.state.contentVersion;assert.deepEqual(s,fixture.state);saved(g);
+ const g=newGame();g.load(JSON.stringify(fixture));const s=structuredClone(g.state);s.contentVersion=fixture.state.contentVersion;assert.deepEqual(s,{...fixture.state,scenarioEdition:'e1'});saved(g);
  for(const mutate of [s=>s.dungeons.persistent.region_3.systems.garden.plants.bridge_1.age=999,s=>s.dungeons.persistent.region_3.systems.garden.plants.fake={species:'cool_spore',age:0},s=>s.expedition.camps.garden_lower={supply:false,relay:true}]){
   const bad=structuredClone(fixture);mutate(bad.state);const before=g.save();assert.throws(()=>g.load(JSON.stringify(bad)));assert.equal(g.save(),before);
  }

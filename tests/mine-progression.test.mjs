@@ -46,7 +46,7 @@ test('five mine supplies grant fixed ropes and one-time rewards; oil and washing
 });
 
 test('actual 1.28 mine save retains individual salt, inventory, progress and old relay without rewards or route flags',()=>{
- const g=newGame();g.load(JSON.stringify(fixture));const s=structuredClone(g.state);s.contentVersion=fixture.state.contentVersion;assert.deepEqual(s,fixture.state);saved(g);
+ const g=newGame();g.load(JSON.stringify(fixture));const s=structuredClone(g.state);s.contentVersion=fixture.state.contentVersion;assert.deepEqual(s,{...fixture.state,scenarioEdition:'e1'});saved(g);
  for(const mutate of [s=>s.gear.items[s.gear.equipped.ada.weapon].salt=-1,s=>s.expedition.camps.mine_lower={supply:false,relay:true},s=>s.dungeons.persistent.region_2.systems.walls.opened=['missing']]){
   const bad=structuredClone(fixture);mutate(bad.state);const before=g.save();assert.throws(()=>g.load(JSON.stringify(bad)));assert.equal(g.save(),before);
  }

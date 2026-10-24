@@ -105,7 +105,7 @@ test('washing and returning preserve unused wax, and corrosion floors consume it
 });
 test('real1.31 campaign migrates without auto-awarding recipes, capacity, gold, tickets or protection',async()=>{
  const original=JSON.parse(await fs.readFile(new URL('./fixtures/workshop-save-1.31.0.json',import.meta.url),'utf8')),g=newGame();g.load(JSON.stringify(original));
- const expected=structuredClone(original.state);expected.contentVersion=data.game.version;assert.deepEqual(g.state,expected);assert.equal(g.state.expedition.workshop,undefined);save(g);
+ const expected=structuredClone(original.state);expected.contentVersion=data.game.version;expected.scenarioEdition='e1';assert.deepEqual(g.state,expected);assert.equal(g.state.expedition.workshop,undefined);save(g);
  townFromStart(g);assert.equal(capacityUpgradePlan(g.data,g.state).ok,false);materials(g);assert.equal(weaponCraftPlan(g.data,g.state,'exp_t2_sword').ok,true);
 });
 test('shop detail follows selected weapon, browsing consumes nothing, craft button and capacity action use the displayed cost',()=>{

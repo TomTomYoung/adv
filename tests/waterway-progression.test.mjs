@@ -74,7 +74,7 @@ for(const options of [{size:4,mode:'grid'},{size:5,mode:'frontline',loadout:'bow
 test('actual 1.27 lower-floor save keeps water and discovery, and opens its old return route without rewards',()=>{
  const g=newGame();g.load(JSON.stringify(fixture));const s=structuredClone(g.state);
  assert.equal(s.flags.waterway.dryStairOpen,true);delete s.flags.waterway;s.contentVersion=fixture.state.contentVersion;
- assert.deepEqual(s,fixture.state);saved(g);
+ assert.deepEqual(s,{...fixture.state,scenarioEdition:'e1'});saved(g);
  assert.equal(connectionBlocked(data,g.state,connectionSide(dryStair,'region_1_f2')),null);
  for(const change of [s=>s.dungeons.persistent.region_1.systems.water.controls.lower_gate='false',s=>s.expedition.camps.water_lower={supply:false,relay:true}]){
   const bad=structuredClone(fixture);change(bad.state);const before=g.save();assert.throws(()=>g.load(JSON.stringify(bad)));assert.equal(g.save(),before);

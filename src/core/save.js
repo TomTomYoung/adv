@@ -36,6 +36,7 @@ import {isRecord,clone,evaluate} from './expression.js';
 import {commandsAt} from './script.js';
 import {battleDefinition} from './battle-events.js';
 import {freshRecords,snapshotRecords,recordsValid} from './records.js';
+import {readSavedScenarioEdition,resolveScenarioEdition} from './scenario-editions.js';
 function addScenarioState(save,data){
   const s=save.state;
   for(const id of Object.keys(data.quests))s.quests[id]??={stage:'available',evidence:[],outcome:null};
@@ -162,7 +163,11 @@ function migrateContentSave(original,data){
   return save;
 }
 export function migrateSave(original,data){
-  let migrated=migrateContentSave(original,data);
+  let edition;
+  try{edition=readSavedScenarioEdition(original);if(edition!==resolveScenarioEdition(data.scenarioEditions,data.scenarioEdition??'e1'))return original;}catch{return original;}
+  let pinned=original;
+  if(!Object.hasOwn(original,'scenarioEdition')){pinned=clone(original);pinned.scenarioEdition=edition;pinned.state.scenarioEdition=edition;}
+  let migrated=migrateContentSave(pinned,data);
   if(migrated?.contentVersion===data.game.version&&Array.isArray(migrated.state?.members)){
     migrated=clone(migrated);if(migrated.state.partyFormation===undefined)migrated.state.partyFormation=nextFormation(migrated.state.members);
     if(migrated.state.battleModePreference===undefined)migrated.state.battleModePreference='auto';
@@ -190,6 +195,7 @@ export function validateSave(save,data){
   const errors=[],fail=s=>errors.push(s),integer=(v,min,max)=>Number.isInteger(v)&&v>=min&&v<=max;
   if(!isRecord(save)||save.saveVersion!==1||save.gameId!==data.game.id||save.contentVersion!==data.game.version)return ['作品またはセーブ形式のバージョンが一致しません'];
   const s=save.state;if(!isRecord(s))return ['状態がありません'];
+  try{if(readSavedScenarioEdition(save)!==resolveScenarioEdition(data.scenarioEditions,data.scenarioEdition??'e1'))return ['記録と読込中のシナリオ版が一致しません'];}catch(error){return [error.message];}
   if('level' in s||'xp' in s)fail('隊共通経験値の旧形式です');
   if(s.gameId!==data.game.id||s.contentVersion!==data.game.version||s.version!==1)fail('状態のバージョン不正');
   for(const key of ['flags','vars','actors','inventory','quests','objects','events','discovered','presentation'])if(!isRecord(s[key]))fail(`${key}不正`);

@@ -2,11 +2,19 @@
 
 2026-09-26: [q004の実移動](Q004_WORLD_ROUTE.md)を実装済み。
 
-作品版1.26.0、確認日2026-10-20。[文書全体へ戻る](../README.md)。シナリオ本文・クエスト・人物・イベント・命令の文書をこのフォルダへ集約します。実行用JSONは `data/`、編集用JSONは `config/`、JavaScriptの物語原稿は `authoring/` に置きます。[正本の対応](../authoring/CONFIG_EDITOR_SOURCES.md)を参照してください。
+作品版1.34.0、確認日2026-10-25。[文書全体へ戻る](../README.md)。シナリオ本文・クエスト・人物・イベント・命令の文書をこのフォルダへ集約します。実行用JSONは `data/`、編集用JSONは `config/`、JavaScriptの物語原稿は `authoring/` に置きます。[正本の対応](../authoring/CONFIG_EDITOR_SOURCES.md)を参照してください。
+
+## シナリオの版
+
+[SCENARIO_EDITIONS.md](SCENARIO_EDITIONS.md)：初版と第2版の切替、最新版の初期設定、版別の保存と継承範囲。
+
+[SCENARIO_MODEL_V12B.md](SCENARIO_MODEL_V12B.md)：第2版に採用するGAMEBOOKモデルv1.2bの全文。
+
+[editions/README.md](editions/README.md)：改稿版の本文。現在はq001第2版を収録し、ほかの209件は初版を継承します。
 
 ## 本文と人物
 
-[QUEST_CATALOG.md](QUEST_CATALOG.md)：全210本・659結末の索引。全件に「【ダンジョン名／町名】[場所]：経過」を掲載し、移動・再訪・分岐を概観できます。q001〜q010は個別ページへリンク、q011〜q020・q201〜q210は全文、q021〜q200は概要・経過・結末。
+[QUEST_CATALOG.md](QUEST_CATALOG.md)：初版の全210本・659結末の索引。全件に「【ダンジョン名／町名】[場所]：経過」を掲載し、移動・再訪・分岐を概観できます。q001〜q010は個別ページへリンク、q011〜q020・q201〜q210は全文、q021〜q200は概要・経過・結末。
 
 [quests/README.md](quests/README.md)：q001〜q010の個別ページ一覧。本文・選択後の処理・イベントID・場所・分岐・結末を集約。q003〜q010には人物と証拠の所在、行為ごとの条件・費用・状態変化、資材不足時の再開、編集時の確認事項も掲載します。
 

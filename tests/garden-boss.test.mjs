@@ -66,7 +66,7 @@ test('invalid schedules reject unbounded, duplicate, unknown, noninitial depende
 });
 
 test('actual 1.30 save migrates without changing plants, progress, purchases or granting central supply',async()=>{
- const fixture=JSON.parse(await fs.readFile(new URL('./fixtures/garden-boss-save-1.30.0.json',import.meta.url))),g=newGame();g.load(JSON.stringify(fixture));const state=structuredClone(g.state);state.contentVersion=fixture.state.contentVersion;assert.deepEqual(state,fixture.state);assert.equal(g.state.expedition.camps.garden_central,undefined);saved(g);
+ const fixture=JSON.parse(await fs.readFile(new URL('./fixtures/garden-boss-save-1.30.0.json',import.meta.url))),g=newGame();g.load(JSON.stringify(fixture));const state=structuredClone(g.state);state.contentVersion=fixture.state.contentVersion;assert.deepEqual(state,{...fixture.state,scenarioEdition:'e1'});assert.equal(g.state.expedition.camps.garden_central,undefined);saved(g);
  const bad=structuredClone(fixture);bad.state.dungeons.persistent.region_3.systems.garden.plants.nursery_bed.age=-1;const before=g.save();assert.throws(()=>g.load(JSON.stringify(bad)));assert.equal(g.save(),before);
 });
 

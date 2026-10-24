@@ -1,8 +1,10 @@
 # adv ドキュメント
 
-現行説明の照合日: 2026-10-24。作品版1.34.0。[現在の状態](CURRENT_STATUS.md)、[現行仕様](SPEC.md)、[採用仕様と次工程](HANDOFF.md)、[浅層工房と封蝋](dungeons/SHALLOW_WORKSHOP.md)から確認してください。実施時点の履歴は[検証記録](development/PROGRESS.md)、整理前の本文は[保存原文](legacy/2026-10-20/README.md)に分けます。
+現行説明の照合日: 2026-10-25。作品版1.34.0。[現在の状態](CURRENT_STATUS.md)、[現行仕様](SPEC.md)、[採用仕様と次工程](HANDOFF.md)、[浅層工房と封蝋](dungeons/SHALLOW_WORKSHOP.md)から確認してください。実施時点の履歴は[検証記録](development/PROGRESS.md)、整理前の本文は[保存原文](legacy/2026-10-20/README.md)に分けます。
 
 ## 現在の実装と続く設計
+
+[シナリオの版切替](scenarios/SCENARIO_EDITIONS.md)を実装しました。新規開始の初期設定は最新版（第2版）、旧セーブは初版として再開します。版ごとに自動保存・手動3枠・進行全体を分離し、q001をGAMEBOOKのv1.2bで改稿しました。ほかの209件は初版を継承します。
 
 [ショップ・スキル屋と旅支度](ui/SHOP_AND_PREPARATIONS.md)では、商品購入・独立施設のスキル屋・旅道具店の補給工房を分離しました。商品一覧と技能一覧はそれぞれ固定領域内をスクロールします。
 

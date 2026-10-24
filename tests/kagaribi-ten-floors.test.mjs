@@ -43,7 +43,7 @@ for(const [scene,old] of Object.entries(fixtures))test(`actual 1.26 fixture: ${s
  const g=newGame();g.load(JSON.stringify(old));const s=structuredClone(g.state);s.contentVersion=old.state.contentVersion;
  for(const k of ['legacyOilRoute','legacySootRoute','legacyAltarRoute','legacyShopTier'])delete s.flags.kagaribi?.[k];
  if(!old.state.flags.kagaribi&&s.flags.kagaribi&&!Object.keys(s.flags.kagaribi).length)delete s.flags.kagaribi;
- assert.deepEqual(s,old.state);checkpoint(g);
+ assert.deepEqual(s,{...old.state,scenarioEdition:'e1'});checkpoint(g);
  if(scene==='choice'){assert.equal(g.state.waiting.type,'choice');assert.ok(g.dispatch({type:'choose',id:'open'}));drain(g);assert.ok(g.state.flags.kagaribi.kilnGate);}
  if(scene==='town'){assert.equal(g.state.expedition.learned.ada.exp_row_sweep,1);goTownLocation(g,data.expedition.skillShopLocation);assert.ok(skillPurchasePlan(data,g.state,'ada','exp_stance_break',1).reason.includes('足りません'));}
  if(scene==='field'){assert.equal(g.state.flags.kagaribi.legacyOilRoute,true);assert.equal(g.state.flags.kagaribi.legacySootRoute,true);assert.equal(g.state.flags.kagaribi.legacyAltarRoute,true);assert.equal(g.state.expedition.camps.kagaribi_gate.relay,true);}

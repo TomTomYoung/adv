@@ -41676,6 +41676,7 @@ export const referenceData={
     "data/quests/q209.json",
     "data/quests/q210.json",
     "data/regions.json",
+    "data/scenario-editions.json",
     "data/scripts/cell-events.json",
     "data/scripts/common.json",
     "data/scripts/dungeon-packages.json",
@@ -44192,6 +44193,17 @@ export const referenceData={
       },
       "workshop": {
         "name": "workshop"
+      }
+    },
+    "scenarioEditions": {
+      "schemaVersion": {
+        "name": "schemaVersion"
+      },
+      "latest": {
+        "name": "latest"
+      },
+      "editions": {
+        "name": "editions"
       }
     },
     "quests": {
