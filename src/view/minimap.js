@@ -13,7 +13,7 @@ export function mapSection(model,{onExpand}={}){
   const d=model.dungeon,section=make('section','side-section map-section');
   const header=make('div','map-heading');header.append(make('span','eyebrow','測量図'));
   if(onExpand){const expand=make('button','map-expand','拡大');expand.type='button';expand.dataset.focus='map:expand';expand.setAttribute('aria-label','地図を拡大');expand.setAttribute('aria-haspopup','dialog');expand.addEventListener('click',onExpand);header.append(expand);}
-  section.append(header,make('p','muted',`${model.lightLabel??'灯油'} ${model.light}/${model.lightMax}`));
+  section.append(header,make('p','muted',`${model.lightLabel??'灯油'} ${model.light}/${model.lightMax}`),make('p','muted map-position',`現在地 (${d.location.x}, ${d.location.y})`));
   if(model.scouting?.recon)section.append(make('p','map-note',`${model.scouting.recon.name}は偵察中（あと${model.scouting.recon.remaining}歩）。`));
   const effects=model.scouting?.effects??{};
   for(const [id,label] of [['ambush','奇襲'],['patrol','哨戒'],['camouflage','迷彩']])if(effects[id])section.append(make('p','map-note',`${label}：残り${effects[id].remaining}歩${id==='ambush'?`・先制${effects[id].actions}回`:''}`));
