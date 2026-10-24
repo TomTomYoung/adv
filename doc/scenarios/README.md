@@ -6,6 +6,8 @@
 
 ## シナリオの版
 
+[トルネアとオッドランドの背景設定](../world/TORNEA_ODDLAND.md)は作者向け設定資料です。現行の初版・第2版へ本文や伏線を挿入せず、オッドランド関連シナリオの起案・追加・実装はユーザーの明示指示まで保留します。[着手条件](../HANDOFF.md#オッドランド関連は明示指示まで保留)を守ってください。
+
 [SCENARIO_EDITIONS.md](SCENARIO_EDITIONS.md)：初版と第2版の切替、最新版の初期設定、版別の保存と継承範囲。
 
 [SCENARIO_MODEL_V12B.md](SCENARIO_MODEL_V12B.md)：第2版に採用するGAMEBOOKモデルv1.2bの全文。
