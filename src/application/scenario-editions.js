@@ -41,6 +41,12 @@ export class ScenarioEditionSession{
     return edition==='e1'?this.readStorage(slot):null;
   }
   readSlot(number){return this.readSave(this.activeEdition,this.slotName(number));}
+  exportSave(){
+    if(!this.requiresRecovery)return this.engine.save();
+    const raw=this.readSave(this.activeEdition);
+    if(raw===null)throw Error('保護中の自動記録を読み取れませんでした。仮の新規状態は書き出していません。');
+    return raw;
+  }
   slotName(number){if(![1,2,3].includes(number))throw Error('保存枠が不正です。');return `slot${number}`;}
   async editionData(edition){
     edition=resolveScenarioEdition(this.catalog,edition);

@@ -124,6 +124,25 @@ test('a corrupt startup auto is protected until explicit recovery and survives s
   await session.switchEdition('latest');assert.equal(session.activeEdition,'e2');assert.equal(storage.getItem(prefix+'auto'),raw);
 });
 
+for(const source of ['legacy','registry'])test(`a corrupt ${source} auto exports its original bytes instead of the temporary new game`,async()=>{
+  const raw='\uFEFF{\r\n  "壊れた記録": true,\r\n  \t',edition=source==='legacy'?'e1':'e2';
+  const entries=source==='legacy'?{[prefix+'auto']:raw}:{[key]:JSON.stringify({schemaVersion:1,preference:'latest',active:edition,editions:{[edition]:{auto:raw,slot1:saved(edition,27)}}})};
+  const {session,storage}=fixture(entries),before=storage.snapshot();assert.equal((await session.start()).recovery,true);
+  const engine=session.engine,exported=session.exportSave();assert.equal(session.requiresRecovery,true);assert.equal(session.activeEdition,edition);
+  assert.ok(Buffer.from(exported,'utf8').equals(Buffer.from(raw,'utf8')));assert.notEqual(exported,engine.save());assert.deepEqual(storage.snapshot(),before);assert.equal(session.engine,engine);
+});
+
+test('normal export includes current progress and does not change any stored record',async()=>{
+  const {session,storage}=fixture();await session.start();session.engine.state.moves=41;const before=storage.snapshot();
+  assert.equal(session.exportSave(),session.engine.save());assert.equal(JSON.parse(session.exportSave()).state.moves,41);assert.deepEqual(storage.snapshot(),before);
+});
+
+test('protected export refuses missing or unreadable raw without falling back to the temporary game',async()=>{
+  const {session,storage}=fixture({[prefix+'auto']:'broken legacy auto'});await session.start();const before=storage.snapshot(),engine=session.engine;
+  storage.readError=true;assert.throws(()=>session.exportSave(),/blocked storage/);assert.deepEqual(storage.snapshot(),before);assert.equal(session.engine,engine);
+  storage.readError=false;storage.values.delete(prefix+'auto');const absent=storage.snapshot();assert.throws(()=>session.exportSave(),/保護中の自動記録/);assert.deepEqual(storage.snapshot(),absent);assert.equal(session.engine,engine);
+});
+
 test('a malformed registry and an external tab update never get overwritten',async()=>{
   const malformed=fixture({[key]:'invalid registry'});await assert.rejects(malformed.session.start(),/記録一覧/);assert.equal(malformed.storage.getItem(key),'invalid registry');
   const {session,storage}=fixture();await session.start();const external=JSON.stringify({schemaVersion:1,preference:'e1',active:'e1',editions:{e1:{auto:saved('e1',99)}}});storage.values.set(key,external);

@@ -41,13 +41,14 @@ const origin=`http://127.0.0.1:${server.address().port}`,checks=[],errors=[];
 let browser,activePage;
 try{
   browser=await chromium.launch({executablePath:process.env.ADV_BROWSER_EXECUTABLE,headless:true,args:['--no-sandbox','--disable-gpu']});
-  async function openPage({legacy=false,viewport={width:1382,height:844}}={}){
+  async function openPage({legacy=false,autosave=null,viewport={width:1382,height:844}}={}){
     const context=await browser.newContext({viewport});const page=await context.newPage();activePage=page;page.setDefaultTimeout(15000);
     page.on('pageerror',error=>errors.push(error.message));
     if(legacy)await page.addInitScript(({prefix,save})=>{
       if(!localStorage.getItem(prefix+'auto'))localStorage.setItem(prefix+'auto',save);
       if(!localStorage.getItem(prefix+'slot1'))localStorage.setItem(prefix+'slot1',save);
     },{prefix,save:legacySave});
+    else if(autosave!==null)await page.addInitScript(({prefix,save})=>localStorage.setItem(prefix+'auto',save),{prefix,save:autosave});
     await page.goto(origin+'/adv/');await page.waitForSelector('.scene-stage');
     if(process.env.ADV_BROWSER_FONT)await page.addStyleTag({content:'@font-face{font-family:EditionTestJapanese;src:url(/adv/__font.otf)}body{font-family:EditionTestJapanese,sans-serif!important}html{--story-font:EditionTestJapanese,sans-serif!important}'});
     return {context,page};
@@ -134,6 +135,15 @@ try{
   assert.equal(await rawRegistry(page),beforeFetch);assert.match(await page.locator('#scenario-edition-current').innerText(),/初版/);
   breakSecond=false;await page.getByRole('button',{name:'この版で再開',exact:true}).click();await waitEdition(page,'e2');
   checks.push('missing edition content fails without overwriting saves and a retry succeeds');await context.close();
+
+  const damaged='{"broken":true}\n  ';
+  ({context,page}=await openPage({autosave:damaged}));await menu(page);
+  const protectedBefore=await rawRegistry(page),protectedDownloadEvent=page.waitForEvent('download');
+  await page.getByRole('button',{name:'保護中の記録を書き出す',exact:true}).click();const protectedDownload=await protectedDownloadEvent;
+  assert.equal(protectedDownload.suggestedFilename(),'lantern-archive-e1-protected-save.json');
+  assert.equal(await fs.readFile(await protectedDownload.path(),'utf8'),damaged,'recovery exports the original bytes, never the temporary fresh engine');
+  assert.equal(await page.evaluate(key=>localStorage.getItem(key),prefix+'auto'),damaged);assert.equal(await rawRegistry(page),protectedBefore);
+  checks.push('unreadable startup saves can be exported byte-for-byte while remaining protected');await context.close();
 
   ({context,page}=await openPage({viewport:{width:390,height:844}}));await menu(page);
   await page.locator('[data-focus="select:シナリオ版"]').click();

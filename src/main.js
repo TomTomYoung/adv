@@ -79,7 +79,10 @@ function menu(){
     row.append(make('span',`記録 ${i}${existing!==null?' / 保存あり':' / 空き'}`),btn('ここへ保存',()=>{try{editionSession.saveSlot(i);status(`${editionSession.label()}の記録${i}へ保存しました。`);menu();}catch(error){status(error.message);}}));
     const load=btn('読み込む',()=>editionAction(()=>editionSession.loadSlot(i)));load.disabled=existing===null;row.append(load);dialog.append(row);
   }
-  const row=make('div');row.className='modal-row';row.append(btn('記録ファイルを書き出す',()=>download(`lantern-archive-${editionSession.activeEdition}-save.json`,engine.save())));dialog.append(row);
+  const row=make('div');row.className='modal-row';row.append(btn(editionSession.requiresRecovery?'保護中の記録を書き出す':'記録ファイルを書き出す',()=>{
+    try{const text=editionSession.exportSave();download(`lantern-archive-${editionSession.activeEdition}-${editionSession.requiresRecovery?'protected-':''}save.json`,text);}
+    catch(error){status(`記録を書き出せませんでした。 ${error.message}`);}
+  }));dialog.append(row);
   const label=make('label','記録ファイルを読み込む'),input=make('input');input.type='file';input.accept='.json,application/json';input.addEventListener('change',()=>{const f=input.files[0];if(!f)return;editionAction(async()=>{if(f.size>data.system.maxSaveBytes)throw Error('記録ファイルが大きすぎます。');await editionSession.importSave(await f.text());});});label.append(input);dialog.append(label);
   const battleLabel=make('label','戦闘方式'),battleMode=make('select');battleMode.setAttribute('aria-label','戦闘方式');for(const [id,name] of [['auto','自動（遭遇設定に従う）'],['classic','従来式'],['grid','Grid（位置・射程）'],['frontline','Frontline（前中後衛）']])battleMode.append(new Option(name,id));battleMode.value=lastModel.battleModePreference;battleMode.disabled=lastModel.busy;battleMode.addEventListener('change',()=>dispatch({type:'battle.mode.set',mode:battleMode.value}));battleLabel.append(battleMode);dialog.append(battleLabel,make('p','次の戦闘から反映します。戦闘側で指定された方式が優先されます。'));
   const section=make('div');section.className='modal-section';const volumeLabel=make('label','音量'),volume=make('input');volume.type='range';volume.min='0';volume.max='100';volume.value=String(settings.volume*100);volume.addEventListener('input',()=>{settings.volume=Number(volume.value)/100;storageWrite('settings',JSON.stringify(settings));syncAudio();});volumeLabel.append(volume);section.append(volumeLabel,make('p','音量0は消音です。右上の「音：再生中」で再生状態を確認できます。'));
