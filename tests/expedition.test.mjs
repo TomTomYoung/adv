@@ -31,7 +31,7 @@ const repair=(g,camp='kagaribi_gate')=>{if(camp==='kagaribi_relay')g.state.flags
 const roundtrip=g=>{const saved=g.save();assert.deepEqual(validateSave(JSON.parse(saved),g.data),[]);g.load(saved);assert.equal(g.save(),saved);};
 const town=g=>{assert.ok(g.returnTown());goTownLocation(g,g.data.expedition.shopLocation);};
 function equipped(g,actor,item){g.give(item,1);assert.ok(g.dispatch({type:'equip',actor,item}));}
-function shop(){const g=game();repair(g,'kagaribi_relay');assert.ok(action(g,'relay','kagaribi_relay'));town(g);equipped(g,'ada','iron_sword');equipped(g,'sera','staff');equipped(g,'il','staff');g.state.expedition.gems=10000;return g;}
+function shop(){const g=game();repair(g,'kagaribi_relay');assert.ok(action(g,'relay','kagaribi_relay'));town(g);goTownLocation(g,g.data.expedition.skillShopLocation);equipped(g,'ada','iron_sword');equipped(g,'sera','staff');equipped(g,'il','staff');g.state.expedition.gems=10000;return g;}
 const buy=(g,actor,skill,level=1)=>g.dispatch({type:'skill.buy',actor,skill,level});
 
 test('supply equipment is revealed after q001, requires local rope, and rewards repair exactly once',()=>{
@@ -120,7 +120,7 @@ test('unavailable purchases never charge: no weapon, no gems, wrong location, bu
   g.state.expedition.gems=0;assert.equal(buy(g,'ada','exp_row_sweep'),false);assert.equal(g.state.expedition.learned.ada,undefined);
   g.state.expedition.gems=500;assert.ok(g.dispatch({type:'unequip',actor:'ada',slot:'weapon'}));assert.equal(buy(g,'ada','exp_row_sweep'),false);
   goTownLocation(g,g.data.game.world.townRoot);assert.equal(buy(g,'il','exp_chain_flame'),false);assert.equal(g.state.expedition.gems,500);
-  goTownLocation(g,g.data.expedition.shopLocation);g.run('prologue');assert.equal(buy(g,'il','exp_chain_flame'),false);assert.equal(g.state.expedition.gems,500);
+  goTownLocation(g,g.data.expedition.skillShopLocation);g.run('prologue');assert.equal(buy(g,'il','exp_chain_flame'),false);assert.equal(g.state.expedition.gems,500);
 });
 test('paid healing upgrades increase the granted target count and cleanse wet without restoring dead actors',()=>{
   const g=shop(),id='exp_clearwater_aid';for(const level of [1,2,3])assert.ok(buy(g,'sera',id,level));
@@ -162,7 +162,7 @@ for(const layout of ['classic','scene'])test(`${layout}: skill shop selection is
   const ui={status(){},menu(){},help(){},sound(){},soundEnabled:()=>false,effectsMode:()=> 'off'};
   const dispatch=intent=>{intents.push(intent);const changed=g.dispatch(intent);view.render(projectGame(g));return changed;};
   try{
-    view=replaceView(null,layout,dom.root,dispatch,ui);view.tab='shop';view.render(projectGame(g));const before=g.save();
+    view=replaceView(null,layout,dom.root,dispatch,ui);view.tab='skills';view.render(projectGame(g));const before=g.save();
     const card=[...dom.root.querySelectorAll('.skill-shop-card')].find(c=>c.textContent.includes('横列払い'));assert.ok(card);assert.equal(g.save(),before);
     card.querySelector('button').click();assert.equal(intents.filter(i=>i.type==='skill.buy').length,1);assert.equal(g.state.expedition.learned.ada.exp_row_sweep,1);
     goTownLocation(g,g.data.game.world.townRoot);view.render(projectGame(g));view.tab='regions';view.render(projectGame(g));const b=[...dom.root.querySelectorAll('button')].find(b=>b.textContent==='7F 中継篝火の補給営から再開');assert.ok(b);b.click();assert.equal(g.state.location.map,'kagaribi_relay');

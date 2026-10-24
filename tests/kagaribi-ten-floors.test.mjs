@@ -30,11 +30,11 @@ test('3F to 4F supply dependency, first-only experience and 4F/7F skill shelves 
  const g=ready();at(g,'kagaribi_crossroads');const before=g.save();assert.equal(act(g,'kagaribi_crossroads','repair'),false);assert.equal(g.state.expedition.gems,0);
  at(g,'kagaribi_gate');assert.ok(act(g,'kagaribi_gate','repair'));assert.equal(act(g,'kagaribi_gate','relay'),false);
  assert.ok(g.returnTown());goTownLocation(g,'hikarigaeri_shop');g.give('iron_sword',1);g.dispatch({type:'equip',actor:'ada',item:'iron_sword'});
- assert.equal(skillPurchasePlan(data,g.state,'ada','exp_row_sweep',1).ok,false);assert.equal(purchasePlan(g,'exp_t1_sword').ok,false);
+ assert.equal(purchasePlan(g,'exp_t1_sword').ok,false);goTownLocation(g,data.expedition.skillShopLocation);assert.equal(skillPurchasePlan(data,g.state,'ada','exp_row_sweep',1).ok,false);
  g.give('rope',5);const xp=g.state.actors.ada.xp;at(g,'kagaribi_manifold');assert.ok(act(g,'kagaribi_manifold','repair'));assert.equal(g.state.actors.ada.xp,xp+600);assert.equal(act(g,'kagaribi_manifold','repair'),false);assert.equal(g.state.actors.ada.xp,xp+600);
  at(g,'kagaribi_crossroads');assert.ok(act(g,'kagaribi_crossroads','repair'));assert.ok(act(g,'kagaribi_crossroads','relay'));assert.equal(g.state.actors.ada.xp,xp+1400);checkpoint(g);
  assert.ok(g.returnTown());goTownLocation(g,'hikarigaeri_shop');g.state.gold=500;assert.ok(purchasePlan(g,'exp_t1_sword').ok);assert.ok(g.dispatch({type:'buy',item:'exp_t1_sword'}));assert.equal(g.state.inventory.exp_t1_sword,1);
- g.state.expedition.gems=500;assert.ok(skillPurchasePlan(data,g.state,'ada','exp_row_sweep',1).ok);
+ goTownLocation(g,data.expedition.skillShopLocation);g.state.expedition.gems=500;assert.ok(skillPurchasePlan(data,g.state,'ada','exp_row_sweep',1).ok);
  at(g,'kagaribi_relay');assert.equal(act(g,'kagaribi_relay','repair'),false);
  g.state.flags.kagaribi={kilnGate:true};assert.ok(act(g,'kagaribi_relay','repair'));assert.equal(expeditionShopTier(data,g.state),1);assert.ok(act(g,'kagaribi_relay','relay'));assert.equal(expeditionShopTier(data,g.state),2);assert.equal(g.state.expedition.capacity,270);checkpoint(g);
 });
@@ -45,7 +45,7 @@ for(const [scene,old] of Object.entries(fixtures))test(`actual 1.26 fixture: ${s
  if(!old.state.flags.kagaribi&&s.flags.kagaribi&&!Object.keys(s.flags.kagaribi).length)delete s.flags.kagaribi;
  assert.deepEqual(s,old.state);checkpoint(g);
  if(scene==='choice'){assert.equal(g.state.waiting.type,'choice');assert.ok(g.dispatch({type:'choose',id:'open'}));drain(g);assert.ok(g.state.flags.kagaribi.kilnGate);}
- if(scene==='town'){assert.equal(g.state.expedition.learned.ada.exp_row_sweep,1);assert.ok(skillPurchasePlan(data,g.state,'ada','exp_stance_break',1).reason.includes('足りません'));}
+ if(scene==='town'){assert.equal(g.state.expedition.learned.ada.exp_row_sweep,1);goTownLocation(g,data.expedition.skillShopLocation);assert.ok(skillPurchasePlan(data,g.state,'ada','exp_stance_break',1).reason.includes('足りません'));}
  if(scene==='field'){assert.equal(g.state.flags.kagaribi.legacyOilRoute,true);assert.equal(g.state.flags.kagaribi.legacySootRoute,true);assert.equal(g.state.flags.kagaribi.legacyAltarRoute,true);assert.equal(g.state.expedition.camps.kagaribi_gate.relay,true);}
 });
 test('damaged 1.26 camp state cannot acquire migration exemptions',()=>{

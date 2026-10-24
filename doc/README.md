@@ -1,8 +1,10 @@
 # adv ドキュメント
 
-現行説明の照合日: 2026-10-23。作品版1.34.0。[現在の状態](CURRENT_STATUS.md)、[現行仕様](SPEC.md)、[採用仕様と次工程](HANDOFF.md)、[浅層工房と封蝋](dungeons/SHALLOW_WORKSHOP.md)から確認してください。実施時点の履歴は[検証記録](development/PROGRESS.md)、整理前の本文は[保存原文](legacy/2026-10-20/README.md)に分けます。
+現行説明の照合日: 2026-10-24。作品版1.34.0。[現在の状態](CURRENT_STATUS.md)、[現行仕様](SPEC.md)、[採用仕様と次工程](HANDOFF.md)、[浅層工房と封蝋](dungeons/SHALLOW_WORKSHOP.md)から確認してください。実施時点の履歴は[検証記録](development/PROGRESS.md)、整理前の本文は[保存原文](legacy/2026-10-20/README.md)に分けます。
 
 ## 現在の実装と続く設計
+
+[ショップ・スキル屋と旅支度](ui/SHOP_AND_PREPARATIONS.md)では、商品購入・独立施設のスキル屋・旅道具店の補給工房を分離しました。商品一覧と技能一覧はそれぞれ固定領域内をスクロールします。
 
 [給油・中継所・技能教習](dungeons/EXPEDITION_IMPLEMENTATION.md)は4迷宮の21設備に接続済みです。篝火1〜10F・10F主・武器18種を接続済みです。容量180→270、無料給油、次回の中継出発、技能宝石、人物別19技能と11技能のLv2/Lv3購入を利用できます。[帰路・成長の測定](dungeons/KAGARIBI_TEN_FLOORS.md)は近道・依頼逆順・弓装備を含む60条件まで確認し、[地下水道の1〜10F](dungeons/WATERWAY_TEN_FLOORS.md)も経路・設備・主を接続しました。[廃坑1〜10F](dungeons/MINE_TEN_FLOORS.md)も洗浄・帰路・設備・主を接続しました。水道と廃坑の6〜9F低位混成・修理材も接続済みです。[庭園の栽培経路](dungeons/GARDEN_SHALLOW_ROUTES.md)は1〜10F・4/7F設備・固定帰路まで接続しました。庭園10Fの大剪定虫・有限増援・種床設備・根留めも接続しました。
 

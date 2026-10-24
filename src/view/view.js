@@ -1,4 +1,4 @@
-import {renderSkillShop} from './expedition-view.js';
+import {renderSkillShop,renderSupplyShop} from './expedition-view.js';
 import {frontlineScene,renderFrontlineControls} from './battle-frontline.js';
 import {gridScene,renderGridControls} from './battle-grid.js';
 import {SceneCastRenderer} from './scene-cast.js';
@@ -69,7 +69,7 @@ export class GameView {
     if(this.ui.modalOpen?.())return;
     if(this.resumeExploration())return;
     const scope=this.inputScope(),selected=this.pendingBattleAction?.target==='enemy'?this.selectedTarget:this.selectedAlly;
-    const preferred=(this.inventoryAction?.kind==='buy'?scope.querySelector('.shop-recipients button:not(:disabled)'):null)??scope.querySelector('.choices button:not(:disabled), .continue')??(this.pendingBattleAction?buttons(scope).find(b=>b.dataset.focus===`target:${selected}`):null);
+    const preferred=(this.inventoryAction?.kind==='buy'?scope.querySelector('.shop-recipients button:not(:disabled)')??scope.querySelector('.shop-product[aria-pressed="true"]'):null)??scope.querySelector('.choices button:not(:disabled), .continue')??(this.pendingBattleAction?buttons(scope).find(b=>b.dataset.focus===`target:${selected}`):null);
     restoreFocus(scope,same?snapshot:null,preferred??(same?null:buttons(scope.querySelector('.scene-window-body')??(!['location','explore'].includes(this.tab)?scope.querySelector('.panel-content'):null)??scope)[0]));
   }
   openCharacter(id){this.profileActor=id;this.profilePage='overview';this.inventoryAction=null;this.tab='profile';this.render(this.model);}
@@ -105,7 +105,7 @@ export class GameView {
     const status=node('div','status-strip');for(const text of [`${model.mode==='town'?(model.town?.name??'灯帰りの町'):model.dungeon?.name}`,`${model.gold} G`,...(model.expedition?[`技能宝石 ${model.expedition.gems}`]:[]),`依頼 ${model.completed} / ${model.total}`])status.append(node('span','',text));this.root.append(status);
     const layout=node('main','game-layout'),main=node('section','main-panel'),side=node('aside','side-panel');main.dataset.fx='screen';side.dataset.fx='party';layout.append(main,side);this.root.append(layout);
     const tabs=node('nav','tabs');tabs.setAttribute('aria-label','表示する内容');
-    const allTabs=model.mode==='town'?[['location',model.town?.interior?'詰所':'町・施設'],...(model.town?.shop?[['shop','ショップ']]:[]),...(model.town?.quests?[['quests','依頼掲示板']]:[]),...(model.town?.dungeons.length?[['regions','迷宮へ']]:[]),['party','隊の状態'],['bag','旅支度'],['journal','冒険手帳']]:[['explore','探索'],['bag','旅支度'],['party','隊の状態'],['journal','冒険手帳']];
+    const allTabs=model.mode==='town'?[['location',model.town?.interior?'詰所':'町・施設'],...(model.town?.shop?[['shop','ショップ']]:[]),...(model.expedition?.shop?[['supply','補給・工房']]:[]),...(model.expedition?.skillShop?[['skills','スキル屋']]:[]),...(model.town?.quests?[['quests','依頼掲示板']]:[]),...(model.town?.dungeons.length?[['regions','迷宮へ']]:[]),['party','隊の状態'],['bag','旅支度'],['journal','冒険手帳']]:[['explore','探索'],['bag','旅支度'],['party','隊の状態'],['journal','冒険手帳']];
     if(this.tab==='profile'&&model.mode==='town')allTabs.push(['profile','キャラクター']);
     if(!allTabs.some(([id])=>id===this.tab))this.tab=model.mode==='town'?'location':'explore';
     if(this.inventoryAction&&(this.inventoryAction.kind==='buy'?this.tab!=='shop':this.tab!=='bag'))this.inventoryAction=null;
@@ -122,6 +122,8 @@ export class GameView {
     else if(this.tab==='profile')this.profile(main,model);
     else if(this.tab==='bag')this.bag(main,model);
     else if(this.tab==='shop')this.shop(main,model);
+    else if(this.tab==='skills')this.skills(main,model);
+    else if(this.tab==='supply')this.supply(main,model);
     else this.journal(main,model);
     if(!model.dialog?.scene)this.castRenderer.reset();
     this.sidebar(side,model);
@@ -144,7 +146,9 @@ export class GameView {
     for(const service of t.services)choices.append(button(`${service.label} — ${service.detail}`,()=>this.act({type:'service',id:service.id}),'',t.busy));
     if(t.quests)choices.append(button('依頼掲示板を見る',()=>{this.tab='quests';this.render(m);}));
     if(t.party)choices.append(button('仲間と旅支度を相談する',()=>{this.tab='party';this.render(m);}));
-    if(t.shop)choices.append(button(m.expedition?.shop?'旅道具・技能教習所を見る':'ショップを見る',()=>{this.tab='shop';this.render(m);}));
+    if(t.shop)choices.append(button('ショップを見る',()=>{this.tab='shop';this.render(m);}));
+    if(m.expedition?.shop)choices.append(button('補給・工房を見る',()=>{this.tab='supply';this.render(m);}));
+    if(m.expedition?.skillShop)choices.append(button('スキル屋を見る',()=>{this.tab='skills';this.render(m);}));
     if(t.dungeons.length&&m.tracked?.entryDungeon)this.questEntrance(choices,m.tracked);
     if(t.dungeons.length)choices.append(button('迷宮へ続く階段へ',()=>{this.tab='regions';this.render(m);},'primary'));
     if(t.parent)choices.append(button(`${t.parent.name}へ戻る`,()=>this.act({type:'location.move',id:t.parent.id}),'location-back',t.busy));
@@ -302,7 +306,9 @@ export class GameView {
   profile(parent,m){renderCharacter(this,parent,m);}
   party(parent,m){renderParty(this,parent,m);}
   bag(parent,m){renderBag(this,parent,m);}
-  shop(parent,m){renderShop(this,parent,m);renderSkillShop(this,parent,m);}
+  shop(parent,m){renderShop(this,parent,m);}
+  skills(parent,m){renderSkillShop(this,parent,m);}
+  supply(parent,m){renderSupplyShop(this,parent,m);}
   journal(parent,m){const section=node('div','panel-content');section.append(heading('FIELD NOTES','冒険手帳'));if(m.ending){const ending=node('article','ending');ending.append(node('span','eyebrow','終幕'),node('h2','',m.ending.title),node('p','',m.ending.text));section.append(ending);}
     const active=m.quests.filter(q=>q.stage==='active');if(active.length){section.append(node('h3','','受注中'));for(const q of active){const entry=node('article','journal-entry');entry.append(node('h3','',q.title));this.questDestination(entry,q);this.mainQuestControl(entry,q,m);this.questEntrance(entry,q);section.append(entry);}}
     for(const note of m.fieldNotes??[]){const row=node('article','journal-entry');row.append(node('span','eyebrow','現地の観察'),node('h3','',note.title),node('p','muted',m.quests.find(q=>q.id===note.quest)?.title??''),node('p','',note.text));section.append(row);}

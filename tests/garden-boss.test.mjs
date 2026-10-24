@@ -80,7 +80,7 @@ test('root gate cancel/escape do not unlock; victory and central repairs pay onc
 });
 
 for(const mode of ['classic','grid','frontline'])test(`${mode}: purchased roots cost 180 gems/8 MP, cap two targets, block movement or reduce accuracy for this round`,()=>{
- const g=ready();g.returnTown();goTownLocation(g,data.expedition.shopLocation);assert.ok(g.dispatch({type:'job.change',actor:'il',job:'druid'}));g.give('exp_t1_staff',1);assert.ok(g.dispatch({type:'equip',actor:'il',item:'exp_t1_staff'}));g.state.expedition.gems=500;
+ const g=ready();g.returnTown();goTownLocation(g,data.expedition.skillShopLocation);assert.ok(g.dispatch({type:'job.change',actor:'il',job:'druid'}));g.give('exp_t1_staff',1);assert.ok(g.dispatch({type:'equip',actor:'il',item:'exp_t1_staff'}));g.state.expedition.gems=500;
  assert.equal(skillPurchasePlan(data,g.state,'il','exp_root_bind',1).ok,false);g.state.expedition.camps.garden_central={supply:true,relay:false};enableOil(data,g.state);assert.ok(g.dispatch({type:'skill.buy',actor:'il',skill:'exp_root_bind',level:1}));assert.equal(g.state.expedition.gems,320);assert.equal(g.dispatch({type:'skill.buy',actor:'il',skill:'exp_root_bind',level:1}),false);assert.equal(g.skills('sera').includes('exp_root_bind'),false);
  const encounter=g.data.encounters.garden_root_guardian;encounter.enemies.push('garden_nectar_bee');encounter.enemyPositions=[{x:2,y:1},{x:2,y:2},{x:3,y:1}];encounter.frontlinePositions=[{lane:2,depth:1},{lane:2,depth:0},{lane:3,depth:1}];
  g.startBattle(encounter.id,{}, {battleMode:mode,manualTurns:true});g.random=()=>.5;

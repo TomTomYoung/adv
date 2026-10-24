@@ -8,7 +8,7 @@
 
 迷宮から帰った人々が灯を囲む広場。施設の戸口と、迷宮へ下りる道が見える。
 
-親: 町の起点。子: 旅道具店 (hikarigaeri_shop) / 帰り火亭 (hikarigaeri_tavern) / 灯番組合 (hikarigaeri_guild) / 医学校 (hikarigaeri_medical) / 保険審査所 (hikarigaeri_insurance) / 地下水道上層・待避場 (hikarigaeri_waterwatch) / 通行資格審査所 (hikarigaeri_pass_registry)。追加の移動先: なし。
+親: 町の起点。子: 旅道具店 (hikarigaeri_shop) / スキル屋 (hikarigaeri_skill_shop) / 帰り火亭 (hikarigaeri_tavern) / 灯番組合 (hikarigaeri_guild) / 医学校 (hikarigaeri_medical) / 保険審査所 (hikarigaeri_insurance) / 地下水道上層・待避場 (hikarigaeri_waterwatch) / 通行資格審査所 (hikarigaeri_pass_registry)。追加の移動先: なし。
 
 機能: 会話・調査。
 
@@ -22,9 +22,19 @@
 
 親: 灯帰り・篝火広場 (hikarigaeri_square)。子: なし。追加の移動先: なし。
 
-機能: 取引 / 第2段階の武器を引き換える。
+機能: 取引 / 補給・工房 / 第2段階の武器を引き換える。
 
 背景: [location_shop](../../assets/images/locations/shop.webp)。
+
+## スキル屋 (hikarigaeri_skill_shop)
+
+技能宝石を持ち寄る教習所。仲間ごとに職業と武器を確かめ、新しい技能や上位の段階を習得する。
+
+親: 灯帰り・篝火広場 (hikarigaeri_square)。子: なし。追加の移動先: なし。
+
+機能: 技能教習。
+
+背景: [location_guild](../../assets/images/locations/guild.webp)。
 
 ## 帰り火亭 (hikarigaeri_tavern)
 

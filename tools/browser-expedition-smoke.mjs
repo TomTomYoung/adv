@@ -26,8 +26,8 @@ try{
   await page.evaluate(async layout=>{
    const {loadContent}=await import('./src/core/loader.js'),{GameEngine}=await import('./src/core/engine.js'),{projectGame}=await import('./src/application/projection.js'),{replaceView}=await import('./src/view/view-layout.js');
    const data=await loadContent();delete data.quests.q001.story;window.g=new GameEngine(data);while(g.state.waiting?.type==='text')g.dispatch({type:'advance'});g.accept('q001');g.complete('q001','informed');g.state.flags.kagaribi={kilnGate:true};g.teleport('kagaribi_relay',1,1,'east');
-   g.dispatch({type:'expedition.action',camp:'kagaribi_relay',action:'repair'});g.dispatch({type:'expedition.action',camp:'kagaribi_relay',action:'relay'});g.returnTown();g.state.expedition.gems=120;g.dispatch({type:'location.move',id:'hikarigaeri_shop'});g.give('iron_sword',1);g.dispatch({type:'equip',actor:'ada',item:'iron_sword'});
-   window.show=()=>view.render(projectGame(g));window.refreshView=()=>{window.view=replaceView(window.view??null,layout,document.querySelector('#app'),intent=>{const ok=g.dispatch(intent);show();return ok;},{status(){},menu(){},help(){},soundEnabled:()=>false,effectsMode:()=> 'off'});show();};refreshView();view.tab='shop';show();
+   g.dispatch({type:'expedition.action',camp:'kagaribi_relay',action:'repair'});g.dispatch({type:'expedition.action',camp:'kagaribi_relay',action:'relay'});g.returnTown();g.state.expedition.gems=120;g.dispatch({type:'location.move',id:g.data.expedition.skillShopLocation});g.give('iron_sword',1);g.dispatch({type:'equip',actor:'ada',item:'iron_sword'});
+   window.show=()=>view.render(projectGame(g));window.refreshView=()=>{window.view=replaceView(window.view??null,layout,document.querySelector('#app'),intent=>{const ok=g.dispatch(intent);show();return ok;},{status(){},menu(){},help(){},soundEnabled:()=>false,effectsMode:()=> 'off'});show();};refreshView();view.tab='skills';show();
   },layout);
   const card=page.locator('.skill-shop-card').filter({has:page.getByRole('heading',{name:'横列払い',exact:true})});await card.getByRole('button',{name:/Lv1を習得/}).click();
   assert.equal(await page.evaluate(()=>g.state.expedition.learned.ada.exp_row_sweep),1);
@@ -68,17 +68,17 @@ try{
   await finishText(page);
   // Separate UI fixture for the three new lessons; earned spending is measured
   // by the campaign suite, not by these supplied gems or victory flags.
-  await page.evaluate(()=>{g.state.expedition.gems=2000;g.give('rope',1);g.teleport('kagaribi_crossroads',1,1,'east');g.dispatch({type:'expedition.action',camp:'kagaribi_crossroads',action:'repair'});g.returnTown();g.dispatch({type:'location.move',id:'hikarigaeri_shop'});refreshView();view.tab='shop';view.skillShopActor='ada';show();});
+  await page.evaluate(()=>{g.state.expedition.gems=2000;g.give('rope',1);g.teleport('kagaribi_crossroads',1,1,'east');g.dispatch({type:'expedition.action',camp:'kagaribi_crossroads',action:'repair'});g.returnTown();g.dispatch({type:'location.move',id:g.data.expedition.skillShopLocation});refreshView();view.tab='skills';view.skillShopActor='ada';show();});
   const lesson=name=>page.locator('.skill-shop-card').filter({has:page.getByRole('heading',{name,exact:true})});
   await lesson('再起の呼吸').getByRole('button',{name:/Lv1を習得/}).click();
   assert.equal(await page.evaluate(()=>g.state.expedition.learned.ada.exp_second_breath),1);
   await page.evaluate(()=>{view.skillShopActor='sera';show();});
   assert.equal(await lesson('祓いの追撃').getByRole('button').isDisabled(),true);
   assert.match(await lesson('祓いの追撃').textContent(),/9F/);
-  await page.evaluate(()=>{g.give('rope',1);g.teleport('kagaribi_ossuary',1,1,'east');g.dispatch({type:'expedition.action',camp:'kagaribi_ossuary',action:'repair'});g.returnTown();g.dispatch({type:'location.move',id:'hikarigaeri_shop'});g.give('staff',1);g.dispatch({type:'equip',actor:'sera',item:'staff'});refreshView();view.tab='shop';view.skillShopActor='sera';show();});
+  await page.evaluate(()=>{g.give('rope',1);g.teleport('kagaribi_ossuary',1,1,'east');g.dispatch({type:'expedition.action',camp:'kagaribi_ossuary',action:'repair'});g.returnTown();g.dispatch({type:'location.move',id:g.data.expedition.skillShopLocation});g.give('staff',1);g.dispatch({type:'equip',actor:'sera',item:'staff'});refreshView();view.tab='skills';view.skillShopActor='sera';show();});
   await lesson('祓いの追撃').getByRole('button',{name:/Lv1を習得/}).click();
   assert.equal(await page.evaluate(()=>g.state.expedition.learned.sera.exp_purging_pursuit),1);
-  await page.evaluate(()=>{g.dispatch({type:'location.move',id:g.data.game.world.townRoot});g.dispatch({type:'location.move',id:'hikarigaeri_tavern'});g.dispatch({type:'job.change',actor:'ada',job:'knight'});g.dispatch({type:'location.move',id:g.data.game.world.townRoot});g.dispatch({type:'location.move',id:'hikarigaeri_shop'});refreshView();view.tab='shop';view.skillShopActor='ada';show();});
+  await page.evaluate(()=>{g.dispatch({type:'location.move',id:g.data.game.world.townRoot});g.dispatch({type:'location.move',id:'hikarigaeri_tavern'});g.dispatch({type:'job.change',actor:'ada',job:'knight'});g.dispatch({type:'location.move',id:g.data.game.world.townRoot});g.dispatch({type:'location.move',id:g.data.expedition.skillShopLocation});refreshView();view.tab='skills';view.skillShopActor='ada';show();});
   await lesson('受け流しの号令').getByRole('button',{name:/Lv1を習得/}).click();
   assert.equal(await page.evaluate(()=>g.state.expedition.learned.ada.exp_parry_command),1);
   assert.ok(await lesson('受け流しの号令').evaluate(card=>card.querySelector('h3').getBoundingClientRect().width>=card.getBoundingClientRect().width*.9),'lesson heading uses the card width');
@@ -116,11 +116,13 @@ try{
   await page.getByRole('button',{name:'水切り剣を1個製作',exact:true}).click();
   assert.equal(await page.evaluate(()=>g.state.gold),workshopBefore.gold-170);assert.equal(await page.evaluate(()=>g.state.inventory.exp_t2_sword),workshopBefore.count+1);
   await page.screenshot({path:path.join(output,`workshop-${layout}-${width}.png`)});
+  await page.getByRole('button',{name:layout==='scene'?'閉じる':'町・施設',exact:true}).click();
+  await page.getByRole('button',{name:'補給・工房を見る',exact:true}).click();
   await page.getByRole('button',{name:'携行容量330へ改修 — 120G',exact:true}).click();assert.equal(await page.evaluate(()=>g.state.expedition.capacity),330);assert.equal(await page.evaluate(()=>g.state.gold),workshopBefore.gold-290);
   assert.equal(await page.evaluate(()=>g.state.expedition.reserve+g.state.expedition.lamp.fuel+(g.state.inventory.torch??0)*90),workshopBefore.oil);
   assert.equal(await page.getByRole('button',{name:'携行容量330へ改修 — 120G',exact:true}).isDisabled(),true);
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'workshop horizontal overflow');
-  await page.evaluate(()=>{g.state.flags.mine={shellbreakerWon:true};g.teleport('region_2_f10',7,1);g.give('rope',1);g.dispatch({type:'expedition.action',action:'repair',camp:'mine_central'});g.returnTown();g.dispatch({type:'location.move',id:'hikarigaeri_shop'});g.dispatch({type:'job.change',actor:'sera',job:'apothecary'});g.give('medicine_kit',1);g.dispatch({type:'equip',actor:'sera',item:'medicine_kit'});g.healAll();refreshView();view.tab='shop';view.skillShopActor='sera';show();});
+  await page.evaluate(()=>{g.state.flags.mine={shellbreakerWon:true};g.teleport('region_2_f10',7,1);g.give('rope',1);g.dispatch({type:'expedition.action',action:'repair',camp:'mine_central'});g.returnTown();g.dispatch({type:'location.move',id:g.data.expedition.skillShopLocation});g.dispatch({type:'job.change',actor:'sera',job:'apothecary'});g.give('medicine_kit',1);g.dispatch({type:'equip',actor:'sera',item:'medicine_kit'});g.healAll();refreshView();view.tab='skills';view.skillShopActor='sera';show();});
   await lesson('封蝋手当').getByRole('button',{name:/Lv1を習得/}).click();
   await page.evaluate(()=>{g.teleport('region_2_f9',1,1);refreshView();view.tab='party';view.partySelection={party:'sera'};view.partyPages={party:'skills'};show();});
   const waxCard=page.locator('.profile-entry').filter({has:page.getByRole('heading',{name:/^封蝋手当/})});

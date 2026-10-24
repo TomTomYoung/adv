@@ -9,7 +9,7 @@ import {projectActorJob} from '../src/application/job-projection.js';
 import {oilLamp} from '../src/core/expedition-oil.js';
 
 const cast=(g,actor,ability)=>g.dispatch({type:'job.action',actor,ability});
-const town=g=>{assert.ok(g.returnTown());goTownLocation(g,'hikarigaeri_shop');};
+const town=g=>{assert.ok(g.returnTown());goTownLocation(g,g.data.expedition.skillShopLocation);};
 const roundtrip=g=>{const saved=g.save();assert.deepEqual(validateSave(JSON.parse(saved),g.data),[]);g.load(saved);assert.equal(g.save(),saved);};
 function repair(g,id){const c=g.data.expedition.camps.find(c=>c.id===id);g.teleport(c.map,c.x,c.y,c.facing);assert.ok(g.dispatch({type:'expedition.action',action:'repair',camp:id}));}
 function setup({unlock=true}={}){

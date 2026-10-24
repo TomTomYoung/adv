@@ -140,7 +140,7 @@ summary:has(button){list-style:none}summary>button{width:100%;text-align:left}
 /* Selection screens keep lists, details and recipients visible together. */
 .shop-panel{height:min(670px,calc(100dvh - 140px));min-height:330px;display:flex;flex-direction:column;overflow:hidden}
 .shop-panel .shop-heading{position:static;flex-shrink:0;margin-bottom:12px}
-.shop-contents{flex:1;min-height:0;display:grid;grid-template-columns:minmax(150px,42%) minmax(0,1fr);gap:16px}
+.shop-contents{flex:1;min-height:0;display:grid;grid-template-columns:minmax(150px,42%) minmax(0,1fr);grid-template-rows:minmax(0,1fr);gap:16px}
 .shop-products,.shop-details{overflow:auto;min-height:0;min-width:0;overscroll-behavior:contain;scrollbar-gutter:stable}
 .shop-products{display:flex;flex-direction:column;gap:6px;padding:2px}
 .shop-product{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;flex-shrink:0;min-width:0}.shop-product>span:first-child{overflow-wrap:anywhere}.shop-price{white-space:nowrap;color:var(--accent);font-variant-numeric:tabular-nums}
@@ -195,5 +195,21 @@ button.party-row{width:100%;text-align:left}
 
 .frontline-sprite.frontline-down{opacity:.45;filter:grayscale(1)}
 /* Lessons have no quest-number column; keep their text and controls together. */
+.skill-shop{height:min(670px,calc(100dvh - 140px));min-height:330px;min-width:0;display:flex;flex-direction:column;gap:12px;overflow:hidden}
+.skill-shop-heading{flex-shrink:0;min-width:0}.skill-shop-heading h2{margin:0 0 4px}.skill-shop-heading p{margin:0;font-size:14px;overflow-wrap:anywhere}
+.skill-shop-gems{color:var(--accent);font-weight:600;font-variant-numeric:tabular-nums}
+.skill-shop-actors{display:flex;gap:8px;flex-shrink:0;min-width:0;margin:0;overflow-x:auto;overscroll-behavior:contain;padding:2px}
+.skill-shop-actors button{flex-shrink:0;white-space:nowrap}.skill-shop-actors [aria-pressed=true]{border-color:var(--accent);background:var(--raised)}
+.skill-shop-products{flex:1;min-height:0;min-width:0;overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable;padding:2px}
 .quest-card.skill-shop-card{grid-template-columns:minmax(0,1fr);gap:8px}
-.skill-shop-card>button{justify-self:start;max-width:100%}
+.skill-shop-card>button{justify-self:start;max-width:100%;overflow-wrap:anywhere}.skill-shop-card h3,.skill-shop-card p{overflow-wrap:anywhere}
+.supply-panel button{max-width:100%;white-space:normal;overflow-wrap:anywhere}
+@media(max-width:600px){.skill-shop{padding:12px;gap:8px}.skill-shop-heading h2{font-size:20px}.skill-shop-heading p{font-size:12px}.skill-shop-actors{gap:5px}.skill-shop-actors button{padding:6px 10px;font-size:13px}}
+/* Short windows retain room for both the item list and purchase recipients. */
+@media(max-height:600px){
+  .shop-panel,.skill-shop{padding:10px 14px;min-height:300px}
+  .shop-panel .shop-heading{padding:0 0 5px;margin-bottom:7px}.shop-heading h2{font-size:20px}.shop-gold{font-size:16px;padding:4px 8px}
+  .shop-recipients{margin-top:8px;padding-top:6px}.shop-recipients h3{font-size:13px;margin-bottom:4px}.shop-recipients>p{font-size:11px;line-height:1.4}
+  .shop-character-cards{grid-auto-columns:minmax(180px,1fr)}.shop-character-cards .inventory-person{padding:4px 6px;gap:6px}.shop-character-cards .inventory-portrait{width:30px;height:42px}.shop-character-cards .inventory-person-text{line-height:1.3}.shop-character-cards .inventory-person-name{font-size:13px}.shop-character-cards .inventory-person-text small,.shop-character-cards .inventory-person-state{font-size:11px}
+  .skill-shop{gap:6px}.skill-shop-heading h2{font-size:20px}.skill-shop-heading p{font-size:12px}.skill-shop-actors button{padding:5px 10px;font-size:13px}
+}
