@@ -138,7 +138,8 @@ export class SceneView extends GameView{
     this.castRenderer.render(world,model.dialog?.scene??(model.town?{mode:'stage',cast:model.town.cast.map(c=>({...c,display:{x:c.x,...c.display}}))}:null),model.castCue,this.ui.effectsMode?.()??'full',model.feedback?.session);
     this.compactParty(hud,model);
     if(model.dungeon&&!model.battle){const map=make('div','scene-minimap');this.mapPanel(map,model);hud.append(map);}
-    if(model.notice&&model.notice!==model.dialog?.text){const notice=make('div','scene-notice',model.notice);notice.setAttribute('role','status');hud.append(notice);}
+    const displayedMessage=this.messageNodes?.dialog.text??model.dialog?.text;
+    if(model.notice&&model.notice!==displayedMessage){const notice=make('div','scene-notice',model.notice);notice.setAttribute('role','status');hud.append(notice);}
     if(panelNames[this.tab]){
       world.inert=true;hud.inert=true;dock.inert=true;
       const overlay=make('div','scene-overlay'),panel=make('section','scene-window');panel.dataset.panel=this.tab;panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','true');panel.setAttribute('aria-labelledby','scene-window-title');
