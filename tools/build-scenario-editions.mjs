@@ -1,3 +1,4 @@
+import {buildOddlandQuests} from './build-oddland-quests.mjs';
 import fs from 'node:fs/promises';
 import {buildOddlandGeography} from './build-oddland-geography.mjs';
 import {buildCompanionEdition} from './build-companion-edition.mjs';
@@ -112,6 +113,7 @@ export function secondEditionDocument(q,firstSha){
 export async function buildScenarioEditions({check=false}={}){
  await buildCompanionEdition({check});
  await buildOddlandGeography({check});
+ await buildOddlandQuests({check});
  const bytes=await fs.readFile(path.join(root,'data/quests/q001.json'));
  const q=buildSecondEditionQuest(JSON.parse(bytes));
  const files={

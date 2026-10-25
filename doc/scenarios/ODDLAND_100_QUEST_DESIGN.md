@@ -1,6 +1,6 @@
 # オッドランド100クエスト・設計カード
 
-2026-10-25。**全100件の企画段階。本文・分岐スクリプト・マップ・報酬数値は未実装**。[越境と受注の設計](../world/ODDLAND_ACCESS_DESIGN.md) ／ [移設調査](../dungeons/ODDLAND_RELOCATION_AUDIT.md) ／ [シナリオモデル](SCENARIO_MODEL_V12B.md) ／ [文章モデル](PROSE_MODEL_V1.md)。
+2026-10-25。100件の設計カードを保持する。2026-10-26に[第一群OD001〜010の本文・実移動・分岐・報酬](editions/e2/ODDLAND_FIRST_TEN.md)を実装。残る90企画は未実装。[越境と受注の設計](../world/ODDLAND_ACCESS_DESIGN.md) ／ [移設調査](../dungeons/ODDLAND_RELOCATION_AUDIT.md) ／ [シナリオモデル](SCENARIO_MODEL_V12B.md) ／ [文章モデル](PROSE_MODEL_V1.md)。
 
 [三地域の初期配分](REGIONAL_QUEST_ALLOCATION.md)では、既存60件＋本企画の第一・第六・第七・第八群40件をオッドランド100件とする条件付き案。ほか60企画も予備として全て保持する。以下の全100件の条件は候補集合の設計であり、初期に全件を配布する意味ではない。
 

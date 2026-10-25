@@ -30,7 +30,7 @@
 
 [REGIONAL_QUEST_ALLOCATION.md](REGIONAL_QUEST_ALLOCATION.md)：灯帰り・オッドランド・サロメ各100件の条件付き配分と旧保存の互換。個人80件は別枠。[JSON台帳](REGIONAL_QUEST_ALLOCATION.json)に全IDを記載します。
 
-[ODDLAND_100_QUEST_DESIGN.md](ODDLAND_100_QUEST_DESIGN.md)：オッドランドの新作100件の設計カード。10群の依頼・発見・介入・帰結、受注条件と後続への協力。本文とゲーム実装は未着手です。
+[ODDLAND_100_QUEST_DESIGN.md](ODDLAND_100_QUEST_DESIGN.md)：オッドランドの新作100件の設計カード。10群の依頼・発見・介入・帰結、受注条件と後続への協力。第一群OD001〜010の[本文・実移動・選択・報酬](editions/e2/ODDLAND_FIRST_TEN.md)を実装済み。残る90企画は設計段階です。
 
 [SCENARIO_DESIGN.md](SCENARIO_DESIGN.md)：モデルの適用範囲、正本、生成手順、常体化と探索到達。
 

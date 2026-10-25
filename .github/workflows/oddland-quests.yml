@@ -1,0 +1,34 @@
+name: Validate Oddland border and quests in Chromium
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'data/scenario-editions/**'
+      - 'data/scenario-editions.json'
+      - 'tools/browser-oddland-smoke.mjs'
+      - '.github/workflows/oddland-quests.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  oddland-browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser test runtime
+        run: |
+          npm install --no-save --package-lock=false playwright@1.58.2
+          npx playwright install --with-deps chromium --only-shell
+      - name: Verify border, local facilities and a complete quest in both layouts and widths
+        run: node tools/browser-oddland-smoke.mjs
+      - name: Keep Oddland viewport checkpoints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: oddland-browser-checkpoints
+          path: /tmp/adv-oddland-browser
+          if-no-files-found: ignore

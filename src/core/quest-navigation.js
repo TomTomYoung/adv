@@ -48,6 +48,7 @@ export function questEntryPlan(data,state,id){
   else if(!place)reason='次のイベントの場所が未定義。';
   else if(place.kind==='town')reason=`次のイベントは${data.locations[place.location]?.name??place.location}にある。`;
   // The quest shortcut includes the trip to the entrance from any town facility.
+  else if(data.worldTravel?.mapRegistrations[place.map])reason='地下関所または国境宿場の石段から、目的地まで歩いてください。';
   else reason=townDepartureReason(data,state,place.dungeon);
   return {ok:!reason,reason,place};
 }

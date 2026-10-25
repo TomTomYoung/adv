@@ -37,8 +37,7 @@ export async function loadContent(read = async path => {
     else if(type==='script') merge(data.scripts,value.scripts,type);
     else data[type]=value;
   }
-  const additionsPath=catalog.editions[data.scenarioEdition].additions;
-  if(additionsPath){
+  const addBundle=async additionsPath=>{
     const additions=await read(additionsPath);
     if(additions?.schemaVersion!==1||!Array.isArray(additions.quests)||!additions.quests.length||!additions.locations||!additions.characters)throw Error('シナリオ版の追加定義が不正です。');
     for(const key of Object.keys(additions))if(!['schemaVersion','quests','locations','characters','regions'].includes(key))throw Error(`未対応の追加定義: ${key}`);
@@ -52,13 +51,24 @@ export async function loadContent(read = async path => {
       merge(data.quests,{[quest.id]:quest},'quest');merge(data.scripts,quest.scripts,'script');ids.push(quest.id);
     }
     if(data.questOrder)data.questOrder={...data.questOrder,ids:[...data.questOrder.ids,...ids]};
-    data.game={...game,subtitle:`${Object.keys(data.quests).length}の依頼と、帰還の記録`,questAdditions:[...(game.questAdditions??[]),{ids}]};
-  }
+    data.game={...data.game,subtitle:`${Object.keys(data.quests).length}の依頼と、帰還の記録`,questAdditions:[...(data.game.questAdditions??[]),{ids}]};
+    return ids;
+  };
+  const additionsPath=catalog.editions[data.scenarioEdition].additions;
+  if(additionsPath)await addBundle(additionsPath);
   const geography=catalog.editions[data.scenarioEdition].geography;
   if(geography){
     const legacy=structuredClone(data);projectQuestObjects(legacy);
     await applyEditionGeography(data,await read(geography));
     data.worldTravelLegacy=legacy;
+  }
+  const regional=catalog.editions[data.scenarioEdition].regionalAdditions;
+  if(regional){
+    if(!data.worldTravel)throw Error('地域依頼には版別地理が必要です。');
+    const legacy=structuredClone(data);projectQuestObjects(legacy);
+    const ids=await addBundle(regional);
+    for(const id of ids){const q=data.quests[id];if(!Object.hasOwn(data.worldTravel.settlements,q.settlement))throw Error('地域依頼の受付拠点が不正です。');data.worldTravel.questSettlements[id]=q.settlement;}
+    data.regionalLegacy=legacy;data.regionalQuestIds=ids;
   }
   projectQuestObjects(data);
   const errors=validateContent(data);

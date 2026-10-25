@@ -18,7 +18,9 @@ export function departureSettlementReason(data,state,dungeon){
 export function questReceptionReason(data,state,quest){
   if(!data.worldTravel)return '';
   const owner=data.worldTravel.questSettlements[quest]??data.worldTravel.home;
-  return townSettlement(data,state)===owner?'':`受付は${data.worldTravel.settlements[owner].name}です。`;
+  if(townSettlement(data,state)!==owner)return `受付は${data.worldTravel.settlements[owner].name}です。`;
+  const desks=data.quests[quest]?.receptionLocations;
+  return desks&&!desks.includes(state.townLocation)?`受付は${desks.map(id=>data.locations[id].name).join('・')}です。`:'';
 }
 export function expeditionFacility(data,state,kind){
   const settlement=data.worldTravel?.settlements[townSettlement(data,state)];
@@ -93,6 +95,7 @@ export function worldTravelDefinitionErrors(data){
   for(const [map,country] of Object.entries(d.mapCountries))if(!data.maps[map]||!own(d.countries,country))bad('マップの国が不正');
   for(const [map,registration] of Object.entries(d.mapRegistrations))if(!data.maps[map]||!registrations.has(registration))bad('マップの登録不正');
   for(const [key,value] of Object.entries(d.questSettlements))if(!data.quests[key]||!own(d.settlements,value))bad('受付拠点不正');
+  for(const q of Object.values(data.quests))if(q.receptionLocations&&(!Array.isArray(q.receptionLocations)||!q.receptionLocations.length||q.receptionLocations.some(id=>!data.locations[id]?.quests||locationRoot(data,id)?.id!==d.settlements[d.questSettlements[q.id]??d.home]?.root)))bad(`受付施設不正 ${q.id}`);
   for(const [key,value] of Object.entries(d.dungeonSettlements))if(!data.dungeons[key]||!own(d.settlements,value))bad('出発拠点不正');
   for(const r of d.routes){
     if(!isRecord(r)||!id(r.id)||ids.has(r.id)||!r.name){bad('接続ID不正');continue;}ids.add(r.id);

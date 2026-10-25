@@ -35,7 +35,7 @@ try{
     };
     document.addEventListener('keydown',e=>handleGameKey(e,{view,model:view.model,dispatch}));
   });
-  const click=async label=>{const button=page.getByRole('button',{name:label,exact:true});await button.scrollIntoViewIfNeeded();await button.click();};
+  const click=async label=>{for(let n=0;n<50&&await page.evaluate(()=>h.view.canChoose?.()===false);n++)await page.keyboard.press('Enter');const button=page.getByRole('button',{name:label,exact:true});await button.scrollIntoViewIfNeeded();await button.click();};
   async function cross(route){
     const label=await page.evaluate(id=>h.routeLabel(id),route);
     await click('任意調べる');await click(label);await click(label);await page.evaluate(()=>h.settle());
@@ -53,7 +53,7 @@ try{
     await click('国境宿場の補給店');await click('携行油を補充する（無料）');
     assert.equal(await page.evaluate(()=>h.g.state.light),90);
     await click('オッドランド・国境宿場へ戻る');await click('国境宿場の共同依頼所');await click('依頼掲示板を見る');
-    assert.equal(await page.locator('.quest-card').count(),0);assert.ok((await page.locator('.empty').innerText()).includes('この窓口'));
+    assert.equal(await page.locator('.quest-card').count(),10);assert.ok(!(await page.locator('.quest-list').innerText()).includes('帰らない灯番'));
     if(layout==='scene'){await page.keyboard.press('Escape');}
     else await click('オッドランド・国境宿場へ戻る');
     if(await page.evaluate(()=>h.g.state.townLocation)!=='oddland_border')await click('オッドランド・国境宿場へ戻る');
@@ -64,7 +64,21 @@ try{
     await click('帰還印で町へ戻る');
     assert.ok((await page.locator('.story-text').allTextContents()).join(' ').includes('オッドランド')||await page.getByText(/帰還印でオッドランド/).count());
     await click('帰還する');await page.evaluate(()=>h.settle());assert.equal(await page.evaluate(()=>h.g.state.townLocation),'oddland_border');
-    checks.push({layout,width,...measure});
+    await click('国境宿場の共同依頼所');await click('依頼掲示板を見る');
+    await page.locator('.quest-card').filter({has:page.getByRole('heading',{name:'荷台から聞こえる笛',exact:true})}).getByRole('button',{name:'依頼を受ける',exact:true}).click();
+    if(layout==='scene')await page.keyboard.press('Escape');else await click('オッドランド・国境宿場へ戻る');
+    if(await page.evaluate(()=>h.g.state.townLocation)!=='oddland_border')await click('オッドランド・国境宿場へ戻る');
+    await click('国境宿場の荷車溜まり');await click('荷台から聞こえる笛の続きを話す');await page.evaluate(()=>h.settle());
+    await click('幌を開け、声を掛ける');await page.evaluate(()=>h.settle());await page.evaluate(()=>h.resume());
+    await page.screenshot({path:path.join(output,`${layout}-${width}-child-choice.png`),fullPage:true});
+    await click('テオと退避所へ父を探しに行く');
+    assert.equal(await page.evaluate(()=>h.g.state.stories.q291.values.teoAt),'transit');
+    await click('オッドランド・国境宿場へ戻る');await click('国境宿場と出入窓口の石段');
+    await page.evaluate(()=>h.walk(1,1));await cross('border_customs');await page.evaluate(()=>{h.walk(3,3);h.settle();});
+    await click('親子に帰りの車を案内する');await page.evaluate(()=>h.settle());await page.evaluate(()=>h.resume());
+    assert.equal(await page.evaluate(()=>h.g.state.quests.q291.outcome),'escort');
+    assert.equal(await page.evaluate(()=>h.g.state.stories.q291.values.teoAt),'refuge');
+    checks.push({layout,width,...measure,quest:'q291',outcome:'escort'});
   }
   assert.deepEqual(errors,[]);await fs.writeFile(path.join(output,'result.json'),JSON.stringify({checks,errors},null,2));console.log(JSON.stringify({checks:checks.length,errors,output}));
 }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
