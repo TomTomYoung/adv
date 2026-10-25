@@ -6,6 +6,8 @@
 
 [シナリオの版切替](scenarios/SCENARIO_EDITIONS.md)を実装しました。新規開始の初期設定は最新版（第2版）、旧セーブは初版として再開します。版ごとに自動保存・手動3枠・進行全体を分離し、q001をGAMEBOOKのv1.2bで改稿しました。ほかの209件は初版を継承し、[仲間連作80件](scenarios/editions/e2/COMPANION_QUESTS.md)を追加しました。第2版は290件です。
 
+[オッドランドへの越境と100件の設計](world/ODDLAND_ACCESS_DESIGN.md)を作成しました。地下関所からの往来、五つの拠点、[新作100件](scenarios/ODDLAND_100_QUEST_DESIGN.md)、[既存迷宮の移設調査](dungeons/ODDLAND_RELOCATION_AUDIT.md)を記録しています。現段階は設計のみで、ゲーム内の件数・マップは変えていません。
+
 [ショップ・スキル屋と旅支度](ui/SHOP_AND_PREPARATIONS.md)では、商品購入・独立施設のスキル屋・旅道具店の補給工房を分離しました。商品一覧と技能一覧はそれぞれ固定領域内をスクロールします。
 
 [給油・中継所・技能教習](dungeons/EXPEDITION_IMPLEMENTATION.md)は4迷宮の21設備に接続済みです。篝火1〜10F・10F主・武器18種を接続済みです。容量180→270、無料給油、次回の中継出発、技能宝石、人物別19技能と11技能のLv2/Lv3購入を利用できます。[帰路・成長の測定](dungeons/KAGARIBI_TEN_FLOORS.md)は近道・依頼逆順・弓装備を含む60条件まで確認し、[地下水道の1〜10F](dungeons/WATERWAY_TEN_FLOORS.md)も経路・設備・主を接続しました。[廃坑1〜10F](dungeons/MINE_TEN_FLOORS.md)も洗浄・帰路・設備・主を接続しました。水道と廃坑の6〜9F低位混成・修理材も接続済みです。[庭園の栽培経路](dungeons/GARDEN_SHALLOW_ROUTES.md)は1〜10F・4/7F設備・固定帰路まで接続しました。庭園10Fの大剪定虫・有限増援・種床設備・根留めも接続しました。
