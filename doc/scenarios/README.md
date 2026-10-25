@@ -6,7 +6,7 @@
 
 ## シナリオの版
 
-[トルネア・オッドランド・帝国](../world/TORNEA_ODDLAND.md)、[アダと夫](../world/ADA.md)、[仲間の追加設定](../world/COMPANIONS.md)、[地下街と勢力](../world/UNDERGROUND_CITY.md)、[くらがりの浸食](../world/DARKNESS.md)は作者向け資料です。夫の凶行という表向きの説明とアダが実行者である真相を区別し、記憶改ざん、大水門の鍵、最終盤の交代、同行イベントなどを採用設定・構想として記録しています。今回の明示指示により、8人の仲間連作80件を第2版へ追加しました。オッドランド侵攻、大水門の鍵と開放、アダ離脱と夫加入は引き続き保留します。[着手条件](../HANDOFF.md#オッドランド関連は明示指示まで保留)を守ってください。
+[トルネア・オッドランド・帝国](../world/TORNEA_ODDLAND.md)、[アダと夫](../world/ADA.md)、[仲間の追加設定](../world/COMPANIONS.md)、[地下街と勢力](../world/UNDERGROUND_CITY.md)、[くらがりの浸食](../world/DARKNESS.md)は作者向け資料です。夫の凶行という表向きの説明とアダが実行者である真相を区別し、記憶改ざん、大水門の鍵、最終盤の交代、同行イベントなどを採用設定・構想として記録しています。今回の明示指示により、8人の仲間連作80件を第2版へ追加しました。オッドランド侵攻、大水門の鍵と開放、アダ離脱と夫加入は引き続き保留します。後続の明示指示により、平時の越境と100件の設計に着手しました。[今回の設計範囲](../HANDOFF.md#オッドランドの設計と最終盤の保留)を参照してください。
 
 [SCENARIO_EDITIONS.md](SCENARIO_EDITIONS.md)：初版と第2版の切替、最新版の初期設定、版別の保存と継承範囲。
 
@@ -25,6 +25,12 @@
 [KAGARIBI_TEN_QUESTS.md](KAGARIBI_TEN_QUESTS.md)：篝火迷宮の追加10編。人物の動機・固定過去・介入・結末・編集元。
 
 ## 設計と実行
+
+[SALOME_100_QUEST_DESIGN.md](SALOME_100_QUEST_DESIGN.md)：サロメの新規100企画。三学・生活・探索・遺物の10群。初期配分は既存40＋新作60、残る40企画は予備です。
+
+[REGIONAL_QUEST_ALLOCATION.md](REGIONAL_QUEST_ALLOCATION.md)：灯帰り・オッドランド・サロメ各100件の条件付き配分と旧保存の互換。個人80件は別枠。[JSON台帳](REGIONAL_QUEST_ALLOCATION.json)に全IDを記載します。
+
+[ODDLAND_100_QUEST_DESIGN.md](ODDLAND_100_QUEST_DESIGN.md)：オッドランドの新作100件の設計カード。10群の依頼・発見・介入・帰結、受注条件と後続への協力。本文とゲーム実装は未着手です。
 
 [SCENARIO_DESIGN.md](SCENARIO_DESIGN.md)：モデルの適用範囲、正本、生成手順、常体化と探索到達。
 

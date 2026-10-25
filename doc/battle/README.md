@@ -20,6 +20,8 @@
 
 [DEBUFF_CATALOG.md](DEBUFF_CATALOG.md)：戦闘中の弱体補正と付与元。
 
+[SALOME_CLASSES_AND_CHARACTERS_DESIGN.md](SALOME_CLASSES_AND_CHARACTERS_DESIGN.md)：サロメの結界師・機工技師、エステル・カイムの設計。現行30職・10人は変更していません。
+
 [JOB_SYSTEM.md](JOB_SYSTEM.md)：30職、技能・成長・装備・探索特技。
 
 [SCOUT_SKILLS.md](SCOUT_SKILLS.md)：斥候の罠解除・罠発見・奇襲・索敵・哨戒・迷彩・偵察の採用仕様。

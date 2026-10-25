@@ -36,6 +36,8 @@
 
 [FIRE_SYSTEM.md](FIRE_SYSTEM.md)：火・火台・油の根幹仕様、油の効果と種類の候補、序盤のくらがり避け、生成・移火・給油・MP種火。後半に現行の燃料消費と保存、q001の別管理、確認済みの未整理の点。
 
+[ODDLAND_RELOCATION_AUDIT.md](ODDLAND_RELOCATION_AUDIT.md)：オッドランドとサロメの配置を見直す既存迷宮の調査。13迷宮の判断、オッドランド60件・サロメ40件の候補、帰還・受付・q100・保存への影響と採用条件。移設は未実行です。
+
 [DUNGEON_CATALOG.md](DUNGEON_CATALOG.md)：13ダンジョンの概要と専用ページへの入口。
 
 [details/README.md](details/README.md)：迷宮ごとの専用ページ。区画・経路・設備・通常遭遇・関連クエスト・保存状態・編集元。
