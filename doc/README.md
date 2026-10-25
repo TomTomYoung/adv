@@ -26,7 +26,7 @@
 
 [dungeons/README.md](dungeons/README.md)：セル・共有エッジ、地形と通行、照明、2D接続、水没、各ダンジョンの仕掛け。[ダンジョンカタログ](dungeons/DUNGEON_CATALOG.md)から13迷宮の専用ページへ進めます。
 
-[world/README.md](world/README.md)：町の施設・場所のID、町と物語の移動。[トルネアとオッドランド](world/TORNEA_ODDLAND.md)の背景設定と[アダと夫・最終盤の構想](world/ADA.md)は作者向け資料。関連シナリオの起案・追加・実装はユーザーの明示指示まで保留。
+[world/README.md](world/README.md)：町の施設・場所のID、町と物語の移動。作者向け資料として[トルネア・オッドランド・帝国](world/TORNEA_ODDLAND.md)、[アダと夫](world/ADA.md)、[仲間の追加設定](world/COMPANIONS.md)、[地下街と勢力](world/UNDERGROUND_CITY.md)、[くらがりの浸食](world/DARKNESS.md)を収録。採用設定・構想と現行実装を区別し、関連シナリオの起案・追加・実装はユーザーの明示指示まで保留。
 
 [scenarios/README.md](scenarios/README.md)：210クエスト、q001〜q010個別ページ、人物、イベント、JSON命令。
 
