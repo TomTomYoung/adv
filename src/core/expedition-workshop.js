@@ -1,8 +1,9 @@
 import {isRecord,evaluate} from './expression.js';
+import {expeditionFacility} from './world-travel.js';
 import {townLocation,dungeonInterior} from './world.js';
 
 const own=(o,k)=>typeof k==='string'&&Object.hasOwn(o??{},k);
-const atShop=(data,state)=>state.mode==='town'&&!state.waiting&&!state.battle&&!state.battleResult&&!dungeonInterior(data,state)&&townLocation(data,state)?.id===data.expedition.shopLocation;
+const atShop=(data,state)=>state.mode==='town'&&!state.waiting&&!state.battle&&!state.battleResult&&!dungeonInterior(data,state)&&expeditionFacility(data,state,'shopLocation');
 export const workshopCapacity=(data,state)=>state.expedition?.workshop?.upgraded?data.expedition.workshop.capacity.value:180;
 export function capacityRecipePlan(data,state,camp){
  const spec=data.expedition.workshop?.capacity,w=state.expedition.workshop;

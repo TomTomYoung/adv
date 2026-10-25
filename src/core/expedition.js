@@ -1,12 +1,13 @@
+import {expeditionFacility} from './world-travel.js';
 import {workshopCapacity,capacityRecipePlan,claimCapacityRecipe,capacityUpgradePlan,upgradeCapacity,workshopSaveValid,workshopDefinitionErrors} from './expedition-workshop.js';
 import {expeditionFieldCards,expeditionFieldSaveValid} from './expedition-field.js';
 import {skillDefinition} from './skill-levels.js';
 import {clone,isRecord,evaluate} from './expression.js';
-import {townLocation,dungeonInterior} from './world.js';
+import {dungeonInterior} from './world.js';
 import {dungeonEntryReason} from './quest-navigation.js';
 import {dungeonRestrictionReason} from './dungeon-restrictions.js';
 import {canInteractAt} from './event-interaction.js';
-import {managesOil,oilLamp,oilFire,oilTotal,oilRoom,balanceOil,enableOil,useReserve} from './expedition-oil.js';
+import {managesOil,oilStore,oilLamp,oilFire,oilTotal,oilRoom,balanceOil,enableOil,useReserve} from './expedition-oil.js';
 
 const own=(o,k)=>typeof k==='string'&&Object.hasOwn(o??{},k);
 const int=(n,min=0,max=1e9)=>Number.isSafeInteger(n)&&n>=min&&n<=max;
@@ -24,7 +25,7 @@ export function battleGems(data,battle){return data.expedition?battle.enemies.re
 export function skillPurchasePlan(data,state,actor,id,level){
   const e=state.expedition,p=data.expedition?.products[id],a=state.actors[actor],skill=skillDefinition(data,id);
   if(!e||!own(data.expedition.products,id)||!own(state.actors,actor)||!p||!a||!int(level,1,3))return {ok:false,reason:'技能・人物・段階を選び直してください。'};
-  if(state.mode!=='town'||dungeonInterior(data,state)||state.waiting||state.battle||townLocation(data,state)?.id!==data.expedition.skillShopLocation)return {ok:false,reason:'町のスキル屋で習得できます。'};
+  if(state.mode!=='town'||dungeonInterior(data,state)||state.waiting||state.battle||!expeditionFacility(data,state,'skillShopLocation'))return {ok:false,reason:'町のスキル屋で習得できます。'};
   if(campTier(state)<p.tier)return {ok:false,reason:p.tier===1?'給油設備を修理すると販売が始まります。':'中継設備を起動すると販売が始まります。'};
   if(p.unlockTier&&expeditionShopTier(data,state)<p.unlockTier)return {ok:false,reason:p.unlockTier===1?'篝火4Fの給油設備を修理すると販売が始まります。':'篝火7Fの給油設備を修理し、中継を起動すると販売が始まります。'};
   if(p.requiresCamp&&!e.camps[p.requiresCamp]?.supply)return {ok:false,reason:`${campById(data,p.requiresCamp).name}を修理すると販売が始まります。`};
@@ -68,9 +69,9 @@ export function expeditionAction(engine,intent){
     e.reserve-=data.expedition.oil.units;engine.give(data.expedition.oil.item,1);engine.notify('予備油90単位を、受け渡しに使える灯油1瓶へ詰めました。');return true;
   }
   if(intent.action==='withdraw'){
-    if(state.mode!=='town'||dungeonInterior(data,state)||townLocation(data,state)?.id!==data.expedition.shopLocation||!managesOil(state))return false;
-    const room=oilRoom(data,state),n=Math.min(room,e.storedOil+e.storedBottles*data.expedition.oil.units);if(!n)return false;
-    while(e.storedOil<n&&e.storedBottles>0){e.storedBottles--;e.storedOil+=data.expedition.oil.units;}e.storedOil-=n;e.reserve+=n;engine.notify(`補給所の保管油を${n}単位受け取りました。`);return true;
+    if(state.mode!=='town'||dungeonInterior(data,state)||!expeditionFacility(data,state,'shopLocation')||!managesOil(state))return false;
+    const depot=oilStore(data,state),room=oilRoom(data,state),n=Math.min(room,depot.storedOil+depot.storedBottles*data.expedition.oil.units);if(!n)return false;
+    while(depot.storedOil<n&&depot.storedBottles>0){depot.storedBottles--;depot.storedOil+=data.expedition.oil.units;}depot.storedOil-=n;e.reserve+=n;engine.notify(`補給所の保管油を${n}単位受け取りました。`);return true;
   }
   const p=campPlan(data,state,intent);if(!p.ok){engine.notify(p.reason);return false;}
   if(intent.action==='recipe')return claimCapacityRecipe(engine,p.c.id);
@@ -97,7 +98,7 @@ export function expeditionView(data,state){
   const e=state.expedition,visible=data.expedition.camps.filter(c=>!c.requiresQuest||state.quests[c.requiresQuest]?.stage==='completed'),camps=visible.filter(c=>canInteractAt(data,state,c));
   if(!camps.length&&!e.managed)return null;
   const cards=camps.map(c=>({name:c.name,text:e.camps[c.id]?.supply?(c.relayEnabled===false?'修理済みの給油専用設備です。':'給油設備は修理済みです。中継設備を起動すると次回の出発点になります。'):'配油管が破損しています。ロープ1本で固定できます。',actions:[['repair','給油設備を修理（ロープ1）'],['relay','中継設備を起動'],['draw','油を容量いっぱい汲む（無料）'],...(data.expedition.workshop?.capacity.camps.includes(c.id)?[['recipe',e.workshop?.claims.length?'330製法を照合（重複は予備部材）':'330容量の製法を受け取る']]:[])].filter(([action])=>action!=='relay'||c.relayEnabled!==false).map(([action,label])=>{const intent={type:'expedition.action',camp:c.id,action},p=campPlan(data,state,intent);return {label,intent,enabled:p.ok,reason:p.reason??'',consumes:action==='repair',explicit:true};})}));
-  const lamp=oilLamp(data,state),actions=[],oilText=`携行 ${oilTotal(data,state)}/${e.capacity}単位 ／ 予備油 ${e.reserve} ／ 灯油瓶 ${state.inventory.torch??0}本。補給所の保管 ${e.storedOil+e.storedBottles*90}単位。`;
+  const lamp=oilLamp(data,state),actions=[],oilText=`携行 ${oilTotal(data,state)}/${e.capacity}単位 ／ 予備油 ${e.reserve} ／ 灯油瓶 ${state.inventory.torch??0}本。補給所の保管 ${oilStore(data,state).storedOil+oilStore(data,state).storedBottles*90}単位。`;
   cards.push(...expeditionFieldCards(data,state));
   if(e.managed){
     if(!oilFire(data,state))actions.push({label:'予備油を携行灯へ補充',intent:{type:'expedition.action',action:'refill'},enabled:!state.waiting&&!state.battle&&e.reserve>0&&lamp.fuel<lamp.capacity,consumes:true});
@@ -108,10 +109,10 @@ export function expeditionView(data,state){
 }
 export function projectExpedition(engine){
   const {data,state}=engine;if(!data.expedition||!state.expedition)return null;
-  const e=state.expedition,location=state.mode==='town'&&!dungeonInterior(data,state)?townLocation(data,state)?.id:null;
-  const shop=location===data.expedition.shopLocation,skillShop=location===data.expedition.skillShopLocation;
+  const e=state.expedition;
+  const shop=expeditionFacility(data,state,'shopLocation'),skillShop=expeditionFacility(data,state,'skillShopLocation'),depot=oilStore(data,state);
   const capacity=data.expedition.workshop?.capacity,upgrade=capacity?{value:capacity.value,price:capacity.price,known:Boolean(e.workshop?.claims.length),done:Boolean(e.workshop?.upgraded),...capacityUpgradePlan(data,state)}:null;
-  return {gems:e.gems,shop,skillShop,upgrade,storedOil:e.storedOil+e.storedBottles*90,canWithdraw:shop&&!state.waiting&&!state.battle&&managesOil(state)&&oilRoom(data,state)>0&&(e.storedOil+e.storedBottles)>0,checkpoints:data.expedition.camps.filter(c=>e.camps[c.id]?.relay).map(c=>({id:c.id,dungeon:c.dungeon,name:c.name,...checkpointPlan(engine,c.id)})).map(({c,...row})=>row),products:skillShop?Object.entries(data.expedition.products).map(([id,p])=>({id,...clone(p),name:skillDefinition(data,id).name,description:skillDefinition(data,id).description,mp:skillDefinition(data,id).mp,weapons:clone(skillDefinition(data,id).weaponTypes),actors:Object.keys(state.actors).map(actor=>{const current=e.learned[actor]?.[id]??0,level=current+1,maxed=current>=(skillDefinition(data,id).maxSkillLevel??1),plan=maxed?{ok:false,reason:'販売中の全段階を習得済みです。'}:skillPurchasePlan(data,state,actor,id,level);return {actor,name:data.actors[actor].name,current,level,maxed,upgrade:!maxed?p.upgrades?.[level]??'':'',price:plan.price??p.price*(level===1?1:level===2?2:4),enabled:plan.ok,reason:plan.reason??'',intent:{type:'skill.buy',actor,skill:id,level}};})})):[]};
+  return {gems:e.gems,shop,skillShop,upgrade,storedOil:depot.storedOil+depot.storedBottles*90,canWithdraw:shop&&!state.waiting&&!state.battle&&managesOil(state)&&oilRoom(data,state)>0&&(depot.storedOil+depot.storedBottles)>0,checkpoints:data.expedition.camps.filter(c=>e.camps[c.id]?.relay).map(c=>({id:c.id,dungeon:c.dungeon,name:c.name,...checkpointPlan(engine,c.id)})).map(({c,...row})=>row),products:skillShop?Object.entries(data.expedition.products).map(([id,p])=>({id,...clone(p),name:skillDefinition(data,id).name,description:skillDefinition(data,id).description,mp:skillDefinition(data,id).mp,weapons:clone(skillDefinition(data,id).weaponTypes),actors:Object.keys(state.actors).map(actor=>{const current=e.learned[actor]?.[id]??0,level=current+1,maxed=current>=(skillDefinition(data,id).maxSkillLevel??1),plan=maxed?{ok:false,reason:'販売中の全段階を習得済みです。'}:skillPurchasePlan(data,state,actor,id,level);return {actor,name:data.actors[actor].name,current,level,maxed,upgrade:!maxed?p.upgrades?.[level]??'':'',price:plan.price??p.price*(level===1?1:level===2?2:4),enabled:plan.ok,reason:plan.reason??'',intent:{type:'skill.buy',actor,skill:id,level}};})})):[]};
 }
 export function expeditionDefinitionErrors(data){
   if(!data.expedition)return [];

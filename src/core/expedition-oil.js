@@ -3,6 +3,16 @@
 // in the supply depot rather than silently deleted.
 import {ignitionReason,attemptIgnition} from './fire-hazards.js';
 import {signalFieldChange} from './field-signals.js';
+import {locationRoot} from './world.js';
+export function oilStore(data,state,create=false){
+  if(!data.worldTravel||!state.worldTravel)return state.expedition;
+  const root=state.mode==='town'?locationRoot(data,state.townLocation)?.id:null;
+  const town=Object.entries(data.worldTravel.settlements).find(([,s])=>s.root===root)?.[0];
+  const id=town??state.worldTravel.returnAnchor;
+  if(id===data.worldTravel.home)return state.expedition;
+  if(create)return state.worldTravel.oilStores[id]??={storedOil:0,storedBottles:0};
+  return state.worldTravel.oilStores[id]??{storedOil:0,storedBottles:0};
+}
 export const managesOil=state=>state.expedition?.managed===true;
 export function oilFire(data,state){
   const active=state.dungeons?.active,definition=data.dungeons?.[active?.id];
@@ -38,9 +48,10 @@ export function balanceOil(data,state){
   const e=state.expedition,{item,units}=data.expedition.oil;
   let excess=oilTotal(data,state)-e.capacity;
   if(excess>0){
+    const depot=oilStore(data,state,true);
     const bottles=Math.min(state.inventory[item]??0,Math.ceil(excess/units));
-    if(bottles){state.inventory[item]-=bottles;e.storedBottles=Math.min(1e9,e.storedBottles+bottles);excess-=bottles*units;}
-    if(excess>0){const n=Math.min(e.reserve,excess);e.reserve-=n;e.storedOil=Math.min(1e9,e.storedOil+n);}
+    if(bottles){state.inventory[item]-=bottles;depot.storedBottles=Math.min(1e9,depot.storedBottles+bottles);excess-=bottles*units;}
+    if(excess>0){const n=Math.min(e.reserve,excess);e.reserve-=n;depot.storedOil=Math.min(1e9,depot.storedOil+n);}
   }
   rememberOil(data,state);
 }

@@ -1,3 +1,4 @@
+import {freshWorldTravel,worldTravelSaveErrors} from './world-travel.js';
 import {reinforcementRoster} from './battle-reinforcements.js';
 import {freshExpedition,expeditionSaveErrors,campTier} from './expedition.js';
 import {migrateFrontlineLifecycle} from './frontline-lifecycle.js';
@@ -165,6 +166,11 @@ function migrateContentSave(original,data){
 export function migrateSave(original,data){
   let edition;
   try{edition=readSavedScenarioEdition(original);if(edition!==resolveScenarioEdition(data.scenarioEditions,data.scenarioEdition??'e1'))return original;}catch{return original;}
+  if(data.worldTravel&&original.state.worldTravel===undefined&&data.worldTravelLegacy){
+    const legacy=data.worldTravelLegacy,previous=migrateSave(original,legacy);
+    if(validateSave(previous,legacy).length)return original;
+    const upgraded=clone(previous);upgraded.state.worldTravel=freshWorldTravel(data);return upgraded;
+  }
   let pinned=original;
   if(!Object.hasOwn(original,'scenarioEdition')){pinned=clone(original);pinned.scenarioEdition=edition;pinned.state.scenarioEdition=edition;}
   let migrated=migrateContentSave(pinned,data);
@@ -207,7 +213,7 @@ export function validateSave(save,data){
     if(typeof v==='number'&&!Number.isFinite(v))fail('数値不正');
     if(v&&typeof v==='object')for(const [key,value] of Object.entries(v)){if(['__proto__','constructor','prototype'].includes(key))fail('予約キー不正');checkPlain(value,depth+1);}
   };checkPlain(s);
-  errors.push(...scoutingSaveErrors(data,s),...skillProgressErrors(data,s),...occurrenceSaveErrors(data,s),...mapChangesErrors(data,s),...treasureSaveErrors(data,s));
+  errors.push(...worldTravelSaveErrors(data,s),...scoutingSaveErrors(data,s),...skillProgressErrors(data,s),...occurrenceSaveErrors(data,s),...mapChangesErrors(data,s),...treasureSaveErrors(data,s));
   if(data.game.recordVersion===1&&!recordsValid(s.records,data))fail('戦績状態不正');
   if(data.game.inspectionVersion===1)errors.push(...validateInspections(s,data));
   if(data.game.fieldEventVersion===1)errors.push(...validateFieldReactions(data,s));

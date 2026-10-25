@@ -17,7 +17,7 @@ export function validateConnections(data,d,s){
       }else if(p.side!==undefined)errors.push('階段に水平の扉面は指定できません');
     }
   }
-  const seen=new Set([d.entries.main.map]);let changed=true;while(changed){changed=false;for(const l of s.links)for(const [a,b] of [[l.a,l.b],[l.b,l.a]])if(a&&b&&seen.has(a.map)&&!seen.has(b.map)){seen.add(b.map);changed=true;}}
+  const seen=new Set([d.entries.main.map]);let changed=true;while(changed){changed=false;for(const l of [...s.links,...(data.worldTravel?.routes??[]).filter(r=>r.a?.dungeon===d.id&&r.b?.dungeon===d.id)])for(const [a,b] of [[l.a,l.b],[l.b,l.a]])if(a&&b&&seen.has(a.map)&&!seen.has(b.map)){seen.add(b.map);changed=true;}}
   if(d.maps.some(m=>!seen.has(m)))errors.push('入口と接続していない2Dマップがあります');
   return errors;
 }
