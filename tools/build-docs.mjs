@@ -28,7 +28,7 @@ await fs.writeFile(path.join(folder,docPath('BUFF_CATALOG.md')),relocateDoc(buff
 await fs.writeFile(path.join(folder,docPath('DEBUFF_CATALOG.md')),relocateDoc(debuffCatalog(data,{date}),'DEBUFF_CATALOG.md'));
 await fs.writeFile(path.join(folder,docPath('STATUS_CATALOG.md')),relocateDoc(statusCatalog(data,{date}),'STATUS_CATALOG.md'));
 const quests=Object.values(data.quests),count=o=>Object.keys(o??{}).length;
-const files=[...new Set(['data/game.json',...Object.values(data.game.files.databases),...data.game.files.maps,...data.game.files.quests,...data.game.files.scripts,...Object.values(data.scenarioEditions.editions).flatMap(edition=>Object.values(edition.questOverrides))])].sort();
+const files=[...new Set(['data/game.json',...Object.values(data.game.files.databases),...data.game.files.maps,...data.game.files.quests,...data.game.files.scripts,...Object.values(data.scenarioEditions.editions).flatMap(edition=>[...Object.values(edition.questOverrides),...(edition.additions?[edition.additions]:[])] )])].sort();
 const digest=createHash('sha256');for(const file of files){digest.update(file+'\n');digest.update(await fs.readFile(path.join(root,file)));}
 const snapshot={updated:date,contentVersion:version,scenarioEdition:data.scenarioEdition,latestScenarioEdition:data.scenarioEditions.latest,contentSha256:digest.digest('hex'),method:'game manifestと全シナリオ版の差分JSONを指紋へ含める。ID数とoutcomes/model.graphは初版を集計。旧スクリプトを含み、story.scenesは互換場面名も含む。',counts:Object.fromEntries(['locations','dungeons','maps','quests','scripts','actors','characters','jobs','skills','buffs','fieldAbilities','items','enemies','encounters','sounds','effects','statuses'].map(k=>[k,count(data[k])])),questOutcomes:quests.reduce((n,q)=>n+count(q.outcomes),0),questGraphScenes:quests.reduce((n,q)=>n+(q.model.graph?.length??0),0),typedStoryQuests:quests.filter(q=>q.story).length,typedStoryScenesIncludingAliases:quests.reduce((n,q)=>n+count(q.story?.scenes),0),questEvents:questEvents(data).length,questEventPlacements:questEvents(data).filter(e=>!['action','auto'].includes(e.trigger)).reduce((n,e)=>n+e.points.length,0),questObservations:questEvents(data).filter(e=>e.note).length,commands:[...COMMANDS],operators:[...EXPRESSION_OPS],migrationVersions:Object.keys(data.game.migrations),assets:{images:count(data.assets.images),audio:count(data.assets.audio)},files};
 await fs.writeFile(path.join(folder,docPath('DATA_SNAPSHOT.json')),JSON.stringify(snapshot,null,2)+'\n');
@@ -63,5 +63,10 @@ export function plainMarkdown(source){
  }
  return out.join('\n').replace(/\n{3,}/g,'\n\n').trimEnd()+'\n';
 }
-for(const file of await currentMarkdown(folder)){const p=path.join(folder,file);await fs.writeFile(p,plainMarkdown(await fs.readFile(p,'utf8')));}
+// Imported source models and authored world documents retain their original
+// formatting; building inventories must not rewrite unrelated source prose.
+for(const file of await currentMarkdown(folder)){
+ if(file.startsWith('world/')||['scenarios/PROSE_MODEL_V1.md','scenarios/PROSE_CHECKLIST.md'].includes(file))continue;
+ const p=path.join(folder,file);await fs.writeFile(p,plainMarkdown(await fs.readFile(p,'utf8')));
+}
 console.log(`DOCS: ${snapshot.counts.quests} quests, ${snapshot.questOutcomes} endings, ${snapshot.counts.dungeons} dungeons; authored prose preserved`);
