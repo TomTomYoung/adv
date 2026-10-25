@@ -1,3 +1,4 @@
+import {freshWorldTravel,rememberDeparture,returnLocation,crossWorldRoute,publicSupply,questReceptionReason,departureSettlementReason} from './world-travel.js';
 import {craftWeapon} from './expedition-workshop.js';
 import {freshExpedition,expeditionAction,buySkill,travelCheckpoint,campSafe,addGems} from './expedition.js';
 import {rememberOil,restoreOil,balanceOil,managesOil} from './expedition-oil.js';
@@ -55,6 +56,7 @@ export class GameEngine {
     this.state.partyFormation=nextFormation(this.state.members);this.state.battleModePreference='auto';
     this.state.carried={};
     if(data.expedition)this.state.expedition=freshExpedition();
+    if(data.worldTravel)this.state.worldTravel=freshWorldTravel(data);
     if(data.jobs)for(const actor of Object.values(this.state.actors)){initializeJob(data,actor);const stats=actorStats(data,this.state,actor.id,false);actor.hp=stats.hp;actor.mp=stats.mp;}
     for(const quest of Object.values(data.quests)) this.state.quests[quest.id]={stage:'available',evidence:[],outcome:null};
     if(data.game.dungeonVersion)this.state.dungeons=freshDungeons();
@@ -106,6 +108,7 @@ export class GameEngine {
   accept(id){
     const q=this.data.quests[id];if(!q||!this.unlocked(q))return false;
     const qs=this.state.quests[id];if(qs.stage==='completed')return false;
+    const reception=qs.stage==='available'&&questReceptionReason(this.data,this.state,id);if(reception){this.notify(reception);return false;}
     if(qs.stage==='available')this.state.records.baselines[id]=snapshotRecords(this.state.records);
     qs.stage='active';this.state.trackedQuest=id;
     this.notify(`依頼「${q.title}」を手帳に記しました。`);return true;
@@ -145,6 +148,7 @@ export class GameEngine {
   }
   teleport(mapId,x,y,facing='north',z=0,continueEntry=false){
     const map=this.data.maps[mapId];if(!this.walkable(map,x,y,z))throw new Error(`移動できない座標: ${mapId} ${x},${y}`);
+    rememberDeparture(this.data,this.state);
     rememberOil(this.data,this.state);
     if(this.state.scouting?.recon?.map!==mapId)returnRecon(this);
     collapseAfterLeaving(this,this.state.location,{map:mapId,x,y});
@@ -160,18 +164,19 @@ export class GameEngine {
     if(reason){this.notify(reason);return false;}
     this.#arriveTown(emergency,quiet);return true;
   }
-  // Defeat rescue is forced recovery. Roll back unfinished event checkpoints
-  // before synchronizing the party to its rescued location.
-  #arriveTown(emergency=false,quiet=false){
+  arriveSettlement(location){this.#arriveTown(false,false,location);}
+  #arriveTown(emergency=false,quiet=false,location=returnLocation(this.data,this.state)){
     clearScoutingTrip(this);clearExpeditionTrip(this.state);
     collapseAfterLeaving(this,this.state.location,null);
     rememberOil(this.data,this.state);leaveDungeon(this);
     if(!quiet)this.eventCue('return');
     if(emergency){const cost=Math.ceil(this.state.gold*this.data.system.retreatGoldRate*this.partyEffect('retreatCost'));this.state.gold-=cost;this.notify(`帰還印で脱出した。救援費 ${cost}G。依頼と手掛かりは維持される。`);}
-    this.state.mode='town';this.state.townLocation=townRoot(this.data)??null;this.state.location=null;this.state.battle=null;this.state.presentation.music='exploration';this.state.presentation.background=townLocation(this.data,this.state)?.background??'corridor';syncWorldStories(this);
+    this.state.mode='town';this.state.townLocation=location??null;this.state.location=null;this.state.battle=null;this.state.presentation.music='exploration';this.state.presentation.background=townLocation(this.data,this.state)?.background??'corridor';syncWorldStories(this);
     this.state.fieldEntry=null;
     this.state.fieldReactions=freshFieldReactions();
   }
+  // Defeat rescue is forced recovery. Roll back unfinished event checkpoints
+  // before synchronizing the party to its rescued location.
   defeat(){
     const rolledBack=rollbackEventCheckpoints(this);
     delete this.state.presentation.cast;delete this.state.presentation.castCue;delete this.state.presentation.message;
@@ -246,6 +251,8 @@ export class GameEngine {
     const loc=this.state.location;
     for(const object of this.triggerCandidates(kind)){
       if(id!==undefined&&object.id!==id)continue;
+      const route=this.data.worldTravel?.routes.find(r=>r.exitObject?.map===loc.map&&r.exitObject.id===object.id);
+      if(route)return crossWorldRoute(this,route.id);
       const reason=object.kind==='exit'&&dungeonRestrictionReason(this.state,'return');
       if(reason){this.notify(reason);return false;}
       const treasure=treasurePlan(this.data,this.state,loc.map,object);if(!treasure.ok&&!treasure.exhausted){this.notify(treasure.reason);return false;}
@@ -287,6 +294,8 @@ export class GameEngine {
     if(type==='party.frontline.set')return setFrontFormation(this,intent.actor,intent.depth,intent.lane);
     if(type==='battle')return battleAction(this,intent);
     if(this.state.waiting||this.state.battle)return false;
+    if(type==='world.cross')return crossWorldRoute(this,intent.route);
+    if(type==='world.supply')return publicSupply(this);
     if(type==='expedition.action')return expeditionAction(this,intent);
     if(type==='weapon.craft')return craftWeapon(this,intent.item);
     if(type==='skill.buy')return buySkill(this,intent);
@@ -310,7 +319,7 @@ export class GameEngine {
       const plan=questEntryPlan(this.data,this.state,intent.id);
       if(!plan.ok){this.notify(plan.reason);return false;}
       const mapId=this.data.dungeons[plan.place.dungeon].entries.main.map,start=this.data.maps[mapId].entrance;
-      if(!managesOil(this.state))this.state.light=this.data.system.lightCapacity;
+      if(!managesOil(this.state)&&!this.data.worldTravel)this.state.light=this.data.system.lightCapacity;
       this.teleport(mapId,start.x,start.y,start.facing,start.z??0);return true;
     }
     if(type==='travel'&&this.state.mode==='town'){
@@ -319,8 +328,9 @@ export class GameEngine {
       const region=this.data.regions.find(r=>r.id===intent.region);
       const mapId=dungeon?.entries.main.map??region?.entrance;if(!mapId)return false;
       const owner=this.data.maps[mapId].dungeon;
+      const reason=departureSettlementReason(this.data,this.state,owner);if(reason){this.notify(reason);return false;}
       if(this.data.game.world&&!townLocation(this.data,this.state)?.dungeons?.includes(owner))return false;
-      if(!managesOil(this.state))this.state.light=this.data.system.lightCapacity;
+      if(!managesOil(this.state)&&!this.data.worldTravel)this.state.light=this.data.system.lightCapacity;
       const start=this.data.maps[mapId].entrance;this.teleport(mapId,start.x,start.y,start.facing,start.z??0);return true;
     }
     if(type==='service'&&this.state.mode==='town'){
@@ -390,7 +400,7 @@ export class GameEngine {
     else return false;
     if(!next.some(id=>s.actors[id].hp>0))return false;
     const formation=nextFormation(next,s.partyFormation,action==='swap'?{from:replaceId,to:actorId}:null);if(!formation)return false;
-    s.partyFormation=formation;s.members=next;syncFrontFormation(s,action==='swap'?{from:replaceId,to:actorId}:null);this.notify(`${this.data.actors[actorId].name}は${action==='leave'?'帰り火亭で待機します':'隊に加わりました'}。`);return true;
+    s.partyFormation=formation;s.members=next;syncFrontFormation(s,action==='swap'?{from:replaceId,to:actorId}:null);this.notify(`${this.data.actors[actorId].name}は${action==='leave'?`${this.data.worldTravel?townLocation(this.data,this.state)?.name??'拠点':'帰り火亭'}で待機します`:'隊に加わりました'}。`);return true;
   }
   unequip(actorId,slot){
     const s=this.state,a=s.actors[actorId];if(s.waiting||s.battle||!a||(s.mode!=='town'||dungeonInterior(this.data,s))&&!s.members.includes(actorId))return false;

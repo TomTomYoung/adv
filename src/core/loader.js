@@ -1,3 +1,4 @@
+import {applyEditionGeography} from './edition-geography.js';
 import {projectQuestObjects} from './quest-events.js';
 import {LEGACY_SCENARIO_EDITIONS,resolveScenarioEdition} from './scenario-editions.js';
 import { validateContent } from './validation.js';
@@ -52,6 +53,12 @@ export async function loadContent(read = async path => {
     }
     if(data.questOrder)data.questOrder={...data.questOrder,ids:[...data.questOrder.ids,...ids]};
     data.game={...game,subtitle:`${Object.keys(data.quests).length}の依頼と、帰還の記録`,questAdditions:[...(game.questAdditions??[]),{ids}]};
+  }
+  const geography=catalog.editions[data.scenarioEdition].geography;
+  if(geography){
+    const legacy=structuredClone(data);projectQuestObjects(legacy);
+    await applyEditionGeography(data,await read(geography));
+    data.worldTravelLegacy=legacy;
   }
   projectQuestObjects(data);
   const errors=validateContent(data);

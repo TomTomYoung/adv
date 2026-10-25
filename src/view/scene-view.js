@@ -107,6 +107,7 @@ export class SceneView extends GameView{
     const hud=make('div','scene-hud'),dock=make('div','scene-dock');stage.append(hud,dock);
     const header=make('header','scene-header'),place=make('div','scene-place');
     place.append(make('span','eyebrow',model.town?.breadcrumbs.map(p=>p.name).join(' / ')??`${model.dungeon?.name??''} / ${model.dungeon?.floor??''}階`),make('span','scene-title',model.town?.name??model.dungeon?.name??model.title));
+    if(model.worldTravel)place.append(make('span','world-travel-status',`${model.worldTravel.country} ／ 帰還先：${model.worldTravel.returnAnchor}`));
     const toolbar=make('nav','scene-toolbar');toolbar.setAttribute('aria-label','管理メニュー');
     for(const [id,label] of [['journal','手帳'],['bag','旅支度'],['party','隊'],...(model.dungeon?[['map','地図']]:[])]){
       const b=button(label,()=>this.openPanel(id));b.dataset.panel=id;if(id==='map'){b.dataset.focus='map:toolbar';b.setAttribute('aria-label','地図を拡大');b.setAttribute('aria-haspopup','dialog');}toolbar.append(b);

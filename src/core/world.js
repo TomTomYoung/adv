@@ -159,7 +159,7 @@ export function validateWorld(data){
   for(const m of Object.values(data.maps))if(!owners.has(m.id)||m.dungeon!==owners.get(m.id))fail(m.id,'マップの所属ダンジョンが一致しません');
   for(const [id,l] of Object.entries(locations)){
     if(l.id!==id||!l.name||!l.description||!data.assets.images[l.background])fail(id,'ロケーション名・本文・背景が不正です');
-    if(id!==root&&!locations[l.parent]&&!l.dungeonEntrance)fail(id,'親ロケーションまたはダンジョン入口がありません');
+    if(id!==root&&!locations[l.parent]&&!l.dungeonEntrance&&!Object.values(data.worldTravel?.settlements??{}).some(s=>s.root===id))fail(id,'親ロケーションまたはダンジョン入口がありません');
     if(l.dungeonEntrance){
       if(l.parent!==null||!['north','east','south','west'].includes(l.dungeonEntrance.facing))fail(id,'室内入口は独立したルートと退出時の向きが必要です');
       for(const error of worldPlaceErrors(data,{kind:'dungeon',...l.dungeonEntrance}))fail(id,error);

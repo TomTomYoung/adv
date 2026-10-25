@@ -1,3 +1,4 @@
+import {worldTravelDefinitionErrors} from './world-travel.js';
 import {reinforcementDefinitionErrors} from './battle-reinforcements.js';
 import {expeditionDefinitionErrors} from './expedition.js';
 import {questOrderErrors} from './quest-order.js';
@@ -135,7 +136,7 @@ export function validateContent(data){
   };
   errors.push(...statusDefinitionsErrors(data));
   for(const d of Object.values(data.dungeons??{}))errors.push(...fireHazardsErrors(data,d,expression));
-  errors.push(...expeditionDefinitionErrors(data),...validatePresentation(data),...validateJobs(data),...validateStories(data,expression),...validateWorld(data));
+  errors.push(...expeditionDefinitionErrors(data),...validatePresentation(data),...validateJobs(data),...validateStories(data,expression),...validateWorld(data),...worldTravelDefinitionErrors(data));
   for(const c of data.expedition?.camps??[])if(c.condition!==undefined)expression(c.condition,`expedition.camps.${c.id}.condition`);
   for(const [id,r] of Object.entries(data.expedition?.workshop?.recipes??{}))if(r?.condition!==undefined)expression(r.condition,`expedition.workshop.recipes.${id}.condition`);
   errors.push(...reinforcementDefinitionErrors(data),...gridDefinitionErrors(data),...frontlineDefinitionErrors(data));

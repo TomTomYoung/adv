@@ -140,7 +140,9 @@ export class GameView {
   }
   location(parent,m){
     if(!m.town)return;const t=m.town,section=node('section','panel-content location-content');section.append(node('p','location-description',t.description));
+    if(m.worldTravel)section.append(node('p','world-travel-status',`${m.worldTravel.country} ／ ${m.worldTravel.settlement??t.name} ／ 帰還先：${m.worldTravel.returnAnchor}`));
     const choices=node('div','location-choices command-window');choices.setAttribute('aria-label','プレイヤーコマンド');
+    for(const action of m.worldTravel?.actions??[])choices.append(button(action.label,()=>this.act(action.intent),'location-choice',!action.enabled));
     for(const l of t.links)choices.append(button(l.name,()=>this.act({type:'location.move',id:l.id}),'location-choice',t.busy));
     for(const q of t.stories)choices.append(button(`${q.title}の続きを話す`,()=>this.act({type:'story.resume',quest:q.id}),'primary',!q.enabled));
     for(const service of t.services)choices.append(button(`${service.label} — ${service.detail}`,()=>this.act({type:'service',id:service.id}),'',t.busy));
@@ -175,8 +177,8 @@ export class GameView {
     const controls=node('div','board-controls'),search=node('input','search');search.placeholder='依頼名・依頼人で探す';search.setAttribute('aria-label','依頼を検索');search.value=this.query;search.dataset.focus='quest-search';search.addEventListener('input',()=>{this.query=search.value;this.render(m);});
     const select=node('select');select.setAttribute('aria-label','依頼先の迷宮');select.append(new Option('すべての迷宮','all'));for(const d of m.dungeons??[])select.append(new Option(d.name,d.id));select.value=this.dungeonFilter;select.addEventListener('change',()=>{this.dungeonFilter=select.value;this.render(m);});
     const filter=node('select');filter.setAttribute('aria-label','依頼の状態');for(const [v,t] of [['open','未完了'],['active','受注中'],['completed','完了'],['all','すべて']])filter.append(new Option(t,v));filter.value=this.filter;filter.addEventListener('change',()=>{this.filter=filter.value;this.render(m);});controls.append(search,select,filter);section.append(controls);
-    const list=node('div','quest-list');const qs=m.quests.filter(q=>(this.dungeonFilter==='all'||q.dungeonIds?.includes(this.dungeonFilter))&&(!this.query||`${q.title}${q.client}${q.brief}`.includes(this.query))&&(this.filter==='all'||this.filter==='open'&&q.stage!=='completed'||q.stage===this.filter));
-    if(!qs.length)list.append(node('p','empty','条件に合う依頼はない。迷宮や状態を変更できる。'));
+    const list=node('div','quest-list');const qs=m.quests.filter(q=>(!m.town?.quests||q.receptionHere!==false)&&(this.dungeonFilter==='all'||q.dungeonIds?.includes(this.dungeonFilter))&&(!this.query||`${q.title}${q.client}${q.brief}`.includes(this.query))&&(this.filter==='all'||this.filter==='open'&&q.stage!=='completed'||q.stage===this.filter));
+    if(!qs.length)list.append(node('p','empty',m.worldTravel&&m.town?.quests&&!m.quests.some(q=>q.receptionHere)?'この窓口で受け付けている依頼はありません。受注済みの依頼は手帳で確認できます。':'条件に合う依頼はない。迷宮や状態を変更できる。'));
     for(const q of qs){const card=node('article',`quest-card ${q.tracked?'tracked':''}`);card.dataset.controlGroup=`quest:${q.id}`;const num=node('span','quest-number',String(q.number).padStart(3,'0')),body=node('div','quest-body');
       const title=node('div','quest-title');title.append(node('h3','',q.title),node('span','badge',q.stage==='completed'?'完了':q.stage==='active'?'受注中':q.unlocked?`推奨 Lv.${q.recommendedLevel}`:'解放待ち'));body.append(title,node('p','quest-client',q.client),node('p','quest-brief',q.brief));
       this.questDestination(body,q);

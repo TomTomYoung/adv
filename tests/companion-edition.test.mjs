@@ -51,7 +51,8 @@ test('e2 adds exactly eight ten-quest arcs, locations and presentation order wit
  assert.equal(added.reduce((n,q)=>n+Object.keys(q.outcomes).length,0),162);
  for(const id of Object.keys(first.quests))if(id!=='q001')assert.deepEqual(data.quests[id],first.quests[id]);
  for(const id of Object.keys(first.locations))assert.deepEqual(data.locations[id],first.locations[id]);
- assert.deepEqual(data.actors,first.actors);assert.deepEqual(data.maps,first.maps);
+ assert.deepEqual(data.actors,first.actors);assert.deepEqual(data.worldTravelLegacy.maps,first.maps);
+ for(const id of Object.keys(first.maps))if(id!=='region_1_landing')assert.deepEqual(data.maps[id],first.maps[id]);
  const g=ready('nio'),view=projectGame(g);assert.equal(view.quests.length,290);assert.equal(new Set(view.quests.map(q=>q.id)).size,290);
  assert.equal(view.quests.find(q=>q.id==='q221').regionName,'仲間と巡るトルネア');
  assert.equal(g.dispatch({type:'travel',region:11}),false);

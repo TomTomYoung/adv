@@ -1,3 +1,4 @@
+import {worldTravelView,crossWorldRoute} from './world-travel.js';
 import {expeditionView,expeditionAction} from './expedition.js';
 import {treasurePlan} from './treasures.js';
 import {dungeonViews,dungeonAction,dungeonCell} from './dungeons.js';
@@ -36,6 +37,8 @@ export function commandTargets(engine,command='interact'){
     for(const t of system.walls??[])add(key([system.id,t.id]),t.name,t.broken?'壁は崩れ、通路が開いている。':'壁に亀裂がある。',t.broken?[]:t.actions);
   }
   if(!inspection)return targets;
+  const travel=worldTravelView({data,state,walkable:engine.walkable.bind(engine)});
+  for(const action of travel?.actions??[])if(!data.worldTravel.routes.find(r=>r.id===action.intent.route)?.exitObject)add(`world-route:${action.intent.route}`,action.label,`${travel.country}。帰還印の行き先は${travel.returnAnchor}。通過口から先も歩いて進む。`,[{...action,explicit:true,consumes:false}]);
   for(const location of interiorEntrances(data,state))add(`interior:${location.id}`,location.name,location.description,[{label:location.enterLabel??`${location.name}に入る`,enabled:true,consumes:false,explicit:true,intent:{type:'location.enter',id:location.id}}]);
   for(const event of questEvents(data)){
     if(event.trigger!=='action'||!eventVisible(state,event)||!canInteractWithEvent(data,state,event)||event.dungeon&&event.dungeon!==state.dungeons?.active?.id)continue;
@@ -81,7 +84,7 @@ export function commandDialog(engine){
   if(wait?.type!=='command')return null;
   if(wait.command==='result')return {type:'text',text:wait.text,speaker:''};
   const cancel={id:'cancel',text:wait.command==='retreat'?'やめる':wait.command==='inspect'&&wait.target?'対象一覧へ戻る':'離れる',enabled:true};
-  if(wait.command==='retreat'){const reason=dungeonRestrictionReason(engine.state,'return_mark');return {type:'choice',text:reason||`帰還印で町へ戻る。救援費は${Math.ceil(engine.state.gold*engine.data.system.retreatGoldRate*engine.partyEffect('retreatCost'))}G。受注中の依頼と手掛かりは残る。`,options:[{id:'confirm',text:'帰還する',enabled:!reason,requirement:reason},cancel]};}
+  if(wait.command==='retreat'){const reason=dungeonRestrictionReason(engine.state,'return_mark');return {type:'choice',text:reason||`帰還印で${engine.data.worldTravel?.settlements[engine.state.worldTravel?.returnAnchor]?.name??'町'}へ戻る。救援費は${Math.ceil(engine.state.gold*engine.data.system.retreatGoldRate*engine.partyEffect('retreatCost'))}G。受注中の依頼と手掛かりは残る。`,options:[{id:'confirm',text:'帰還する',enabled:!reason,requirement:reason},cancel]};}
   const targets=wait.origin!==inspectionOrigin(engine.state)?[]:commandTargets(engine,wait.command),target=targets.find(t=>t.id===wait.target);
   if(!target)return {type:'choice',text:targets.length?'何を調べる？':'今は調べられるものがない。',options:[...targets.map(t=>({id:key(['target',t.id]),text:t.name,enabled:true,target:t.id})),cancel]};
   return {type:'choice',text:target.text?`${target.name}\n\n${target.text}`:target.name,options:[...target.actions.map(a=>({id:key(['action',target.id,a.intent]),text:a.label,enabled:a.enabled,requirement:a.reason??'',intent:a.intent})),cancel]};
@@ -103,6 +106,7 @@ function performTarget(engine,target,action){
   if(action.intent.type==='quest.event')changed=openQuestEvent(engine,action.intent.quest,action.intent.id);
   else if(action.intent.type==='field.object')changed=engine.trigger('interact',action.intent.id);
   else if(action.intent.type==='location.enter')changed=engine.enterLocation(action.intent.id);
+  else if(action.intent.type==='world.cross')changed=crossWorldRoute(engine,action.intent.route);
   else if(action.intent.type==='expedition.action')changed=expeditionAction(engine,action.intent);
   else changed=dungeonAction(engine,action.intent);
   if(!changed){s.inspectionActive=null;return false;}

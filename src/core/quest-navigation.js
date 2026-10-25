@@ -1,3 +1,4 @@
+import {departureSettlementReason} from './world-travel.js';
 import {clone} from './expression.js';
 import {townLocation,dungeonInterior,locationRoot,atWorldPlace,resolveStoryWorldPlace,storyJourneyPlaces} from './world.js';
 
@@ -27,7 +28,7 @@ function townDepartureReason(data,state,id){
   if(!data.dungeons[id])return '行き先の迷宮が見つからない。';
   if(state.waiting||state.battle)return '会話・戦闘を終えてから出発する。';
   if(state.mode!=='town'||dungeonInterior(data,state))return '現在の迷宮から町へ戻ってから出発する。';
-  return '';
+  return departureSettlementReason(data,state,id);
 }
 
 export function dungeonEntryReason(data,state,id){

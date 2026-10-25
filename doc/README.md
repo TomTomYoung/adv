@@ -1,12 +1,12 @@
 # adv ドキュメント
 
-現行説明の照合日: 2026-10-25。作品版1.34.0。[現在の状態](CURRENT_STATUS.md)、[現行仕様](SPEC.md)、[採用仕様と次工程](HANDOFF.md)、[浅層工房と封蝋](dungeons/SHALLOW_WORKSHOP.md)から確認してください。実施時点の履歴は[検証記録](development/PROGRESS.md)、整理前の本文は[保存原文](legacy/2026-10-20/README.md)に分けます。
+現行説明の照合日: 2026-10-26。作品版1.34.0。[現在の状態](CURRENT_STATUS.md)、[現行仕様](SPEC.md)、[採用仕様と次工程](HANDOFF.md)、[浅層工房と封蝋](dungeons/SHALLOW_WORKSHOP.md)から確認してください。実施時点の履歴は[検証記録](development/PROGRESS.md)、整理前の本文は[保存原文](legacy/2026-10-20/README.md)に分けます。
 
 ## 現在の実装と続く設計
 
 [シナリオの版切替](scenarios/SCENARIO_EDITIONS.md)を実装しました。新規開始の初期設定は最新版（第2版）、旧セーブは初版として再開します。版ごとに自動保存・手動3枠・進行全体を分離し、q001をGAMEBOOKのv1.2bで改稿しました。ほかの209件は初版を継承し、[仲間連作80件](scenarios/editions/e2/COMPANION_QUESTS.md)を追加しました。第2版は290件です。
 
-[オッドランドの越境](world/ODDLAND_ACCESS_DESIGN.md)と[学術都市サロメ](world/SALOME_DESIGN.md)を設計しました。[サロメの新規100企画](scenarios/SALOME_100_QUEST_DESIGN.md)、[オッドランドの100企画](scenarios/ODDLAND_100_QUEST_DESIGN.md)、[三地域各100件の条件付き配分](scenarios/REGIONAL_QUEST_ALLOCATION.md)、[移設調査](dungeons/ODDLAND_RELOCATION_AUDIT.md)、[2職・2人の候補](battle/SALOME_CLASSES_AND_CHARACTERS_DESIGN.md)を記録しています。個人80件は地域300件と別枠。旧保存を保持し、移設や初期対象外化が成立しない場合の件数も明記しています。設計のみで、ゲーム内の件数・マップ・能力は変更していません。
+[オッドランドの越境](world/ODDLAND_ACCESS_DESIGN.md)と[学術都市サロメ](world/SALOME_DESIGN.md)を設計しました。[サロメの新規100企画](scenarios/SALOME_100_QUEST_DESIGN.md)、[オッドランドの100企画](scenarios/ODDLAND_100_QUEST_DESIGN.md)、[三地域各100件の条件付き配分](scenarios/REGIONAL_QUEST_ALLOCATION.md)、[移設調査](dungeons/ODDLAND_RELOCATION_AUDIT.md)、[2職・2人の候補](battle/SALOME_CLASSES_AND_CHARACTERS_DESIGN.md)を記録しています。個人80件は地域300件と別枠。旧保存を保持し、移設や初期対象外化が成立しない場合の件数も明記しています。[越境基盤の第1段階](world/ODDLAND_ACCESS_IMPLEMENTATION.md)を第2版へ実装しました。地下関所から国境宿場までの3マップ、現地施設、受付・出発制限、拠点別の帰還と保存移行を接続し、第2版は59マップ・290件です。地域新作、既存迷宮の移設、サロメ街道、追加職と人物は後続です。
 
 [ショップ・スキル屋と旅支度](ui/SHOP_AND_PREPARATIONS.md)では、商品購入・独立施設のスキル屋・旅道具店の補給工房を分離しました。商品一覧と技能一覧はそれぞれ固定領域内をスクロールします。
 
