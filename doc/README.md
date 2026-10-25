@@ -6,7 +6,7 @@
 
 [シナリオの版切替](scenarios/SCENARIO_EDITIONS.md)を実装しました。新規開始の初期設定は最新版（第2版）、旧セーブは初版として再開します。版ごとに自動保存・手動3枠・進行全体を分離し、q001をGAMEBOOKのv1.2bで改稿しました。ほかの209件は初版を継承し、[仲間連作80件](scenarios/editions/e2/COMPANION_QUESTS.md)を追加しました。第2版は290件です。
 
-[オッドランドへの越境と100件の設計](world/ODDLAND_ACCESS_DESIGN.md)を作成しました。地下関所からの往来、五つの拠点、[新作100件](scenarios/ODDLAND_100_QUEST_DESIGN.md)、[既存迷宮の移設調査](dungeons/ODDLAND_RELOCATION_AUDIT.md)を記録しています。現段階は設計のみで、ゲーム内の件数・マップは変えていません。
+[オッドランドの越境](world/ODDLAND_ACCESS_DESIGN.md)と[学術都市サロメ](world/SALOME_DESIGN.md)を設計しました。[サロメの新規100企画](scenarios/SALOME_100_QUEST_DESIGN.md)、[オッドランドの100企画](scenarios/ODDLAND_100_QUEST_DESIGN.md)、[三地域各100件の条件付き配分](scenarios/REGIONAL_QUEST_ALLOCATION.md)、[移設調査](dungeons/ODDLAND_RELOCATION_AUDIT.md)、[2職・2人の候補](battle/SALOME_CLASSES_AND_CHARACTERS_DESIGN.md)を記録しています。個人80件は地域300件と別枠。旧保存を保持し、移設や初期対象外化が成立しない場合の件数も明記しています。設計のみで、ゲーム内の件数・マップ・能力は変更していません。
 
 [ショップ・スキル屋と旅支度](ui/SHOP_AND_PREPARATIONS.md)では、商品購入・独立施設のスキル屋・旅道具店の補給工房を分離しました。商品一覧と技能一覧はそれぞれ固定領域内をスクロールします。
 
