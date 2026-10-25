@@ -164,7 +164,7 @@ export function validateContent(data){
     serviceIds.add(service.id);
   }
   for(const d of Object.values(data.dungeons??{}))for(const s of Object.values(d.systems))if(s.use==='map_connections')for(const link of s.links??[])if(link.condition!==undefined)expression(link.condition,`${d.id}/${link.id}`);
-  for(const region of data.regions)reference(data.maps,region.entrance,'region');
+  for(const region of data.regions)if(region.kind==='story'){if(!region.name||!region.description||region.entrance!==undefined)fail('region','物語地域は名前・説明が必要で、迷宮入口を持ちません');}else reference(data.maps,region.entrance,'region');
   for(const [id,map] of Object.entries(data.maps)){
     if(id!==map.id||!Array.isArray(map.tiles)||!map.tiles.length){fail(id,'マップ構造不正');continue;}
     const width=map.tiles[0].length;
@@ -189,6 +189,7 @@ export function validateContent(data){
   for(const [id,q] of Object.entries(data.quests)){
     if(q.schemaVersion!==1||q.id!==id||typeof q.title!=='string')fail(id,'依頼定義不正');
     if(q.requires)expression(q.requires,id);for(const o of Object.values(q.outcomes??{}))if(o.requires)expression(o.requires,id);
+    if(q.requiredParty!==undefined){if(!Array.isArray(q.requiredParty)||!q.requiredParty.length||new Set(q.requiredParty).size!==q.requiredParty.length)fail(id,'同行者一覧が不正です');else for(const actor of q.requiredParty)reference(data.actors,actor,id);}
     if(!q.model?.world?.truth||!q.model?.agents?.length||!Array.isArray(q.model?.reveal?.retroactiveTargets))fail(id,'シナリオモデルが不足しています');
     if(Object.keys(q.outcomes??{}).length<2)fail(id,'結末は2つ以上必要です');
     for(const [name,outcome] of Object.entries(q.outcomes??{}))if(!outcome.text||!Number.isInteger(outcome.gold)||outcome.gold<0||!Number.isInteger(outcome.xp)||outcome.xp<0||outcome.gems!==undefined&&(!Number.isSafeInteger(outcome.gems)||outcome.gems<0||outcome.gems>1e9))fail(`${id}/${name}`,'結末・報酬不正');

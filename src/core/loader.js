@@ -36,6 +36,23 @@ export async function loadContent(read = async path => {
     else if(type==='script') merge(data.scripts,value.scripts,type);
     else data[type]=value;
   }
+  const additionsPath=catalog.editions[data.scenarioEdition].additions;
+  if(additionsPath){
+    const additions=await read(additionsPath);
+    if(additions?.schemaVersion!==1||!Array.isArray(additions.quests)||!additions.quests.length||!additions.locations||!additions.characters)throw Error('シナリオ版の追加定義が不正です。');
+    for(const key of Object.keys(additions))if(!['schemaVersion','quests','locations','characters','regions'].includes(key))throw Error(`未対応の追加定義: ${key}`);
+    if(!Array.isArray(additions.regions))throw Error('追加地域の一覧が不正です。');
+    data.regions=[...data.regions];
+    for(const region of additions.regions){if(!Number.isInteger(region.id)||region.id<1||data.regions.some(r=>r.id===region.id))throw Error('追加地域のID重複または不正');data.regions.push(region);}
+    merge(data.locations,additions.locations,'location');merge(data.characters,additions.characters,'character');
+    const ids=[];
+    for(const quest of additions.quests){
+      if(!quest||typeof quest.id!=='string')throw Error('追加依頼のIDが不正です。');
+      merge(data.quests,{[quest.id]:quest},'quest');merge(data.scripts,quest.scripts,'script');ids.push(quest.id);
+    }
+    if(data.questOrder)data.questOrder={...data.questOrder,ids:[...data.questOrder.ids,...ids]};
+    data.game={...game,subtitle:`${Object.keys(data.quests).length}の依頼と、帰還の記録`,questAdditions:[...(game.questAdditions??[]),{ids}]};
+  }
   projectQuestObjects(data);
   const errors=validateContent(data);
   if(errors.length) throw new Error(`シナリオ検証エラー\n${errors.join('\n')}`);

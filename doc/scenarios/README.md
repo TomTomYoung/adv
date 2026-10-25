@@ -6,13 +6,13 @@
 
 ## シナリオの版
 
-[トルネア・オッドランド・帝国](../world/TORNEA_ODDLAND.md)、[アダと夫](../world/ADA.md)、[仲間の追加設定](../world/COMPANIONS.md)、[地下街と勢力](../world/UNDERGROUND_CITY.md)、[くらがりの浸食](../world/DARKNESS.md)は作者向け資料です。夫の凶行という表向きの説明とアダが実行者である真相を区別し、記憶改ざん、大水門の鍵、最終盤の交代、同行イベントなどを採用設定・構想として記録しています。現行の初版・第2版へ本文や伏線を挿入せず、具体的なシナリオ制作やゲーム実装はユーザーの明示指示まで保留します。[着手条件](../HANDOFF.md#オッドランド関連は明示指示まで保留)を守ってください。
+[トルネア・オッドランド・帝国](../world/TORNEA_ODDLAND.md)、[アダと夫](../world/ADA.md)、[仲間の追加設定](../world/COMPANIONS.md)、[地下街と勢力](../world/UNDERGROUND_CITY.md)、[くらがりの浸食](../world/DARKNESS.md)は作者向け資料です。夫の凶行という表向きの説明とアダが実行者である真相を区別し、記憶改ざん、大水門の鍵、最終盤の交代、同行イベントなどを採用設定・構想として記録しています。今回の明示指示により、8人の仲間連作80件を第2版へ追加しました。オッドランド侵攻、大水門の鍵と開放、アダ離脱と夫加入は引き続き保留します。[着手条件](../HANDOFF.md#オッドランド関連は明示指示まで保留)を守ってください。
 
 [SCENARIO_EDITIONS.md](SCENARIO_EDITIONS.md)：初版と第2版の切替、最新版の初期設定、版別の保存と継承範囲。
 
 [SCENARIO_MODEL_V12B.md](SCENARIO_MODEL_V12B.md)：第2版に採用するGAMEBOOKモデルv1.2bの全文。
 
-[editions/README.md](editions/README.md)：改稿版の本文。現在はq001第2版を収録し、ほかの209件は初版を継承します。
+[editions/README.md](editions/README.md)：改稿版の本文。q001第2版と新作の仲間連作80件を収録し、ほかの209件は初版を継承します。
 
 ## 本文と人物
 
@@ -47,3 +47,7 @@
 配置図は `quest-maps/`。専用ページから各図と配布マップJSONへリンクします。`npm run build:catalog` がカタログ・専用ページ・図を生成し、`npm run check:docs` が内容・配置・ローカルリンクを照合します。改稿時は原稿と配布JSONを同期してから生成してください。
 
 町の共通仕様は [WORLD_LOCATIONS.md](../world/WORLD_LOCATIONS.md)、2D区画は [CONNECTED_2D_MAPS.md](../dungeons/CONNECTED_2D_MAPS.md)、UIは [MESSAGE_AND_COMMAND_WINDOWS.md](../ui/MESSAGE_AND_COMMAND_WINDOWS.md)、作業の引き継ぎは [HANDOFF.md](../HANDOFF.md) を参照してください。
+
+[PROSE_MODEL_V1.md](PROSE_MODEL_V1.md)：GAMEBOOK「読み手の気持ちを考える文章設計モデル 第1版」の全文。
+
+[PROSE_CHECKLIST.md](PROSE_CHECKLIST.md)：GAMEBOOK「邪悪な文章の構造と点検チェックシート」の全文。

@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises';
+import {buildCompanionEdition} from './build-companion-edition.mjs';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {createHash} from 'node:crypto';
@@ -108,6 +109,7 @@ export function secondEditionDocument(q,firstSha){
 }
 
 export async function buildScenarioEditions({check=false}={}){
+ await buildCompanionEdition({check});
  const bytes=await fs.readFile(path.join(root,'data/quests/q001.json'));
  const q=buildSecondEditionQuest(JSON.parse(bytes));
  const files={

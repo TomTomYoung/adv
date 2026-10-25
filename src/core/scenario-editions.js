@@ -12,6 +12,7 @@ export function resolveScenarioEdition(catalog=LEGACY_SCENARIO_EDITIONS,requeste
   for(const [id,edition] of Object.entries(catalog.editions)){
     if(!known(id)||!isRecord(edition)||typeof edition.label!=='string'||!edition.label.trim()||!isRecord(edition.questOverrides))throw Error('シナリオ版の定義が不正です。');
     for(const [quest,path] of Object.entries(edition.questOverrides))if(!/^[a-z][a-z0-9_]*$/.test(quest)||!dataPath(path))throw Error('シナリオ版の差替え先が不正です。');
+    if(edition.additions!==undefined&&!dataPath(edition.additions))throw Error('シナリオ版の追加定義先が不正です。');
   }
   const id=requested==='latest'?catalog.latest:requested;
   if(!known(id)||!Object.hasOwn(catalog.editions,id))throw Error(`対応していないシナリオ版です: ${String(requested)}`);

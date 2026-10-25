@@ -8,7 +8,7 @@ const data=await loadContent(read);
 const editions=[data.scenarioEdition];
 for(const id of Object.keys(data.scenarioEditions.editions))if(id!==data.scenarioEdition){
   const resolved=await loadContent(read,{edition:id});
-  if(Object.keys(resolved.quests).length!==Object.keys(data.quests).length)throw Error(`Scenario edition ${id} changed the quest set`);
+  if(Object.keys(data.quests).some(quest=>!resolved.quests[quest]))throw Error(`Scenario edition ${id} removed a base quest`);
   editions.push(id);
 }
 for(const file of [...Object.values(data.assets.images),...Object.values(data.assets.audio)]){const buffer=await fs.readFile(path.join(root,file));if(!buffer.length)throw Error(`Empty asset ${file}`);}
