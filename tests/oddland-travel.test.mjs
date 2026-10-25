@@ -40,7 +40,7 @@ test('first-edition geography stays byte-derived and only the second edition has
   assert.deepEqual(first.maps.region_1_landing.tiles,(await read('data/maps/region_1_landing.json')).tiles);
   assert.equal(data.maps.region_1_landing.objects.filter(o=>o.id==='oddland_route_sign').length,1);
   for(const id of Object.keys(first.locations))assert.deepEqual(data.locations[id],first.locations[id]);
-  assert.deepEqual(data.quests.q004,first.quests.q004);assert.equal(Object.keys(data.quests).length,290);
+  assert.deepEqual(data.quests.q004,first.quests.q004);assert.equal(Object.keys(data.quests).length,300);
   const g=new GameEngine(first);drain(g);assert.equal(g.dispatch({type:'world.cross',route:'oddland_checkpoint'}),false);
 });
 
@@ -116,7 +116,7 @@ test('old e2 saves migrate through the companion cohort before adding unvisited 
     g.load(old.save());assert.deepEqual(validateSave(JSON.parse(g.save()),data),[]);assert.equal(g.state.worldTravel.visited.oddland,undefined);
     assert.deepEqual(g.state.vm,before.state.vm);assert.deepEqual(g.state.waiting,before.state.waiting);assert.deepEqual(g.state.expedition,before.state.expedition);
     for(const key of ['gold','location','townLocation','journey','inventory','rng','actors'])assert.deepEqual(g.state[key],before.state[key]);
-    assert.equal(Object.keys(g.state.quests).length,290);save(g);
+    assert.equal(Object.keys(g.state.quests).length,300);save(g);
   }
   const old=new GameEngine(data.worldTravelLegacy);drain(old);old.teleport('region_1_landing',13,3);old.dispatch({type:'location.enter',id:'waterway_checkpoint'});
   const g=fresh();g.load(old.save());assert.equal(g.state.townLocation,'waterway_checkpoint');save(g);assert.ok(g.dispatch({type:'location.exit'}));
@@ -140,7 +140,7 @@ test('edition geography rejects stale fingerprints, duplicate replacements and i
   for(const change of [d=>d.worldTravel.routes[1].a.x=0,d=>d.worldTravel.settlements.oddland.root='missing',d=>d.worldTravel.routes[1].b.dungeon='kagaribi',d=>d.worldTravel.mapRegistrations.e2_trade_corridor='unknown',d=>d.worldTravel.settlements.oddland.registration='unknown',d=>d.worldTravel.routes[0].exitObject.id='missing']){const bad=structuredClone(data);change(bad);assert.ok(validateContent(bad).length);}
 });
 
-for(const layout of ['scene','classic'])test(`${layout}: real view controls cross the border, keep the local board empty and confirm the named return anchor`,()=>{
+for(const layout of ['scene','classic'])test(`${layout}: real view controls cross the border, show only the local board and confirm the named return anchor`,()=>{
   const g=fresh();gate(g);const dom=installDOM();let view;
   const render=()=>view.render(projectGame(g)),dispatch=intent=>{const ok=g.dispatch(intent);render();return ok;};
   const click=label=>{const b=[...dom.root.querySelectorAll('button')].find(b=>b.textContent===label);assert.ok(b,`missing ${label}; visible: ${[...dom.root.querySelectorAll('button')].map(b=>b.textContent).join(' / ')}`);assert.ok(!b.disabled);b.click();};
@@ -154,7 +154,7 @@ for(const layout of ['scene','classic'])test(`${layout}: real view controls cros
     assert.equal(g.state.townLocation,'oddland_border');assert.match(dom.root.querySelector('.world-travel-status').textContent,/オッドランド/);
     click('国境宿場の補給店');click('携行油を補充する（無料）');assert.equal(g.state.light,90);
     click('オッドランド・国境宿場へ戻る');click('国境宿場の共同依頼所');click('依頼掲示板を見る');
-    assert.equal(dom.root.querySelectorAll('.quest-card').length,0);assert.match(dom.root.querySelector('.empty').textContent,/この窓口/);
+    assert.equal(dom.root.querySelectorAll('.quest-card').length,10);assert.ok(!dom.root.querySelector('.quest-list').textContent.includes('帰らない灯番'));
     if(layout==='scene')key('Escape');else click('オッドランド・国境宿場へ戻る');
     if(g.state.townLocation!=='oddland_border')click('オッドランド・国境宿場へ戻る');
     click('国境宿場と出入窓口の石段');assert.equal(g.state.worldTravel.returnAnchor,'oddland');

@@ -14,6 +14,7 @@ export function resolveScenarioEdition(catalog=LEGACY_SCENARIO_EDITIONS,requeste
     for(const [quest,path] of Object.entries(edition.questOverrides))if(!/^[a-z][a-z0-9_]*$/.test(quest)||!dataPath(path))throw Error('シナリオ版の差替え先が不正です。');
     if(edition.geography!==undefined&&!dataPath(edition.geography))throw Error('シナリオ版の地理定義先が不正です。');
     if(edition.additions!==undefined&&!dataPath(edition.additions))throw Error('シナリオ版の追加定義先が不正です。');
+    if(edition.regionalAdditions!==undefined&&!dataPath(edition.regionalAdditions))throw Error('シナリオ版の地域追加先が不正です。');
   }
   const id=requested==='latest'?catalog.latest:requested;
   if(!known(id)||!Object.hasOwn(catalog.editions,id))throw Error(`対応していないシナリオ版です: ${String(requested)}`);

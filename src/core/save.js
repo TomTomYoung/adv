@@ -166,6 +166,13 @@ function migrateContentSave(original,data){
 export function migrateSave(original,data){
   let edition;
   try{edition=readSavedScenarioEdition(original);if(edition!==resolveScenarioEdition(data.scenarioEditions,data.scenarioEdition??'e1'))return original;}catch{return original;}
+  if(data.regionalLegacy&&isRecord(original.state.quests)&&data.regionalQuestIds.every(id=>!Object.hasOwn(original.state.quests,id)&&!Object.hasOwn(original.state.stories??{},id))){
+    const legacy=data.regionalLegacy,previous=migrateSave(original,legacy);
+    if(validateSave(previous,legacy).length)return original;
+    const upgraded=clone(previous);
+    for(const id of data.regionalQuestIds)upgraded.state.quests[id]={stage:'available',evidence:[],outcome:null};
+    return upgraded;
+  }
   if(data.worldTravel&&original.state.worldTravel===undefined&&data.worldTravelLegacy){
     const legacy=data.worldTravelLegacy,previous=migrateSave(original,legacy);
     if(validateSave(previous,legacy).length)return original;

@@ -11,7 +11,7 @@ import {drain} from './helpers.mjs';
 
 const read=file=>fs.readFile(new URL('../'+file,import.meta.url),'utf8').then(JSON.parse);
 const first=await loadContent(read),data=await loadContent(read,{edition:'e2'});
-const added=Object.values(data.quests).filter(q=>q.number>=211);
+const added=Object.values(data.quests).filter(q=>q.number>=211&&q.number<=290);
 export function go(g,to){
  const queue=[g.state.townLocation],seen=new Map([[queue[0],null]]);
  for(let i=0;i<queue.length&&!seen.has(to);i++){
@@ -46,14 +46,14 @@ function prepareEarlier(g,q,preferences={}){
 }
 
 test('e2 adds exactly eight ten-quest arcs, locations and presentation order without touching e1',async()=>{
- assert.equal(Object.keys(first.quests).length,210);assert.equal(Object.keys(data.quests).length,290);assert.equal(added.length,80);
+ assert.equal(Object.keys(first.quests).length,210);assert.equal(Object.keys(data.quests).length,300);assert.equal(added.length,80);
  for(const [actor,episodes] of Object.entries(arcs)){assert.equal(episodes.length,10);assert.deepEqual(episodes.map(q=>q.number),Array.from({length:10},(_,i)=>episodes[0].number+i));}
  assert.equal(added.reduce((n,q)=>n+Object.keys(q.outcomes).length,0),162);
  for(const id of Object.keys(first.quests))if(id!=='q001')assert.deepEqual(data.quests[id],first.quests[id]);
  for(const id of Object.keys(first.locations))assert.deepEqual(data.locations[id],first.locations[id]);
  assert.deepEqual(data.actors,first.actors);assert.deepEqual(data.worldTravelLegacy.maps,first.maps);
  for(const id of Object.keys(first.maps))if(id!=='region_1_landing')assert.deepEqual(data.maps[id],first.maps[id]);
- const g=ready('nio'),view=projectGame(g);assert.equal(view.quests.length,290);assert.equal(new Set(view.quests.map(q=>q.id)).size,290);
+ const g=ready('nio'),view=projectGame(g);assert.equal(view.quests.length,300);assert.equal(new Set(view.quests.map(q=>q.id)).size,300);
  assert.equal(view.quests.find(q=>q.id==='q221').regionName,'仲間と巡るトルネア');
  assert.equal(g.dispatch({type:'travel',region:11}),false);
  await buildCompanionEdition({check:true});

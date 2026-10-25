@@ -1,6 +1,6 @@
 # オッドランドへの越境と100クエストの設計
 
-設計日: 2026-10-25（日本時間）。基点はPR #130統合後のmaster `fa1bd5200f293915252a9a86cf11a5859212d30a`。2026-10-26に[第1段階の越境基盤](ODDLAND_ACCESS_IMPLEMENTATION.md)を実装。以下は設計時点の仕様と後続計画を保持する。新作100企画・既存迷宮の移設は未実装。現在は初版210件、第2版290件である。
+設計日: 2026-10-25（日本時間）。基点はPR #130統合後のmaster `fa1bd5200f293915252a9a86cf11a5859212d30a`。2026-10-26に[第1段階の越境基盤](ODDLAND_ACCESS_IMPLEMENTATION.md)を実装。以下は設計時点の仕様と後続計画を保持する。第2段階の[第一群10件](../scenarios/editions/e2/ODDLAND_FIRST_TEN.md)と[必要素材台帳](ODDLAND_ASSETS.md)も追加した。現在は初版210件、第2版300件。残る90企画と既存迷宮の移設は未実装。
 
 [100件の企画](../scenarios/ODDLAND_100_QUEST_DESIGN.md) ／ [既存迷宮の移設調査](../dungeons/ODDLAND_RELOCATION_AUDIT.md) ／ [背景設定](TORNEA_ODDLAND.md) ／ [引き継ぎ](../HANDOFF.md)。
 
