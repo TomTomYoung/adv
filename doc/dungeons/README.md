@@ -38,6 +38,10 @@
 
 [ODDLAND_RELOCATION_AUDIT.md](ODDLAND_RELOCATION_AUDIT.md)：オッドランドとサロメの配置を見直す既存迷宮の調査。13迷宮の判断、オッドランド60件・サロメ40件の候補、帰還・受付・q100・保存への影響と採用条件。移設は未実行です。
 
+[REGIONAL_RELOCATION_CHECK.md](REGIONAL_RELOCATION_CHECK.md)：既存100件・321結末の移設前検証、全結末の再現手順、2,800条件の世代別保存移行。[測定JSON](REGIONAL_RELOCATION_CHECK.json)。
+
+[REGIONAL_RELOCATION_WORK.md](REGIONAL_RELOCATION_WORK.md)：100件それぞれの現場・同行・受渡し・帰路の残作業と、旧遠征・サロメ施設を保つ実装順序。
+
 [DUNGEON_CATALOG.md](DUNGEON_CATALOG.md)：13ダンジョンの概要と専用ページへの入口。
 
 [details/README.md](details/README.md)：迷宮ごとの専用ページ。区画・経路・設備・通常遭遇・関連クエスト・保存状態・編集元。

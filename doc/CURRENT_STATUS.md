@@ -12,7 +12,7 @@
 
 ## オッドランドの越境とサロメの設計
 
-[地下関所からの越境](world/ODDLAND_ACCESS_DESIGN.md)に[学術都市サロメ](world/SALOME_DESIGN.md)を加え、[サロメ新作100企画](scenarios/SALOME_100_QUEST_DESIGN.md)と[三地域各100件の条件付き配分](scenarios/REGIONAL_QUEST_ALLOCATION.md)を設計しました。移設成立時は灯帰り既存100、オッドランド既存60＋新40、サロメ既存40＋新60。個人80件は別枠で、初期目標380件です。旧10件を初期対象外にできなければ390件の互換優先案となります。予備は既存10＋新作100企画を保持します。[2職・2人の追加候補](battle/SALOME_CLASSES_AND_CHARACTERS_DESIGN.md)も設計しました。現行はe2の300件・30職・操作対象10人です。国境往復・宿場・受付制限・帰還先・保存移行は[第2版へ実装済み](world/ODDLAND_ACCESS_IMPLEMENTATION.md)です。地下関所から小さな3マップを実際に歩いて通過します。第2版は59マップです。[国境宿場の第一群10件・88場面・21結末](scenarios/editions/e2/ODDLAND_FIRST_TEN.md)を受注でき、7施設と場面用NPC22人を追加しました。独立7件の任意3件完了から夜番・寝床・食事会へ進めます。旧迷宮の移設、残る地域新作、サロメの追加職・仲間は未実装で、最終盤は保留です。
+[地下関所からの越境](world/ODDLAND_ACCESS_DESIGN.md)に[学術都市サロメ](world/SALOME_DESIGN.md)を加え、[サロメ新作100企画](scenarios/SALOME_100_QUEST_DESIGN.md)と[三地域各100件の条件付き配分](scenarios/REGIONAL_QUEST_ALLOCATION.md)を設計しました。移設成立時は灯帰り既存100、オッドランド既存60＋新40、サロメ既存40＋新60。個人80件は別枠で、初期目標380件です。旧10件を初期対象外にできなければ390件の互換優先案となります。予備は既存10＋新作100企画を保持します。[2職・2人の追加候補](battle/SALOME_CLASSES_AND_CHARACTERS_DESIGN.md)も設計しました。現行はe2の300件・30職・操作対象10人です。国境往復・宿場・受付制限・帰還先・保存移行は[第2版へ実装済み](world/ODDLAND_ACCESS_IMPLEMENTATION.md)です。地下関所から小さな3マップを実際に歩いて通過します。第2版は59マップです。[国境宿場の第一群10件・88場面・21結末](scenarios/editions/e2/ODDLAND_FIRST_TEN.md)を受注でき、7施設と場面用NPC22人を追加しました。独立7件の任意3件完了から夜番・寝床・食事会へ進めます。[旧100件の移設前検証](dungeons/REGIONAL_RELOCATION_CHECK.md)は全321結末・2,800条件の世代別保存移行を確認し、[現場・帰路の個別作業](dungeons/REGIONAL_RELOCATION_WORK.md)を整理しました。現配置での検証であり、新地理への移設合格ではありません。100件の実地図接続と旧遠征の地理互換が未実装のため、入口・受付は変更していません。残る地域新作、サロメ街道・追加職・仲間も未実装で、最終盤は保留です。
 
 ## 全体と配布データ
 
