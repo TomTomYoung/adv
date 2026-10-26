@@ -41,7 +41,7 @@ test('first-edition geography stays byte-derived and only the second edition has
   assert.deepEqual(first.maps.region_1_landing.tiles,(await read('data/maps/region_1_landing.json')).tiles);
   assert.equal(data.maps.region_1_landing.objects.filter(o=>o.id==='oddland_route_sign').length,1);
   for(const id of Object.keys(first.locations).filter(id=>id!=='hikarigaeri_square'))assert.deepEqual(data.locations[id],first.locations[id]);
-  assert.deepEqual(data.locations.hikarigaeri_square.dungeons,first.locations.hikarigaeri_square.dungeons.filter(id=>!['region_4','region_7','region_9'].includes(id)));
+  assert.deepEqual(data.locations.hikarigaeri_square.dungeons,first.locations.hikarigaeri_square.dungeons.filter(id=>!['region_4','region_5','region_7','region_8','region_9'].includes(id)));
   assert.deepEqual(data.quests.q004,first.quests.q004);assert.equal(Object.keys(data.quests).length,300);
   const g=new GameEngine(first);drain(g);assert.equal(g.dispatch({type:'world.cross',route:'oddland_checkpoint'}),false);
 });

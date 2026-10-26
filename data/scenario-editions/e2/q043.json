@@ -1,0 +1,2435 @@
+{
+  "schemaVersion": 1,
+  "id": "q043",
+  "number": 43,
+  "title": "墨を食う火",
+  "client": "写本師のアリ",
+  "brief": "本を焼かず文字だけ消す火が広がっている。消えた内容を探してください。",
+  "region": 5,
+  "type": "authored_progression",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。 サロメの共同依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q043_clue_a",
+      "title": "墨を食う火：現場の痕跡",
+      "points": [
+        {
+          "map": "region_5_f1",
+          "x": 5,
+          "y": 3,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q043.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q043.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q043"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q043"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "q043_clue_b",
+      "title": "墨を食う火：記録と証言",
+      "points": [
+        {
+          "map": "region_5_f1",
+          "x": 3,
+          "y": 13,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q043.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q043.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q043"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q043"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "q043_decision",
+      "title": "墨を食う火：決着の場",
+      "points": [
+        {
+          "map": "region_5_f1",
+          "x": 9,
+          "y": 12,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q043.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q043.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q043.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q043"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "q043_library_entry",
+      "title": "墨を食う火の現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q043.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q043.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q043"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q043.library.visit",
+      "points": [
+        {
+          "dungeon": "region_5",
+          "map": "region_5_f1",
+          "x": 9,
+          "y": 12
+        }
+      ]
+    },
+    {
+      "id": "q043_library_valve",
+      "title": "保存薬の噴霧弁",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "valve",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q043.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q043.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q043"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q043.library.visit",
+      "points": [
+        {
+          "dungeon": "region_5",
+          "map": "region_5_f1",
+          "x": 5,
+          "y": 3
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_5_f1",
+      "x": 5,
+      "y": 3,
+      "object": "q043_clue_a",
+      "role": "clue_a"
+    },
+    {
+      "map": "region_5_f1",
+      "x": 3,
+      "y": 13,
+      "object": "q043_clue_b",
+      "role": "clue_b"
+    },
+    {
+      "map": "region_5_f1",
+      "x": 9,
+      "y": 12,
+      "object": "q043_decision",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "無傷の控えから追記を戻す",
+      "text": "本文も訂正も読み直せる。アリは安い墨を恥じず、薬剤との組合せを記す。",
+      "gold": 105,
+      "xp": 100
+    },
+    "contract": {
+      "label": "光る棚を封鎖し、以後使わない",
+      "text": "光は見えなくなった。訂正前の間違いが正本として残る。",
+      "gold": 125,
+      "xp": 75
+    },
+    "compromise": {
+      "label": "読める文字だけ写し、失った箇所を空欄にする",
+      "text": "空欄は隠されなかった。次の読者が、何を知らないか分かる。",
+      "gold": 68,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/salome/library-first.mjs",
+    "world": {
+      "truth": "保存用薬剤が特定の安墨だけに反応し、燃えて見える光を出している。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "保存用薬剤が特定の安墨だけに反応し、燃えて見える光を出している。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "本を焼かず文字だけ消す火が広がっている。消えた内容を探してください。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "写本師のアリ",
+        "observation": "本を焼かず文字だけ消す火が広がっている。消えた内容を探してください。",
+        "belief": "本を焼かず文字だけ消す火が広がっている。消えた内容を探してください。",
+        "goal": "本を焼かず文字だけ消す火が広がっている。消えた内容を探してください。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "本を焼かず文字だけ消す火が広がっている。消えた内容を探してください。",
+      "progression": "消える文字を前に薬剤停止・控えの退避を選び、保存に失敗した本文は戻さない。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q043.library.entry"
+        },
+        {
+          "id": "restore",
+          "script": "q043.library.restore"
+        },
+        {
+          "id": "valve",
+          "script": "q043.library.valve"
+        },
+        {
+          "id": "backup",
+          "script": "q043.library.backup"
+        },
+        {
+          "id": "restored",
+          "script": "q043.library.restored"
+        },
+        {
+          "id": "blanks",
+          "script": "q043.library.blanks"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "本を焼かず文字だけ消す火が広がっている。消えた内容を探してください。",
+      "openQuestion": "墨を食う火の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "ruleReveal",
+      "newInformation": "保存用薬剤が特定の安墨だけに反応し、燃えて見える光を出している。",
+      "retroactiveTargets": [
+        "restore"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q043.flow.entry"
+      },
+      {
+        "id": "restore",
+        "script": "q043.flow.restore"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q043.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q043.stopped",
+        "meaning": "各場面に明記した stopped の行為・合意の記録",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "消える文字を前に薬剤停止・控えの退避を選び、保存に失敗した本文は戻さない。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "消える文字を前に薬剤停止・控えの退避を選び、保存に失敗した本文は戻さない。",
+    "flowVersion": 2,
+    "entryScript": "q043.library.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "安い墨の追記だけが青く光る。保存薬の噴霧はまだ動いている。",
+        "options": [
+          {
+            "id": "valve",
+            "text": "まず噴霧弁を止める",
+            "to": "valve",
+            "action": "entry_valve"
+          },
+          {
+            "id": "copy",
+            "text": "光る文字を先に写し取る",
+            "to": "restore",
+            "action": "entry_copy"
+          },
+          {
+            "id": "seal",
+            "text": "光る棚を封鎖し、以後使わない",
+            "to": "@contract",
+            "action": "entry_seal"
+          }
+        ]
+      },
+      {
+        "id": "restore",
+        "place": "entry",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q043.values.stopped"
+              },
+              "right": true
+            },
+            "yes": "薬剤を止めると光が消えた。別室の控えはまだ読める。",
+            "no": "写している間に別室へも薬が回り、控えの追記が消えた。今弁を止めても、その文字は戻らない。"
+          },
+          "保存用薬剤が特定の安墨だけに反応し、燃えて見える光を出している。"
+        ],
+        "options": [
+          {
+            "id": "restore",
+            "text": "無傷の控えから追記を戻す",
+            "to": "backup",
+            "action": "restore_restore"
+          },
+          {
+            "id": "blanks",
+            "text": "読める文字だけ写し、失った箇所を空欄にする",
+            "to": "blanks",
+            "action": "restore_blanks"
+          },
+          {
+            "id": "close",
+            "text": "復旧せず、消えた棚を封鎖する",
+            "to": "@contract",
+            "action": "restore_close"
+          }
+        ]
+      },
+      {
+        "id": "valve",
+        "place": "valve",
+        "text": "噴霧弁の前へ来た。ここで止めれば、別室の控えへ薬が回るのを防げる。",
+        "options": [
+          {
+            "id": "stop",
+            "text": "弁を閉じて文字の残りを確かめる",
+            "to": "restore",
+            "action": "valve_stop"
+          }
+        ]
+      },
+      {
+        "id": "backup",
+        "place": "copy",
+        "text": "薬が届く前に残った控えを照合し、乾いた箱へ収めた。元の棚へ運ぶ。",
+        "options": [
+          {
+            "id": "carry",
+            "text": "控えを元の棚へ運んで追記を戻す",
+            "to": "restored",
+            "action": "backup_carry"
+          }
+        ]
+      },
+      {
+        "id": "restored",
+        "place": "entry",
+        "text": "無傷の控えと照合して追記を戻す。消えた内容を推測で埋めてはいない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@informed",
+            "action": "restored_finish"
+          }
+        ]
+      },
+      {
+        "id": "blanks",
+        "place": "copy",
+        "text": "読める内容を控えの照合室へ残し、失われた部分を空欄として明記する。薬が回った後の追記は復元しない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@compromise",
+            "action": "blanks_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "library-first-ten",
+      "settlement": "salome",
+      "saveRevision": 2,
+      "scope": "書庫前半10件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q043.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "高価な赤字は残り、安い黒墨の追記だけが光っている。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q043",
+          "key": "clue_a",
+          "text": "高価な赤字は残り、安い黒墨の追記だけが光っている。"
+        }
+      ]
+    },
+    "q043.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "写本師のアリ",
+          "text": "薬剤の使用記録は、予算削減で安墨へ替えた日と重なります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q043",
+          "key": "clue_b",
+          "text": "薬剤の使用記録は、予算削減で安墨へ替えた日と重なる。"
+        }
+      ]
+    },
+    "q043.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "墨を食う火\n\n本を焼かず文字だけ消す火が広がっている。消えた内容を探してください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "火の精を倒し燃えた棚を封鎖する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_5",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "光は見えなくなった。訂正前の間違いが正本として残る。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q043",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "薬剤を止め控えから追記を戻す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q043.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q043.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "保存用薬剤が特定の安墨だけに反応し、燃えて見える光を出している。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "本文も訂正も読み直せる。アリは安い墨を恥じず、薬剤との組合せを記す。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q043",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "残った文字を写し消えた箇所を空欄にする",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "空欄は隠されなかった。次の読者が、何を知らないか分かる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q043",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q043.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "墨を食う火\n\n本を焼かず文字だけ消す火が広がっている。消えた内容を探してください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q043.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q043.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "保存用薬剤が特定の安墨だけに反応し、燃えて見える光を出している。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q043.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "火の精を倒し燃えた棚を封鎖する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_5",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "光は見えなくなった。訂正前の間違いが正本として残る。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q043",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "薬剤を止め控えから追記を戻す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q043.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q043.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "本文も訂正も読み直せる。アリは安い墨を恥じず、薬剤との組合せを記す。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q043",
+                  "outcome": "informed"
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q043.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q043.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "compromise",
+              "text": "残った文字を写し消えた箇所を空欄にする",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "空欄は隠されなかった。次の読者が、何を知らないか分かる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q043",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」写本師のアリは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられる。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q043.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q043.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q043.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "本文も訂正も読み直せる。アリは安い墨を恥じず、薬剤との組合せを記す。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q043.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "光は見えなくなった。訂正前の間違いが正本として残る。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q043.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "空欄は隠されなかった。次の読者が、何を知らないか分かる。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q043.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q043.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q043.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q043.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q043.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q043.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q043.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "安い墨の追記だけが青く光る。保存薬の噴霧はまだ動いている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "valve",
+              "text": "まず噴霧弁を止める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q043.stopped",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q043.flow.restore"
+                }
+              ]
+            },
+            {
+              "id": "copy",
+              "text": "光る文字を先に写し取る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q043.flow.restore"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "光る棚を封鎖し、以後使わない",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q043.flow.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q043.flow.restore": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q043.node",
+          "value": "restore"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q043.stopped"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "薬剤を止めると光が消えた。別室の控えはまだ読める。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "写している間に別室へも薬が回り、控えの追記が消えた。今弁を止めても、その文字は戻らない。"
+            }
+          ]
+        },
+        {
+          "op": "say",
+          "text": "保存用薬剤が特定の安墨だけに反応し、燃えて見える光を出している。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "restore",
+              "text": "無傷の控えから追記を戻す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q043.stopped"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q043.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "blanks",
+              "text": "読める文字だけ写し、失った箇所を空欄にする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q043.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "close",
+              "text": "復旧せず、消えた棚を封鎖する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q043.flow.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q043.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q043.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "本文も訂正も読み直せる。アリは安い墨を恥じず、薬剤との組合せを記す。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q043",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q043.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q043.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "光は見えなくなった。訂正前の間違いが正本として残る。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q043",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q043.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q043.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "空欄は隠されなかった。次の読者が、何を知らないか分かる。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q043",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q043.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q043.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q043.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "本文も訂正も読み直せる。アリは安い墨を恥じず、薬剤との組合せを記す。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "光は見えなくなった。訂正前の間違いが正本として残る。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "空欄は隠されなかった。次の読者が、何を知らないか分かる。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q043"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q043.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q043.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q043.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "restore",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q043.flow.restore"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q043.flow.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q043.library.entry": {
+      "storyQuest": "q043",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q043",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "安い墨の追記だけが青く光る。保存薬の噴霧はまだ動いている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "valve",
+              "text": "まず噴霧弁を止める",
+              "storyAction": {
+                "quest": "q043",
+                "action": "entry_valve"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q043",
+                  "action": "entry_valve"
+                }
+              ]
+            },
+            {
+              "id": "copy",
+              "text": "光る文字を先に写し取る",
+              "storyAction": {
+                "quest": "q043",
+                "action": "entry_copy"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q043",
+                  "action": "entry_copy"
+                },
+                {
+                  "op": "jump",
+                  "script": "q043.library.restore"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "光る棚を封鎖し、以後使わない",
+              "storyAction": {
+                "quest": "q043",
+                "action": "entry_seal"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q043",
+                  "action": "entry_seal"
+                },
+                {
+                  "op": "jump",
+                  "script": "q043.library.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q043.library.restore": {
+      "storyQuest": "q043",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q043",
+          "scene": "restore"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q043.values.stopped"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "薬剤を止めると光が消えた。別室の控えはまだ読める。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "写している間に別室へも薬が回り、控えの追記が消えた。今弁を止めても、その文字は戻らない。"
+            }
+          ]
+        },
+        {
+          "op": "narrate",
+          "text": "保存用薬剤が特定の安墨だけに反応し、燃えて見える光を出している。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "restore",
+              "text": "無傷の控えから追記を戻す",
+              "storyAction": {
+                "quest": "q043",
+                "action": "restore_restore"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q043.values.stopped"
+                },
+                "right": true
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q043",
+                  "action": "restore_restore"
+                }
+              ]
+            },
+            {
+              "id": "blanks",
+              "text": "読める文字だけ写し、失った箇所を空欄にする",
+              "storyAction": {
+                "quest": "q043",
+                "action": "restore_blanks"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q043",
+                  "action": "restore_blanks"
+                }
+              ]
+            },
+            {
+              "id": "close",
+              "text": "復旧せず、消えた棚を封鎖する",
+              "storyAction": {
+                "quest": "q043",
+                "action": "restore_close"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q043",
+                  "action": "restore_close"
+                },
+                {
+                  "op": "jump",
+                  "script": "q043.library.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q043.library.valve": {
+      "storyQuest": "q043",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q043",
+          "scene": "valve"
+        },
+        {
+          "op": "narrate",
+          "text": "噴霧弁の前へ来た。ここで止めれば、別室の控えへ薬が回るのを防げる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "stop",
+              "text": "弁を閉じて文字の残りを確かめる",
+              "storyAction": {
+                "quest": "q043",
+                "action": "valve_stop"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q043",
+                  "action": "valve_stop"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q043.library.backup": {
+      "storyQuest": "q043",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q043",
+          "scene": "backup"
+        },
+        {
+          "op": "narrate",
+          "text": "薬が届く前に残った控えを照合し、乾いた箱へ収めた。元の棚へ運ぶ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "carry",
+              "text": "控えを元の棚へ運んで追記を戻す",
+              "storyAction": {
+                "quest": "q043",
+                "action": "backup_carry"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q043",
+                  "action": "backup_carry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q043.library.restored": {
+      "storyQuest": "q043",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q043",
+          "scene": "restored"
+        },
+        {
+          "op": "narrate",
+          "text": "無傷の控えと照合して追記を戻す。消えた内容を推測で埋めてはいない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q043",
+                "action": "restored_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q043",
+                  "action": "restored_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q043.library.end.informed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q043.library.blanks": {
+      "storyQuest": "q043",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q043",
+          "scene": "blanks"
+        },
+        {
+          "op": "narrate",
+          "text": "読める内容を控えの照合室へ残し、失われた部分を空欄として明記する。薬が回った後の追記は復元しない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q043",
+                "action": "blanks_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q043",
+                  "action": "blanks_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q043.library.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q043.library.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "本文も訂正も読み直せる。アリは安い墨を恥じず、薬剤との組合せを記す。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q043",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q043.library.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "光は見えなくなった。訂正前の間違いが正本として残る。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q043",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q043.library.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "空欄は隠されなかった。次の読者が、何を知らないか分かる。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q043",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q043.library.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q043"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q043.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q043.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q043.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "本文も訂正も読み直せる。アリは安い墨を恥じず、薬剤との組合せを記す。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "光は見えなくなった。訂正前の間違いが正本として残る。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "空欄は隠されなかった。次の読者が、何を知らないか分かる。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q043"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q043.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q043.library.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "restore",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q043.library.restore"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "valve",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q043.library.valve"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "backup",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q043.library.backup"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "restored",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q043.library.restored"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "blanks",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q043.library.blanks"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q043.library.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "墨を食う火の現場",
+      "valve": "保存薬の噴霧弁",
+      "copy": "退避する控えの照合室",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "valve"
+      ],
+      [
+        "transit",
+        "copy"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "valve",
+          "copy",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "lost": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "lost"
+      },
+      "sealed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "sealed"
+      },
+      "stopped": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "stopped"
+      },
+      "restored": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "restored"
+      },
+      "blanks": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "blanks"
+      },
+      "backupAt": {
+        "type": "enum",
+        "initial": "copy",
+        "values": [
+          "entry",
+          "valve",
+          "copy",
+          "transit",
+          "party",
+          "restored"
+        ],
+        "meaning": "backup の所在または保持者"
+      },
+      "restoredAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "valve",
+          "copy",
+          "transit",
+          "party",
+          "backup"
+        ],
+        "meaning": "restored の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "backup": {
+        "holder": "backupAt",
+        "kind": "item"
+      },
+      "restored": {
+        "holder": "restoredAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "保存用薬剤が特定の安墨だけに反応し、燃えて見える光を出している。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "墨を食う火の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "restore": {
+        "title": "墨を食う火の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "valve": {
+        "title": "保存薬の噴霧弁",
+        "place": "valve",
+        "cast": [],
+        "requires": true
+      },
+      "backup": {
+        "title": "退避する控えの照合室",
+        "place": "copy",
+        "cast": [],
+        "requires": true
+      },
+      "restored": {
+        "title": "墨を食う火の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "blanks": {
+        "title": "退避する控えの照合室",
+        "place": "copy",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_valve": {
+        "from": [
+          "entry"
+        ],
+        "to": "valve",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "valve"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "valve",
+          "companions": []
+        },
+        "depart": []
+      },
+      "entry_copy": {
+        "from": [
+          "entry"
+        ],
+        "to": "restore",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "lost",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "entry_seal": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "sealed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "restore_restore": {
+        "from": [
+          "restore"
+        ],
+        "to": "backup",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q043.values.stopped"
+          },
+          "right": true
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "copy"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "copy",
+          "companions": []
+        },
+        "depart": []
+      },
+      "restore_blanks": {
+        "from": [
+          "restore"
+        ],
+        "to": "blanks",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "copy"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "copy",
+          "companions": []
+        },
+        "depart": []
+      },
+      "restore_close": {
+        "from": [
+          "restore"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "sealed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "valve_stop": {
+        "from": [
+          "valve"
+        ],
+        "to": "restore",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "stopped",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "backup_carry": {
+        "from": [
+          "backup"
+        ],
+        "to": "restored",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "backup",
+            "from": "copy",
+            "to": "party"
+          }
+        ]
+      },
+      "restored_finish": {
+        "from": [
+          "restored"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "backup",
+            "from": "party",
+            "to": "entry"
+          },
+          {
+            "op": "set",
+            "key": "restored",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "blanks_finish": {
+        "from": [
+          "blanks"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "blanks",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q043.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q043.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q043.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q043.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q043.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q043.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q043.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q043.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q043.values.partyAt"
+                },
+                "right": "copy"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_5",
+        "map": "region_5_f1",
+        "x": 9,
+        "y": 12
+      },
+      "valve": {
+        "kind": "dungeon",
+        "dungeon": "region_5",
+        "map": "region_5_f1",
+        "x": 5,
+        "y": 3
+      },
+      "copy": {
+        "kind": "town",
+        "location": "library_copy_room"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "salome",
+  "receptionLocations": [
+    "salome_board"
+  ]
+}

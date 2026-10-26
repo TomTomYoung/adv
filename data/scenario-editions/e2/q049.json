@@ -1,0 +1,2513 @@
+{
+  "schemaVersion": 1,
+  "id": "q049",
+  "number": 49,
+  "title": "忘却の栞",
+  "client": "探検家のルウ",
+  "brief": "栞を挟むと道を忘れる。必要な頁だけ持ち帰ってください。",
+  "region": 5,
+  "type": "authored_progression",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。 サロメの共同依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q049_clue_a",
+      "title": "忘却の栞：現場の痕跡",
+      "points": [
+        {
+          "map": "region_5_f2",
+          "x": 3,
+          "y": 6,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q049.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q049.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q049"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q049"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "q049_clue_b",
+      "title": "忘却の栞：記録と証言",
+      "points": [
+        {
+          "map": "region_5_f2",
+          "x": 8,
+          "y": 7,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q049.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q049.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q049"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q049"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "q049_decision",
+      "title": "忘却の栞：決着の場",
+      "points": [
+        {
+          "map": "region_5_f2",
+          "x": 17,
+          "y": 3,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q049.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q049.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q049.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q049"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "region_5",
+      "title": "閉じた頁と開いた通路",
+      "dungeon": "region_5",
+      "points": [
+        {
+          "map": "region_5_f1",
+          "x": 1,
+          "y": 2,
+          "dungeon": "region_5"
+        }
+      ],
+      "trigger": "action",
+      "script": "dungeon.scene.region_5.v1",
+      "condition": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q049.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      },
+      "requirement": "関連する依頼を受けると調査できる。",
+      "note": {
+        "text": "借りた知識で第1層の封印通路を開く手順を確認した。貸出による技の封印と、栞がどの頁を封じたかの調査を分けて記す。",
+        "when": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.dungeonNotes.region_5"
+          },
+          "right": true
+        }
+      },
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          null,
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q049"
+              },
+              "right": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "q049_library_entry",
+      "title": "忘却の栞の現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q049.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q049.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q049"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q049.library.visit",
+      "points": [
+        {
+          "dungeon": "region_5",
+          "map": "region_5_f2",
+          "x": 17,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "id": "q049_library_map",
+      "title": "壁に残された帰路の見取図",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "map",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q049.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q049.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q049"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q049.library.visit",
+      "points": [
+        {
+          "dungeon": "region_5",
+          "map": "region_5_f2",
+          "x": 7,
+          "y": 1
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_5_f2",
+      "x": 3,
+      "y": 6,
+      "object": "q049_clue_a",
+      "role": "clue_a"
+    },
+    {
+      "map": "region_5_f2",
+      "x": 8,
+      "y": 7,
+      "object": "q049_clue_b",
+      "role": "clue_b"
+    },
+    {
+      "map": "region_5_f2",
+      "x": 17,
+      "y": 3,
+      "object": "q049_decision",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "別紙で出口へ戻り、封印範囲の修正を届ける",
+      "text": "ルウは帰路を覚えて帰った。忘れる約束も守れたと胸を張る。",
+      "gold": 105,
+      "xp": 100
+    },
+    "contract": {
+      "label": "機密の封印も含め、栞を焼く",
+      "text": "全て思い出せた。持ち帰るべきでない知識も、夢に現れるようになる。",
+      "gold": 125,
+      "xp": 75
+    },
+    "compromise": {
+      "label": "機密頁を置き、壁の道順だけ紙へ写す",
+      "text": "成果は少なくても隊は戻った。ルウは次の契約で閲覧範囲を確かめる。",
+      "gold": 68,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/salome/library-first.mjs",
+    "world": {
+      "truth": "栞は読んだ内容を封じる機密道具で、道順を記した頁まで封じている。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "栞は読んだ内容を封じる機密道具で、道順を記した頁まで封じている。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "栞を挟むと道を忘れる。必要な頁だけ持ち帰ってください。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "探検家のルウ",
+        "observation": "栞を挟むと道を忘れる。必要な頁だけ持ち帰ってください。",
+        "belief": "栞を挟むと道を忘れる。必要な頁だけ持ち帰ってください。",
+        "goal": "栞を挟むと道を忘れる。必要な頁だけ持ち帰ってください。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "栞を挟むと道を忘れる。必要な頁だけ持ち帰ってください。",
+      "progression": "読んだ道順が封じられる体験から、機密の本文と帰り道の範囲を切り分ける。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q049.library.entry"
+        },
+        {
+          "id": "scope",
+          "script": "q049.library.scope"
+        },
+        {
+          "id": "test",
+          "script": "q049.library.test"
+        },
+        {
+          "id": "map",
+          "script": "q049.library.map"
+        },
+        {
+          "id": "returned",
+          "script": "q049.library.returned"
+        },
+        {
+          "id": "reported",
+          "script": "q049.library.reported"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "栞を挟むと道を忘れる。必要な頁だけ持ち帰ってください。",
+      "openQuestion": "忘却の栞の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "observerSwap",
+      "newInformation": "栞は読んだ内容を封じる機密道具で、道順を記した頁まで封じている。",
+      "retroactiveTargets": [
+        "scope"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q049.flow.entry"
+      },
+      {
+        "id": "scope",
+        "script": "q049.flow.scope"
+      },
+      {
+        "id": "test",
+        "script": "q049.flow.test"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q049.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "読んだ道順が封じられる体験から、機密の本文と帰り道の範囲を切り分ける。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "読んだ道順が封じられる体験から、機密の本文と帰り道の範囲を切り分ける。",
+    "flowVersion": 2,
+    "entryScript": "q049.library.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "栞を挟んだ直後、帰りの道が思い出せなくなった。手元には部屋番号だけ残る。",
+        "options": [
+          {
+            "id": "remove",
+            "text": "栞を一時外して道順を確かめる",
+            "to": "scope",
+            "action": "entry_remove"
+          },
+          {
+            "id": "burn",
+            "text": "機密の封印も含め、栞を焼く",
+            "to": "@contract",
+            "action": "entry_burn"
+          },
+          {
+            "id": "map",
+            "text": "機密頁を置き、壁の道順だけ紙へ写す",
+            "to": "map",
+            "action": "entry_map"
+          }
+        ]
+      },
+      {
+        "id": "scope",
+        "place": "entry",
+        "text": "道を読み直せた。栞は読んだ内容を封じる機密道具で、道順を記した頁まで封じている。 栞の封印枠は、機密と見取り図を同じ頁として囲んでいる。",
+        "options": [
+          {
+            "id": "split",
+            "text": "見取り図を別紙へ移し、機密だけ封印する",
+            "to": "test",
+            "action": "scope_split"
+          },
+          {
+            "id": "leave",
+            "text": "文書を置き、道順の写しだけ持ち帰る",
+            "to": "map",
+            "action": "scope_leave"
+          }
+        ]
+      },
+      {
+        "id": "test",
+        "place": "entry",
+        "text": "栞を戻しても別紙の道順は読める。機密の文字だけが思い出せない。",
+        "options": [
+          {
+            "id": "return",
+            "text": "別紙で出口へ戻り、封印範囲の修正を届ける",
+            "to": "reported",
+            "action": "test_return"
+          },
+          {
+            "id": "undo",
+            "text": "文書を保管庫へ戻し、地図だけで帰る",
+            "to": "map",
+            "action": "test_undo"
+          }
+        ]
+      },
+      {
+        "id": "map",
+        "place": "map",
+        "text": "文書を元の保管場所へ残し、壁の見取図を別紙へ写した。帰路を封じる操作は行わない。",
+        "options": [
+          {
+            "id": "return",
+            "text": "道順の写しを持ち、ルウと窓口へ戻る",
+            "to": "returned",
+            "action": "map_return"
+          }
+        ]
+      },
+      {
+        "id": "returned",
+        "place": "registry",
+        "text": "ルウと帰着し、道順の写しを示す。封じた文書は持ち出していない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@compromise",
+            "action": "returned_finish"
+          }
+        ]
+      },
+      {
+        "id": "reported",
+        "place": "registry",
+        "text": "別紙の道順で帰着し、機密だけを封じた文書と封印範囲の修正を窓口へ渡す。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@informed",
+            "action": "reported_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "library-first-ten",
+      "settlement": "salome",
+      "saveRevision": 2,
+      "scope": "書庫前半10件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q049.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "覚えていない道でも足が曲がり角へ向き、地図を見れば進める。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q049",
+          "key": "clue_a",
+          "text": "覚えていない道でも足が曲がり角へ向き、地図を見れば進める。"
+        }
+      ]
+    },
+    "q049.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "探検家のルウ",
+          "text": "栞の封印範囲は頁番号で指定され、経路図が同じ範囲にあります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q049",
+          "key": "clue_b",
+          "text": "栞の封印範囲は頁番号で指定され、経路図が同じ範囲にある。"
+        }
+      ]
+    },
+    "q049.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "忘却の栞\n\n栞を挟むと道を忘れる。必要な頁だけ持ち帰ってください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "忘却の番人を倒して栞を焼く",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_5",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "全て思い出せた。持ち帰るべきでない知識も、夢に現れるようになる。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q049",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "道順を封印範囲から外し機密だけ守る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q049.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q049.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "栞は読んだ内容を封じる機密道具で、道順を記した頁まで封じている。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "ルウは帰路を覚えて帰った。忘れる約束も守れたと胸を張る。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q049",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "機密頁を置き地図だけ写して帰る",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "成果は少なくても隊は戻った。ルウは次の契約で閲覧範囲を確かめる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q049",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q049.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "忘却の栞\n\n栞を挟むと道を忘れる。必要な頁だけ持ち帰ってください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q049.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q049.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "栞は読んだ内容を封じる機密道具で、道順を記した頁まで封じている。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q049.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "忘却の番人を倒して栞を焼く",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_5",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "全て思い出せた。持ち帰るべきでない知識も、夢に現れるようになる。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q049",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "道順を封印範囲から外し機密だけ守る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q049.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q049.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "ルウは帰路を覚えて帰った。忘れる約束も守れたと胸を張る。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q049",
+                  "outcome": "informed"
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q049.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q049.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "compromise",
+              "text": "機密頁を置き地図だけ写して帰る",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "成果は少なくても隊は戻った。ルウは次の契約で閲覧範囲を確かめる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q049",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」探検家のルウは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられる。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q049.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q049.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q049.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "ルウは帰路を覚えて帰った。忘れる約束も守れたと胸を張る。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q049.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "全て思い出せた。持ち帰るべきでない知識も、夢に現れるようになる。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q049.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "成果は少なくても隊は戻った。ルウは次の契約で閲覧範囲を確かめる。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q049.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q049.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q049.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q049.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q049.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q049.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q049.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "栞を挟んだ直後、帰りの道が思い出せなくなった。手元には部屋番号だけ残る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "remove",
+              "text": "栞を一時外して道順を確かめる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q049.flow.scope"
+                }
+              ]
+            },
+            {
+              "id": "burn",
+              "text": "機密の封印も含め、栞を焼く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q049.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "map",
+              "text": "機密頁を置き、壁の道順だけ紙へ写す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q049.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q049.flow.scope": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q049.node",
+          "value": "scope"
+        },
+        {
+          "op": "say",
+          "text": "道を読み直せた。栞は読んだ内容を封じる機密道具で、道順を記した頁まで封じている。 栞の封印枠は、機密と見取り図を同じ頁として囲んでいる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "split",
+              "text": "見取り図を別紙へ移し、機密だけ封印する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q049.flow.test"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "文書を置き、道順の写しだけ持ち帰る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q049.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q049.flow.test": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q049.node",
+          "value": "test"
+        },
+        {
+          "op": "say",
+          "text": "栞を戻しても別紙の道順は読める。機密の文字だけが思い出せない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "別紙で出口へ戻り、封印範囲の修正を届ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q049.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "undo",
+              "text": "文書を保管庫へ戻し、地図だけで帰る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q049.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q049.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q049.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "ルウは帰路を覚えて帰った。忘れる約束も守れたと胸を張る。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q049",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q049.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q049.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "全て思い出せた。持ち帰るべきでない知識も、夢に現れるようになる。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q049",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q049.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q049.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "成果は少なくても隊は戻った。ルウは次の契約で閲覧範囲を確かめる。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q049",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q049.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q049.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q049.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "ルウは帰路を覚えて帰った。忘れる約束も守れたと胸を張る。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "全て思い出せた。持ち帰るべきでない知識も、夢に現れるようになる。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "成果は少なくても隊は戻った。ルウは次の契約で閲覧範囲を確かめる。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q049"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q049.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q049.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q049.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "scope",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q049.flow.scope"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "test",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q049.flow.test"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q049.flow.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "dungeon.scene.region_5.v1": {
+      "dungeonScene": "region_5",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "書見台のそばで、封じられた通路と貸出の仕組みを照合する。ここで借りる知識には、代わりに使えなくなる自分の技がある。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "contains",
+            "left": {
+              "ref": "dungeons.persistent.region_5.systems.library.opened"
+            },
+            "right": "seal_1_0"
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "第1層の封印通路が解かれている。通路を読む知識を借り、封印へ作用させる手順が確かめられた。返却すると元の技を使えるようになるが、開いた通路は残る。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.region_5"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.region_5",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "第1層の対象通路はまだ封印されている。通路を読む本を借り、封印の操作セルで探索スキルを使ってから、書見台へ戻って確かめよう。"
+            }
+          ]
+        }
+      ]
+    },
+    "q049.library.entry": {
+      "storyQuest": "q049",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q049",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "栞を挟んだ直後、帰りの道が思い出せなくなった。手元には部屋番号だけ残る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "remove",
+              "text": "栞を一時外して道順を確かめる",
+              "storyAction": {
+                "quest": "q049",
+                "action": "entry_remove"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q049",
+                  "action": "entry_remove"
+                },
+                {
+                  "op": "jump",
+                  "script": "q049.library.scope"
+                }
+              ]
+            },
+            {
+              "id": "burn",
+              "text": "機密の封印も含め、栞を焼く",
+              "storyAction": {
+                "quest": "q049",
+                "action": "entry_burn"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q049",
+                  "action": "entry_burn"
+                },
+                {
+                  "op": "jump",
+                  "script": "q049.library.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "map",
+              "text": "機密頁を置き、壁の道順だけ紙へ写す",
+              "storyAction": {
+                "quest": "q049",
+                "action": "entry_map"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q049",
+                  "action": "entry_map"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q049.library.scope": {
+      "storyQuest": "q049",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q049",
+          "scene": "scope"
+        },
+        {
+          "op": "narrate",
+          "text": "道を読み直せた。栞は読んだ内容を封じる機密道具で、道順を記した頁まで封じている。 栞の封印枠は、機密と見取り図を同じ頁として囲んでいる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "split",
+              "text": "見取り図を別紙へ移し、機密だけ封印する",
+              "storyAction": {
+                "quest": "q049",
+                "action": "scope_split"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q049",
+                  "action": "scope_split"
+                },
+                {
+                  "op": "jump",
+                  "script": "q049.library.test"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "文書を置き、道順の写しだけ持ち帰る",
+              "storyAction": {
+                "quest": "q049",
+                "action": "scope_leave"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q049",
+                  "action": "scope_leave"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q049.library.test": {
+      "storyQuest": "q049",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q049",
+          "scene": "test"
+        },
+        {
+          "op": "narrate",
+          "text": "栞を戻しても別紙の道順は読める。機密の文字だけが思い出せない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "別紙で出口へ戻り、封印範囲の修正を届ける",
+              "storyAction": {
+                "quest": "q049",
+                "action": "test_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q049",
+                  "action": "test_return"
+                }
+              ]
+            },
+            {
+              "id": "undo",
+              "text": "文書を保管庫へ戻し、地図だけで帰る",
+              "storyAction": {
+                "quest": "q049",
+                "action": "test_undo"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q049",
+                  "action": "test_undo"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q049.library.map": {
+      "storyQuest": "q049",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q049",
+          "scene": "map"
+        },
+        {
+          "op": "narrate",
+          "text": "文書を元の保管場所へ残し、壁の見取図を別紙へ写した。帰路を封じる操作は行わない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "道順の写しを持ち、ルウと窓口へ戻る",
+              "storyAction": {
+                "quest": "q049",
+                "action": "map_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q049",
+                  "action": "map_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q049.library.returned": {
+      "storyQuest": "q049",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q049",
+          "scene": "returned"
+        },
+        {
+          "op": "narrate",
+          "text": "ルウと帰着し、道順の写しを示す。封じた文書は持ち出していない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q049",
+                "action": "returned_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q049",
+                  "action": "returned_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q049.library.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q049.library.reported": {
+      "storyQuest": "q049",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q049",
+          "scene": "reported"
+        },
+        {
+          "op": "narrate",
+          "text": "別紙の道順で帰着し、機密だけを封じた文書と封印範囲の修正を窓口へ渡す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q049",
+                "action": "reported_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q049",
+                  "action": "reported_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q049.library.end.informed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q049.library.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "ルウは帰路を覚えて帰った。忘れる約束も守れたと胸を張る。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q049",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q049.library.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "全て思い出せた。持ち帰るべきでない知識も、夢に現れるようになる。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q049",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q049.library.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "成果は少なくても隊は戻った。ルウは次の契約で閲覧範囲を確かめる。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q049",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q049.library.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q049"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q049.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q049.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q049.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "ルウは帰路を覚えて帰った。忘れる約束も守れたと胸を張る。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "全て思い出せた。持ち帰るべきでない知識も、夢に現れるようになる。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "成果は少なくても隊は戻った。ルウは次の契約で閲覧範囲を確かめる。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q049"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q049.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q049.library.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "scope",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q049.library.scope"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "test",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q049.library.test"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "map",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q049.library.map"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "returned",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q049.library.returned"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "reported",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q049.library.reported"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q049.library.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "忘却の栞の現場",
+      "map": "壁に残された帰路の見取図",
+      "registry": "封印範囲の修正を受け取る窓口",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "map"
+      ],
+      [
+        "transit",
+        "registry"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "map",
+          "registry",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "burned": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "burned"
+      },
+      "separateMap": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "separateMap"
+      },
+      "reported": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "reported"
+      },
+      "documentAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "map",
+          "registry",
+          "transit",
+          "party",
+          "mapCopy",
+          "luu"
+        ],
+        "meaning": "document の所在または保持者"
+      },
+      "mapCopyAt": {
+        "type": "enum",
+        "initial": "map",
+        "values": [
+          "entry",
+          "map",
+          "registry",
+          "transit",
+          "party",
+          "document",
+          "luu"
+        ],
+        "meaning": "mapCopy の所在または保持者"
+      },
+      "luuAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "map",
+          "registry",
+          "transit"
+        ],
+        "meaning": "luu の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "document": {
+        "holder": "documentAt",
+        "kind": "item"
+      },
+      "mapCopy": {
+        "holder": "mapCopyAt",
+        "kind": "item"
+      },
+      "luu": {
+        "holder": "luuAt",
+        "kind": "person"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "栞は読んだ内容を封じる機密道具で、道順を記した頁まで封じている。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "忘却の栞の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "scope": {
+        "title": "忘却の栞の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "test": {
+        "title": "忘却の栞の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "map": {
+        "title": "壁に残された帰路の見取図",
+        "place": "map",
+        "cast": [],
+        "requires": true
+      },
+      "returned": {
+        "title": "封印範囲の修正を受け取る窓口",
+        "place": "registry",
+        "cast": [],
+        "requires": true
+      },
+      "reported": {
+        "title": "封印範囲の修正を受け取る窓口",
+        "place": "registry",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_remove": {
+        "from": [
+          "entry"
+        ],
+        "to": "scope",
+        "requires": true,
+        "effects": [
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "entry",
+            "requires": true
+          }
+        ],
+        "once": false
+      },
+      "entry_burn": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "burned",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "entry_map": {
+        "from": [
+          "entry"
+        ],
+        "to": "map",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "luu"
+            ],
+            "path": [
+              "transit",
+              "map"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "map",
+          "companions": [
+            "luu"
+          ]
+        },
+        "depart": []
+      },
+      "scope_split": {
+        "from": [
+          "scope"
+        ],
+        "to": "test",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "separateMap",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "scope_leave": {
+        "from": [
+          "scope"
+        ],
+        "to": "map",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "luu"
+            ],
+            "path": [
+              "transit",
+              "map"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "map",
+          "companions": [
+            "luu"
+          ]
+        },
+        "depart": []
+      },
+      "test_return": {
+        "from": [
+          "test"
+        ],
+        "to": "reported",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "luu"
+            ],
+            "path": [
+              "transit",
+              "registry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "registry",
+          "companions": [
+            "luu"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "document",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      },
+      "test_undo": {
+        "from": [
+          "test"
+        ],
+        "to": "map",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "luu"
+            ],
+            "path": [
+              "transit",
+              "map"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "map",
+          "companions": [
+            "luu"
+          ]
+        },
+        "depart": []
+      },
+      "map_return": {
+        "from": [
+          "map"
+        ],
+        "to": "returned",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "luu"
+            ],
+            "path": [
+              "transit",
+              "registry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "registry",
+          "companions": [
+            "luu"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "mapCopy",
+            "from": "map",
+            "to": "party"
+          }
+        ]
+      },
+      "returned_finish": {
+        "from": [
+          "returned"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "mapCopy",
+            "from": "party",
+            "to": "registry"
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "reported_finish": {
+        "from": [
+          "reported"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "document",
+            "from": "party",
+            "to": "registry"
+          },
+          {
+            "op": "set",
+            "key": "reported",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q049.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q049.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q049.values.partyAt"
+                },
+                "right": "registry"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q049.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q049.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q049.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q049.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q049.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q049.values.partyAt"
+                },
+                "right": "registry"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_5",
+        "map": "region_5_f2",
+        "x": 17,
+        "y": 3
+      },
+      "map": {
+        "kind": "dungeon",
+        "dungeon": "region_5",
+        "map": "region_5_f2",
+        "x": 7,
+        "y": 1
+      },
+      "registry": {
+        "kind": "town",
+        "location": "library_registry"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "salome",
+  "receptionLocations": [
+    "salome_board"
+  ]
+}
