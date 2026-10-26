@@ -1,0 +1,1891 @@
+{
+  "schemaVersion": 1,
+  "id": "q144",
+  "number": 144,
+  "title": "祭の悪役",
+  "client": "悪竜役のジル",
+  "brief": "切られた舞台衣装を調べ、公演の続け方を相談してください。",
+  "region": 5,
+  "type": "scene_graph",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 サロメの共同依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q144_scene",
+      "title": "祭の悪役：悪竜役のジル",
+      "points": [
+        {
+          "map": "region_5_f1",
+          "x": 6,
+          "y": 1,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q144.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q144.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q144.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q144"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "q144_library_entry",
+      "title": "祭の悪役の相談卓",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q144.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q144.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q144"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q144.library.visit",
+      "points": [
+        {
+          "dungeon": "region_5",
+          "map": "region_5_f1",
+          "x": 6,
+          "y": 1
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_5_f1",
+      "x": 6,
+      "y": 1,
+      "object": "q144_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "light": {
+      "label": "二人で起きる悪竜",
+      "text": "若手と息を合わせてジルが立ち上がった。幕の後、頭を脱いでも同じ角度で観客へ礼をした。",
+      "gold": 105,
+      "xp": 75
+    },
+    "wit": {
+      "label": "知恵比べの舞台",
+      "text": "勇者役にも笑いが生まれた。ジルは主役を奪わずに観客を待たせる間を覚えた。",
+      "gold": 105,
+      "xp": 75
+    },
+    "retire": {
+      "label": "最後の悪竜",
+      "text": "来年は別の役者が角をかぶる。ジルは最後の頭を脱ぎ、自分の顔で礼をした。",
+      "gold": 105,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/salome/library-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381a39bfadc8f9711c51f",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "観客は勇者より、毎年負けても起き上がる悪竜を待っている。ジルは人気を失いたくないため、苦しい動きを増やしていた。裏地に何度も補強した縫い跡を先に見せ、破損が敵意だけでは読めないようにする。",
+      "fixedPast": "悪竜役の役者ジルが、壊された衣装の調査を頼む。若い勇者役は主役を奪われると嫉妬しているが、切ったのは衣装係だ。重すぎる新衣装でジルが倒れる前に止めようとし、本人は好意を侮辱と思う。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "悪竜役のジル",
+        "beliefsAndGoals": "悪竜役の役者ジルが、壊された衣装の調査を頼む。若い勇者役は主役を奪われると嫉妬しているが、切ったのは衣装係だ。重すぎる新衣装でジルが倒れる前に止めようとし、本人は好意を侮辱と思う。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "切られた舞台衣装を調べ、公演の続け方を相談してください。"
+      }
+    ],
+    "conflict": {
+      "design": "衣装調査→関係者の聞き取り→試演→軽量化して決闘／知恵比べへ変更／引退公演。破損の弁償と舞台の安全を別々に決める。手掛かりが少なくても、危険を見た時点で軽量化を提案できる。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q144.library.entry"
+        },
+        {
+          "id": "play",
+          "script": "q144.library.play"
+        },
+        {
+          "id": "repair",
+          "script": "q144.library.repair"
+        },
+        {
+          "id": "show_light",
+          "script": "q144.library.show_light"
+        },
+        {
+          "id": "show_wit",
+          "script": "q144.library.show_wit"
+        },
+        {
+          "id": "retire_consent",
+          "script": "q144.library.retire_consent"
+        },
+        {
+          "id": "retire_after_trial",
+          "script": "q144.library.retire_after_trial"
+        },
+        {
+          "id": "last_show",
+          "script": "q144.library.last_show"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "切られた舞台衣装を調べ、公演の続け方を相談してください。"
+    },
+    "reveal": {
+      "newInformation": "観客は勇者より、毎年負けても起き上がる悪竜を待っている。ジルは人気を失いたくないため、苦しい動きを増やしていた。裏地に何度も補強した縫い跡を先に見せ、破損が敵意だけでは読めないようにする。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q144.scene.entry"
+      },
+      {
+        "id": "play",
+        "script": "q144.scene.play"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q144.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "衣装の裏地は何度も補強されていた。嫉妬する勇者役が疑われるが、衣装係が切ったと名乗り出る。「倒れる前に止めたかった」",
+        "options": [
+          {
+            "id": "trial",
+            "text": "破損の弁償を別に残し、安全な試演をする",
+            "to": "repair",
+            "action": "entry_trial"
+          },
+          {
+            "id": "retire",
+            "text": "本人の希望を確かめ、引退公演にする",
+            "to": "retire_consent",
+            "action": "entry_retire"
+          }
+        ]
+      },
+      {
+        "id": "play",
+        "place": "trial",
+        "text": "軽い衣装なら起き上がれる。観客が待つのは派手な転倒より、毎年負けても起きる悪竜だった。若手にも見せ場を渡せる。",
+        "options": [
+          {
+            "id": "light",
+            "text": "軽量化して若手と決闘を演じる",
+            "to": "show_light",
+            "action": "play_light"
+          },
+          {
+            "id": "wit",
+            "text": "体力勝負から知恵比べの芝居へ変える",
+            "to": "show_wit",
+            "action": "play_wit"
+          },
+          {
+            "id": "retire",
+            "text": "今回を最後の公演にする",
+            "to": "retire_after_trial",
+            "action": "play_retire"
+          }
+        ]
+      },
+      {
+        "id": "repair",
+        "place": "workshop",
+        "text": "破損した衣装と衣装係の申告を確認し、弁償の記録を残した。これとは別に、ジルが試せる軽い衣装へ直す。",
+        "options": [
+          {
+            "id": "try",
+            "text": "直した衣装を持ち、ジルと稽古場へ向かう",
+            "to": "play",
+            "action": "repair_try"
+          }
+        ]
+      },
+      {
+        "id": "show_light",
+        "place": "stage",
+        "text": "ジルと若手が会場で息を合わせ、軽い衣装で最後まで演じた。衣装係の弁償は別の記録に残る。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@light",
+            "action": "show_light_finish"
+          }
+        ]
+      },
+      {
+        "id": "show_wit",
+        "place": "stage",
+        "text": "会場へ着き、知恵比べへ変えた芝居を演じた。危険な転倒を続ける条件には戻さない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@wit",
+            "action": "show_wit_finish"
+          }
+        ]
+      },
+      {
+        "id": "retire_consent",
+        "place": "entry",
+        "text": "ジル本人が今回を最後にしたいと答えた。衣装の破損についても、衣装係の弁償記録を残す。",
+        "options": [
+          {
+            "id": "stage",
+            "text": "本人と衣装を最後の公演へ運ぶ",
+            "to": "last_show",
+            "action": "retire_consent_stage"
+          }
+        ]
+      },
+      {
+        "id": "retire_after_trial",
+        "place": "trial",
+        "text": "試演を終えたジルが、今回を最後にすると決めた。軽い衣装で最後の礼をする。",
+        "options": [
+          {
+            "id": "stage",
+            "text": "本人と最後の公演へ向かう",
+            "to": "last_show",
+            "action": "retire_after_trial_stage"
+          }
+        ]
+      },
+      {
+        "id": "last_show",
+        "place": "stage",
+        "text": "会場で最後の公演を終えた。ジルは衣装の頭を外し、自分の顔で観客へ礼をした。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@retire",
+            "action": "last_show_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "entryScript": "q144.library.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "library-second-ten",
+      "settlement": "salome",
+      "saveRevision": 2,
+      "scope": "書庫後半10件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q144.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q144.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "衣装の裏地は何度も補強されていた。嫉妬する勇者役が疑われるが、衣装係が切ったと名乗り出る。「倒れる前に止めたかった」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "trial",
+              "text": "破損の弁償を別に残し、安全な試演をする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q144.scene.play"
+                }
+              ]
+            },
+            {
+              "id": "retire",
+              "text": "本人の希望を確かめ、引退公演にする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q144.end.retire"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q144.scene.play": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q144.node",
+          "value": "play"
+        },
+        {
+          "op": "say",
+          "text": "軽い衣装なら起き上がれる。観客が待つのは派手な転倒より、毎年負けても起きる悪竜だった。若手にも見せ場を渡せる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "light",
+              "text": "軽量化して若手と決闘を演じる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q144.end.light"
+                }
+              ]
+            },
+            {
+              "id": "wit",
+              "text": "体力勝負から知恵比べの芝居へ変える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q144.end.wit"
+                }
+              ]
+            },
+            {
+              "id": "retire",
+              "text": "今回を最後の公演にする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q144.end.retire"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q144.end.light": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q144.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "若手と息を合わせてジルが立ち上がった。幕の後、頭を脱いでも同じ角度で観客へ礼をした。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q144",
+              "outcome": "light"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q144.end.wit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q144.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "勇者役にも笑いが生まれた。ジルは主役を奪わずに観客を待たせる間を覚えた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q144",
+              "outcome": "wit"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q144.end.retire": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q144.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "来年は別の役者が角をかぶる。ジルは最後の頭を脱ぎ、自分の顔で礼をした。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q144",
+              "outcome": "retire"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q144.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q144.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q144.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "light",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "若手と息を合わせてジルが立ち上がった。幕の後、頭を脱いでも同じ角度で観客へ礼をした。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "wit",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "勇者役にも笑いが生まれた。ジルは主役を奪わずに観客を待たせる間を覚えた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "retire",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "来年は別の役者が角をかぶる。ジルは最後の頭を脱ぎ、自分の顔で礼をした。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q144.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q144.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "play",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q144.scene.play"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q144.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q144.library.entry": {
+      "storyQuest": "q144",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q144",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "衣装の裏地は何度も補強されていた。嫉妬する勇者役が疑われるが、衣装係が切ったと名乗り出る。「倒れる前に止めたかった」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "trial",
+              "text": "破損の弁償を別に残し、安全な試演をする",
+              "storyAction": {
+                "quest": "q144",
+                "action": "entry_trial"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q144",
+                  "action": "entry_trial"
+                }
+              ]
+            },
+            {
+              "id": "retire",
+              "text": "本人の希望を確かめ、引退公演にする",
+              "storyAction": {
+                "quest": "q144",
+                "action": "entry_retire"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q144",
+                  "action": "entry_retire"
+                },
+                {
+                  "op": "jump",
+                  "script": "q144.library.retire_consent"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q144.library.play": {
+      "storyQuest": "q144",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q144",
+          "scene": "play"
+        },
+        {
+          "op": "narrate",
+          "text": "軽い衣装なら起き上がれる。観客が待つのは派手な転倒より、毎年負けても起きる悪竜だった。若手にも見せ場を渡せる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "light",
+              "text": "軽量化して若手と決闘を演じる",
+              "storyAction": {
+                "quest": "q144",
+                "action": "play_light"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q144",
+                  "action": "play_light"
+                }
+              ]
+            },
+            {
+              "id": "wit",
+              "text": "体力勝負から知恵比べの芝居へ変える",
+              "storyAction": {
+                "quest": "q144",
+                "action": "play_wit"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q144",
+                  "action": "play_wit"
+                }
+              ]
+            },
+            {
+              "id": "retire",
+              "text": "今回を最後の公演にする",
+              "storyAction": {
+                "quest": "q144",
+                "action": "play_retire"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q144",
+                  "action": "play_retire"
+                },
+                {
+                  "op": "jump",
+                  "script": "q144.library.retire_after_trial"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q144.library.repair": {
+      "storyQuest": "q144",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q144",
+          "scene": "repair"
+        },
+        {
+          "op": "narrate",
+          "text": "破損した衣装と衣装係の申告を確認し、弁償の記録を残した。これとは別に、ジルが試せる軽い衣装へ直す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "try",
+              "text": "直した衣装を持ち、ジルと稽古場へ向かう",
+              "storyAction": {
+                "quest": "q144",
+                "action": "repair_try"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q144",
+                  "action": "repair_try"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q144.library.show_light": {
+      "storyQuest": "q144",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q144",
+          "scene": "show_light"
+        },
+        {
+          "op": "narrate",
+          "text": "ジルと若手が会場で息を合わせ、軽い衣装で最後まで演じた。衣装係の弁償は別の記録に残る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q144",
+                "action": "show_light_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q144",
+                  "action": "show_light_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q144.library.end.light"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q144.library.show_wit": {
+      "storyQuest": "q144",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q144",
+          "scene": "show_wit"
+        },
+        {
+          "op": "narrate",
+          "text": "会場へ着き、知恵比べへ変えた芝居を演じた。危険な転倒を続ける条件には戻さない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q144",
+                "action": "show_wit_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q144",
+                  "action": "show_wit_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q144.library.end.wit"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q144.library.retire_consent": {
+      "storyQuest": "q144",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q144",
+          "scene": "retire_consent"
+        },
+        {
+          "op": "narrate",
+          "text": "ジル本人が今回を最後にしたいと答えた。衣装の破損についても、衣装係の弁償記録を残す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "stage",
+              "text": "本人と衣装を最後の公演へ運ぶ",
+              "storyAction": {
+                "quest": "q144",
+                "action": "retire_consent_stage"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q144",
+                  "action": "retire_consent_stage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q144.library.retire_after_trial": {
+      "storyQuest": "q144",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q144",
+          "scene": "retire_after_trial"
+        },
+        {
+          "op": "narrate",
+          "text": "試演を終えたジルが、今回を最後にすると決めた。軽い衣装で最後の礼をする。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "stage",
+              "text": "本人と最後の公演へ向かう",
+              "storyAction": {
+                "quest": "q144",
+                "action": "retire_after_trial_stage"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q144",
+                  "action": "retire_after_trial_stage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q144.library.last_show": {
+      "storyQuest": "q144",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q144",
+          "scene": "last_show"
+        },
+        {
+          "op": "narrate",
+          "text": "会場で最後の公演を終えた。ジルは衣装の頭を外し、自分の顔で観客へ礼をした。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q144",
+                "action": "last_show_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q144",
+                  "action": "last_show_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q144.library.end.retire"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q144.library.end.light": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "若手と息を合わせてジルが立ち上がった。幕の後、頭を脱いでも同じ角度で観客へ礼をした。"
+        },
+        {
+          "op": "add",
+          "target": "vars.light",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q144",
+          "outcome": "light"
+        }
+      ]
+    },
+    "q144.library.end.wit": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "勇者役にも笑いが生まれた。ジルは主役を奪わずに観客を待たせる間を覚えた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.wit",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q144",
+          "outcome": "wit"
+        }
+      ]
+    },
+    "q144.library.end.retire": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "来年は別の役者が角をかぶる。ジルは最後の頭を脱ぎ、自分の顔で礼をした。"
+        },
+        {
+          "op": "add",
+          "target": "vars.retire",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q144",
+          "outcome": "retire"
+        }
+      ]
+    },
+    "q144.library.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q144"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q144.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q144.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q144.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "light",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "若手と息を合わせてジルが立ち上がった。幕の後、頭を脱いでも同じ角度で観客へ礼をした。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "wit",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "勇者役にも笑いが生まれた。ジルは主役を奪わずに観客を待たせる間を覚えた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "retire",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "来年は別の役者が角をかぶる。ジルは最後の頭を脱ぎ、自分の顔で礼をした。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q144"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q144.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q144.library.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "play",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q144.library.play"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "repair",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q144.library.repair"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "show_light",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q144.library.show_light"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "show_wit",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q144.library.show_wit"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "retire_consent",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q144.library.retire_consent"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "retire_after_trial",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q144.library.retire_after_trial"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "last_show",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q144.library.last_show"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q144.library.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "祭の悪役の相談卓",
+      "workshop": "衣装の修理工房",
+      "trial": "軽い衣装で試演する稽古場",
+      "stage": "祭の本番会場",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "workshop"
+      ],
+      [
+        "transit",
+        "trial"
+      ],
+      [
+        "transit",
+        "stage"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "workshop",
+          "trial",
+          "stage",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "light",
+          "wit",
+          "retire"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "compensationRecorded": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "compensationRecorded"
+      },
+      "lightened": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "lightened"
+      },
+      "performed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "performed"
+      },
+      "retireAgreed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "retireAgreed"
+      },
+      "jillAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "workshop",
+          "trial",
+          "stage",
+          "transit"
+        ],
+        "meaning": "jill の所在または保持者"
+      },
+      "wardrobeAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "workshop",
+          "trial",
+          "stage",
+          "transit"
+        ],
+        "meaning": "wardrobe の所在または保持者"
+      },
+      "costumeAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "workshop",
+          "trial",
+          "stage",
+          "transit",
+          "party",
+          "jill",
+          "wardrobe",
+          "youngActor"
+        ],
+        "meaning": "costume の所在または保持者"
+      },
+      "youngActorAt": {
+        "type": "enum",
+        "initial": "trial",
+        "values": [
+          "entry",
+          "workshop",
+          "trial",
+          "stage",
+          "transit"
+        ],
+        "meaning": "youngActor の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "jill": {
+        "holder": "jillAt",
+        "kind": "person"
+      },
+      "wardrobe": {
+        "holder": "wardrobeAt",
+        "kind": "person"
+      },
+      "costume": {
+        "holder": "costumeAt",
+        "kind": "item"
+      },
+      "youngActor": {
+        "holder": "youngActorAt",
+        "kind": "person"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "観客は勇者より、毎年負けても起き上がる悪竜を待っている。ジルは人気を失いたくないため、苦しい動きを増やしていた。裏地に何度も補強した縫い跡を先に見せ、破損が敵意だけでは読めないようにする。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "祭の悪役の相談卓",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "play": {
+        "title": "軽い衣装で試演する稽古場",
+        "place": "trial",
+        "cast": [],
+        "requires": true
+      },
+      "repair": {
+        "title": "衣装の修理工房",
+        "place": "workshop",
+        "cast": [],
+        "requires": true
+      },
+      "show_light": {
+        "title": "祭の本番会場",
+        "place": "stage",
+        "cast": [],
+        "requires": true
+      },
+      "show_wit": {
+        "title": "祭の本番会場",
+        "place": "stage",
+        "cast": [],
+        "requires": true
+      },
+      "retire_consent": {
+        "title": "祭の悪役の相談卓",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "retire_after_trial": {
+        "title": "軽い衣装で試演する稽古場",
+        "place": "trial",
+        "cast": [],
+        "requires": true
+      },
+      "last_show": {
+        "title": "祭の本番会場",
+        "place": "stage",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_trial": {
+        "from": [
+          "entry"
+        ],
+        "to": "repair",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "jill",
+              "wardrobe"
+            ],
+            "path": [
+              "transit",
+              "workshop"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "workshop",
+          "companions": [
+            "jill",
+            "wardrobe"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "costume",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      },
+      "entry_retire": {
+        "from": [
+          "entry"
+        ],
+        "to": "retire_consent",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "play_light": {
+        "from": [
+          "play"
+        ],
+        "to": "show_light",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "jill",
+              "wardrobe",
+              "youngActor"
+            ],
+            "path": [
+              "transit",
+              "stage"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "stage",
+          "companions": [
+            "jill",
+            "wardrobe",
+            "youngActor"
+          ]
+        },
+        "depart": []
+      },
+      "play_wit": {
+        "from": [
+          "play"
+        ],
+        "to": "show_wit",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "jill",
+              "wardrobe",
+              "youngActor"
+            ],
+            "path": [
+              "transit",
+              "stage"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "stage",
+          "companions": [
+            "jill",
+            "wardrobe",
+            "youngActor"
+          ]
+        },
+        "depart": []
+      },
+      "play_retire": {
+        "from": [
+          "play"
+        ],
+        "to": "retire_after_trial",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "repair_try": {
+        "from": [
+          "repair"
+        ],
+        "to": "play",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "jill",
+              "wardrobe"
+            ],
+            "path": [
+              "transit",
+              "trial"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "trial",
+          "companions": [
+            "jill",
+            "wardrobe"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "compensationRecorded",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "lightened",
+            "value": true
+          }
+        ]
+      },
+      "show_light_finish": {
+        "from": [
+          "show_light"
+        ],
+        "ending": "light",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "costume",
+            "from": "party",
+            "to": "jill"
+          },
+          {
+            "op": "set",
+            "key": "performed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "light"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "show_wit_finish": {
+        "from": [
+          "show_wit"
+        ],
+        "ending": "wit",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "costume",
+            "from": "party",
+            "to": "jill"
+          },
+          {
+            "op": "set",
+            "key": "performed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "wit"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "retire_consent_stage": {
+        "from": [
+          "retire_consent"
+        ],
+        "to": "last_show",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "jill",
+              "wardrobe"
+            ],
+            "path": [
+              "transit",
+              "stage"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "stage",
+          "companions": [
+            "jill",
+            "wardrobe"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "costume",
+            "from": "entry",
+            "to": "party"
+          },
+          {
+            "op": "set",
+            "key": "retireAgreed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "compensationRecorded",
+            "value": true
+          }
+        ]
+      },
+      "retire_after_trial_stage": {
+        "from": [
+          "retire_after_trial"
+        ],
+        "to": "last_show",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "jill",
+              "wardrobe",
+              "youngActor"
+            ],
+            "path": [
+              "transit",
+              "stage"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "stage",
+          "companions": [
+            "jill",
+            "wardrobe",
+            "youngActor"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "retireAgreed",
+            "value": true
+          }
+        ]
+      },
+      "last_show_finish": {
+        "from": [
+          "last_show"
+        ],
+        "ending": "retire",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "costume",
+            "from": "party",
+            "to": "jill"
+          },
+          {
+            "op": "set",
+            "key": "performed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "retire"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "light": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q144.values.resolution"
+            },
+            "right": "light"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q144.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q144.values.partyAt"
+                },
+                "right": "stage"
+              }
+            ]
+          }
+        ]
+      },
+      "wit": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q144.values.resolution"
+            },
+            "right": "wit"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q144.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q144.values.partyAt"
+                },
+                "right": "stage"
+              }
+            ]
+          }
+        ]
+      },
+      "retire": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q144.values.resolution"
+            },
+            "right": "retire"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q144.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q144.values.partyAt"
+                },
+                "right": "stage"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_5",
+        "map": "region_5_f1",
+        "x": 6,
+        "y": 1
+      },
+      "workshop": {
+        "kind": "town",
+        "location": "library_tailor"
+      },
+      "trial": {
+        "kind": "town",
+        "location": "library_rehearsal"
+      },
+      "stage": {
+        "kind": "town",
+        "location": "library_stage"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "salome",
+  "receptionLocations": [
+    "salome_board"
+  ]
+}

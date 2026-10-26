@@ -74,7 +74,10 @@ export async function loadContent(read = async path => {
   if(upgrade){
     // Keep the shipped geography for full validation of pre-relocation saves.
     // Only maps need a deep copy: quest projection appends their objects below.
-    const previous={...data,maps:structuredClone(data.maps),locations:{...data.locations},dungeons:{...data.dungeons},scripts:{...data.scripts}};
+    const previous={...data,maps:structuredClone(data.maps),quests:{...data.quests},locations:{...data.locations},dungeons:{...data.dungeons},scripts:{...data.scripts}};
+    // A relocated quest may place events on maps introduced by this upgrade.
+    // The old geography must validate its shipped event route instead.
+    for(const [id,quest] of Object.entries(previous.quests))if(data.previousQuestRoutes?.[id]&&quest.events.some(event=>event.points?.some(point=>!previous.maps[point.map])))previous.quests[id]=data.previousQuestRoutes[id];
     projectQuestObjects(previous);
     await applyEditionGeography(data,await read(upgrade));
     for(const id of data.regionalQuestIds??[])data.worldTravel.questSettlements[id]=data.quests[id].settlement;

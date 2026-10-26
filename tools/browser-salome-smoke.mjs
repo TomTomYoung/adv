@@ -44,6 +44,10 @@ try{
     else{await click(label);await click(label);}
     await page.evaluate(()=>h.settle());
   }
+  async function stairs(){
+    const name=await page.evaluate(()=>{h.settle();const s=h.g.map().objects.find(o=>o.id==='stairs');h.walk(s.x,s.y);return s.name;});
+    await click('任意調べる');await click(name);await click('調べる');await page.evaluate(()=>h.settle());
+  }
   for(const layout of ['scene','classic'])for(const width of [1440,390]){
     await page.setViewportSize({width,height:width===390?844:1000});await page.evaluate(layout=>h.start(layout),layout);
     assert.ok(await page.getByRole('button',{name:'学術都市サロメへの乗合便（5G）',exact:true}).isDisabled());
@@ -85,6 +89,32 @@ try{
     await click('相手と結果を確かめ、依頼を終える');await page.evaluate(()=>{h.settle();h.resume();});
     assert.equal(await page.evaluate(()=>h.g.state.quests.q041.outcome),'informed');assert.equal(await page.evaluate(()=>h.g.state.stories.q041.values.clerkAt),'registry');
     await click('学術都市・灰時計の書庫受付へ戻る');await click('サロメ・学門前へ戻る');
+    // Permission to use a song never becomes permission to escort its composer.
+    await click('サロメの共同依頼所');await click('依頼掲示板を見る');
+    await page.locator('.quest-card').filter({has:page.getByRole('heading',{name:'音の出ない優勝旗',exact:true})}).getByRole('button',{name:'依頼を受ける',exact:true}).click();
+    if(layout==='scene')await page.keyboard.press('Escape');else await click('サロメ・学門前へ戻る');
+    if(await page.evaluate(()=>h.g.state.townLocation)!=='e2_academy')await click('サロメ・学門前へ戻る');
+    await click(libraryGate);await page.evaluate(()=>{h.settle();h.walk(3,1);if(!h.dispatch({type:'story.resume',quest:'q141'}))throw Error('second-half resume');h.settle();});
+    await click('サナへ曲と出演を別々に相談する');await page.evaluate(()=>{h.settle();h.walk(1,1);});await cross('library_surface');
+    await click('サロメの共同洗濯場');await page.evaluate(()=>h.settle());await click('出演を求めず、許諾した対旋律を使う');await page.evaluate(()=>{h.settle();h.resume();});
+    assert.equal(await page.evaluate(()=>h.g.state.stories.q141.values.sanaAt),'laundry');assert.equal(await page.evaluate(()=>h.g.state.stories.q141.values.performerAgreed),false);
+    await click('サロメ・学門前へ戻る');await click('学術都市・灰時計の書庫受付');await click('書庫の控え・写本室');await page.evaluate(()=>h.settle());
+    await click('許諾された楽譜と旗を本番会場へ運ぶ');await page.evaluate(()=>{h.settle();h.resume();});await click('学術都市・灰時計の書庫受付へ戻る');await click('サロメ・学門前へ戻る');await click('サロメの祭の舞台');await page.evaluate(()=>h.settle());
+    await page.screenshot({path:path.join(output,`${layout}-${width}-library-composer.png`),fullPage:true});await click('相手と結果を確かめ、依頼を終える');await page.evaluate(()=>{h.settle();h.resume();});
+    assert.equal(await page.evaluate(()=>h.g.state.quests.q141.outcome),'use');assert.equal(await page.evaluate(()=>h.g.state.stories.q141.values.sanaAt),'laundry');await click('サロメ・学門前へ戻る');
+    // The quiet delivery must pass the actual canal before the recipient can receive it.
+    await click('サロメの共同依頼所');await click('依頼掲示板を見る');
+    await page.locator('.quest-card').filter({has:page.getByRole('heading',{name:'一番遅い配達',exact:true})}).getByRole('button',{name:'依頼を受ける',exact:true}).click();
+    if(layout==='scene')await page.keyboard.press('Escape');else await click('サロメ・学門前へ戻る');
+    if(await page.evaluate(()=>h.g.state.townLocation)!=='e2_academy')await click('サロメ・学門前へ戻る');
+    await click(libraryGate);await stairs();await page.evaluate(()=>{h.walk(4,1);if(!h.dispatch({type:'story.resume',quest:'q147'}))throw Error('flower resume');h.settle();});
+    await click('時間をかけ、静かな水路で届ける');await page.evaluate(()=>{h.settle();h.resume();});await stairs();await page.evaluate(()=>h.walk(1,1));await cross('library_surface');
+    await click('サロメから静かな水路沿いへ');await page.evaluate(()=>{h.settle();h.walk(9,3);h.settle();h.resume();});assert.equal(await page.evaluate(()=>h.g.state.stories.q147.values.deliveryMode),'water');
+    await click('荷を静かに保ち、受取先へ運ぶ');await page.evaluate(()=>{h.settle();h.walk(15,5);});await cross('salome_canal_lower');await page.evaluate(()=>h.walk(1,1));await cross('salome_road_home');
+    await click('灯帰りの引退した舞踊家の家');await page.evaluate(()=>h.settle());assert.equal(await page.evaluate(()=>h.g.state.stories.q147.values.flowerAt),'party');
+    await page.screenshot({path:path.join(output,`${layout}-${width}-library-flower.png`),fullPage:true});await click('相手と結果を確かめ、依頼を終える');await page.evaluate(()=>{h.settle();h.resume();});
+    assert.equal(await page.evaluate(()=>h.g.state.quests.q147.outcome),'quiet');assert.equal(await page.evaluate(()=>h.g.state.stories.q147.values.flowerAt),'receiver');await click('灯帰り・篝火広場へ戻る');
+    await click('学術都市サロメへの乗合便（5G）');
     const gold=await page.evaluate(()=>h.g.state.gold);await click('灯帰りへの乗合便（5G）');assert.equal(await page.evaluate(()=>h.g.state.townLocation),'hikarigaeri_square');assert.equal(await page.evaluate(()=>h.g.state.gold),gold-5);
     await click('学術都市サロメへの乗合便（5G）');assert.equal(await page.evaluate(()=>h.g.state.townLocation),'e2_academy');
     await click('サロメの学門と高台街道');await page.evaluate(()=>h.walk(1,1));await cross('salome_road_slope');await page.evaluate(()=>{h.walk(1,1);h.resume();});await cross('salome_road_home');

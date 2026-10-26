@@ -1,0 +1,1691 @@
+{
+  "schemaVersion": 1,
+  "id": "q146",
+  "number": 146,
+  "title": "染め直せない軍服",
+  "client": "染物屋ニア",
+  "brief": "染めても軍の色へ戻る服を調べてください。",
+  "region": 5,
+  "type": "scene_graph",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 サロメの共同依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q146_scene",
+      "title": "染め直せない軍服：染物屋ニア",
+      "points": [
+        {
+          "map": "region_5_f2",
+          "x": 3,
+          "y": 1,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q146.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q146.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q146.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q146"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "q146_library_entry",
+      "title": "染め直せない軍服の相談卓",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q146.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q146.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q146"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q146.library.visit",
+      "points": [
+        {
+          "dungeon": "region_5",
+          "map": "region_5_f2",
+          "x": 3,
+          "y": 1
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_5_f2",
+      "x": 3,
+      "y": 1,
+      "object": "q146_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "release": {
+      "label": "選べる色",
+      "text": "服は新しい色になった。同僚は酒場で徽章を探さず、本人の顔を見て手を上げた。",
+      "gold": 105,
+      "xp": 75
+    },
+    "coat": {
+      "label": "裏地の旧色",
+      "text": "軍服としての形を失い、外套の裏にだけ色が残った。誓いを消さず、毎日の用途を変えた。",
+      "gold": 105,
+      "xp": 75
+    },
+    "keep": {
+      "label": "着る日を選ぶ",
+      "text": "軍服は箱に収まった。忘れたのでなく、いつ着るかを選べる生活が始まった。",
+      "gold": 105,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/salome/library-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381a39bfadc8f9711c51f",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "服には誓いを結んだ全員の小さな刺繍がある。相手は上官一人でなく、生き残った同僚たちだった。退役兵は故郷で軍歴を隠したいのだが、同僚は見捨てられるように感じる。染色の成功を、友情の断絶の強制にはしない。",
+      "fixedPast": "染物屋ニアは、退役兵の軍服が何色を重ねても元の色へ戻るため、魔力処理を頼む。服は部隊の誓約に染められ、本人が除隊を認めても、誓いの相手が解放していない。元上官は戦死し、手続の相手がいない。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "染物屋ニア",
+        "beliefsAndGoals": "染物屋ニアは、退役兵の軍服が何色を重ねても元の色へ戻るため、魔力処理を頼む。服は部隊の誓約に染められ、本人が除隊を認めても、誓いの相手が解放していない。元上官は戦死し、手続の相手がいない。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "染めても軍の色へ戻る服を調べてください。"
+      }
+    ],
+    "conflict": {
+      "design": "染物屋→刺繍の調査→旧同僚を訪問→誓約解除／外套へ仕立て直し／軍服を保管。解除は本人の意思と相手の同意、仕立直しは生地を切るため戦闘装備としての能力を失う。どちらも選ばず私服を新調できる。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q146.library.entry"
+        },
+        {
+          "id": "friends",
+          "script": "q146.library.friends"
+        },
+        {
+          "id": "dyed",
+          "script": "q146.library.dyed"
+        },
+        {
+          "id": "reunion",
+          "script": "q146.library.reunion"
+        },
+        {
+          "id": "tailored",
+          "script": "q146.library.tailored"
+        },
+        {
+          "id": "stored",
+          "script": "q146.library.stored"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "染めても軍の色へ戻る服を調べてください。"
+    },
+    "reveal": {
+      "newInformation": "服には誓いを結んだ全員の小さな刺繍がある。相手は上官一人でなく、生き残った同僚たちだった。退役兵は故郷で軍歴を隠したいのだが、同僚は見捨てられるように感じる。染色の成功を、友情の断絶の強制にはしない。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q146.scene.entry"
+      },
+      {
+        "id": "friends",
+        "script": "q146.scene.friends"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q146.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "軍服の刺繍は上官一人のものではない。誓いを結んだ同僚たち全員の印があった。退役兵は軍歴を隠したいが、同僚は見捨てられたくない。",
+        "options": [
+          {
+            "id": "friends",
+            "text": "生き残った同僚と本人の意思を確かめる",
+            "to": "friends",
+            "action": "entry_friends"
+          },
+          {
+            "id": "coat",
+            "text": "本人の同意で生地を切り、外套へ仕立てる",
+            "to": "tailored",
+            "action": "entry_coat"
+          },
+          {
+            "id": "keep",
+            "text": "軍服は保管し、私服で暮らす",
+            "to": "stored",
+            "action": "entry_keep"
+          }
+        ]
+      },
+      {
+        "id": "friends",
+        "place": "friends",
+        "text": "同僚は再会を約束できるなら誓約を解くと答えた。本人も軍服を着ずに会いたいと言う。",
+        "options": [
+          {
+            "id": "release",
+            "text": "双方の同意で誓約を解除し、色を選び直す",
+            "to": "dyed",
+            "action": "friends_release"
+          },
+          {
+            "id": "keep",
+            "text": "誓約を解かず服を保管する",
+            "to": "stored",
+            "action": "friends_keep"
+          }
+        ]
+      },
+      {
+        "id": "dyed",
+        "place": "dyer",
+        "text": "本人と同僚の合意を持って染物工房へ戻った。誓約を解き、本人が選んだ色へ染め直した服を返す。",
+        "options": [
+          {
+            "id": "meet",
+            "text": "新しい服を着た本人と再会の酒場へ行く",
+            "to": "reunion",
+            "action": "dyed_meet"
+          }
+        ]
+      },
+      {
+        "id": "reunion",
+        "place": "friends",
+        "text": "私服になった本人が酒場へ着き、同僚と顔を合わせた。誓約を解いても再会の約束は残る。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@release",
+            "action": "reunion_finish"
+          }
+        ]
+      },
+      {
+        "id": "tailored",
+        "place": "dyer",
+        "text": "本人の同意を確かめて生地を裁ち、外套に仕立てて返した。裏地の旧色を残し、軍服の形へは戻さない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@coat",
+            "action": "tailored_finish"
+          }
+        ]
+      },
+      {
+        "id": "stored",
+        "place": "storage",
+        "text": "本人と保管窓口へ着き、軍服を箱へ収めて預けた。着る日を決める権利は本人に残る。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@keep",
+            "action": "stored_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "entryScript": "q146.library.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "library-second-ten",
+      "settlement": "salome",
+      "saveRevision": 2,
+      "scope": "書庫後半10件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q146.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q146.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "軍服の刺繍は上官一人のものではない。誓いを結んだ同僚たち全員の印があった。退役兵は軍歴を隠したいが、同僚は見捨てられたくない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "friends",
+              "text": "生き残った同僚と本人の意思を確かめる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q146.scene.friends"
+                }
+              ]
+            },
+            {
+              "id": "coat",
+              "text": "本人の同意で生地を切り、外套へ仕立てる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q146.end.coat"
+                }
+              ]
+            },
+            {
+              "id": "keep",
+              "text": "軍服は保管し、私服で暮らす",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q146.end.keep"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q146.scene.friends": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q146.node",
+          "value": "friends"
+        },
+        {
+          "op": "say",
+          "text": "同僚は再会を約束できるなら誓約を解くと答えた。本人も軍服を着ずに会いたいと言う。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "release",
+              "text": "双方の同意で誓約を解除し、色を選び直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q146.end.release"
+                }
+              ]
+            },
+            {
+              "id": "keep",
+              "text": "誓約を解かず服を保管する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q146.end.keep"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q146.end.release": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q146.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "服は新しい色になった。同僚は酒場で徽章を探さず、本人の顔を見て手を上げた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q146",
+              "outcome": "release"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q146.end.coat": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q146.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "軍服としての形を失い、外套の裏にだけ色が残った。誓いを消さず、毎日の用途を変えた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q146",
+              "outcome": "coat"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q146.end.keep": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q146.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "軍服は箱に収まった。忘れたのでなく、いつ着るかを選べる生活が始まった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q146",
+              "outcome": "keep"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q146.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q146.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q146.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "release",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "服は新しい色になった。同僚は酒場で徽章を探さず、本人の顔を見て手を上げた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "coat",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "軍服としての形を失い、外套の裏にだけ色が残った。誓いを消さず、毎日の用途を変えた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "keep",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "軍服は箱に収まった。忘れたのでなく、いつ着るかを選べる生活が始まった。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q146.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q146.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "friends",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q146.scene.friends"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q146.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q146.library.entry": {
+      "storyQuest": "q146",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q146",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "軍服の刺繍は上官一人のものではない。誓いを結んだ同僚たち全員の印があった。退役兵は軍歴を隠したいが、同僚は見捨てられたくない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "friends",
+              "text": "生き残った同僚と本人の意思を確かめる",
+              "storyAction": {
+                "quest": "q146",
+                "action": "entry_friends"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q146",
+                  "action": "entry_friends"
+                }
+              ]
+            },
+            {
+              "id": "coat",
+              "text": "本人の同意で生地を切り、外套へ仕立てる",
+              "storyAction": {
+                "quest": "q146",
+                "action": "entry_coat"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q146",
+                  "action": "entry_coat"
+                }
+              ]
+            },
+            {
+              "id": "keep",
+              "text": "軍服は保管し、私服で暮らす",
+              "storyAction": {
+                "quest": "q146",
+                "action": "entry_keep"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q146",
+                  "action": "entry_keep"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q146.library.friends": {
+      "storyQuest": "q146",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q146",
+          "scene": "friends"
+        },
+        {
+          "op": "narrate",
+          "text": "同僚は再会を約束できるなら誓約を解くと答えた。本人も軍服を着ずに会いたいと言う。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "release",
+              "text": "双方の同意で誓約を解除し、色を選び直す",
+              "storyAction": {
+                "quest": "q146",
+                "action": "friends_release"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q146",
+                  "action": "friends_release"
+                }
+              ]
+            },
+            {
+              "id": "keep",
+              "text": "誓約を解かず服を保管する",
+              "storyAction": {
+                "quest": "q146",
+                "action": "friends_keep"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q146",
+                  "action": "friends_keep"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q146.library.dyed": {
+      "storyQuest": "q146",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q146",
+          "scene": "dyed"
+        },
+        {
+          "op": "narrate",
+          "text": "本人と同僚の合意を持って染物工房へ戻った。誓約を解き、本人が選んだ色へ染め直した服を返す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "meet",
+              "text": "新しい服を着た本人と再会の酒場へ行く",
+              "storyAction": {
+                "quest": "q146",
+                "action": "dyed_meet"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q146",
+                  "action": "dyed_meet"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q146.library.reunion": {
+      "storyQuest": "q146",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q146",
+          "scene": "reunion"
+        },
+        {
+          "op": "narrate",
+          "text": "私服になった本人が酒場へ着き、同僚と顔を合わせた。誓約を解いても再会の約束は残る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q146",
+                "action": "reunion_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q146",
+                  "action": "reunion_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q146.library.end.release"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q146.library.tailored": {
+      "storyQuest": "q146",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q146",
+          "scene": "tailored"
+        },
+        {
+          "op": "narrate",
+          "text": "本人の同意を確かめて生地を裁ち、外套に仕立てて返した。裏地の旧色を残し、軍服の形へは戻さない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q146",
+                "action": "tailored_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q146",
+                  "action": "tailored_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q146.library.end.coat"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q146.library.stored": {
+      "storyQuest": "q146",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q146",
+          "scene": "stored"
+        },
+        {
+          "op": "narrate",
+          "text": "本人と保管窓口へ着き、軍服を箱へ収めて預けた。着る日を決める権利は本人に残る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q146",
+                "action": "stored_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q146",
+                  "action": "stored_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q146.library.end.keep"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q146.library.end.release": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "服は新しい色になった。同僚は酒場で徽章を探さず、本人の顔を見て手を上げた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.release",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q146",
+          "outcome": "release"
+        }
+      ]
+    },
+    "q146.library.end.coat": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "軍服としての形を失い、外套の裏にだけ色が残った。誓いを消さず、毎日の用途を変えた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.coat",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q146",
+          "outcome": "coat"
+        }
+      ]
+    },
+    "q146.library.end.keep": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "軍服は箱に収まった。忘れたのでなく、いつ着るかを選べる生活が始まった。"
+        },
+        {
+          "op": "add",
+          "target": "vars.keep",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q146",
+          "outcome": "keep"
+        }
+      ]
+    },
+    "q146.library.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q146"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q146.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q146.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q146.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "release",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "服は新しい色になった。同僚は酒場で徽章を探さず、本人の顔を見て手を上げた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "coat",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "軍服としての形を失い、外套の裏にだけ色が残った。誓いを消さず、毎日の用途を変えた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "keep",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "軍服は箱に収まった。忘れたのでなく、いつ着るかを選べる生活が始まった。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q146"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q146.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q146.library.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "friends",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q146.library.friends"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "dyed",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q146.library.dyed"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "reunion",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q146.library.reunion"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "tailored",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q146.library.tailored"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "stored",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q146.library.stored"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q146.library.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "染め直せない軍服の相談卓",
+      "friends": "生き残った同僚の集う酒場",
+      "dyer": "染め直しと仕立ての工房",
+      "storage": "軍服を保管する別倉",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "friends"
+      ],
+      [
+        "transit",
+        "dyer"
+      ],
+      [
+        "transit",
+        "storage"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "friends",
+          "dyer",
+          "storage",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "release",
+          "coat",
+          "keep"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "cutAgreed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "cutAgreed"
+      },
+      "bothAgreed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "bothAgreed"
+      },
+      "released": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "released"
+      },
+      "dyed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "dyed"
+      },
+      "reunited": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "reunited"
+      },
+      "cut": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "cut"
+      },
+      "tailored": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "tailored"
+      },
+      "stored": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "stored"
+      },
+      "veteranAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "friends",
+          "dyer",
+          "storage",
+          "transit"
+        ],
+        "meaning": "veteran の所在または保持者"
+      },
+      "uniformAt": {
+        "type": "enum",
+        "initial": "veteran",
+        "values": [
+          "entry",
+          "friends",
+          "dyer",
+          "storage",
+          "transit",
+          "party",
+          "veteran",
+          "colleagues"
+        ],
+        "meaning": "uniform の所在または保持者"
+      },
+      "colleaguesAt": {
+        "type": "enum",
+        "initial": "friends",
+        "values": [
+          "entry",
+          "friends",
+          "dyer",
+          "storage",
+          "transit"
+        ],
+        "meaning": "colleagues の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "veteran": {
+        "holder": "veteranAt",
+        "kind": "person"
+      },
+      "uniform": {
+        "holder": "uniformAt",
+        "kind": "item"
+      },
+      "colleagues": {
+        "holder": "colleaguesAt",
+        "kind": "group"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "服には誓いを結んだ全員の小さな刺繍がある。相手は上官一人でなく、生き残った同僚たちだった。退役兵は故郷で軍歴を隠したいのだが、同僚は見捨てられるように感じる。染色の成功を、友情の断絶の強制にはしない。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "染め直せない軍服の相談卓",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "friends": {
+        "title": "生き残った同僚の集う酒場",
+        "place": "friends",
+        "cast": [],
+        "requires": true
+      },
+      "dyed": {
+        "title": "染め直しと仕立ての工房",
+        "place": "dyer",
+        "cast": [],
+        "requires": true
+      },
+      "reunion": {
+        "title": "生き残った同僚の集う酒場",
+        "place": "friends",
+        "cast": [],
+        "requires": true
+      },
+      "tailored": {
+        "title": "染め直しと仕立ての工房",
+        "place": "dyer",
+        "cast": [],
+        "requires": true
+      },
+      "stored": {
+        "title": "軍服を保管する別倉",
+        "place": "storage",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_friends": {
+        "from": [
+          "entry"
+        ],
+        "to": "friends",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "veteran"
+            ],
+            "path": [
+              "transit",
+              "friends"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "friends",
+          "companions": [
+            "veteran"
+          ]
+        },
+        "depart": []
+      },
+      "entry_coat": {
+        "from": [
+          "entry"
+        ],
+        "to": "tailored",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "veteran"
+            ],
+            "path": [
+              "transit",
+              "dyer"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "dyer",
+          "companions": [
+            "veteran"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "cutAgreed",
+            "value": true
+          }
+        ]
+      },
+      "entry_keep": {
+        "from": [
+          "entry"
+        ],
+        "to": "stored",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "veteran"
+            ],
+            "path": [
+              "transit",
+              "storage"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "storage",
+          "companions": [
+            "veteran"
+          ]
+        },
+        "depart": []
+      },
+      "friends_release": {
+        "from": [
+          "friends"
+        ],
+        "to": "dyed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "veteran"
+            ],
+            "path": [
+              "transit",
+              "dyer"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "dyer",
+          "companions": [
+            "veteran"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "bothAgreed",
+            "value": true
+          }
+        ]
+      },
+      "friends_keep": {
+        "from": [
+          "friends"
+        ],
+        "to": "stored",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "veteran"
+            ],
+            "path": [
+              "transit",
+              "storage"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "storage",
+          "companions": [
+            "veteran"
+          ]
+        },
+        "depart": []
+      },
+      "dyed_meet": {
+        "from": [
+          "dyed"
+        ],
+        "to": "reunion",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "veteran"
+            ],
+            "path": [
+              "transit",
+              "friends"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "friends",
+          "companions": [
+            "veteran"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "released",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "dyed",
+            "value": true
+          }
+        ]
+      },
+      "reunion_finish": {
+        "from": [
+          "reunion"
+        ],
+        "ending": "release",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "reunited",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "release"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "tailored_finish": {
+        "from": [
+          "tailored"
+        ],
+        "ending": "coat",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "cut",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "tailored",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "coat"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "stored_finish": {
+        "from": [
+          "stored"
+        ],
+        "ending": "keep",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "uniform",
+            "from": "veteran",
+            "to": "storage"
+          },
+          {
+            "op": "set",
+            "key": "stored",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "keep"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "release": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q146.values.resolution"
+            },
+            "right": "release"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q146.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q146.values.partyAt"
+                },
+                "right": "friends"
+              }
+            ]
+          }
+        ]
+      },
+      "coat": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q146.values.resolution"
+            },
+            "right": "coat"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q146.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q146.values.partyAt"
+                },
+                "right": "dyer"
+              }
+            ]
+          }
+        ]
+      },
+      "keep": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q146.values.resolution"
+            },
+            "right": "keep"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q146.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q146.values.partyAt"
+                },
+                "right": "storage"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_5",
+        "map": "region_5_f2",
+        "x": 3,
+        "y": 1
+      },
+      "friends": {
+        "kind": "town",
+        "location": "salome_inn"
+      },
+      "dyer": {
+        "kind": "town",
+        "location": "library_tailor"
+      },
+      "storage": {
+        "kind": "town",
+        "location": "library_warehouse"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "salome",
+  "receptionLocations": [
+    "salome_board"
+  ]
+}

@@ -1,0 +1,4067 @@
+{
+  "schemaVersion": 1,
+  "id": "q150",
+  "number": 150,
+  "title": "大道芸人の弟子",
+  "client": "曲芸師リッツ",
+  "brief": "弟子候補三人の試演を手伝ってください。",
+  "region": 5,
+  "type": "authored_progression",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 サロメの共同依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q150_scene",
+      "title": "大道芸人の弟子：曲芸師リッツ",
+      "points": [
+        {
+          "map": "region_5_f2",
+          "x": 8,
+          "y": 1,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q150.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q150.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q150.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q150"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "q150_library_entry",
+      "title": "大道芸人の弟子の相談卓",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q150.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q150.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q150"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q150.library.visit",
+      "points": [
+        {
+          "dungeon": "region_5",
+          "map": "region_5_f2",
+          "x": 8,
+          "y": 1
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_5_f2",
+      "x": 8,
+      "y": 1,
+      "object": "q150_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "porter": {
+      "label": "客席から始める芸",
+      "text": "荷役が弟子になった。残る二人には別の仕事を紹介し、リッツは直った客席で演目を考えた。",
+      "gold": 105,
+      "xp": 75
+    },
+    "thief": {
+      "label": "返す手の芸",
+      "text": "スリが弟子になった。返された財布を確かめる客の笑顔に、リッツは悔しそうに笑った。",
+      "gold": 105,
+      "xp": 75
+    },
+    "singer": {
+      "label": "待つ間の歌",
+      "text": "歌手が弟子になった。道具のない間を支えた声が、次の演目の最初に置かれた。",
+      "gold": 105,
+      "xp": 75
+    },
+    "company": {
+      "label": "小さくなった看板",
+      "text": "三人が役割に同意し、一座ができた。師の名前は小さくなり、笑う場所が舞台全体へ広がった。",
+      "gold": 105,
+      "xp": 75
+    },
+    "none": {
+      "label": "出演者としての精算",
+      "text": "弟子は決まらなかった。三人の出演料は払い、舞台を救った仕事を失敗扱いにはしなかった。",
+      "gold": 105,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/salome/library-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381a39bfadc8f9711c51f",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "公開試演で道具が壊れ、予定の芸ができなくなる。荷役は観客席を直し、スリは落ちた財布を本人へ戻す芸にし、歌手は伴奏なしで待ち時間を埋める。試験を仕掛けたのではなく、本当に失敗した舞台をそれぞれが救う。",
+      "fixedPast": "曲芸師リッツが、弟子選びの一日を手伝う相手を募る。応募者は怪力の荷役、器用なスリ、口下手な歌手だ。リッツは自分と同じ芸を継ぐ者を求め、誰の違う強みも欠点として見ている。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "曲芸師リッツ",
+        "beliefsAndGoals": "曲芸師リッツが、弟子選びの一日を手伝う相手を募る。応募者は怪力の荷役、器用なスリ、口下手な歌手だ。リッツは自分と同じ芸を継ぐ者を求め、誰の違う強みも欠点として見ている。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "弟子候補三人の試演を手伝ってください。"
+      }
+    ],
+    "conflict": {
+      "request": "弟子候補三人の試演を手伝ってください。",
+      "progression": "弟子選びの試演が舞台故障への対応へ変わり、誰に仕事を任せたかが採用の選択を作る。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q150.library.entry"
+        },
+        {
+          "id": "accident",
+          "script": "q150.library.accident"
+        },
+        {
+          "id": "repair",
+          "script": "q150.library.repair"
+        },
+        {
+          "id": "audience",
+          "script": "q150.library.audience"
+        },
+        {
+          "id": "contracts",
+          "script": "q150.library.contracts"
+        },
+        {
+          "id": "company",
+          "script": "q150.library.company"
+        },
+        {
+          "id": "practice",
+          "script": "q150.library.practice"
+        },
+        {
+          "id": "settled",
+          "script": "q150.library.settled"
+        },
+        {
+          "id": "tools",
+          "script": "q150.library.tools"
+        },
+        {
+          "id": "formed",
+          "script": "q150.library.formed"
+        },
+        {
+          "id": "company_agree_ready",
+          "script": "q150.library.company_agree_ready"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "弟子候補三人の試演を手伝ってください。"
+    },
+    "reveal": {
+      "newInformation": "公開試演で道具が壊れ、予定の芸ができなくなる。荷役は観客席を直し、スリは落ちた財布を本人へ戻す芸にし、歌手は伴奏なしで待ち時間を埋める。試験を仕掛けたのではなく、本当に失敗した舞台をそれぞれが救う。",
+      "retroactiveTargets": [],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする",
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q150.flow.entry"
+      },
+      {
+        "id": "accident",
+        "script": "q150.flow.accident"
+      },
+      {
+        "id": "repair",
+        "script": "q150.flow.repair"
+      },
+      {
+        "id": "audience",
+        "script": "q150.flow.audience"
+      },
+      {
+        "id": "contracts",
+        "script": "q150.flow.contracts"
+      },
+      {
+        "id": "company",
+        "script": "q150.flow.company"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q150.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q150.prepared",
+        "meaning": "各場面に明記した prepared の行為・合意の記録",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q150.porter",
+        "meaning": "各場面に明記した porter の行為・合意の記録",
+        "writer": [
+          "accident",
+          "repair"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q150.singer",
+        "meaning": "各場面に明記した singer の行為・合意の記録",
+        "writer": [
+          "accident",
+          "audience"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q150.thief",
+        "meaning": "各場面に明記した thief の行為・合意の記録",
+        "writer": [
+          "repair",
+          "audience"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "荷役、スリ、歌手の三人が来た。リッツは自分と同じ曲芸だけを試すつもりだ。",
+        "options": [
+          {
+            "id": "practice",
+            "text": "先に三人それぞれの得意な仕事を見せてもらう",
+            "to": "practice",
+            "action": "entry_practice"
+          },
+          {
+            "id": "stage",
+            "text": "予定通り本番を始める",
+            "to": "accident",
+            "action": "entry_stage"
+          }
+        ]
+      },
+      {
+        "id": "accident",
+        "place": "stage",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q150.values.prepared"
+              },
+              "right": true
+            },
+            "yes": "試演の舞台が壊れた。練習で見た三人の仕事を、今ここで頼める。",
+            "no": "舞台が壊れた。仕込んだ試験ではない。候補者はそれぞれ、自分ならできる仕事を申し出る。"
+          }
+        ],
+        "options": [
+          {
+            "id": "porter",
+            "text": "荷役に客席と舞台の支えを直してもらう",
+            "to": "audience",
+            "action": "accident_porter"
+          },
+          {
+            "id": "singer",
+            "text": "歌手に待つ客を支えてもらう",
+            "to": "repair",
+            "action": "accident_singer"
+          },
+          {
+            "id": "cancel",
+            "text": "公演を中止し、出演料を精算する",
+            "to": "settled",
+            "action": "accident_cancel"
+          }
+        ]
+      },
+      {
+        "id": "repair",
+        "place": "stage",
+        "text": "歌で客は待っているが、舞台はまだ直らない。荷役は支えを、スリは小さな留め具の修理を申し出た。",
+        "options": [
+          {
+            "id": "porter",
+            "text": "荷役へ支えの修理を頼む",
+            "to": "audience",
+            "action": "repair_porter"
+          },
+          {
+            "id": "thief",
+            "text": "スリへ留め具の修理を頼む",
+            "to": "audience",
+            "action": "repair_thief"
+          },
+          {
+            "id": "cancel",
+            "text": "無理に続けず、公演を中止して精算する",
+            "to": "settled",
+            "action": "repair_cancel"
+          }
+        ]
+      },
+      {
+        "id": "audience",
+        "place": "stage",
+        "text": "舞台が戻った。客の注意を集める芸を一つ挟める。候補者は自分の仕事として出演したいという。",
+        "options": [
+          {
+            "id": "thief",
+            "text": "スリに財布を持主へ返す芸を任せる",
+            "to": "contracts",
+            "action": "audience_thief"
+          },
+          {
+            "id": "singer",
+            "text": "歌手の歌を次の演目へつなぐ",
+            "to": "contracts",
+            "action": "audience_singer"
+          },
+          {
+            "id": "finish",
+            "text": "修理を手伝った人の仕事を紹介して閉演する",
+            "to": "contracts",
+            "action": "audience_finish"
+          }
+        ]
+      },
+      {
+        "id": "contracts",
+        "place": "contracts",
+        "text": "故障への対応は終わった。本人たちは、手伝った事実と弟子になる意思を別に聞いてほしいと言う。",
+        "options": [
+          {
+            "id": "porter",
+            "text": "働きを見た荷役に弟子を申し出て、同意を受ける",
+            "to": "@porter",
+            "action": "contracts_porter"
+          },
+          {
+            "id": "thief",
+            "text": "働きを見たスリに弟子を申し出て、同意を受ける",
+            "to": "@thief",
+            "action": "contracts_thief"
+          },
+          {
+            "id": "singer",
+            "text": "働きを見た歌手に弟子を申し出て、同意を受ける",
+            "to": "@singer",
+            "action": "contracts_singer"
+          },
+          {
+            "id": "company",
+            "text": "三人へ役割を提案し、一座への同意を受ける",
+            "to": "company",
+            "action": "contracts_company"
+          },
+          {
+            "id": "none",
+            "text": "今回は出演料だけを精算する",
+            "to": "settled",
+            "action": "contracts_none"
+          }
+        ]
+      },
+      {
+        "id": "company",
+        "place": "contracts",
+        "text": "三人は芸と裏方を固定せず交代できる条件で同意した。共有する道具に40G必要だ。",
+        "options": [
+          {
+            "id": "agree",
+            "text": "道具代40Gを出し、一座を作る",
+            "to": "company_agree_ready",
+            "action": "company_agree"
+          },
+          {
+            "id": "decline",
+            "text": "一座を作らず、出演料を精算する",
+            "to": "settled",
+            "action": "company_decline"
+          }
+        ]
+      },
+      {
+        "id": "practice",
+        "place": "practice",
+        "text": "荷役の組立、スリの細かな手仕事、歌手の歌を実際に見せてもらった。公開試演の会場へ向かう。",
+        "options": [
+          {
+            "id": "stage",
+            "text": "三人とリッツを会場へ案内する",
+            "to": "accident",
+            "action": "practice_stage"
+          }
+        ]
+      },
+      {
+        "id": "settled",
+        "place": "contracts",
+        "text": "窓口で三人の出演料を精算した。公演の中止や弟子不採用を、手伝った仕事の無価値さへ読み替えない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@none",
+            "action": "settled_finish"
+          }
+        ]
+      },
+      {
+        "id": "tools",
+        "place": "tools",
+        "text": "合意した交代制を道具の注文へ添え、支払済みの共有道具を受け取った。道具と三人を会場へ戻す。",
+        "options": [
+          {
+            "id": "carry",
+            "text": "共有道具を運び、三人と一座を始める",
+            "to": "formed",
+            "action": "tools_carry"
+          }
+        ]
+      },
+      {
+        "id": "formed",
+        "place": "stage",
+        "text": "三人が会場へ戻り、共有道具を受け取った。固定の裏方を押しつけず、合意した役割で一座を始める。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@company",
+            "action": "formed_finish"
+          }
+        ]
+      },
+      {
+        "id": "company_agree_ready",
+        "place": "contracts",
+        "text": "必要な道具を使って準備を整えた。ここから目的地まで運ぶ。",
+        "options": [
+          {
+            "id": "continue",
+            "text": "準備した相手・品物と目的地へ向かう",
+            "to": "tools",
+            "action": "company_agree_ready_continue"
+          }
+        ]
+      }
+    ],
+    "progression": "弟子選びの試演が舞台故障への対応へ変わり、誰に仕事を任せたかが採用の選択を作る。",
+    "flowVersion": 2,
+    "entryScript": "q150.library.visit",
+    "choiceContract": {
+      "progression": "弟子選びの試演が舞台故障への対応へ変わり、誰に仕事を任せたかが採用の選択を作る。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q150.scene.stage",
+        "action": "company",
+        "option": "company_supplies",
+        "shortage": "q150.scene.stage.company.shortage",
+        "resume": "q150.scene.stage.company.resume",
+        "cost": {
+          "gold": 40
+        }
+      },
+      {
+        "from": "q150.flow.company",
+        "action": "agree",
+        "option": "agree_supplies",
+        "shortage": "q150.flow.company.agree.shortage",
+        "resume": "q150.flow.company.agree.resume",
+        "cost": {
+          "gold": 40
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q150.visit",
+      "q150.flow.visit"
+    ],
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "library-second-ten",
+      "settlement": "salome",
+      "saveRevision": 2,
+      "scope": "書庫後半10件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q150.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q150.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "怪力の荷役、器用なスリ、口下手な歌手。リッツは自分と違う芸を欠点のように挙げる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "practice",
+              "text": "三人の得意な仕事を先に見せてもらう",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q150.prepared",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q150.scene.stage"
+                }
+              ]
+            },
+            {
+              "id": "stage",
+              "text": "本番の試演へ進む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q150.scene.stage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q150.scene.stage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q150.node",
+          "value": "stage"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.quest.q150.prepared"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "練習を見ていたので、壊れた舞台で誰に頼めるか分かった。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "道具が壊れた。仕込みの試験ではない。候補者たちが自分から名乗り出た。"
+            }
+          ]
+        },
+        {
+          "op": "say",
+          "text": "荷役が客席を直し、スリが財布を返す芸をし、歌手が待ち時間を埋める。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "porter",
+              "text": "荷役へ主な仕事を渡し、弟子に選ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q150.end.porter"
+                }
+              ]
+            },
+            {
+              "id": "thief",
+              "text": "スリへ主な仕事を渡し、弟子に選ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q150.end.thief"
+                }
+              ]
+            },
+            {
+              "id": "singer",
+              "text": "歌手へ主な仕事を渡し、弟子に選ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q150.end.singer"
+                }
+              ]
+            },
+            {
+              "id": "company",
+              "text": "全員の同意を得て一座を作る（道具代40G）",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 40
+                  }
+                ]
+              },
+              "requirement": "G 40消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -40
+                },
+                {
+                  "op": "jump",
+                  "script": "q150.end.company"
+                }
+              ]
+            },
+            {
+              "id": "none",
+              "text": "出演料を精算し、今回は弟子を取らない",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q150.end.none"
+                }
+              ]
+            },
+            {
+              "id": "company_supplies",
+              "text": "40Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 40
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 40
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q150.scene.stage.company.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q150.end.porter": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q150.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "荷役が弟子になった。残る二人には別の仕事を紹介し、リッツは直った客席で演目を考えた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q150",
+              "outcome": "porter"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q150.end.thief": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q150.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "スリが弟子になった。返された財布を確かめる客の笑顔に、リッツは悔しそうに笑った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q150",
+              "outcome": "thief"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q150.end.singer": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q150.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "歌手が弟子になった。道具のない間を支えた声が、次の演目の最初に置かれた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q150",
+              "outcome": "singer"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q150.end.company": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q150.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "三人が役割に同意し、一座ができた。師の名前は小さくなり、笑う場所が舞台全体へ広がった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q150",
+              "outcome": "company"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q150.end.none": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q150.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "弟子は決まらなかった。三人の出演料は払い、舞台を救った仕事を失敗扱いにはしなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q150",
+              "outcome": "none"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q150.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q150"
+          },
+          "cases": [
+            {
+              "equals": "q150.scene.stage.company.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q150.scene.stage.company.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q150.flow.company.agree.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q150.flow.company.agree.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q150.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q150.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "porter",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "荷役が弟子になった。残る二人には別の仕事を紹介し、リッツは直った客席で演目を考えた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "thief",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "スリが弟子になった。返された財布を確かめる客の笑顔に、リッツは悔しそうに笑った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "singer",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "歌手が弟子になった。道具のない間を支えた声が、次の演目の最初に置かれた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "company",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "三人が役割に同意し、一座ができた。師の名前は小さくなり、笑う場所が舞台全体へ広がった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "none",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "弟子は決まらなかった。三人の出演料は払い、舞台を救った仕事を失敗扱いにはしなかった。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q150.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q150.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "stage",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q150.scene.stage"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q150.scene.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q150.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q150.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "荷役、スリ、歌手の三人が来た。リッツは自分と同じ曲芸だけを試すつもりだ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "practice",
+              "text": "先に三人それぞれの得意な仕事を見せてもらう",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q150.prepared",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q150.flow.accident"
+                }
+              ]
+            },
+            {
+              "id": "stage",
+              "text": "予定通り本番を始める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q150.flow.accident"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q150.flow.accident": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q150.node",
+          "value": "accident"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q150.prepared"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "試演の舞台が壊れた。練習で見た三人の仕事を、今ここで頼める。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "舞台が壊れた。仕込んだ試験ではない。候補者はそれぞれ、自分ならできる仕事を申し出る。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "porter",
+              "text": "荷役に客席と舞台の支えを直してもらう",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q150.porter",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q150.flow.audience"
+                }
+              ]
+            },
+            {
+              "id": "singer",
+              "text": "歌手に待つ客を支えてもらう",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q150.singer",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q150.flow.repair"
+                }
+              ]
+            },
+            {
+              "id": "cancel",
+              "text": "公演を中止し、出演料を精算する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q150.flow.end.none"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q150.flow.repair": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q150.node",
+          "value": "repair"
+        },
+        {
+          "op": "say",
+          "text": "歌で客は待っているが、舞台はまだ直らない。荷役は支えを、スリは小さな留め具の修理を申し出た。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "porter",
+              "text": "荷役へ支えの修理を頼む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q150.porter",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q150.flow.audience"
+                }
+              ]
+            },
+            {
+              "id": "thief",
+              "text": "スリへ留め具の修理を頼む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q150.thief",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q150.flow.audience"
+                }
+              ]
+            },
+            {
+              "id": "cancel",
+              "text": "無理に続けず、公演を中止して精算する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q150.flow.end.none"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q150.flow.audience": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q150.node",
+          "value": "audience"
+        },
+        {
+          "op": "say",
+          "text": "舞台が戻った。客の注意を集める芸を一つ挟める。候補者は自分の仕事として出演したいという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "thief",
+              "text": "スリに財布を持主へ返す芸を任せる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q150.thief",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q150.flow.contracts"
+                }
+              ]
+            },
+            {
+              "id": "singer",
+              "text": "歌手の歌を次の演目へつなぐ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q150.singer",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q150.flow.contracts"
+                }
+              ]
+            },
+            {
+              "id": "finish",
+              "text": "修理を手伝った人の仕事を紹介して閉演する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q150.flow.contracts"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q150.flow.contracts": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q150.node",
+          "value": "contracts"
+        },
+        {
+          "op": "say",
+          "text": "故障への対応は終わった。本人たちは、手伝った事実と弟子になる意思を別に聞いてほしいと言う。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "porter",
+              "text": "働きを見た荷役に弟子を申し出て、同意を受ける",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q150.porter"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に「荷役に客席と舞台の支えを直してもらう」",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q150.flow.end.porter"
+                }
+              ]
+            },
+            {
+              "id": "thief",
+              "text": "働きを見たスリに弟子を申し出て、同意を受ける",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q150.thief"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に「スリへ留め具の修理を頼む」",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q150.flow.end.thief"
+                }
+              ]
+            },
+            {
+              "id": "singer",
+              "text": "働きを見た歌手に弟子を申し出て、同意を受ける",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q150.singer"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に「歌手に待つ客を支えてもらう」",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q150.flow.end.singer"
+                }
+              ]
+            },
+            {
+              "id": "company",
+              "text": "三人へ役割を提案し、一座への同意を受ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q150.flow.company"
+                }
+              ]
+            },
+            {
+              "id": "none",
+              "text": "今回は出演料だけを精算する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q150.flow.end.none"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q150.flow.company": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q150.node",
+          "value": "company"
+        },
+        {
+          "op": "say",
+          "text": "三人は芸と裏方を固定せず交代できる条件で同意した。共有する道具に40G必要だ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "道具代40Gを出し、一座を作る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 40
+                  }
+                ]
+              },
+              "requirement": "G 40消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -40
+                },
+                {
+                  "op": "jump",
+                  "script": "q150.flow.end.company"
+                }
+              ]
+            },
+            {
+              "id": "decline",
+              "text": "一座を作らず、出演料を精算する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q150.flow.end.none"
+                }
+              ]
+            },
+            {
+              "id": "agree_supplies",
+              "text": "40Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 40
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 40
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q150.flow.company.agree.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q150.flow.end.porter": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q150.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "荷役が弟子になった。残る二人には別の仕事を紹介し、リッツは直った客席で演目を考えた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q150",
+              "outcome": "porter"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q150.flow.end.thief": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q150.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "スリが弟子になった。返された財布を確かめる客の笑顔に、リッツは悔しそうに笑った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q150",
+              "outcome": "thief"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q150.flow.end.singer": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q150.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "歌手が弟子になった。道具のない間を支えた声が、次の演目の最初に置かれた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q150",
+              "outcome": "singer"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q150.flow.end.company": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q150.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "三人が役割に同意し、一座ができた。師の名前は小さくなり、笑う場所が舞台全体へ広がった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q150",
+              "outcome": "company"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q150.flow.end.none": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q150.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "弟子は決まらなかった。三人の出演料は払い、舞台を救った仕事を失敗扱いにはしなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q150",
+              "outcome": "none"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q150.flow.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q150"
+          },
+          "cases": [
+            {
+              "equals": "q150.scene.stage.company.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q150.scene.stage.company.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q150.flow.company.agree.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q150.flow.company.agree.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q150.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q150.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "porter",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "荷役が弟子になった。残る二人には別の仕事を紹介し、リッツは直った客席で演目を考えた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "thief",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "スリが弟子になった。返された財布を確かめる客の笑顔に、リッツは悔しそうに笑った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "singer",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "歌手が弟子になった。道具のない間を支えた声が、次の演目の最初に置かれた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "company",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "三人が役割に同意し、一座ができた。師の名前は小さくなり、笑う場所が舞台全体へ広がった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "none",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "弟子は決まらなかった。三人の出演料は払い、舞台を救った仕事を失敗扱いにはしなかった。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.legacyQuestRoutes.q150"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "jump",
+                      "script": "q150.visit"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "flags.flow.q150.node"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q150.flow.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "accident",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q150.flow.accident"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "repair",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q150.flow.repair"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "audience",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q150.flow.audience"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "contracts",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q150.flow.contracts"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "company",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q150.flow.company"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
+                        {
+                          "op": "jump",
+                          "script": "q150.flow.entry"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q150.scene.stage.company.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q150",
+          "value": "q150.scene.stage.company.resume"
+        },
+        {
+          "op": "say",
+          "text": "40Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q150.scene.stage.company.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q150",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "40Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q150.scene.stage"
+        }
+      ]
+    },
+    "q150.flow.company.agree.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q150",
+          "value": "q150.flow.company.agree.resume"
+        },
+        {
+          "op": "say",
+          "text": "40Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q150.flow.company.agree.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q150",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "40Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q150.flow.company"
+        }
+      ]
+    },
+    "q150.library.entry": {
+      "storyQuest": "q150",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q150",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "荷役、スリ、歌手の三人が来た。リッツは自分と同じ曲芸だけを試すつもりだ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "practice",
+              "text": "先に三人それぞれの得意な仕事を見せてもらう",
+              "storyAction": {
+                "quest": "q150",
+                "action": "entry_practice"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q150",
+                  "action": "entry_practice"
+                }
+              ]
+            },
+            {
+              "id": "stage",
+              "text": "予定通り本番を始める",
+              "storyAction": {
+                "quest": "q150",
+                "action": "entry_stage"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q150",
+                  "action": "entry_stage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q150.library.accident": {
+      "storyQuest": "q150",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q150",
+          "scene": "accident"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q150.values.prepared"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "試演の舞台が壊れた。練習で見た三人の仕事を、今ここで頼める。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "舞台が壊れた。仕込んだ試験ではない。候補者はそれぞれ、自分ならできる仕事を申し出る。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "porter",
+              "text": "荷役に客席と舞台の支えを直してもらう",
+              "storyAction": {
+                "quest": "q150",
+                "action": "accident_porter"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q150",
+                  "action": "accident_porter"
+                },
+                {
+                  "op": "jump",
+                  "script": "q150.library.audience"
+                }
+              ]
+            },
+            {
+              "id": "singer",
+              "text": "歌手に待つ客を支えてもらう",
+              "storyAction": {
+                "quest": "q150",
+                "action": "accident_singer"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q150",
+                  "action": "accident_singer"
+                },
+                {
+                  "op": "jump",
+                  "script": "q150.library.repair"
+                }
+              ]
+            },
+            {
+              "id": "cancel",
+              "text": "公演を中止し、出演料を精算する",
+              "storyAction": {
+                "quest": "q150",
+                "action": "accident_cancel"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q150",
+                  "action": "accident_cancel"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q150.library.repair": {
+      "storyQuest": "q150",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q150",
+          "scene": "repair"
+        },
+        {
+          "op": "narrate",
+          "text": "歌で客は待っているが、舞台はまだ直らない。荷役は支えを、スリは小さな留め具の修理を申し出た。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "porter",
+              "text": "荷役へ支えの修理を頼む",
+              "storyAction": {
+                "quest": "q150",
+                "action": "repair_porter"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q150",
+                  "action": "repair_porter"
+                },
+                {
+                  "op": "jump",
+                  "script": "q150.library.audience"
+                }
+              ]
+            },
+            {
+              "id": "thief",
+              "text": "スリへ留め具の修理を頼む",
+              "storyAction": {
+                "quest": "q150",
+                "action": "repair_thief"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q150",
+                  "action": "repair_thief"
+                },
+                {
+                  "op": "jump",
+                  "script": "q150.library.audience"
+                }
+              ]
+            },
+            {
+              "id": "cancel",
+              "text": "無理に続けず、公演を中止して精算する",
+              "storyAction": {
+                "quest": "q150",
+                "action": "repair_cancel"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q150",
+                  "action": "repair_cancel"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q150.library.audience": {
+      "storyQuest": "q150",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q150",
+          "scene": "audience"
+        },
+        {
+          "op": "narrate",
+          "text": "舞台が戻った。客の注意を集める芸を一つ挟める。候補者は自分の仕事として出演したいという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "thief",
+              "text": "スリに財布を持主へ返す芸を任せる",
+              "storyAction": {
+                "quest": "q150",
+                "action": "audience_thief"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q150",
+                  "action": "audience_thief"
+                }
+              ]
+            },
+            {
+              "id": "singer",
+              "text": "歌手の歌を次の演目へつなぐ",
+              "storyAction": {
+                "quest": "q150",
+                "action": "audience_singer"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q150",
+                  "action": "audience_singer"
+                }
+              ]
+            },
+            {
+              "id": "finish",
+              "text": "修理を手伝った人の仕事を紹介して閉演する",
+              "storyAction": {
+                "quest": "q150",
+                "action": "audience_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q150",
+                  "action": "audience_finish"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q150.library.contracts": {
+      "storyQuest": "q150",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q150",
+          "scene": "contracts"
+        },
+        {
+          "op": "narrate",
+          "text": "故障への対応は終わった。本人たちは、手伝った事実と弟子になる意思を別に聞いてほしいと言う。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "porter",
+              "text": "働きを見た荷役に弟子を申し出て、同意を受ける",
+              "storyAction": {
+                "quest": "q150",
+                "action": "contracts_porter"
+              },
+              "condition": {
+                "op": "and",
+                "args": [
+                  true,
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q150.values.porter"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q150",
+                  "action": "contracts_porter"
+                },
+                {
+                  "op": "jump",
+                  "script": "q150.library.end.porter"
+                }
+              ]
+            },
+            {
+              "id": "thief",
+              "text": "働きを見たスリに弟子を申し出て、同意を受ける",
+              "storyAction": {
+                "quest": "q150",
+                "action": "contracts_thief"
+              },
+              "condition": {
+                "op": "and",
+                "args": [
+                  true,
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q150.values.thief"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q150",
+                  "action": "contracts_thief"
+                },
+                {
+                  "op": "jump",
+                  "script": "q150.library.end.thief"
+                }
+              ]
+            },
+            {
+              "id": "singer",
+              "text": "働きを見た歌手に弟子を申し出て、同意を受ける",
+              "storyAction": {
+                "quest": "q150",
+                "action": "contracts_singer"
+              },
+              "condition": {
+                "op": "and",
+                "args": [
+                  true,
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q150.values.singer"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q150",
+                  "action": "contracts_singer"
+                },
+                {
+                  "op": "jump",
+                  "script": "q150.library.end.singer"
+                }
+              ]
+            },
+            {
+              "id": "company",
+              "text": "三人へ役割を提案し、一座への同意を受ける",
+              "storyAction": {
+                "quest": "q150",
+                "action": "contracts_company"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q150",
+                  "action": "contracts_company"
+                },
+                {
+                  "op": "jump",
+                  "script": "q150.library.company"
+                }
+              ]
+            },
+            {
+              "id": "none",
+              "text": "今回は出演料だけを精算する",
+              "storyAction": {
+                "quest": "q150",
+                "action": "contracts_none"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q150",
+                  "action": "contracts_none"
+                },
+                {
+                  "op": "jump",
+                  "script": "q150.library.settled"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q150.library.company": {
+      "storyQuest": "q150",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q150",
+          "scene": "company"
+        },
+        {
+          "op": "narrate",
+          "text": "三人は芸と裏方を固定せず交代できる条件で同意した。共有する道具に40G必要だ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "道具代40Gを出し、一座を作る",
+              "storyAction": {
+                "quest": "q150",
+                "action": "company_agree"
+              },
+              "requirement": "gold 40消費",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q150",
+                  "action": "company_agree"
+                },
+                {
+                  "op": "jump",
+                  "script": "q150.library.company_agree_ready"
+                }
+              ]
+            },
+            {
+              "id": "decline",
+              "text": "一座を作らず、出演料を精算する",
+              "storyAction": {
+                "quest": "q150",
+                "action": "company_decline"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q150",
+                  "action": "company_decline"
+                },
+                {
+                  "op": "jump",
+                  "script": "q150.library.settled"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q150.library.practice": {
+      "storyQuest": "q150",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q150",
+          "scene": "practice"
+        },
+        {
+          "op": "narrate",
+          "text": "荷役の組立、スリの細かな手仕事、歌手の歌を実際に見せてもらった。公開試演の会場へ向かう。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "stage",
+              "text": "三人とリッツを会場へ案内する",
+              "storyAction": {
+                "quest": "q150",
+                "action": "practice_stage"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q150",
+                  "action": "practice_stage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q150.library.settled": {
+      "storyQuest": "q150",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q150",
+          "scene": "settled"
+        },
+        {
+          "op": "narrate",
+          "text": "窓口で三人の出演料を精算した。公演の中止や弟子不採用を、手伝った仕事の無価値さへ読み替えない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q150",
+                "action": "settled_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q150",
+                  "action": "settled_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q150.library.end.none"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q150.library.tools": {
+      "storyQuest": "q150",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q150",
+          "scene": "tools"
+        },
+        {
+          "op": "narrate",
+          "text": "合意した交代制を道具の注文へ添え、支払済みの共有道具を受け取った。道具と三人を会場へ戻す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "carry",
+              "text": "共有道具を運び、三人と一座を始める",
+              "storyAction": {
+                "quest": "q150",
+                "action": "tools_carry"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q150",
+                  "action": "tools_carry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q150.library.formed": {
+      "storyQuest": "q150",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q150",
+          "scene": "formed"
+        },
+        {
+          "op": "narrate",
+          "text": "三人が会場へ戻り、共有道具を受け取った。固定の裏方を押しつけず、合意した役割で一座を始める。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q150",
+                "action": "formed_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q150",
+                  "action": "formed_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q150.library.end.company"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q150.library.company_agree_ready": {
+      "storyQuest": "q150",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q150",
+          "scene": "company_agree_ready"
+        },
+        {
+          "op": "narrate",
+          "text": "必要な道具を使って準備を整えた。ここから目的地まで運ぶ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "continue",
+              "text": "準備した相手・品物と目的地へ向かう",
+              "storyAction": {
+                "quest": "q150",
+                "action": "company_agree_ready_continue"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q150",
+                  "action": "company_agree_ready_continue"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q150.library.end.porter": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "荷役が弟子になった。残る二人には別の仕事を紹介し、リッツは直った客席で演目を考えた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.porter",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q150",
+          "outcome": "porter"
+        }
+      ]
+    },
+    "q150.library.end.thief": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "スリが弟子になった。返された財布を確かめる客の笑顔に、リッツは悔しそうに笑った。"
+        },
+        {
+          "op": "add",
+          "target": "vars.thief",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q150",
+          "outcome": "thief"
+        }
+      ]
+    },
+    "q150.library.end.singer": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "歌手が弟子になった。道具のない間を支えた声が、次の演目の最初に置かれた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.singer",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q150",
+          "outcome": "singer"
+        }
+      ]
+    },
+    "q150.library.end.company": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "三人が役割に同意し、一座ができた。師の名前は小さくなり、笑う場所が舞台全体へ広がった。"
+        },
+        {
+          "op": "add",
+          "target": "vars.company",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q150",
+          "outcome": "company"
+        }
+      ]
+    },
+    "q150.library.end.none": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "弟子は決まらなかった。三人の出演料は払い、舞台を救った仕事を失敗扱いにはしなかった。"
+        },
+        {
+          "op": "add",
+          "target": "vars.none",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q150",
+          "outcome": "none"
+        }
+      ]
+    },
+    "q150.library.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q150"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q150.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q150.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q150.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "porter",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "荷役が弟子になった。残る二人には別の仕事を紹介し、リッツは直った客席で演目を考えた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "thief",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "スリが弟子になった。返された財布を確かめる客の笑顔に、リッツは悔しそうに笑った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "singer",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "歌手が弟子になった。道具のない間を支えた声が、次の演目の最初に置かれた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "company",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "三人が役割に同意し、一座ができた。師の名前は小さくなり、笑う場所が舞台全体へ広がった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "none",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "弟子は決まらなかった。三人の出演料は払い、舞台を救った仕事を失敗扱いにはしなかった。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q150"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q150.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q150.library.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "accident",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q150.library.accident"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "repair",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q150.library.repair"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "audience",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q150.library.audience"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contracts",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q150.library.contracts"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "company",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q150.library.company"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "practice",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q150.library.practice"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "settled",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q150.library.settled"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "tools",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q150.library.tools"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "formed",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q150.library.formed"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "company_agree_ready",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q150.library.company_agree_ready"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q150.library.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "大道芸人の弟子の相談卓",
+      "practice": "三人の仕事を見る稽古場",
+      "stage": "祭の本番会場",
+      "contracts": "出演料と弟子入りの相談窓口",
+      "tools": "共有道具の受取工房",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "practice"
+      ],
+      [
+        "transit",
+        "stage"
+      ],
+      [
+        "transit",
+        "contracts"
+      ],
+      [
+        "transit",
+        "tools"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "practice",
+          "stage",
+          "contracts",
+          "tools",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "porter",
+          "thief",
+          "singer",
+          "company",
+          "none"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "porter": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "porter"
+      },
+      "singer": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "singer"
+      },
+      "thief": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "thief"
+      },
+      "walletReturned": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "walletReturned"
+      },
+      "porterAgreed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "porterAgreed"
+      },
+      "feesSettled": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "feesSettled"
+      },
+      "thiefAgreed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "thiefAgreed"
+      },
+      "singerAgreed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "singerAgreed"
+      },
+      "toolsPaid": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "toolsPaid"
+      },
+      "prepared": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "prepared"
+      },
+      "companyAgreed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "companyAgreed"
+      },
+      "ritzAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "practice",
+          "stage",
+          "contracts",
+          "tools",
+          "transit"
+        ],
+        "meaning": "ritz の所在または保持者"
+      },
+      "porterPersonAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "practice",
+          "stage",
+          "contracts",
+          "tools",
+          "transit"
+        ],
+        "meaning": "porterPerson の所在または保持者"
+      },
+      "thiefPersonAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "practice",
+          "stage",
+          "contracts",
+          "tools",
+          "transit"
+        ],
+        "meaning": "thiefPerson の所在または保持者"
+      },
+      "singerPersonAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "practice",
+          "stage",
+          "contracts",
+          "tools",
+          "transit"
+        ],
+        "meaning": "singerPerson の所在または保持者"
+      },
+      "sharedToolsAt": {
+        "type": "enum",
+        "initial": "tools",
+        "values": [
+          "entry",
+          "practice",
+          "stage",
+          "contracts",
+          "tools",
+          "transit",
+          "party",
+          "ritz",
+          "porterPerson",
+          "thiefPerson",
+          "singerPerson",
+          "walletOwner",
+          "wallet"
+        ],
+        "meaning": "sharedTools の所在または保持者"
+      },
+      "walletOwnerAt": {
+        "type": "enum",
+        "initial": "stage",
+        "values": [
+          "entry",
+          "practice",
+          "stage",
+          "contracts",
+          "tools",
+          "transit"
+        ],
+        "meaning": "walletOwner の所在または保持者"
+      },
+      "walletAt": {
+        "type": "enum",
+        "initial": "stage",
+        "values": [
+          "entry",
+          "practice",
+          "stage",
+          "contracts",
+          "tools",
+          "transit",
+          "party",
+          "ritz",
+          "porterPerson",
+          "thiefPerson",
+          "singerPerson",
+          "sharedTools",
+          "walletOwner"
+        ],
+        "meaning": "wallet の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "ritz": {
+        "holder": "ritzAt",
+        "kind": "person"
+      },
+      "porterPerson": {
+        "holder": "porterPersonAt",
+        "kind": "person"
+      },
+      "thiefPerson": {
+        "holder": "thiefPersonAt",
+        "kind": "person"
+      },
+      "singerPerson": {
+        "holder": "singerPersonAt",
+        "kind": "person"
+      },
+      "sharedTools": {
+        "holder": "sharedToolsAt",
+        "kind": "item"
+      },
+      "walletOwner": {
+        "holder": "walletOwnerAt",
+        "kind": "person"
+      },
+      "wallet": {
+        "holder": "walletAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "公開試演で道具が壊れ、予定の芸ができなくなる。荷役は観客席を直し、スリは落ちた財布を本人へ戻す芸にし、歌手は伴奏なしで待ち時間を埋める。試験を仕掛けたのではなく、本当に失敗した舞台をそれぞれが救う。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "大道芸人の弟子の相談卓",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "accident": {
+        "title": "祭の本番会場",
+        "place": "stage",
+        "cast": [],
+        "requires": true
+      },
+      "repair": {
+        "title": "祭の本番会場",
+        "place": "stage",
+        "cast": [],
+        "requires": true
+      },
+      "audience": {
+        "title": "祭の本番会場",
+        "place": "stage",
+        "cast": [],
+        "requires": true
+      },
+      "contracts": {
+        "title": "出演料と弟子入りの相談窓口",
+        "place": "contracts",
+        "cast": [],
+        "requires": true
+      },
+      "company": {
+        "title": "出演料と弟子入りの相談窓口",
+        "place": "contracts",
+        "cast": [],
+        "requires": true
+      },
+      "practice": {
+        "title": "三人の仕事を見る稽古場",
+        "place": "practice",
+        "cast": [],
+        "requires": true
+      },
+      "settled": {
+        "title": "出演料と弟子入りの相談窓口",
+        "place": "contracts",
+        "cast": [],
+        "requires": true
+      },
+      "tools": {
+        "title": "共有道具の受取工房",
+        "place": "tools",
+        "cast": [],
+        "requires": true
+      },
+      "formed": {
+        "title": "祭の本番会場",
+        "place": "stage",
+        "cast": [],
+        "requires": true
+      },
+      "company_agree_ready": {
+        "title": "出演料と弟子入りの相談窓口",
+        "place": "contracts",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_practice": {
+        "from": [
+          "entry"
+        ],
+        "to": "practice",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "ritz",
+              "porterPerson",
+              "thiefPerson",
+              "singerPerson"
+            ],
+            "path": [
+              "transit",
+              "practice"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "practice",
+          "companions": [
+            "ritz",
+            "porterPerson",
+            "thiefPerson",
+            "singerPerson"
+          ]
+        },
+        "depart": []
+      },
+      "entry_stage": {
+        "from": [
+          "entry"
+        ],
+        "to": "accident",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "ritz",
+              "porterPerson",
+              "thiefPerson",
+              "singerPerson"
+            ],
+            "path": [
+              "transit",
+              "stage"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "stage",
+          "companions": [
+            "ritz",
+            "porterPerson",
+            "thiefPerson",
+            "singerPerson"
+          ]
+        },
+        "depart": []
+      },
+      "accident_porter": {
+        "from": [
+          "accident"
+        ],
+        "to": "audience",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "porter",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "accident_singer": {
+        "from": [
+          "accident"
+        ],
+        "to": "repair",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "singer",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "accident_cancel": {
+        "from": [
+          "accident"
+        ],
+        "to": "settled",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "ritz",
+              "porterPerson",
+              "thiefPerson",
+              "singerPerson"
+            ],
+            "path": [
+              "transit",
+              "contracts"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "contracts",
+          "companions": [
+            "ritz",
+            "porterPerson",
+            "thiefPerson",
+            "singerPerson"
+          ]
+        },
+        "depart": []
+      },
+      "repair_porter": {
+        "from": [
+          "repair"
+        ],
+        "to": "audience",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "porter",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "repair_thief": {
+        "from": [
+          "repair"
+        ],
+        "to": "audience",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "thief",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "repair_cancel": {
+        "from": [
+          "repair"
+        ],
+        "to": "settled",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "ritz",
+              "porterPerson",
+              "thiefPerson",
+              "singerPerson"
+            ],
+            "path": [
+              "transit",
+              "contracts"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "contracts",
+          "companions": [
+            "ritz",
+            "porterPerson",
+            "thiefPerson",
+            "singerPerson"
+          ]
+        },
+        "depart": []
+      },
+      "audience_thief": {
+        "from": [
+          "audience"
+        ],
+        "to": "contracts",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "ritz",
+              "porterPerson",
+              "thiefPerson",
+              "singerPerson"
+            ],
+            "path": [
+              "transit",
+              "contracts"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "thief",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "contracts",
+          "companions": [
+            "ritz",
+            "porterPerson",
+            "thiefPerson",
+            "singerPerson"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "wallet",
+            "from": "stage",
+            "to": "walletOwner"
+          },
+          {
+            "op": "set",
+            "key": "walletReturned",
+            "value": true
+          }
+        ]
+      },
+      "audience_singer": {
+        "from": [
+          "audience"
+        ],
+        "to": "contracts",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "ritz",
+              "porterPerson",
+              "thiefPerson",
+              "singerPerson"
+            ],
+            "path": [
+              "transit",
+              "contracts"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "singer",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "contracts",
+          "companions": [
+            "ritz",
+            "porterPerson",
+            "thiefPerson",
+            "singerPerson"
+          ]
+        },
+        "depart": []
+      },
+      "audience_finish": {
+        "from": [
+          "audience"
+        ],
+        "to": "contracts",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "ritz",
+              "porterPerson",
+              "thiefPerson",
+              "singerPerson"
+            ],
+            "path": [
+              "transit",
+              "contracts"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "contracts",
+          "companions": [
+            "ritz",
+            "porterPerson",
+            "thiefPerson",
+            "singerPerson"
+          ]
+        },
+        "depart": []
+      },
+      "contracts_porter": {
+        "from": [
+          "contracts"
+        ],
+        "ending": "porter",
+        "requires": {
+          "op": "and",
+          "args": [
+            true,
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q150.values.porter"
+              },
+              "right": true
+            }
+          ]
+        },
+        "effects": [
+          {
+            "op": "set",
+            "key": "porterAgreed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "feesSettled",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "porter"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "contracts_thief": {
+        "from": [
+          "contracts"
+        ],
+        "ending": "thief",
+        "requires": {
+          "op": "and",
+          "args": [
+            true,
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q150.values.thief"
+              },
+              "right": true
+            }
+          ]
+        },
+        "effects": [
+          {
+            "op": "set",
+            "key": "thiefAgreed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "feesSettled",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "thief"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "contracts_singer": {
+        "from": [
+          "contracts"
+        ],
+        "ending": "singer",
+        "requires": {
+          "op": "and",
+          "args": [
+            true,
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q150.values.singer"
+              },
+              "right": true
+            }
+          ]
+        },
+        "effects": [
+          {
+            "op": "set",
+            "key": "singerAgreed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "feesSettled",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "singer"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "contracts_company": {
+        "from": [
+          "contracts"
+        ],
+        "to": "company",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "contracts_none": {
+        "from": [
+          "contracts"
+        ],
+        "to": "settled",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "company_agree": {
+        "from": [
+          "company"
+        ],
+        "to": "company_agree_ready",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "toolsPaid",
+            "value": true
+          }
+        ],
+        "cost": {
+          "gold": 40
+        },
+        "once": false
+      },
+      "company_decline": {
+        "from": [
+          "company"
+        ],
+        "to": "settled",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "practice_stage": {
+        "from": [
+          "practice"
+        ],
+        "to": "accident",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "ritz",
+              "porterPerson",
+              "thiefPerson",
+              "singerPerson"
+            ],
+            "path": [
+              "transit",
+              "stage"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "stage",
+          "companions": [
+            "ritz",
+            "porterPerson",
+            "thiefPerson",
+            "singerPerson"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "prepared",
+            "value": true
+          }
+        ]
+      },
+      "settled_finish": {
+        "from": [
+          "settled"
+        ],
+        "ending": "none",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "feesSettled",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "none"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "tools_carry": {
+        "from": [
+          "tools"
+        ],
+        "to": "formed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "ritz",
+              "porterPerson",
+              "thiefPerson",
+              "singerPerson"
+            ],
+            "path": [
+              "transit",
+              "stage"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "stage",
+          "companions": [
+            "ritz",
+            "porterPerson",
+            "thiefPerson",
+            "singerPerson"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "sharedTools",
+            "from": "tools",
+            "to": "party"
+          }
+        ]
+      },
+      "formed_finish": {
+        "from": [
+          "formed"
+        ],
+        "ending": "company",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "sharedTools",
+            "from": "party",
+            "to": "stage"
+          },
+          {
+            "op": "set",
+            "key": "companyAgreed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "feesSettled",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "company"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "company_agree_ready_continue": {
+        "from": [
+          "company_agree_ready"
+        ],
+        "to": "tools",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "ritz",
+              "porterPerson",
+              "thiefPerson",
+              "singerPerson"
+            ],
+            "path": [
+              "transit",
+              "tools"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "tools",
+          "companions": [
+            "ritz",
+            "porterPerson",
+            "thiefPerson",
+            "singerPerson"
+          ]
+        },
+        "depart": []
+      }
+    },
+    "endings": {
+      "porter": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q150.values.resolution"
+            },
+            "right": "porter"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q150.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q150.values.partyAt"
+                },
+                "right": "contracts"
+              }
+            ]
+          }
+        ]
+      },
+      "thief": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q150.values.resolution"
+            },
+            "right": "thief"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q150.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q150.values.partyAt"
+                },
+                "right": "contracts"
+              }
+            ]
+          }
+        ]
+      },
+      "singer": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q150.values.resolution"
+            },
+            "right": "singer"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q150.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q150.values.partyAt"
+                },
+                "right": "contracts"
+              }
+            ]
+          }
+        ]
+      },
+      "company": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q150.values.resolution"
+            },
+            "right": "company"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q150.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q150.values.partyAt"
+                },
+                "right": "stage"
+              }
+            ]
+          }
+        ]
+      },
+      "none": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q150.values.resolution"
+            },
+            "right": "none"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q150.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q150.values.partyAt"
+                },
+                "right": "contracts"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_5",
+        "map": "region_5_f2",
+        "x": 8,
+        "y": 1
+      },
+      "practice": {
+        "kind": "town",
+        "location": "library_rehearsal"
+      },
+      "stage": {
+        "kind": "town",
+        "location": "library_stage"
+      },
+      "contracts": {
+        "kind": "town",
+        "location": "library_registry"
+      },
+      "tools": {
+        "kind": "town",
+        "location": "library_tailor"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "salome",
+  "receptionLocations": [
+    "salome_board"
+  ]
+}

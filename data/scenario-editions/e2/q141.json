@@ -1,0 +1,1792 @@
+{
+  "schemaVersion": 1,
+  "id": "q141",
+  "number": 141,
+  "title": "音の出ない優勝旗",
+  "client": "楽団長ポル",
+  "brief": "歌わなくなった優勝旗を調べてください。",
+  "region": 5,
+  "type": "scene_graph",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 サロメの共同依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q141_scene",
+      "title": "音の出ない優勝旗：楽団長ポル",
+      "points": [
+        {
+          "map": "region_5_f1",
+          "x": 3,
+          "y": 1,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q141.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q141.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q141.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q141"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "q141_library_entry",
+      "title": "音の出ない優勝旗の相談卓",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q141.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q141.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q141"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q141.library.visit",
+      "points": [
+        {
+          "dungeon": "region_5",
+          "map": "region_5_f1",
+          "x": 3,
+          "y": 1
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_5_f1",
+      "x": 3,
+      "y": 1,
+      "object": "q141_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "use": {
+      "label": "舞台に上がらない作曲者",
+      "text": "旗が歌い、サナの名も掲げられた。本人は洗濯場で少し調子を変え、歌を続けた。",
+      "gold": 105,
+      "xp": 75
+    },
+    "new": {
+      "label": "今年の新曲",
+      "text": "旗は新しい曲を覚えた。去年を完全に再現できなくても、ポルは若手の音を止めなかった。",
+      "gold": 105,
+      "xp": 75
+    },
+    "silent": {
+      "label": "旗のない音楽",
+      "text": "旗は静かなままだった。演奏が終わってから、洗濯場の歌が聞こえた。",
+      "gold": 105,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/salome/library-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381a39bfadc8f9711c51f",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "ポルは自分の指揮が衰えたと思い、若手へ厳しく当たる。旗は演奏の直後でなく、洗濯物を絞る音に微かに揺れる。サナは舞台に上がりたいのではなく、仕事中の歌まで人に採点されたくない。才能発掘を無条件の救済にしない。",
+      "fixedPast": "楽団長ポルは、歌うはずの優勝旗が黙ったため修理を頼む。旗は優勝曲を覚える魔具だ。去年の演奏で、舞台裏の洗濯娘サナが口ずさんだ対旋律まで記憶し、今年の楽団だけでは曲が完成しない。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "楽団長ポル",
+        "beliefsAndGoals": "楽団長ポルは、歌うはずの優勝旗が黙ったため修理を頼む。旗は優勝曲を覚える魔具だ。去年の演奏で、舞台裏の洗濯娘サナが口ずさんだ対旋律まで記憶し、今年の楽団だけでは曲が完成しない。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "歌わなくなった優勝旗を調べてください。"
+      }
+    ],
+    "conflict": {
+      "design": "旗の試奏→楽譜／洗濯場→曲の相談→本番。許可を得て対旋律を入れる、別の新曲で旗を上書きする、今年は旗を鳴らさず演奏する道がある。本人が出演を断っても曲の使用は別に相談できる。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q141.library.entry"
+        },
+        {
+          "id": "sana",
+          "script": "q141.library.sana"
+        },
+        {
+          "id": "score_use",
+          "script": "q141.library.score_use"
+        },
+        {
+          "id": "performed_use",
+          "script": "q141.library.performed_use"
+        },
+        {
+          "id": "score_new",
+          "script": "q141.library.score_new"
+        },
+        {
+          "id": "performed_new",
+          "script": "q141.library.performed_new"
+        },
+        {
+          "id": "performed_silent",
+          "script": "q141.library.performed_silent"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "歌わなくなった優勝旗を調べてください。"
+    },
+    "reveal": {
+      "newInformation": "ポルは自分の指揮が衰えたと思い、若手へ厳しく当たる。旗は演奏の直後でなく、洗濯物を絞る音に微かに揺れる。サナは舞台に上がりたいのではなく、仕事中の歌まで人に採点されたくない。才能発掘を無条件の救済にしない。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q141.scene.entry"
+      },
+      {
+        "id": "sana",
+        "script": "q141.scene.sana"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q141.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "旗は楽団の演奏に黙ったまま、洗濯物を絞る音で微かに揺れた。去年の旗は、舞台裏のサナの対旋律も覚えていた。",
+        "options": [
+          {
+            "id": "ask",
+            "text": "サナへ曲と出演を別々に相談する",
+            "to": "sana",
+            "action": "entry_ask"
+          },
+          {
+            "id": "new",
+            "text": "別の新曲で今年の旗を上書きする",
+            "to": "score_new",
+            "action": "entry_new"
+          },
+          {
+            "id": "silent",
+            "text": "旗を鳴らさず今年の演奏をする",
+            "to": "performed_silent",
+            "action": "entry_silent"
+          }
+        ]
+      },
+      {
+        "id": "sana",
+        "place": "laundry",
+        "text": "「仕事中の歌まで採点されたくない」サナは出演を断ったが、曲の使用と作曲者として名を載せることには同意した。",
+        "options": [
+          {
+            "id": "use",
+            "text": "出演を求めず、許諾した対旋律を使う",
+            "to": "score_use",
+            "action": "sana_use"
+          },
+          {
+            "id": "new",
+            "text": "許諾曲を使わず新曲で進む",
+            "to": "score_new",
+            "action": "sana_new"
+          }
+        ]
+      },
+      {
+        "id": "score_use",
+        "place": "score",
+        "text": "使用許可の範囲で対旋律を写し、サナの名を楽譜と演目札へ記した。出演を断った本人は洗濯場に残る。",
+        "options": [
+          {
+            "id": "carry",
+            "text": "許諾された楽譜と旗を本番会場へ運ぶ",
+            "to": "performed_use",
+            "action": "score_use_carry"
+          }
+        ]
+      },
+      {
+        "id": "performed_use",
+        "place": "stage",
+        "text": "楽団へ楽譜と旗を渡した。舞台へ呼ぶ約束は加えず、名を載せた曲を演奏する。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@use",
+            "action": "performed_use_finish"
+          }
+        ]
+      },
+      {
+        "id": "score_new",
+        "place": "score",
+        "text": "今年の新曲を書き上げた。去年の曲の許諾と混ぜず、新しい楽譜で本番に臨む。",
+        "options": [
+          {
+            "id": "carry",
+            "text": "新曲の楽譜と旗を会場へ運ぶ",
+            "to": "performed_new",
+            "action": "score_new_carry"
+          }
+        ]
+      },
+      {
+        "id": "performed_new",
+        "place": "stage",
+        "text": "楽団へ新曲の楽譜と旗を渡し、今年の演奏を始めた。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@new",
+            "action": "performed_new_finish"
+          }
+        ]
+      },
+      {
+        "id": "performed_silent",
+        "place": "stage",
+        "text": "旗を会場へ届け、鳴らさないまま演奏を終える。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@silent",
+            "action": "performed_silent_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "entryScript": "q141.library.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "library-second-ten",
+      "settlement": "salome",
+      "saveRevision": 2,
+      "scope": "書庫後半10件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q141.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q141.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "旗は楽団の演奏に黙ったまま、洗濯物を絞る音で微かに揺れた。去年の旗は、舞台裏のサナの対旋律も覚えていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "ask",
+              "text": "サナへ曲と出演を別々に相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q141.scene.sana"
+                }
+              ]
+            },
+            {
+              "id": "new",
+              "text": "別の新曲で今年の旗を上書きする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q141.end.new"
+                }
+              ]
+            },
+            {
+              "id": "silent",
+              "text": "旗を鳴らさず今年の演奏をする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q141.end.silent"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q141.scene.sana": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q141.node",
+          "value": "sana"
+        },
+        {
+          "op": "say",
+          "text": "「仕事中の歌まで採点されたくない」サナは出演を断ったが、曲の使用と作曲者として名を載せることには同意した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "use",
+              "text": "出演を求めず、許諾した対旋律を使う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q141.end.use"
+                }
+              ]
+            },
+            {
+              "id": "new",
+              "text": "許諾曲を使わず新曲で進む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q141.end.new"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q141.end.use": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q141.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "旗が歌い、サナの名も掲げられた。本人は洗濯場で少し調子を変え、歌を続けた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q141",
+              "outcome": "use"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q141.end.new": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q141.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "旗は新しい曲を覚えた。去年を完全に再現できなくても、ポルは若手の音を止めなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q141",
+              "outcome": "new"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q141.end.silent": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q141.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "旗は静かなままだった。演奏が終わってから、洗濯場の歌が聞こえた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q141",
+              "outcome": "silent"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q141.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q141.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q141.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "use",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "旗が歌い、サナの名も掲げられた。本人は洗濯場で少し調子を変え、歌を続けた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "new",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "旗は新しい曲を覚えた。去年を完全に再現できなくても、ポルは若手の音を止めなかった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "silent",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "旗は静かなままだった。演奏が終わってから、洗濯場の歌が聞こえた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q141.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q141.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "sana",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q141.scene.sana"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q141.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q141.library.entry": {
+      "storyQuest": "q141",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q141",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "旗は楽団の演奏に黙ったまま、洗濯物を絞る音で微かに揺れた。去年の旗は、舞台裏のサナの対旋律も覚えていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "ask",
+              "text": "サナへ曲と出演を別々に相談する",
+              "storyAction": {
+                "quest": "q141",
+                "action": "entry_ask"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q141",
+                  "action": "entry_ask"
+                }
+              ]
+            },
+            {
+              "id": "new",
+              "text": "別の新曲で今年の旗を上書きする",
+              "storyAction": {
+                "quest": "q141",
+                "action": "entry_new"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q141",
+                  "action": "entry_new"
+                }
+              ]
+            },
+            {
+              "id": "silent",
+              "text": "旗を鳴らさず今年の演奏をする",
+              "storyAction": {
+                "quest": "q141",
+                "action": "entry_silent"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q141",
+                  "action": "entry_silent"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q141.library.sana": {
+      "storyQuest": "q141",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q141",
+          "scene": "sana"
+        },
+        {
+          "op": "narrate",
+          "text": "「仕事中の歌まで採点されたくない」サナは出演を断ったが、曲の使用と作曲者として名を載せることには同意した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "use",
+              "text": "出演を求めず、許諾した対旋律を使う",
+              "storyAction": {
+                "quest": "q141",
+                "action": "sana_use"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q141",
+                  "action": "sana_use"
+                }
+              ]
+            },
+            {
+              "id": "new",
+              "text": "許諾曲を使わず新曲で進む",
+              "storyAction": {
+                "quest": "q141",
+                "action": "sana_new"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q141",
+                  "action": "sana_new"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q141.library.score_use": {
+      "storyQuest": "q141",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q141",
+          "scene": "score_use"
+        },
+        {
+          "op": "narrate",
+          "text": "使用許可の範囲で対旋律を写し、サナの名を楽譜と演目札へ記した。出演を断った本人は洗濯場に残る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "carry",
+              "text": "許諾された楽譜と旗を本番会場へ運ぶ",
+              "storyAction": {
+                "quest": "q141",
+                "action": "score_use_carry"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q141",
+                  "action": "score_use_carry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q141.library.performed_use": {
+      "storyQuest": "q141",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q141",
+          "scene": "performed_use"
+        },
+        {
+          "op": "narrate",
+          "text": "楽団へ楽譜と旗を渡した。舞台へ呼ぶ約束は加えず、名を載せた曲を演奏する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q141",
+                "action": "performed_use_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q141",
+                  "action": "performed_use_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q141.library.end.use"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q141.library.score_new": {
+      "storyQuest": "q141",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q141",
+          "scene": "score_new"
+        },
+        {
+          "op": "narrate",
+          "text": "今年の新曲を書き上げた。去年の曲の許諾と混ぜず、新しい楽譜で本番に臨む。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "carry",
+              "text": "新曲の楽譜と旗を会場へ運ぶ",
+              "storyAction": {
+                "quest": "q141",
+                "action": "score_new_carry"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q141",
+                  "action": "score_new_carry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q141.library.performed_new": {
+      "storyQuest": "q141",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q141",
+          "scene": "performed_new"
+        },
+        {
+          "op": "narrate",
+          "text": "楽団へ新曲の楽譜と旗を渡し、今年の演奏を始めた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q141",
+                "action": "performed_new_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q141",
+                  "action": "performed_new_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q141.library.end.new"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q141.library.performed_silent": {
+      "storyQuest": "q141",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q141",
+          "scene": "performed_silent"
+        },
+        {
+          "op": "narrate",
+          "text": "旗を会場へ届け、鳴らさないまま演奏を終える。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q141",
+                "action": "performed_silent_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q141",
+                  "action": "performed_silent_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q141.library.end.silent"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q141.library.end.use": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "旗が歌い、サナの名も掲げられた。本人は洗濯場で少し調子を変え、歌を続けた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.use",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q141",
+          "outcome": "use"
+        }
+      ]
+    },
+    "q141.library.end.new": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "旗は新しい曲を覚えた。去年を完全に再現できなくても、ポルは若手の音を止めなかった。"
+        },
+        {
+          "op": "add",
+          "target": "vars.new",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q141",
+          "outcome": "new"
+        }
+      ]
+    },
+    "q141.library.end.silent": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "旗は静かなままだった。演奏が終わってから、洗濯場の歌が聞こえた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.silent",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q141",
+          "outcome": "silent"
+        }
+      ]
+    },
+    "q141.library.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q141"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q141.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q141.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q141.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "use",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "旗が歌い、サナの名も掲げられた。本人は洗濯場で少し調子を変え、歌を続けた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "new",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "旗は新しい曲を覚えた。去年を完全に再現できなくても、ポルは若手の音を止めなかった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "silent",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "旗は静かなままだった。演奏が終わってから、洗濯場の歌が聞こえた。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q141"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q141.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q141.library.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "sana",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q141.library.sana"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "score_use",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q141.library.score_use"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "performed_use",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q141.library.performed_use"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "score_new",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q141.library.score_new"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "performed_new",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q141.library.performed_new"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "performed_silent",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q141.library.performed_silent"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q141.library.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "音の出ない優勝旗の相談卓",
+      "laundry": "サナが働く洗濯場",
+      "score": "楽譜を整える写本室",
+      "stage": "祭の本番会場",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "laundry"
+      ],
+      [
+        "transit",
+        "score"
+      ],
+      [
+        "transit",
+        "stage"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "laundry",
+          "score",
+          "stage",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "use",
+          "new",
+          "silent"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "performerAgreed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "performerAgreed"
+      },
+      "musicAllowed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "musicAllowed"
+      },
+      "nameAllowed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "nameAllowed"
+      },
+      "performed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "performed"
+      },
+      "sanaAt": {
+        "type": "enum",
+        "initial": "laundry",
+        "values": [
+          "entry",
+          "laundry",
+          "score",
+          "stage",
+          "transit"
+        ],
+        "meaning": "sana の所在または保持者"
+      },
+      "bannerAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "laundry",
+          "score",
+          "stage",
+          "transit",
+          "party",
+          "sana",
+          "scoreSheet"
+        ],
+        "meaning": "banner の所在または保持者"
+      },
+      "scoreSheetAt": {
+        "type": "enum",
+        "initial": "score",
+        "values": [
+          "entry",
+          "laundry",
+          "score",
+          "stage",
+          "transit",
+          "party",
+          "sana",
+          "banner"
+        ],
+        "meaning": "scoreSheet の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "sana": {
+        "holder": "sanaAt",
+        "kind": "person"
+      },
+      "banner": {
+        "holder": "bannerAt",
+        "kind": "item"
+      },
+      "scoreSheet": {
+        "holder": "scoreSheetAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "ポルは自分の指揮が衰えたと思い、若手へ厳しく当たる。旗は演奏の直後でなく、洗濯物を絞る音に微かに揺れる。サナは舞台に上がりたいのではなく、仕事中の歌まで人に採点されたくない。才能発掘を無条件の救済にしない。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "音の出ない優勝旗の相談卓",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "sana": {
+        "title": "サナが働く洗濯場",
+        "place": "laundry",
+        "cast": [],
+        "requires": true
+      },
+      "score_use": {
+        "title": "楽譜を整える写本室",
+        "place": "score",
+        "cast": [],
+        "requires": true
+      },
+      "performed_use": {
+        "title": "祭の本番会場",
+        "place": "stage",
+        "cast": [],
+        "requires": true
+      },
+      "score_new": {
+        "title": "楽譜を整える写本室",
+        "place": "score",
+        "cast": [],
+        "requires": true
+      },
+      "performed_new": {
+        "title": "祭の本番会場",
+        "place": "stage",
+        "cast": [],
+        "requires": true
+      },
+      "performed_silent": {
+        "title": "祭の本番会場",
+        "place": "stage",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_ask": {
+        "from": [
+          "entry"
+        ],
+        "to": "sana",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "laundry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "laundry",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "banner",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      },
+      "entry_new": {
+        "from": [
+          "entry"
+        ],
+        "to": "score_new",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "score"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "score",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "banner",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      },
+      "entry_silent": {
+        "from": [
+          "entry"
+        ],
+        "to": "performed_silent",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "stage"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "stage",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "banner",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      },
+      "sana_use": {
+        "from": [
+          "sana"
+        ],
+        "to": "score_use",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "score"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "score",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "musicAllowed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "nameAllowed",
+            "value": true
+          }
+        ]
+      },
+      "sana_new": {
+        "from": [
+          "sana"
+        ],
+        "to": "score_new",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "score"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "score",
+          "companions": []
+        },
+        "depart": []
+      },
+      "score_use_carry": {
+        "from": [
+          "score_use"
+        ],
+        "to": "performed_use",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "stage"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "stage",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "scoreSheet",
+            "from": "score",
+            "to": "party"
+          }
+        ]
+      },
+      "performed_use_finish": {
+        "from": [
+          "performed_use"
+        ],
+        "ending": "use",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "banner",
+            "from": "party",
+            "to": "stage"
+          },
+          {
+            "op": "transfer",
+            "entity": "scoreSheet",
+            "from": "party",
+            "to": "stage"
+          },
+          {
+            "op": "set",
+            "key": "performed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "use"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "score_new_carry": {
+        "from": [
+          "score_new"
+        ],
+        "to": "performed_new",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "stage"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "stage",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "scoreSheet",
+            "from": "score",
+            "to": "party"
+          }
+        ]
+      },
+      "performed_new_finish": {
+        "from": [
+          "performed_new"
+        ],
+        "ending": "new",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "banner",
+            "from": "party",
+            "to": "stage"
+          },
+          {
+            "op": "transfer",
+            "entity": "scoreSheet",
+            "from": "party",
+            "to": "stage"
+          },
+          {
+            "op": "set",
+            "key": "performed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "new"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "performed_silent_finish": {
+        "from": [
+          "performed_silent"
+        ],
+        "ending": "silent",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "banner",
+            "from": "party",
+            "to": "stage"
+          },
+          {
+            "op": "set",
+            "key": "performed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "silent"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "use": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q141.values.resolution"
+            },
+            "right": "use"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q141.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q141.values.partyAt"
+                },
+                "right": "stage"
+              }
+            ]
+          }
+        ]
+      },
+      "new": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q141.values.resolution"
+            },
+            "right": "new"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q141.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q141.values.partyAt"
+                },
+                "right": "stage"
+              }
+            ]
+          }
+        ]
+      },
+      "silent": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q141.values.resolution"
+            },
+            "right": "silent"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q141.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q141.values.partyAt"
+                },
+                "right": "stage"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_5",
+        "map": "region_5_f1",
+        "x": 3,
+        "y": 1
+      },
+      "laundry": {
+        "kind": "town",
+        "location": "library_laundry"
+      },
+      "score": {
+        "kind": "town",
+        "location": "library_copy_room"
+      },
+      "stage": {
+        "kind": "town",
+        "location": "library_stage"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "salome",
+  "receptionLocations": [
+    "salome_board"
+  ]
+}

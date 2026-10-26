@@ -1,0 +1,2060 @@
+{
+  "schemaVersion": 1,
+  "id": "q148",
+  "number": 148,
+  "title": "贋金より軽い金",
+  "client": "市場の両替人",
+  "brief": "同じ金貨で傾きが変わる秤を調べてください。",
+  "region": 5,
+  "type": "scene_graph",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 サロメの共同依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q148_scene",
+      "title": "贋金より軽い金：市場の両替人",
+      "points": [
+        {
+          "map": "region_5_f2",
+          "x": 5,
+          "y": 1,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q148.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q148.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q148.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q148"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "q148_library_entry",
+      "title": "贋金より軽い金の相談卓",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q148.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q148.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q148"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q148.library.visit",
+      "points": [
+        {
+          "dungeon": "region_5",
+          "map": "region_5_f2",
+          "x": 5,
+          "y": 1
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_5_f2",
+      "x": 5,
+      "y": 1,
+      "object": "q148_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "public": {
+      "label": "公開された比較",
+      "text": "営業停止と返金手続が始まった。謝り続けていた客は、金貨を置いたまま適正額を待った。",
+      "gold": 105,
+      "xp": 75
+    },
+    "private": {
+      "label": "一人への返金",
+      "text": "この客は払い戻しを受けた。他の客の救済は済んでおらず、エギの商売を監視する仕事が残った。",
+      "gold": 105,
+      "xp": 75
+    },
+    "remove": {
+      "label": "秤を止める",
+      "text": "装置は使えなくなった。過去の被害を確定したとは報告せず、別の手口への警戒を申し添えた。",
+      "gold": 105,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/salome/library-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381a39bfadc8f9711c51f",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "同じ硬貨を別人が置くだけで目盛りが変わる。最初に貧しい客が損をしている場面を見せ、その人が悪人だからではなく、自責しやすさを利用されていると示す。図太い盗人の金貨が最も重くなる皮肉を置く。",
+      "fixedPast": "市場の両替人は、同じ金貨なのに秤が人によって傾くと訴える。秤師エギは罪悪感の重さを測る魔具を「純度の秤」として売っている。客の弱みを見つけ、値切るためだ。彼の事情を聞いても意図的な詐欺は残る。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "市場の両替人",
+        "beliefsAndGoals": "市場の両替人は、同じ金貨なのに秤が人によって傾くと訴える。秤師エギは罪悪感の重さを測る魔具を「純度の秤」として売っている。客の弱みを見つけ、値切るためだ。彼の事情を聞いても意図的な詐欺は残る。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "同じ金貨で傾きが変わる秤を調べてください。"
+      }
+    ],
+    "conflict": {
+      "design": "苦情→比較実験／仕入れ元→公開実演／私的返金交渉／装置だけ回収。証明前の告発は反論され、追加調査へ戻れる。秤師が逃げる場合は市場出口で追跡場面を行い、戦闘は必須にしない。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q148.library.entry"
+        },
+        {
+          "id": "denied",
+          "script": "q148.library.denied"
+        },
+        {
+          "id": "proof",
+          "script": "q148.library.proof"
+        },
+        {
+          "id": "market",
+          "script": "q148.library.market"
+        },
+        {
+          "id": "public_demo",
+          "script": "q148.library.public_demo"
+        },
+        {
+          "id": "private_refund",
+          "script": "q148.library.private_refund"
+        },
+        {
+          "id": "fetch_scale",
+          "script": "q148.library.fetch_scale"
+        },
+        {
+          "id": "removed",
+          "script": "q148.library.removed"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "同じ金貨で傾きが変わる秤を調べてください。"
+    },
+    "reveal": {
+      "newInformation": "同じ硬貨を別人が置くだけで目盛りが変わる。最初に貧しい客が損をしている場面を見せ、その人が悪人だからではなく、自責しやすさを利用されていると示す。図太い盗人の金貨が最も重くなる皮肉を置く。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q148.scene.entry"
+      },
+      {
+        "id": "denied",
+        "script": "q148.scene.denied"
+      },
+      {
+        "id": "proof",
+        "script": "q148.scene.proof"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q148.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q148.proof",
+        "meaning": "作者原稿の proof に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "書庫の相談卓で、秤師エギの買取について届いた申立を読む。現物と客を市場で確かめる。",
+        "options": [
+          {
+            "id": "visit",
+            "text": "客と秤師のいる買取台を訪ねる",
+            "to": "market",
+            "action": "entry_visit"
+          }
+        ]
+      },
+      {
+        "id": "denied",
+        "place": "office",
+        "text": "エギは硬貨の違いだと反論した。あなたの疑いを誤りと断定はできないが、公の証明はまだない。",
+        "options": [
+          {
+            "id": "test",
+            "text": "比較実験へ戻る",
+            "to": "market",
+            "action": "denied_test"
+          },
+          {
+            "id": "remove",
+            "text": "装置の使用停止だけを仲介する",
+            "to": "fetch_scale",
+            "action": "denied_remove"
+          }
+        ]
+      },
+      {
+        "id": "proof",
+        "place": "market",
+        "text": "同じ硬貨でも持主を替えると重さが変わった。純度でなく自責を読む秤だった。図太い客ほど有利になる。",
+        "options": [
+          {
+            "id": "public",
+            "text": "本人の内心を暴かず、比較結果を公開実演する",
+            "to": "public_demo",
+            "action": "proof_public"
+          },
+          {
+            "id": "private",
+            "text": "この客の返金を私的に交渉する",
+            "to": "private_refund",
+            "action": "proof_private"
+          },
+          {
+            "id": "remove",
+            "text": "装置だけを回収する",
+            "to": "removed",
+            "action": "proof_remove"
+          }
+        ]
+      },
+      {
+        "id": "market",
+        "place": "market",
+        "text": "貧しい客が謝るたび買取額が下がる。秤師エギは純度の違いだと言った。",
+        "options": [
+          {
+            "id": "test",
+            "text": "同じ硬貨を別の人に載せてもらう",
+            "to": "proof",
+            "action": "market_test"
+          },
+          {
+            "id": "accuse",
+            "text": "まだ試験せず、不正だと告発する",
+            "to": "denied",
+            "action": "market_accuse"
+          },
+          {
+            "id": "remove",
+            "text": "秤だけを回収し、使用を止める",
+            "to": "removed",
+            "action": "market_remove"
+          }
+        ]
+      },
+      {
+        "id": "public_demo",
+        "place": "office",
+        "text": "審査窓口で同じ硬貨を替えずに載せ手だけを替え、目盛りの差を実演した。内心の告白は求めない。装置と比較記録を預け、営業停止と返金手続を始める。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@public",
+            "action": "public_demo_finish"
+          }
+        ]
+      },
+      {
+        "id": "private_refund",
+        "place": "market",
+        "text": "買取台でこの客の返金を確認する。他の客の被害確定や返金完了を記録へ足さない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@private",
+            "action": "private_refund_finish"
+          }
+        ]
+      },
+      {
+        "id": "fetch_scale",
+        "place": "market",
+        "text": "使用停止の取り決めを持って買取台へ戻った。現物を受け取り、保管先へ運ぶ。",
+        "options": [
+          {
+            "id": "carry",
+            "text": "止めた秤を保管窓口へ運ぶ",
+            "to": "removed",
+            "action": "fetch_scale_carry"
+          }
+        ]
+      },
+      {
+        "id": "removed",
+        "place": "storage",
+        "text": "秤を保管窓口へ渡し、使用停止だけを記録する。過去の被害は未確定として残す。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@remove",
+            "action": "removed_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "entryScript": "q148.library.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "library-second-ten",
+      "settlement": "salome",
+      "saveRevision": 2,
+      "scope": "書庫後半10件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q148.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q148.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "貧しい客が謝るたび買取額が下がる。秤師エギは純度の違いだと言った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "test",
+              "text": "同じ硬貨を別の人に載せてもらう",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q148.proof",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q148.scene.proof"
+                }
+              ]
+            },
+            {
+              "id": "accuse",
+              "text": "まだ試験せず、不正だと告発する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q148.scene.denied"
+                }
+              ]
+            },
+            {
+              "id": "remove",
+              "text": "秤だけを回収し、使用を止める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q148.end.remove"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q148.scene.denied": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q148.node",
+          "value": "denied"
+        },
+        {
+          "op": "say",
+          "text": "エギは硬貨の違いだと反論した。あなたの疑いを誤りと断定はできないが、公の証明はまだない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "test",
+              "text": "比較実験へ戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q148.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "remove",
+              "text": "装置の使用停止だけを仲介する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q148.end.remove"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q148.scene.proof": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q148.node",
+          "value": "proof"
+        },
+        {
+          "op": "say",
+          "text": "同じ硬貨でも持主を替えると重さが変わった。純度でなく自責を読む秤だった。図太い客ほど有利になる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "public",
+              "text": "本人の内心を暴かず、比較結果を公開実演する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q148.end.public"
+                }
+              ]
+            },
+            {
+              "id": "private",
+              "text": "この客の返金を私的に交渉する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q148.end.private"
+                }
+              ]
+            },
+            {
+              "id": "remove",
+              "text": "装置だけを回収する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q148.end.remove"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q148.end.public": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q148.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "営業停止と返金手続が始まった。謝り続けていた客は、金貨を置いたまま適正額を待った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q148",
+              "outcome": "public"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q148.end.private": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q148.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "この客は払い戻しを受けた。他の客の救済は済んでおらず、エギの商売を監視する仕事が残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q148",
+              "outcome": "private"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q148.end.remove": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q148.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "装置は使えなくなった。過去の被害を確定したとは報告せず、別の手口への警戒を申し添えた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q148",
+              "outcome": "remove"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q148.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q148.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q148.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "public",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "営業停止と返金手続が始まった。謝り続けていた客は、金貨を置いたまま適正額を待った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "private",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "この客は払い戻しを受けた。他の客の救済は済んでおらず、エギの商売を監視する仕事が残った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "remove",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "装置は使えなくなった。過去の被害を確定したとは報告せず、別の手口への警戒を申し添えた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q148.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q148.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "denied",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q148.scene.denied"
+                    }
+                  ]
+                },
+                {
+                  "equals": "proof",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q148.scene.proof"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q148.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q148.library.entry": {
+      "storyQuest": "q148",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q148",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "書庫の相談卓で、秤師エギの買取について届いた申立を読む。現物と客を市場で確かめる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "visit",
+              "text": "客と秤師のいる買取台を訪ねる",
+              "storyAction": {
+                "quest": "q148",
+                "action": "entry_visit"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q148",
+                  "action": "entry_visit"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q148.library.denied": {
+      "storyQuest": "q148",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q148",
+          "scene": "denied"
+        },
+        {
+          "op": "narrate",
+          "text": "エギは硬貨の違いだと反論した。あなたの疑いを誤りと断定はできないが、公の証明はまだない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "test",
+              "text": "比較実験へ戻る",
+              "storyAction": {
+                "quest": "q148",
+                "action": "denied_test"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q148",
+                  "action": "denied_test"
+                }
+              ]
+            },
+            {
+              "id": "remove",
+              "text": "装置の使用停止だけを仲介する",
+              "storyAction": {
+                "quest": "q148",
+                "action": "denied_remove"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q148",
+                  "action": "denied_remove"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q148.library.proof": {
+      "storyQuest": "q148",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q148",
+          "scene": "proof"
+        },
+        {
+          "op": "narrate",
+          "text": "同じ硬貨でも持主を替えると重さが変わった。純度でなく自責を読む秤だった。図太い客ほど有利になる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "public",
+              "text": "本人の内心を暴かず、比較結果を公開実演する",
+              "storyAction": {
+                "quest": "q148",
+                "action": "proof_public"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q148",
+                  "action": "proof_public"
+                }
+              ]
+            },
+            {
+              "id": "private",
+              "text": "この客の返金を私的に交渉する",
+              "storyAction": {
+                "quest": "q148",
+                "action": "proof_private"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q148",
+                  "action": "proof_private"
+                },
+                {
+                  "op": "jump",
+                  "script": "q148.library.private_refund"
+                }
+              ]
+            },
+            {
+              "id": "remove",
+              "text": "装置だけを回収する",
+              "storyAction": {
+                "quest": "q148",
+                "action": "proof_remove"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q148",
+                  "action": "proof_remove"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q148.library.market": {
+      "storyQuest": "q148",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q148",
+          "scene": "market"
+        },
+        {
+          "op": "narrate",
+          "text": "貧しい客が謝るたび買取額が下がる。秤師エギは純度の違いだと言った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "test",
+              "text": "同じ硬貨を別の人に載せてもらう",
+              "storyAction": {
+                "quest": "q148",
+                "action": "market_test"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q148",
+                  "action": "market_test"
+                },
+                {
+                  "op": "jump",
+                  "script": "q148.library.proof"
+                }
+              ]
+            },
+            {
+              "id": "accuse",
+              "text": "まだ試験せず、不正だと告発する",
+              "storyAction": {
+                "quest": "q148",
+                "action": "market_accuse"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q148",
+                  "action": "market_accuse"
+                }
+              ]
+            },
+            {
+              "id": "remove",
+              "text": "秤だけを回収し、使用を止める",
+              "storyAction": {
+                "quest": "q148",
+                "action": "market_remove"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q148",
+                  "action": "market_remove"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q148.library.public_demo": {
+      "storyQuest": "q148",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q148",
+          "scene": "public_demo"
+        },
+        {
+          "op": "narrate",
+          "text": "審査窓口で同じ硬貨を替えずに載せ手だけを替え、目盛りの差を実演した。内心の告白は求めない。装置と比較記録を預け、営業停止と返金手続を始める。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q148",
+                "action": "public_demo_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q148",
+                  "action": "public_demo_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q148.library.end.public"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q148.library.private_refund": {
+      "storyQuest": "q148",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q148",
+          "scene": "private_refund"
+        },
+        {
+          "op": "narrate",
+          "text": "買取台でこの客の返金を確認する。他の客の被害確定や返金完了を記録へ足さない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q148",
+                "action": "private_refund_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q148",
+                  "action": "private_refund_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q148.library.end.private"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q148.library.fetch_scale": {
+      "storyQuest": "q148",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q148",
+          "scene": "fetch_scale"
+        },
+        {
+          "op": "narrate",
+          "text": "使用停止の取り決めを持って買取台へ戻った。現物を受け取り、保管先へ運ぶ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "carry",
+              "text": "止めた秤を保管窓口へ運ぶ",
+              "storyAction": {
+                "quest": "q148",
+                "action": "fetch_scale_carry"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q148",
+                  "action": "fetch_scale_carry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q148.library.removed": {
+      "storyQuest": "q148",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q148",
+          "scene": "removed"
+        },
+        {
+          "op": "narrate",
+          "text": "秤を保管窓口へ渡し、使用停止だけを記録する。過去の被害は未確定として残す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q148",
+                "action": "removed_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q148",
+                  "action": "removed_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q148.library.end.remove"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q148.library.end.public": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "営業停止と返金手続が始まった。謝り続けていた客は、金貨を置いたまま適正額を待った。"
+        },
+        {
+          "op": "add",
+          "target": "vars.public",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q148",
+          "outcome": "public"
+        }
+      ]
+    },
+    "q148.library.end.private": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "この客は払い戻しを受けた。他の客の救済は済んでおらず、エギの商売を監視する仕事が残った。"
+        },
+        {
+          "op": "add",
+          "target": "vars.private",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q148",
+          "outcome": "private"
+        }
+      ]
+    },
+    "q148.library.end.remove": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "装置は使えなくなった。過去の被害を確定したとは報告せず、別の手口への警戒を申し添えた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.remove",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q148",
+          "outcome": "remove"
+        }
+      ]
+    },
+    "q148.library.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q148"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q148.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q148.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q148.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "public",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "営業停止と返金手続が始まった。謝り続けていた客は、金貨を置いたまま適正額を待った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "private",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "この客は払い戻しを受けた。他の客の救済は済んでおらず、エギの商売を監視する仕事が残った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "remove",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "装置は使えなくなった。過去の被害を確定したとは報告せず、別の手口への警戒を申し添えた。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q148"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q148.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q148.library.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "denied",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q148.library.denied"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "proof",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q148.library.proof"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "market",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q148.library.market"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "public_demo",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q148.library.public_demo"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "private_refund",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q148.library.private_refund"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "fetch_scale",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q148.library.fetch_scale"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "removed",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q148.library.removed"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q148.library.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "贋金より軽い金の相談卓",
+      "market": "秤の置かれた買取台",
+      "office": "比較実演と返金の審査窓口",
+      "storage": "回収秤の保管窓口",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "market"
+      ],
+      [
+        "transit",
+        "office"
+      ],
+      [
+        "transit",
+        "storage"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "market",
+          "office",
+          "storage",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "public",
+          "private",
+          "remove"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "proof": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "proof"
+      },
+      "demonstrated": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "demonstrated"
+      },
+      "refundProcedureStarted": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "refundProcedureStarted"
+      },
+      "oneRefunded": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "oneRefunded"
+      },
+      "removed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "removed"
+      },
+      "scaleAt": {
+        "type": "enum",
+        "initial": "market",
+        "values": [
+          "entry",
+          "market",
+          "office",
+          "storage",
+          "transit",
+          "party",
+          "coin",
+          "customer",
+          "egi"
+        ],
+        "meaning": "scale の所在または保持者"
+      },
+      "coinAt": {
+        "type": "enum",
+        "initial": "market",
+        "values": [
+          "entry",
+          "market",
+          "office",
+          "storage",
+          "transit",
+          "party",
+          "scale",
+          "customer",
+          "egi"
+        ],
+        "meaning": "coin の所在または保持者"
+      },
+      "customerAt": {
+        "type": "enum",
+        "initial": "market",
+        "values": [
+          "entry",
+          "market",
+          "office",
+          "storage",
+          "transit"
+        ],
+        "meaning": "customer の所在または保持者"
+      },
+      "egiAt": {
+        "type": "enum",
+        "initial": "market",
+        "values": [
+          "entry",
+          "market",
+          "office",
+          "storage",
+          "transit"
+        ],
+        "meaning": "egi の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "scale": {
+        "holder": "scaleAt",
+        "kind": "item"
+      },
+      "coin": {
+        "holder": "coinAt",
+        "kind": "item"
+      },
+      "customer": {
+        "holder": "customerAt",
+        "kind": "person"
+      },
+      "egi": {
+        "holder": "egiAt",
+        "kind": "person"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "同じ硬貨を別人が置くだけで目盛りが変わる。最初に貧しい客が損をしている場面を見せ、その人が悪人だからではなく、自責しやすさを利用されていると示す。図太い盗人の金貨が最も重くなる皮肉を置く。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "贋金より軽い金の相談卓",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "denied": {
+        "title": "比較実演と返金の審査窓口",
+        "place": "office",
+        "cast": [],
+        "requires": true
+      },
+      "proof": {
+        "title": "秤の置かれた買取台",
+        "place": "market",
+        "cast": [],
+        "requires": true
+      },
+      "market": {
+        "title": "秤の置かれた買取台",
+        "place": "market",
+        "cast": [],
+        "requires": true
+      },
+      "public_demo": {
+        "title": "比較実演と返金の審査窓口",
+        "place": "office",
+        "cast": [],
+        "requires": true
+      },
+      "private_refund": {
+        "title": "秤の置かれた買取台",
+        "place": "market",
+        "cast": [],
+        "requires": true
+      },
+      "fetch_scale": {
+        "title": "秤の置かれた買取台",
+        "place": "market",
+        "cast": [],
+        "requires": true
+      },
+      "removed": {
+        "title": "回収秤の保管窓口",
+        "place": "storage",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_visit": {
+        "from": [
+          "entry"
+        ],
+        "to": "market",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "market"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "market",
+          "companions": []
+        },
+        "depart": []
+      },
+      "denied_test": {
+        "from": [
+          "denied"
+        ],
+        "to": "market",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "egi",
+              "customer"
+            ],
+            "path": [
+              "transit",
+              "market"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "market",
+          "companions": [
+            "egi",
+            "customer"
+          ]
+        },
+        "depart": []
+      },
+      "denied_remove": {
+        "from": [
+          "denied"
+        ],
+        "to": "fetch_scale",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "market"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "market",
+          "companions": []
+        },
+        "depart": []
+      },
+      "proof_public": {
+        "from": [
+          "proof"
+        ],
+        "to": "public_demo",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "egi",
+              "customer"
+            ],
+            "path": [
+              "transit",
+              "office"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "office",
+          "companions": [
+            "egi",
+            "customer"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "scale",
+            "from": "market",
+            "to": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "coin",
+            "from": "market",
+            "to": "party"
+          }
+        ]
+      },
+      "proof_private": {
+        "from": [
+          "proof"
+        ],
+        "to": "private_refund",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "proof_remove": {
+        "from": [
+          "proof"
+        ],
+        "to": "removed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "storage"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "storage",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "scale",
+            "from": "market",
+            "to": "party"
+          }
+        ]
+      },
+      "market_test": {
+        "from": [
+          "market"
+        ],
+        "to": "proof",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "proof",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "market_accuse": {
+        "from": [
+          "market"
+        ],
+        "to": "denied",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "egi",
+              "customer"
+            ],
+            "path": [
+              "transit",
+              "office"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "office",
+          "companions": [
+            "egi",
+            "customer"
+          ]
+        },
+        "depart": []
+      },
+      "market_remove": {
+        "from": [
+          "market"
+        ],
+        "to": "removed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "storage"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "storage",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "scale",
+            "from": "market",
+            "to": "party"
+          }
+        ]
+      },
+      "public_demo_finish": {
+        "from": [
+          "public_demo"
+        ],
+        "ending": "public",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "scale",
+            "from": "party",
+            "to": "office"
+          },
+          {
+            "op": "transfer",
+            "entity": "coin",
+            "from": "party",
+            "to": "customer"
+          },
+          {
+            "op": "set",
+            "key": "demonstrated",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "refundProcedureStarted",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "public"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "private_refund_finish": {
+        "from": [
+          "private_refund"
+        ],
+        "ending": "private",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "oneRefunded",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "private"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "fetch_scale_carry": {
+        "from": [
+          "fetch_scale"
+        ],
+        "to": "removed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "storage"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "storage",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "scale",
+            "from": "market",
+            "to": "party"
+          }
+        ]
+      },
+      "removed_finish": {
+        "from": [
+          "removed"
+        ],
+        "ending": "remove",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "scale",
+            "from": "party",
+            "to": "storage"
+          },
+          {
+            "op": "set",
+            "key": "removed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "remove"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "public": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q148.values.resolution"
+            },
+            "right": "public"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q148.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q148.values.partyAt"
+                },
+                "right": "office"
+              }
+            ]
+          }
+        ]
+      },
+      "private": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q148.values.resolution"
+            },
+            "right": "private"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q148.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q148.values.partyAt"
+                },
+                "right": "market"
+              }
+            ]
+          }
+        ]
+      },
+      "remove": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q148.values.resolution"
+            },
+            "right": "remove"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q148.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q148.values.partyAt"
+                },
+                "right": "storage"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_5",
+        "map": "region_5_f2",
+        "x": 5,
+        "y": 1
+      },
+      "market": {
+        "kind": "town",
+        "location": "library_market"
+      },
+      "office": {
+        "kind": "town",
+        "location": "library_review"
+      },
+      "storage": {
+        "kind": "town",
+        "location": "e2_storage"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "salome",
+  "receptionLocations": [
+    "salome_board"
+  ]
+}
