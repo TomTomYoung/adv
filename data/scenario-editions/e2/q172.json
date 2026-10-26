@@ -1,0 +1,2409 @@
+{
+  "schemaVersion": 1,
+  "id": "q172",
+  "number": 172,
+  "title": "名前を返す井戸",
+  "client": "織工ルイ",
+  "brief": "井戸へ失った名前を、本人と取り戻す方法を探してください。",
+  "region": 8,
+  "type": "scene_graph",
+  "recommendedLevel": 8,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 サロメの共同依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q172_scene",
+      "title": "名前を返す井戸：織工ルイ",
+      "points": [
+        {
+          "map": "region_8_f1",
+          "x": 4,
+          "y": 1,
+          "dungeon": "region_8"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q172.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q172.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q172.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q172"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_8"
+    },
+    {
+      "id": "q172_machine_entry",
+      "title": "名前を返す井戸の現場受付",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q172.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q172.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q172"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q172.machine.visit",
+      "points": [
+        {
+          "dungeon": "region_8",
+          "map": "region_8_f1",
+          "x": 4,
+          "y": 1
+        }
+      ]
+    },
+    {
+      "id": "q172_machine_well_place",
+      "title": "名前を取った井戸",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "well_place",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q172.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q172.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q172"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q172.machine.visit",
+      "points": [
+        {
+          "dungeon": "salome_road",
+          "map": "e2_salome_cemetery",
+          "x": 7,
+          "y": 3
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_8_f1",
+      "x": 4,
+      "y": 1,
+      "object": "q172_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "restore": {
+      "label": "二つの名の返還",
+      "text": "本人は両方の名と過去を取り戻した。母は今の呼び名を一度間違え、言い直した。",
+      "gold": 141,
+      "xp": 93
+    },
+    "new": {
+      "label": "本人が選ぶ新名",
+      "text": "ルイは新たな名を選んだ。記憶の欠落は残り、それを探す旅と、今どう呼ばれるかを分けた。",
+      "gold": 141,
+      "xp": 93
+    },
+    "seal": {
+      "label": "井戸を封じる",
+      "text": "主を封じて代わりの水場を手配した。奪われた記憶の回復まで済んだとは告げなかった。",
+      "gold": 141,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/salome/machine-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381d79e52f9b1f447f1d2",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "衣類には二種類の名の刺繍がある。ルイは家の期待から逃れるため「誰も昔の私を呼ばないで」と願い、井戸は本人の記憶まで奪った。願いの曲解を本人の責任だけにせず、取引内容を説明しなかった主の企みとする。",
+      "fixedPast": "井戸から水を汲んだ織工ルイが、自分の名を思い出せなくなる。母は古い名を教えるが、本人は成人後に別の名を選んでいる。井戸の主は、名と引き換えに願いを叶えたと主張し、ルイが何を願ったかも返そうとしない。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "織工ルイ",
+        "beliefsAndGoals": "井戸から水を汲んだ織工ルイが、自分の名を思い出せなくなる。母は古い名を教えるが、本人は成人後に別の名を選んでいる。井戸の主は、名と引き換えに願いを叶えたと主張し、ルイが何を願ったかも返そうとしない。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "井戸へ失った名前を、本人と取り戻す方法を探してください。"
+      }
+    ],
+    "conflict": {
+      "design": "工房→母／作品市→井戸→元の名を返させる／新たな名を本人が選ぶ／主を封じる。二つの名を知れば取引の対象を特定できる。新たな名はプレイヤーが勝手に付けず本人が決める。交渉決裂は封印の戦闘または退避へつなぐ。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q172.machine.entry"
+        },
+        {
+          "id": "well",
+          "script": "q172.machine.well"
+        },
+        {
+          "id": "onsite",
+          "script": "q172.machine.onsite"
+        },
+        {
+          "id": "mother_heard",
+          "script": "q172.machine.mother_heard"
+        },
+        {
+          "id": "market_heard",
+          "script": "q172.machine.market_heard"
+        },
+        {
+          "id": "restored_confirm",
+          "script": "q172.machine.restored_confirm"
+        },
+        {
+          "id": "restored",
+          "script": "q172.machine.restored"
+        },
+        {
+          "id": "named",
+          "script": "q172.machine.named"
+        },
+        {
+          "id": "water",
+          "script": "q172.machine.water"
+        },
+        {
+          "id": "well_seal_ready",
+          "script": "q172.machine.well_seal_ready"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "井戸へ失った名前を、本人と取り戻す方法を探してください。"
+    },
+    "reveal": {
+      "newInformation": "衣類には二種類の名の刺繍がある。ルイは家の期待から逃れるため「誰も昔の私を呼ばないで」と願い、井戸は本人の記憶まで奪った。願いの曲解を本人の責任だけにせず、取引内容を説明しなかった主の企みとする。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q172.scene.entry"
+      },
+      {
+        "id": "well",
+        "script": "q172.scene.well"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q172.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q172.old",
+        "meaning": "作者原稿の old に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q172.chosen",
+        "meaning": "作者原稿の chosen に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "機関廟の相談所でルイの記憶の欠落を聞いた。本人の工房を訪ねる。",
+        "options": [
+          {
+            "id": "visit",
+            "text": "依頼人のいる現場へ向かう",
+            "to": "onsite",
+            "action": "entry_visit"
+          }
+        ]
+      },
+      {
+        "id": "well",
+        "place": "well_place",
+        "text": "井戸は「昔の名で呼ばれたくない」という願いを口実に、本人の記憶まで取った。説明のない取引を、願った側だけの責任にはできない。",
+        "options": [
+          {
+            "id": "restore",
+            "text": "二つの名から取引の対象を示し、返還を求める",
+            "to": "restored_confirm",
+            "action": "well_restore"
+          },
+          {
+            "id": "new",
+            "text": "今の名をルイ本人が選ぶ意思を尊重する",
+            "to": "named",
+            "action": "well_new"
+          },
+          {
+            "id": "seal",
+            "text": "主を封じ、水源を別に手配する",
+            "to": "well_seal_ready",
+            "action": "well_seal"
+          },
+          {
+            "id": "back",
+            "text": "名の聞き取りへ戻る",
+            "to": "onsite",
+            "action": "well_back"
+          }
+        ]
+      },
+      {
+        "id": "onsite",
+        "place": "workshop",
+        "text": "母が呼ぶ名と、作品の刺繍にある名が違う。本人は成人後に別の名を選んでいた。",
+        "options": [
+          {
+            "id": "mother",
+            "text": "母から昔の名を聞く",
+            "to": "mother_heard",
+            "action": "onsite_mother"
+          },
+          {
+            "id": "market",
+            "text": "作品市で本人が選んだ名を確かめる",
+            "to": "market_heard",
+            "action": "onsite_market"
+          },
+          {
+            "id": "well",
+            "text": "井戸の主と話す",
+            "to": "well",
+            "action": "onsite_well"
+          }
+        ]
+      },
+      {
+        "id": "mother_heard",
+        "place": "mother",
+        "text": "母から昔の名と呼んでいた頃の事情を聞いた。",
+        "options": [
+          {
+            "id": "return",
+            "text": "本人の工房へ戻る",
+            "to": "onsite",
+            "action": "mother_heard_return"
+          }
+        ]
+      },
+      {
+        "id": "market_heard",
+        "place": "market",
+        "text": "作品の刺繍と出品記録を照合し、本人が選んだ名を確認した。",
+        "options": [
+          {
+            "id": "return",
+            "text": "本人の工房へ戻る",
+            "to": "onsite",
+            "action": "market_heard_return"
+          }
+        ]
+      },
+      {
+        "id": "restored_confirm",
+        "place": "workshop",
+        "text": "ルイと工房へ戻り、二つの名と過去を取り戻したことを本人に確認する。",
+        "options": [
+          {
+            "id": "mother",
+            "text": "本人と母を訪ね、今の呼び名を伝える",
+            "to": "restored",
+            "action": "restored_confirm_mother"
+          }
+        ]
+      },
+      {
+        "id": "restored",
+        "place": "mother",
+        "text": "母は呼び名を一度間違え、本人が望む今の名へ言い直した。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@restore",
+            "action": "restored_finish"
+          }
+        ]
+      },
+      {
+        "id": "named",
+        "place": "workshop",
+        "text": "本人が選んだ新しい呼び名を工房へ記した。記憶の欠落は回復済みにしない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@new",
+            "action": "named_finish"
+          }
+        ]
+      },
+      {
+        "id": "water",
+        "place": "water",
+        "text": "井戸を封じたことと記憶の未回復を窓口へ伝え、代わりの水場を手配した。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@seal",
+            "action": "water_finish"
+          }
+        ]
+      },
+      {
+        "id": "well_seal_ready",
+        "place": "well_place",
+        "text": "戦いに勝利し、先へ進む道が開いた。次の場所まで歩いて確かめる。",
+        "options": [
+          {
+            "id": "continue",
+            "text": "準備した相手・品物と目的地へ向かう",
+            "to": "water",
+            "action": "well_seal_ready_continue"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "entryScript": "q172.machine.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "machine-twenty",
+      "settlement": "salome",
+      "saveRevision": 2,
+      "scope": "機関廟20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q172.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q172.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "母が呼ぶ名と、作品の刺繍にある名が違う。本人は成人後に別の名を選んでいた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "mother",
+              "text": "母から昔の名を聞く",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q172.old"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q172.old",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q172.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "market",
+              "text": "作品市で本人が選んだ名を確かめる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q172.chosen"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q172.chosen",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q172.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "well",
+              "text": "井戸の主と話す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q172.scene.well"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q172.scene.well": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q172.node",
+          "value": "well"
+        },
+        {
+          "op": "say",
+          "text": "井戸は「昔の名で呼ばれたくない」という願いを口実に、本人の記憶まで取った。説明のない取引を、願った側だけの責任にはできない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "restore",
+              "text": "二つの名から取引の対象を示し、返還を求める",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q172.old"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q172.chosen"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q172.end.restore"
+                }
+              ]
+            },
+            {
+              "id": "new",
+              "text": "今の名をルイ本人が選ぶ意思を尊重する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q172.end.new"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "主を封じ、水源を別に手配する",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_8",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q172.end.seal"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q172.scene.well"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "back",
+              "text": "名の聞き取りへ戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q172.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q172.end.restore": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q172.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "本人は両方の名と過去を取り戻した。母は今の呼び名を一度間違え、言い直した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q172",
+              "outcome": "restore"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q172.end.new": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q172.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "ルイは新たな名を選んだ。記憶の欠落は残り、それを探す旅と、今どう呼ばれるかを分けた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q172",
+              "outcome": "new"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q172.end.seal": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q172.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "主を封じて代わりの水場を手配した。奪われた記憶の回復まで済んだとは告げなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q172",
+              "outcome": "seal"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q172.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q172.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q172.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "restore",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "本人は両方の名と過去を取り戻した。母は今の呼び名を一度間違え、言い直した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "new",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "ルイは新たな名を選んだ。記憶の欠落は残り、それを探す旅と、今どう呼ばれるかを分けた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "seal",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "主を封じて代わりの水場を手配した。奪われた記憶の回復まで済んだとは告げなかった。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q172.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q172.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "well",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q172.scene.well"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q172.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q172.machine.entry": {
+      "storyQuest": "q172",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q172",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "機関廟の相談所でルイの記憶の欠落を聞いた。本人の工房を訪ねる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "visit",
+              "text": "依頼人のいる現場へ向かう",
+              "storyAction": {
+                "quest": "q172",
+                "action": "entry_visit"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q172",
+                  "action": "entry_visit"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q172.machine.well": {
+      "storyQuest": "q172",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q172",
+          "scene": "well"
+        },
+        {
+          "op": "narrate",
+          "text": "井戸は「昔の名で呼ばれたくない」という願いを口実に、本人の記憶まで取った。説明のない取引を、願った側だけの責任にはできない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "restore",
+              "text": "二つの名から取引の対象を示し、返還を求める",
+              "storyAction": {
+                "quest": "q172",
+                "action": "well_restore"
+              },
+              "condition": {
+                "op": "and",
+                "args": [
+                  true,
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q172.values.old"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q172.values.chosen"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q172",
+                  "action": "well_restore"
+                }
+              ]
+            },
+            {
+              "id": "new",
+              "text": "今の名をルイ本人が選ぶ意思を尊重する",
+              "storyAction": {
+                "quest": "q172",
+                "action": "well_new"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q172",
+                  "action": "well_new"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "主を封じ、水源を別に手配する",
+              "storyAction": {
+                "quest": "q172",
+                "action": "well_seal"
+              },
+              "requirement": "戦闘。作業・報酬は勝利後に確定する。",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_8",
+                  "on_win": [
+                    {
+                      "op": "story.action",
+                      "quest": "q172",
+                      "action": "well_seal"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q172.machine.well_seal_ready"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "narrate",
+                      "text": "戦いを切り上げた。作業は確定していない。現場で再開できる。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q172.machine.well"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "narrate",
+                      "text": "救助班にサロメへ運び出された。現場へ戻れば直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "back",
+              "text": "名の聞き取りへ戻る",
+              "storyAction": {
+                "quest": "q172",
+                "action": "well_back"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q172",
+                  "action": "well_back"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q172.machine.onsite": {
+      "storyQuest": "q172",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q172",
+          "scene": "onsite"
+        },
+        {
+          "op": "narrate",
+          "text": "母が呼ぶ名と、作品の刺繍にある名が違う。本人は成人後に別の名を選んでいた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "mother",
+              "text": "母から昔の名を聞く",
+              "storyAction": {
+                "quest": "q172",
+                "action": "onsite_mother"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q172.values.old"
+                  },
+                  "right": true
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q172",
+                  "action": "onsite_mother"
+                }
+              ]
+            },
+            {
+              "id": "market",
+              "text": "作品市で本人が選んだ名を確かめる",
+              "storyAction": {
+                "quest": "q172",
+                "action": "onsite_market"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q172.values.chosen"
+                  },
+                  "right": true
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q172",
+                  "action": "onsite_market"
+                }
+              ]
+            },
+            {
+              "id": "well",
+              "text": "井戸の主と話す",
+              "storyAction": {
+                "quest": "q172",
+                "action": "onsite_well"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q172",
+                  "action": "onsite_well"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q172.machine.mother_heard": {
+      "storyQuest": "q172",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q172",
+          "scene": "mother_heard"
+        },
+        {
+          "op": "narrate",
+          "text": "母から昔の名と呼んでいた頃の事情を聞いた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "本人の工房へ戻る",
+              "storyAction": {
+                "quest": "q172",
+                "action": "mother_heard_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q172",
+                  "action": "mother_heard_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q172.machine.market_heard": {
+      "storyQuest": "q172",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q172",
+          "scene": "market_heard"
+        },
+        {
+          "op": "narrate",
+          "text": "作品の刺繍と出品記録を照合し、本人が選んだ名を確認した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "本人の工房へ戻る",
+              "storyAction": {
+                "quest": "q172",
+                "action": "market_heard_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q172",
+                  "action": "market_heard_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q172.machine.restored_confirm": {
+      "storyQuest": "q172",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q172",
+          "scene": "restored_confirm"
+        },
+        {
+          "op": "narrate",
+          "text": "ルイと工房へ戻り、二つの名と過去を取り戻したことを本人に確認する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "mother",
+              "text": "本人と母を訪ね、今の呼び名を伝える",
+              "storyAction": {
+                "quest": "q172",
+                "action": "restored_confirm_mother"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q172",
+                  "action": "restored_confirm_mother"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q172.machine.restored": {
+      "storyQuest": "q172",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q172",
+          "scene": "restored"
+        },
+        {
+          "op": "narrate",
+          "text": "母は呼び名を一度間違え、本人が望む今の名へ言い直した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q172",
+                "action": "restored_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q172",
+                  "action": "restored_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q172.machine.end.restore"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q172.machine.named": {
+      "storyQuest": "q172",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q172",
+          "scene": "named"
+        },
+        {
+          "op": "narrate",
+          "text": "本人が選んだ新しい呼び名を工房へ記した。記憶の欠落は回復済みにしない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q172",
+                "action": "named_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q172",
+                  "action": "named_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q172.machine.end.new"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q172.machine.water": {
+      "storyQuest": "q172",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q172",
+          "scene": "water"
+        },
+        {
+          "op": "narrate",
+          "text": "井戸を封じたことと記憶の未回復を窓口へ伝え、代わりの水場を手配した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q172",
+                "action": "water_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q172",
+                  "action": "water_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q172.machine.end.seal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q172.machine.well_seal_ready": {
+      "storyQuest": "q172",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q172",
+          "scene": "well_seal_ready"
+        },
+        {
+          "op": "narrate",
+          "text": "戦いに勝利し、先へ進む道が開いた。次の場所まで歩いて確かめる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "continue",
+              "text": "準備した相手・品物と目的地へ向かう",
+              "storyAction": {
+                "quest": "q172",
+                "action": "well_seal_ready_continue"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q172",
+                  "action": "well_seal_ready_continue"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q172.machine.end.restore": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "本人は両方の名と過去を取り戻した。母は今の呼び名を一度間違え、言い直した。"
+        },
+        {
+          "op": "add",
+          "target": "vars.restore",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q172",
+          "outcome": "restore"
+        }
+      ]
+    },
+    "q172.machine.end.new": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "ルイは新たな名を選んだ。記憶の欠落は残り、それを探す旅と、今どう呼ばれるかを分けた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.new",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q172",
+          "outcome": "new"
+        }
+      ]
+    },
+    "q172.machine.end.seal": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "主を封じて代わりの水場を手配した。奪われた記憶の回復まで済んだとは告げなかった。"
+        },
+        {
+          "op": "add",
+          "target": "vars.seal",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q172",
+          "outcome": "seal"
+        }
+      ]
+    },
+    "q172.machine.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q172"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q172.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q172.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q172.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "restore",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "本人は両方の名と過去を取り戻した。母は今の呼び名を一度間違え、言い直した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "new",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "ルイは新たな名を選んだ。記憶の欠落は残り、それを探す旅と、今どう呼ばれるかを分けた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "seal",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "主を封じて代わりの水場を手配した。奪われた記憶の回復まで済んだとは告げなかった。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q172"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q172.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q172.machine.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "well",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q172.machine.well"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "onsite",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q172.machine.onsite"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "mother_heard",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q172.machine.mother_heard"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "market_heard",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q172.machine.market_heard"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "restored_confirm",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q172.machine.restored_confirm"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "restored",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q172.machine.restored"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "named",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q172.machine.named"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "water",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q172.machine.water"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "well_seal_ready",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q172.machine.well_seal_ready"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q172.machine.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "名前を返す井戸の現場受付",
+      "workshop": "ルイ本人の刺繍工房",
+      "mother": "母から昔の名を聞く家",
+      "market": "作品の名を確かめる市",
+      "well_place": "名前を取った井戸",
+      "water": "代わりの水源を手配する窓口",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "workshop"
+      ],
+      [
+        "transit",
+        "mother"
+      ],
+      [
+        "transit",
+        "market"
+      ],
+      [
+        "transit",
+        "well_place"
+      ],
+      [
+        "transit",
+        "water"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "workshop",
+          "mother",
+          "market",
+          "well_place",
+          "water",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "restore",
+          "new",
+          "seal"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "memoriesReturned": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "memoriesReturned"
+      },
+      "wellSealed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "wellSealed"
+      },
+      "old": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "old"
+      },
+      "chosen": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "chosen"
+      },
+      "nameConfirmed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "nameConfirmed"
+      },
+      "motherInformed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "motherInformed"
+      },
+      "newNameChosen": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "newNameChosen"
+      },
+      "waterArranged": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "waterArranged"
+      },
+      "luiAt": {
+        "type": "enum",
+        "initial": "workshop",
+        "values": [
+          "entry",
+          "workshop",
+          "mother",
+          "market",
+          "well_place",
+          "water",
+          "transit"
+        ],
+        "meaning": "lui の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "lui": {
+        "holder": "luiAt",
+        "kind": "person"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "衣類には二種類の名の刺繍がある。ルイは家の期待から逃れるため「誰も昔の私を呼ばないで」と願い、井戸は本人の記憶まで奪った。願いの曲解を本人の責任だけにせず、取引内容を説明しなかった主の企みとする。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "名前を返す井戸の現場受付",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "well": {
+        "title": "名前を取った井戸",
+        "place": "well_place",
+        "cast": [],
+        "requires": true
+      },
+      "onsite": {
+        "title": "ルイ本人の刺繍工房",
+        "place": "workshop",
+        "cast": [],
+        "requires": true
+      },
+      "mother_heard": {
+        "title": "母から昔の名を聞く家",
+        "place": "mother",
+        "cast": [],
+        "requires": true
+      },
+      "market_heard": {
+        "title": "作品の名を確かめる市",
+        "place": "market",
+        "cast": [],
+        "requires": true
+      },
+      "restored_confirm": {
+        "title": "ルイ本人の刺繍工房",
+        "place": "workshop",
+        "cast": [],
+        "requires": true
+      },
+      "restored": {
+        "title": "母から昔の名を聞く家",
+        "place": "mother",
+        "cast": [],
+        "requires": true
+      },
+      "named": {
+        "title": "ルイ本人の刺繍工房",
+        "place": "workshop",
+        "cast": [],
+        "requires": true
+      },
+      "water": {
+        "title": "代わりの水源を手配する窓口",
+        "place": "water",
+        "cast": [],
+        "requires": true
+      },
+      "well_seal_ready": {
+        "title": "名前を取った井戸",
+        "place": "well_place",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_visit": {
+        "from": [
+          "entry"
+        ],
+        "to": "onsite",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "workshop"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "workshop",
+          "companions": []
+        },
+        "depart": []
+      },
+      "well_restore": {
+        "from": [
+          "well"
+        ],
+        "to": "restored_confirm",
+        "requires": {
+          "op": "and",
+          "args": [
+            true,
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q172.values.old"
+              },
+              "right": true
+            },
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q172.values.chosen"
+              },
+              "right": true
+            }
+          ]
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "lui"
+            ],
+            "path": [
+              "transit",
+              "workshop"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "workshop",
+          "companions": [
+            "lui"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "memoriesReturned",
+            "value": true
+          }
+        ]
+      },
+      "well_new": {
+        "from": [
+          "well"
+        ],
+        "to": "named",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "lui"
+            ],
+            "path": [
+              "transit",
+              "workshop"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "workshop",
+          "companions": [
+            "lui"
+          ]
+        },
+        "depart": []
+      },
+      "well_seal": {
+        "from": [
+          "well"
+        ],
+        "to": "well_seal_ready",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "wellSealed",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "well_back": {
+        "from": [
+          "well"
+        ],
+        "to": "onsite",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "lui"
+            ],
+            "path": [
+              "transit",
+              "workshop"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "workshop",
+          "companions": [
+            "lui"
+          ]
+        },
+        "depart": []
+      },
+      "onsite_mother": {
+        "from": [
+          "onsite"
+        ],
+        "to": "mother_heard",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q172.values.old"
+            },
+            "right": true
+          }
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "mother"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "old",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "mother",
+          "companions": []
+        },
+        "depart": []
+      },
+      "onsite_market": {
+        "from": [
+          "onsite"
+        ],
+        "to": "market_heard",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q172.values.chosen"
+            },
+            "right": true
+          }
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "market"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "chosen",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "market",
+          "companions": []
+        },
+        "depart": []
+      },
+      "onsite_well": {
+        "from": [
+          "onsite"
+        ],
+        "to": "well",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "lui"
+            ],
+            "path": [
+              "transit",
+              "well_place"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "well_place",
+          "companions": [
+            "lui"
+          ]
+        },
+        "depart": []
+      },
+      "mother_heard_return": {
+        "from": [
+          "mother_heard"
+        ],
+        "to": "onsite",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "workshop"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "workshop",
+          "companions": []
+        },
+        "depart": []
+      },
+      "market_heard_return": {
+        "from": [
+          "market_heard"
+        ],
+        "to": "onsite",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "workshop"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "workshop",
+          "companions": []
+        },
+        "depart": []
+      },
+      "restored_confirm_mother": {
+        "from": [
+          "restored_confirm"
+        ],
+        "to": "restored",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "lui"
+            ],
+            "path": [
+              "transit",
+              "mother"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "mother",
+          "companions": [
+            "lui"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "nameConfirmed",
+            "value": true
+          }
+        ]
+      },
+      "restored_finish": {
+        "from": [
+          "restored"
+        ],
+        "ending": "restore",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "motherInformed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "restore"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "named_finish": {
+        "from": [
+          "named"
+        ],
+        "ending": "new",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "newNameChosen",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "new"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "water_finish": {
+        "from": [
+          "water"
+        ],
+        "ending": "seal",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "waterArranged",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "seal"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "well_seal_ready_continue": {
+        "from": [
+          "well_seal_ready"
+        ],
+        "to": "water",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "lui"
+            ],
+            "path": [
+              "transit",
+              "water"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "water",
+          "companions": [
+            "lui"
+          ]
+        },
+        "depart": []
+      }
+    },
+    "endings": {
+      "restore": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q172.values.resolution"
+            },
+            "right": "restore"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q172.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q172.values.partyAt"
+                },
+                "right": "mother"
+              }
+            ]
+          }
+        ]
+      },
+      "new": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q172.values.resolution"
+            },
+            "right": "new"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q172.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q172.values.partyAt"
+                },
+                "right": "workshop"
+              }
+            ]
+          }
+        ]
+      },
+      "seal": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q172.values.resolution"
+            },
+            "right": "seal"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q172.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q172.values.partyAt"
+                },
+                "right": "water"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_8",
+        "map": "region_8_f1",
+        "x": 4,
+        "y": 1
+      },
+      "workshop": {
+        "kind": "town",
+        "location": "machine_lui"
+      },
+      "mother": {
+        "kind": "town",
+        "location": "machine_mother"
+      },
+      "market": {
+        "kind": "town",
+        "location": "library_market"
+      },
+      "well_place": {
+        "kind": "dungeon",
+        "dungeon": "salome_road",
+        "map": "e2_salome_cemetery",
+        "x": 7,
+        "y": 3
+      },
+      "water": {
+        "kind": "town",
+        "location": "machine_registry"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "salome",
+  "receptionLocations": [
+    "salome_board"
+  ]
+}

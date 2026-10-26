@@ -6,7 +6,7 @@ import {fixture,auditQuest,replay} from '../tools/audit-regional-relocation.mjs'
 import {data,read,go,drain,start,choose,checkpoint} from './library-helpers.mjs';
 const previous=await loadContent(async file=>{
  if(file==='data/scenario-editions/e2/salome-geography.json')return read('tests/fixtures/e2-geography-before-library-second.json');
- const value=await read(file);if(file==='data/scenario-editions.json')for(let n=141;n<=150;n++)delete value.editions.e2.questOverrides['q'+n];return value;
+ const value=await read(file);if(file==='data/scenario-editions.json')for(let n=141;n<=150;n++)delete value.editions.e2.questOverrides['q'+n];if(file==='data/scenario-editions.json')for(const n of [71,171].flatMap(s=>Array.from({length:10},(_,i)=>s+i)))delete value.editions.e2.questOverrides['q'+String(n).padStart(3,'0')];return value;
 },{edition:'e2'});
 function oldFixture(id,{accepted=true,entered=true,started=true}={}){
  const g=fixture(previous,id,{accepted:false,entered:false,started:false});g.random=()=>.999999;

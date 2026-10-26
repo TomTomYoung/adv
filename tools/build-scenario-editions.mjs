@@ -1,3 +1,4 @@
+import {buildMachineQuests} from './build-machine-quests.mjs';
 import {buildLibrarySecondQuests} from './build-library-second-quests.mjs';
 import {buildLibraryQuests} from './build-library-quests.mjs';
 import {buildObservatoryQuests} from './build-observatory-quests.mjs';
@@ -128,6 +129,7 @@ export async function buildScenarioEditions({check=false}={}){
  await buildObservatoryQuests({check});
  await buildLibraryQuests({check});
  await buildLibrarySecondQuests({check});
+ await buildMachineQuests({check});
  const bytes=await fs.readFile(path.join(root,'data/quests/q001.json'));
  const q=buildSecondEditionQuest(JSON.parse(bytes));
  const files={
@@ -144,5 +146,5 @@ export async function buildScenarioEditions({check=false}={}){
 
 if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href){
  await buildScenarioEditions({check:process.argv.includes('--check')});
- console.log(`SCENARIO EDITIONS ${process.argv.includes('--check')?'OK':'BUILT'}: e2 q001 and chapel q031–040/q131–140 and sunken q061–070/q161–170 and observatory q081–090/q181–190 and library q041–050/q141–150; e1 unchanged`);
+ console.log(`SCENARIO EDITIONS ${process.argv.includes('--check')?'OK':'BUILT'}: e2 q001 and chapel q031–040/q131–140 and sunken q061–070/q161–170 and observatory q081–090/q181–190 and library q041–050/q141–150 and machine q071–080/q171–180; e1 unchanged`);
 }

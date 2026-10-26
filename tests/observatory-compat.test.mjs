@@ -8,7 +8,7 @@ import {data,ready,go,checkpoint,drain} from './royal-helpers.mjs';
 const numbers=[...Array.from({length:10},(_,i)=>81+i),...Array.from({length:10},(_,i)=>181+i)];
 const previous=await loadContent(async file=>{
  if(file==='data/scenario-editions/e2/geography.json')return read('tests/fixtures/e2-geography-before-observatory.json');
- const value=await read(file);if(file==='data/scenario-editions.json')delete value.editions.e2.geographyUpgrade;if(file==='data/scenario-editions.json'){for(let n=41;n<=50;n++)delete value.editions.e2.questOverrides['q0'+n];for(let n=141;n<=150;n++)delete value.editions.e2.questOverrides['q'+n];}if(file==='data/scenario-editions.json')for(const n of numbers)delete value.editions.e2.questOverrides['q'+String(n).padStart(3,'0')];return value;
+ const value=await read(file);if(file==='data/scenario-editions.json')delete value.editions.e2.geographyUpgrade;if(file==='data/scenario-editions.json'){for(let n=41;n<=50;n++)delete value.editions.e2.questOverrides['q0'+n];for(let n=141;n<=150;n++)delete value.editions.e2.questOverrides['q'+n];for(const n of [71,171].flatMap(s=>Array.from({length:10},(_,i)=>s+i)))delete value.editions.e2.questOverrides['q'+String(n).padStart(3,'0')];}if(file==='data/scenario-editions.json')for(const n of numbers)delete value.editions.e2.questOverrides['q'+String(n).padStart(3,'0')];return value;
 },{edition:'e2'});
 function oldFixture(id,{accepted=true,entered=true,started=true,absent=null}={}){
  const g=fixture(previous,id==='q090'?'q081':id,{accepted:false,entered:false,started:false,absent});

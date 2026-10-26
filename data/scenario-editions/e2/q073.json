@@ -1,0 +1,2695 @@
+{
+  "schemaVersion": 1,
+  "id": "q073",
+  "number": 73,
+  "title": "天使の予備腕",
+  "client": "義肢職人のリン",
+  "brief": "天使像の腕を回収してください。義肢の材料に使えそうだ。",
+  "region": 8,
+  "type": "authored_progression",
+  "recommendedLevel": 8,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。 サロメの共同依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q073_clue_a",
+      "title": "天使の予備腕：現場の痕跡",
+      "points": [
+        {
+          "map": "region_8_f1",
+          "x": 7,
+          "y": 1,
+          "dungeon": "region_8"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q073.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q073.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q073"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q073"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_8"
+    },
+    {
+      "id": "q073_clue_b",
+      "title": "天使の予備腕：記録と証言",
+      "points": [
+        {
+          "map": "region_8_f1",
+          "x": 3,
+          "y": 13,
+          "dungeon": "region_8"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q073.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q073.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q073"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q073"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_8"
+    },
+    {
+      "id": "q073_decision",
+      "title": "天使の予備腕：決着の場",
+      "points": [
+        {
+          "map": "region_8_f1",
+          "x": 13,
+          "y": 7,
+          "dungeon": "region_8"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q073.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q073.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q073.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q073"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_8"
+    },
+    {
+      "id": "q073_machine_entry",
+      "title": "天使の予備腕の現場受付",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q073.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q073.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q073"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q073.machine.visit",
+      "points": [
+        {
+          "dungeon": "region_8",
+          "map": "region_8_f1",
+          "x": 13,
+          "y": 7
+        }
+      ]
+    },
+    {
+      "id": "q073_machine_load",
+      "title": "避難扉の荷重確認位置",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "load",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q073.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q073.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q073"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q073.machine.visit",
+      "points": [
+        {
+          "dungeon": "region_8",
+          "map": "region_8_f1",
+          "x": 7,
+          "y": 1
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_8_f1",
+      "x": 7,
+      "y": 1,
+      "object": "q073_clue_a",
+      "role": "clue_a"
+    },
+    {
+      "map": "region_8_f1",
+      "x": 3,
+      "y": 13,
+      "object": "q073_clue_b",
+      "role": "clue_b"
+    },
+    {
+      "map": "region_8_f1",
+      "x": 13,
+      "y": 7,
+      "object": "q073_decision",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "扉の開閉を点検し、余剰の腕を回収する",
+      "text": "義肢も避難路も残った。リンは次の腕に支えた扉の番号を刻む。",
+      "gold": 141,
+      "xp": 124
+    },
+    "contract": {
+      "label": "支えの腕を三本とも持ち去る",
+      "text": "材料は揃った。非常扉を開けるには、人が支える番を必要とする。",
+      "gold": 161,
+      "xp": 96
+    },
+    "compromise": {
+      "label": "複製を受け取り、原品を扉へ戻す",
+      "text": "納品は遅れた。天使の片腕は、戻るまで仮の梁に替わる。",
+      "gold": 91,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/salome/machine-first.mjs",
+    "world": {
+      "truth": "腕は非常時に扉を支える補助具で、全部外すと避難路が閉じる。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "腕は非常時に扉を支える補助具で、全部外すと避難路が閉じる。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "天使像の腕を回収してください。義肢の材料に使えそうだ。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "義肢職人のリン",
+        "observation": "天使像の腕を回収してください。義肢の材料に使えそうだ。",
+        "belief": "天使像の腕を回収してください。義肢の材料に使えそうだ。",
+        "goal": "天使像の腕を回収してください。義肢の材料に使えそうだ。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "天使像の腕を回収してください。義肢の材料に使えそうだ。",
+      "progression": "腕を一本ずつ外して荷重を確かめ、先に支えを作るか一本だけ借りて返す。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q073.machine.entry"
+        },
+        {
+          "id": "support",
+          "script": "q073.machine.support"
+        },
+        {
+          "id": "copy",
+          "script": "q073.machine.copy"
+        },
+        {
+          "id": "brace",
+          "script": "q073.machine.brace"
+        },
+        {
+          "id": "returned",
+          "script": "q073.machine.returned"
+        },
+        {
+          "id": "tested",
+          "script": "q073.machine.tested"
+        },
+        {
+          "id": "recovered",
+          "script": "q073.machine.recovered"
+        },
+        {
+          "id": "taken",
+          "script": "q073.machine.taken"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "天使像の腕を回収してください。義肢の材料に使えそうだ。",
+      "openQuestion": "天使の予備腕の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "ruleReveal",
+      "newInformation": "腕は非常時に扉を支える補助具で、全部外すと避難路が閉じる。",
+      "retroactiveTargets": [
+        "support"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q073.flow.entry"
+      },
+      {
+        "id": "support",
+        "script": "q073.flow.support"
+      },
+      {
+        "id": "copy",
+        "script": "q073.flow.copy"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q073.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "腕を一本ずつ外して荷重を確かめ、先に支えを作るか一本だけ借りて返す。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "腕を一本ずつ外して荷重を確かめ、先に支えを作るか一本だけ借りて返す。",
+    "flowVersion": 2,
+    "entryScript": "q073.machine.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "予備腕が三本、避難扉の下へ差し込まれている。一本を緩めると扉が少し下がった。",
+        "options": [
+          {
+            "id": "brace",
+            "text": "腕を外す前に新しい支えを組む",
+            "to": "brace",
+            "action": "entry_brace"
+          },
+          {
+            "id": "borrow",
+            "text": "一本だけ借り、残る二本で扉を保つ",
+            "to": "copy",
+            "action": "entry_borrow"
+          },
+          {
+            "id": "take",
+            "text": "支えの腕を三本とも持ち去る",
+            "to": "taken",
+            "action": "entry_take"
+          }
+        ]
+      },
+      {
+        "id": "support",
+        "place": "entry",
+        "text": "腕は非常時に扉を支える補助具で、全部外すと避難路が閉じる。 支えが荷重を受けた。腕を外しても扉の高さは変わらない。",
+        "options": [
+          {
+            "id": "recover",
+            "text": "扉の開閉を点検し、余剰の腕を回収する",
+            "to": "tested",
+            "action": "support_recover"
+          },
+          {
+            "id": "one",
+            "text": "新しい支えを残し、一本だけ借りる",
+            "to": "copy",
+            "action": "support_one"
+          }
+        ]
+      },
+      {
+        "id": "copy",
+        "place": "smith",
+        "text": "職人が借りた腕の複製を作った。貸し出した腕は、返して初めて避難設備へ戻る。",
+        "options": [
+          {
+            "id": "return",
+            "text": "複製を受け取り、原品を扉へ戻す",
+            "to": "returned",
+            "action": "copy_return"
+          },
+          {
+            "id": "support",
+            "text": "原品を返す代わりに、常設の支えを作る",
+            "to": "support",
+            "action": "copy_support"
+          }
+        ]
+      },
+      {
+        "id": "brace",
+        "place": "smith",
+        "text": "扉の荷重に合う支えを用意した。腕を外す前に扉へ戻る。",
+        "options": [
+          {
+            "id": "carry",
+            "text": "支えを扉へ運び、荷重を受け替える",
+            "to": "support",
+            "action": "brace_carry"
+          }
+        ]
+      },
+      {
+        "id": "returned",
+        "place": "entry",
+        "text": "複製を持って扉へ戻り、借りた原品を元の位置へ据えた。返却を確認して納品する。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@compromise",
+            "action": "returned_finish"
+          }
+        ]
+      },
+      {
+        "id": "tested",
+        "place": "load",
+        "text": "常設の支えに荷重を掛け、扉が開閉できることを確認した。回収した腕を工房へ納める。",
+        "options": [
+          {
+            "id": "deliver",
+            "text": "腕を工房へ運ぶ",
+            "to": "recovered",
+            "action": "tested_deliver"
+          }
+        ]
+      },
+      {
+        "id": "recovered",
+        "place": "smith",
+        "text": "支えと扉の試験結果を添えて腕を引き渡した。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@informed",
+            "action": "recovered_finish"
+          }
+        ]
+      },
+      {
+        "id": "taken",
+        "place": "smith",
+        "text": "三本を工房へ渡した。避難扉には人が支える番が必要になったと申し送る。通常の石段の帰路は塞がない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@contract",
+            "action": "taken_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "machine-twenty",
+      "settlement": "salome",
+      "saveRevision": 2,
+      "scope": "機関廟20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q073.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "指先には人を抱く摩耗でなく、扉の桟を押す傷がある。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q073",
+          "key": "clue_a",
+          "text": "指先には人を抱く摩耗でなく、扉の桟を押す傷がある。"
+        }
+      ]
+    },
+    "q073.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "義肢職人のリン",
+          "text": "非常図では像の数と、固定すべき扉の数が一致します。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q073",
+          "key": "clue_b",
+          "text": "非常図では像の数と、固定すべき扉の数が一致する。"
+        }
+      ]
+    },
+    "q073.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "天使の予備腕\n\n天使像の腕を回収してください。義肢の材料に使えそうだ。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "天使の護衛を倒し腕を持ち去る",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_8",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "材料は揃った。非常扉を開けるには、人が支える番を必要とする。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q073",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "支えを新設して余剰の腕を回収する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q073.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q073.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "腕は非常時に扉を支える補助具で、全部外すと避難路が閉じる。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "義肢も避難路も残った。リンは次の腕に支えた扉の番号を刻む。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q073",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "一本だけ借りて複製後に返す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "納品は遅れた。天使の片腕は、戻るまで仮の梁に替わる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q073",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q073.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "天使の予備腕\n\n天使像の腕を回収してください。義肢の材料に使えそうだ。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q073.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q073.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "腕は非常時に扉を支える補助具で、全部外すと避難路が閉じる。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q073.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "天使の護衛を倒し腕を持ち去る",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_8",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "材料は揃った。非常扉を開けるには、人が支える番を必要とする。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q073",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "支えを新設して余剰の腕を回収する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q073.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q073.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "義肢も避難路も残った。リンは次の腕に支えた扉の番号を刻む。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q073",
+                  "outcome": "informed"
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q073.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q073.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "compromise",
+              "text": "一本だけ借りて複製後に返す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "納品は遅れた。天使の片腕は、戻るまで仮の梁に替わる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q073",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」義肢職人のリンは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられる。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q073.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q073.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q073.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "義肢も避難路も残った。リンは次の腕に支えた扉の番号を刻む。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q073.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "材料は揃った。非常扉を開けるには、人が支える番を必要とする。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q073.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "納品は遅れた。天使の片腕は、戻るまで仮の梁に替わる。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q073.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q073.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q073.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q073.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q073.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q073.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q073.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "予備腕が三本、避難扉の下へ差し込まれている。一本を緩めると扉が少し下がった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "brace",
+              "text": "腕を外す前に新しい支えを組む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q073.flow.support"
+                }
+              ]
+            },
+            {
+              "id": "borrow",
+              "text": "一本だけ借り、残る二本で扉を保つ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q073.flow.copy"
+                }
+              ]
+            },
+            {
+              "id": "take",
+              "text": "支えの腕を三本とも持ち去る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q073.flow.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q073.flow.support": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q073.node",
+          "value": "support"
+        },
+        {
+          "op": "say",
+          "text": "腕は非常時に扉を支える補助具で、全部外すと避難路が閉じる。 支えが荷重を受けた。腕を外しても扉の高さは変わらない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "recover",
+              "text": "扉の開閉を点検し、余剰の腕を回収する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q073.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "one",
+              "text": "新しい支えを残し、一本だけ借りる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q073.flow.copy"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q073.flow.copy": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q073.node",
+          "value": "copy"
+        },
+        {
+          "op": "say",
+          "text": "職人が借りた腕の複製を作った。貸し出した腕は、返して初めて避難設備へ戻る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "複製を受け取り、原品を扉へ戻す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q073.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "support",
+              "text": "原品を返す代わりに、常設の支えを作る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q073.flow.support"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q073.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q073.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "義肢も避難路も残った。リンは次の腕に支えた扉の番号を刻む。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q073",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q073.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q073.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "材料は揃った。非常扉を開けるには、人が支える番を必要とする。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q073",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q073.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q073.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "納品は遅れた。天使の片腕は、戻るまで仮の梁に替わる。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q073",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q073.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q073.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q073.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "義肢も避難路も残った。リンは次の腕に支えた扉の番号を刻む。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "材料は揃った。非常扉を開けるには、人が支える番を必要とする。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "納品は遅れた。天使の片腕は、戻るまで仮の梁に替わる。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q073"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q073.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q073.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q073.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "support",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q073.flow.support"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "copy",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q073.flow.copy"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q073.flow.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q073.machine.entry": {
+      "storyQuest": "q073",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q073",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "予備腕が三本、避難扉の下へ差し込まれている。一本を緩めると扉が少し下がった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "brace",
+              "text": "腕を外す前に新しい支えを組む",
+              "storyAction": {
+                "quest": "q073",
+                "action": "entry_brace"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q073",
+                  "action": "entry_brace"
+                }
+              ]
+            },
+            {
+              "id": "borrow",
+              "text": "一本だけ借り、残る二本で扉を保つ",
+              "storyAction": {
+                "quest": "q073",
+                "action": "entry_borrow"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q073",
+                  "action": "entry_borrow"
+                }
+              ]
+            },
+            {
+              "id": "take",
+              "text": "支えの腕を三本とも持ち去る",
+              "storyAction": {
+                "quest": "q073",
+                "action": "entry_take"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q073",
+                  "action": "entry_take"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q073.machine.support": {
+      "storyQuest": "q073",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q073",
+          "scene": "support"
+        },
+        {
+          "op": "narrate",
+          "text": "腕は非常時に扉を支える補助具で、全部外すと避難路が閉じる。 支えが荷重を受けた。腕を外しても扉の高さは変わらない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "recover",
+              "text": "扉の開閉を点検し、余剰の腕を回収する",
+              "storyAction": {
+                "quest": "q073",
+                "action": "support_recover"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q073",
+                  "action": "support_recover"
+                }
+              ]
+            },
+            {
+              "id": "one",
+              "text": "新しい支えを残し、一本だけ借りる",
+              "storyAction": {
+                "quest": "q073",
+                "action": "support_one"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q073",
+                  "action": "support_one"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q073.machine.copy": {
+      "storyQuest": "q073",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q073",
+          "scene": "copy"
+        },
+        {
+          "op": "narrate",
+          "text": "職人が借りた腕の複製を作った。貸し出した腕は、返して初めて避難設備へ戻る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "複製を受け取り、原品を扉へ戻す",
+              "storyAction": {
+                "quest": "q073",
+                "action": "copy_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q073",
+                  "action": "copy_return"
+                }
+              ]
+            },
+            {
+              "id": "support",
+              "text": "原品を返す代わりに、常設の支えを作る",
+              "storyAction": {
+                "quest": "q073",
+                "action": "copy_support"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q073",
+                  "action": "copy_support"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q073.machine.brace": {
+      "storyQuest": "q073",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q073",
+          "scene": "brace"
+        },
+        {
+          "op": "narrate",
+          "text": "扉の荷重に合う支えを用意した。腕を外す前に扉へ戻る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "carry",
+              "text": "支えを扉へ運び、荷重を受け替える",
+              "storyAction": {
+                "quest": "q073",
+                "action": "brace_carry"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q073",
+                  "action": "brace_carry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q073.machine.returned": {
+      "storyQuest": "q073",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q073",
+          "scene": "returned"
+        },
+        {
+          "op": "narrate",
+          "text": "複製を持って扉へ戻り、借りた原品を元の位置へ据えた。返却を確認して納品する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q073",
+                "action": "returned_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q073",
+                  "action": "returned_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q073.machine.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q073.machine.tested": {
+      "storyQuest": "q073",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q073",
+          "scene": "tested"
+        },
+        {
+          "op": "narrate",
+          "text": "常設の支えに荷重を掛け、扉が開閉できることを確認した。回収した腕を工房へ納める。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "deliver",
+              "text": "腕を工房へ運ぶ",
+              "storyAction": {
+                "quest": "q073",
+                "action": "tested_deliver"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q073",
+                  "action": "tested_deliver"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q073.machine.recovered": {
+      "storyQuest": "q073",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q073",
+          "scene": "recovered"
+        },
+        {
+          "op": "narrate",
+          "text": "支えと扉の試験結果を添えて腕を引き渡した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q073",
+                "action": "recovered_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q073",
+                  "action": "recovered_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q073.machine.end.informed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q073.machine.taken": {
+      "storyQuest": "q073",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q073",
+          "scene": "taken"
+        },
+        {
+          "op": "narrate",
+          "text": "三本を工房へ渡した。避難扉には人が支える番が必要になったと申し送る。通常の石段の帰路は塞がない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q073",
+                "action": "taken_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q073",
+                  "action": "taken_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q073.machine.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q073.machine.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "義肢も避難路も残った。リンは次の腕に支えた扉の番号を刻む。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q073",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q073.machine.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "材料は揃った。非常扉を開けるには、人が支える番を必要とする。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q073",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q073.machine.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "納品は遅れた。天使の片腕は、戻るまで仮の梁に替わる。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q073",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q073.machine.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q073"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q073.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q073.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q073.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "義肢も避難路も残った。リンは次の腕に支えた扉の番号を刻む。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "材料は揃った。非常扉を開けるには、人が支える番を必要とする。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "納品は遅れた。天使の片腕は、戻るまで仮の梁に替わる。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q073"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q073.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q073.machine.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "support",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q073.machine.support"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "copy",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q073.machine.copy"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "brace",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q073.machine.brace"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "returned",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q073.machine.returned"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "tested",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q073.machine.tested"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "recovered",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q073.machine.recovered"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "taken",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q073.machine.taken"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q073.machine.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "天使の予備腕の現場受付",
+      "smith": "腕の複製と支えの工房",
+      "load": "避難扉の荷重確認位置",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "smith"
+      ],
+      [
+        "transit",
+        "load"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "smith",
+          "load",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "evacuationBlocked": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "evacuationBlocked"
+      },
+      "supported": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "supported"
+      },
+      "returned": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "returned"
+      },
+      "loadTested": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "loadTested"
+      },
+      "armAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "smith",
+          "load",
+          "transit",
+          "party",
+          "otherArms",
+          "copyArm"
+        ],
+        "meaning": "arm の所在または保持者"
+      },
+      "otherArmsAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "smith",
+          "load",
+          "transit",
+          "party",
+          "arm",
+          "copyArm"
+        ],
+        "meaning": "otherArms の所在または保持者"
+      },
+      "copyArmAt": {
+        "type": "enum",
+        "initial": "smith",
+        "values": [
+          "entry",
+          "smith",
+          "load",
+          "transit",
+          "party",
+          "arm",
+          "otherArms"
+        ],
+        "meaning": "copyArm の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "arm": {
+        "holder": "armAt",
+        "kind": "item"
+      },
+      "otherArms": {
+        "holder": "otherArmsAt",
+        "kind": "item"
+      },
+      "copyArm": {
+        "holder": "copyArmAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "腕は非常時に扉を支える補助具で、全部外すと避難路が閉じる。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "天使の予備腕の現場受付",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "support": {
+        "title": "天使の予備腕の現場受付",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "copy": {
+        "title": "腕の複製と支えの工房",
+        "place": "smith",
+        "cast": [],
+        "requires": true
+      },
+      "brace": {
+        "title": "腕の複製と支えの工房",
+        "place": "smith",
+        "cast": [],
+        "requires": true
+      },
+      "returned": {
+        "title": "天使の予備腕の現場受付",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "tested": {
+        "title": "避難扉の荷重確認位置",
+        "place": "load",
+        "cast": [],
+        "requires": true
+      },
+      "recovered": {
+        "title": "腕の複製と支えの工房",
+        "place": "smith",
+        "cast": [],
+        "requires": true
+      },
+      "taken": {
+        "title": "腕の複製と支えの工房",
+        "place": "smith",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_brace": {
+        "from": [
+          "entry"
+        ],
+        "to": "brace",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "smith"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "smith",
+          "companions": []
+        },
+        "depart": []
+      },
+      "entry_borrow": {
+        "from": [
+          "entry"
+        ],
+        "to": "copy",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "smith"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "smith",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "arm",
+            "from": "entry",
+            "to": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q073.values.armAt"
+              },
+              "right": "entry"
+            }
+          }
+        ]
+      },
+      "entry_take": {
+        "from": [
+          "entry"
+        ],
+        "to": "taken",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "smith"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "smith",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "arm",
+            "from": "entry",
+            "to": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "otherArms",
+            "from": "entry",
+            "to": "party"
+          },
+          {
+            "op": "set",
+            "key": "evacuationBlocked",
+            "value": true
+          }
+        ]
+      },
+      "support_recover": {
+        "from": [
+          "support"
+        ],
+        "to": "tested",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "load"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "load",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "arm",
+            "from": "entry",
+            "to": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q073.values.armAt"
+              },
+              "right": "entry"
+            }
+          },
+          {
+            "op": "transfer",
+            "entity": "otherArms",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      },
+      "support_one": {
+        "from": [
+          "support"
+        ],
+        "to": "copy",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "smith"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "smith",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "arm",
+            "from": "entry",
+            "to": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q073.values.armAt"
+              },
+              "right": "entry"
+            }
+          }
+        ]
+      },
+      "copy_return": {
+        "from": [
+          "copy"
+        ],
+        "to": "returned",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "copyArm",
+            "from": "smith",
+            "to": "party"
+          }
+        ]
+      },
+      "copy_support": {
+        "from": [
+          "copy"
+        ],
+        "to": "support",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "supported",
+            "value": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "entry",
+            "requires": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "brace_carry": {
+        "from": [
+          "brace"
+        ],
+        "to": "support",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "supported",
+            "value": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "entry",
+            "requires": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "returned_finish": {
+        "from": [
+          "returned"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "arm",
+            "from": "party",
+            "to": "entry"
+          },
+          {
+            "op": "set",
+            "key": "returned",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "tested_deliver": {
+        "from": [
+          "tested"
+        ],
+        "to": "recovered",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "smith"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "smith",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "loadTested",
+            "value": true
+          }
+        ]
+      },
+      "recovered_finish": {
+        "from": [
+          "recovered"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "arm",
+            "from": "party",
+            "to": "smith"
+          },
+          {
+            "op": "transfer",
+            "entity": "otherArms",
+            "from": "party",
+            "to": "smith"
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "taken_finish": {
+        "from": [
+          "taken"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "arm",
+            "from": "party",
+            "to": "smith"
+          },
+          {
+            "op": "transfer",
+            "entity": "otherArms",
+            "from": "party",
+            "to": "smith"
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q073.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q073.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q073.values.partyAt"
+                },
+                "right": "smith"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q073.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q073.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q073.values.partyAt"
+                },
+                "right": "smith"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q073.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q073.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q073.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_8",
+        "map": "region_8_f1",
+        "x": 13,
+        "y": 7
+      },
+      "smith": {
+        "kind": "town",
+        "location": "machine_hammer"
+      },
+      "load": {
+        "kind": "dungeon",
+        "dungeon": "region_8",
+        "map": "region_8_f1",
+        "x": 7,
+        "y": 1
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "salome",
+  "receptionLocations": [
+    "salome_board"
+  ]
+}

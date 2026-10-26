@@ -7,7 +7,7 @@ import {worldTravelView} from '../src/core/world-travel.js';
 import {data,read,ready,go,walk,inspect,checkpoint,drain} from './library-helpers.mjs';
 const previous=await loadContent(async file=>{
  if(file==='data/scenario-editions/e2/salome-geography.json')return read('tests/fixtures/e2-geography-before-library.json');
- const v=await read(file);if(file==='data/scenario-editions.json'){for(let n=41;n<=50;n++)delete v.editions.e2.questOverrides['q0'+n];for(let n=141;n<=150;n++)delete v.editions.e2.questOverrides['q'+n];}return v;
+ const v=await read(file);if(file==='data/scenario-editions.json'){for(let n=41;n<=50;n++)delete v.editions.e2.questOverrides['q0'+n];for(let n=141;n<=150;n++)delete v.editions.e2.questOverrides['q'+n];for(const n of [71,171].flatMap(s=>Array.from({length:10},(_,i)=>s+i)))delete v.editions.e2.questOverrides['q'+String(n).padStart(3,'0')];}return v;
 },{edition:'e2'});
 const act=(g,system,action,target,extra={})=>assert.ok(g.dispatch({type:'dungeon.action',system,action,target,...extra}),g.state.notice);
 function operate(g,id){
@@ -25,7 +25,7 @@ for(const id of ['region_5','region_8'])for(const kind of ['exit','cross','mark'
 });
 test('all forty receptions and both departures move; systems, first edition and quest identities remain unchanged',async()=>{
  for(const id of ['region_5','region_8']){assert.deepEqual(data.dungeons[id],previous.dungeons[id]);assert.ok(!data.locations.hikarigaeri_square.dungeons.includes(id));for(const map of data.dungeons[id].maps){const physical=m=>({...m,objects:m.objects.filter(o=>!o.quest)});assert.deepEqual(physical(data.maps[map]),physical(previous.maps[map]));}}
- assert.equal(Object.keys(data.maps).length,83);assert.equal(Object.keys(data.quests).length,300);assert.equal(data.scenarioEditions.editions.e2.saveRevision,2);assert.equal(data.worldTravel.version,2);
+ assert.equal(Object.keys(data.maps).length,86);assert.equal(Object.keys(data.quests).length,300);assert.equal(data.scenarioEditions.editions.e2.saveRevision,2);assert.equal(data.worldTravel.version,2);
  const g=ready();for(const n of [41,71,141,171].flatMap(s=>Array.from({length:10},(_,i)=>s+i))){const id='q'+String(n).padStart(3,'0');assert.equal(g.accept(id),false);const q=data.quests[id],base=await read('data/quests/'+id+'.json');for(const key of ['id','number','title','region','requires','outcomes'])assert.deepEqual(q[key],base[key]);}
  go(g,{kind:'town',location:'salome_board'});assert.equal(projectGame(g).quests.filter(q=>q.stage==='available'&&q.receptionHere).length,60);assert.equal(g.accept('q050'),false);assert.equal(g.accept('q080'),false);assert.ok(g.accept('q041'));assert.ok(g.accept('q071'));assert.ok(g.accept('q141'));assert.ok(g.accept('q171'));checkpoint(g);
  const e1=await loadContent(read);assert.equal(Object.keys(e1.maps).length,56);assert.equal(Object.keys(e1.quests).length,210);assert.ok(e1.locations.hikarigaeri_square.dungeons.includes('region_5'));

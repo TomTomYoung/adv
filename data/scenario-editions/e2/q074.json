@@ -1,0 +1,2799 @@
+{
+  "schemaVersion": 1,
+  "id": "q074",
+  "number": 74,
+  "title": "祈祷の順番",
+  "client": "鐘番のユア",
+  "brief": "祈祷の順番を間違えると廟が閉じる。正しい順を探してください。",
+  "region": 8,
+  "type": "authored_progression",
+  "recommendedLevel": 8,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。 サロメの共同依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q074_clue_a",
+      "title": "祈祷の順番：現場の痕跡",
+      "points": [
+        {
+          "map": "region_8_f1",
+          "x": 1,
+          "y": 7,
+          "dungeon": "region_8"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q074.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q074.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q074"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q074"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_8"
+    },
+    {
+      "id": "q074_clue_b",
+      "title": "祈祷の順番：記録と証言",
+      "points": [
+        {
+          "map": "region_8_f1",
+          "x": 10,
+          "y": 5,
+          "dungeon": "region_8"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q074.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q074.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q074"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q074"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_8"
+    },
+    {
+      "id": "q074_decision",
+      "title": "祈祷の順番：決着の場",
+      "points": [
+        {
+          "map": "region_8_f1",
+          "x": 15,
+          "y": 5,
+          "dungeon": "region_8"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q074.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q074.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q074.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q074"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_8"
+    },
+    {
+      "id": "q074_machine_entry",
+      "title": "祈祷の順番の現場受付",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q074.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q074.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q074"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q074.machine.visit",
+      "points": [
+        {
+          "dungeon": "region_8",
+          "map": "region_8_f1",
+          "x": 15,
+          "y": 5
+        }
+      ]
+    },
+    {
+      "id": "q074_machine_cooling",
+      "title": "冷却を入れる操作盤",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "cooling",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q074.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q074.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q074"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q074.machine.visit",
+      "points": [
+        {
+          "dungeon": "region_8",
+          "map": "region_8_f1",
+          "x": 1,
+          "y": 7
+        }
+      ]
+    },
+    {
+      "id": "q074_machine_furnace_place",
+      "title": "試験炉の操作盤",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "furnace_place",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q074.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q074.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q074"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q074.machine.visit",
+      "points": [
+        {
+          "dungeon": "region_8",
+          "map": "region_8_f1",
+          "x": 10,
+          "y": 5
+        }
+      ]
+    },
+    {
+      "id": "q074_machine_footing",
+      "title": "封鎖外の退避足場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "footing",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q074.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q074.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q074"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q074.machine.visit",
+      "points": [
+        {
+          "dungeon": "region_8",
+          "map": "region_8_f1",
+          "x": 3,
+          "y": 7
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_8_f1",
+      "x": 1,
+      "y": 7,
+      "object": "q074_clue_a",
+      "role": "clue_a"
+    },
+    {
+      "map": "region_8_f1",
+      "x": 10,
+      "y": 5,
+      "object": "q074_clue_b",
+      "role": "clue_b"
+    },
+    {
+      "map": "region_8_f1",
+      "x": 15,
+      "y": 5,
+      "object": "q074_decision",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "扉を開き、試験済みの順で祈祷書を訂正する",
+      "text": "扉は開いた。ユアは訂正した頁に、自分の検証日を記す。",
+      "gold": 141,
+      "xp": 124
+    },
+    "contract": {
+      "label": "封鎖機構を倒し、順番を無視して進む",
+      "text": "今回の隊は通れた。次の祈祷でも炉は熱を持つ。",
+      "gold": 161,
+      "xp": 96
+    },
+    "compromise": {
+      "label": "炉を停止し、手動で扉を開く",
+      "text": "廟は静かなまま開いた。鐘の音が戻るのは点検の後だ。",
+      "gold": 91,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/salome/machine-first.mjs",
+    "world": {
+      "truth": "祈祷は起動手順の口伝で、冷却より先に炉を開く句が写し間違えられている。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "祈祷は起動手順の口伝で、冷却より先に炉を開く句が写し間違えられている。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "祈祷の順番を間違えると廟が閉じる。正しい順を探してください。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "鐘番のユア",
+        "observation": "祈祷の順番を間違えると廟が閉じる。正しい順を探してください。",
+        "belief": "祈祷の順番を間違えると廟が閉じる。正しい順を探してください。",
+        "goal": "祈祷の順番を間違えると廟が閉じる。正しい順を探してください。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "祈祷の順番を間違えると廟が閉じる。正しい順を探してください。",
+      "progression": "祈祷を起動手順として一節ずつ実行し、写し間違いによる閉鎖からも安全にやり直せる。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q074.machine.entry"
+        },
+        {
+          "id": "lock",
+          "script": "q074.machine.lock"
+        },
+        {
+          "id": "furnace",
+          "script": "q074.machine.furnace"
+        },
+        {
+          "id": "door",
+          "script": "q074.machine.door"
+        },
+        {
+          "id": "opened",
+          "script": "q074.machine.opened"
+        },
+        {
+          "id": "corrected",
+          "script": "q074.machine.corrected"
+        },
+        {
+          "id": "manual",
+          "script": "q074.machine.manual"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "祈祷の順番を間違えると廟が閉じる。正しい順を探してください。",
+      "openQuestion": "祈祷の順番の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "referenceSwap",
+      "newInformation": "祈祷は起動手順の口伝で、冷却より先に炉を開く句が写し間違えられている。",
+      "retroactiveTargets": [
+        "door"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q074.flow.entry"
+      },
+      {
+        "id": "lock",
+        "script": "q074.flow.lock"
+      },
+      {
+        "id": "furnace",
+        "script": "q074.flow.furnace"
+      },
+      {
+        "id": "door",
+        "script": "q074.flow.door"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q074.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q074.failedTrial",
+        "meaning": "各場面に明記した failedTrial の行為・合意の記録",
+        "writer": [
+          "lock"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "祈祷を起動手順として一節ずつ実行し、写し間違いによる閉鎖からも安全にやり直せる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "祈祷を起動手順として一節ずつ実行し、写し間違いによる閉鎖からも安全にやり直せる。",
+    "flowVersion": 2,
+    "entryScript": "q074.machine.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "新しい祈祷書は「炉、冷却、扉」。古い操作盤には冷却が最初に彫られている。",
+        "options": [
+          {
+            "id": "cool",
+            "text": "古い刻印通り、冷却を先に入れる",
+            "to": "furnace",
+            "action": "entry_cool"
+          },
+          {
+            "id": "heat",
+            "text": "祈祷書通り、炉を先に開く",
+            "to": "lock",
+            "action": "entry_heat"
+          },
+          {
+            "id": "force",
+            "text": "封鎖機構を倒し、順番を無視して進む",
+            "to": "@contract",
+            "action": "entry_force"
+          },
+          {
+            "id": "manual",
+            "text": "炉を停止し、手動で扉を開く",
+            "to": "manual",
+            "action": "entry_manual"
+          }
+        ]
+      },
+      {
+        "id": "lock",
+        "place": "footing",
+        "text": "温度が上がり、封鎖が戻った。試験盤なので炉は自動停止した。写本の一節目が逆らしい。",
+        "options": [
+          {
+            "id": "reset",
+            "text": "試験盤を戻し、冷却から始める",
+            "to": "furnace",
+            "action": "lock_reset"
+          },
+          {
+            "id": "manual",
+            "text": "試験を中止して手動で扉を開く",
+            "to": "manual",
+            "action": "lock_manual"
+          }
+        ]
+      },
+      {
+        "id": "furnace",
+        "place": "cooling",
+        "text": "冷却灯が点いた。次は炉、その後で扉の句へ進める。",
+        "options": [
+          {
+            "id": "furnace",
+            "text": "冷却を確認して炉を開く",
+            "to": "door",
+            "action": "furnace_furnace"
+          },
+          {
+            "id": "manual",
+            "text": "炉を使わず、手動へ切り替える",
+            "to": "manual",
+            "action": "furnace_manual"
+          }
+        ]
+      },
+      {
+        "id": "door",
+        "place": "furnace_place",
+        "text": "扉の封鎖灯が消えた。祈祷は起動手順の口伝で、冷却より先に炉を開く句が写し間違えられている。",
+        "options": [
+          {
+            "id": "correct",
+            "text": "扉を開き、試験済みの順で祈祷書を訂正する",
+            "to": "opened",
+            "action": "door_correct"
+          },
+          {
+            "id": "stop",
+            "text": "訂正の決定は預け、炉を止めて手動運用する",
+            "to": "manual",
+            "action": "door_stop"
+          }
+        ]
+      },
+      {
+        "id": "opened",
+        "place": "entry",
+        "text": "冷却、炉の順で起動した灯を確かめ、扉を開いた。試験結果を写本室へ運ぶ。",
+        "options": [
+          {
+            "id": "correct",
+            "text": "ユアへ検証済みの順序を届ける",
+            "to": "corrected",
+            "action": "opened_correct"
+          }
+        ]
+      },
+      {
+        "id": "corrected",
+        "place": "copy",
+        "text": "写本の一節目を試験結果に合わせて訂正し、検証日を記した。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@informed",
+            "action": "corrected_finish"
+          }
+        ]
+      },
+      {
+        "id": "manual",
+        "place": "entry",
+        "text": "炉の停止を確かめ、手動で扉を開く。訂正を決めたことにはしない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@compromise",
+            "action": "manual_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "machine-twenty",
+      "settlement": "salome",
+      "saveRevision": 2,
+      "scope": "機関廟20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q074.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "古い鐘の番号と新しい祈祷書で、二番と三番だけ逆になっている。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q074",
+          "key": "clue_a",
+          "text": "古い鐘の番号と新しい祈祷書で、二番と三番だけ逆になっている。"
+        }
+      ]
+    },
+    "q074.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "鐘番のユア",
+          "text": "炉壁の焼け方は冷却前の点火と一致し、古い書には水の句が先にあります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q074",
+          "key": "clue_b",
+          "text": "炉壁の焼け方は冷却前の点火と一致し、古い書には水の句が先にある。"
+        }
+      ]
+    },
+    "q074.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "祈祷の順番\n\n祈祷の順番を間違えると廟が閉じる。正しい順を探してください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "旧手順を試験して祈祷書を訂正する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q074.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q074.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "祈祷は起動手順の口伝で、冷却より先に炉を開く句が写し間違えられている。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "扉は開いた。ユアは訂正した頁に、自分の検証日を記す。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q074",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "封鎖機構を倒し順番を無視して進む",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_8",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "今回の隊は通れた。次の祈祷でも炉は熱を持つ。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q074",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "炉を止め手動で扉を開ける",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "廟は静かなまま開いた。鐘の音が戻るのは点検の後だ。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q074",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q074.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "祈祷の順番\n\n祈祷の順番を間違えると廟が閉じる。正しい順を探してください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q074.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q074.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "祈祷は起動手順の口伝で、冷却より先に炉を開く句が写し間違えられている。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q074.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "旧手順を試験して祈祷書を訂正する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q074.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q074.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "扉は開いた。ユアは訂正した頁に、自分の検証日を記す。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q074",
+                  "outcome": "informed"
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q074.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q074.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "contract",
+              "text": "封鎖機構を倒し順番を無視して進む",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_8",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "今回の隊は通れた。次の祈祷でも炉は熱を持つ。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q074",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "炉を止め手動で扉を開ける",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "廟は静かなまま開いた。鐘の音が戻るのは点検の後だ。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q074",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」鐘番のユアは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられる。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q074.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q074.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q074.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "扉は開いた。ユアは訂正した頁に、自分の検証日を記す。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q074.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "今回の隊は通れた。次の祈祷でも炉は熱を持つ。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q074.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "廟は静かなまま開いた。鐘の音が戻るのは点検の後だ。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q074.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q074.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q074.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q074.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q074.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q074.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q074.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "新しい祈祷書は「炉、冷却、扉」。古い操作盤には冷却が最初に彫られている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "cool",
+              "text": "古い刻印通り、冷却を先に入れる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q074.flow.furnace"
+                }
+              ]
+            },
+            {
+              "id": "heat",
+              "text": "祈祷書通り、炉を先に開く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q074.flow.lock"
+                }
+              ]
+            },
+            {
+              "id": "force",
+              "text": "封鎖機構を倒し、順番を無視して進む",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_8",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q074.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "manual",
+              "text": "炉を停止し、手動で扉を開く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q074.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q074.flow.lock": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q074.node",
+          "value": "lock"
+        },
+        {
+          "op": "say",
+          "text": "温度が上がり、封鎖が戻った。試験盤なので炉は自動停止した。写本の一節目が逆らしい。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "reset",
+              "text": "試験盤を戻し、冷却から始める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q074.failedTrial",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q074.flow.furnace"
+                }
+              ]
+            },
+            {
+              "id": "manual",
+              "text": "試験を中止して手動で扉を開く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q074.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q074.flow.furnace": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q074.node",
+          "value": "furnace"
+        },
+        {
+          "op": "say",
+          "text": "冷却灯が点いた。次は炉、その後で扉の句へ進める。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "furnace",
+              "text": "冷却を確認して炉を開く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q074.flow.door"
+                }
+              ]
+            },
+            {
+              "id": "manual",
+              "text": "炉を使わず、手動へ切り替える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q074.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q074.flow.door": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q074.node",
+          "value": "door"
+        },
+        {
+          "op": "say",
+          "text": "扉の封鎖灯が消えた。祈祷は起動手順の口伝で、冷却より先に炉を開く句が写し間違えられている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "correct",
+              "text": "扉を開き、試験済みの順で祈祷書を訂正する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q074.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "訂正の決定は預け、炉を止めて手動運用する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q074.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q074.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q074.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "扉は開いた。ユアは訂正した頁に、自分の検証日を記す。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q074",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q074.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q074.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "今回の隊は通れた。次の祈祷でも炉は熱を持つ。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q074",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q074.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q074.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "廟は静かなまま開いた。鐘の音が戻るのは点検の後だ。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q074",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q074.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q074.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q074.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "扉は開いた。ユアは訂正した頁に、自分の検証日を記す。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "今回の隊は通れた。次の祈祷でも炉は熱を持つ。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "廟は静かなまま開いた。鐘の音が戻るのは点検の後だ。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q074"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q074.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q074.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q074.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "lock",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q074.flow.lock"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "furnace",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q074.flow.furnace"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "door",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q074.flow.door"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q074.flow.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q074.machine.entry": {
+      "storyQuest": "q074",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q074",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "新しい祈祷書は「炉、冷却、扉」。古い操作盤には冷却が最初に彫られている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "cool",
+              "text": "古い刻印通り、冷却を先に入れる",
+              "storyAction": {
+                "quest": "q074",
+                "action": "entry_cool"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q074",
+                  "action": "entry_cool"
+                }
+              ]
+            },
+            {
+              "id": "heat",
+              "text": "祈祷書通り、炉を先に開く",
+              "storyAction": {
+                "quest": "q074",
+                "action": "entry_heat"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q074",
+                  "action": "entry_heat"
+                }
+              ]
+            },
+            {
+              "id": "force",
+              "text": "封鎖機構を倒し、順番を無視して進む",
+              "storyAction": {
+                "quest": "q074",
+                "action": "entry_force"
+              },
+              "requirement": "戦闘。作業・報酬は勝利後に確定する。",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_8",
+                  "on_win": [
+                    {
+                      "op": "story.action",
+                      "quest": "q074",
+                      "action": "entry_force"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q074.machine.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "narrate",
+                      "text": "戦いを切り上げた。作業は確定していない。現場で再開できる。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q074.machine.entry"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "narrate",
+                      "text": "救助班にサロメへ運び出された。現場へ戻れば直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "manual",
+              "text": "炉を停止し、手動で扉を開く",
+              "storyAction": {
+                "quest": "q074",
+                "action": "entry_manual"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q074",
+                  "action": "entry_manual"
+                },
+                {
+                  "op": "jump",
+                  "script": "q074.machine.manual"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q074.machine.lock": {
+      "storyQuest": "q074",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q074",
+          "scene": "lock"
+        },
+        {
+          "op": "narrate",
+          "text": "温度が上がり、封鎖が戻った。試験盤なので炉は自動停止した。写本の一節目が逆らしい。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "reset",
+              "text": "試験盤を戻し、冷却から始める",
+              "storyAction": {
+                "quest": "q074",
+                "action": "lock_reset"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q074",
+                  "action": "lock_reset"
+                }
+              ]
+            },
+            {
+              "id": "manual",
+              "text": "試験を中止して手動で扉を開く",
+              "storyAction": {
+                "quest": "q074",
+                "action": "lock_manual"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q074",
+                  "action": "lock_manual"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q074.machine.furnace": {
+      "storyQuest": "q074",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q074",
+          "scene": "furnace"
+        },
+        {
+          "op": "narrate",
+          "text": "冷却灯が点いた。次は炉、その後で扉の句へ進める。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "furnace",
+              "text": "冷却を確認して炉を開く",
+              "storyAction": {
+                "quest": "q074",
+                "action": "furnace_furnace"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q074",
+                  "action": "furnace_furnace"
+                }
+              ]
+            },
+            {
+              "id": "manual",
+              "text": "炉を使わず、手動へ切り替える",
+              "storyAction": {
+                "quest": "q074",
+                "action": "furnace_manual"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q074",
+                  "action": "furnace_manual"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q074.machine.door": {
+      "storyQuest": "q074",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q074",
+          "scene": "door"
+        },
+        {
+          "op": "narrate",
+          "text": "扉の封鎖灯が消えた。祈祷は起動手順の口伝で、冷却より先に炉を開く句が写し間違えられている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "correct",
+              "text": "扉を開き、試験済みの順で祈祷書を訂正する",
+              "storyAction": {
+                "quest": "q074",
+                "action": "door_correct"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q074",
+                  "action": "door_correct"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "訂正の決定は預け、炉を止めて手動運用する",
+              "storyAction": {
+                "quest": "q074",
+                "action": "door_stop"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q074",
+                  "action": "door_stop"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q074.machine.opened": {
+      "storyQuest": "q074",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q074",
+          "scene": "opened"
+        },
+        {
+          "op": "narrate",
+          "text": "冷却、炉の順で起動した灯を確かめ、扉を開いた。試験結果を写本室へ運ぶ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "correct",
+              "text": "ユアへ検証済みの順序を届ける",
+              "storyAction": {
+                "quest": "q074",
+                "action": "opened_correct"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q074",
+                  "action": "opened_correct"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q074.machine.corrected": {
+      "storyQuest": "q074",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q074",
+          "scene": "corrected"
+        },
+        {
+          "op": "narrate",
+          "text": "写本の一節目を試験結果に合わせて訂正し、検証日を記した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q074",
+                "action": "corrected_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q074",
+                  "action": "corrected_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q074.machine.end.informed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q074.machine.manual": {
+      "storyQuest": "q074",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q074",
+          "scene": "manual"
+        },
+        {
+          "op": "narrate",
+          "text": "炉の停止を確かめ、手動で扉を開く。訂正を決めたことにはしない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q074",
+                "action": "manual_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q074",
+                  "action": "manual_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q074.machine.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q074.machine.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "扉は開いた。ユアは訂正した頁に、自分の検証日を記す。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q074",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q074.machine.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "今回の隊は通れた。次の祈祷でも炉は熱を持つ。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q074",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q074.machine.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "廟は静かなまま開いた。鐘の音が戻るのは点検の後だ。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q074",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q074.machine.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q074"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q074.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q074.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q074.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "扉は開いた。ユアは訂正した頁に、自分の検証日を記す。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "今回の隊は通れた。次の祈祷でも炉は熱を持つ。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "廟は静かなまま開いた。鐘の音が戻るのは点検の後だ。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q074"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q074.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q074.machine.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "lock",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q074.machine.lock"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "furnace",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q074.machine.furnace"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "door",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q074.machine.door"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "opened",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q074.machine.opened"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "corrected",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q074.machine.corrected"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "manual",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q074.machine.manual"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q074.machine.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "祈祷の順番の現場受付",
+      "cooling": "冷却を入れる操作盤",
+      "furnace_place": "試験炉の操作盤",
+      "footing": "封鎖外の退避足場",
+      "copy": "祈祷書の訂正窓口",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "cooling"
+      ],
+      [
+        "transit",
+        "furnace_place"
+      ],
+      [
+        "transit",
+        "footing"
+      ],
+      [
+        "transit",
+        "copy"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "cooling",
+          "furnace_place",
+          "footing",
+          "copy",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "coolingOn": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "coolingOn"
+      },
+      "failedTrial": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "failedTrial"
+      },
+      "furnaceOn": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "furnaceOn"
+      },
+      "doorOpened": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "doorOpened"
+      },
+      "corrected": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "corrected"
+      },
+      "manualOpened": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "manualOpened"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "祈祷は起動手順の口伝で、冷却より先に炉を開く句が写し間違えられている。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "祈祷の順番の現場受付",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "lock": {
+        "title": "封鎖外の退避足場",
+        "place": "footing",
+        "cast": [],
+        "requires": true
+      },
+      "furnace": {
+        "title": "冷却を入れる操作盤",
+        "place": "cooling",
+        "cast": [],
+        "requires": true
+      },
+      "door": {
+        "title": "試験炉の操作盤",
+        "place": "furnace_place",
+        "cast": [],
+        "requires": true
+      },
+      "opened": {
+        "title": "祈祷の順番の現場受付",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "corrected": {
+        "title": "祈祷書の訂正窓口",
+        "place": "copy",
+        "cast": [],
+        "requires": true
+      },
+      "manual": {
+        "title": "祈祷の順番の現場受付",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_cool": {
+        "from": [
+          "entry"
+        ],
+        "to": "furnace",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "cooling"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "coolingOn",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "cooling",
+          "companions": []
+        },
+        "depart": []
+      },
+      "entry_heat": {
+        "from": [
+          "entry"
+        ],
+        "to": "lock",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "footing"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "footing",
+          "companions": []
+        },
+        "depart": []
+      },
+      "entry_force": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "entry_manual": {
+        "from": [
+          "entry"
+        ],
+        "to": "manual",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "lock_reset": {
+        "from": [
+          "lock"
+        ],
+        "to": "furnace",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "cooling"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "coolingOn",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "failedTrial",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "cooling",
+          "companions": []
+        },
+        "depart": []
+      },
+      "lock_manual": {
+        "from": [
+          "lock"
+        ],
+        "to": "manual",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "furnace_furnace": {
+        "from": [
+          "furnace"
+        ],
+        "to": "door",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "furnace_place"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "furnaceOn",
+            "value": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "furnace_place",
+            "requires": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "furnace_place",
+          "companions": []
+        },
+        "depart": []
+      },
+      "furnace_manual": {
+        "from": [
+          "furnace"
+        ],
+        "to": "manual",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "door_correct": {
+        "from": [
+          "door"
+        ],
+        "to": "opened",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "door_stop": {
+        "from": [
+          "door"
+        ],
+        "to": "manual",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "opened_correct": {
+        "from": [
+          "opened"
+        ],
+        "to": "corrected",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "copy"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "copy",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "doorOpened",
+            "value": true
+          }
+        ]
+      },
+      "corrected_finish": {
+        "from": [
+          "corrected"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "corrected",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "manual_finish": {
+        "from": [
+          "manual"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "furnaceOn",
+            "value": false
+          },
+          {
+            "op": "set",
+            "key": "manualOpened",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q074.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q074.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q074.values.partyAt"
+                },
+                "right": "copy"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q074.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q074.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q074.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q074.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q074.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q074.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_8",
+        "map": "region_8_f1",
+        "x": 15,
+        "y": 5
+      },
+      "cooling": {
+        "kind": "dungeon",
+        "dungeon": "region_8",
+        "map": "region_8_f1",
+        "x": 1,
+        "y": 7
+      },
+      "furnace_place": {
+        "kind": "dungeon",
+        "dungeon": "region_8",
+        "map": "region_8_f1",
+        "x": 10,
+        "y": 5
+      },
+      "footing": {
+        "kind": "dungeon",
+        "dungeon": "region_8",
+        "map": "region_8_f1",
+        "x": 3,
+        "y": 7
+      },
+      "copy": {
+        "kind": "town",
+        "location": "library_copy_room"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "salome",
+  "receptionLocations": [
+    "salome_board"
+  ]
+}
