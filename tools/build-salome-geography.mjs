@@ -1,3 +1,4 @@
+import {extendLibraryGeography} from '../authoring/editions/e2/salome/library-geography.mjs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {geographyFingerprint} from '../src/core/edition-geography.js';
@@ -36,7 +37,9 @@ export async function buildSalomeGeography(previous,{check=false}={}){
  travel.shuttles=[{id:'salome_coach',stops:['hikarigaeri','salome'],cost:5}];
  const oldDungeons=JSON.parse(await fs.readFile(path.join(root,'data/dungeons.json'),'utf8'));
  const dungeons={salome_road:{schemaVersion:1,id:'salome_road',name:'サロメへの高台街道',description:'灯帰りと学術都市を結ぶ国内の街道。坂下と学門坂を歩いて往復できる。',region:11,recommendedLevel:1,profile:'classic',entries:{main:{map:'e2_highland_lower',point:'entrance'}},maps:specs.map(s=>s[0]),systems:{},art:structuredClone(oldDungeons.region_5.art)}};
- const bundle={schemaVersion:1,additions:{maps,locations,dungeons},patches,travel},output=JSON.stringify(bundle,null,2)+'\n',file=path.join(root,'data/scenario-editions/e2/salome-geography.json');
+ const bundle={schemaVersion:1,additions:{maps,locations,dungeons},patches,travel};
+ await extendLibraryGeography(bundle,previous,oldDungeons);
+ const output=JSON.stringify(bundle,null,2)+'\n',file=path.join(root,'data/scenario-editions/e2/salome-geography.json');
  if(check){if(await fs.readFile(file,'utf8').catch(()=>null)!==output)throw Error('サロメ地理が古くなっています。npm run build:editions を実行してください。');}
  else await fs.writeFile(file,output);
  return bundle;

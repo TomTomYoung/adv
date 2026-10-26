@@ -1,0 +1,3000 @@
+{
+  "schemaVersion": 1,
+  "id": "q042",
+  "number": 42,
+  "title": "砂時計の残業",
+  "client": "記録係のテオ",
+  "brief": "砂時計が落ち切らず、交代できない。仕掛けを調べてください。",
+  "region": 5,
+  "type": "authored_progression",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。 サロメの共同依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q042_clue_a",
+      "title": "砂時計の残業：現場の痕跡",
+      "points": [
+        {
+          "map": "region_5_f1",
+          "x": 1,
+          "y": 8,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q042.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q042.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q042"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q042"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "q042_clue_b",
+      "title": "砂時計の残業：記録と証言",
+      "points": [
+        {
+          "map": "region_5_f1",
+          "x": 12,
+          "y": 3,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q042.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q042.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q042"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q042"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "q042_decision",
+      "title": "砂時計の残業：決着の場",
+      "points": [
+        {
+          "map": "region_5_f1",
+          "x": 17,
+          "y": 3,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q042.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q042.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q042.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q042"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "q042_library_entry",
+      "title": "砂時計の残業の現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q042.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q042.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q042"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q042.library.visit",
+      "points": [
+        {
+          "dungeon": "region_5",
+          "map": "region_5_f1",
+          "x": 17,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "id": "q042_library_relief",
+      "title": "交代者の待つ休息棚",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "relief",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q042.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q042.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q042"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q042.library.visit",
+      "points": [
+        {
+          "dungeon": "region_5",
+          "map": "region_5_f1",
+          "x": 7,
+          "y": 1
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_5_f1",
+      "x": 1,
+      "y": 8,
+      "object": "q042_clue_a",
+      "role": "clue_a"
+    },
+    {
+      "map": "region_5_f1",
+      "x": 12,
+      "y": 3,
+      "object": "q042_clue_b",
+      "role": "clue_b"
+    },
+    {
+      "map": "region_5_f1",
+      "x": 17,
+      "y": 3,
+      "object": "q042_decision",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "乾いた砂と外の時計で、実際の労働時間を記す",
+      "text": "過去の超過分が計算された。交代の鐘は書庫の外にも設置される。",
+      "gold": 105,
+      "xp": 100
+    },
+    "contract": {
+      "label": "砂時計を割って残業を止める",
+      "text": "交代はできた。翌日から時刻のない勤務をどう数えるか揉め始める。",
+      "gold": 125,
+      "xp": 75
+    },
+    "compromise": {
+      "label": "二つの時計を並べ、早い方で交代する契約を結ぶ",
+      "text": "勤務は短くなった。管理者は毎日、二つの時刻を説明するようになる。",
+      "gold": 68,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/salome/library-first.mjs",
+    "world": {
+      "truth": "管理者が湿った砂を使い、交代時刻を遅らせている。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "管理者が湿った砂を使い、交代時刻を遅らせている。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "砂時計が落ち切らず、交代できない。仕掛けを調べてください。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "記録係のテオ",
+        "observation": "砂時計が落ち切らず、交代できない。仕掛けを調べてください。",
+        "belief": "砂時計が落ち切らず、交代できない。仕掛けを調べてください。",
+        "goal": "砂時計が落ち切らず、交代できない。仕掛けを調べてください。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "砂時計が落ち切らず、交代できない。仕掛けを調べてください。",
+      "progression": "交代を待つ労働へ一緒に入り、外の時刻を持ち込むか、その場で交代を成立させる。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q042.library.entry"
+        },
+        {
+          "id": "shift",
+          "script": "q042.library.shift"
+        },
+        {
+          "id": "sand",
+          "script": "q042.library.sand"
+        },
+        {
+          "id": "outside",
+          "script": "q042.library.outside"
+        },
+        {
+          "id": "record_clock",
+          "script": "q042.library.record_clock"
+        },
+        {
+          "id": "relief",
+          "script": "q042.library.relief"
+        },
+        {
+          "id": "shifted",
+          "script": "q042.library.shifted"
+        },
+        {
+          "id": "two_clock",
+          "script": "q042.library.two_clock"
+        },
+        {
+          "id": "agreed",
+          "script": "q042.library.agreed"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "砂時計が落ち切らず、交代できない。仕掛けを調べてください。",
+      "openQuestion": "砂時計の残業の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "evidenceRecode",
+      "newInformation": "管理者が湿った砂を使い、交代時刻を遅らせている。",
+      "retroactiveTargets": [
+        "sand"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q042.flow.entry"
+      },
+      {
+        "id": "shift",
+        "script": "q042.flow.shift"
+      },
+      {
+        "id": "sand",
+        "script": "q042.flow.sand"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q042.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q042.shifted",
+        "meaning": "各場面に明記した shifted の行為・合意の記録",
+        "writer": [
+          "shift"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "交代を待つ労働へ一緒に入り、外の時刻を持ち込むか、その場で交代を成立させる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "交代を待つ労働へ一緒に入り、外の時刻を持ち込むか、その場で交代を成立させる。",
+    "flowVersion": 2,
+    "entryScript": "q042.library.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "砂は細く落ち続ける。疲れた職人は「まだ上の砂が残る」と手を止められない。",
+        "options": [
+          {
+            "id": "outside",
+            "text": "外の時計で交代時刻を告げる",
+            "to": "outside",
+            "action": "entry_outside"
+          },
+          {
+            "id": "sample",
+            "text": "砂を少量取り、乾いた紙に広げる",
+            "to": "sand",
+            "action": "entry_sample"
+          },
+          {
+            "id": "break",
+            "text": "砂時計を割って残業を止める",
+            "to": "@contract",
+            "action": "entry_break"
+          }
+        ]
+      },
+      {
+        "id": "shift",
+        "place": "entry",
+        "text": "外では交代時刻を過ぎている。管理者は砂時計の方を指した。",
+        "options": [
+          {
+            "id": "two",
+            "text": "二つの時計を並べ、早い方で交代する契約を結ぶ",
+            "to": "two_clock",
+            "action": "shift_two"
+          },
+          {
+            "id": "sand",
+            "text": "管理者の前で砂を乾かして試す",
+            "to": "sand",
+            "action": "shift_sand"
+          }
+        ]
+      },
+      {
+        "id": "sand",
+        "place": "entry",
+        "text": "乾いた砂だけが滞らずに落ちた。管理者の予備袋は湿っている。管理者が湿った砂を使い、交代時刻を遅らせている。",
+        "options": [
+          {
+            "id": "hours",
+            "text": "乾いた砂と外の時計で、実際の労働時間を記す",
+            "to": "record_clock",
+            "action": "sand_hours"
+          },
+          {
+            "id": "two",
+            "text": "責任の追及はせず、二時計で交代する",
+            "to": "two_clock",
+            "action": "sand_two"
+          }
+        ]
+      },
+      {
+        "id": "outside",
+        "place": "clock",
+        "text": "通りの時計を確かめると、交代時刻を過ぎていた。作業室へ時刻を伝える。",
+        "options": [
+          {
+            "id": "tell",
+            "text": "作業室へ戻り、確認した時刻を告げる",
+            "to": "shift",
+            "action": "outside_tell"
+          }
+        ]
+      },
+      {
+        "id": "record_clock",
+        "place": "clock",
+        "text": "乾いた砂で測った長さを外時計と照合し、超過した労働時間を記録した。交代者を呼びに行く。",
+        "options": [
+          {
+            "id": "call",
+            "text": "休息棚で交代者へ記録を渡す",
+            "to": "relief",
+            "action": "record_clock_call"
+          }
+        ]
+      },
+      {
+        "id": "relief",
+        "place": "relief",
+        "text": "記録を見た交代者が仕事を引き継ぐ。本人たちと作業室へ戻る。",
+        "options": [
+          {
+            "id": "escort",
+            "text": "交代者を作業室へ案内する",
+            "to": "shifted",
+            "action": "relief_escort"
+          }
+        ]
+      },
+      {
+        "id": "shifted",
+        "place": "entry",
+        "text": "交代者が作業室へ着いた。超過分の記録を管理者へ渡し、外の鐘も交代の目安にする。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@informed",
+            "action": "shifted_finish"
+          }
+        ]
+      },
+      {
+        "id": "two_clock",
+        "place": "clock",
+        "text": "外時計を確認し、砂時計より早い方を交代時刻にする取り決めを持ち帰る。",
+        "options": [
+          {
+            "id": "agree",
+            "text": "作業室で二時計の契約を結ぶ",
+            "to": "agreed",
+            "action": "two_clock_agree"
+          }
+        ]
+      },
+      {
+        "id": "agreed",
+        "place": "entry",
+        "text": "作業室で二つの時計を確認する契約を結んだ。外へ出ただけで勤務が終わったことにはしない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@compromise",
+            "action": "agreed_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q042.decision",
+        "action": "informed",
+        "option": "informed_supplies",
+        "shortage": "q042.decision.informed.shortage",
+        "resume": "q042.decision.informed.resume",
+        "cost": {
+          "rope": 1
+        }
+      },
+      {
+        "from": "q042.review",
+        "action": "informed",
+        "option": "informed_supplies",
+        "shortage": "q042.review.informed.shortage",
+        "resume": "q042.review.informed.resume",
+        "cost": {
+          "rope": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q042.visit",
+      "q042.flow.visit"
+    ],
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "library-first-ten",
+      "settlement": "salome",
+      "saveRevision": 2,
+      "scope": "書庫前半10件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q042.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "粒は上部で固まり、逆さにすると別の場所へ塊で落ちる。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q042",
+          "key": "clue_a",
+          "text": "粒は上部で固まり、逆さにすると別の場所へ塊で落ちる。"
+        }
+      ]
+    },
+    "q042.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "記録係のテオ",
+          "text": "予備砂は乾いていますが、使用分だけ給水口の傍へ置かれています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q042",
+          "key": "clue_b",
+          "text": "予備砂は乾いているが、使用分だけ給水口の傍へ置かれている。"
+        }
+      ]
+    },
+    "q042.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "砂時計の残業\n\n砂時計が落ち切らず、交代できない。仕掛けを調べてください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "乾いた砂と外の時計で労働時間を記す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q042.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q042.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "rope"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・補修用の縄1本（消費）・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "管理者が湿った砂を使い、交代時刻を遅らせている。"
+                },
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_5",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "過去の超過分が計算された。交代の鐘は書庫の外にも設置される。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q042",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "時計の番獣を倒し砂時計を割る",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_5",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "交代はできた。翌日から時刻のない勤務をどう数えるか揉め始める。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q042",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "二つの時計を並べ短い方で交代する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "勤務は短くなった。管理者は毎日、二つの時刻を説明するようになる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q042",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            },
+            {
+              "id": "informed_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q042.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q042.evidence"
+                    },
+                    "right": "clue_b"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "rope",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q042.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q042.evidence"
+                    },
+                    "right": "clue_b"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "rope",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q042.decision.informed.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q042.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "砂時計の残業\n\n砂時計が落ち切らず、交代できない。仕掛けを調べてください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q042.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q042.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "管理者が湿った砂を使い、交代時刻を遅らせている。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q042.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "乾いた砂と外の時計で労働時間を記す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q042.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q042.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "rope"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合・縄1本（勝利して作業を確定した時に消費）・戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_5",
+                  "on_win": [
+                    {
+                      "op": "item.take",
+                      "item": "rope",
+                      "count": 1
+                    },
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "過去の超過分が計算された。交代の鐘は書庫の外にも設置される。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q042",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q042.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q042.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "contract",
+              "text": "時計の番獣を倒し砂時計を割る",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_5",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "交代はできた。翌日から時刻のない勤務をどう数えるか揉め始める。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q042",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "二つの時計を並べ短い方で交代する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "勤務は短くなった。管理者は毎日、二つの時刻を説明するようになる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q042",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」記録係のテオは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられる。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q042.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            },
+            {
+              "id": "informed_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q042.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q042.evidence"
+                    },
+                    "right": "clue_b"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "rope",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q042.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q042.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q042.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q042.evidence"
+                        },
+                        "right": "clue_b"
+                      },
+                      {
+                        "op": "not",
+                        "arg": {
+                          "op": "has_item",
+                          "item": "rope",
+                          "count": 1
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q042.review.informed.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q042.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q042.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "過去の超過分が計算された。交代の鐘は書庫の外にも設置される。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q042.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "交代はできた。翌日から時刻のない勤務をどう数えるか揉め始める。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q042.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "勤務は短くなった。管理者は毎日、二つの時刻を説明するようになる。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q042.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q042.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q042"
+          },
+          "cases": [
+            {
+              "equals": "q042.decision.informed.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q042.decision.informed.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q042.review.informed.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q042.review.informed.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q042.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q042.aftermath"
+                }
+              ],
+              "else": [
+                {
+                  "op": "jump",
+                  "script": "q042.review"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q042.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q042.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "砂は細く落ち続ける。疲れた職人は「まだ上の砂が残る」と手を止められない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "outside",
+              "text": "外の時計で交代時刻を告げる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q042.flow.shift"
+                }
+              ]
+            },
+            {
+              "id": "sample",
+              "text": "砂を少量取り、乾いた紙に広げる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q042.flow.sand"
+                }
+              ]
+            },
+            {
+              "id": "break",
+              "text": "砂時計を割って残業を止める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q042.flow.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q042.flow.shift": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q042.node",
+          "value": "shift"
+        },
+        {
+          "op": "say",
+          "text": "外では交代時刻を過ぎている。管理者は砂時計の方を指した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "two",
+              "text": "二つの時計を並べ、早い方で交代する契約を結ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q042.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "sand",
+              "text": "管理者の前で砂を乾かして試す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q042.shifted",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q042.flow.sand"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q042.flow.sand": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q042.node",
+          "value": "sand"
+        },
+        {
+          "op": "say",
+          "text": "乾いた砂だけが滞らずに落ちた。管理者の予備袋は湿っている。管理者が湿った砂を使い、交代時刻を遅らせている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hours",
+              "text": "乾いた砂と外の時計で、実際の労働時間を記す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q042.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "two",
+              "text": "責任の追及はせず、二時計で交代する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q042.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q042.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q042.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "過去の超過分が計算された。交代の鐘は書庫の外にも設置される。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q042",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q042.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q042.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "交代はできた。翌日から時刻のない勤務をどう数えるか揉め始める。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q042",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q042.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q042.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "勤務は短くなった。管理者は毎日、二つの時刻を説明するようになる。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q042",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q042.flow.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q042"
+          },
+          "cases": [
+            {
+              "equals": "q042.decision.informed.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q042.decision.informed.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q042.review.informed.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q042.review.informed.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q042.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q042.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "過去の超過分が計算された。交代の鐘は書庫の外にも設置される。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "交代はできた。翌日から時刻のない勤務をどう数えるか揉め始める。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "勤務は短くなった。管理者は毎日、二つの時刻を説明するようになる。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.legacyQuestRoutes.q042"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "jump",
+                      "script": "q042.visit"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "flags.flow.q042.node"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q042.flow.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "shift",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q042.flow.shift"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "sand",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q042.flow.sand"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
+                        {
+                          "op": "jump",
+                          "script": "q042.flow.entry"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q042.decision.informed.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q042",
+          "value": "q042.decision.informed.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q042.decision.informed.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q042",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q042.decision"
+        }
+      ]
+    },
+    "q042.review.informed.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q042",
+          "value": "q042.review.informed.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q042.review.informed.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q042",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q042.review"
+        }
+      ]
+    },
+    "q042.library.entry": {
+      "storyQuest": "q042",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q042",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "砂は細く落ち続ける。疲れた職人は「まだ上の砂が残る」と手を止められない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "outside",
+              "text": "外の時計で交代時刻を告げる",
+              "storyAction": {
+                "quest": "q042",
+                "action": "entry_outside"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q042",
+                  "action": "entry_outside"
+                }
+              ]
+            },
+            {
+              "id": "sample",
+              "text": "砂を少量取り、乾いた紙に広げる",
+              "storyAction": {
+                "quest": "q042",
+                "action": "entry_sample"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q042",
+                  "action": "entry_sample"
+                },
+                {
+                  "op": "jump",
+                  "script": "q042.library.sand"
+                }
+              ]
+            },
+            {
+              "id": "break",
+              "text": "砂時計を割って残業を止める",
+              "storyAction": {
+                "quest": "q042",
+                "action": "entry_break"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q042",
+                  "action": "entry_break"
+                },
+                {
+                  "op": "jump",
+                  "script": "q042.library.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q042.library.shift": {
+      "storyQuest": "q042",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q042",
+          "scene": "shift"
+        },
+        {
+          "op": "narrate",
+          "text": "外では交代時刻を過ぎている。管理者は砂時計の方を指した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "two",
+              "text": "二つの時計を並べ、早い方で交代する契約を結ぶ",
+              "storyAction": {
+                "quest": "q042",
+                "action": "shift_two"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q042",
+                  "action": "shift_two"
+                }
+              ]
+            },
+            {
+              "id": "sand",
+              "text": "管理者の前で砂を乾かして試す",
+              "storyAction": {
+                "quest": "q042",
+                "action": "shift_sand"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q042",
+                  "action": "shift_sand"
+                },
+                {
+                  "op": "jump",
+                  "script": "q042.library.sand"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q042.library.sand": {
+      "storyQuest": "q042",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q042",
+          "scene": "sand"
+        },
+        {
+          "op": "narrate",
+          "text": "乾いた砂だけが滞らずに落ちた。管理者の予備袋は湿っている。管理者が湿った砂を使い、交代時刻を遅らせている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hours",
+              "text": "乾いた砂と外の時計で、実際の労働時間を記す",
+              "storyAction": {
+                "quest": "q042",
+                "action": "sand_hours"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q042",
+                  "action": "sand_hours"
+                }
+              ]
+            },
+            {
+              "id": "two",
+              "text": "責任の追及はせず、二時計で交代する",
+              "storyAction": {
+                "quest": "q042",
+                "action": "sand_two"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q042",
+                  "action": "sand_two"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q042.library.outside": {
+      "storyQuest": "q042",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q042",
+          "scene": "outside"
+        },
+        {
+          "op": "narrate",
+          "text": "通りの時計を確かめると、交代時刻を過ぎていた。作業室へ時刻を伝える。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "tell",
+              "text": "作業室へ戻り、確認した時刻を告げる",
+              "storyAction": {
+                "quest": "q042",
+                "action": "outside_tell"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q042",
+                  "action": "outside_tell"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q042.library.record_clock": {
+      "storyQuest": "q042",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q042",
+          "scene": "record_clock"
+        },
+        {
+          "op": "narrate",
+          "text": "乾いた砂で測った長さを外時計と照合し、超過した労働時間を記録した。交代者を呼びに行く。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "call",
+              "text": "休息棚で交代者へ記録を渡す",
+              "storyAction": {
+                "quest": "q042",
+                "action": "record_clock_call"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q042",
+                  "action": "record_clock_call"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q042.library.relief": {
+      "storyQuest": "q042",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q042",
+          "scene": "relief"
+        },
+        {
+          "op": "narrate",
+          "text": "記録を見た交代者が仕事を引き継ぐ。本人たちと作業室へ戻る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "escort",
+              "text": "交代者を作業室へ案内する",
+              "storyAction": {
+                "quest": "q042",
+                "action": "relief_escort"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q042",
+                  "action": "relief_escort"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q042.library.shifted": {
+      "storyQuest": "q042",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q042",
+          "scene": "shifted"
+        },
+        {
+          "op": "narrate",
+          "text": "交代者が作業室へ着いた。超過分の記録を管理者へ渡し、外の鐘も交代の目安にする。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q042",
+                "action": "shifted_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q042",
+                  "action": "shifted_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q042.library.end.informed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q042.library.two_clock": {
+      "storyQuest": "q042",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q042",
+          "scene": "two_clock"
+        },
+        {
+          "op": "narrate",
+          "text": "外時計を確認し、砂時計より早い方を交代時刻にする取り決めを持ち帰る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "作業室で二時計の契約を結ぶ",
+              "storyAction": {
+                "quest": "q042",
+                "action": "two_clock_agree"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q042",
+                  "action": "two_clock_agree"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q042.library.agreed": {
+      "storyQuest": "q042",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q042",
+          "scene": "agreed"
+        },
+        {
+          "op": "narrate",
+          "text": "作業室で二つの時計を確認する契約を結んだ。外へ出ただけで勤務が終わったことにはしない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q042",
+                "action": "agreed_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q042",
+                  "action": "agreed_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q042.library.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q042.library.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "過去の超過分が計算された。交代の鐘は書庫の外にも設置される。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q042",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q042.library.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "交代はできた。翌日から時刻のない勤務をどう数えるか揉め始める。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q042",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q042.library.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "勤務は短くなった。管理者は毎日、二つの時刻を説明するようになる。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q042",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q042.library.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q042"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q042.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q042.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q042.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "過去の超過分が計算された。交代の鐘は書庫の外にも設置される。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "交代はできた。翌日から時刻のない勤務をどう数えるか揉め始める。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "勤務は短くなった。管理者は毎日、二つの時刻を説明するようになる。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q042"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q042.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q042.library.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "shift",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q042.library.shift"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "sand",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q042.library.sand"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "outside",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q042.library.outside"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "record_clock",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q042.library.record_clock"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "relief",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q042.library.relief"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "shifted",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q042.library.shifted"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "two_clock",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q042.library.two_clock"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "agreed",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q042.library.agreed"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q042.library.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "砂時計の残業の現場",
+      "clock": "書庫の外時計",
+      "relief": "交代者の待つ休息棚",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "clock"
+      ],
+      [
+        "transit",
+        "relief"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "clock",
+          "relief",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "broken": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "broken"
+      },
+      "shifted": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "shifted"
+      },
+      "outsideChecked": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "outsideChecked"
+      },
+      "hoursRecorded": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "hoursRecorded"
+      },
+      "twoClocks": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "twoClocks"
+      },
+      "reliefCrewAt": {
+        "type": "enum",
+        "initial": "relief",
+        "values": [
+          "entry",
+          "clock",
+          "relief",
+          "transit"
+        ],
+        "meaning": "reliefCrew の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "reliefCrew": {
+        "holder": "reliefCrewAt",
+        "kind": "group"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "管理者が湿った砂を使い、交代時刻を遅らせている。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "砂時計の残業の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "shift": {
+        "title": "砂時計の残業の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "sand": {
+        "title": "砂時計の残業の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "outside": {
+        "title": "書庫の外時計",
+        "place": "clock",
+        "cast": [],
+        "requires": true
+      },
+      "record_clock": {
+        "title": "書庫の外時計",
+        "place": "clock",
+        "cast": [],
+        "requires": true
+      },
+      "relief": {
+        "title": "交代者の待つ休息棚",
+        "place": "relief",
+        "cast": [],
+        "requires": true
+      },
+      "shifted": {
+        "title": "砂時計の残業の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "two_clock": {
+        "title": "書庫の外時計",
+        "place": "clock",
+        "cast": [],
+        "requires": true
+      },
+      "agreed": {
+        "title": "砂時計の残業の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_outside": {
+        "from": [
+          "entry"
+        ],
+        "to": "outside",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "clock"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "clock",
+          "companions": []
+        },
+        "depart": []
+      },
+      "entry_sample": {
+        "from": [
+          "entry"
+        ],
+        "to": "sand",
+        "requires": true,
+        "effects": [
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "entry",
+            "requires": true
+          }
+        ],
+        "once": false
+      },
+      "entry_break": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "broken",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "shift_two": {
+        "from": [
+          "shift"
+        ],
+        "to": "two_clock",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "clock"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "clock",
+          "companions": []
+        },
+        "depart": []
+      },
+      "shift_sand": {
+        "from": [
+          "shift"
+        ],
+        "to": "sand",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "shifted",
+            "value": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "entry",
+            "requires": true
+          }
+        ],
+        "once": false
+      },
+      "sand_hours": {
+        "from": [
+          "sand"
+        ],
+        "to": "record_clock",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "clock"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "clock",
+          "companions": []
+        },
+        "depart": []
+      },
+      "sand_two": {
+        "from": [
+          "sand"
+        ],
+        "to": "two_clock",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "clock"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "clock",
+          "companions": []
+        },
+        "depart": []
+      },
+      "outside_tell": {
+        "from": [
+          "outside"
+        ],
+        "to": "shift",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "outsideChecked",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "record_clock_call": {
+        "from": [
+          "record_clock"
+        ],
+        "to": "relief",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "relief"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "relief",
+          "companions": []
+        },
+        "depart": []
+      },
+      "relief_escort": {
+        "from": [
+          "relief"
+        ],
+        "to": "shifted",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "reliefCrew"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "reliefCrew"
+          ]
+        },
+        "depart": []
+      },
+      "shifted_finish": {
+        "from": [
+          "shifted"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "hoursRecorded",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "shifted",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "two_clock_agree": {
+        "from": [
+          "two_clock"
+        ],
+        "to": "agreed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "agreed_finish": {
+        "from": [
+          "agreed"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "twoClocks",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q042.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q042.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q042.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q042.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q042.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q042.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q042.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q042.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q042.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_5",
+        "map": "region_5_f1",
+        "x": 17,
+        "y": 3
+      },
+      "clock": {
+        "kind": "town",
+        "location": "library_clock"
+      },
+      "relief": {
+        "kind": "dungeon",
+        "dungeon": "region_5",
+        "map": "region_5_f1",
+        "x": 7,
+        "y": 1
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "salome",
+  "receptionLocations": [
+    "salome_board"
+  ]
+}

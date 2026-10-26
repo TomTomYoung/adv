@@ -39,7 +39,10 @@ try{
   const click=async label=>{await revealChoices();const button=page.getByRole('button',{name:label,exact:true});await button.scrollIntoViewIfNeeded();await button.click();};
   async function cross(route){
     const label=await page.evaluate(id=>h.routeLabel(id),route);
-    await click('任意調べる');await click(label);await click(label);await page.evaluate(()=>h.settle());
+    await click('任意調べる');
+    if(route==='library_surface'){await click('地上への階段');await click('調べる');}
+    else{await click(label);await click(label);}
+    await page.evaluate(()=>h.settle());
   }
   for(const layout of ['scene','classic'])for(const width of [1440,390]){
     await page.setViewportSize({width,height:width===390?844:1000});await page.evaluate(layout=>h.start(layout),layout);
@@ -50,7 +53,7 @@ try{
     assert.equal(await page.evaluate(()=>h.g.state.worldTravel.visited.salome),true);assert.deepEqual(await page.evaluate(()=>h.g.state.worldTravel.registrations),{});
     await click('サロメの補給店');await click('携行油を補充する（無料）');assert.equal(await page.evaluate(()=>h.g.state.light),90);
     await click('サロメ・学門前へ戻る');await click('サロメの共同依頼所');await click('依頼掲示板を見る');
-    assert.equal(await page.locator('.quest-card').count(),20);
+    assert.equal(await page.locator('.quest-card').count(),60);
     await page.locator('.quest-card').filter({has:page.getByRole('heading',{name:'借りたままの一冊',exact:true})}).getByRole('button',{name:'依頼を受ける',exact:true}).click();
     if(layout==='scene')await page.keyboard.press('Escape');else await click('サロメ・学門前へ戻る');
     if(await page.evaluate(()=>h.g.state.townLocation)!=='e2_academy')await click('サロメ・学門前へ戻る');
@@ -63,6 +66,25 @@ try{
     await click('依頼の出発地点へ戻る');await page.evaluate(()=>h.settle());await click('学術都市・灰時計の書庫受付へ戻る');await page.evaluate(()=>h.settle());
     await click('この件を終える');await page.evaluate(()=>{h.settle();h.resume();});assert.equal(await page.evaluate(()=>h.g.state.quests.q241.stage),'completed');
     await click('サロメ・学門前へ戻る');
+    // The relocated regional request uses the same city but a real dungeon,
+    // an interior resident, and a separate lending/tenancy desk.
+    await click('サロメの共同依頼所');await click('依頼掲示板を見る');
+    await page.locator('.quest-card').filter({has:page.getByRole('heading',{name:'返却日のない本',exact:true})}).getByRole('button',{name:'依頼を受ける',exact:true}).click();
+    if(layout==='scene')await page.keyboard.press('Escape');else await click('サロメ・学門前へ戻る');
+    if(await page.evaluate(()=>h.g.state.townLocation)!=='e2_academy')await click('サロメ・学門前へ戻る');
+    const libraryGate=await page.evaluate(()=>h.routeLabel('library_surface'));
+    await click(libraryGate);await page.evaluate(()=>{h.settle();h.walk(15,5);if(!h.dispatch({type:'story.resume',quest:'q041'}))throw Error('library resume');h.settle();});
+    await click('本を持たず、その住所を訪ねる');await page.evaluate(()=>{h.settle();h.resume();h.walk(7,1);h.settle();});
+    await click('居住の意思を確認し、司書をここへ招く');await page.evaluate(()=>{h.settle();h.walk(1,1);});await cross('library_surface');
+    await click('学術都市・灰時計の書庫受付');await click('書庫の貸出・居住契約窓口');await page.evaluate(()=>h.settle());
+    await click('司書と住所印の部屋へ戻る');await page.evaluate(()=>{h.settle();h.resume();});assert.equal(await page.evaluate(()=>h.g.state.stories.q041.values.clerkAt),'transit');
+    await click('学術都市・灰時計の書庫受付へ戻る');await click('サロメ・学門前へ戻る');await click(libraryGate);await page.evaluate(()=>{h.settle();h.walk(7,1);h.settle();});
+    await click('本の貸出と人の移住を分けた台帳へ直す');await page.evaluate(()=>{h.settle();h.walk(1,1);});await cross('library_surface');
+    await click('学術都市・灰時計の書庫受付');await click('書庫の貸出・居住契約窓口');await page.evaluate(()=>h.settle());
+    await page.screenshot({path:path.join(output,`${layout}-${width}-library-register.png`),fullPage:true});
+    await click('相手と結果を確かめ、依頼を終える');await page.evaluate(()=>{h.settle();h.resume();});
+    assert.equal(await page.evaluate(()=>h.g.state.quests.q041.outcome),'informed');assert.equal(await page.evaluate(()=>h.g.state.stories.q041.values.clerkAt),'registry');
+    await click('学術都市・灰時計の書庫受付へ戻る');await click('サロメ・学門前へ戻る');
     const gold=await page.evaluate(()=>h.g.state.gold);await click('灯帰りへの乗合便（5G）');assert.equal(await page.evaluate(()=>h.g.state.townLocation),'hikarigaeri_square');assert.equal(await page.evaluate(()=>h.g.state.gold),gold-5);
     await click('学術都市サロメへの乗合便（5G）');assert.equal(await page.evaluate(()=>h.g.state.townLocation),'e2_academy');
     await click('サロメの学門と高台街道');await page.evaluate(()=>h.walk(1,1));await cross('salome_road_slope');await page.evaluate(()=>{h.walk(1,1);h.resume();});await cross('salome_road_home');

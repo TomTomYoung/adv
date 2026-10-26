@@ -1,0 +1,2541 @@
+{
+  "schemaVersion": 1,
+  "id": "q041",
+  "number": 41,
+  "title": "返却日のない本",
+  "client": "司書のシフ",
+  "brief": "返却日が消える本を回収してください。借り手が何年も戻らない。",
+  "region": 5,
+  "type": "authored_progression",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。 サロメの共同依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q041_clue_a",
+      "title": "返却日のない本：現場の痕跡",
+      "points": [
+        {
+          "map": "region_5_f1",
+          "x": 7,
+          "y": 1,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q041.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q041.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q041"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q041"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "q041_clue_b",
+      "title": "返却日のない本：記録と証言",
+      "points": [
+        {
+          "map": "region_5_f1",
+          "x": 14,
+          "y": 1,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q041.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q041.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q041"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q041"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "q041_decision",
+      "title": "返却日のない本：決着の場",
+      "points": [
+        {
+          "map": "region_5_f1",
+          "x": 15,
+          "y": 5,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q041.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q041.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q041.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q041"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "q041_library_entry",
+      "title": "返却日のない本の現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q041.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q041.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q041"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q041.library.visit",
+      "points": [
+        {
+          "dungeon": "region_5",
+          "map": "region_5_f1",
+          "x": 15,
+          "y": 5
+        }
+      ]
+    },
+    {
+      "id": "q041_library_resident",
+      "title": "住所印のある居室",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "resident",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q041.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q041.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q041"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q041.library.visit",
+      "points": [
+        {
+          "dungeon": "region_5",
+          "map": "region_5_f1",
+          "x": 7,
+          "y": 1
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_5_f1",
+      "x": 7,
+      "y": 1,
+      "object": "q041_clue_a",
+      "role": "clue_a"
+    },
+    {
+      "map": "region_5_f1",
+      "x": 14,
+      "y": 1,
+      "object": "q041_clue_b",
+      "role": "clue_b"
+    },
+    {
+      "map": "region_5_f1",
+      "x": 15,
+      "y": 5,
+      "object": "q041_decision",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "本の貸出と人の移住を分けた台帳へ直す",
+      "text": "行方不明者は住人として数え直された。司書には本と人の二つの管理簿ができる。",
+      "gold": 105,
+      "xp": 100
+    },
+    "contract": {
+      "label": "住人を訪ねず本だけ回収する",
+      "text": "蔵書は戻った。住人は居場所を失い、別の未返却本の陰へ移る。",
+      "gold": 125,
+      "xp": 75
+    },
+    "compromise": {
+      "label": "借り手と返却期限を相談する",
+      "text": "本は本人の手で返った。部屋を借りる契約は改めて交わされる。",
+      "gold": 68,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/salome/library-first.mjs",
+    "world": {
+      "truth": "本の返却印は貸出でなく移住許可で、借り手は書庫の奥へ住み移っている。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "本の返却印は貸出でなく移住許可で、借り手は書庫の奥へ住み移っている。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "返却日が消える本を回収してください。借り手が何年も戻らない。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "司書のシフ",
+        "observation": "返却日が消える本を回収してください。借り手が何年も戻らない。",
+        "belief": "返却日が消える本を回収してください。借り手が何年も戻らない。",
+        "goal": "返却日が消える本を回収してください。借り手が何年も戻らない。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "返却日が消える本を回収してください。借り手が何年も戻らない。",
+      "progression": "返却先を訪ねる配達から居住者との契約更新へ進み、本を持ち帰るだけでは終わらない。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q041.library.entry"
+        },
+        {
+          "id": "resident",
+          "script": "q041.library.resident"
+        },
+        {
+          "id": "clerk",
+          "script": "q041.library.clerk"
+        },
+        {
+          "id": "recovered",
+          "script": "q041.library.recovered"
+        },
+        {
+          "id": "invite",
+          "script": "q041.library.invite"
+        },
+        {
+          "id": "collect",
+          "script": "q041.library.collect"
+        },
+        {
+          "id": "returned",
+          "script": "q041.library.returned"
+        },
+        {
+          "id": "registered",
+          "script": "q041.library.registered"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "返却日が消える本を回収してください。借り手が何年も戻らない。",
+      "openQuestion": "返却日のない本の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "causeSwap",
+      "newInformation": "本の返却印は貸出でなく移住許可で、借り手は書庫の奥へ住み移っている。",
+      "retroactiveTargets": [
+        "resident"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q041.flow.entry"
+      },
+      {
+        "id": "resident",
+        "script": "q041.flow.resident"
+      },
+      {
+        "id": "clerk",
+        "script": "q041.flow.clerk"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q041.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "返却先を訪ねる配達から居住者との契約更新へ進み、本を持ち帰るだけでは終わらない。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "返却先を訪ねる配達から居住者との契約更新へ進み、本を持ち帰るだけでは終わらない。",
+    "flowVersion": 2,
+    "entryScript": "q041.library.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "貸出印に返却日がなく、書庫の奥の住所が押されている。",
+        "options": [
+          {
+            "id": "visit",
+            "text": "本を持たず、その住所を訪ねる",
+            "to": "resident",
+            "action": "entry_visit"
+          },
+          {
+            "id": "recover",
+            "text": "住人を訪ねず本だけ回収する",
+            "to": "recovered",
+            "action": "entry_recover"
+          }
+        ]
+      },
+      {
+        "id": "resident",
+        "place": "resident",
+        "text": "借り手は棚の間で食事を作っていた。本の返却印は貸出でなく移住許可で、借り手は書庫の奥へ住み移っている。",
+        "options": [
+          {
+            "id": "deadline",
+            "text": "借り手と返却期限を相談する",
+            "to": "collect",
+            "action": "resident_deadline"
+          },
+          {
+            "id": "registry",
+            "text": "居住の意思を確認し、司書をここへ招く",
+            "to": "invite",
+            "action": "resident_registry"
+          }
+        ]
+      },
+      {
+        "id": "clerk",
+        "place": "resident",
+        "text": "司書は移住印を貸出として数えていた。借り手は住所を台帳へ載せることに同意した。",
+        "options": [
+          {
+            "id": "rewrite",
+            "text": "本の貸出と人の移住を分けた台帳へ直す",
+            "to": "registered",
+            "action": "clerk_rewrite"
+          },
+          {
+            "id": "temporary",
+            "text": "台帳は後回しにし、当面の期限だけ結ぶ",
+            "to": "collect",
+            "action": "clerk_temporary"
+          }
+        ]
+      },
+      {
+        "id": "recovered",
+        "place": "registry",
+        "text": "回収した本を窓口へ渡す。住所の住人は訪ねていない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@contract",
+            "action": "recovered_finish"
+          }
+        ]
+      },
+      {
+        "id": "invite",
+        "place": "registry",
+        "text": "窓口へ居住の意思を伝えた。司書を借り手の部屋へ案内する。",
+        "options": [
+          {
+            "id": "escort",
+            "text": "司書と住所印の部屋へ戻る",
+            "to": "clerk",
+            "action": "invite_escort"
+          }
+        ]
+      },
+      {
+        "id": "collect",
+        "place": "entry",
+        "text": "借り手と期限を決め、本の置き場所へ戻った。本人が本を窓口へ返す。",
+        "options": [
+          {
+            "id": "return",
+            "text": "本人と本を返却窓口へ運ぶ",
+            "to": "returned",
+            "action": "collect_return"
+          }
+        ]
+      },
+      {
+        "id": "returned",
+        "place": "registry",
+        "text": "本人が本を返した。本の返却を記し、居住する部屋の契約は改めて結ぶ。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@compromise",
+            "action": "returned_finish"
+          }
+        ]
+      },
+      {
+        "id": "registered",
+        "place": "registry",
+        "text": "司書と住人が窓口へ到着した。本の貸出と人の居住を別の台帳へ記す。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@informed",
+            "action": "registered_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "library-first-ten",
+      "settlement": "salome",
+      "saveRevision": 2,
+      "scope": "書庫前半10件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q041.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "貸出欄に部屋番号があり、返却箱には家賃の硬貨が入っている。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q041",
+          "key": "clue_a",
+          "text": "貸出欄に部屋番号があり、返却箱には家賃の硬貨が入っている。"
+        }
+      ]
+    },
+    "q041.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "司書のシフ",
+          "text": "奥の本棚に生活用の窪みがあり、借り手の筆跡の献立が貼られています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q041",
+          "key": "clue_b",
+          "text": "奥の本棚に生活用の窪みがあり、借り手の筆跡の献立が貼られている。"
+        }
+      ]
+    },
+    "q041.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "返却日のない本\n\n返却日が消える本を回収してください。借り手が何年も戻らない。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "書棚の守護者を倒し本だけ回収する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_5",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "蔵書は戻った。住人は居場所を失い、別の未返却本の陰へ移る。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q041",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "移住記録として台帳を作り直す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q041.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q041.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "本の返却印は貸出でなく移住許可で、借り手は書庫の奥へ住み移っている。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "行方不明者は住人として数え直された。司書には本と人の二つの管理簿ができる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q041",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "借り手に会って返却期限を相談する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "本は本人の手で返った。部屋を借りる契約は改めて交わされる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q041",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q041.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "返却日のない本\n\n返却日が消える本を回収してください。借り手が何年も戻らない。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q041.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q041.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "本の返却印は貸出でなく移住許可で、借り手は書庫の奥へ住み移っている。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q041.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "書棚の守護者を倒し本だけ回収する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_5",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "蔵書は戻った。住人は居場所を失い、別の未返却本の陰へ移る。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q041",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "移住記録として台帳を作り直す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q041.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q041.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "行方不明者は住人として数え直された。司書には本と人の二つの管理簿ができる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q041",
+                  "outcome": "informed"
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q041.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q041.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "compromise",
+              "text": "借り手に会って返却期限を相談する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "本は本人の手で返った。部屋を借りる契約は改めて交わされる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q041",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」司書のシフは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられる。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q041.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q041.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q041.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "行方不明者は住人として数え直された。司書には本と人の二つの管理簿ができる。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q041.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "蔵書は戻った。住人は居場所を失い、別の未返却本の陰へ移る。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q041.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "本は本人の手で返った。部屋を借りる契約は改めて交わされる。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q041.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q041.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q041.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q041.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q041.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q041.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q041.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "貸出印に返却日がなく、書庫の奥の住所が押されている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "visit",
+              "text": "本を持たず、その住所を訪ねる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q041.flow.resident"
+                }
+              ]
+            },
+            {
+              "id": "recover",
+              "text": "住人を訪ねず本だけ回収する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q041.flow.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q041.flow.resident": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q041.node",
+          "value": "resident"
+        },
+        {
+          "op": "say",
+          "text": "借り手は棚の間で食事を作っていた。本の返却印は貸出でなく移住許可で、借り手は書庫の奥へ住み移っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "deadline",
+              "text": "借り手と返却期限を相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q041.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "registry",
+              "text": "居住の意思を確認し、司書をここへ招く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q041.flow.clerk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q041.flow.clerk": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q041.node",
+          "value": "clerk"
+        },
+        {
+          "op": "say",
+          "text": "司書は移住印を貸出として数えていた。借り手は住所を台帳へ載せることに同意した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "rewrite",
+              "text": "本の貸出と人の移住を分けた台帳へ直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q041.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "temporary",
+              "text": "台帳は後回しにし、当面の期限だけ結ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q041.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q041.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q041.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "行方不明者は住人として数え直された。司書には本と人の二つの管理簿ができる。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q041",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q041.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q041.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "蔵書は戻った。住人は居場所を失い、別の未返却本の陰へ移る。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q041",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q041.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q041.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "本は本人の手で返った。部屋を借りる契約は改めて交わされる。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q041",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q041.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q041.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q041.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "行方不明者は住人として数え直された。司書には本と人の二つの管理簿ができる。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "蔵書は戻った。住人は居場所を失い、別の未返却本の陰へ移る。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "本は本人の手で返った。部屋を借りる契約は改めて交わされる。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q041"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q041.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q041.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q041.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "resident",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q041.flow.resident"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "clerk",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q041.flow.clerk"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q041.flow.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q041.library.entry": {
+      "storyQuest": "q041",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q041",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "貸出印に返却日がなく、書庫の奥の住所が押されている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "visit",
+              "text": "本を持たず、その住所を訪ねる",
+              "storyAction": {
+                "quest": "q041",
+                "action": "entry_visit"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q041",
+                  "action": "entry_visit"
+                }
+              ]
+            },
+            {
+              "id": "recover",
+              "text": "住人を訪ねず本だけ回収する",
+              "storyAction": {
+                "quest": "q041",
+                "action": "entry_recover"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q041",
+                  "action": "entry_recover"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q041.library.resident": {
+      "storyQuest": "q041",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q041",
+          "scene": "resident"
+        },
+        {
+          "op": "narrate",
+          "text": "借り手は棚の間で食事を作っていた。本の返却印は貸出でなく移住許可で、借り手は書庫の奥へ住み移っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "deadline",
+              "text": "借り手と返却期限を相談する",
+              "storyAction": {
+                "quest": "q041",
+                "action": "resident_deadline"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q041",
+                  "action": "resident_deadline"
+                }
+              ]
+            },
+            {
+              "id": "registry",
+              "text": "居住の意思を確認し、司書をここへ招く",
+              "storyAction": {
+                "quest": "q041",
+                "action": "resident_registry"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q041",
+                  "action": "resident_registry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q041.library.clerk": {
+      "storyQuest": "q041",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q041",
+          "scene": "clerk"
+        },
+        {
+          "op": "narrate",
+          "text": "司書は移住印を貸出として数えていた。借り手は住所を台帳へ載せることに同意した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "rewrite",
+              "text": "本の貸出と人の移住を分けた台帳へ直す",
+              "storyAction": {
+                "quest": "q041",
+                "action": "clerk_rewrite"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q041",
+                  "action": "clerk_rewrite"
+                }
+              ]
+            },
+            {
+              "id": "temporary",
+              "text": "台帳は後回しにし、当面の期限だけ結ぶ",
+              "storyAction": {
+                "quest": "q041",
+                "action": "clerk_temporary"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q041",
+                  "action": "clerk_temporary"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q041.library.recovered": {
+      "storyQuest": "q041",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q041",
+          "scene": "recovered"
+        },
+        {
+          "op": "narrate",
+          "text": "回収した本を窓口へ渡す。住所の住人は訪ねていない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q041",
+                "action": "recovered_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q041",
+                  "action": "recovered_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q041.library.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q041.library.invite": {
+      "storyQuest": "q041",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q041",
+          "scene": "invite"
+        },
+        {
+          "op": "narrate",
+          "text": "窓口へ居住の意思を伝えた。司書を借り手の部屋へ案内する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "escort",
+              "text": "司書と住所印の部屋へ戻る",
+              "storyAction": {
+                "quest": "q041",
+                "action": "invite_escort"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q041",
+                  "action": "invite_escort"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q041.library.collect": {
+      "storyQuest": "q041",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q041",
+          "scene": "collect"
+        },
+        {
+          "op": "narrate",
+          "text": "借り手と期限を決め、本の置き場所へ戻った。本人が本を窓口へ返す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "本人と本を返却窓口へ運ぶ",
+              "storyAction": {
+                "quest": "q041",
+                "action": "collect_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q041",
+                  "action": "collect_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q041.library.returned": {
+      "storyQuest": "q041",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q041",
+          "scene": "returned"
+        },
+        {
+          "op": "narrate",
+          "text": "本人が本を返した。本の返却を記し、居住する部屋の契約は改めて結ぶ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q041",
+                "action": "returned_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q041",
+                  "action": "returned_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q041.library.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q041.library.registered": {
+      "storyQuest": "q041",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q041",
+          "scene": "registered"
+        },
+        {
+          "op": "narrate",
+          "text": "司書と住人が窓口へ到着した。本の貸出と人の居住を別の台帳へ記す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q041",
+                "action": "registered_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q041",
+                  "action": "registered_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q041.library.end.informed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q041.library.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "行方不明者は住人として数え直された。司書には本と人の二つの管理簿ができる。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q041",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q041.library.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "蔵書は戻った。住人は居場所を失い、別の未返却本の陰へ移る。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q041",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q041.library.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "本は本人の手で返った。部屋を借りる契約は改めて交わされる。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q041",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q041.library.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q041"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q041.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q041.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q041.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "行方不明者は住人として数え直された。司書には本と人の二つの管理簿ができる。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "蔵書は戻った。住人は居場所を失い、別の未返却本の陰へ移る。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "本は本人の手で返った。部屋を借りる契約は改めて交わされる。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q041"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q041.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q041.library.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "resident",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q041.library.resident"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "clerk",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q041.library.clerk"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "recovered",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q041.library.recovered"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "invite",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q041.library.invite"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "collect",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q041.library.collect"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "returned",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q041.library.returned"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "registered",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q041.library.registered"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q041.library.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "返却日のない本の現場",
+      "resident": "住所印のある居室",
+      "registry": "本の返却と居住契約の窓口",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "resident"
+      ],
+      [
+        "transit",
+        "registry"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "resident",
+          "registry",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "leaseRenewed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "leaseRenewed"
+      },
+      "registered": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "registered"
+      },
+      "bookAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "resident",
+          "registry",
+          "transit",
+          "party",
+          "borrower",
+          "clerk"
+        ],
+        "meaning": "book の所在または保持者"
+      },
+      "borrowerAt": {
+        "type": "enum",
+        "initial": "resident",
+        "values": [
+          "entry",
+          "resident",
+          "registry",
+          "transit"
+        ],
+        "meaning": "borrower の所在または保持者"
+      },
+      "clerkAt": {
+        "type": "enum",
+        "initial": "registry",
+        "values": [
+          "entry",
+          "resident",
+          "registry",
+          "transit"
+        ],
+        "meaning": "clerk の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "book": {
+        "holder": "bookAt",
+        "kind": "item"
+      },
+      "borrower": {
+        "holder": "borrowerAt",
+        "kind": "person"
+      },
+      "clerk": {
+        "holder": "clerkAt",
+        "kind": "person"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "本の返却印は貸出でなく移住許可で、借り手は書庫の奥へ住み移っている。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "返却日のない本の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "resident": {
+        "title": "住所印のある居室",
+        "place": "resident",
+        "cast": [],
+        "requires": true
+      },
+      "clerk": {
+        "title": "住所印のある居室",
+        "place": "resident",
+        "cast": [],
+        "requires": true
+      },
+      "recovered": {
+        "title": "本の返却と居住契約の窓口",
+        "place": "registry",
+        "cast": [],
+        "requires": true
+      },
+      "invite": {
+        "title": "本の返却と居住契約の窓口",
+        "place": "registry",
+        "cast": [],
+        "requires": true
+      },
+      "collect": {
+        "title": "返却日のない本の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "returned": {
+        "title": "本の返却と居住契約の窓口",
+        "place": "registry",
+        "cast": [],
+        "requires": true
+      },
+      "registered": {
+        "title": "本の返却と居住契約の窓口",
+        "place": "registry",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_visit": {
+        "from": [
+          "entry"
+        ],
+        "to": "resident",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "resident"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "resident",
+            "requires": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "resident",
+          "companions": []
+        },
+        "depart": []
+      },
+      "entry_recover": {
+        "from": [
+          "entry"
+        ],
+        "to": "recovered",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "registry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "registry",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "book",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      },
+      "resident_deadline": {
+        "from": [
+          "resident"
+        ],
+        "to": "collect",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "borrower"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "borrower"
+          ]
+        },
+        "depart": []
+      },
+      "resident_registry": {
+        "from": [
+          "resident"
+        ],
+        "to": "invite",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "registry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "registry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "clerk_rewrite": {
+        "from": [
+          "clerk"
+        ],
+        "to": "registered",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "borrower",
+              "clerk"
+            ],
+            "path": [
+              "transit",
+              "registry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "registry",
+          "companions": [
+            "borrower",
+            "clerk"
+          ]
+        },
+        "depart": []
+      },
+      "clerk_temporary": {
+        "from": [
+          "clerk"
+        ],
+        "to": "collect",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "borrower"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "borrower"
+          ]
+        },
+        "depart": []
+      },
+      "recovered_finish": {
+        "from": [
+          "recovered"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "book",
+            "from": "party",
+            "to": "registry"
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "invite_escort": {
+        "from": [
+          "invite"
+        ],
+        "to": "clerk",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "clerk"
+            ],
+            "path": [
+              "transit",
+              "resident"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "resident",
+          "companions": [
+            "clerk"
+          ]
+        },
+        "depart": []
+      },
+      "collect_return": {
+        "from": [
+          "collect"
+        ],
+        "to": "returned",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "borrower"
+            ],
+            "path": [
+              "transit",
+              "registry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "registry",
+          "companions": [
+            "borrower"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "book",
+            "from": "entry",
+            "to": "borrower"
+          }
+        ]
+      },
+      "returned_finish": {
+        "from": [
+          "returned"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "book",
+            "from": "borrower",
+            "to": "registry"
+          },
+          {
+            "op": "set",
+            "key": "leaseRenewed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "registered_finish": {
+        "from": [
+          "registered"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "registered",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q041.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q041.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q041.values.partyAt"
+                },
+                "right": "registry"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q041.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q041.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q041.values.partyAt"
+                },
+                "right": "registry"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q041.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q041.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q041.values.partyAt"
+                },
+                "right": "registry"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_5",
+        "map": "region_5_f1",
+        "x": 15,
+        "y": 5
+      },
+      "resident": {
+        "kind": "dungeon",
+        "dungeon": "region_5",
+        "map": "region_5_f1",
+        "x": 7,
+        "y": 1
+      },
+      "registry": {
+        "kind": "town",
+        "location": "library_registry"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "salome",
+  "receptionLocations": [
+    "salome_board"
+  ]
+}

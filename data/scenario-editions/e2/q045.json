@@ -1,0 +1,2191 @@
+{
+  "schemaVersion": 1,
+  "id": "q045",
+  "number": 45,
+  "title": "白紙の相続",
+  "client": "代書人のサキ",
+  "brief": "遺言状が白紙になっている。内容を復元してください。",
+  "region": 5,
+  "type": "authored_progression",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。 サロメの共同依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q045_clue_a",
+      "title": "白紙の相続：現場の痕跡",
+      "points": [
+        {
+          "map": "region_5_f1",
+          "x": 3,
+          "y": 6,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q045.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q045.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q045"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q045"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "q045_clue_b",
+      "title": "白紙の相続：記録と証言",
+      "points": [
+        {
+          "map": "region_5_f1",
+          "x": 5,
+          "y": 11,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q045.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q045.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q045"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q045"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "q045_decision",
+      "title": "白紙の相続：決着の場",
+      "points": [
+        {
+          "map": "region_5_f1",
+          "x": 11,
+          "y": 10,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q045.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q045.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q045.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q045"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "q045_library_entry",
+      "title": "白紙の相続の現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q045.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q045.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q045"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q045.library.visit",
+      "points": [
+        {
+          "dungeon": "region_5",
+          "map": "region_5_f1",
+          "x": 11,
+          "y": 10
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_5_f1",
+      "x": 3,
+      "y": 6,
+      "object": "q045_clue_a",
+      "role": "clue_a"
+    },
+    {
+      "map": "region_5_f1",
+      "x": 5,
+      "y": 11,
+      "object": "q045_clue_b",
+      "role": "clue_b"
+    },
+    {
+      "map": "region_5_f1",
+      "x": 11,
+      "y": 10,
+      "object": "q045_decision",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "未成立と記録し、新たな協議の議事録を起こす",
+      "text": "復元文は参考にとどまった。遺された人たちは、自分の名で分配を決める。",
+      "gold": 105,
+      "xp": 100
+    },
+    "contract": {
+      "label": "残った筆跡を正式な遺言として扱う",
+      "text": "分配は早く済んだ。署名しなかった者の異議だけが残る。",
+      "gold": 125,
+      "xp": 75
+    },
+    "compromise": {
+      "label": "財産を一時保管し、署名の証人を探す",
+      "text": "誰もすぐには受け取れない。サキは保管費を先に説明する。",
+      "gold": 68,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/salome/library-first.mjs",
+    "world": {
+      "truth": "遺言は熱で消える仮契約用の墨で書かれ、正式な同意が得られていなかった。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "遺言は熱で消える仮契約用の墨で書かれ、正式な同意が得られていなかった。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "遺言状が白紙になっている。内容を復元してください。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "代書人のサキ",
+        "observation": "遺言状が白紙になっている。内容を復元してください。",
+        "belief": "遺言状が白紙になっている。内容を復元してください。",
+        "goal": "遺言状が白紙になっている。内容を復元してください。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "遺言状が白紙になっている。内容を復元してください。",
+      "progression": "消えた遺言の復元を試すと仮契約だと分かり、署名を待つ保管か共同協議へ転じる。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q045.library.entry"
+        },
+        {
+          "id": "draft",
+          "script": "q045.library.draft"
+        },
+        {
+          "id": "conference",
+          "script": "q045.library.conference"
+        },
+        {
+          "id": "deposited",
+          "script": "q045.library.deposited"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "遺言状が白紙になっている。内容を復元してください。",
+      "openQuestion": "白紙の相続の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "frameShift",
+      "newInformation": "遺言は熱で消える仮契約用の墨で書かれ、正式な同意が得られていなかった。",
+      "retroactiveTargets": [
+        "draft"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q045.flow.entry"
+      },
+      {
+        "id": "draft",
+        "script": "q045.flow.draft"
+      },
+      {
+        "id": "conference",
+        "script": "q045.flow.conference"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q045.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "消えた遺言の復元を試すと仮契約だと分かり、署名を待つ保管か共同協議へ転じる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "消えた遺言の復元を試すと仮契約だと分かり、署名を待つ保管か共同協議へ転じる。",
+    "flowVersion": 2,
+    "entryScript": "q045.library.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "相続人は白紙を囲んでいる。火鉢のそばほど紙の端が白い。",
+        "options": [
+          {
+            "id": "cool",
+            "text": "紙を冷やし、残る筆跡を調べる",
+            "to": "draft",
+            "action": "entry_cool"
+          },
+          {
+            "id": "witness",
+            "text": "財産を一時保管し、署名の証人を探す",
+            "to": "deposited",
+            "action": "entry_witness"
+          },
+          {
+            "id": "restore",
+            "text": "残った筆跡を正式な遺言として扱う",
+            "to": "@contract",
+            "action": "entry_restore"
+          }
+        ]
+      },
+      {
+        "id": "draft",
+        "place": "entry",
+        "text": "端に仮契約用の墨が戻ったが、署名欄は空白のままだ。遺言は熱で消える仮契約用の墨で書かれ、正式な同意が得られていなかった。",
+        "options": [
+          {
+            "id": "gather",
+            "text": "文書に従うのでなく、相続人の協議を始める",
+            "to": "conference",
+            "action": "draft_gather"
+          },
+          {
+            "id": "hold",
+            "text": "成立していた証人がいないか、保管して探す",
+            "to": "deposited",
+            "action": "draft_hold"
+          }
+        ]
+      },
+      {
+        "id": "conference",
+        "place": "council",
+        "text": "相続人は配分にまだ合意していない。ただ、この紙を成立した遺言として扱わないことには全員が同意した。",
+        "options": [
+          {
+            "id": "minutes",
+            "text": "未成立と記録し、新たな協議の議事録を起こす",
+            "to": "@informed",
+            "action": "conference_minutes"
+          },
+          {
+            "id": "deposit",
+            "text": "協議を延期し、財産だけ保管する",
+            "to": "deposited",
+            "action": "conference_deposit"
+          }
+        ]
+      },
+      {
+        "id": "deposited",
+        "place": "deposit",
+        "text": "保管窓口で費用を聞き、財産の受領を確かめる。文書は未成立のまま、証人の確認を続ける。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@compromise",
+            "action": "deposited_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "library-first-ten",
+      "settlement": "salome",
+      "saveRevision": 2,
+      "scope": "書庫前半10件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q045.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "署名欄に筆圧がなく、本文の跡だけが裏まで残っている。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q045",
+          "key": "clue_a",
+          "text": "署名欄に筆圧がなく、本文の跡だけが裏まで残っている。"
+        }
+      ]
+    },
+    "q045.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "代書人のサキ",
+          "text": "同じ紙の契約見本には同意まで加熱厳禁と記されています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q045",
+          "key": "clue_b",
+          "text": "同じ紙の契約見本には同意まで加熱厳禁と記されている。"
+        }
+      ]
+    },
+    "q045.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "白紙の相続\n\n遺言状が白紙になっている。内容を復元してください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "白紙を守る霊を倒し筆跡を正本にする",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_5",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "分配は早く済んだ。署名しなかった者の異議だけが残る。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q045",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "未成立の文書と認め相続人で協議する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q045.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q045.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "遺言は熱で消える仮契約用の墨で書かれ、正式な同意が得られていなかった。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "復元文は参考にとどまった。遺された人たちは、自分の名で分配を決める。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q045",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "財産を一時保管し署名の証人を探す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "誰もすぐには受け取れない。サキは保管費を先に説明する。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q045",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q045.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "白紙の相続\n\n遺言状が白紙になっている。内容を復元してください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q045.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q045.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "遺言は熱で消える仮契約用の墨で書かれ、正式な同意が得られていなかった。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q045.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "白紙を守る霊を倒し筆跡を正本にする",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_5",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "分配は早く済んだ。署名しなかった者の異議だけが残る。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q045",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "未成立の文書と認め相続人で協議する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q045.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q045.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "復元文は参考にとどまった。遺された人たちは、自分の名で分配を決める。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q045",
+                  "outcome": "informed"
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q045.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q045.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "compromise",
+              "text": "財産を一時保管し署名の証人を探す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "誰もすぐには受け取れない。サキは保管費を先に説明する。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q045",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」代書人のサキは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられる。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q045.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q045.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q045.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "復元文は参考にとどまった。遺された人たちは、自分の名で分配を決める。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q045.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "分配は早く済んだ。署名しなかった者の異議だけが残る。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q045.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "誰もすぐには受け取れない。サキは保管費を先に説明する。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q045.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q045.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q045.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q045.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q045.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q045.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q045.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "相続人は白紙を囲んでいる。火鉢のそばほど紙の端が白い。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "cool",
+              "text": "紙を冷やし、残る筆跡を調べる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q045.flow.draft"
+                }
+              ]
+            },
+            {
+              "id": "witness",
+              "text": "財産を一時保管し、署名の証人を探す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q045.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "restore",
+              "text": "残った筆跡を正式な遺言として扱う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q045.flow.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q045.flow.draft": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q045.node",
+          "value": "draft"
+        },
+        {
+          "op": "say",
+          "text": "端に仮契約用の墨が戻ったが、署名欄は空白のままだ。遺言は熱で消える仮契約用の墨で書かれ、正式な同意が得られていなかった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "gather",
+              "text": "文書に従うのでなく、相続人の協議を始める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q045.flow.conference"
+                }
+              ]
+            },
+            {
+              "id": "hold",
+              "text": "成立していた証人がいないか、保管して探す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q045.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q045.flow.conference": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q045.node",
+          "value": "conference"
+        },
+        {
+          "op": "say",
+          "text": "相続人は配分にまだ合意していない。ただ、この紙を成立した遺言として扱わないことには全員が同意した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "minutes",
+              "text": "未成立と記録し、新たな協議の議事録を起こす",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q045.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "deposit",
+              "text": "協議を延期し、財産だけ保管する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q045.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q045.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q045.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "復元文は参考にとどまった。遺された人たちは、自分の名で分配を決める。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q045",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q045.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q045.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "分配は早く済んだ。署名しなかった者の異議だけが残る。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q045",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q045.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q045.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "誰もすぐには受け取れない。サキは保管費を先に説明する。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q045",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q045.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q045.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q045.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "復元文は参考にとどまった。遺された人たちは、自分の名で分配を決める。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "分配は早く済んだ。署名しなかった者の異議だけが残る。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "誰もすぐには受け取れない。サキは保管費を先に説明する。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q045"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q045.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q045.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q045.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "draft",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q045.flow.draft"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "conference",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q045.flow.conference"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q045.flow.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q045.library.entry": {
+      "storyQuest": "q045",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q045",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "相続人は白紙を囲んでいる。火鉢のそばほど紙の端が白い。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "cool",
+              "text": "紙を冷やし、残る筆跡を調べる",
+              "storyAction": {
+                "quest": "q045",
+                "action": "entry_cool"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q045",
+                  "action": "entry_cool"
+                },
+                {
+                  "op": "jump",
+                  "script": "q045.library.draft"
+                }
+              ]
+            },
+            {
+              "id": "witness",
+              "text": "財産を一時保管し、署名の証人を探す",
+              "storyAction": {
+                "quest": "q045",
+                "action": "entry_witness"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q045",
+                  "action": "entry_witness"
+                }
+              ]
+            },
+            {
+              "id": "restore",
+              "text": "残った筆跡を正式な遺言として扱う",
+              "storyAction": {
+                "quest": "q045",
+                "action": "entry_restore"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q045",
+                  "action": "entry_restore"
+                },
+                {
+                  "op": "jump",
+                  "script": "q045.library.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q045.library.draft": {
+      "storyQuest": "q045",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q045",
+          "scene": "draft"
+        },
+        {
+          "op": "narrate",
+          "text": "端に仮契約用の墨が戻ったが、署名欄は空白のままだ。遺言は熱で消える仮契約用の墨で書かれ、正式な同意が得られていなかった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "gather",
+              "text": "文書に従うのでなく、相続人の協議を始める",
+              "storyAction": {
+                "quest": "q045",
+                "action": "draft_gather"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q045",
+                  "action": "draft_gather"
+                }
+              ]
+            },
+            {
+              "id": "hold",
+              "text": "成立していた証人がいないか、保管して探す",
+              "storyAction": {
+                "quest": "q045",
+                "action": "draft_hold"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q045",
+                  "action": "draft_hold"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q045.library.conference": {
+      "storyQuest": "q045",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q045",
+          "scene": "conference"
+        },
+        {
+          "op": "narrate",
+          "text": "相続人は配分にまだ合意していない。ただ、この紙を成立した遺言として扱わないことには全員が同意した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "minutes",
+              "text": "未成立と記録し、新たな協議の議事録を起こす",
+              "storyAction": {
+                "quest": "q045",
+                "action": "conference_minutes"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q045",
+                  "action": "conference_minutes"
+                },
+                {
+                  "op": "jump",
+                  "script": "q045.library.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "deposit",
+              "text": "協議を延期し、財産だけ保管する",
+              "storyAction": {
+                "quest": "q045",
+                "action": "conference_deposit"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q045",
+                  "action": "conference_deposit"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q045.library.deposited": {
+      "storyQuest": "q045",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q045",
+          "scene": "deposited"
+        },
+        {
+          "op": "narrate",
+          "text": "保管窓口で費用を聞き、財産の受領を確かめる。文書は未成立のまま、証人の確認を続ける。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q045",
+                "action": "deposited_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q045",
+                  "action": "deposited_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q045.library.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q045.library.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "復元文は参考にとどまった。遺された人たちは、自分の名で分配を決める。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q045",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q045.library.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "分配は早く済んだ。署名しなかった者の異議だけが残る。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q045",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q045.library.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "誰もすぐには受け取れない。サキは保管費を先に説明する。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q045",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q045.library.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q045"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q045.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q045.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q045.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "復元文は参考にとどまった。遺された人たちは、自分の名で分配を決める。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "分配は早く済んだ。署名しなかった者の異議だけが残る。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "誰もすぐには受け取れない。サキは保管費を先に説明する。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q045"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q045.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q045.library.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "draft",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q045.library.draft"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "conference",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q045.library.conference"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "deposited",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q045.library.deposited"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q045.library.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "白紙の相続の現場",
+      "council": "相続人の協議室",
+      "deposit": "財産の保管窓口",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "council"
+      ],
+      [
+        "transit",
+        "deposit"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "council",
+          "deposit",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "unsigned": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "unsigned"
+      },
+      "treatedAsFinal": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "treatedAsFinal"
+      },
+      "minutes": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "minutes"
+      },
+      "held": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "held"
+      },
+      "draftAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "council",
+          "deposit",
+          "transit",
+          "party",
+          "heirs"
+        ],
+        "meaning": "draft の所在または保持者"
+      },
+      "heirsAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "council",
+          "deposit",
+          "transit"
+        ],
+        "meaning": "heirs の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "draft": {
+        "holder": "draftAt",
+        "kind": "item"
+      },
+      "heirs": {
+        "holder": "heirsAt",
+        "kind": "group"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "遺言は熱で消える仮契約用の墨で書かれ、正式な同意が得られていなかった。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "白紙の相続の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "draft": {
+        "title": "白紙の相続の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "conference": {
+        "title": "相続人の協議室",
+        "place": "council",
+        "cast": [],
+        "requires": true
+      },
+      "deposited": {
+        "title": "財産の保管窓口",
+        "place": "deposit",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_cool": {
+        "from": [
+          "entry"
+        ],
+        "to": "draft",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "unsigned",
+            "value": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "entry",
+            "requires": true
+          }
+        ],
+        "once": false
+      },
+      "entry_witness": {
+        "from": [
+          "entry"
+        ],
+        "to": "deposited",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "heirs"
+            ],
+            "path": [
+              "transit",
+              "deposit"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "deposit",
+          "companions": [
+            "heirs"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "draft",
+            "from": "entry",
+            "to": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q045.values.draftAt"
+              },
+              "right": "entry"
+            }
+          }
+        ]
+      },
+      "entry_restore": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "treatedAsFinal",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "draft_gather": {
+        "from": [
+          "draft"
+        ],
+        "to": "conference",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "heirs"
+            ],
+            "path": [
+              "transit",
+              "council"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "council",
+          "companions": [
+            "heirs"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "draft",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      },
+      "draft_hold": {
+        "from": [
+          "draft"
+        ],
+        "to": "deposited",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "heirs"
+            ],
+            "path": [
+              "transit",
+              "deposit"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "deposit",
+          "companions": [
+            "heirs"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "draft",
+            "from": "entry",
+            "to": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q045.values.draftAt"
+              },
+              "right": "entry"
+            }
+          }
+        ]
+      },
+      "conference_minutes": {
+        "from": [
+          "conference"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "draft",
+            "from": "party",
+            "to": "council"
+          },
+          {
+            "op": "set",
+            "key": "minutes",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "conference_deposit": {
+        "from": [
+          "conference"
+        ],
+        "to": "deposited",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "heirs"
+            ],
+            "path": [
+              "transit",
+              "deposit"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "deposit",
+          "companions": [
+            "heirs"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "draft",
+            "from": "entry",
+            "to": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q045.values.draftAt"
+              },
+              "right": "entry"
+            }
+          }
+        ]
+      },
+      "deposited_finish": {
+        "from": [
+          "deposited"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "draft",
+            "from": "party",
+            "to": "deposit"
+          },
+          {
+            "op": "set",
+            "key": "held",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q045.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q045.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q045.values.partyAt"
+                },
+                "right": "council"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q045.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q045.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q045.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q045.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q045.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q045.values.partyAt"
+                },
+                "right": "deposit"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_5",
+        "map": "region_5_f1",
+        "x": 11,
+        "y": 10
+      },
+      "council": {
+        "kind": "town",
+        "location": "library_council"
+      },
+      "deposit": {
+        "kind": "town",
+        "location": "library_deposit"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "salome",
+  "receptionLocations": [
+    "salome_board"
+  ]
+}

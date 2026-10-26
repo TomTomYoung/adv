@@ -9,7 +9,7 @@ import {locationRoot} from '../src/core/world.js';
 import {oilStore,oilTotal} from '../src/core/expedition-oil.js';
 import {read,data,fresh,go,town,walk,drain,checkpoint} from './oddland-helpers.mjs';
 
-const previous=await loadContent(async file=>{const value=await read(file);if(file==='data/scenario-editions.json')delete value.editions.e2.geographyUpgrade;return value;},{edition:'e2'});
+const previous=await loadContent(async file=>{const value=await read(file);if(file==='data/scenario-editions.json')delete value.editions.e2.geographyUpgrade;if(file==='data/scenario-editions.json')for(let n=41;n<=50;n++)delete value.editions.e2.questOverrides['q0'+n];return value;},{edition:'e2'});
 const city=['e2_academy','e2_archive','e2_stacks','e2_workshop','e2_relic','e2_storage'];
 const personal=Object.values(data.quests).filter(q=>['il','mica'].includes(q.model?.companion));
 const cross=(g,route)=>assert.ok(g.dispatch({type:'world.cross',route}),g.state.notice);
@@ -31,7 +31,7 @@ test('Salome reuses the six existing facilities, preserves twenty stories and al
  assert.equal(data.scenarioEditions.editions.e2.saveRevision,2);assert.equal(data.worldTravel.version,2);
  assert.ok(city.every(id=>locationRoot(data,id).id==='e2_academy'));assert.equal(personal.length,20);
  for(const q of personal){assert.deepEqual(q,previous.quests[q.id]);assert.equal(data.worldTravel.questSettlements[q.id],'salome');}
- for(const id of ['region_5','region_8']){assert.deepEqual(data.dungeons[id],previous.dungeons[id]);for(const m of data.dungeons[id].maps)assert.deepEqual(data.maps[m],previous.maps[m]);}
+ for(const id of ['region_5','region_8']){assert.deepEqual(data.dungeons[id],previous.dungeons[id]);for(const m of data.dungeons[id].maps)assert.deepEqual({...data.maps[m],objects:data.maps[m].objects.filter(o=>!o.quest)},{...previous.maps[m],objects:previous.maps[m].objects.filter(o=>!o.quest)});}
  const first=await loadContent(read);assert.equal(Object.keys(first.maps).length,56);assert.equal(Object.keys(first.quests).length,210);assert.equal(first.worldTravel,undefined);
 });
 
