@@ -8,7 +8,7 @@ import {data,read,checkpoint,drain} from './library-helpers.mjs';
 const numbers=[41,71,141,171].flatMap(start=>Array.from({length:10},(_,i)=>start+i));
 export const historical=async version=>loadContent(async file=>{
  if(file==='data/scenario-editions/e2/salome-geography.json')return read('tests/fixtures/e2-geography-before-library.json');
- const value=await read(file);if(file==='data/scenario-editions.json'){for(let n=41;n<=50;n++)delete value.editions.e2.questOverrides['q0'+n];if(version===1)delete value.editions.e2.geographyUpgrade;}return value;
+ const value=await read(file);if(file==='data/scenario-editions.json'){for(let n=41;n<=50;n++)delete value.editions.e2.questOverrides['q0'+n];for(let n=141;n<=150;n++)delete value.editions.e2.questOverrides['q'+n];if(version===1)delete value.editions.e2.geographyUpgrade;}return value;
 },{edition:'e2'});
 for(const version of [1,2]){
  const previous=await historical(version);

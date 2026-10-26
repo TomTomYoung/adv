@@ -1,0 +1,2307 @@
+{
+  "schemaVersion": 1,
+  "id": "q147",
+  "number": 147,
+  "title": "一番遅い配達",
+  "client": "運送店主",
+  "brief": "振動で閉じる夜咲きの花を、引退した舞踊家へ届けてください。",
+  "region": 5,
+  "type": "scene_graph",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 サロメの共同依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q147_scene",
+      "title": "一番遅い配達：運送店主",
+      "points": [
+        {
+          "map": "region_5_f2",
+          "x": 4,
+          "y": 1,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q147.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q147.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q147.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q147"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "q147_library_entry",
+      "title": "一番遅い配達の相談卓",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q147.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q147.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q147"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q147.library.visit",
+      "points": [
+        {
+          "dungeon": "region_5",
+          "map": "region_5_f2",
+          "x": 4,
+          "y": 1
+        }
+      ]
+    },
+    {
+      "id": "q147_library_mountain",
+      "title": "高台街道の山道側",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "mountain",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q147.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q147.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q147"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q147.library.visit",
+      "points": [
+        {
+          "dungeon": "salome_road",
+          "map": "e2_highland_lower",
+          "x": 13,
+          "y": 5
+        }
+      ]
+    },
+    {
+      "id": "q147_library_water",
+      "title": "サロメの静かな水路沿い",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "water",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q147.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q147.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q147"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q147.library.visit",
+      "points": [
+        {
+          "dungeon": "salome_road",
+          "map": "e2_salome_canal",
+          "x": 9,
+          "y": 3
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_5_f2",
+      "x": 4,
+      "y": 1,
+      "object": "q147_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "quiet": {
+      "label": "開く花の配達",
+      "text": "花の開く音を受取人と聞いた。配達人は到着時刻の横に、荷の状態も書いた。",
+      "gold": 105,
+      "xp": 75
+    },
+    "tomorrow": {
+      "label": "翌晩の到着",
+      "text": "待つ一晩を置いて花が開いた。舞踊家は待ち時間も演目の一部にし、次の拍手を急がなかった。",
+      "gold": 105,
+      "xp": 75
+    },
+    "record": {
+      "label": "速達の記録",
+      "text": "競技の宣伝は成功した。開花を見せる依頼は未達として残り、店主と受取人の評価は分かれた。",
+      "gold": 105,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/salome/library-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381a39bfadc8f9711c51f",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "近道を走るほど花は閉じ、到着が早くても受取条件を満たさない。店主は条件を知りながら宣伝の速さだけを強調している。出発前に花の扱い札を読めるようにし、到着後の隠し減点にはしない。",
+      "fixedPast": "運送店主が、速達競争の荷を運んでほしいと頼む。包みは振動で閉じる夜咲きの花。受取人は引退した舞踊家で、かつて舞台の最後に使った花をもう一度開くところから見たいのだ。若い配達人は最速記録を狙っている。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "運送店主",
+        "beliefsAndGoals": "運送店主が、速達競争の荷を運んでほしいと頼む。包みは振動で閉じる夜咲きの花。受取人は引退した舞踊家で、かつて舞台の最後に使った花をもう一度開くところから見たいのだ。若い配達人は最速記録を狙っている。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "振動で閉じる夜咲きの花を、引退した舞踊家へ届けてください。"
+      }
+    ],
+    "conflict": {
+      "design": "荷受け→速い山道／遅い水路／費用の高い懸架車→受取。閉じた花でも事情を説明して翌晩の配達へ変更できる。速さを優先した場合、競技賞と依頼達成を別に扱う。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q147.library.entry"
+        },
+        {
+          "id": "closed",
+          "script": "q147.library.closed"
+        },
+        {
+          "id": "mountain",
+          "script": "q147.library.mountain"
+        },
+        {
+          "id": "water",
+          "script": "q147.library.water"
+        },
+        {
+          "id": "car",
+          "script": "q147.library.car"
+        },
+        {
+          "id": "quiet_arrival",
+          "script": "q147.library.quiet_arrival"
+        },
+        {
+          "id": "rest",
+          "script": "q147.library.rest"
+        },
+        {
+          "id": "tomorrow_arrival",
+          "script": "q147.library.tomorrow_arrival"
+        },
+        {
+          "id": "recorded",
+          "script": "q147.library.recorded"
+        },
+        {
+          "id": "entry_car_ready",
+          "script": "q147.library.entry_car_ready"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "振動で閉じる夜咲きの花を、引退した舞踊家へ届けてください。"
+    },
+    "reveal": {
+      "newInformation": "近道を走るほど花は閉じ、到着が早くても受取条件を満たさない。店主は条件を知りながら宣伝の速さだけを強調している。出発前に花の扱い札を読めるようにし、到着後の隠し減点にはしない。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q147.scene.entry"
+      },
+      {
+        "id": "closed",
+        "script": "q147.scene.closed"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q147.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "扱い札には振動を避けるよう書かれている。店主は速達記録を宣伝したい。受取人は花が開くところから見たいという。",
+        "options": [
+          {
+            "id": "run",
+            "text": "最速の山道を走る。花は閉じる",
+            "to": "mountain",
+            "action": "entry_run"
+          },
+          {
+            "id": "water",
+            "text": "時間をかけ、静かな水路で届ける",
+            "to": "water",
+            "action": "entry_water"
+          },
+          {
+            "id": "car",
+            "text": "30Gで懸架車を借り、速さと静けさを両立する",
+            "to": "entry_car_ready",
+            "action": "entry_car"
+          }
+        ]
+      },
+      {
+        "id": "closed",
+        "place": "receiver",
+        "text": "記録は更新したが花は閉じた。到着後に隠されていた条件ではない。受取人へ状態を伝える。",
+        "options": [
+          {
+            "id": "tomorrow",
+            "text": "事情を説明し、翌晩の再配達へ変更する",
+            "to": "rest",
+            "action": "closed_tomorrow"
+          },
+          {
+            "id": "record",
+            "text": "競技の達成だけで精算し、花の依頼は未達と報告する",
+            "to": "recorded",
+            "action": "closed_record"
+          }
+        ]
+      },
+      {
+        "id": "mountain",
+        "place": "mountain",
+        "text": "山道を急いだため花が閉じた。速達記録と、開花を見せる依頼を分けて受取人へ説明する。",
+        "options": [
+          {
+            "id": "deliver",
+            "text": "閉じた花を持ち、受取人を訪ねる",
+            "to": "closed",
+            "action": "mountain_deliver"
+          }
+        ]
+      },
+      {
+        "id": "water",
+        "place": "water",
+        "text": "水路沿いを静かに運び、振動を避けた。開花を見せるため、このまま受取人へ向かう。",
+        "options": [
+          {
+            "id": "deliver",
+            "text": "荷を静かに保ち、受取先へ運ぶ",
+            "to": "quiet_arrival",
+            "action": "water_deliver"
+          }
+        ]
+      },
+      {
+        "id": "car",
+        "place": "mountain",
+        "text": "借りた懸架車で山道を越えた。吊り台が衝撃を受け止め、花は閉じていない。",
+        "options": [
+          {
+            "id": "deliver",
+            "text": "懸架車から荷を受取先へ運ぶ",
+            "to": "quiet_arrival",
+            "action": "car_deliver"
+          }
+        ]
+      },
+      {
+        "id": "quiet_arrival",
+        "place": "receiver",
+        "text": "受取人の前で花が開くところを確かめ、鉢を渡した。時刻だけで受領済みにはしない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@quiet",
+            "action": "quiet_arrival_finish"
+          }
+        ]
+      },
+      {
+        "id": "rest",
+        "place": "rest",
+        "text": "受取人と翌晩への変更を約束し、花を静かな保管室へ預けた。ここで一晩を置き、次の開花を待つ。",
+        "options": [
+          {
+            "id": "next",
+            "text": "翌晩、開き始めた花を再配達する",
+            "to": "tomorrow_arrival",
+            "action": "rest_next"
+          }
+        ]
+      },
+      {
+        "id": "tomorrow_arrival",
+        "place": "receiver",
+        "text": "翌晩に戻り、受取人が花の開くところを見てから鉢を渡した。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@tomorrow",
+            "action": "tomorrow_arrival_finish"
+          }
+        ]
+      },
+      {
+        "id": "recorded",
+        "place": "record",
+        "text": "閉じた花を依頼元の窓口へ戻し、速達競技だけを精算した。開花を見せる依頼は未達として記す。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@record",
+            "action": "recorded_finish"
+          }
+        ]
+      },
+      {
+        "id": "entry_car_ready",
+        "place": "entry",
+        "text": "必要な道具を使って準備を整えた。ここから目的地まで運ぶ。",
+        "options": [
+          {
+            "id": "continue",
+            "text": "準備した相手・品物と目的地へ向かう",
+            "to": "car",
+            "action": "entry_car_ready_continue"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q147.scene.entry",
+        "action": "car",
+        "option": "car_supplies",
+        "shortage": "q147.scene.entry.car.shortage",
+        "resume": "q147.scene.entry.car.resume",
+        "cost": {
+          "gold": 30
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q147.visit"
+    ],
+    "entryScript": "q147.library.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "library-second-ten",
+      "settlement": "salome",
+      "saveRevision": 2,
+      "scope": "書庫後半10件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q147.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q147.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "扱い札には振動を避けるよう書かれている。店主は速達記録を宣伝したい。受取人は花が開くところから見たいという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "run",
+              "text": "最速の山道を走る。花は閉じる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q147.scene.closed"
+                }
+              ]
+            },
+            {
+              "id": "water",
+              "text": "時間をかけ、静かな水路で届ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q147.end.quiet"
+                }
+              ]
+            },
+            {
+              "id": "car",
+              "text": "30Gで懸架車を借り、速さと静けさを両立する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 30
+                  }
+                ]
+              },
+              "requirement": "G 30消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -30
+                },
+                {
+                  "op": "jump",
+                  "script": "q147.end.quiet"
+                }
+              ]
+            },
+            {
+              "id": "car_supplies",
+              "text": "30Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 30
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 30
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q147.scene.entry.car.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q147.scene.closed": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q147.node",
+          "value": "closed"
+        },
+        {
+          "op": "say",
+          "text": "記録は更新したが花は閉じた。到着後に隠されていた条件ではない。受取人へ状態を伝える。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "tomorrow",
+              "text": "事情を説明し、翌晩の再配達へ変更する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q147.end.tomorrow"
+                }
+              ]
+            },
+            {
+              "id": "record",
+              "text": "競技の達成だけで精算し、花の依頼は未達と報告する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q147.end.record"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q147.end.quiet": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q147.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "花の開く音を受取人と聞いた。配達人は到着時刻の横に、荷の状態も書いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q147",
+              "outcome": "quiet"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q147.end.tomorrow": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q147.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "待つ一晩を置いて花が開いた。舞踊家は待ち時間も演目の一部にし、次の拍手を急がなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q147",
+              "outcome": "tomorrow"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q147.end.record": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q147.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "競技の宣伝は成功した。開花を見せる依頼は未達として残り、店主と受取人の評価は分かれた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q147",
+              "outcome": "record"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q147.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q147"
+          },
+          "cases": [
+            {
+              "equals": "q147.scene.entry.car.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q147.scene.entry.car.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q147.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q147.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "quiet",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "花の開く音を受取人と聞いた。配達人は到着時刻の横に、荷の状態も書いた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "tomorrow",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "待つ一晩を置いて花が開いた。舞踊家は待ち時間も演目の一部にし、次の拍手を急がなかった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "record",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "競技の宣伝は成功した。開花を見せる依頼は未達として残り、店主と受取人の評価は分かれた。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q147.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q147.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "closed",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q147.scene.closed"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q147.scene.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q147.scene.entry.car.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q147",
+          "value": "q147.scene.entry.car.resume"
+        },
+        {
+          "op": "say",
+          "text": "30Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q147.scene.entry.car.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q147",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "30Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q147.scene.entry"
+        }
+      ]
+    },
+    "q147.library.entry": {
+      "storyQuest": "q147",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q147",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "扱い札には振動を避けるよう書かれている。店主は速達記録を宣伝したい。受取人は花が開くところから見たいという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "run",
+              "text": "最速の山道を走る。花は閉じる",
+              "storyAction": {
+                "quest": "q147",
+                "action": "entry_run"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q147",
+                  "action": "entry_run"
+                }
+              ]
+            },
+            {
+              "id": "water",
+              "text": "時間をかけ、静かな水路で届ける",
+              "storyAction": {
+                "quest": "q147",
+                "action": "entry_water"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q147",
+                  "action": "entry_water"
+                }
+              ]
+            },
+            {
+              "id": "car",
+              "text": "30Gで懸架車を借り、速さと静けさを両立する",
+              "storyAction": {
+                "quest": "q147",
+                "action": "entry_car"
+              },
+              "requirement": "gold 30消費",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q147",
+                  "action": "entry_car"
+                },
+                {
+                  "op": "jump",
+                  "script": "q147.library.entry_car_ready"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q147.library.closed": {
+      "storyQuest": "q147",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q147",
+          "scene": "closed"
+        },
+        {
+          "op": "narrate",
+          "text": "記録は更新したが花は閉じた。到着後に隠されていた条件ではない。受取人へ状態を伝える。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "tomorrow",
+              "text": "事情を説明し、翌晩の再配達へ変更する",
+              "storyAction": {
+                "quest": "q147",
+                "action": "closed_tomorrow"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q147",
+                  "action": "closed_tomorrow"
+                }
+              ]
+            },
+            {
+              "id": "record",
+              "text": "競技の達成だけで精算し、花の依頼は未達と報告する",
+              "storyAction": {
+                "quest": "q147",
+                "action": "closed_record"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q147",
+                  "action": "closed_record"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q147.library.mountain": {
+      "storyQuest": "q147",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q147",
+          "scene": "mountain"
+        },
+        {
+          "op": "narrate",
+          "text": "山道を急いだため花が閉じた。速達記録と、開花を見せる依頼を分けて受取人へ説明する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "deliver",
+              "text": "閉じた花を持ち、受取人を訪ねる",
+              "storyAction": {
+                "quest": "q147",
+                "action": "mountain_deliver"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q147",
+                  "action": "mountain_deliver"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q147.library.water": {
+      "storyQuest": "q147",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q147",
+          "scene": "water"
+        },
+        {
+          "op": "narrate",
+          "text": "水路沿いを静かに運び、振動を避けた。開花を見せるため、このまま受取人へ向かう。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "deliver",
+              "text": "荷を静かに保ち、受取先へ運ぶ",
+              "storyAction": {
+                "quest": "q147",
+                "action": "water_deliver"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q147",
+                  "action": "water_deliver"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q147.library.car": {
+      "storyQuest": "q147",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q147",
+          "scene": "car"
+        },
+        {
+          "op": "narrate",
+          "text": "借りた懸架車で山道を越えた。吊り台が衝撃を受け止め、花は閉じていない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "deliver",
+              "text": "懸架車から荷を受取先へ運ぶ",
+              "storyAction": {
+                "quest": "q147",
+                "action": "car_deliver"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q147",
+                  "action": "car_deliver"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q147.library.quiet_arrival": {
+      "storyQuest": "q147",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q147",
+          "scene": "quiet_arrival"
+        },
+        {
+          "op": "narrate",
+          "text": "受取人の前で花が開くところを確かめ、鉢を渡した。時刻だけで受領済みにはしない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q147",
+                "action": "quiet_arrival_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q147",
+                  "action": "quiet_arrival_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q147.library.end.quiet"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q147.library.rest": {
+      "storyQuest": "q147",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q147",
+          "scene": "rest"
+        },
+        {
+          "op": "narrate",
+          "text": "受取人と翌晩への変更を約束し、花を静かな保管室へ預けた。ここで一晩を置き、次の開花を待つ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "next",
+              "text": "翌晩、開き始めた花を再配達する",
+              "storyAction": {
+                "quest": "q147",
+                "action": "rest_next"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q147",
+                  "action": "rest_next"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q147.library.tomorrow_arrival": {
+      "storyQuest": "q147",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q147",
+          "scene": "tomorrow_arrival"
+        },
+        {
+          "op": "narrate",
+          "text": "翌晩に戻り、受取人が花の開くところを見てから鉢を渡した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q147",
+                "action": "tomorrow_arrival_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q147",
+                  "action": "tomorrow_arrival_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q147.library.end.tomorrow"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q147.library.recorded": {
+      "storyQuest": "q147",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q147",
+          "scene": "recorded"
+        },
+        {
+          "op": "narrate",
+          "text": "閉じた花を依頼元の窓口へ戻し、速達競技だけを精算した。開花を見せる依頼は未達として記す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q147",
+                "action": "recorded_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q147",
+                  "action": "recorded_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q147.library.end.record"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q147.library.entry_car_ready": {
+      "storyQuest": "q147",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q147",
+          "scene": "entry_car_ready"
+        },
+        {
+          "op": "narrate",
+          "text": "必要な道具を使って準備を整えた。ここから目的地まで運ぶ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "continue",
+              "text": "準備した相手・品物と目的地へ向かう",
+              "storyAction": {
+                "quest": "q147",
+                "action": "entry_car_ready_continue"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q147",
+                  "action": "entry_car_ready_continue"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q147.library.end.quiet": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "花の開く音を受取人と聞いた。配達人は到着時刻の横に、荷の状態も書いた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.quiet",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q147",
+          "outcome": "quiet"
+        }
+      ]
+    },
+    "q147.library.end.tomorrow": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "待つ一晩を置いて花が開いた。舞踊家は待ち時間も演目の一部にし、次の拍手を急がなかった。"
+        },
+        {
+          "op": "add",
+          "target": "vars.tomorrow",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q147",
+          "outcome": "tomorrow"
+        }
+      ]
+    },
+    "q147.library.end.record": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "競技の宣伝は成功した。開花を見せる依頼は未達として残り、店主と受取人の評価は分かれた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.record",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q147",
+          "outcome": "record"
+        }
+      ]
+    },
+    "q147.library.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q147"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q147.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q147.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q147.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "quiet",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "花の開く音を受取人と聞いた。配達人は到着時刻の横に、荷の状態も書いた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "tomorrow",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "待つ一晩を置いて花が開いた。舞踊家は待ち時間も演目の一部にし、次の拍手を急がなかった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "record",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "競技の宣伝は成功した。開花を見せる依頼は未達として残り、店主と受取人の評価は分かれた。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q147"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q147.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q147.library.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "closed",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q147.library.closed"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "mountain",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q147.library.mountain"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "water",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q147.library.water"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "car",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q147.library.car"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "quiet_arrival",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q147.library.quiet_arrival"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "rest",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q147.library.rest"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "tomorrow_arrival",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q147.library.tomorrow_arrival"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "recorded",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q147.library.recorded"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "entry_car_ready",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q147.library.entry_car_ready"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q147.library.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "一番遅い配達の相談卓",
+      "mountain": "高台街道の山道側",
+      "water": "サロメの静かな水路沿い",
+      "receiver": "引退した舞踊家の家",
+      "rest": "翌晩まで花を休める保管室",
+      "record": "速達競技の記録受付",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "mountain"
+      ],
+      [
+        "transit",
+        "water"
+      ],
+      [
+        "transit",
+        "receiver"
+      ],
+      [
+        "transit",
+        "rest"
+      ],
+      [
+        "transit",
+        "record"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "mountain",
+          "water",
+          "receiver",
+          "rest",
+          "record",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "quiet",
+          "tomorrow",
+          "record"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "flowerClosed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "flowerClosed"
+      },
+      "carPaid": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "carPaid"
+      },
+      "redeliveryAgreed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "redeliveryAgreed"
+      },
+      "delivered": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "delivered"
+      },
+      "overnight": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "overnight"
+      },
+      "deliveryFailed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "deliveryFailed"
+      },
+      "deliveryMode": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "mountain",
+          "water",
+          "car"
+        ],
+        "meaning": "選んだ運搬経路"
+      },
+      "flowerAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "mountain",
+          "water",
+          "receiver",
+          "rest",
+          "record",
+          "transit",
+          "party"
+        ],
+        "meaning": "flower の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "flower": {
+        "holder": "flowerAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "近道を走るほど花は閉じ、到着が早くても受取条件を満たさない。店主は条件を知りながら宣伝の速さだけを強調している。出発前に花の扱い札を読めるようにし、到着後の隠し減点にはしない。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "一番遅い配達の相談卓",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "closed": {
+        "title": "引退した舞踊家の家",
+        "place": "receiver",
+        "cast": [],
+        "requires": true
+      },
+      "mountain": {
+        "title": "高台街道の山道側",
+        "place": "mountain",
+        "cast": [],
+        "requires": true
+      },
+      "water": {
+        "title": "サロメの静かな水路沿い",
+        "place": "water",
+        "cast": [],
+        "requires": true
+      },
+      "car": {
+        "title": "高台街道の山道側",
+        "place": "mountain",
+        "cast": [],
+        "requires": true
+      },
+      "quiet_arrival": {
+        "title": "引退した舞踊家の家",
+        "place": "receiver",
+        "cast": [],
+        "requires": true
+      },
+      "rest": {
+        "title": "翌晩まで花を休める保管室",
+        "place": "rest",
+        "cast": [],
+        "requires": true
+      },
+      "tomorrow_arrival": {
+        "title": "引退した舞踊家の家",
+        "place": "receiver",
+        "cast": [],
+        "requires": true
+      },
+      "recorded": {
+        "title": "速達競技の記録受付",
+        "place": "record",
+        "cast": [],
+        "requires": true
+      },
+      "entry_car_ready": {
+        "title": "一番遅い配達の相談卓",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_run": {
+        "from": [
+          "entry"
+        ],
+        "to": "mountain",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "mountain"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "flowerClosed",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "mountain",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "flower",
+            "from": "entry",
+            "to": "party"
+          },
+          {
+            "op": "set",
+            "key": "deliveryMode",
+            "value": "mountain"
+          }
+        ]
+      },
+      "entry_water": {
+        "from": [
+          "entry"
+        ],
+        "to": "water",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "water"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "water",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "flower",
+            "from": "entry",
+            "to": "party"
+          },
+          {
+            "op": "set",
+            "key": "deliveryMode",
+            "value": "water"
+          }
+        ]
+      },
+      "entry_car": {
+        "from": [
+          "entry"
+        ],
+        "to": "entry_car_ready",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "carPaid",
+            "value": true
+          }
+        ],
+        "cost": {
+          "gold": 30
+        },
+        "once": false
+      },
+      "closed_tomorrow": {
+        "from": [
+          "closed"
+        ],
+        "to": "rest",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "rest"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "flower",
+            "from": "party",
+            "to": "rest"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "rest",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "redeliveryAgreed",
+            "value": true
+          }
+        ]
+      },
+      "closed_record": {
+        "from": [
+          "closed"
+        ],
+        "to": "recorded",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "record"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "record",
+          "companions": []
+        },
+        "depart": []
+      },
+      "mountain_deliver": {
+        "from": [
+          "mountain"
+        ],
+        "to": "closed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "receiver"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "receiver",
+          "companions": []
+        },
+        "depart": []
+      },
+      "water_deliver": {
+        "from": [
+          "water"
+        ],
+        "to": "quiet_arrival",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "receiver"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "receiver",
+          "companions": []
+        },
+        "depart": []
+      },
+      "car_deliver": {
+        "from": [
+          "car"
+        ],
+        "to": "quiet_arrival",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "receiver"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "receiver",
+          "companions": []
+        },
+        "depart": []
+      },
+      "quiet_arrival_finish": {
+        "from": [
+          "quiet_arrival"
+        ],
+        "ending": "quiet",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "flower",
+            "from": "party",
+            "to": "receiver"
+          },
+          {
+            "op": "set",
+            "key": "delivered",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "quiet"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "rest_next": {
+        "from": [
+          "rest"
+        ],
+        "to": "tomorrow_arrival",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "receiver"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "receiver",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "flower",
+            "from": "rest",
+            "to": "party"
+          },
+          {
+            "op": "set",
+            "key": "overnight",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "flowerClosed",
+            "value": false
+          }
+        ]
+      },
+      "tomorrow_arrival_finish": {
+        "from": [
+          "tomorrow_arrival"
+        ],
+        "ending": "tomorrow",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "flower",
+            "from": "party",
+            "to": "receiver"
+          },
+          {
+            "op": "set",
+            "key": "delivered",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "tomorrow"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "recorded_finish": {
+        "from": [
+          "recorded"
+        ],
+        "ending": "record",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "flower",
+            "from": "party",
+            "to": "record"
+          },
+          {
+            "op": "set",
+            "key": "deliveryFailed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "record"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "entry_car_ready_continue": {
+        "from": [
+          "entry_car_ready"
+        ],
+        "to": "car",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "mountain"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "mountain",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "flower",
+            "from": "entry",
+            "to": "party"
+          },
+          {
+            "op": "set",
+            "key": "deliveryMode",
+            "value": "car"
+          }
+        ]
+      }
+    },
+    "endings": {
+      "quiet": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q147.values.resolution"
+            },
+            "right": "quiet"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q147.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q147.values.partyAt"
+                },
+                "right": "receiver"
+              }
+            ]
+          }
+        ]
+      },
+      "tomorrow": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q147.values.resolution"
+            },
+            "right": "tomorrow"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q147.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q147.values.partyAt"
+                },
+                "right": "receiver"
+              }
+            ]
+          }
+        ]
+      },
+      "record": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q147.values.resolution"
+            },
+            "right": "record"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q147.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q147.values.partyAt"
+                },
+                "right": "record"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_5",
+        "map": "region_5_f2",
+        "x": 4,
+        "y": 1
+      },
+      "mountain": {
+        "kind": "dungeon",
+        "dungeon": "salome_road",
+        "map": "e2_highland_lower",
+        "x": 13,
+        "y": 5
+      },
+      "water": {
+        "kind": "dungeon",
+        "dungeon": "salome_road",
+        "map": "e2_salome_canal",
+        "x": 9,
+        "y": 3
+      },
+      "receiver": {
+        "kind": "town",
+        "location": "library_dancer"
+      },
+      "rest": {
+        "kind": "town",
+        "location": "library_flower_rest"
+      },
+      "record": {
+        "kind": "town",
+        "location": "library_post"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "salome",
+  "receptionLocations": [
+    "salome_board"
+  ]
+}

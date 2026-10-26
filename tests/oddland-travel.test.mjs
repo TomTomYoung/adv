@@ -36,7 +36,7 @@ function inward(g){
 }
 
 test('first-edition geography stays byte-derived and only the second edition has the border',async()=>{
-  assert.equal(Object.keys(first.maps).length,56);assert.equal(Object.keys(data.maps).length,82);
+  assert.equal(Object.keys(first.maps).length,56);assert.equal(Object.keys(data.maps).length,83);
   assert.equal(first.worldTravel,undefined);assert.equal(first.locations.oddland_border,undefined);
   assert.deepEqual(first.maps.region_1_landing.tiles,(await read('data/maps/region_1_landing.json')).tiles);
   assert.equal(data.maps.region_1_landing.objects.filter(o=>o.id==='oddland_route_sign').length,1);

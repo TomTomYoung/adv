@@ -22,7 +22,7 @@ for(const phase of ['east','west'])test(`all original-floor story destinations r
  for(let n=81;n<=90;n++)for(const p of Object.values(data.quests['q0'+n].story.worldPlaces))if(p.dungeon==='region_9')go(g,p);
  go(g,{kind:'town',location:'royal_board'});assert.deepEqual(g.state.dungeons.persistent.region_9.systems.terrain,terrain);checkpoint(g);
 });
-test('all twenty identities, unlocks, outcomes and rewards remain intact; the expanded edition has eighty-two maps and twenty dungeon definitions',async()=>{
+test('all twenty identities, unlocks, outcomes and rewards remain intact; the expanded edition has eighty-three maps and twenty dungeon definitions',async()=>{
  for(const n of numbers){const id='q'+String(n).padStart(3,'0'),old=await read('data/quests/'+id+'.json'),q=data.quests[id];for(const key of ['id','number','region','title','requires','outcomes'])assert.deepEqual(q[key],old[key],id+'/'+key);assert.equal(q.settlement,'oddland_village');assert.deepEqual(q.receptionLocations,['royal_board']);assert.equal(q.model.preserveAcceptedRoute,true);}
- assert.equal(Object.keys(data.maps).length,82);assert.equal(Object.keys(data.dungeons).length,20);assert.equal(Object.keys(data.quests).length,300);assert.equal(data.scenarioEditions.editions.e2.saveRevision,2);
+ assert.equal(Object.keys(data.maps).length,83);assert.equal(Object.keys(data.dungeons).length,20);assert.equal(Object.keys(data.quests).length,300);assert.equal(data.scenarioEditions.editions.e2.saveRevision,2);
 });

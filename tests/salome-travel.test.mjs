@@ -9,7 +9,7 @@ import {locationRoot} from '../src/core/world.js';
 import {oilStore,oilTotal} from '../src/core/expedition-oil.js';
 import {read,data,fresh,go,town,walk,drain,checkpoint} from './oddland-helpers.mjs';
 
-const previous=await loadContent(async file=>{const value=await read(file);if(file==='data/scenario-editions.json')delete value.editions.e2.geographyUpgrade;if(file==='data/scenario-editions.json')for(let n=41;n<=50;n++)delete value.editions.e2.questOverrides['q0'+n];return value;},{edition:'e2'});
+const previous=await loadContent(async file=>{const value=await read(file);if(file==='data/scenario-editions.json')delete value.editions.e2.geographyUpgrade;if(file==='data/scenario-editions.json'){for(let n=41;n<=50;n++)delete value.editions.e2.questOverrides['q0'+n];for(let n=141;n<=150;n++)delete value.editions.e2.questOverrides['q'+n];}return value;},{edition:'e2'});
 const city=['e2_academy','e2_archive','e2_stacks','e2_workshop','e2_relic','e2_storage'];
 const personal=Object.values(data.quests).filter(q=>['il','mica'].includes(q.model?.companion));
 const cross=(g,route)=>assert.ok(g.dispatch({type:'world.cross',route}),g.state.notice);
@@ -27,7 +27,7 @@ function oldReady(q){
 }
 
 test('Salome reuses the six existing facilities, preserves twenty stories and all old dungeon geography',async()=>{
- assert.equal(Object.keys(data.maps).length,82);assert.equal(Object.keys(data.dungeons).length,20);assert.equal(Object.keys(data.quests).length,300);
+ assert.equal(Object.keys(data.maps).length,83);assert.equal(Object.keys(data.dungeons).length,20);assert.equal(Object.keys(data.quests).length,300);
  assert.equal(data.scenarioEditions.editions.e2.saveRevision,2);assert.equal(data.worldTravel.version,2);
  assert.ok(city.every(id=>locationRoot(data,id).id==='e2_academy'));assert.equal(personal.length,20);
  for(const q of personal){assert.deepEqual(q,previous.quests[q.id]);assert.equal(data.worldTravel.questSettlements[q.id],'salome');}
