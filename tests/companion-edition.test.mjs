@@ -52,7 +52,7 @@ test('e2 adds exactly eight ten-quest arcs, locations and presentation order wit
  for(const id of Object.keys(first.quests))if(!Object.hasOwn(data.scenarioEditions.editions.e2.questOverrides,id))assert.deepEqual(data.quests[id],first.quests[id]);
  for(const id of Object.keys(first.locations).filter(id=>id!=='hikarigaeri_square'))assert.deepEqual(data.locations[id],first.locations[id]);
  assert.deepEqual(data.actors,first.actors);for(const [id,map] of Object.entries(first.maps))assert.deepEqual(data.maps[id].tiles,map.tiles);
- for(const id of Object.keys(first.maps))if(!['region_1_landing','region_4_f1','region_4_f2','region_7_f1','region_7_f2'].includes(id))assert.deepEqual(data.maps[id],first.maps[id]);
+ for(const id of Object.keys(first.maps))if(!['region_1_landing','region_4_f1','region_4_f2','region_7_f1','region_7_f2','region_9_f1','region_9_f2'].includes(id))assert.deepEqual(data.maps[id],first.maps[id]);
  const g=ready('nio'),view=projectGame(g);assert.equal(view.quests.length,300);assert.equal(new Set(view.quests.map(q=>q.id)).size,300);
  assert.equal(view.quests.find(q=>q.id==='q221').regionName,'仲間と巡るトルネア');
  assert.equal(g.dispatch({type:'travel',region:11}),false);

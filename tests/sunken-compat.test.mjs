@@ -23,6 +23,3 @@ test('available saves adopt the new route only at acceptance; mixed chapter save
  start(now,'q062');choose(now,'q062','names');const before=now.save();
  for(const mutate of [s=>delete s.flags.currentStoryRoutes.q062,s=>{s.flags.legacyStoryRoutes={q062:true};},s=>{s.flags.currentStoryRoutes.q061=false;}]){const bad=JSON.parse(before);mutate(bad.state);assert.throws(()=>now.load(JSON.stringify(bad)));assert.equal(now.save(),before);}
 });
-for(const n of [...Array.from({length:10},(_,i)=>81+i),...Array.from({length:10},(_,i)=>181+i)]){const id='q'+String(n).padStart(3,'0');test(`${id}: village reception retains all original event-hub endings`,()=>{
- auditQuest(data,id,{makeFixture:(_data,_id,options={})=>{const g=ready();go(g,{kind:'town',location:'royal_board'});g.state.vars.region_9=3;if(options.absent)assert.ok(g.dispatch({type:'party',action:'leave',actor:options.absent}));assert.ok(g.accept(id));const q=data.quests[id],p=q.locations.find(p=>p.role==='decision');g.teleport(p.map,p.x,p.y);delete g.random;g.run(q.model.entryScript??id+'.visit');return g;}});
-});}

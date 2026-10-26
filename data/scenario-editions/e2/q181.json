@@ -1,0 +1,2191 @@
+{
+  "schemaVersion": 1,
+  "id": "q181",
+  "number": 181,
+  "title": "白い矢筒",
+  "client": "新任の弓兵隊長",
+  "brief": "敵陣へ矢文を届ける護衛をお願いする。",
+  "region": 9,
+  "type": "scene_graph",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 旧王領の村の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q181_scene",
+      "title": "白い矢筒：新任の弓兵隊長",
+      "points": [
+        {
+          "map": "region_9_f1",
+          "x": 3,
+          "y": 1,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q181.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q181.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q181.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q181"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "q181_observatory_entry",
+      "title": "白い矢筒を準備する陣地",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q181.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q181.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q181"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q181.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_front",
+          "x": 1,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "id": "q181_observatory_mercenaries",
+      "title": "慣習を伝える傭兵の持場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "mercenaries",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q181.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q181.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q181"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q181.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_front",
+          "x": 5,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "id": "q181_observatory_signal",
+      "title": "返礼を受ける前線",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "signal",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q181.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q181.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q181"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q181.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_front",
+          "x": 9,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "id": "q181_observatory_meeting",
+      "title": "使者が対面する場所",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "meeting",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q181.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q181.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q181"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q181.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_front",
+          "x": 13,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "id": "q181_observatory_rescue",
+      "title": "誤射された使者の退避先",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "rescue",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q181.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q181.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q181"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q181.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_front",
+          "x": 5,
+          "y": 7
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_9_f1",
+      "x": 3,
+      "y": 1,
+      "object": "q181_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "meet": {
+      "label": "短い休戦",
+      "text": "遺体を回収する時間を結んだ。隊長は古参へ白い矢筒を返す時、部下の前で使い方を尋ねた。",
+      "gold": 153,
+      "xp": 99
+    },
+    "rescue": {
+      "label": "誤射からの救援",
+      "text": "慣習を知らない傭兵が誤射した。使者を救援し、印だけで安全とした手順を見直した。",
+      "gold": 153,
+      "xp": 99
+    },
+    "withdraw": {
+      "label": "別の伝達路",
+      "text": "停戦が成立したとは報告せず、別の使者と伝達方法を探した。白い筒は次の説明のため残した。",
+      "gold": 153,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/observatory-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38166a207eb49f89ac578",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "古参が矢尻を外す動作を、戦闘準備不足に見せる。敵側からも同じ白い筒が掲げられ、双方に共有する慣習と分かる。ただし慣習を知らない傭兵も戦場におり、印だけで安全が保証されない。",
+      "fixedPast": "弓兵隊長は、敵陣へ矢文を届ける護衛を頼む。白い矢筒は停戦使者の印だが、新任隊長はその意味を知らず、古参の臆病さと思っている。古参は部下の前で訂正して隊長の面目を潰したくない。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "新任の弓兵隊長",
+        "beliefsAndGoals": "弓兵隊長は、敵陣へ矢文を届ける護衛を頼む。白い矢筒は停戦使者の印だが、新任隊長はその意味を知らず、古参の臆病さと思っている。古参は部下の前で訂正して隊長の面目を潰したくない。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "敵陣へ矢文を届ける護衛をお願いする。"
+      }
+    ],
+    "conflict": {
+      "design": "準備→古参へ質問／直ちに前線→信号交換→対面／撤回。慣習を知り通達すれば安全な会談路、通達なしなら誤射の騒動から救援場面へ移る。返礼がなければ勝手に停戦成立とせず戻れる。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q181.observatory.entry"
+        },
+        {
+          "id": "signal",
+          "script": "q181.observatory.signal"
+        },
+        {
+          "id": "briefed",
+          "script": "q181.observatory.briefed"
+        },
+        {
+          "id": "meeting",
+          "script": "q181.observatory.meeting"
+        },
+        {
+          "id": "agreed",
+          "script": "q181.observatory.agreed"
+        },
+        {
+          "id": "misfire",
+          "script": "q181.observatory.misfire"
+        },
+        {
+          "id": "rescued",
+          "script": "q181.observatory.rescued"
+        },
+        {
+          "id": "rescue_report",
+          "script": "q181.observatory.rescue_report"
+        },
+        {
+          "id": "withdrawn",
+          "script": "q181.observatory.withdrawn"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "敵陣へ矢文を届ける護衛をお願いする。"
+    },
+    "reveal": {
+      "newInformation": "古参が矢尻を外す動作を、戦闘準備不足に見せる。敵側からも同じ白い筒が掲げられ、双方に共有する慣習と分かる。ただし慣習を知らない傭兵も戦場におり、印だけで安全が保証されない。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q181.scene.entry"
+      },
+      {
+        "id": "signal",
+        "script": "q181.scene.signal"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q181.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q181.notice",
+        "meaning": "作者原稿の notice に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "古参は矢尻を外し、白い矢筒を掲げた。隊長は臆病だと笑う。敵側にも同じ筒が上がったが、傭兵はまだ弓を構えている。",
+        "options": [
+          {
+            "id": "ask",
+            "text": "古参から慣習を聞き、傭兵へも通達する",
+            "to": "briefed",
+            "action": "entry_ask"
+          },
+          {
+            "id": "front",
+            "text": "通達せず直ちに前へ出る",
+            "to": "misfire",
+            "action": "entry_front"
+          },
+          {
+            "id": "withdraw",
+            "text": "今の伝達は撤回する",
+            "to": "withdrawn",
+            "action": "entry_withdraw"
+          }
+        ]
+      },
+      {
+        "id": "signal",
+        "place": "signal",
+        "text": "返礼が届いた。示すのは戦争全体の終結でなく、この使者が話すための道だ。",
+        "options": [
+          {
+            "id": "meet",
+            "text": "遺体回収に限った短い休戦を結ぶ",
+            "to": "meeting",
+            "action": "signal_meet"
+          },
+          {
+            "id": "withdraw",
+            "text": "対面せず撤回する",
+            "to": "withdrawn",
+            "action": "signal_withdraw"
+          }
+        ]
+      },
+      {
+        "id": "briefed",
+        "place": "mercenaries",
+        "text": "古参と傭兵の持場へ来て、白い矢筒の慣習と使者の通る道を説明した。",
+        "options": [
+          {
+            "id": "signal",
+            "text": "使者と前線へ出て返礼を確かめる",
+            "to": "signal",
+            "action": "briefed_signal"
+          }
+        ]
+      },
+      {
+        "id": "meeting",
+        "place": "meeting",
+        "text": "使者が対面した。遺体回収に限る短い休戦の時間を取り決める。",
+        "options": [
+          {
+            "id": "return",
+            "text": "取り決めを陣地へ持ち帰る",
+            "to": "agreed",
+            "action": "meeting_return"
+          }
+        ]
+      },
+      {
+        "id": "agreed",
+        "place": "entry",
+        "text": "陣地へ戻り、合意した時間と範囲を隊長へ報告する。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@meet",
+            "action": "agreed_finish"
+          }
+        ]
+      },
+      {
+        "id": "misfire",
+        "place": "signal",
+        "text": "使者と前へ出ると、通達を受けていない傭兵が誤射した。使者を退避させる。",
+        "options": [
+          {
+            "id": "rescue",
+            "text": "使者と退避先へ移る",
+            "to": "rescued",
+            "action": "misfire_rescue"
+          }
+        ]
+      },
+      {
+        "id": "rescued",
+        "place": "rescue",
+        "text": "使者を前線から運び出した。陣地へ戻り、印だけに頼った手順を伝え直す。",
+        "options": [
+          {
+            "id": "return",
+            "text": "使者と陣地へ帰る",
+            "to": "rescue_report",
+            "action": "rescued_return"
+          }
+        ]
+      },
+      {
+        "id": "rescue_report",
+        "place": "entry",
+        "text": "使者が陣地へ戻った。誤射と救援を報告し、伝達の手順を見直す。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@rescue",
+            "action": "rescue_report_finish"
+          }
+        ]
+      },
+      {
+        "id": "withdrawn",
+        "place": "entry",
+        "text": "使者と陣地へ戻り、今回の伝達を撤回したと報告する。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@withdraw",
+            "action": "withdrawn_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "entryScript": "q181.observatory.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "observatory-twenty",
+      "settlement": "oddland_village",
+      "saveRevision": 2,
+      "scope": "観測所20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q181.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q181.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "古参は矢尻を外し、白い矢筒を掲げた。隊長は臆病だと笑う。敵側にも同じ筒が上がったが、傭兵はまだ弓を構えている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "ask",
+              "text": "古参から慣習を聞き、傭兵へも通達する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q181.notice",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q181.scene.signal"
+                }
+              ]
+            },
+            {
+              "id": "front",
+              "text": "通達せず直ちに前へ出る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q181.end.rescue"
+                }
+              ]
+            },
+            {
+              "id": "withdraw",
+              "text": "今の伝達は撤回する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q181.end.withdraw"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q181.scene.signal": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q181.node",
+          "value": "signal"
+        },
+        {
+          "op": "say",
+          "text": "返礼が届いた。示すのは戦争全体の終結でなく、この使者が話すための道だ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "meet",
+              "text": "遺体回収に限った短い休戦を結ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q181.end.meet"
+                }
+              ]
+            },
+            {
+              "id": "withdraw",
+              "text": "対面せず撤回する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q181.end.withdraw"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q181.end.meet": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q181.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "遺体を回収する時間を結んだ。隊長は古参へ白い矢筒を返す時、部下の前で使い方を尋ねた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q181",
+              "outcome": "meet"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q181.end.rescue": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q181.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "慣習を知らない傭兵が誤射した。使者を救援し、印だけで安全とした手順を見直した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q181",
+              "outcome": "rescue"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q181.end.withdraw": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q181.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "停戦が成立したとは報告せず、別の使者と伝達方法を探した。白い筒は次の説明のため残した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q181",
+              "outcome": "withdraw"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q181.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q181.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q181.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "meet",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "遺体を回収する時間を結んだ。隊長は古参へ白い矢筒を返す時、部下の前で使い方を尋ねた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "rescue",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "慣習を知らない傭兵が誤射した。使者を救援し、印だけで安全とした手順を見直した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "withdraw",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "停戦が成立したとは報告せず、別の使者と伝達方法を探した。白い筒は次の説明のため残した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q181.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q181.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "signal",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q181.scene.signal"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q181.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q181.observatory.entry": {
+      "storyQuest": "q181",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q181",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "古参は矢尻を外し、白い矢筒を掲げた。隊長は臆病だと笑う。敵側にも同じ筒が上がったが、傭兵はまだ弓を構えている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "ask",
+              "text": "古参から慣習を聞き、傭兵へも通達する",
+              "storyAction": {
+                "quest": "q181",
+                "action": "entry_ask"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q181",
+                  "action": "entry_ask"
+                }
+              ]
+            },
+            {
+              "id": "front",
+              "text": "通達せず直ちに前へ出る",
+              "storyAction": {
+                "quest": "q181",
+                "action": "entry_front"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q181",
+                  "action": "entry_front"
+                }
+              ]
+            },
+            {
+              "id": "withdraw",
+              "text": "今の伝達は撤回する",
+              "storyAction": {
+                "quest": "q181",
+                "action": "entry_withdraw"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q181",
+                  "action": "entry_withdraw"
+                },
+                {
+                  "op": "jump",
+                  "script": "q181.observatory.withdrawn"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q181.observatory.signal": {
+      "storyQuest": "q181",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q181",
+          "scene": "signal"
+        },
+        {
+          "op": "narrate",
+          "text": "返礼が届いた。示すのは戦争全体の終結でなく、この使者が話すための道だ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "meet",
+              "text": "遺体回収に限った短い休戦を結ぶ",
+              "storyAction": {
+                "quest": "q181",
+                "action": "signal_meet"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q181",
+                  "action": "signal_meet"
+                }
+              ]
+            },
+            {
+              "id": "withdraw",
+              "text": "対面せず撤回する",
+              "storyAction": {
+                "quest": "q181",
+                "action": "signal_withdraw"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q181",
+                  "action": "signal_withdraw"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q181.observatory.briefed": {
+      "storyQuest": "q181",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q181",
+          "scene": "briefed"
+        },
+        {
+          "op": "narrate",
+          "text": "古参と傭兵の持場へ来て、白い矢筒の慣習と使者の通る道を説明した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "signal",
+              "text": "使者と前線へ出て返礼を確かめる",
+              "storyAction": {
+                "quest": "q181",
+                "action": "briefed_signal"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q181",
+                  "action": "briefed_signal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q181.observatory.meeting": {
+      "storyQuest": "q181",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q181",
+          "scene": "meeting"
+        },
+        {
+          "op": "narrate",
+          "text": "使者が対面した。遺体回収に限る短い休戦の時間を取り決める。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "取り決めを陣地へ持ち帰る",
+              "storyAction": {
+                "quest": "q181",
+                "action": "meeting_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q181",
+                  "action": "meeting_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q181.observatory.agreed": {
+      "storyQuest": "q181",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q181",
+          "scene": "agreed"
+        },
+        {
+          "op": "narrate",
+          "text": "陣地へ戻り、合意した時間と範囲を隊長へ報告する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q181",
+                "action": "agreed_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q181",
+                  "action": "agreed_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q181.observatory.end.meet"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q181.observatory.misfire": {
+      "storyQuest": "q181",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q181",
+          "scene": "misfire"
+        },
+        {
+          "op": "narrate",
+          "text": "使者と前へ出ると、通達を受けていない傭兵が誤射した。使者を退避させる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "rescue",
+              "text": "使者と退避先へ移る",
+              "storyAction": {
+                "quest": "q181",
+                "action": "misfire_rescue"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q181",
+                  "action": "misfire_rescue"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q181.observatory.rescued": {
+      "storyQuest": "q181",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q181",
+          "scene": "rescued"
+        },
+        {
+          "op": "narrate",
+          "text": "使者を前線から運び出した。陣地へ戻り、印だけに頼った手順を伝え直す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "使者と陣地へ帰る",
+              "storyAction": {
+                "quest": "q181",
+                "action": "rescued_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q181",
+                  "action": "rescued_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q181.observatory.rescue_report": {
+      "storyQuest": "q181",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q181",
+          "scene": "rescue_report"
+        },
+        {
+          "op": "narrate",
+          "text": "使者が陣地へ戻った。誤射と救援を報告し、伝達の手順を見直す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q181",
+                "action": "rescue_report_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q181",
+                  "action": "rescue_report_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q181.observatory.end.rescue"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q181.observatory.withdrawn": {
+      "storyQuest": "q181",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q181",
+          "scene": "withdrawn"
+        },
+        {
+          "op": "narrate",
+          "text": "使者と陣地へ戻り、今回の伝達を撤回したと報告する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q181",
+                "action": "withdrawn_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q181",
+                  "action": "withdrawn_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q181.observatory.end.withdraw"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q181.observatory.end.meet": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "遺体を回収する時間を結んだ。隊長は古参へ白い矢筒を返す時、部下の前で使い方を尋ねた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.meet",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q181",
+          "outcome": "meet"
+        }
+      ]
+    },
+    "q181.observatory.end.rescue": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "慣習を知らない傭兵が誤射した。使者を救援し、印だけで安全とした手順を見直した。"
+        },
+        {
+          "op": "add",
+          "target": "vars.rescue",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q181",
+          "outcome": "rescue"
+        }
+      ]
+    },
+    "q181.observatory.end.withdraw": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "停戦が成立したとは報告せず、別の使者と伝達方法を探した。白い筒は次の説明のため残した。"
+        },
+        {
+          "op": "add",
+          "target": "vars.withdraw",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q181",
+          "outcome": "withdraw"
+        }
+      ]
+    },
+    "q181.observatory.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q181"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q181.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q181.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q181.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "meet",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "遺体を回収する時間を結んだ。隊長は古参へ白い矢筒を返す時、部下の前で使い方を尋ねた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "rescue",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "慣習を知らない傭兵が誤射した。使者を救援し、印だけで安全とした手順を見直した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "withdraw",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "停戦が成立したとは報告せず、別の使者と伝達方法を探した。白い筒は次の説明のため残した。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q181"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q181.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q181.observatory.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "signal",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q181.observatory.signal"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "briefed",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q181.observatory.briefed"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "meeting",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q181.observatory.meeting"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "agreed",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q181.observatory.agreed"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "misfire",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q181.observatory.misfire"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "rescued",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q181.observatory.rescued"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "rescue_report",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q181.observatory.rescue_report"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "withdrawn",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q181.observatory.withdrawn"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q181.observatory.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "白い矢筒を準備する陣地",
+      "mercenaries": "慣習を伝える傭兵の持場",
+      "signal": "返礼を受ける前線",
+      "meeting": "使者が対面する場所",
+      "rescue": "誤射された使者の退避先",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "mercenaries"
+      ],
+      [
+        "transit",
+        "signal"
+      ],
+      [
+        "transit",
+        "meeting"
+      ],
+      [
+        "transit",
+        "rescue"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "mercenaries",
+          "signal",
+          "meeting",
+          "rescue",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "meet",
+          "rescue",
+          "withdraw"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "notice": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "notice"
+      },
+      "agreed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "agreed"
+      },
+      "envoyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "mercenaries",
+          "signal",
+          "meeting",
+          "rescue",
+          "transit"
+        ],
+        "meaning": "envoy の所在または保持者"
+      },
+      "veteranAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "mercenaries",
+          "signal",
+          "meeting",
+          "rescue",
+          "transit"
+        ],
+        "meaning": "veteran の所在または保持者"
+      },
+      "captainAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "mercenaries",
+          "signal",
+          "meeting",
+          "rescue",
+          "transit"
+        ],
+        "meaning": "captain の所在または保持者"
+      },
+      "quiverAt": {
+        "type": "enum",
+        "initial": "envoy",
+        "values": [
+          "entry",
+          "mercenaries",
+          "signal",
+          "meeting",
+          "rescue",
+          "transit",
+          "party",
+          "envoy",
+          "veteran",
+          "captain"
+        ],
+        "meaning": "quiver の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "envoy": {
+        "holder": "envoyAt",
+        "kind": "person"
+      },
+      "veteran": {
+        "holder": "veteranAt",
+        "kind": "person"
+      },
+      "captain": {
+        "holder": "captainAt",
+        "kind": "person"
+      },
+      "quiver": {
+        "holder": "quiverAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "古参が矢尻を外す動作を、戦闘準備不足に見せる。敵側からも同じ白い筒が掲げられ、双方に共有する慣習と分かる。ただし慣習を知らない傭兵も戦場におり、印だけで安全が保証されない。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "白い矢筒を準備する陣地",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "signal": {
+        "title": "返礼を受ける前線",
+        "place": "signal",
+        "cast": [],
+        "requires": true
+      },
+      "briefed": {
+        "title": "慣習を伝える傭兵の持場",
+        "place": "mercenaries",
+        "cast": [],
+        "requires": true
+      },
+      "meeting": {
+        "title": "使者が対面する場所",
+        "place": "meeting",
+        "cast": [],
+        "requires": true
+      },
+      "agreed": {
+        "title": "白い矢筒を準備する陣地",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "misfire": {
+        "title": "返礼を受ける前線",
+        "place": "signal",
+        "cast": [],
+        "requires": true
+      },
+      "rescued": {
+        "title": "誤射された使者の退避先",
+        "place": "rescue",
+        "cast": [],
+        "requires": true
+      },
+      "rescue_report": {
+        "title": "白い矢筒を準備する陣地",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "withdrawn": {
+        "title": "白い矢筒を準備する陣地",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_ask": {
+        "from": [
+          "entry"
+        ],
+        "to": "briefed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "envoy",
+              "veteran"
+            ],
+            "path": [
+              "transit",
+              "mercenaries"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "notice",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "mercenaries",
+          "companions": [
+            "envoy",
+            "veteran"
+          ]
+        },
+        "depart": []
+      },
+      "entry_front": {
+        "from": [
+          "entry"
+        ],
+        "to": "misfire",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "envoy",
+              "veteran"
+            ],
+            "path": [
+              "transit",
+              "signal"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "signal",
+          "companions": [
+            "envoy",
+            "veteran"
+          ]
+        },
+        "depart": []
+      },
+      "entry_withdraw": {
+        "from": [
+          "entry"
+        ],
+        "to": "withdrawn",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "signal_meet": {
+        "from": [
+          "signal"
+        ],
+        "to": "meeting",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "envoy",
+              "veteran"
+            ],
+            "path": [
+              "transit",
+              "meeting"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "meeting",
+          "companions": [
+            "envoy",
+            "veteran"
+          ]
+        },
+        "depart": []
+      },
+      "signal_withdraw": {
+        "from": [
+          "signal"
+        ],
+        "to": "withdrawn",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "envoy",
+              "veteran"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "envoy",
+            "veteran"
+          ]
+        },
+        "depart": []
+      },
+      "briefed_signal": {
+        "from": [
+          "briefed"
+        ],
+        "to": "signal",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "envoy",
+              "veteran"
+            ],
+            "path": [
+              "transit",
+              "signal"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "signal",
+          "companions": [
+            "envoy",
+            "veteran"
+          ]
+        },
+        "depart": []
+      },
+      "meeting_return": {
+        "from": [
+          "meeting"
+        ],
+        "to": "agreed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "envoy",
+              "veteran"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "envoy",
+            "veteran"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "agreed",
+            "value": true
+          }
+        ]
+      },
+      "agreed_finish": {
+        "from": [
+          "agreed"
+        ],
+        "ending": "meet",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "quiver",
+            "from": "envoy",
+            "to": "captain"
+          },
+          {
+            "op": "transfer",
+            "entity": "quiver",
+            "from": "captain",
+            "to": "veteran"
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "meet"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "misfire_rescue": {
+        "from": [
+          "misfire"
+        ],
+        "to": "rescued",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "envoy",
+              "veteran"
+            ],
+            "path": [
+              "transit",
+              "rescue"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "rescue",
+          "companions": [
+            "envoy",
+            "veteran"
+          ]
+        },
+        "depart": []
+      },
+      "rescued_return": {
+        "from": [
+          "rescued"
+        ],
+        "to": "rescue_report",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "envoy",
+              "veteran"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "envoy",
+            "veteran"
+          ]
+        },
+        "depart": []
+      },
+      "rescue_report_finish": {
+        "from": [
+          "rescue_report"
+        ],
+        "ending": "rescue",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "rescue"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "withdrawn_finish": {
+        "from": [
+          "withdrawn"
+        ],
+        "ending": "withdraw",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "withdraw"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "meet": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q181.values.resolution"
+            },
+            "right": "meet"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q181.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q181.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "rescue": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q181.values.resolution"
+            },
+            "right": "rescue"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q181.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q181.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "withdraw": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q181.values.resolution"
+            },
+            "right": "withdraw"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q181.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q181.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_front",
+        "x": 1,
+        "y": 3
+      },
+      "mercenaries": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_front",
+        "x": 5,
+        "y": 3
+      },
+      "signal": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_front",
+        "x": 9,
+        "y": 3
+      },
+      "meeting": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_front",
+        "x": 13,
+        "y": 3
+      },
+      "rescue": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_front",
+        "x": 5,
+        "y": 7
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_village",
+  "receptionLocations": [
+    "royal_board"
+  ]
+}

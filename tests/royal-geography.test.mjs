@@ -24,7 +24,7 @@ for(const id of ['region_7','region_9'])for(const kind of ['exit','cross','mark'
 });
 test('all forty receptions move together; inherited dungeon definitions and first-edition quests stay unchanged',async()=>{
  for(const id of ['region_7','region_9']){assert.deepEqual(data.dungeons[id],previous.dungeons[id]);assert.ok(!data.locations.hikarigaeri_square.dungeons.includes(id));for(const map of data.dungeons[id].maps){const withoutQuestObjects=m=>({...m,objects:m.objects.filter(o=>!o.quest)});assert.deepEqual(withoutQuestObjects(data.maps[map]),withoutQuestObjects(previous.maps[map]));}}
- assert.equal(Object.keys(data.maps).length,72);assert.equal(Object.keys(data.dungeons).length,17);assert.equal(Object.keys(data.quests).length,300);assert.equal(data.scenarioEditions.editions.e2.saveRevision,2);
+ assert.equal(Object.keys(data.maps).length,80);assert.equal(Object.keys(data.dungeons).length,19);assert.equal(Object.keys(data.quests).length,300);assert.equal(data.scenarioEditions.editions.e2.saveRevision,2);
  const g=ready();for(const id of ['q061','q081','q161','q181'])assert.equal(g.accept(id),false);for(const id of ['region_7','region_9'])assert.equal(g.dispatch({type:'travel',dungeon:id}),false);
  roadGo(g,{kind:'town',location:'royal_board'});assert.equal(projectGame(g).quests.filter(q=>q.stage==='available'&&q.receptionHere).length,40);
  assert.equal(g.accept('q070'),false);assert.equal(g.accept('q090'),false);

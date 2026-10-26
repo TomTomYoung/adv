@@ -1,0 +1,2816 @@
+{
+  "schemaVersion": 1,
+  "id": "q086",
+  "number": 86,
+  "title": "百年前の観測者",
+  "client": "観測士のシオ",
+  "brief": "百年前の日付で観測報告が続く。書いた者を探してください。",
+  "region": 9,
+  "type": "authored_progression",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。 旧王領の村の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q086_clue_a",
+      "title": "百年前の観測者：現場の痕跡",
+      "points": [
+        {
+          "map": "region_9_f2",
+          "x": 5,
+          "y": 3,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q086.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q086.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q086"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q086"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "q086_clue_b",
+      "title": "百年前の観測者：記録と証言",
+      "points": [
+        {
+          "map": "region_9_f2",
+          "x": 11,
+          "y": 4,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q086.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q086.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q086"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q086"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "q086_decision",
+      "title": "百年前の観測者：決着の場",
+      "points": [
+        {
+          "map": "region_9_f2",
+          "x": 13,
+          "y": 7,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q086.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q086.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q086.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q086"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "q086_observatory_entry",
+      "title": "百年前の観測者の現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q086.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q086.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q086"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q086.observatory.visit",
+      "points": [
+        {
+          "dungeon": "region_9",
+          "map": "region_9_f2",
+          "x": 13,
+          "y": 7
+        }
+      ]
+    },
+    {
+      "id": "q086_observatory_mail",
+      "title": "受領歯車の欠けた通信箱",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "mail",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q086.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q086.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q086"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q086.observatory.visit",
+      "points": [
+        {
+          "dungeon": "region_9",
+          "map": "region_9_f2",
+          "x": 11,
+          "y": 5
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_9_f2",
+      "x": 5,
+      "y": 3,
+      "object": "q086_clue_a",
+      "role": "clue_a"
+    },
+    {
+      "map": "region_9_f2",
+      "x": 11,
+      "y": 4,
+      "object": "q086_clue_b",
+      "role": "clue_b"
+    },
+    {
+      "map": "region_9_f2",
+      "x": 13,
+      "y": 7,
+      "object": "q086_decision",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "新旧の対応表を作り、古い値も保存する",
+      "text": "古い観測値も現在の研究へ使える。機械の名は観測者欄に残る。",
+      "gold": 153,
+      "xp": 132
+    },
+    "contract": {
+      "label": "古い日付の報告を全て破棄する",
+      "text": "日付の混乱は消えた。長い変化を追える資料も失われる。",
+      "gold": 173,
+      "xp": 103
+    },
+    "compromise": {
+      "label": "旧暦と注記して毎日の報告を受け取る",
+      "text": "新旧の暦が並んだ。変換を忘れない仕事が、毎日の当番に加わる。",
+      "gold": 99,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/observatory-first.mjs",
+    "world": {
+      "truth": "観測者は長命な人ではなく、暦の改定を受け取っていない自動観測器だ。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "観測者は長命な人ではなく、暦の改定を受け取っていない自動観測器だ。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "百年前の日付で観測報告が続く。書いた者を探してください。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "観測士のシオ",
+        "observation": "百年前の日付で観測報告が続く。書いた者を探してください。",
+        "belief": "百年前の日付で観測報告が続く。書いた者を探してください。",
+        "goal": "百年前の日付で観測報告が続く。書いた者を探してください。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "百年前の日付で観測報告が続く。書いた者を探してください。",
+      "progression": "現在の星と古い日付の報告を突き合わせ、通信修理後に百年分の対応を保存する。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q086.observatory.entry"
+        },
+        {
+          "id": "mail",
+          "script": "q086.observatory.mail"
+        },
+        {
+          "id": "mapping",
+          "script": "q086.observatory.mapping"
+        },
+        {
+          "id": "repaired",
+          "script": "q086.observatory.repaired"
+        },
+        {
+          "id": "mapped",
+          "script": "q086.observatory.mapped"
+        },
+        {
+          "id": "annotate",
+          "script": "q086.observatory.annotate"
+        },
+        {
+          "id": "annotated",
+          "script": "q086.observatory.annotated"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "百年前の日付で観測報告が続く。書いた者を探してください。",
+      "openQuestion": "百年前の観測者の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "pathHide",
+      "newInformation": "観測者は長命な人ではなく、暦の改定を受け取っていない自動観測器だ。",
+      "retroactiveTargets": [
+        "mapping"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q086.flow.entry"
+      },
+      {
+        "id": "mail",
+        "script": "q086.flow.mail"
+      },
+      {
+        "id": "mapping",
+        "script": "q086.flow.mapping"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q086.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "現在の星と古い日付の報告を突き合わせ、通信修理後に百年分の対応を保存する。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "現在の星と古い日付の報告を突き合わせ、通信修理後に百年分の対応を保存する。",
+    "flowVersion": 2,
+    "entryScript": "q086.observatory.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "百年前の日付の報告へ、今夜しかない星の並びが描かれている。",
+        "options": [
+          {
+            "id": "reply",
+            "text": "報告者へ現在の暦を返信する",
+            "to": "mail",
+            "action": "entry_reply"
+          },
+          {
+            "id": "old",
+            "text": "旧暦と注記して毎日の報告を受け取る",
+            "to": "annotate",
+            "action": "entry_old"
+          },
+          {
+            "id": "discard",
+            "text": "古い日付の報告を全て破棄する",
+            "to": "@contract",
+            "action": "entry_discard"
+          }
+        ]
+      },
+      {
+        "id": "mail",
+        "place": "mail",
+        "text": "返信が受領されない。通信箱では受領用の歯車が欠け、暦改定通知が封をしたまま積まれている。",
+        "options": [
+          {
+            "id": "repair",
+            "text": "受領歯車を直し、暦改定を読み込ませる",
+            "to": "repaired",
+            "action": "mail_repair"
+          },
+          {
+            "id": "manual",
+            "text": "通信の修理を延期し、旧暦として受け取る",
+            "to": "annotate",
+            "action": "mail_manual"
+          }
+        ]
+      },
+      {
+        "id": "mapping",
+        "place": "entry",
+        "text": "観測者は長命な人ではなく、暦の改定を受け取っていない自動観測器だ。 新しい報告の日付は直ったが、過去百年の値は旧暦のままだ。",
+        "options": [
+          {
+            "id": "table",
+            "text": "新旧の対応表を作り、古い値も保存する",
+            "to": "mapped",
+            "action": "mapping_table"
+          },
+          {
+            "id": "daily",
+            "text": "対応表は作らず、日ごとに旧暦の注記を付ける",
+            "to": "annotate",
+            "action": "mapping_daily"
+          }
+        ]
+      },
+      {
+        "id": "repaired",
+        "place": "mail",
+        "text": "通信箱の受領歯車を直し、暦改定通知を読み込ませた。観測器の新しい報告を確かめに戻る。",
+        "options": [
+          {
+            "id": "verify",
+            "text": "観測器へ戻って新しい日付を確かめる",
+            "to": "mapping",
+            "action": "repaired_verify"
+          }
+        ]
+      },
+      {
+        "id": "mapped",
+        "place": "archive",
+        "text": "旧報告を資料室へ運び、新旧の対応表とともに保存する。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@informed",
+            "action": "mapped_finish"
+          }
+        ]
+      },
+      {
+        "id": "annotate",
+        "place": "entry",
+        "text": "観測器の報告を旧暦と区別して受け取り、日ごとの注記を付ける。",
+        "options": [
+          {
+            "id": "save",
+            "text": "注記した報告を資料室へ運ぶ",
+            "to": "annotated",
+            "action": "annotate_save"
+          }
+        ]
+      },
+      {
+        "id": "annotated",
+        "place": "archive",
+        "text": "旧暦の注記を付けた報告を保存した。新旧の一括対応表は作っていない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@compromise",
+            "action": "annotated_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q086.decision",
+        "action": "informed",
+        "option": "informed_supplies",
+        "shortage": "q086.decision.informed.shortage",
+        "resume": "q086.decision.informed.resume",
+        "cost": {
+          "rope": 1
+        }
+      },
+      {
+        "from": "q086.review",
+        "action": "informed",
+        "option": "informed_supplies",
+        "shortage": "q086.review.informed.shortage",
+        "resume": "q086.review.informed.resume",
+        "cost": {
+          "rope": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q086.visit",
+      "q086.flow.visit"
+    ],
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "observatory-twenty",
+      "settlement": "oddland_village",
+      "saveRevision": 2,
+      "scope": "観測所20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q086.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "星の位置は現在と一致し、報告には生活の言葉が一つもない。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q086",
+          "key": "clue_a",
+          "text": "星の位置は現在と一致し、報告には生活の言葉が一つもない。"
+        }
+      ]
+    },
+    "q086.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "観測士のシオ",
+          "text": "通信箱には未開封の暦改定通知と、破れた受領用の歯車があります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q086",
+          "key": "clue_b",
+          "text": "通信箱には未開封の暦改定通知と、破れた受領用の歯車がある。"
+        }
+      ]
+    },
+    "q086.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "百年前の観測者\n\n百年前の日付で観測報告が続く。書いた者を探してください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "暦を更新し百年分の対応表を作る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q086.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q086.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "rope"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・補修用の縄1本（消費）・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "観測者は長命な人ではなく、暦の改定を受け取っていない自動観測器だ。"
+                },
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "古い観測値も現在の研究へ使える。機械の名は観測者欄に残る。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q086",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "観測器の護衛を倒し古い報告を破棄する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "日付の混乱は消えた。長い変化を追える資料も失われる。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q086",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "旧暦のまま受領し注記を付ける",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "新旧の暦が並んだ。変換を忘れない仕事が、毎日の当番に加わる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q086",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            },
+            {
+              "id": "informed_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q086.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q086.evidence"
+                    },
+                    "right": "clue_b"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "rope",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q086.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q086.evidence"
+                    },
+                    "right": "clue_b"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "rope",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q086.decision.informed.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q086.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "百年前の観測者\n\n百年前の日付で観測報告が続く。書いた者を探してください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q086.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q086.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "観測者は長命な人ではなく、暦の改定を受け取っていない自動観測器だ。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q086.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "暦を更新し百年分の対応表を作る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q086.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q086.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "rope"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合・縄1本（勝利して作業を確定した時に消費）・戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "item.take",
+                      "item": "rope",
+                      "count": 1
+                    },
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "古い観測値も現在の研究へ使える。機械の名は観測者欄に残る。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q086",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q086.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q086.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "contract",
+              "text": "観測器の護衛を倒し古い報告を破棄する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "日付の混乱は消えた。長い変化を追える資料も失われる。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q086",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "旧暦のまま受領し注記を付ける",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "新旧の暦が並んだ。変換を忘れない仕事が、毎日の当番に加わる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q086",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」観測士のシオは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられる。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q086.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            },
+            {
+              "id": "informed_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q086.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q086.evidence"
+                    },
+                    "right": "clue_b"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "rope",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q086.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q086.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q086.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q086.evidence"
+                        },
+                        "right": "clue_b"
+                      },
+                      {
+                        "op": "not",
+                        "arg": {
+                          "op": "has_item",
+                          "item": "rope",
+                          "count": 1
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q086.review.informed.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q086.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q086.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "古い観測値も現在の研究へ使える。機械の名は観測者欄に残る。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q086.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "日付の混乱は消えた。長い変化を追える資料も失われる。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q086.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "新旧の暦が並んだ。変換を忘れない仕事が、毎日の当番に加わる。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q086.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q086.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q086"
+          },
+          "cases": [
+            {
+              "equals": "q086.decision.informed.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q086.decision.informed.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q086.review.informed.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q086.review.informed.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q086.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q086.aftermath"
+                }
+              ],
+              "else": [
+                {
+                  "op": "jump",
+                  "script": "q086.review"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q086.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q086.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "百年前の日付の報告へ、今夜しかない星の並びが描かれている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "reply",
+              "text": "報告者へ現在の暦を返信する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q086.flow.mail"
+                }
+              ]
+            },
+            {
+              "id": "old",
+              "text": "旧暦と注記して毎日の報告を受け取る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q086.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "discard",
+              "text": "古い日付の報告を全て破棄する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q086.flow.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q086.flow.mail": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q086.node",
+          "value": "mail"
+        },
+        {
+          "op": "say",
+          "text": "返信が受領されない。通信箱では受領用の歯車が欠け、暦改定通知が封をしたまま積まれている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "repair",
+              "text": "受領歯車を直し、暦改定を読み込ませる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q086.flow.mapping"
+                }
+              ]
+            },
+            {
+              "id": "manual",
+              "text": "通信の修理を延期し、旧暦として受け取る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q086.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q086.flow.mapping": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q086.node",
+          "value": "mapping"
+        },
+        {
+          "op": "say",
+          "text": "観測者は長命な人ではなく、暦の改定を受け取っていない自動観測器だ。 新しい報告の日付は直ったが、過去百年の値は旧暦のままだ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "table",
+              "text": "新旧の対応表を作り、古い値も保存する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q086.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "daily",
+              "text": "対応表は作らず、日ごとに旧暦の注記を付ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q086.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q086.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q086.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "古い観測値も現在の研究へ使える。機械の名は観測者欄に残る。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q086",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q086.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q086.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "日付の混乱は消えた。長い変化を追える資料も失われる。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q086",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q086.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q086.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "新旧の暦が並んだ。変換を忘れない仕事が、毎日の当番に加わる。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q086",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q086.flow.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q086"
+          },
+          "cases": [
+            {
+              "equals": "q086.decision.informed.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q086.decision.informed.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q086.review.informed.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q086.review.informed.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q086.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q086.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "古い観測値も現在の研究へ使える。機械の名は観測者欄に残る。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "日付の混乱は消えた。長い変化を追える資料も失われる。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "新旧の暦が並んだ。変換を忘れない仕事が、毎日の当番に加わる。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.legacyQuestRoutes.q086"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "jump",
+                      "script": "q086.visit"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "flags.flow.q086.node"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q086.flow.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "mail",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q086.flow.mail"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "mapping",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q086.flow.mapping"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
+                        {
+                          "op": "jump",
+                          "script": "q086.flow.entry"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q086.decision.informed.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q086",
+          "value": "q086.decision.informed.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q086.decision.informed.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q086",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q086.decision"
+        }
+      ]
+    },
+    "q086.review.informed.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q086",
+          "value": "q086.review.informed.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q086.review.informed.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q086",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q086.review"
+        }
+      ]
+    },
+    "q086.observatory.entry": {
+      "storyQuest": "q086",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q086",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "百年前の日付の報告へ、今夜しかない星の並びが描かれている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "reply",
+              "text": "報告者へ現在の暦を返信する",
+              "storyAction": {
+                "quest": "q086",
+                "action": "entry_reply"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q086",
+                  "action": "entry_reply"
+                }
+              ]
+            },
+            {
+              "id": "old",
+              "text": "旧暦と注記して毎日の報告を受け取る",
+              "storyAction": {
+                "quest": "q086",
+                "action": "entry_old"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q086",
+                  "action": "entry_old"
+                },
+                {
+                  "op": "jump",
+                  "script": "q086.observatory.annotate"
+                }
+              ]
+            },
+            {
+              "id": "discard",
+              "text": "古い日付の報告を全て破棄する",
+              "storyAction": {
+                "quest": "q086",
+                "action": "entry_discard"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q086",
+                  "action": "entry_discard"
+                },
+                {
+                  "op": "jump",
+                  "script": "q086.observatory.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q086.observatory.mail": {
+      "storyQuest": "q086",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q086",
+          "scene": "mail"
+        },
+        {
+          "op": "narrate",
+          "text": "返信が受領されない。通信箱では受領用の歯車が欠け、暦改定通知が封をしたまま積まれている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "repair",
+              "text": "受領歯車を直し、暦改定を読み込ませる",
+              "storyAction": {
+                "quest": "q086",
+                "action": "mail_repair"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q086",
+                  "action": "mail_repair"
+                },
+                {
+                  "op": "jump",
+                  "script": "q086.observatory.repaired"
+                }
+              ]
+            },
+            {
+              "id": "manual",
+              "text": "通信の修理を延期し、旧暦として受け取る",
+              "storyAction": {
+                "quest": "q086",
+                "action": "mail_manual"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q086",
+                  "action": "mail_manual"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q086.observatory.mapping": {
+      "storyQuest": "q086",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q086",
+          "scene": "mapping"
+        },
+        {
+          "op": "narrate",
+          "text": "観測者は長命な人ではなく、暦の改定を受け取っていない自動観測器だ。 新しい報告の日付は直ったが、過去百年の値は旧暦のままだ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "table",
+              "text": "新旧の対応表を作り、古い値も保存する",
+              "storyAction": {
+                "quest": "q086",
+                "action": "mapping_table"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q086",
+                  "action": "mapping_table"
+                }
+              ]
+            },
+            {
+              "id": "daily",
+              "text": "対応表は作らず、日ごとに旧暦の注記を付ける",
+              "storyAction": {
+                "quest": "q086",
+                "action": "mapping_daily"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q086",
+                  "action": "mapping_daily"
+                },
+                {
+                  "op": "jump",
+                  "script": "q086.observatory.annotate"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q086.observatory.repaired": {
+      "storyQuest": "q086",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q086",
+          "scene": "repaired"
+        },
+        {
+          "op": "narrate",
+          "text": "通信箱の受領歯車を直し、暦改定通知を読み込ませた。観測器の新しい報告を確かめに戻る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "verify",
+              "text": "観測器へ戻って新しい日付を確かめる",
+              "storyAction": {
+                "quest": "q086",
+                "action": "repaired_verify"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q086",
+                  "action": "repaired_verify"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q086.observatory.mapped": {
+      "storyQuest": "q086",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q086",
+          "scene": "mapped"
+        },
+        {
+          "op": "narrate",
+          "text": "旧報告を資料室へ運び、新旧の対応表とともに保存する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q086",
+                "action": "mapped_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q086",
+                  "action": "mapped_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q086.observatory.end.informed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q086.observatory.annotate": {
+      "storyQuest": "q086",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q086",
+          "scene": "annotate"
+        },
+        {
+          "op": "narrate",
+          "text": "観測器の報告を旧暦と区別して受け取り、日ごとの注記を付ける。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "save",
+              "text": "注記した報告を資料室へ運ぶ",
+              "storyAction": {
+                "quest": "q086",
+                "action": "annotate_save"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q086",
+                  "action": "annotate_save"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q086.observatory.annotated": {
+      "storyQuest": "q086",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q086",
+          "scene": "annotated"
+        },
+        {
+          "op": "narrate",
+          "text": "旧暦の注記を付けた報告を保存した。新旧の一括対応表は作っていない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q086",
+                "action": "annotated_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q086",
+                  "action": "annotated_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q086.observatory.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q086.observatory.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "古い観測値も現在の研究へ使える。機械の名は観測者欄に残る。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q086",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q086.observatory.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "日付の混乱は消えた。長い変化を追える資料も失われる。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q086",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q086.observatory.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "新旧の暦が並んだ。変換を忘れない仕事が、毎日の当番に加わる。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q086",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q086.observatory.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q086"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q086.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q086.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q086.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "古い観測値も現在の研究へ使える。機械の名は観測者欄に残る。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "日付の混乱は消えた。長い変化を追える資料も失われる。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "新旧の暦が並んだ。変換を忘れない仕事が、毎日の当番に加わる。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q086"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q086.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q086.observatory.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "mail",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q086.observatory.mail"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "mapping",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q086.observatory.mapping"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "repaired",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q086.observatory.repaired"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "mapped",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q086.observatory.mapped"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "annotate",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q086.observatory.annotate"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "annotated",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q086.observatory.annotated"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q086.observatory.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "百年前の観測者の現場",
+      "mail": "受領歯車の欠けた通信箱",
+      "archive": "旧報告と対応表の保存先",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "mail"
+      ],
+      [
+        "transit",
+        "archive"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "mail",
+          "archive",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "discarded": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "discarded"
+      },
+      "receiverFixed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "receiverFixed"
+      },
+      "noticeAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "mail",
+          "archive",
+          "transit",
+          "party",
+          "receiver",
+          "reports"
+        ],
+        "meaning": "notice の所在または保持者"
+      },
+      "receiverAt": {
+        "type": "enum",
+        "initial": "mail",
+        "values": [
+          "entry",
+          "mail",
+          "archive",
+          "transit",
+          "party",
+          "notice",
+          "reports"
+        ],
+        "meaning": "receiver の所在または保持者"
+      },
+      "reportsAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "mail",
+          "archive",
+          "transit",
+          "party",
+          "notice",
+          "receiver"
+        ],
+        "meaning": "reports の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "notice": {
+        "holder": "noticeAt",
+        "kind": "item"
+      },
+      "receiver": {
+        "holder": "receiverAt",
+        "kind": "item"
+      },
+      "reports": {
+        "holder": "reportsAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "観測者は長命な人ではなく、暦の改定を受け取っていない自動観測器だ。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "百年前の観測者の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "mail": {
+        "title": "受領歯車の欠けた通信箱",
+        "place": "mail",
+        "cast": [],
+        "requires": true
+      },
+      "mapping": {
+        "title": "百年前の観測者の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "repaired": {
+        "title": "受領歯車の欠けた通信箱",
+        "place": "mail",
+        "cast": [],
+        "requires": true
+      },
+      "mapped": {
+        "title": "旧報告と対応表の保存先",
+        "place": "archive",
+        "cast": [],
+        "requires": true
+      },
+      "annotate": {
+        "title": "百年前の観測者の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "annotated": {
+        "title": "旧報告と対応表の保存先",
+        "place": "archive",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_reply": {
+        "from": [
+          "entry"
+        ],
+        "to": "mail",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "mail"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "notice",
+            "from": "party",
+            "to": "receiver"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "mail",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "notice",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      },
+      "entry_old": {
+        "from": [
+          "entry"
+        ],
+        "to": "annotate",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "entry_discard": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "discarded",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "mail_repair": {
+        "from": [
+          "mail"
+        ],
+        "to": "repaired",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "receiverFixed",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "mail_manual": {
+        "from": [
+          "mail"
+        ],
+        "to": "annotate",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "mapping_table": {
+        "from": [
+          "mapping"
+        ],
+        "to": "mapped",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "archive"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "archive",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "reports",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      },
+      "mapping_daily": {
+        "from": [
+          "mapping"
+        ],
+        "to": "annotate",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "repaired_verify": {
+        "from": [
+          "repaired"
+        ],
+        "to": "mapping",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "entry",
+            "requires": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "mapped_finish": {
+        "from": [
+          "mapped"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "reports",
+            "from": "party",
+            "to": "archive"
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "annotate_save": {
+        "from": [
+          "annotate"
+        ],
+        "to": "annotated",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "archive"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "archive",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "reports",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      },
+      "annotated_finish": {
+        "from": [
+          "annotated"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "reports",
+            "from": "party",
+            "to": "archive"
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q086.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q086.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q086.values.partyAt"
+                },
+                "right": "archive"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q086.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q086.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q086.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q086.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q086.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q086.values.partyAt"
+                },
+                "right": "archive"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_9",
+        "map": "region_9_f2",
+        "x": 13,
+        "y": 7
+      },
+      "mail": {
+        "kind": "dungeon",
+        "dungeon": "region_9",
+        "map": "region_9_f2",
+        "x": 11,
+        "y": 5
+      },
+      "archive": {
+        "kind": "town",
+        "location": "observatory_archive"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_village",
+  "receptionLocations": [
+    "royal_board"
+  ]
+}

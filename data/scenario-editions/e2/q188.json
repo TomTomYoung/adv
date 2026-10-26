@@ -1,0 +1,2065 @@
+{
+  "schemaVersion": 1,
+  "id": "q188",
+  "number": 188,
+  "title": "帰還兵の席",
+  "client": "帰還兵ラフ",
+  "brief": "故郷の家まで護衛してください。",
+  "region": 9,
+  "type": "scene_graph",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 旧王領の村の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q188_scene",
+      "title": "帰還兵の席：帰還兵ラフ",
+      "points": [
+        {
+          "map": "region_9_f2",
+          "x": 5,
+          "y": 1,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q188.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q188.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q188.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q188"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_9_f2",
+      "x": 5,
+      "y": 1,
+      "object": "q188_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "arrived": {
+      "label": "帰郷の護衛",
+      "text": "安全な到着で護衛は精算された。家庭を仲直りさせたかどうかは報酬の条件にしなかった。",
+      "gold": 153,
+      "xp": 99
+    },
+    "old": {
+      "label": "戻す仕事の負担",
+      "text": "昔の仕事は戻った。弟の次の仕事探しも家族で引き受け、席だけ戻して終わりにはしなかった。",
+      "gold": 153,
+      "xp": 99
+    },
+    "share": {
+      "label": "新しい机",
+      "text": "三人で仕事を分け直した。食卓も一緒に持ち上げ、新しい位置に置いた。",
+      "gold": 153,
+      "xp": 99
+    },
+    "apart": {
+      "label": "距離のある帰還",
+      "text": "別居を選んだ。再会は残し、昔の席へ戻らなかったことを失敗とは呼ばなかった。",
+      "gold": 153,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/observatory-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38166a207eb49f89ac578",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "食卓の席が変わり、使っていた道具が別の棚へ移っている。妻は彼の存在を消したのではなく、怪我した自分でも届く位置へ動かした。小さな変更を疑惑として見せ、理由を一つずつ知れるようにする。",
+      "fixedPast": "行方不明だった兵士ラフを故郷へ送る。妻は帰還を喜ぶが、彼がいない間、弟と店を切り盛りして生活を作っている。弟は妻の恋人ではない。しかしラフは家で役割を失ったことを、誰かに奪われたと感じる。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "帰還兵ラフ",
+        "beliefsAndGoals": "行方不明だった兵士ラフを故郷へ送る。妻は帰還を喜ぶが、彼がいない間、弟と店を切り盛りして生活を作っている。弟は妻の恋人ではない。しかしラフは家で役割を失ったことを、誰かに奪われたと感じる。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "故郷の家まで護衛してください。"
+      }
+    ],
+    "conflict": {
+      "design": "帰郷→家の観察／家族との個別会話→同じ仕事へ戻る／役割を再分担／別の住まいから交流。本人が怒って家を出ても追跡戦にはせず、落ち着く場所で話せる。護衛依頼は安全な到着で達成し、家庭を仲直りさせることを報酬条件にしない。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "family",
+          "script": "q188.observatory.family"
+        },
+        {
+          "id": "work",
+          "script": "q188.observatory.work"
+        },
+        {
+          "id": "entry",
+          "script": "q188.observatory.entry"
+        },
+        {
+          "id": "wife",
+          "script": "q188.observatory.wife"
+        },
+        {
+          "id": "brother",
+          "script": "q188.observatory.brother"
+        },
+        {
+          "id": "invite_old",
+          "script": "q188.observatory.invite_old"
+        },
+        {
+          "id": "agreed_old",
+          "script": "q188.observatory.agreed_old"
+        },
+        {
+          "id": "invite_share",
+          "script": "q188.observatory.invite_share"
+        },
+        {
+          "id": "agreed_share",
+          "script": "q188.observatory.agreed_share"
+        },
+        {
+          "id": "apart",
+          "script": "q188.observatory.apart"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "故郷の家まで護衛してください。"
+    },
+    "reveal": {
+      "newInformation": "食卓の席が変わり、使っていた道具が別の棚へ移っている。妻は彼の存在を消したのではなく、怪我した自分でも届く位置へ動かした。小さな変更を疑惑として見せ、理由を一つずつ知れるようにする。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q188.scene.entry"
+      },
+      {
+        "id": "work",
+        "script": "q188.scene.work"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q188.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "family",
+        "place": "home",
+        "text": "家には妻と弟がいる。妻は帰還を喜んだが、席も道具の棚も変わっていた。妻が怪我をしても届く位置に移したのだという。",
+        "options": [
+          {
+            "id": "talk",
+            "text": "個別に理由を聞き、仕事を相談する",
+            "to": "wife",
+            "action": "family_talk"
+          },
+          {
+            "id": "arrived",
+            "text": "安全な到着を報告し、家庭の判断には介入しない",
+            "to": "@arrived",
+            "action": "family_arrived"
+          }
+        ]
+      },
+      {
+        "id": "work",
+        "place": "backroom",
+        "text": "弟は妻の恋人ではなく、店を支えてきた。昔の役割へそのまま戻すなら、弟の次の仕事を探す負担もある。",
+        "options": [
+          {
+            "id": "old",
+            "text": "弟の転職も含め、旧役割へ戻す合意を作る",
+            "to": "invite_old",
+            "action": "work_old"
+          },
+          {
+            "id": "share",
+            "text": "三人で仕事を分け直す",
+            "to": "invite_share",
+            "action": "work_share"
+          },
+          {
+            "id": "apart",
+            "text": "別の住まいから交流を続ける意思を尊重する",
+            "to": "apart",
+            "action": "work_apart"
+          }
+        ]
+      },
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "帰還兵を故郷の家まで護衛する。家庭の判断とは別に、安全な到着を確認する。",
+        "options": [
+          {
+            "id": "escort",
+            "text": "帰還兵と家へ向かう",
+            "to": "family",
+            "action": "entry_escort"
+          }
+        ]
+      },
+      {
+        "id": "wife",
+        "place": "room",
+        "text": "妻と別室へ来た。怪我をしても届くよう、棚と席を変えた理由を聞く。",
+        "options": [
+          {
+            "id": "next",
+            "text": "帰還兵と弟のいる家へ戻る",
+            "to": "brother",
+            "action": "wife_next"
+          }
+        ]
+      },
+      {
+        "id": "brother",
+        "place": "home",
+        "text": "家に残っていた弟にも、個別に店を支えた事情を聞く。",
+        "options": [
+          {
+            "id": "talk",
+            "text": "弟と帰還兵で奥の部屋へ移る",
+            "to": "work",
+            "action": "brother_talk"
+          }
+        ]
+      },
+      {
+        "id": "invite_old",
+        "place": "room",
+        "text": "妻にも相談を伝え、三人で家の仕事を決め直す。",
+        "options": [
+          {
+            "id": "gather",
+            "text": "三人と家へ戻って取り決めを確認する",
+            "to": "agreed_old",
+            "action": "invite_old_gather"
+          }
+        ]
+      },
+      {
+        "id": "agreed_old",
+        "place": "home",
+        "text": "弟の次の仕事を探す負担も含め、昔の役割へ戻す合意を確認する。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@old",
+            "action": "agreed_old_finish"
+          }
+        ]
+      },
+      {
+        "id": "invite_share",
+        "place": "room",
+        "text": "妻にも相談を伝え、三人で家の仕事を決め直す。",
+        "options": [
+          {
+            "id": "gather",
+            "text": "三人と家へ戻って取り決めを確認する",
+            "to": "agreed_share",
+            "action": "invite_share_gather"
+          }
+        ]
+      },
+      {
+        "id": "agreed_share",
+        "place": "home",
+        "text": "三人で仕事を分け直し、机を一緒に新しい位置へ動かす。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@share",
+            "action": "agreed_share_finish"
+          }
+        ]
+      },
+      {
+        "id": "apart",
+        "place": "lodging",
+        "text": "本人と別の住まいへ来た。家族との交流を続ける意思を確認する。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@apart",
+            "action": "apart_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "entryScript": "q188.observatory.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "observatory-twenty",
+      "settlement": "oddland_village",
+      "saveRevision": 2,
+      "scope": "観測所20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q188.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q188.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "家には妻と弟がいる。妻は帰還を喜んだが、席も道具の棚も変わっていた。妻が怪我をしても届く位置に移したのだという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "talk",
+              "text": "個別に理由を聞き、仕事を相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q188.scene.work"
+                }
+              ]
+            },
+            {
+              "id": "arrived",
+              "text": "安全な到着を報告し、家庭の判断には介入しない",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q188.end.arrived"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q188.scene.work": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q188.node",
+          "value": "work"
+        },
+        {
+          "op": "say",
+          "text": "弟は妻の恋人ではなく、店を支えてきた。昔の役割へそのまま戻すなら、弟の次の仕事を探す負担もある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "old",
+              "text": "弟の転職も含め、旧役割へ戻す合意を作る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q188.end.old"
+                }
+              ]
+            },
+            {
+              "id": "share",
+              "text": "三人で仕事を分け直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q188.end.share"
+                }
+              ]
+            },
+            {
+              "id": "apart",
+              "text": "別の住まいから交流を続ける意思を尊重する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q188.end.apart"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q188.end.arrived": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q188.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "安全な到着で護衛は精算された。家庭を仲直りさせたかどうかは報酬の条件にしなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q188",
+              "outcome": "arrived"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q188.end.old": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q188.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "昔の仕事は戻った。弟の次の仕事探しも家族で引き受け、席だけ戻して終わりにはしなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q188",
+              "outcome": "old"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q188.end.share": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q188.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "三人で仕事を分け直した。食卓も一緒に持ち上げ、新しい位置に置いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q188",
+              "outcome": "share"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q188.end.apart": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q188.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "別居を選んだ。再会は残し、昔の席へ戻らなかったことを失敗とは呼ばなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q188",
+              "outcome": "apart"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q188.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q188.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q188.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "arrived",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "安全な到着で護衛は精算された。家庭を仲直りさせたかどうかは報酬の条件にしなかった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "old",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "昔の仕事は戻った。弟の次の仕事探しも家族で引き受け、席だけ戻して終わりにはしなかった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "share",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "三人で仕事を分け直した。食卓も一緒に持ち上げ、新しい位置に置いた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "apart",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "別居を選んだ。再会は残し、昔の席へ戻らなかったことを失敗とは呼ばなかった。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q188.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q188.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "work",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q188.scene.work"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q188.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q188.observatory.family": {
+      "storyQuest": "q188",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q188",
+          "scene": "family"
+        },
+        {
+          "op": "narrate",
+          "text": "家には妻と弟がいる。妻は帰還を喜んだが、席も道具の棚も変わっていた。妻が怪我をしても届く位置に移したのだという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "talk",
+              "text": "個別に理由を聞き、仕事を相談する",
+              "storyAction": {
+                "quest": "q188",
+                "action": "family_talk"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q188",
+                  "action": "family_talk"
+                }
+              ]
+            },
+            {
+              "id": "arrived",
+              "text": "安全な到着を報告し、家庭の判断には介入しない",
+              "storyAction": {
+                "quest": "q188",
+                "action": "family_arrived"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q188",
+                  "action": "family_arrived"
+                },
+                {
+                  "op": "jump",
+                  "script": "q188.observatory.end.arrived"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q188.observatory.work": {
+      "storyQuest": "q188",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q188",
+          "scene": "work"
+        },
+        {
+          "op": "narrate",
+          "text": "弟は妻の恋人ではなく、店を支えてきた。昔の役割へそのまま戻すなら、弟の次の仕事を探す負担もある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "old",
+              "text": "弟の転職も含め、旧役割へ戻す合意を作る",
+              "storyAction": {
+                "quest": "q188",
+                "action": "work_old"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q188",
+                  "action": "work_old"
+                }
+              ]
+            },
+            {
+              "id": "share",
+              "text": "三人で仕事を分け直す",
+              "storyAction": {
+                "quest": "q188",
+                "action": "work_share"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q188",
+                  "action": "work_share"
+                }
+              ]
+            },
+            {
+              "id": "apart",
+              "text": "別の住まいから交流を続ける意思を尊重する",
+              "storyAction": {
+                "quest": "q188",
+                "action": "work_apart"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q188",
+                  "action": "work_apart"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q188.observatory.entry": {
+      "storyQuest": "q188",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q188",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "帰還兵を故郷の家まで護衛する。家庭の判断とは別に、安全な到着を確認する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "escort",
+              "text": "帰還兵と家へ向かう",
+              "storyAction": {
+                "quest": "q188",
+                "action": "entry_escort"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q188",
+                  "action": "entry_escort"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q188.observatory.wife": {
+      "storyQuest": "q188",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q188",
+          "scene": "wife"
+        },
+        {
+          "op": "narrate",
+          "text": "妻と別室へ来た。怪我をしても届くよう、棚と席を変えた理由を聞く。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "next",
+              "text": "帰還兵と弟のいる家へ戻る",
+              "storyAction": {
+                "quest": "q188",
+                "action": "wife_next"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q188",
+                  "action": "wife_next"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q188.observatory.brother": {
+      "storyQuest": "q188",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q188",
+          "scene": "brother"
+        },
+        {
+          "op": "narrate",
+          "text": "家に残っていた弟にも、個別に店を支えた事情を聞く。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "talk",
+              "text": "弟と帰還兵で奥の部屋へ移る",
+              "storyAction": {
+                "quest": "q188",
+                "action": "brother_talk"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q188",
+                  "action": "brother_talk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q188.observatory.invite_old": {
+      "storyQuest": "q188",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q188",
+          "scene": "invite_old"
+        },
+        {
+          "op": "narrate",
+          "text": "妻にも相談を伝え、三人で家の仕事を決め直す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "gather",
+              "text": "三人と家へ戻って取り決めを確認する",
+              "storyAction": {
+                "quest": "q188",
+                "action": "invite_old_gather"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q188",
+                  "action": "invite_old_gather"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q188.observatory.agreed_old": {
+      "storyQuest": "q188",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q188",
+          "scene": "agreed_old"
+        },
+        {
+          "op": "narrate",
+          "text": "弟の次の仕事を探す負担も含め、昔の役割へ戻す合意を確認する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q188",
+                "action": "agreed_old_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q188",
+                  "action": "agreed_old_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q188.observatory.end.old"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q188.observatory.invite_share": {
+      "storyQuest": "q188",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q188",
+          "scene": "invite_share"
+        },
+        {
+          "op": "narrate",
+          "text": "妻にも相談を伝え、三人で家の仕事を決め直す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "gather",
+              "text": "三人と家へ戻って取り決めを確認する",
+              "storyAction": {
+                "quest": "q188",
+                "action": "invite_share_gather"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q188",
+                  "action": "invite_share_gather"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q188.observatory.agreed_share": {
+      "storyQuest": "q188",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q188",
+          "scene": "agreed_share"
+        },
+        {
+          "op": "narrate",
+          "text": "三人で仕事を分け直し、机を一緒に新しい位置へ動かす。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q188",
+                "action": "agreed_share_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q188",
+                  "action": "agreed_share_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q188.observatory.end.share"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q188.observatory.apart": {
+      "storyQuest": "q188",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q188",
+          "scene": "apart"
+        },
+        {
+          "op": "narrate",
+          "text": "本人と別の住まいへ来た。家族との交流を続ける意思を確認する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q188",
+                "action": "apart_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q188",
+                  "action": "apart_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q188.observatory.end.apart"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q188.observatory.end.arrived": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "安全な到着で護衛は精算された。家庭を仲直りさせたかどうかは報酬の条件にしなかった。"
+        },
+        {
+          "op": "add",
+          "target": "vars.arrived",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q188",
+          "outcome": "arrived"
+        }
+      ]
+    },
+    "q188.observatory.end.old": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "昔の仕事は戻った。弟の次の仕事探しも家族で引き受け、席だけ戻して終わりにはしなかった。"
+        },
+        {
+          "op": "add",
+          "target": "vars.old",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q188",
+          "outcome": "old"
+        }
+      ]
+    },
+    "q188.observatory.end.share": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "三人で仕事を分け直した。食卓も一緒に持ち上げ、新しい位置に置いた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.share",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q188",
+          "outcome": "share"
+        }
+      ]
+    },
+    "q188.observatory.end.apart": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "別居を選んだ。再会は残し、昔の席へ戻らなかったことを失敗とは呼ばなかった。"
+        },
+        {
+          "op": "add",
+          "target": "vars.apart",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q188",
+          "outcome": "apart"
+        }
+      ]
+    },
+    "q188.observatory.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q188"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q188.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q188.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q188.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "arrived",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "安全な到着で護衛は精算された。家庭を仲直りさせたかどうかは報酬の条件にしなかった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "old",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "昔の仕事は戻った。弟の次の仕事探しも家族で引き受け、席だけ戻して終わりにはしなかった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "share",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "三人で仕事を分け直した。食卓も一緒に持ち上げ、新しい位置に置いた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "apart",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "別居を選んだ。再会は残し、昔の席へ戻らなかったことを失敗とは呼ばなかった。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q188"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q188.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "family",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q188.observatory.family"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "work",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q188.observatory.work"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q188.observatory.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "wife",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q188.observatory.wife"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "brother",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q188.observatory.brother"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "invite_old",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q188.observatory.invite_old"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "agreed_old",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q188.observatory.agreed_old"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "invite_share",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q188.observatory.invite_share"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "agreed_share",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q188.observatory.agreed_share"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "apart",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q188.observatory.apart"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q188.observatory.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "帰郷の護衛を始める受付",
+      "home": "帰還兵と妻と弟の家",
+      "room": "妻に個別に理由を聞く部屋",
+      "backroom": "弟に個別に理由を聞く部屋",
+      "lodging": "別居を選んだ住まい",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "home"
+      ],
+      [
+        "transit",
+        "room"
+      ],
+      [
+        "transit",
+        "backroom"
+      ],
+      [
+        "transit",
+        "lodging"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "home",
+          "room",
+          "backroom",
+          "lodging",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "arrived",
+          "old",
+          "share",
+          "apart"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "arrived": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "arrived"
+      },
+      "soldierAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "home",
+          "room",
+          "backroom",
+          "lodging",
+          "transit"
+        ],
+        "meaning": "soldier の所在または保持者"
+      },
+      "wifeAt": {
+        "type": "enum",
+        "initial": "home",
+        "values": [
+          "entry",
+          "home",
+          "room",
+          "backroom",
+          "lodging",
+          "transit"
+        ],
+        "meaning": "wife の所在または保持者"
+      },
+      "brotherAt": {
+        "type": "enum",
+        "initial": "home",
+        "values": [
+          "entry",
+          "home",
+          "room",
+          "backroom",
+          "lodging",
+          "transit"
+        ],
+        "meaning": "brother の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "soldier": {
+        "holder": "soldierAt",
+        "kind": "person"
+      },
+      "wife": {
+        "holder": "wifeAt",
+        "kind": "person"
+      },
+      "brother": {
+        "holder": "brotherAt",
+        "kind": "person"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "食卓の席が変わり、使っていた道具が別の棚へ移っている。妻は彼の存在を消したのではなく、怪我した自分でも届く位置へ動かした。小さな変更を疑惑として見せ、理由を一つずつ知れるようにする。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "family": {
+        "title": "帰還兵と妻と弟の家",
+        "place": "home",
+        "cast": [],
+        "requires": true
+      },
+      "work": {
+        "title": "弟に個別に理由を聞く部屋",
+        "place": "backroom",
+        "cast": [],
+        "requires": true
+      },
+      "entry": {
+        "title": "帰郷の護衛を始める受付",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "wife": {
+        "title": "妻に個別に理由を聞く部屋",
+        "place": "room",
+        "cast": [],
+        "requires": true
+      },
+      "brother": {
+        "title": "帰還兵と妻と弟の家",
+        "place": "home",
+        "cast": [],
+        "requires": true
+      },
+      "invite_old": {
+        "title": "妻に個別に理由を聞く部屋",
+        "place": "room",
+        "cast": [],
+        "requires": true
+      },
+      "agreed_old": {
+        "title": "帰還兵と妻と弟の家",
+        "place": "home",
+        "cast": [],
+        "requires": true
+      },
+      "invite_share": {
+        "title": "妻に個別に理由を聞く部屋",
+        "place": "room",
+        "cast": [],
+        "requires": true
+      },
+      "agreed_share": {
+        "title": "帰還兵と妻と弟の家",
+        "place": "home",
+        "cast": [],
+        "requires": true
+      },
+      "apart": {
+        "title": "別居を選んだ住まい",
+        "place": "lodging",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "family_talk": {
+        "from": [
+          "family"
+        ],
+        "to": "wife",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "soldier",
+              "wife"
+            ],
+            "path": [
+              "transit",
+              "room"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "room",
+          "companions": [
+            "soldier",
+            "wife"
+          ]
+        },
+        "depart": []
+      },
+      "family_arrived": {
+        "from": [
+          "family"
+        ],
+        "ending": "arrived",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "arrived"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "work_old": {
+        "from": [
+          "work"
+        ],
+        "to": "invite_old",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "soldier",
+              "brother"
+            ],
+            "path": [
+              "transit",
+              "room"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "room",
+          "companions": [
+            "soldier",
+            "brother"
+          ]
+        },
+        "depart": []
+      },
+      "work_share": {
+        "from": [
+          "work"
+        ],
+        "to": "invite_share",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "soldier",
+              "brother"
+            ],
+            "path": [
+              "transit",
+              "room"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "room",
+          "companions": [
+            "soldier",
+            "brother"
+          ]
+        },
+        "depart": []
+      },
+      "work_apart": {
+        "from": [
+          "work"
+        ],
+        "to": "apart",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "soldier"
+            ],
+            "path": [
+              "transit",
+              "lodging"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "lodging",
+          "companions": [
+            "soldier"
+          ]
+        },
+        "depart": []
+      },
+      "entry_escort": {
+        "from": [
+          "entry"
+        ],
+        "to": "family",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "soldier"
+            ],
+            "path": [
+              "transit",
+              "home"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "arrived",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "home",
+          "companions": [
+            "soldier"
+          ]
+        },
+        "depart": []
+      },
+      "wife_next": {
+        "from": [
+          "wife"
+        ],
+        "to": "brother",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "soldier"
+            ],
+            "path": [
+              "transit",
+              "home"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "home",
+          "companions": [
+            "soldier"
+          ]
+        },
+        "depart": []
+      },
+      "brother_talk": {
+        "from": [
+          "brother"
+        ],
+        "to": "work",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "brother",
+              "soldier"
+            ],
+            "path": [
+              "transit",
+              "backroom"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "backroom",
+          "companions": [
+            "brother",
+            "soldier"
+          ]
+        },
+        "depart": []
+      },
+      "invite_old_gather": {
+        "from": [
+          "invite_old"
+        ],
+        "to": "agreed_old",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "soldier",
+              "brother",
+              "wife"
+            ],
+            "path": [
+              "transit",
+              "home"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "home",
+          "companions": [
+            "soldier",
+            "brother",
+            "wife"
+          ]
+        },
+        "depart": []
+      },
+      "agreed_old_finish": {
+        "from": [
+          "agreed_old"
+        ],
+        "ending": "old",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "old"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "invite_share_gather": {
+        "from": [
+          "invite_share"
+        ],
+        "to": "agreed_share",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "soldier",
+              "brother",
+              "wife"
+            ],
+            "path": [
+              "transit",
+              "home"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "home",
+          "companions": [
+            "soldier",
+            "brother",
+            "wife"
+          ]
+        },
+        "depart": []
+      },
+      "agreed_share_finish": {
+        "from": [
+          "agreed_share"
+        ],
+        "ending": "share",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "share"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "apart_finish": {
+        "from": [
+          "apart"
+        ],
+        "ending": "apart",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "apart"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "arrived": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q188.values.resolution"
+            },
+            "right": "arrived"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q188.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q188.values.partyAt"
+                },
+                "right": "home"
+              }
+            ]
+          }
+        ]
+      },
+      "old": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q188.values.resolution"
+            },
+            "right": "old"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q188.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q188.values.partyAt"
+                },
+                "right": "home"
+              }
+            ]
+          }
+        ]
+      },
+      "share": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q188.values.resolution"
+            },
+            "right": "share"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q188.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q188.values.partyAt"
+                },
+                "right": "home"
+              }
+            ]
+          }
+        ]
+      },
+      "apart": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q188.values.resolution"
+            },
+            "right": "apart"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q188.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q188.values.partyAt"
+                },
+                "right": "lodging"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "town",
+        "location": "observatory_muster"
+      },
+      "home": {
+        "kind": "town",
+        "location": "observatory_home"
+      },
+      "room": {
+        "kind": "town",
+        "location": "observatory_room"
+      },
+      "backroom": {
+        "kind": "town",
+        "location": "observatory_backroom"
+      },
+      "lodging": {
+        "kind": "town",
+        "location": "observatory_lodging"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_village",
+  "receptionLocations": [
+    "royal_board"
+  ]
+}

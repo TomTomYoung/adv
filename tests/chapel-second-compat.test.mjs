@@ -8,7 +8,7 @@ import {read,fixture,auditQuest,replay,resolveBattle} from '../tools/audit-regio
 import {data,ready,checkpoint,drain,go,start,choose} from './pilgrimage-helpers.mjs';
 export const previous=await loadContent(async file=>{
  if(file==='data/scenario-editions/e2/geography.json')return read('tests/fixtures/e2-geography-before-chapel-second.json');
- const value=await read(file);if(file==='data/scenario-editions.json'){for(let n=131;n<=140;n++)delete value.editions.e2.questOverrides['q'+n];for(let n=161;n<=170;n++)delete value.editions.e2.questOverrides['q'+n];for(let n=61;n<=70;n++)delete value.editions.e2.questOverrides['q0'+n];}return value;
+ const value=await read(file);if(file==='data/scenario-editions.json')for(const n of [...Array.from({length:10},(_,i)=>81+i),...Array.from({length:10},(_,i)=>181+i)])delete value.editions.e2.questOverrides['q'+String(n).padStart(3,'0')];if(file==='data/scenario-editions.json'){for(let n=131;n<=140;n++)delete value.editions.e2.questOverrides['q'+n];for(let n=161;n<=170;n++)delete value.editions.e2.questOverrides['q'+n];for(let n=61;n<=70;n++)delete value.editions.e2.questOverrides['q0'+n];}return value;
 },{edition:'e2'});
 function oldFixture(id,options={}){
  const {accepted=true,entered=true,started=true}=options,g=fixture(previous,id,{accepted:false,entered:false,started:false});

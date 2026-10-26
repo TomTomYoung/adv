@@ -1,0 +1,2085 @@
+{
+  "schemaVersion": 1,
+  "id": "q081",
+  "number": 81,
+  "title": "落ちてこない星",
+  "client": "観測士のシオ",
+  "brief": "予報された星が落ちない。地下の計算盤を調べてください。",
+  "region": 9,
+  "type": "authored_progression",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。 旧王領の村の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q081_clue_a",
+      "title": "落ちてこない星：現場の痕跡",
+      "points": [
+        {
+          "map": "region_9_f1",
+          "x": 7,
+          "y": 1,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q081.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q081.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q081"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q081"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "q081_clue_b",
+      "title": "落ちてこない星：記録と証言",
+      "points": [
+        {
+          "map": "region_9_f1",
+          "x": 12,
+          "y": 3,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q081.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q081.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q081"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q081"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "q081_decision",
+      "title": "落ちてこない星：決着の場",
+      "points": [
+        {
+          "map": "region_9_f1",
+          "x": 11,
+          "y": 9,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q081.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q081.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q081.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q081"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "q081_observatory_entry",
+      "title": "落ちてこない星の現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q081.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q081.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q081"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q081.observatory.visit",
+      "points": [
+        {
+          "dungeon": "region_9",
+          "map": "region_9_f1",
+          "x": 11,
+          "y": 9
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_9_f1",
+      "x": 7,
+      "y": 1,
+      "object": "q081_clue_a",
+      "role": "clue_a"
+    },
+    {
+      "map": "region_9_f1",
+      "x": 12,
+      "y": 3,
+      "object": "q081_clue_b",
+      "role": "clue_b"
+    },
+    {
+      "map": "region_9_f1",
+      "x": 11,
+      "y": 9,
+      "object": "q081_decision",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "避難先へ訂正を届け、上映と天気の告知を分ける",
+      "text": "避難騒ぎは収まった。子供たちは安心して星の落ちる上映を見る。",
+      "gold": 153,
+      "xp": 132
+    },
+    "contract": {
+      "label": "予報盤を壊して予報を止める",
+      "text": "予報は消えた。観測士は本物の天候記録まで失う。",
+      "gold": 173,
+      "xp": 103
+    },
+    "compromise": {
+      "label": "上映を延期し、実際の空を再観測する",
+      "text": "人は一日待った。シオは空を見た記録と盤の記録を並べる。",
+      "gold": 99,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/observatory-first.mjs",
+    "world": {
+      "truth": "予報は地上の空でなく、天井に投影する星図の落下演出の予定だ。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "予報は地上の空でなく、天井に投影する星図の落下演出の予定だ。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "予報された星が落ちない。地下の計算盤を調べてください。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "観測士のシオ",
+        "observation": "予報された星が落ちない。地下の計算盤を調べてください。",
+        "belief": "予報された星が落ちない。地下の計算盤を調べてください。",
+        "goal": "予報された星が落ちない。地下の計算盤を調べてください。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "予報された星が落ちない。地下の計算盤を調べてください。",
+      "progression": "避難の呼び掛けが上映予定の誤読だと、その場の試写で分かる。誤報の訂正を実行して終える。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q081.observatory.entry"
+        },
+        {
+          "id": "show",
+          "script": "q081.observatory.show"
+        },
+        {
+          "id": "correction",
+          "script": "q081.observatory.correction"
+        },
+        {
+          "id": "posted",
+          "script": "q081.observatory.posted"
+        },
+        {
+          "id": "observed",
+          "script": "q081.observatory.observed"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "予報された星が落ちない。地下の計算盤を調べてください。",
+      "openQuestion": "落ちてこない星の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "causeSwap",
+      "newInformation": "予報は地上の空でなく、天井に投影する星図の落下演出の予定だ。",
+      "retroactiveTargets": [],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q081.flow.entry"
+      },
+      {
+        "id": "show",
+        "script": "q081.flow.show"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q081.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "避難の呼び掛けが上映予定の誤読だと、その場の試写で分かる。誤報の訂正を実行して終える。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "避難の呼び掛けが上映予定の誤読だと、その場の試写で分かる。誤報の訂正を実行して終える。",
+    "flowVersion": 2,
+    "entryScript": "q081.observatory.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "予報盤は観覧席の天井へ向き、「落下、幕間」と表示する。空の雲とは動きが合わない。",
+        "options": [
+          {
+            "id": "project",
+            "text": "予報された時刻の星図を試写する",
+            "to": "show",
+            "action": "entry_project"
+          },
+          {
+            "id": "delay",
+            "text": "上映を延期し、実際の空を再観測する",
+            "to": "observed",
+            "action": "entry_delay"
+          },
+          {
+            "id": "destroy",
+            "text": "予報盤を壊して予報を止める",
+            "to": "@contract",
+            "action": "entry_destroy"
+          }
+        ]
+      },
+      {
+        "id": "show",
+        "place": "entry",
+        "text": "天井にだけ星が落ち、幕間の札が出た。外の空に変化はない。",
+        "options": [
+          {
+            "id": "correct",
+            "text": "避難先へ訂正を届け、上映と天気の告知を分ける",
+            "to": "correction",
+            "action": "show_correct"
+          },
+          {
+            "id": "postpone",
+            "text": "説明を添えて上映を一日延期する",
+            "to": "observed",
+            "action": "show_postpone"
+          }
+        ]
+      },
+      {
+        "id": "correction",
+        "place": "refuge",
+        "text": "避難先へ来て、天井の上映と実際の天気の違いを伝えた。次は告知所の表示を分ける。",
+        "options": [
+          {
+            "id": "post",
+            "text": "告知所へ訂正を掲示しに行く",
+            "to": "posted",
+            "action": "correction_post"
+          }
+        ]
+      },
+      {
+        "id": "posted",
+        "place": "notice",
+        "text": "上映と天気の告知を別々に掲示する。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@informed",
+            "action": "posted_finish"
+          }
+        ]
+      },
+      {
+        "id": "observed",
+        "place": "sky",
+        "text": "地上へ出て空を観測し、延期した盤の記録と並べる。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@compromise",
+            "action": "observed_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "observatory-twenty",
+      "settlement": "oddland_village",
+      "saveRevision": 2,
+      "scope": "観測所20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q081.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "方位盤の北が地理上の北と逆で、天井の投影機へ向いている。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q081",
+          "key": "clue_a",
+          "text": "方位盤の北が地理上の北と逆で、天井の投影機へ向いている。"
+        }
+      ]
+    },
+    "q081.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "観測士のシオ",
+          "text": "予定表には落下の後に幕間とあり、観覧席の席数が添えられています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q081",
+          "key": "clue_b",
+          "text": "予定表には落下の後に幕間とあり、観覧席の席数が添えられている。"
+        }
+      ]
+    },
+    "q081.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "落ちてこない星\n\n予報された星が落ちない。地下の計算盤を調べてください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "星図の番獣を倒し予報盤を壊す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "予報は消えた。観測士は本物の天候記録まで失う。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q081",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "星図と本当の空を分けて告知する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q081.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q081.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "予報は地上の空でなく、天井に投影する星図の落下演出の予定だ。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "避難騒ぎは収まった。子供たちは安心して星の落ちる上映を見る。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q081",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "上映を延期して観測結果を再確認する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "人は一日待った。シオは空を見た記録と盤の記録を並べる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q081",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q081.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "落ちてこない星\n\n予報された星が落ちない。地下の計算盤を調べてください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q081.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q081.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "予報は地上の空でなく、天井に投影する星図の落下演出の予定だ。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q081.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "星図の番獣を倒し予報盤を壊す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "予報は消えた。観測士は本物の天候記録まで失う。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q081",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "星図と本当の空を分けて告知する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q081.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q081.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "避難騒ぎは収まった。子供たちは安心して星の落ちる上映を見る。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q081",
+                  "outcome": "informed"
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q081.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q081.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "compromise",
+              "text": "上映を延期して観測結果を再確認する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "人は一日待った。シオは空を見た記録と盤の記録を並べる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q081",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」観測士のシオは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられる。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q081.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q081.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q081.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "避難騒ぎは収まった。子供たちは安心して星の落ちる上映を見る。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q081.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "予報は消えた。観測士は本物の天候記録まで失う。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q081.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "人は一日待った。シオは空を見た記録と盤の記録を並べる。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q081.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q081.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q081.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q081.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q081.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q081.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q081.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "予報盤は観覧席の天井へ向き、「落下、幕間」と表示する。空の雲とは動きが合わない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "project",
+              "text": "予報された時刻の星図を試写する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q081.flow.show"
+                }
+              ]
+            },
+            {
+              "id": "delay",
+              "text": "上映を延期し、実際の空を再観測する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q081.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "destroy",
+              "text": "予報盤を壊して予報を止める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q081.flow.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q081.flow.show": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q081.node",
+          "value": "show"
+        },
+        {
+          "op": "say",
+          "text": "天井にだけ星が落ち、幕間の札が出た。外の空に変化はない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "correct",
+              "text": "避難先へ訂正を届け、上映と天気の告知を分ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q081.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "postpone",
+              "text": "説明を添えて上映を一日延期する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q081.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q081.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q081.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "避難騒ぎは収まった。子供たちは安心して星の落ちる上映を見る。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q081",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q081.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q081.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "予報は消えた。観測士は本物の天候記録まで失う。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q081",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q081.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q081.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "人は一日待った。シオは空を見た記録と盤の記録を並べる。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q081",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q081.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q081.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q081.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "避難騒ぎは収まった。子供たちは安心して星の落ちる上映を見る。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "予報は消えた。観測士は本物の天候記録まで失う。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "人は一日待った。シオは空を見た記録と盤の記録を並べる。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q081"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q081.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q081.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q081.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "show",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q081.flow.show"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q081.flow.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q081.observatory.entry": {
+      "storyQuest": "q081",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q081",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "予報盤は観覧席の天井へ向き、「落下、幕間」と表示する。空の雲とは動きが合わない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "project",
+              "text": "予報された時刻の星図を試写する",
+              "storyAction": {
+                "quest": "q081",
+                "action": "entry_project"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q081",
+                  "action": "entry_project"
+                },
+                {
+                  "op": "jump",
+                  "script": "q081.observatory.show"
+                }
+              ]
+            },
+            {
+              "id": "delay",
+              "text": "上映を延期し、実際の空を再観測する",
+              "storyAction": {
+                "quest": "q081",
+                "action": "entry_delay"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q081",
+                  "action": "entry_delay"
+                }
+              ]
+            },
+            {
+              "id": "destroy",
+              "text": "予報盤を壊して予報を止める",
+              "storyAction": {
+                "quest": "q081",
+                "action": "entry_destroy"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q081",
+                  "action": "entry_destroy"
+                },
+                {
+                  "op": "jump",
+                  "script": "q081.observatory.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q081.observatory.show": {
+      "storyQuest": "q081",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q081",
+          "scene": "show"
+        },
+        {
+          "op": "narrate",
+          "text": "天井にだけ星が落ち、幕間の札が出た。外の空に変化はない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "correct",
+              "text": "避難先へ訂正を届け、上映と天気の告知を分ける",
+              "storyAction": {
+                "quest": "q081",
+                "action": "show_correct"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q081",
+                  "action": "show_correct"
+                }
+              ]
+            },
+            {
+              "id": "postpone",
+              "text": "説明を添えて上映を一日延期する",
+              "storyAction": {
+                "quest": "q081",
+                "action": "show_postpone"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q081",
+                  "action": "show_postpone"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q081.observatory.correction": {
+      "storyQuest": "q081",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q081",
+          "scene": "correction"
+        },
+        {
+          "op": "narrate",
+          "text": "避難先へ来て、天井の上映と実際の天気の違いを伝えた。次は告知所の表示を分ける。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "post",
+              "text": "告知所へ訂正を掲示しに行く",
+              "storyAction": {
+                "quest": "q081",
+                "action": "correction_post"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q081",
+                  "action": "correction_post"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q081.observatory.posted": {
+      "storyQuest": "q081",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q081",
+          "scene": "posted"
+        },
+        {
+          "op": "narrate",
+          "text": "上映と天気の告知を別々に掲示する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q081",
+                "action": "posted_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q081",
+                  "action": "posted_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q081.observatory.end.informed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q081.observatory.observed": {
+      "storyQuest": "q081",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q081",
+          "scene": "observed"
+        },
+        {
+          "op": "narrate",
+          "text": "地上へ出て空を観測し、延期した盤の記録と並べる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q081",
+                "action": "observed_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q081",
+                  "action": "observed_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q081.observatory.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q081.observatory.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "避難騒ぎは収まった。子供たちは安心して星の落ちる上映を見る。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q081",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q081.observatory.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "予報は消えた。観測士は本物の天候記録まで失う。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q081",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q081.observatory.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "人は一日待った。シオは空を見た記録と盤の記録を並べる。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q081",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q081.observatory.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q081"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q081.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q081.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q081.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "避難騒ぎは収まった。子供たちは安心して星の落ちる上映を見る。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "予報は消えた。観測士は本物の天候記録まで失う。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "人は一日待った。シオは空を見た記録と盤の記録を並べる。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q081"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q081.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q081.observatory.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "show",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q081.observatory.show"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "correction",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q081.observatory.correction"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "posted",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q081.observatory.posted"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "observed",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q081.observatory.observed"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q081.observatory.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "落ちてこない星の現場",
+      "refuge": "避難した人の待つ高台",
+      "notice": "上映と天気の告知所",
+      "sky": "実際の空を観測する地上台",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "refuge"
+      ],
+      [
+        "transit",
+        "notice"
+      ],
+      [
+        "transit",
+        "sky"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "refuge",
+          "notice",
+          "sky",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "delayed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "delayed"
+      },
+      "destroyed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "destroyed"
+      },
+      "corrected": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "corrected"
+      },
+      "observed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "observed"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "予報は地上の空でなく、天井に投影する星図の落下演出の予定だ。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "落ちてこない星の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "show": {
+        "title": "落ちてこない星の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "correction": {
+        "title": "避難した人の待つ高台",
+        "place": "refuge",
+        "cast": [],
+        "requires": true
+      },
+      "posted": {
+        "title": "上映と天気の告知所",
+        "place": "notice",
+        "cast": [],
+        "requires": true
+      },
+      "observed": {
+        "title": "実際の空を観測する地上台",
+        "place": "sky",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_project": {
+        "from": [
+          "entry"
+        ],
+        "to": "show",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "entry_delay": {
+        "from": [
+          "entry"
+        ],
+        "to": "observed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "sky"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "sky",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "delayed",
+            "value": true
+          }
+        ]
+      },
+      "entry_destroy": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "destroyed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "show_correct": {
+        "from": [
+          "show"
+        ],
+        "to": "correction",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "refuge"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "refuge",
+          "companions": []
+        },
+        "depart": []
+      },
+      "show_postpone": {
+        "from": [
+          "show"
+        ],
+        "to": "observed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "sky"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "sky",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "delayed",
+            "value": true
+          }
+        ]
+      },
+      "correction_post": {
+        "from": [
+          "correction"
+        ],
+        "to": "posted",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "notice"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "notice",
+          "companions": []
+        },
+        "depart": []
+      },
+      "posted_finish": {
+        "from": [
+          "posted"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "corrected",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "observed_finish": {
+        "from": [
+          "observed"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "observed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q081.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q081.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q081.values.partyAt"
+                },
+                "right": "notice"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q081.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q081.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q081.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q081.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q081.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q081.values.partyAt"
+                },
+                "right": "sky"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_9",
+        "map": "region_9_f1",
+        "x": 11,
+        "y": 9
+      },
+      "refuge": {
+        "kind": "town",
+        "location": "royal_refuge"
+      },
+      "notice": {
+        "kind": "town",
+        "location": "observatory_notice"
+      },
+      "sky": {
+        "kind": "town",
+        "location": "observatory_platform"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_village",
+  "receptionLocations": [
+    "royal_board"
+  ]
+}
