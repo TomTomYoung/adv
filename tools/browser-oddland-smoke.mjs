@@ -29,7 +29,7 @@ try{
     const settle=()=>{for(let i=0;i<100&&(g.state.waiting?.type==='text'||g.state.waiting?.type==='command'&&g.state.waiting.command==='result');i++)g.dispatch({type:'advance'});render();};
     window.h={get g(){return g;},get view(){return view;},dispatch,render,settle,
       start(layout){view?.destroy();g=new GameEngine(data,1907);while(g.state.waiting?.type==='text')g.dispatch({type:'advance'});g.random=()=>.999999;g.teleport('region_1_landing',15,3);view=replaceView(null,layout,document.querySelector('#app'),dispatch,{status(){},menu(){},help(){},soundEnabled:()=>false,effectsMode:()=> 'off'});render();},
-      walk(x,y){const l=g.state.location,queue=[[l.x,l.y]],seen=new Map([[`${l.x},${l.y}`,null]]);for(let i=0;i<queue.length;i++){const p=queue[i];for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const n=[p[0]+dx,p[1]+dy];if(g.walkable(g.map(),...n)&&!seen.has(n.join(','))){seen.set(n.join(','),p);queue.push(n);}}}if(!seen.has(`${x},${y}`))throw Error('no walking route');const route=[];for(let p=[x,y];seen.get(p.join(','));p=seen.get(p.join(',')))route.unshift(p);for(const [nx,ny] of route){const f=nx>l.x?'east':nx<l.x?'west':ny>l.y?'south':'north';while(l.facing!==f)g.dispatch({type:'move',direction:'right'});if(!g.dispatch({type:'move',direction:'forward'}))throw Error('step rejected');}render();},
+      walk(x,y){settle();const l=g.state.location,queue=[[l.x,l.y]],seen=new Map([[`${l.x},${l.y}`,null]]);for(let i=0;i<queue.length;i++){const p=queue[i];for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const n=[p[0]+dx,p[1]+dy];if(g.walkable(g.map(),...n)&&!seen.has(n.join(','))){seen.set(n.join(','),p);queue.push(n);}}}if(!seen.has(`${x},${y}`))throw Error('no walking route');const route=[];for(let p=[x,y];seen.get(p.join(','));p=seen.get(p.join(',')))route.unshift(p);for(const [nx,ny] of route){const f=nx>l.x?'east':nx<l.x?'west':ny>l.y?'south':'north';while(l.facing!==f)if(!g.dispatch({type:'move',direction:'right'}))throw Error('turn rejected: '+JSON.stringify(g.state.waiting));if(!g.dispatch({type:'move',direction:'forward'}))throw Error('step rejected: '+JSON.stringify({location:g.state.location,waiting:g.state.waiting,notice:g.state.notice}));settle();}render();},
       routeLabel(id){return projectGame(g).worldTravel.actions.find(a=>a.intent.route===id).label;},
       resume(){g.load(g.save());render();}
     };
@@ -78,7 +78,28 @@ try{
     await click('親子に帰りの車を案内する');await page.evaluate(()=>h.settle());await page.evaluate(()=>h.resume());
     assert.equal(await page.evaluate(()=>h.g.state.quests.q291.outcome),'escort');
     assert.equal(await page.evaluate(()=>h.g.state.stories.q291.values.teoAt),'refuge');
-    checks.push({layout,width,...measure,quest:'q291',outcome:'escort'});
+    await page.evaluate(()=>h.walk(9,3));await cross('border_customs');await page.evaluate(()=>h.walk(9,3));await cross('oddland_surface');
+    for(const road of ['e2_market_road','e2_pilgrim_road']){
+      await click(await page.evaluate(id=>h.routeLabel(id),road+'_west'));await page.evaluate(()=>h.walk(13,5));await cross(road+'_east');
+    }
+    assert.equal(await page.evaluate(()=>h.g.state.townLocation),'oddland_plateau');
+    await click('巡礼台地の依頼所');await click('依頼掲示板を見る');assert.equal(await page.locator('.quest-card').count(),20);
+    await page.locator('.quest-card').filter({has:page.getByRole('heading',{name:'片目の聖像',exact:true})}).getByRole('button',{name:'依頼を受ける',exact:true}).click();
+    if(layout==='scene')await page.keyboard.press('Escape');else await click('巡礼台地へ戻る');
+    if(await page.evaluate(()=>h.g.state.townLocation)!=='oddland_plateau')await click('巡礼台地へ戻る');
+    await click(await page.evaluate(()=>h.routeLabel('chapel_surface')));
+    await page.evaluate(()=>{h.walk(9,11);h.dispatch({type:'story.resume',quest:'q032'});h.settle();});
+    await click('覗き窓の行先を確かめ、地下牢へ回る');await page.evaluate(()=>h.resume());
+    assert.ok(await page.evaluate(()=>h.g.state.journey));await page.evaluate(()=>{h.walk(1,8);h.settle();});
+    await click('見通せない石の目を用意する');await page.evaluate(()=>{h.walk(9,6);h.settle();});
+    await click('覗き管を塞いで不透明な目をはめる');assert.equal(await page.evaluate(()=>h.g.state.stories.q032.values.stoneAt),'party');
+    await page.evaluate(()=>h.resume());await page.evaluate(()=>{h.walk(9,11);h.settle();});
+    await page.screenshot({path:path.join(output,`${layout}-${width}-chapel.png`),fullPage:true});
+    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+    await click('現場の結果を確かめ、依頼を終える');await page.evaluate(()=>{h.settle();h.resume();});
+    assert.equal(await page.evaluate(()=>h.g.state.quests.q032.outcome),'informed');assert.equal(await page.evaluate(()=>h.g.state.stories.q032.values.stoneAt),'entry');
+    await page.evaluate(()=>h.walk(1,1));await click('任意調べる');await click('地上への階段');await click('調べる');await page.evaluate(()=>h.settle());assert.equal(await page.evaluate(()=>h.g.state.townLocation),'oddland_plateau');
+    checks.push({layout,width,...measure,quests:{q291:'escort',q032:'informed'},chapelReturn:'oddland_plateau'});
   }
   assert.deepEqual(errors,[]);await fs.writeFile(path.join(output,'result.json'),JSON.stringify({checks,errors},null,2));console.log(JSON.stringify({checks:checks.length,errors,output}));
 }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}

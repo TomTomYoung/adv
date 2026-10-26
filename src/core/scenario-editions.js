@@ -15,6 +15,7 @@ export function resolveScenarioEdition(catalog=LEGACY_SCENARIO_EDITIONS,requeste
     if(edition.geography!==undefined&&!dataPath(edition.geography))throw Error('シナリオ版の地理定義先が不正です。');
     if(edition.additions!==undefined&&!dataPath(edition.additions))throw Error('シナリオ版の追加定義先が不正です。');
     if(edition.regionalAdditions!==undefined&&!dataPath(edition.regionalAdditions))throw Error('シナリオ版の地域追加先が不正です。');
+    if(edition.saveRevision!==undefined&&(!Number.isSafeInteger(edition.saveRevision)||edition.saveRevision<1))throw Error('シナリオ版の保存改訂番号が不正です。');
   }
   const id=requested==='latest'?catalog.latest:requested;
   if(!known(id)||!Object.hasOwn(catalog.editions,id))throw Error(`対応していないシナリオ版です: ${String(requested)}`);
@@ -28,7 +29,21 @@ export function readSavedScenarioEdition(save){
   const outer=Object.hasOwn(save,'scenarioEdition'),inner=Object.hasOwn(save.state,'scenarioEdition');
   if(!outer&&!inner)return 'e1';
   if(!outer||!inner||!known(save.scenarioEdition)||save.scenarioEdition!==save.state.scenarioEdition)throw Error('記録のシナリオ版が不正または不一致です。');
+  readSavedScenarioRevision(save);
   return save.scenarioEdition;
+}
+
+export const scenarioSaveRevision=data=>data.scenarioEditions?.editions[data.scenarioEdition??'e1']?.saveRevision??1;
+export function readSavedScenarioRevision(save){
+  const outer=Object.hasOwn(save,'scenarioRevision'),inner=Object.hasOwn(save.state,'scenarioRevision');
+  if(!outer&&!inner)return 1;
+  if(!outer||!inner||!Number.isSafeInteger(save.scenarioRevision)||save.scenarioRevision<1||save.scenarioRevision!==save.state.scenarioRevision)throw Error('記録の保存改訂番号が不正または不一致です。');
+  return save.scenarioRevision;
+}
+export function scenarioRevisionError(save,data){
+  try{if(readSavedScenarioRevision(save)!==scenarioSaveRevision(data))return '第2版の地理・依頼の更新により、この旧記録は非対応になりました。「記録」から第2版の新しい旅を始めてください。初版の記録は引き続き利用できます。';}
+  catch(error){return error.message;}
+  return '';
 }
 
 export function savedScenarioEdition(text){

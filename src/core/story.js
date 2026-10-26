@@ -232,7 +232,7 @@ export function resumeWorldStory(engine,id){
 export function journeyErrors(data,state){
   const j=state.journey;if(j===null)return [];
   const q=data.quests[j?.quest],a=q?.story?.actions[j?.action],s=state.stories?.[j?.quest];
-  if(!j||!a?.journey||!a.from.includes(j.from)||state.quests[j.quest]?.stage!=='active'||s?.scene!==null||s.events.includes(j.action))return ['移動中の物語参照が不正です'];
+  if(!j||!a?.journey||!a.from.includes(j.from)||state.quests[j.quest]?.stage!=='active'||s?.scene!==null||a.once!==false&&s.events.includes(j.action))return ['移動中の物語参照が不正です'];
   for(const who of ['party',...a.journey.companions])if(s.values[q.story.entities[who].holder]!=='transit')return ['移動中の人物の所在が不正です'];
   return [];
 }

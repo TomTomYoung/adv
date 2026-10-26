@@ -49,10 +49,10 @@ test('e2 adds exactly eight ten-quest arcs, locations and presentation order wit
  assert.equal(Object.keys(first.quests).length,210);assert.equal(Object.keys(data.quests).length,300);assert.equal(added.length,80);
  for(const [actor,episodes] of Object.entries(arcs)){assert.equal(episodes.length,10);assert.deepEqual(episodes.map(q=>q.number),Array.from({length:10},(_,i)=>episodes[0].number+i));}
  assert.equal(added.reduce((n,q)=>n+Object.keys(q.outcomes).length,0),162);
- for(const id of Object.keys(first.quests))if(id!=='q001')assert.deepEqual(data.quests[id],first.quests[id]);
- for(const id of Object.keys(first.locations))assert.deepEqual(data.locations[id],first.locations[id]);
- assert.deepEqual(data.actors,first.actors);assert.deepEqual(data.worldTravelLegacy.maps,first.maps);
- for(const id of Object.keys(first.maps))if(id!=='region_1_landing')assert.deepEqual(data.maps[id],first.maps[id]);
+ for(const id of Object.keys(first.quests))if(!Object.hasOwn(data.scenarioEditions.editions.e2.questOverrides,id))assert.deepEqual(data.quests[id],first.quests[id]);
+ for(const id of Object.keys(first.locations).filter(id=>id!=='hikarigaeri_square'))assert.deepEqual(data.locations[id],first.locations[id]);
+ assert.deepEqual(data.actors,first.actors);for(const [id,map] of Object.entries(first.maps))assert.deepEqual(data.maps[id].tiles,map.tiles);
+ for(const id of Object.keys(first.maps))if(!['region_1_landing','region_4_f1','region_4_f2'].includes(id))assert.deepEqual(data.maps[id],first.maps[id]);
  const g=ready('nio'),view=projectGame(g);assert.equal(view.quests.length,300);assert.equal(new Set(view.quests.map(q=>q.id)).size,300);
  assert.equal(view.quests.find(q=>q.id==='q221').regionName,'仲間と巡るトルネア');
  assert.equal(g.dispatch({type:'travel',region:11}),false);
@@ -110,15 +110,13 @@ test('cost shortage leaves a free alternative and does not consume resources or 
  choose(g,'sort');choose(g,'return');arrive(g);choose(g,'finish');assert.equal(g.state.gold,10);
 });
 
-test('an existing e2 save gains only an entirely absent cohort; a partial cohort is rejected',async()=>{
- const old=await loadContent(async file=>{const value=await read(file);if(file==='data/scenario-editions.json')delete value.editions.e2.additions;return value;},{edition:'e2'});
- const g=new GameEngine(old,17);drain(g);g.accept('q001');const original=JSON.parse(g.save()),before=structuredClone(original);
- const migrated=migrateSave(original,data);assert.deepEqual(validateSave(migrated,data),[]);assert.deepEqual(original,before);
- const expected=structuredClone(before);for(const q of added)expected.state.quests[q.id]={stage:'available',evidence:[],outcome:null};
- assert.deepEqual(migrated,expected);
- const partial=structuredClone(before);partial.state.quests.q211={stage:'available',evidence:[],outcome:null};
- assert.ok(validateSave(migrateSave(partial,data),data).length);
- const target=new GameEngine(data);assert.throws(()=>target.load(JSON.stringify(partial)));
+test('post-cut e2 records reject entirely missing and partially missing companion cohorts',()=>{
+ const target=new GameEngine(data),stable=target.save();
+ for(const missing of [added,added.slice(1)]){
+  const original=JSON.parse(stable);for(const q of missing)delete original.state.quests[q.id];const before=structuredClone(original);
+  assert.deepEqual(migrateSave(original,data),before);assert.deepEqual(original,before);assert.ok(validateSave(original,data).length);
+  assert.throws(()=>target.load(JSON.stringify(original)));assert.equal(target.save(),stable);
+ }
 });
 
 test('edition additions reject duplicate IDs and cannot overwrite the base world',async()=>{

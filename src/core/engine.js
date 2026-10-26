@@ -43,7 +43,7 @@ import {actorStats,initializeJob,knownSkills,changeJob,fieldAction,partyEffect,p
 import {awardExperience} from './progression.js';
 import {advanceBattleResult} from './battle-results.js';
 import {useFieldSkill} from './field-skills.js';
-import {resolveScenarioEdition} from './scenario-editions.js';
+import {resolveScenarioEdition,scenarioSaveRevision} from './scenario-editions.js';
 export const DIRECTIONS=['north','east','south','west'];
 export const DELTAS=[[0,-1],[1,0],[0,1],[-1,0]];
 
@@ -51,6 +51,7 @@ export class GameEngine {
   constructor(data, seed = 20260909) {
     this.data=data;this.feedback=freshFeedback();
     this.state={version:1,gameId:data.game.id,contentVersion:data.game.version,scenarioEdition:resolveScenarioEdition(data.scenarioEditions,data.scenarioEdition??'e1'),gear:freshGear(),rng:(seed>>>0)||1,mode:'town',location:null,townLocation:townRoot(data)??null,journey:null,flags:{},vars:{},stories:{},records:freshRecords(),gold:data.game.initial.gold,battleResult:null,steps:0,light:data.system.lightCapacity,members:clone(data.game.initial.members),actors:{},inventory:clone(data.game.initial.inventory),quests:{},objects:{},events:{},discovered:{},journal:[],log:[],vm:[],waiting:null,battle:null,trackedQuest:null,ending:null,presentation:{background:'corridor',music:'exploration'},notice:''};
+    if(scenarioSaveRevision(data)>1)this.state.scenarioRevision=scenarioSaveRevision(data);
     for(const [item,count] of Object.entries(this.state.inventory))if(data.items[item]?.slot)addGear(this.state,item,count);
     for(const actor of Object.values(data.actors)) this.state.actors[actor.id]={id:actor.id,level:1,xp:0,hp:actor.stats.hp,mp:actor.stats.mp,statuses:[],equipment:{}};
     this.state.partyFormation=nextFormation(this.state.members);this.state.battleModePreference='auto';
@@ -416,7 +417,7 @@ export class GameEngine {
     this.give(itemId,-1);this.eventCue('item');this.run(item.script,{target:actorId});return true;
   }
   setPortableFire(command){setPortableFire(this.data,this.state,command,this);}
-  save(){return JSON.stringify({saveVersion:1,gameId:this.data.game.id,contentVersion:this.data.game.version,scenarioEdition:this.state.scenarioEdition,state:clone(this.state)});}
+  save(){return JSON.stringify({saveVersion:1,gameId:this.data.game.id,contentVersion:this.data.game.version,scenarioEdition:this.state.scenarioEdition,...(this.state.scenarioRevision?{scenarioRevision:this.state.scenarioRevision}:{}),state:clone(this.state)});}
   load(text){
     if(typeof text!=='string'||text.length>this.data.system.maxSaveBytes)throw new Error('セーブのサイズが不正です');
     const save=migrateSave(JSON.parse(text),this.data),errors=validateSave(save,this.data);

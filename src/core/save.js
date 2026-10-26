@@ -37,7 +37,7 @@ import {isRecord,clone,evaluate} from './expression.js';
 import {commandsAt} from './script.js';
 import {battleDefinition} from './battle-events.js';
 import {freshRecords,snapshotRecords,recordsValid} from './records.js';
-import {readSavedScenarioEdition,resolveScenarioEdition} from './scenario-editions.js';
+import {readSavedScenarioEdition,resolveScenarioEdition,scenarioRevisionError,scenarioSaveRevision} from './scenario-editions.js';
 function addScenarioState(save,data){
   const s=save.state;
   for(const id of Object.keys(data.quests))s.quests[id]??={stage:'available',evidence:[],outcome:null};
@@ -166,6 +166,10 @@ function migrateContentSave(original,data){
 export function migrateSave(original,data){
   let edition;
   try{edition=readSavedScenarioEdition(original);if(edition!==resolveScenarioEdition(data.scenarioEditions,data.scenarioEdition??'e1'))return original;}catch{return original;}
+  if(scenarioRevisionError(original,data))return original;
+  // Revision 2 is a new save lineage. Do not reinterpret missing cohorts or
+  // world state as the pre-cut e2 format. Later migrations must be explicit.
+  if(scenarioSaveRevision(data)>1)return original;
   if(data.regionalLegacy&&isRecord(original.state.quests)&&data.regionalQuestIds.every(id=>!Object.hasOwn(original.state.quests,id)&&!Object.hasOwn(original.state.stories??{},id))){
     const legacy=data.regionalLegacy,previous=migrateSave(original,legacy);
     if(validateSave(previous,legacy).length)return original;
@@ -209,6 +213,7 @@ export function validateSave(save,data){
   if(!isRecord(save)||save.saveVersion!==1||save.gameId!==data.game.id||save.contentVersion!==data.game.version)return ['作品またはセーブ形式のバージョンが一致しません'];
   const s=save.state;if(!isRecord(s))return ['状態がありません'];
   try{if(readSavedScenarioEdition(save)!==resolveScenarioEdition(data.scenarioEditions,data.scenarioEdition??'e1'))return ['記録と読込中のシナリオ版が一致しません'];}catch(error){return [error.message];}
+  const revisionError=scenarioRevisionError(save,data);if(revisionError)return [revisionError];
   if('level' in s||'xp' in s)fail('隊共通経験値の旧形式です');
   if(s.gameId!==data.game.id||s.contentVersion!==data.game.version||s.version!==1)fail('状態のバージョン不正');
   for(const key of ['flags','vars','actors','inventory','quests','objects','events','discovered','presentation'])if(!isRecord(s[key]))fail(`${key}不正`);

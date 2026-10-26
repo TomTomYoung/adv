@@ -1,0 +1,1187 @@
+{
+  "schemaVersion": 1,
+  "id": "q033",
+  "number": 33,
+  "title": "映らない巡礼者",
+  "client": "宿坊のウラ",
+  "brief": "鏡に映らない巡礼者がいる。礼拝堂へ入れてよいか判断してください。",
+  "region": 4,
+  "type": "authored_progression",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。 巡礼台地の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q033_pilgrim_entry",
+      "title": "映らない巡礼者の現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q033.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q033.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      },
+      "script": "q033.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "region_4",
+          "map": "region_4_f1",
+          "x": 13,
+          "y": 7
+        }
+      ]
+    },
+    {
+      "id": "q033_pilgrim_wash",
+      "title": "外套を洗う水盤",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "wash",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q033.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q033.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      },
+      "script": "q033.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "region_4",
+          "map": "region_4_f1",
+          "x": 10,
+          "y": 5
+        }
+      ]
+    }
+  ],
+  "locations": [],
+  "outcomes": {
+    "informed": {
+      "label": "外套を洗い、巡礼者と曇りを磨き直す",
+      "text": "巡礼者は仕事を取り戻した。宿坊は鏡だけで人を決めない規則を掲げる。",
+      "gold": 93,
+      "xp": 92
+    },
+    "contract": {
+      "label": "巡礼者の入堂を拒む",
+      "text": "騒ぎは収まった。外套の白い粉は、門の前にも残る。",
+      "gold": 113,
+      "xp": 68
+    },
+    "compromise": {
+      "label": "鏡のない別室へ泊めて話を聞く",
+      "text": "巡礼者は一晩だけ休めた。翌朝、宿坊の曇り鏡が一枚直っている。",
+      "gold": 60,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/chapel.mjs",
+    "world": {
+      "truth": "巡礼者の衣服は銀磨き粉を含み、曇った鏡の表面を一時的に白くしている。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "巡礼者の衣服は銀磨き粉を含み、曇った鏡の表面を一時的に白くしている。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "鏡に映らない巡礼者がいる。礼拝堂へ入れてよいか判断してください。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "宿坊のウラ",
+        "observation": "鏡に映らない巡礼者がいる。礼拝堂へ入れてよいか判断してください。",
+        "belief": "鏡に映らない巡礼者がいる。礼拝堂へ入れてよいか判断してください。",
+        "goal": "鏡に映らない巡礼者がいる。礼拝堂へ入れてよいか判断してください。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "鏡に映らない巡礼者がいる。礼拝堂へ入れてよいか判断してください。",
+      "progression": "巡礼者を拒む前に鏡の表面を洗う実験で、疑われた人が修復を手伝う側へ変わる。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q033.pilgrimage.entry"
+        },
+        {
+          "id": "powder",
+          "script": "q033.pilgrimage.powder"
+        },
+        {
+          "id": "guest",
+          "script": "q033.pilgrimage.guest"
+        },
+        {
+          "id": "wash",
+          "script": "q033.pilgrimage.wash"
+        },
+        {
+          "id": "clean",
+          "script": "q033.pilgrimage.clean"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "鏡に映らない巡礼者がいる。礼拝堂へ入れてよいか判断してください。",
+      "openQuestion": "映らない巡礼者の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "ruleReveal",
+      "newInformation": "巡礼者の衣服は銀磨き粉を含み、曇った鏡の表面を一時的に白くしている。",
+      "retroactiveTargets": [
+        "powder"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q033.flow.entry"
+      },
+      {
+        "id": "powder",
+        "script": "q033.flow.powder"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q033.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "巡礼者を拒む前に鏡の表面を洗う実験で、疑われた人が修復を手伝う側へ変わる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "巡礼者を拒む前に鏡の表面を洗う実験で、疑われた人が修復を手伝う側へ変わる。",
+    "flowVersion": 2,
+    "entryScript": "q033.pilgrimage.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "巡礼者が鏡へ触れると白く曇った。「自分でも分からない」と外套を握る。",
+        "options": [
+          {
+            "id": "cloth",
+            "text": "鏡と外套をそれぞれ布で拭く",
+            "to": "powder",
+            "action": "entry_cloth"
+          },
+          {
+            "id": "guest",
+            "text": "鏡のない別室へ泊めて話を聞く",
+            "to": "guest",
+            "action": "entry_guest"
+          },
+          {
+            "id": "reject",
+            "text": "巡礼者の入堂を拒む",
+            "to": "@contract",
+            "action": "entry_reject"
+          }
+        ]
+      },
+      {
+        "id": "powder",
+        "place": "entry",
+        "text": "布に銀磨き粉が付き、拭いた鏡へ手が映った。巡礼者の衣服は銀磨き粉を含み、曇った鏡の表面を一時的に白くしている。 巡礼者は以前、鏡磨きの作業をしていた。",
+        "options": [
+          {
+            "id": "wash",
+            "text": "外套を洗い、巡礼者と曇りを磨き直す",
+            "to": "wash",
+            "action": "powder_wash"
+          },
+          {
+            "id": "room",
+            "text": "身の潔白だけ伝え、別室へ案内する",
+            "to": "guest",
+            "action": "powder_room"
+          }
+        ]
+      },
+      {
+        "id": "guest",
+        "place": "guest",
+        "text": "巡礼者と鏡のない客室まで来た。外套を椅子へ掛け、戸を閉じてから話を聞く。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@compromise",
+            "action": "guest_finish"
+          }
+        ]
+      },
+      {
+        "id": "wash",
+        "place": "wash",
+        "text": "水盤で外套を洗うと、磨き粉が水に落ちた。巡礼者は濡れた袖を絞り、鏡へ戻ろうと言う。",
+        "options": [
+          {
+            "id": "return",
+            "text": "巡礼者と鏡へ戻り、曇りを磨き直す",
+            "to": "clean",
+            "action": "wash_return"
+          }
+        ]
+      },
+      {
+        "id": "clean",
+        "place": "entry",
+        "text": "戻った鏡に二人の手が映る。巡礼者と残る曇りを拭き取った。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@informed",
+            "action": "clean_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "first-ten",
+      "settlement": "oddland_plateau",
+      "saveRevision": 2,
+      "scope": "礼拝堂20件のうち前半10件の実地接続。後半10件の出張先は未接続。"
+    }
+  },
+  "scripts": {
+    "q033.pilgrimage.entry": {
+      "storyQuest": "q033",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q033",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "巡礼者が鏡へ触れると白く曇った。「自分でも分からない」と外套を握る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "cloth",
+              "text": "鏡と外套をそれぞれ布で拭く",
+              "storyAction": {
+                "quest": "q033",
+                "action": "entry_cloth"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q033",
+                  "action": "entry_cloth"
+                },
+                {
+                  "op": "jump",
+                  "script": "q033.pilgrimage.powder"
+                }
+              ]
+            },
+            {
+              "id": "guest",
+              "text": "鏡のない別室へ泊めて話を聞く",
+              "storyAction": {
+                "quest": "q033",
+                "action": "entry_guest"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q033",
+                  "action": "entry_guest"
+                }
+              ]
+            },
+            {
+              "id": "reject",
+              "text": "巡礼者の入堂を拒む",
+              "storyAction": {
+                "quest": "q033",
+                "action": "entry_reject"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q033",
+                  "action": "entry_reject"
+                },
+                {
+                  "op": "jump",
+                  "script": "q033.pilgrimage.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q033.pilgrimage.powder": {
+      "storyQuest": "q033",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q033",
+          "scene": "powder"
+        },
+        {
+          "op": "narrate",
+          "text": "布に銀磨き粉が付き、拭いた鏡へ手が映った。巡礼者の衣服は銀磨き粉を含み、曇った鏡の表面を一時的に白くしている。 巡礼者は以前、鏡磨きの作業をしていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wash",
+              "text": "外套を洗い、巡礼者と曇りを磨き直す",
+              "storyAction": {
+                "quest": "q033",
+                "action": "powder_wash"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q033",
+                  "action": "powder_wash"
+                }
+              ]
+            },
+            {
+              "id": "room",
+              "text": "身の潔白だけ伝え、別室へ案内する",
+              "storyAction": {
+                "quest": "q033",
+                "action": "powder_room"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q033",
+                  "action": "powder_room"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q033.pilgrimage.guest": {
+      "storyQuest": "q033",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q033",
+          "scene": "guest"
+        },
+        {
+          "op": "narrate",
+          "text": "巡礼者と鏡のない客室まで来た。外套を椅子へ掛け、戸を閉じてから話を聞く。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q033",
+                "action": "guest_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q033",
+                  "action": "guest_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q033.pilgrimage.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q033.pilgrimage.wash": {
+      "storyQuest": "q033",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q033",
+          "scene": "wash"
+        },
+        {
+          "op": "narrate",
+          "text": "水盤で外套を洗うと、磨き粉が水に落ちた。巡礼者は濡れた袖を絞り、鏡へ戻ろうと言う。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "巡礼者と鏡へ戻り、曇りを磨き直す",
+              "storyAction": {
+                "quest": "q033",
+                "action": "wash_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q033",
+                  "action": "wash_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q033.pilgrimage.clean": {
+      "storyQuest": "q033",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q033",
+          "scene": "clean"
+        },
+        {
+          "op": "narrate",
+          "text": "戻った鏡に二人の手が映る。巡礼者と残る曇りを拭き取った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q033",
+                "action": "clean_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q033",
+                  "action": "clean_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q033.pilgrimage.end.informed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q033.pilgrimage.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "巡礼者は仕事を取り戻した。宿坊は鏡だけで人を決めない規則を掲げる。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q033",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q033.pilgrimage.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "騒ぎは収まった。外套の白い粉は、門の前にも残る。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q033",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q033.pilgrimage.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "巡礼者は一晩だけ休めた。翌朝、宿坊の曇り鏡が一枚直っている。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q033",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q033.pilgrimage.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q033.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q033.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "巡礼者は仕事を取り戻した。宿坊は鏡だけで人を決めない規則を掲げる。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "騒ぎは収まった。外套の白い粉は、門の前にも残る。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "巡礼者は一晩だけ休めた。翌朝、宿坊の曇り鏡が一枚直っている。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "story.init",
+              "quest": "q033"
+            },
+            {
+              "op": "switch",
+              "value": {
+                "ref": "stories.q033.scene"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q033.pilgrimage.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "powder",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q033.pilgrimage.powder"
+                    }
+                  ]
+                },
+                {
+                  "equals": "guest",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q033.pilgrimage.guest"
+                    }
+                  ]
+                },
+                {
+                  "equals": "wash",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q033.pilgrimage.wash"
+                    }
+                  ]
+                },
+                {
+                  "equals": "clean",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q033.pilgrimage.clean"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q033.pilgrimage.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "映らない巡礼者の現場",
+      "wash": "外套を洗う水盤",
+      "guest": "鏡のない客室",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "wash"
+      ],
+      [
+        "transit",
+        "guest"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "wash",
+          "guest",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "pilgrimAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "wash",
+          "guest",
+          "transit"
+        ],
+        "meaning": "pilgrim の所在または保持者"
+      },
+      "cloakAt": {
+        "type": "enum",
+        "initial": "pilgrim",
+        "values": [
+          "entry",
+          "wash",
+          "guest",
+          "transit",
+          "party",
+          "pilgrim"
+        ],
+        "meaning": "cloak の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "pilgrim": {
+        "holder": "pilgrimAt",
+        "kind": "person"
+      },
+      "cloak": {
+        "holder": "cloakAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "巡礼者の衣服は銀磨き粉を含み、曇った鏡の表面を一時的に白くしている。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "映らない巡礼者の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "powder": {
+        "title": "映らない巡礼者の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "guest": {
+        "title": "鏡のない客室",
+        "place": "guest",
+        "cast": [],
+        "requires": true
+      },
+      "wash": {
+        "title": "外套を洗う水盤",
+        "place": "wash",
+        "cast": [],
+        "requires": true
+      },
+      "clean": {
+        "title": "映らない巡礼者の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_cloth": {
+        "from": [
+          "entry"
+        ],
+        "to": "powder",
+        "requires": true,
+        "effects": [
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "entry",
+            "requires": true
+          }
+        ],
+        "once": false
+      },
+      "entry_guest": {
+        "from": [
+          "entry"
+        ],
+        "to": "guest",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "pilgrim"
+            ],
+            "path": [
+              "transit",
+              "guest"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "guest",
+          "companions": [
+            "pilgrim"
+          ]
+        },
+        "depart": []
+      },
+      "entry_reject": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "powder_wash": {
+        "from": [
+          "powder"
+        ],
+        "to": "wash",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "pilgrim"
+            ],
+            "path": [
+              "transit",
+              "wash"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "wash",
+          "companions": [
+            "pilgrim"
+          ]
+        },
+        "depart": []
+      },
+      "powder_room": {
+        "from": [
+          "powder"
+        ],
+        "to": "guest",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "pilgrim"
+            ],
+            "path": [
+              "transit",
+              "guest"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "guest",
+          "companions": [
+            "pilgrim"
+          ]
+        },
+        "depart": []
+      },
+      "guest_finish": {
+        "from": [
+          "guest"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "wash_return": {
+        "from": [
+          "wash"
+        ],
+        "to": "clean",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "pilgrim"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "pilgrim"
+          ]
+        },
+        "depart": []
+      },
+      "clean_finish": {
+        "from": [
+          "clean"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q033.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q033.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q033.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q033.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q033.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q033.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q033.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q033.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q033.values.partyAt"
+                },
+                "right": "guest"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_4",
+        "map": "region_4_f1",
+        "x": 13,
+        "y": 7
+      },
+      "wash": {
+        "kind": "dungeon",
+        "dungeon": "region_4",
+        "map": "region_4_f1",
+        "x": 10,
+        "y": 5
+      },
+      "guest": {
+        "kind": "town",
+        "location": "pilgrim_guesthouse"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_plateau",
+  "receptionLocations": [
+    "pilgrim_board"
+  ]
+}

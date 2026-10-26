@@ -1,3 +1,4 @@
+import {buildChapelQuests} from './build-chapel-quests.mjs';
 import {buildOddlandQuests} from './build-oddland-quests.mjs';
 import fs from 'node:fs/promises';
 import {buildOddlandGeography} from './build-oddland-geography.mjs';
@@ -114,6 +115,7 @@ export async function buildScenarioEditions({check=false}={}){
  await buildCompanionEdition({check});
  await buildOddlandGeography({check});
  await buildOddlandQuests({check});
+ await buildChapelQuests({check});
  const bytes=await fs.readFile(path.join(root,'data/quests/q001.json'));
  const q=buildSecondEditionQuest(JSON.parse(bytes));
  const files={
@@ -130,5 +132,5 @@ export async function buildScenarioEditions({check=false}={}){
 
 if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href){
  await buildScenarioEditions({check:process.argv.includes('--check')});
- console.log(`SCENARIO EDITIONS ${process.argv.includes('--check')?'OK':'BUILT'}: e2 q001, 2 entrance choices, 2 endings; e1 unchanged`);
+ console.log(`SCENARIO EDITIONS ${process.argv.includes('--check')?'OK':'BUILT'}: e2 q001 and chapel q031–040; e1 unchanged`);
 }

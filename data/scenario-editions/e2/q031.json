@@ -1,0 +1,893 @@
+{
+  "schemaVersion": 1,
+  "id": "q031",
+  "number": 31,
+  "title": "遅れる祈り",
+  "client": "聖歌隊のキリ",
+  "brief": "祈りの声が一日遅れて返る。誰の声か確かめてください。",
+  "region": 4,
+  "type": "authored_progression",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。 巡礼台地の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q031_pilgrim_entry",
+      "title": "遅れる祈りの現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q031.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q031.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      },
+      "script": "q031.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "region_4",
+          "map": "region_4_f1",
+          "x": 11,
+          "y": 9
+        }
+      ]
+    }
+  ],
+  "locations": [],
+  "outcomes": {
+    "informed": {
+      "label": "録音と再生の切替を直し、仕組みを見せる",
+      "text": "祈りは記録として聞かれた。奇跡を失った人も、亡き家族の声を聞きに来る。",
+      "gold": 93,
+      "xp": 92
+    },
+    "contract": {
+      "label": "録音水晶を割って声を止める",
+      "text": "遅れる声は止んだ。もう聞けない声を惜しむ人が、小さな破片を拾う。",
+      "gold": 113,
+      "xp": 68
+    },
+    "compromise": {
+      "label": "昨日の録音と表示して再生を続ける",
+      "text": "礼拝堂は過去と現在を分けて祈る場所になった。",
+      "gold": 60,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/chapel.mjs",
+    "world": {
+      "truth": "礼拝堂の録音水晶が夜間に前日の声を再生している。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "礼拝堂の録音水晶が夜間に前日の声を再生している。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "祈りの声が一日遅れて返る。誰の声か確かめてください。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "聖歌隊のキリ",
+        "observation": "祈りの声が一日遅れて返る。誰の声か確かめてください。",
+        "belief": "祈りの声が一日遅れて返る。誰の声か確かめてください。",
+        "goal": "祈りの声が一日遅れて返る。誰の声か確かめてください。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "祈りの声が一日遅れて返る。誰の声か確かめてください。",
+      "progression": "録音と再生の時差を自分の声で試し、公開する説明を再生の運用へ組み込む。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q031.pilgrimage.entry"
+        },
+        {
+          "id": "night",
+          "script": "q031.pilgrimage.night"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "祈りの声が一日遅れて返る。誰の声か確かめてください。",
+      "openQuestion": "遅れる祈りの問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "causeSwap",
+      "newInformation": "礼拝堂の録音水晶が夜間に前日の声を再生している。",
+      "retroactiveTargets": [
+        "night"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q031.flow.entry"
+      },
+      {
+        "id": "night",
+        "script": "q031.flow.night"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q031.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q031.retested",
+        "meaning": "各場面に明記した retested の行為・合意の記録",
+        "writer": [
+          "night"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "録音と再生の時差を自分の声で試し、公開する説明を再生の運用へ組み込む。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "録音と再生の時差を自分の声で試し、公開する説明を再生の運用へ組み込む。",
+    "flowVersion": 2,
+    "entryScript": "q031.pilgrimage.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "昨日の祈りが今日返ってくる。水晶の横には録音用の小さな窪みがある。",
+        "options": [
+          {
+            "id": "record",
+            "text": "今日の日付を水晶へ吹き込む",
+            "to": "night",
+            "action": "entry_record"
+          },
+          {
+            "id": "break",
+            "text": "録音水晶を割って声を止める",
+            "to": "@contract",
+            "action": "entry_break"
+          },
+          {
+            "id": "date",
+            "text": "昨日の録音と表示して再生を続ける",
+            "to": "@compromise",
+            "action": "entry_date"
+          }
+        ]
+      },
+      {
+        "id": "night",
+        "place": "entry",
+        "text": "夜の礼拝が始まり、自分の言った日付が流れた。礼拝堂の録音水晶が夜間に前日の声を再生している。",
+        "options": [
+          {
+            "id": "repair",
+            "text": "録音と再生の切替を直し、仕組みを見せる",
+            "to": "@informed",
+            "action": "night_repair"
+          },
+          {
+            "id": "notice",
+            "text": "機構はそのままに、録音日を掲げる",
+            "to": "@compromise",
+            "action": "night_notice"
+          },
+          {
+            "id": "again",
+            "text": "別の日付でも試す",
+            "to": "night",
+            "action": "night_again"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "first-ten",
+      "settlement": "oddland_plateau",
+      "saveRevision": 2,
+      "scope": "礼拝堂20件のうち前半10件の実地接続。後半10件の出張先は未接続。"
+    }
+  },
+  "scripts": {
+    "q031.pilgrimage.entry": {
+      "storyQuest": "q031",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q031",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "昨日の祈りが今日返ってくる。水晶の横には録音用の小さな窪みがある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "record",
+              "text": "今日の日付を水晶へ吹き込む",
+              "storyAction": {
+                "quest": "q031",
+                "action": "entry_record"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q031",
+                  "action": "entry_record"
+                },
+                {
+                  "op": "jump",
+                  "script": "q031.pilgrimage.night"
+                }
+              ]
+            },
+            {
+              "id": "break",
+              "text": "録音水晶を割って声を止める",
+              "storyAction": {
+                "quest": "q031",
+                "action": "entry_break"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q031",
+                  "action": "entry_break"
+                },
+                {
+                  "op": "jump",
+                  "script": "q031.pilgrimage.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "date",
+              "text": "昨日の録音と表示して再生を続ける",
+              "storyAction": {
+                "quest": "q031",
+                "action": "entry_date"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q031",
+                  "action": "entry_date"
+                },
+                {
+                  "op": "jump",
+                  "script": "q031.pilgrimage.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q031.pilgrimage.night": {
+      "storyQuest": "q031",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q031",
+          "scene": "night"
+        },
+        {
+          "op": "narrate",
+          "text": "夜の礼拝が始まり、自分の言った日付が流れた。礼拝堂の録音水晶が夜間に前日の声を再生している。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "repair",
+              "text": "録音と再生の切替を直し、仕組みを見せる",
+              "storyAction": {
+                "quest": "q031",
+                "action": "night_repair"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q031",
+                  "action": "night_repair"
+                },
+                {
+                  "op": "jump",
+                  "script": "q031.pilgrimage.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "notice",
+              "text": "機構はそのままに、録音日を掲げる",
+              "storyAction": {
+                "quest": "q031",
+                "action": "night_notice"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q031",
+                  "action": "night_notice"
+                },
+                {
+                  "op": "jump",
+                  "script": "q031.pilgrimage.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "again",
+              "text": "別の日付でも試す",
+              "storyAction": {
+                "quest": "q031",
+                "action": "night_again"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q031.values.retested"
+                  },
+                  "right": true
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q031",
+                  "action": "night_again"
+                },
+                {
+                  "op": "narrate",
+                  "text": "二度目も録音した順に遅れて聞こえた。祈りへの回答が選ばれているわけではない。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q031.pilgrimage.night"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q031.pilgrimage.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "祈りは記録として聞かれた。奇跡を失った人も、亡き家族の声を聞きに来る。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q031",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q031.pilgrimage.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "遅れる声は止んだ。もう聞けない声を惜しむ人が、小さな破片を拾う。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q031",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q031.pilgrimage.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "礼拝堂は過去と現在を分けて祈る場所になった。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q031",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q031.pilgrimage.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q031.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q031.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "祈りは記録として聞かれた。奇跡を失った人も、亡き家族の声を聞きに来る。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "遅れる声は止んだ。もう聞けない声を惜しむ人が、小さな破片を拾う。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "礼拝堂は過去と現在を分けて祈る場所になった。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "story.init",
+              "quest": "q031"
+            },
+            {
+              "op": "switch",
+              "value": {
+                "ref": "stories.q031.scene"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q031.pilgrimage.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "night",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q031.pilgrimage.night"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q031.pilgrimage.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "遅れる祈りの現場",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "recorded": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "recorded"
+      },
+      "retested": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "retested"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "礼拝堂の録音水晶が夜間に前日の声を再生している。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "遅れる祈りの現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "night": {
+        "title": "遅れる祈りの現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_record": {
+        "from": [
+          "entry"
+        ],
+        "to": "night",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "recorded",
+            "value": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "entry",
+            "requires": true
+          }
+        ],
+        "once": false
+      },
+      "entry_break": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "entry_date": {
+        "from": [
+          "entry"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "night_repair": {
+        "from": [
+          "night"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "night_notice": {
+        "from": [
+          "night"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "night_again": {
+        "from": [
+          "night"
+        ],
+        "to": "night",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q031.values.retested"
+            },
+            "right": true
+          }
+        },
+        "effects": [
+          {
+            "op": "set",
+            "key": "retested",
+            "value": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "entry",
+            "requires": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q031.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q031.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q031.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q031.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q031.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q031.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q031.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q031.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q031.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_4",
+        "map": "region_4_f1",
+        "x": 11,
+        "y": 9
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_plateau",
+  "receptionLocations": [
+    "pilgrim_board"
+  ]
+}

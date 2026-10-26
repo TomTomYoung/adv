@@ -1,0 +1,1410 @@
+{
+  "schemaVersion": 1,
+  "id": "q032",
+  "number": 32,
+  "title": "片目の聖像",
+  "client": "修復師のサイ",
+  "brief": "聖像の片目を戻す依頼だ。外された宝玉を探してください。",
+  "region": 4,
+  "type": "authored_progression",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。 巡礼台地の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q032_pilgrim_entry",
+      "title": "片目の聖像の現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q032.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q032.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      },
+      "script": "q032.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "region_4",
+          "map": "region_4_f1",
+          "x": 9,
+          "y": 11
+        }
+      ]
+    },
+    {
+      "id": "q032_pilgrim_cell",
+      "title": "聖像の下の地下牢",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "cell",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q032.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q032.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      },
+      "script": "q032.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "region_4",
+          "map": "region_4_f1",
+          "x": 1,
+          "y": 8
+        }
+      ]
+    },
+    {
+      "id": "q032_pilgrim_workshop",
+      "title": "礼拝堂の石工台",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "workshop",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q032.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q032.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      },
+      "script": "q032.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "region_4",
+          "map": "region_4_f1",
+          "x": 9,
+          "y": 6
+        }
+      ]
+    }
+  ],
+  "locations": [],
+  "outcomes": {
+    "informed": {
+      "label": "覗き管を塞いで不透明な目をはめる",
+      "text": "像は元の顔に戻った。地下牢の監視記録だけが、礼拝堂の外へ出る。",
+      "gold": 93,
+      "xp": 92
+    },
+    "contract": {
+      "label": "元の透明な宝玉を戻す",
+      "text": "修復師は褒められた。囚人は再び祈りの目を避けて座る。",
+      "gold": 113,
+      "xp": 68
+    },
+    "compromise": {
+      "label": "片目のまま修復を止め、由来を銘板にする",
+      "text": "不完全な像が過去を語り始めた。修復費の残りは牢の整備に回る。",
+      "gold": 60,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/chapel.mjs",
+    "world": {
+      "truth": "片目は地下牢への覗き窓で、両目を戻すと囚人の見張りが再開する。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "片目は地下牢への覗き窓で、両目を戻すと囚人の見張りが再開する。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "聖像の片目を戻す依頼だ。外された宝玉を探してください。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "修復師のサイ",
+        "observation": "聖像の片目を戻す依頼だ。外された宝玉を探してください。",
+        "belief": "聖像の片目を戻す依頼だ。外された宝玉を探してください。",
+        "goal": "聖像の片目を戻す依頼だ。外された宝玉を探してください。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "聖像の片目を戻す依頼だ。外された宝玉を探してください。",
+      "progression": "聖像の目を戻す修復の途中で地下牢へ通じ、囚人の視点から部品を選び直す。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q032.pilgrimage.entry"
+        },
+        {
+          "id": "cell",
+          "script": "q032.pilgrimage.cell"
+        },
+        {
+          "id": "workshop",
+          "script": "q032.pilgrimage.workshop"
+        },
+        {
+          "id": "fit_stone",
+          "script": "q032.pilgrimage.fit_stone"
+        },
+        {
+          "id": "fit_original",
+          "script": "q032.pilgrimage.fit_original"
+        },
+        {
+          "id": "plate",
+          "script": "q032.pilgrimage.plate"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "聖像の片目を戻す依頼だ。外された宝玉を探してください。",
+      "openQuestion": "片目の聖像の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "evidenceRecode",
+      "newInformation": "片目は地下牢への覗き窓で、両目を戻すと囚人の見張りが再開する。",
+      "retroactiveTargets": [
+        "cell"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q032.flow.entry"
+      },
+      {
+        "id": "cell",
+        "script": "q032.flow.cell"
+      },
+      {
+        "id": "workshop",
+        "script": "q032.flow.workshop"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q032.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "聖像の目を戻す修復の途中で地下牢へ通じ、囚人の視点から部品を選び直す。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "聖像の目を戻す修復の途中で地下牢へ通じ、囚人の視点から部品を選び直す。",
+    "flowVersion": 2,
+    "entryScript": "q032.pilgrimage.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "片目の穴には小さな風が通る。宝玉は元の棚へ戻っている。",
+        "options": [
+          {
+            "id": "look",
+            "text": "覗き窓の行先を確かめ、地下牢へ回る",
+            "to": "cell",
+            "action": "entry_look"
+          },
+          {
+            "id": "restore",
+            "text": "元の透明な宝玉を戻す",
+            "to": "@contract",
+            "action": "entry_restore"
+          },
+          {
+            "id": "plate",
+            "text": "片目のまま修復を止め、由来を銘板にする",
+            "to": "@compromise",
+            "action": "entry_plate"
+          }
+        ]
+      },
+      {
+        "id": "cell",
+        "place": "cell",
+        "text": "穴の先は地下牢だった。囚人が「誰が見ている」と顔を隠す。片目は地下牢への覗き窓で、両目を戻すと囚人の見張りが再開する。",
+        "options": [
+          {
+            "id": "opaque",
+            "text": "見通せない石の目を用意する",
+            "to": "workshop",
+            "action": "cell_opaque"
+          },
+          {
+            "id": "leave",
+            "text": "穴の由来を記し、今の姿を保存する",
+            "to": "plate",
+            "action": "cell_leave"
+          }
+        ]
+      },
+      {
+        "id": "workshop",
+        "place": "workshop",
+        "text": "職人が透明な宝玉と不透明な石を並べた。像の輪郭はどちらでも戻る。",
+        "options": [
+          {
+            "id": "stone",
+            "text": "覗き管を塞いで不透明な目をはめる",
+            "to": "fit_stone",
+            "action": "workshop_stone"
+          },
+          {
+            "id": "original",
+            "text": "元の見張り用宝玉へ戻す",
+            "to": "fit_original",
+            "action": "workshop_original"
+          }
+        ]
+      },
+      {
+        "id": "fit_stone",
+        "place": "entry",
+        "text": "石工台から不透明な目を持ち帰った。覗き管を塞ぐ位置と、像の輪郭をもう一度確かめる。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@informed",
+            "action": "fit_stone_finish"
+          }
+        ]
+      },
+      {
+        "id": "fit_original",
+        "place": "entry",
+        "text": "透明な宝玉のある棚へ戻った。元の目を戻すと、地下牢を見張る穴も再び通る。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@contract",
+            "action": "fit_original_finish"
+          }
+        ]
+      },
+      {
+        "id": "plate",
+        "place": "entry",
+        "text": "聖像へ戻り、片目を塞がず保存する方針と、穴が地下牢へ通じる由来を銘板に記す。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@compromise",
+            "action": "plate_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q032.decision",
+        "action": "informed",
+        "option": "informed_supplies",
+        "shortage": "q032.decision.informed.shortage",
+        "resume": "q032.decision.informed.resume",
+        "cost": {
+          "rope": 1
+        }
+      },
+      {
+        "from": "q032.review",
+        "action": "informed",
+        "option": "informed_supplies",
+        "shortage": "q032.review.informed.shortage",
+        "resume": "q032.review.informed.resume",
+        "cost": {
+          "rope": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q032.visit",
+      "q032.flow.visit"
+    ],
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "first-ten",
+      "settlement": "oddland_plateau",
+      "saveRevision": 2,
+      "scope": "礼拝堂20件のうち前半10件の実地接続。後半10件の出張先は未接続。"
+    }
+  },
+  "scripts": {
+    "q032.pilgrimage.entry": {
+      "storyQuest": "q032",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q032",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "片目の穴には小さな風が通る。宝玉は元の棚へ戻っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "look",
+              "text": "覗き窓の行先を確かめ、地下牢へ回る",
+              "storyAction": {
+                "quest": "q032",
+                "action": "entry_look"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q032",
+                  "action": "entry_look"
+                }
+              ]
+            },
+            {
+              "id": "restore",
+              "text": "元の透明な宝玉を戻す",
+              "storyAction": {
+                "quest": "q032",
+                "action": "entry_restore"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q032",
+                  "action": "entry_restore"
+                },
+                {
+                  "op": "jump",
+                  "script": "q032.pilgrimage.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "plate",
+              "text": "片目のまま修復を止め、由来を銘板にする",
+              "storyAction": {
+                "quest": "q032",
+                "action": "entry_plate"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q032",
+                  "action": "entry_plate"
+                },
+                {
+                  "op": "jump",
+                  "script": "q032.pilgrimage.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q032.pilgrimage.cell": {
+      "storyQuest": "q032",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q032",
+          "scene": "cell"
+        },
+        {
+          "op": "narrate",
+          "text": "穴の先は地下牢だった。囚人が「誰が見ている」と顔を隠す。片目は地下牢への覗き窓で、両目を戻すと囚人の見張りが再開する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "opaque",
+              "text": "見通せない石の目を用意する",
+              "storyAction": {
+                "quest": "q032",
+                "action": "cell_opaque"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q032",
+                  "action": "cell_opaque"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "穴の由来を記し、今の姿を保存する",
+              "storyAction": {
+                "quest": "q032",
+                "action": "cell_leave"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q032",
+                  "action": "cell_leave"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q032.pilgrimage.workshop": {
+      "storyQuest": "q032",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q032",
+          "scene": "workshop"
+        },
+        {
+          "op": "narrate",
+          "text": "職人が透明な宝玉と不透明な石を並べた。像の輪郭はどちらでも戻る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "stone",
+              "text": "覗き管を塞いで不透明な目をはめる",
+              "storyAction": {
+                "quest": "q032",
+                "action": "workshop_stone"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q032",
+                  "action": "workshop_stone"
+                }
+              ]
+            },
+            {
+              "id": "original",
+              "text": "元の見張り用宝玉へ戻す",
+              "storyAction": {
+                "quest": "q032",
+                "action": "workshop_original"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q032",
+                  "action": "workshop_original"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q032.pilgrimage.fit_stone": {
+      "storyQuest": "q032",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q032",
+          "scene": "fit_stone"
+        },
+        {
+          "op": "narrate",
+          "text": "石工台から不透明な目を持ち帰った。覗き管を塞ぐ位置と、像の輪郭をもう一度確かめる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q032",
+                "action": "fit_stone_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q032",
+                  "action": "fit_stone_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q032.pilgrimage.end.informed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q032.pilgrimage.fit_original": {
+      "storyQuest": "q032",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q032",
+          "scene": "fit_original"
+        },
+        {
+          "op": "narrate",
+          "text": "透明な宝玉のある棚へ戻った。元の目を戻すと、地下牢を見張る穴も再び通る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q032",
+                "action": "fit_original_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q032",
+                  "action": "fit_original_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q032.pilgrimage.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q032.pilgrimage.plate": {
+      "storyQuest": "q032",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q032",
+          "scene": "plate"
+        },
+        {
+          "op": "narrate",
+          "text": "聖像へ戻り、片目を塞がず保存する方針と、穴が地下牢へ通じる由来を銘板に記す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q032",
+                "action": "plate_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q032",
+                  "action": "plate_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q032.pilgrimage.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q032.pilgrimage.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "像は元の顔に戻った。地下牢の監視記録だけが、礼拝堂の外へ出る。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q032",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q032.pilgrimage.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "修復師は褒められた。囚人は再び祈りの目を避けて座る。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q032",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q032.pilgrimage.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "不完全な像が過去を語り始めた。修復費の残りは牢の整備に回る。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q032",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q032.pilgrimage.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q032.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q032.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "像は元の顔に戻った。地下牢の監視記録だけが、礼拝堂の外へ出る。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "修復師は褒められた。囚人は再び祈りの目を避けて座る。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "不完全な像が過去を語り始めた。修復費の残りは牢の整備に回る。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "story.init",
+              "quest": "q032"
+            },
+            {
+              "op": "switch",
+              "value": {
+                "ref": "stories.q032.scene"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q032.pilgrimage.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "cell",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q032.pilgrimage.cell"
+                    }
+                  ]
+                },
+                {
+                  "equals": "workshop",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q032.pilgrimage.workshop"
+                    }
+                  ]
+                },
+                {
+                  "equals": "fit_stone",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q032.pilgrimage.fit_stone"
+                    }
+                  ]
+                },
+                {
+                  "equals": "fit_original",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q032.pilgrimage.fit_original"
+                    }
+                  ]
+                },
+                {
+                  "equals": "plate",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q032.pilgrimage.plate"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q032.pilgrimage.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "片目の聖像の現場",
+      "cell": "聖像の下の地下牢",
+      "workshop": "礼拝堂の石工台",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "cell"
+      ],
+      [
+        "transit",
+        "workshop"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "cell",
+          "workshop",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "stoneAt": {
+        "type": "enum",
+        "initial": "workshop",
+        "values": [
+          "entry",
+          "cell",
+          "workshop",
+          "transit",
+          "party",
+          "jewel"
+        ],
+        "meaning": "stone の所在または保持者"
+      },
+      "jewelAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "cell",
+          "workshop",
+          "transit",
+          "party",
+          "stone"
+        ],
+        "meaning": "jewel の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "stone": {
+        "holder": "stoneAt",
+        "kind": "item"
+      },
+      "jewel": {
+        "holder": "jewelAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "片目は地下牢への覗き窓で、両目を戻すと囚人の見張りが再開する。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "片目の聖像の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "cell": {
+        "title": "聖像の下の地下牢",
+        "place": "cell",
+        "cast": [],
+        "requires": true
+      },
+      "workshop": {
+        "title": "礼拝堂の石工台",
+        "place": "workshop",
+        "cast": [],
+        "requires": true
+      },
+      "fit_stone": {
+        "title": "片目の聖像の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "fit_original": {
+        "title": "片目の聖像の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "plate": {
+        "title": "片目の聖像の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_look": {
+        "from": [
+          "entry"
+        ],
+        "to": "cell",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "cell"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "cell",
+            "requires": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "cell",
+          "companions": []
+        },
+        "depart": []
+      },
+      "entry_restore": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "entry_plate": {
+        "from": [
+          "entry"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "cell_opaque": {
+        "from": [
+          "cell"
+        ],
+        "to": "workshop",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "workshop"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "workshop",
+          "companions": []
+        },
+        "depart": []
+      },
+      "cell_leave": {
+        "from": [
+          "cell"
+        ],
+        "to": "plate",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "workshop_stone": {
+        "from": [
+          "workshop"
+        ],
+        "to": "fit_stone",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "stone",
+            "from": "workshop",
+            "to": "party"
+          }
+        ]
+      },
+      "workshop_original": {
+        "from": [
+          "workshop"
+        ],
+        "to": "fit_original",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "fit_stone_finish": {
+        "from": [
+          "fit_stone"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "stone",
+            "from": "party",
+            "to": "entry"
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "fit_original_finish": {
+        "from": [
+          "fit_original"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "plate_finish": {
+        "from": [
+          "plate"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q032.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q032.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q032.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q032.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q032.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q032.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q032.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q032.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q032.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_4",
+        "map": "region_4_f1",
+        "x": 9,
+        "y": 11
+      },
+      "cell": {
+        "kind": "dungeon",
+        "dungeon": "region_4",
+        "map": "region_4_f1",
+        "x": 1,
+        "y": 8
+      },
+      "workshop": {
+        "kind": "dungeon",
+        "dungeon": "region_4",
+        "map": "region_4_f1",
+        "x": 9,
+        "y": 6
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_plateau",
+  "receptionLocations": [
+    "pilgrim_board"
+  ]
+}

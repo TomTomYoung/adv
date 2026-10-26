@@ -1,3 +1,4 @@
+import {loadStages} from '../tools/audit-regional-relocation.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {loadContent} from '../src/core/loader.js';
@@ -7,11 +8,12 @@ import {projectGame} from '../src/application/projection.js';
 import {storyCanAct} from '../src/core/story.js';
 import {data,read,sources,fresh,border,go,start,play,paths,prepare,choose,checkpoint,drain,walk,inspect} from './oddland-helpers.mjs';
 import {buildOddlandQuests} from '../tools/build-oddland-quests.mjs';
+const preCut=await loadStages();
 const ids=Array.from({length:10},(_,i)=>'q'+(291+i));
 
 test('ten regional quests are a distinct cohort, with original editions and content preserved',async()=>{
- const old=data.regionalLegacy,first=await loadContent(read);assert.equal(Object.keys(data.quests).length,300);assert.equal(Object.keys(old.quests).length,290);assert.equal(Object.keys(first.quests).length,210);
- for(const id of Object.keys(old.quests))assert.deepEqual(data.quests[id],old.quests[id]);assert.deepEqual(data.actors,old.actors);assert.equal(Object.keys(data.maps).length,59);
+ const old=preCut.border,first=await loadContent(read);assert.equal(Object.keys(data.quests).length,300);assert.equal(Object.keys(old.quests).length,290);assert.equal(Object.keys(first.quests).length,210);
+ for(const id of Object.keys(old.quests).filter(id=>!/^q03[1-9]$|^q040$/.test(id)))assert.deepEqual(data.quests[id],old.quests[id]);assert.deepEqual(data.actors,old.actors);assert.equal(Object.keys(data.maps).length,62);
  assert.equal(new Set(ids.map(id=>data.quests[id].title)).size,10);assert.ok(ids.every(id=>data.quests[id].region===12));assert.equal(ids.reduce((n,id)=>n+Object.keys(data.quests[id].outcomes).length,0),21);
  assert.ok(sources.every(s=>s.review.scope.length===s.nodes.length));await buildOddlandQuests({check:true});
 });
@@ -59,14 +61,11 @@ test('all ten complete in one campaign, preserving minority outcomes and paying 
  const g=border();for(const number of sources.map(s=>s.number)){const options=paths(number).filter(p=>!p.choices.includes('signals')||number===297);play(g,number,options.at(-1));}assert.equal(g.state.vars.region_12,10);assert.equal(g.state.vars.region_11,undefined);assert.equal(g.state.vars.region_1,undefined);assert.ok(ids.every(id=>g.state.quests[id].stage==='completed'));assert.ok(Buffer.byteLength(g.save())<=data.system.maxSaveBytes);checkpoint(g);
 });
 
-test('save migrations compose from every shipped e2 stage, including foreign locations and pending VM',async()=>{
- for(const stage of ['q001','companions','border']){
- const old=await loadContent(async file=>{const v=await read(file);if(file==='data/scenario-editions.json'){delete v.editions.e2.regionalAdditions;if(stage!=='border')delete v.editions.e2.geography;if(stage==='q001')delete v.editions.e2.additions;}return v;},{edition:'e2'});
- const g=new GameEngine(old,81);drain(g);g.accept('q001');const q=old.quests.q001,p=q.story.worldPlaces[q.story.scenes.entry.place];g.teleport(p.map,p.x,p.y);g.run(q.model.entryScript);assert.ok(g.state.waiting);assert.ok(g.state.vm.length);const raw=JSON.parse(g.save()),saved=structuredClone(raw);const migrated=migrateSave(raw,data);
- assert.deepEqual(raw,saved);assert.deepEqual(validateSave(migrated,data),[]);for(const id of ids)assert.deepEqual(migrated.state.quests[id],{stage:'available',evidence:[],outcome:null});assert.deepEqual(migrated.state.vm,raw.state.vm);assert.deepEqual(migrated.state.waiting,raw.state.waiting);assert.deepEqual(migrated.state.inventory,raw.state.inventory);assert.deepEqual(migrated.state.quests.q001,raw.state.quests.q001);
+test('every pre-cut e2 stage rejects instead of silently appending cohorts or reinterpreting pending VM',()=>{
+ for(const old of Object.values(preCut)){
+  const g=new GameEngine(old,81);drain(g);g.accept('q001');const q=old.quests.q001,p=q.story.worldPlaces[q.story.scenes.entry.place];g.teleport(p.map,p.x,p.y);g.run(q.model.entryScript);assert.ok(g.state.waiting);const raw=JSON.parse(g.save()),saved=structuredClone(raw);
+  assert.deepEqual(migrateSave(raw,data),saved);assert.deepEqual(raw,saved);assert.match(validateSave(raw,data).join(' '),/旧記録は非対応/);
  }
- const current=border(),legacy=new GameEngine(data.regionalLegacy);const raw=JSON.parse(current.save());for(const id of ids)delete raw.state.quests[id];legacy.load(JSON.stringify(raw));go(current,{kind:'town',location:'oddland_inn'});
- const expected=migrateSave(JSON.parse(legacy.save()),data);assert.equal(expected.state.townLocation,'oddland_border');assert.deepEqual(expected.state.worldTravel,legacy.state.worldTravel);
 });
 
 test('partial regional cohorts and impossible locations are rejected without resetting current progress',()=>{
