@@ -35,7 +35,8 @@ try{
     };
     document.addEventListener('keydown',e=>handleGameKey(e,{view,model:view.model,dispatch}));
   });
-  const click=async label=>{for(let n=0;n<50&&await page.evaluate(()=>h.view.canChoose?.()===false);n++)await page.keyboard.press('Enter');const button=page.getByRole('button',{name:label,exact:true});await button.scrollIntoViewIfNeeded();await button.click();};
+  const revealChoices=async()=>{for(let n=0;n<50&&await page.evaluate(()=>h.view.canChoose?.()===false);n++)await page.keyboard.press('Enter');};
+  const click=async label=>{await revealChoices();const button=page.getByRole('button',{name:label,exact:true});await button.scrollIntoViewIfNeeded();await button.click();};
   async function cross(route){
     const label=await page.evaluate(id=>h.routeLabel(id),route);
     await click('任意調べる');await click(label);await click(label);await page.evaluate(()=>h.settle());
@@ -106,7 +107,7 @@ try{
     if(await page.evaluate(()=>h.g.state.townLocation)!=='oddland_plateau')await click('巡礼台地へ戻る');
     await click(await page.evaluate(()=>h.routeLabel('e2_burnt_library_surface')));await page.evaluate(()=>{h.walk(3,1);h.dispatch({type:'story.resume',quest:'q137'});h.settle();});
     await click('薬学書を選ぶ');await page.evaluate(()=>{h.walk(7,3);h.settle();h.resume();});
-    assert.equal(await page.getByRole('button',{name:'読み終えた本を回収する',exact:true}).count(),1);
+    await revealChoices();assert.equal(await page.getByRole('button',{name:'読み終えた本を回収する',exact:true}).count(),1,`${layout} ${width}: selected book carry option`);
     assert.ok(await page.getByRole('button',{name:'読み終えた本を回収する',exact:true}).isDisabled());
     for(let i=0;i<3;i++){await click('次の段階を読み終える');await page.evaluate(()=>h.settle());}
     await click('読み終えた本を回収する');await page.evaluate(()=>h.resume());assert.equal(await page.evaluate(()=>h.g.state.stories.q137.values.medicineAt),'party');
