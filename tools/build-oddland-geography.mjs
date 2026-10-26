@@ -3,6 +3,7 @@ import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {geographyFingerprint} from '../src/core/edition-geography.js';
 import {extendChapelSites} from '../authoring/editions/e2/oddland/chapel-sites.mjs';
+import {extendRoyalGeography} from '../authoring/editions/e2/oddland/royal-geography.mjs';
 import {extendPilgrimageGeography} from '../authoring/editions/e2/oddland/pilgrimage-geography.mjs';
 
 const root=path.resolve(import.meta.dirname,'..');
@@ -41,6 +42,7 @@ export async function buildOddlandGeography({check=false}={}){
   ]}};
   await extendPilgrimageGeography(bundle,read);
   extendChapelSites(bundle);
+  await extendRoyalGeography(bundle,read);
   const output=JSON.stringify(bundle,null,2)+'\n',file=path.join(root,'data/scenario-editions/e2/geography.json');
   if(check){if(await fs.readFile(file,'utf8').catch(()=>null)!==output)throw Error('第2版の越境地理が古くなっています。npm run build:editions を実行してください。');}
   else await fs.writeFile(file,output);

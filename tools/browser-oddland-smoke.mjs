@@ -115,7 +115,25 @@ try{
     await page.screenshot({path:path.join(output,`${layout}-${width}-library.png`),fullPage:true});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
     await click('現場の結果を確かめ、依頼を終える');await page.evaluate(()=>{h.settle();h.resume();});
     assert.equal(await page.evaluate(()=>h.g.state.quests.q137.outcome),'medicine');assert.deepEqual(await page.evaluate(()=>{const v=h.g.state.stories.q137.values;return [v.medicineAt,v.familyAt,v.languageAt,v.medicinePages];}),['archive','entry','entry',3]);
-    checks.push({layout,width,...measure,quests:{q291:'escort',q032:'informed',q137:'medicine'},chapelReturn:'oddland_plateau'});
+    await click('巡礼台地へ戻る');await click(await page.evaluate(()=>h.routeLabel('e2_pilgrim_road_east')));await page.evaluate(()=>h.walk(1,1));await cross('e2_pilgrim_road_west');
+    await click(await page.evaluate(()=>h.routeLabel('e2_village_road_west')));await page.evaluate(()=>h.walk(13,5));await cross('e2_village_road_east');
+    await click('旧王領の村の依頼所');await click('依頼掲示板を見る');assert.equal(await page.locator('.quest-card').count(),40);
+    const chartTitle=await page.evaluate(()=>h.g.data.quests.q061.title);
+    await page.locator('.quest-card').filter({has:page.getByRole('heading',{name:chartTitle,exact:true})}).getByRole('button',{name:'依頼を受ける',exact:true}).click();
+    if(layout==='scene')await page.keyboard.press('Escape');else await click('旧王領の村へ戻る');
+    if(await page.evaluate(()=>h.g.state.townLocation)!=='oddland_village')await click('旧王領の村へ戻る');
+    await click(await page.evaluate(()=>h.routeLabel('sunken_surface')));await page.evaluate(()=>{h.walk(9,11);h.dispatch({type:'story.resume',quest:'q061'});h.settle();});
+    await click('城内で一本の線を試す');await page.evaluate(()=>{h.walk(9,5);h.settle();h.resume();});
+    assert.equal(await page.evaluate(()=>h.g.state.dungeons.active.systems.air.air),36);await revealChoices();assert.ok(await page.getByRole('button',{name:'空気溜まりを示す救難図として隊へ引き継ぐ',exact:true}).isDisabled());
+    await click('次の空気室へ図をたどる');await page.evaluate(()=>{h.walk(15,3);h.settle();h.resume();});assert.equal(await page.evaluate(()=>h.g.state.stories.q061.values.tested),1);
+    await page.screenshot({path:path.join(output,`${layout}-${width}-sunken.png`),fullPage:true});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+    await click('空気溜まりを示す救難図として隊へ引き継ぐ');assert.equal(await page.evaluate(()=>h.g.state.stories.q061.values.chartAt),'party');
+    await page.evaluate(()=>h.walk(1,1));await click('任意調べる');await click('地上への階段');await click('調べる');await page.evaluate(()=>h.settle());assert.equal(await page.evaluate(()=>h.g.state.townLocation),'oddland_village');
+    await click('村の救難隊詰所');await page.evaluate(()=>{h.settle();h.resume();});assert.equal(await page.evaluate(()=>h.g.state.stories.q061.values.chartAt),'rescue');
+    await click('現場の結果を確かめ、依頼を終える');await page.evaluate(()=>{h.settle();h.resume();});assert.equal(await page.evaluate(()=>h.g.state.quests.q061.outcome),'informed');
+    await click('旧王領の村へ戻る');await click(await page.evaluate(()=>h.routeLabel('observatory_surface')));await page.evaluate(()=>h.resume());assert.equal(await page.evaluate(()=>h.g.state.worldTravel.returnAnchor),'oddland_village');
+    await click('任意調べる');await click('地上への階段');await click('調べる');await page.evaluate(()=>h.settle());assert.equal(await page.evaluate(()=>h.g.state.townLocation),'oddland_village');
+    checks.push({layout,width,...measure,quests:{q291:'escort',q032:'informed',q137:'medicine',q061:'informed'},chapelReturn:'oddland_plateau',royalReturn:'oddland_village'});
   }
   assert.deepEqual(errors,[]);await fs.writeFile(path.join(output,'result.json'),JSON.stringify({checks,errors},null,2));console.log(JSON.stringify({checks:checks.length,errors,output}));
 }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}

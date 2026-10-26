@@ -31,13 +31,27 @@ export function rememberDeparture(data,state){
 }
 export function returnLocation(data,state){return data.worldTravel?.settlements[state.worldTravel?.returnAnchor]?.root??townRoot(data);}
 
+// The departure anchor is already saved for the whole expedition. An expedition
+// that began before a relocation keeps its original country and surface exit.
+export function legacyExpeditionSettlement(data,state){
+  const dungeon=state.dungeons?.active?.id,previous=data.worldTravel?.previousDungeonSettlements?.[dungeon];
+  return previous&&state.worldTravel?.returnAnchor===previous?previous:null;
+}
+function expeditionRoute(data,state,route){
+  const previous=legacyExpeditionSettlement(data,state),dungeon=state.dungeons?.active?.id;
+  if(!previous||![route.a,route.b].some(p=>p.kind==='dungeon'&&p.dungeon===dungeon))return route;
+  const old=data.worldTravel.settlements[previous],owner=data.worldTravel.settlements[data.worldTravel.dungeonSettlements[dungeon]];
+  const replace=p=>p.kind==='town'&&p.location===owner.root?{...p,location:old.root}:p;
+  return {...route,a:replace(route.a),b:replace(route.b),name:`${old.name}と${data.dungeons[dungeon].name}の旧帰路`};
+}
+
 function sideAt(state,route){
   if(atWorldPlace(state,route.a))return {from:route.a,to:route.b};
   if(atWorldPlace(state,route.b))return {from:route.b,to:route.a};
   return null;
 }
 export function worldCrossPlan(engine,id){
-  const {data,state}=engine,route=data.worldTravel?.routes.find(r=>r.id===id),side=route&&sideAt(state,route);
+  const {data,state}=engine,definition=data.worldTravel?.routes.find(r=>r.id===id),route=definition&&expeditionRoute(data,state,definition),side=route&&sideAt(state,route);
   if(!route||!side)return {ok:false,reason:'この道の出入口まで歩いてください。'};
   if(state.waiting||state.battle||state.battleResult||state.vm.length)return {ok:false,reason:'会話・戦闘を終えてから通過してください。'};
   const reason=dungeonRestrictionReason(state,'return');if(reason)return {ok:false,reason};
@@ -73,11 +87,11 @@ export function publicSupply(engine){
 }
 export function worldTravelView(engine){
   const {data,state}=engine;if(!data.worldTravel)return null;
-  const config=data.worldTravel,settlement=config.settlements[townSettlement(data,state)],anchor=config.settlements[state.worldTravel.returnAnchor];
-  const actions=config.routes.filter(r=>sideAt(state,r)).map(r=>({label:r.registration&&!state.worldTravel.registrations[r.registration]?'探索隊を記帳してオッドランド方面へ進む（無料）':r.name,intent:{type:'world.cross',route:r.id},enabled:worldCrossPlan(engine,r.id).ok,reason:worldCrossPlan(engine,r.id).reason??''}));
+  const config=data.worldTravel,settlement=config.settlements[townSettlement(data,state)],anchor=config.settlements[state.worldTravel.returnAnchor],legacy=config.settlements[legacyExpeditionSettlement(data,state)],routes=config.routes.map(r=>expeditionRoute(data,state,r));
+  const actions=routes.filter(r=>sideAt(state,r)).map(r=>({label:r.registration&&!state.worldTravel.registrations[r.registration]?'探索隊を記帳してオッドランド方面へ進む（無料）':r.name,intent:{type:'world.cross',route:r.id},enabled:worldCrossPlan(engine,r.id).ok,reason:worldCrossPlan(engine,r.id).reason??''}));
   if(settlement?.publicSupply===state.townLocation)actions.push({label:'携行油を補充する（無料）',intent:{type:'world.supply'},enabled:!state.waiting&&!state.battle&&!state.vm.length});
-  const country=settlement?.country??config.mapCountries[state.location?.map]??config.settlements[config.home].country;
-  return {country:config.countries[country],settlement:settlement?.name??null,returnAnchor:anchor.name,actions,markers:config.routes.flatMap(r=>[r.a,r.b].filter(p=>p.kind==='dungeon'&&p.map===state.location?.map).map(p=>({id:`route:${r.id}`,name:r.name,x:p.x,y:p.y,kind:'map_connection',glyph:'⇄',inInteractionRange:atWorldPlace(state,p)})))};
+  const country=settlement?.country??legacy?.country??config.mapCountries[state.location?.map]??config.settlements[config.home].country;
+  return {country:config.countries[country],settlement:settlement?.name??null,returnAnchor:anchor.name,actions,markers:routes.flatMap(r=>[r.a,r.b].filter(p=>p.kind==='dungeon'&&p.map===state.location?.map).map(p=>({id:`route:${r.id}`,name:r.name,x:p.x,y:p.y,kind:'map_connection',glyph:'⇄',inInteractionRange:atWorldPlace(state,p)})))};
 }
 export function worldTravelDefinitionErrors(data){
   const d=data.worldTravel;if(!d)return [];
@@ -97,6 +111,10 @@ export function worldTravelDefinitionErrors(data){
   for(const [key,value] of Object.entries(d.questSettlements))if(!data.quests[key]||!own(d.settlements,value))bad('受付拠点不正');
   for(const q of Object.values(data.quests))if(q.receptionLocations&&(!Array.isArray(q.receptionLocations)||!q.receptionLocations.length||q.receptionLocations.some(id=>!data.locations[id]?.quests||locationRoot(data,id)?.id!==d.settlements[d.questSettlements[q.id]??d.home]?.root)))bad(`受付施設不正 ${q.id}`);
   for(const [key,value] of Object.entries(d.dungeonSettlements))if(!data.dungeons[key]||!own(d.settlements,value))bad('出発拠点不正');
+  if(d.previousDungeonSettlements!==undefined){
+    if(!isRecord(d.previousDungeonSettlements))bad('移設前の出発拠点不正');
+    else for(const [key,value] of Object.entries(d.previousDungeonSettlements))if(!data.dungeons[key]||!own(d.settlements,value)||!own(d.dungeonSettlements,key)||d.dungeonSettlements[key]===value)bad('移設前の出発拠点不正');
+  }
   for(const r of d.routes){
     if(!isRecord(r)||!id(r.id)||ids.has(r.id)||!r.name){bad('接続ID不正');continue;}ids.add(r.id);
     if(r.registration!==undefined&&!id(r.registration))bad('登録ID不正');
@@ -119,7 +137,9 @@ export function worldTravelSaveErrors(data,state){
   if(Object.entries(t.registrations).some(([id,v])=>!registrations.has(id)||v!==true))return fail();
   for(const [id,s] of Object.entries(t.oilStores))if(!own(d.settlements,id)||id===d.home||!own(t.visited,id)||!isRecord(s)||Object.keys(s).sort().join(',')!=='storedBottles,storedOil'||![s.storedOil,s.storedBottles].every(v=>Number.isSafeInteger(v)&&v>=0&&v<=1e9)||!managesOil(state)&&(s.storedOil||s.storedBottles))return fail();
   const map=state.location?.map??dungeonInterior(data,state)?.map;
-  if(d.mapRegistrations[map]&&!t.registrations[d.mapRegistrations[map]])return fail();
+  if(d.mapRegistrations[map]&&!t.registrations[d.mapRegistrations[map]]&&!legacyExpeditionSettlement(data,state))return fail();
+  const active=state.dungeons?.active?.id;
+  if(d.previousDungeonSettlements?.[active]&&![d.previousDungeonSettlements[active],d.dungeonSettlements[active]].includes(t.returnAnchor))return fail();
   const here=townSettlement(data,state);if(here&&!t.visited[here])return fail();
   for(const [id,s] of Object.entries(d.settlements))if(s.registration&&t.visited[id]&&!t.registrations[s.registration])return fail();
   return [];
