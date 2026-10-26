@@ -99,7 +99,8 @@ try{
     await click('現場の結果を確かめ、依頼を終える');await page.evaluate(()=>{h.settle();h.resume();});
     assert.equal(await page.evaluate(()=>h.g.state.quests.q032.outcome),'informed');assert.equal(await page.evaluate(()=>h.g.state.stories.q032.values.stoneAt),'entry');
     await page.evaluate(()=>h.walk(1,1));await click('任意調べる');await click('地上への階段');await click('調べる');await page.evaluate(()=>h.settle());assert.equal(await page.evaluate(()=>h.g.state.townLocation),'oddland_plateau');
-    await click('巡礼台地の依頼所');await click('依頼掲示板を見る');assert.equal(await page.locator('.quest-card').count(),20);
+    await click('巡礼台地の依頼所');await click('依頼掲示板を見る');assert.equal(await page.locator('.quest-card').count(),19);
+    assert.equal(await page.locator('.quest-card').filter({has:page.getByRole('heading',{name:'片目の聖像',exact:true})}).count(),0);
     await page.locator('.quest-card').filter({has:page.getByRole('heading',{name:'燃え残る図書館',exact:true})}).getByRole('button',{name:'依頼を受ける',exact:true}).click();
     if(layout==='scene')await page.keyboard.press('Escape');else await click('巡礼台地へ戻る');
     if(await page.evaluate(()=>h.g.state.townLocation)!=='oddland_plateau')await click('巡礼台地へ戻る');

@@ -9,7 +9,7 @@ for(const layout of ['classic','scene'])test(`${layout}: plateau board and stone
  const g=border(),dom=installDOM();let view;
  const render=()=>view.render(projectGame(g)),dispatch=intent=>{const ok=g.dispatch(intent);render();return ok;};
  const click=label=>{let n=50;while(view.canChoose?.()===false){assert.ok(--n);view.advanceText();}const b=[...dom.root.querySelectorAll('button')].find(b=>b.textContent===label);assert.ok(b,`missing: ${label}`);assert.ok(!b.disabled);b.click();};
- const advance=()=>{let n=100;while(g.state.waiting?.type==='text'){assert.ok(--n);view.advanceText();}};
+ const advance=()=>{let n=100;while(g.state.waiting?.type==='text'||g.state.waiting?.type==='command'&&g.state.waiting.command==='result'){assert.ok(--n);view.advanceText();}};
  const arrive=place=>{go(g,data.quests.q032.story.worldPlaces[place]);render();advance();checkpoint(g);};
  try{
  go(g,{kind:'town',location:'oddland_plateau'});
@@ -21,13 +21,14 @@ for(const layout of ['classic','scene'])test(`${layout}: plateau board and stone
  arrive('cell');click('見通せない石の目を用意する');arrive('workshop');click('覗き管を塞いで不透明な目をはめる');assert.equal(g.state.stories.q032.values.stoneAt,'party');checkpoint(g);
  arrive('entry');click('現場の結果を確かめ、依頼を終える');advance();assert.equal(g.state.quests.q032.outcome,'informed');assert.equal(g.state.stories.q032.values.stoneAt,'entry');checkpoint(g);
  go(g,{kind:'dungeon',dungeon:'region_4',map:'region_4_f1',x:1,y:1});render();click('任意調べる');click('地上への階段');click('調べる');advance();assert.equal(g.state.townLocation,'oddland_plateau');checkpoint(g);
+ click('巡礼台地の依頼所');click('依頼掲示板を見る');const remaining=[...dom.root.querySelectorAll('.quest-card')];assert.equal(remaining.length,19);assert.ok(!remaining.some(c=>c.textContent.includes('片目の聖像')));
  }finally{view?.destroy();dom.restore();}
 });
 
 for(const layout of ['classic','scene'])test(`${layout}: library shows only the chosen book and requires reading before its real delivery`,()=>{
  const g=ready(),dom=installDOM();let view;
  const render=()=>view.render(projectGame(g)),dispatch=intent=>{const ok=g.dispatch(intent);render();return ok;};
- const advance=()=>{let n=100;while(g.state.waiting?.type==='text'){assert.ok(--n);view.advanceText();}while(view.canChoose?.()===false){assert.ok(--n);view.advanceText();}};
+ const advance=()=>{let n=100;while(g.state.waiting?.type==='text'||g.state.waiting?.type==='command'&&g.state.waiting.command==='result'){assert.ok(--n);view.advanceText();}while(view.canChoose?.()===false){assert.ok(--n);view.advanceText();}};
  const buttons=label=>[...dom.root.querySelectorAll('button')].filter(b=>b.textContent===label);
  const click=label=>{advance();const matches=buttons(label);assert.equal(matches.length,1,label);assert.ok(!matches[0].disabled);matches[0].click();};
  const arrive=place=>{go(g,data.quests.q137.story.worldPlaces[place]);render();advance();checkpoint(g);};
