@@ -13,7 +13,7 @@ const ids=Array.from({length:10},(_,i)=>'q'+(291+i));
 
 test('ten regional quests are a distinct cohort, with original editions and content preserved',async()=>{
  const old=preCut.border,first=await loadContent(read);assert.equal(Object.keys(data.quests).length,300);assert.equal(Object.keys(old.quests).length,290);assert.equal(Object.keys(first.quests).length,210);
- for(const id of Object.keys(old.quests).filter(id=>!/^q03[1-9]$|^q040$|^q13[1-9]$|^q140$|^q06[1-9]$|^q070$/.test(id)))assert.deepEqual(data.quests[id],old.quests[id]);assert.deepEqual(data.actors,old.actors);assert.equal(Object.keys(data.maps).length,67);
+ for(const id of Object.keys(old.quests).filter(id=>!/^q03[1-9]$|^q040$|^q13[1-9]$|^q140$|^q06[1-9]$|^q070$|^q16[1-9]$|^q170$/.test(id)))assert.deepEqual(data.quests[id],old.quests[id]);assert.deepEqual(data.actors,old.actors);assert.equal(Object.keys(data.maps).length,72);
  assert.equal(new Set(ids.map(id=>data.quests[id].title)).size,10);assert.ok(ids.every(id=>data.quests[id].region===12));assert.equal(ids.reduce((n,id)=>n+Object.keys(data.quests[id].outcomes).length,0),21);
  assert.ok(sources.every(s=>s.review.scope.length===s.nodes.length));await buildOddlandQuests({check:true});
 });

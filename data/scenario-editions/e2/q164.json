@@ -1,0 +1,1784 @@
+{
+  "schemaVersion": 1,
+  "id": "q164",
+  "number": 164,
+  "title": "吟遊詩人抜きの宴",
+  "client": "帰り火亭の常連",
+  "brief": "楽師レンに内緒で、送別会の言葉を準備したいのだ。",
+  "region": 7,
+  "type": "scene_graph",
+  "recommendedLevel": 7,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 旧王領の村の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q164_scene",
+      "title": "吟遊詩人抜きの宴：帰り火亭の常連",
+      "points": [
+        {
+          "map": "region_7_f1",
+          "x": 6,
+          "y": 1,
+          "dungeon": "region_7"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q164.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q164.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q164.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q164"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_7"
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_7_f1",
+      "x": 6,
+      "y": 1,
+      "object": "q164_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "secret": {
+      "label": "不器用な送辞",
+      "text": "短い言葉が一人ずつ届いた。レンの別れの歌は、客の話を一つも引用しなかった。",
+      "gold": 129,
+      "xp": 87
+    },
+    "explain": {
+      "label": "サプライズをやめる",
+      "text": "秘密はなくなったが、レンは歌わず待つ練習に加わった。会の最後の歌だけは短くした。",
+      "gold": 129,
+      "xp": 87
+    },
+    "listen": {
+      "label": "最後まで聞く宴",
+      "text": "客が言い終えるまで歌を待った。レンは何も借りず、自分の言葉で別れを歌った。",
+      "gold": 129,
+      "xp": 87
+    },
+    "song": {
+      "label": "歌になった送辞",
+      "text": "場は賑わった。言いそびれた客は送辞を紙で渡し、レンには後で一人で読む時間が残った。",
+      "gold": 129,
+      "xp": 87
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/sunken-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3816fa85bc3dd738a74b8",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "本人のいない席では失敗談が悪口に聞こえるが、客はその話を送辞にするため本人の傷つく部分を削っている。ペルにも、沈黙が怖くて歌い始める理由がある。聞き耳で断片だけ得た時と、客に尋ねた時で認識を分ける。",
+      "fixedPast": "宿の常連は、いつも皆を歌へ巻き込む吟遊詩人ペルに内緒で送別会を開きたいと言う。本人は仲間外れを疑う。客は嫌っているのではなく、彼の前では話の途中でも歌にされるため、一度自分たちの言葉を揃えたいのだ。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "帰り火亭の常連",
+        "beliefsAndGoals": "宿の常連は、いつも皆を歌へ巻き込む吟遊詩人ペルに内緒で送別会を開きたいと言う。本人は仲間外れを疑う。客は嫌っているのではなく、彼の前では話の途中でも歌にされるため、一度自分たちの言葉を揃えたいのだ。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "楽師レンに内緒で、送別会の言葉を準備したいのだ。"
+      }
+    ],
+    "conflict": {
+      "design": "準備依頼→ペルを別用事へ案内／事情を説明／席へ同伴→送別会。本人不在は準備会話の条件にだけ使い、追放を強制しない。話を漏らした場合はサプライズでなく、本人も準備に加わる会へ変わる。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q164.royal.entry"
+        },
+        {
+          "id": "prepare",
+          "script": "q164.royal.prepare"
+        },
+        {
+          "id": "together",
+          "script": "q164.royal.together"
+        },
+        {
+          "id": "invite",
+          "script": "q164.royal.invite"
+        },
+        {
+          "id": "secret_party",
+          "script": "q164.royal.secret_party"
+        },
+        {
+          "id": "rehearse",
+          "script": "q164.royal.rehearse"
+        },
+        {
+          "id": "explained",
+          "script": "q164.royal.explained"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "楽師レンに内緒で、送別会の言葉を準備したいのだ。"
+    },
+    "reveal": {
+      "newInformation": "本人のいない席では失敗談が悪口に聞こえるが、客はその話を送辞にするため本人の傷つく部分を削っている。ペルにも、沈黙が怖くて歌い始める理由がある。聞き耳で断片だけ得た時と、客に尋ねた時で認識を分ける。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q164.scene.entry"
+      },
+      {
+        "id": "prepare",
+        "script": "q164.scene.prepare"
+      },
+      {
+        "id": "together",
+        "script": "q164.scene.together"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": [
+        "原稿のペルを既存の楽師レンへ置換。不在判定はmembersを直接読む。秘密の準備ができなくても公開の会へ進める。"
+      ]
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q164.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "客は、レンの前だと話の途中で歌にされると困っていた。嫌っているのではなく、自分たちの言葉を揃えたいという。",
+        "options": [
+          {
+            "id": "secret",
+            "text": "レンが出撃隊にいない間に、秘密の準備を聞く",
+            "to": "prepare",
+            "action": "entry_secret"
+          },
+          {
+            "id": "explain",
+            "text": "レンに事情を説明し、一緒に準備する",
+            "to": "rehearse",
+            "action": "entry_explain"
+          },
+          {
+            "id": "bring",
+            "text": "本人も同席する形の会へ変える",
+            "to": "together",
+            "action": "entry_bring"
+          }
+        ]
+      },
+      {
+        "id": "prepare",
+        "place": "prepare",
+        "text": "失敗談から、本人の傷つく部分を皆で削る。不在時に聞いた断片を悪口と決めつけず、一つの送辞へ揃えた。",
+        "options": [
+          {
+            "id": "party",
+            "text": "秘密を守って送別会を開く",
+            "to": "invite",
+            "action": "prepare_party"
+          }
+        ]
+      },
+      {
+        "id": "together",
+        "place": "hall",
+        "text": "レンが沈黙に耐えかね、歌い始めようとした。客はまだ自分の言葉を言い終えていない。",
+        "options": [
+          {
+            "id": "wait",
+            "text": "客の言葉を最後まで待ってもらう",
+            "to": "@listen",
+            "action": "together_wait"
+          },
+          {
+            "id": "song",
+            "text": "歌で間を埋めるに任せる",
+            "to": "@song",
+            "action": "together_song"
+          }
+        ]
+      },
+      {
+        "id": "invite",
+        "place": "entry",
+        "text": "客と宿へ戻り、レンを送別会へ招いた。準備した送辞は会まで伏せておく。",
+        "options": [
+          {
+            "id": "escort",
+            "text": "レンと客と集会所へ向かう",
+            "to": "secret_party",
+            "action": "invite_escort"
+          }
+        ]
+      },
+      {
+        "id": "secret_party",
+        "place": "hall",
+        "text": "レンと客が集会所へ揃った。一人ずつ自分の言葉で送辞を伝える。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@secret",
+            "action": "secret_party_finish"
+          }
+        ]
+      },
+      {
+        "id": "rehearse",
+        "place": "prepare",
+        "text": "レンにも事情を説明し、客の言葉を最後まで聞く練習をした。",
+        "options": [
+          {
+            "id": "party",
+            "text": "皆で集会所へ向かう",
+            "to": "explained",
+            "action": "rehearse_party"
+          }
+        ]
+      },
+      {
+        "id": "explained",
+        "place": "hall",
+        "text": "練習した皆が集会所へ来た。送辞を聞き、最後に短い歌を頼む。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@explain",
+            "action": "explained_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "entryScript": "q164.royal.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "sunken-second-ten",
+      "settlement": "oddland_village",
+      "saveRevision": 2,
+      "scope": "沈没城後半10件の村・橋・試験場・砦・湖の現場接続。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q164.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q164.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "客は、レンの前だと話の途中で歌にされると困っていた。嫌っているのではなく、自分たちの言葉を揃えたいという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "secret",
+              "text": "レンが出撃隊にいない間に、秘密の準備を聞く",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_member",
+                      "actor": "ren"
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q164.scene.prepare"
+                }
+              ]
+            },
+            {
+              "id": "explain",
+              "text": "レンに事情を説明し、一緒に準備する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q164.end.explain"
+                }
+              ]
+            },
+            {
+              "id": "bring",
+              "text": "本人も同席する形の会へ変える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q164.scene.together"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q164.scene.prepare": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q164.node",
+          "value": "prepare"
+        },
+        {
+          "op": "say",
+          "text": "失敗談から、本人の傷つく部分を皆で削る。不在時に聞いた断片を悪口と決めつけず、一つの送辞へ揃えた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "party",
+              "text": "秘密を守って送別会を開く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q164.end.secret"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q164.scene.together": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q164.node",
+          "value": "together"
+        },
+        {
+          "op": "say",
+          "text": "レンが沈黙に耐えかね、歌い始めようとした。客はまだ自分の言葉を言い終えていない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wait",
+              "text": "客の言葉を最後まで待ってもらう",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q164.end.listen"
+                }
+              ]
+            },
+            {
+              "id": "song",
+              "text": "歌で間を埋めるに任せる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q164.end.song"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q164.end.secret": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q164.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "短い言葉が一人ずつ届いた。レンの別れの歌は、客の話を一つも引用しなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q164",
+              "outcome": "secret"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q164.end.explain": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q164.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "秘密はなくなったが、レンは歌わず待つ練習に加わった。会の最後の歌だけは短くした。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q164",
+              "outcome": "explain"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q164.end.listen": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q164.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "客が言い終えるまで歌を待った。レンは何も借りず、自分の言葉で別れを歌った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q164",
+              "outcome": "listen"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q164.end.song": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q164.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "場は賑わった。言いそびれた客は送辞を紙で渡し、レンには後で一人で読む時間が残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q164",
+              "outcome": "song"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q164.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q164.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q164.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "secret",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "短い言葉が一人ずつ届いた。レンの別れの歌は、客の話を一つも引用しなかった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "explain",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "秘密はなくなったが、レンは歌わず待つ練習に加わった。会の最後の歌だけは短くした。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "listen",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "客が言い終えるまで歌を待った。レンは何も借りず、自分の言葉で別れを歌った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "song",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "場は賑わった。言いそびれた客は送辞を紙で渡し、レンには後で一人で読む時間が残った。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q164.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q164.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "prepare",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q164.scene.prepare"
+                    }
+                  ]
+                },
+                {
+                  "equals": "together",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q164.scene.together"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q164.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q164.royal.entry": {
+      "storyQuest": "q164",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q164",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "客は、レンの前だと話の途中で歌にされると困っていた。嫌っているのではなく、自分たちの言葉を揃えたいという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "secret",
+              "text": "レンが出撃隊にいない間に、秘密の準備を聞く",
+              "storyAction": {
+                "quest": "q164",
+                "action": "entry_secret"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_member",
+                  "actor": "ren"
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q164",
+                  "action": "entry_secret"
+                }
+              ]
+            },
+            {
+              "id": "explain",
+              "text": "レンに事情を説明し、一緒に準備する",
+              "storyAction": {
+                "quest": "q164",
+                "action": "entry_explain"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q164",
+                  "action": "entry_explain"
+                }
+              ]
+            },
+            {
+              "id": "bring",
+              "text": "本人も同席する形の会へ変える",
+              "storyAction": {
+                "quest": "q164",
+                "action": "entry_bring"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q164",
+                  "action": "entry_bring"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q164.royal.prepare": {
+      "storyQuest": "q164",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q164",
+          "scene": "prepare"
+        },
+        {
+          "op": "narrate",
+          "text": "失敗談から、本人の傷つく部分を皆で削る。不在時に聞いた断片を悪口と決めつけず、一つの送辞へ揃えた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "party",
+              "text": "秘密を守って送別会を開く",
+              "storyAction": {
+                "quest": "q164",
+                "action": "prepare_party"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q164",
+                  "action": "prepare_party"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q164.royal.together": {
+      "storyQuest": "q164",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q164",
+          "scene": "together"
+        },
+        {
+          "op": "narrate",
+          "text": "レンが沈黙に耐えかね、歌い始めようとした。客はまだ自分の言葉を言い終えていない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wait",
+              "text": "客の言葉を最後まで待ってもらう",
+              "storyAction": {
+                "quest": "q164",
+                "action": "together_wait"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q164",
+                  "action": "together_wait"
+                },
+                {
+                  "op": "jump",
+                  "script": "q164.royal.end.listen"
+                }
+              ]
+            },
+            {
+              "id": "song",
+              "text": "歌で間を埋めるに任せる",
+              "storyAction": {
+                "quest": "q164",
+                "action": "together_song"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q164",
+                  "action": "together_song"
+                },
+                {
+                  "op": "jump",
+                  "script": "q164.royal.end.song"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q164.royal.invite": {
+      "storyQuest": "q164",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q164",
+          "scene": "invite"
+        },
+        {
+          "op": "narrate",
+          "text": "客と宿へ戻り、レンを送別会へ招いた。準備した送辞は会まで伏せておく。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "escort",
+              "text": "レンと客と集会所へ向かう",
+              "storyAction": {
+                "quest": "q164",
+                "action": "invite_escort"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q164",
+                  "action": "invite_escort"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q164.royal.secret_party": {
+      "storyQuest": "q164",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q164",
+          "scene": "secret_party"
+        },
+        {
+          "op": "narrate",
+          "text": "レンと客が集会所へ揃った。一人ずつ自分の言葉で送辞を伝える。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q164",
+                "action": "secret_party_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q164",
+                  "action": "secret_party_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q164.royal.end.secret"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q164.royal.rehearse": {
+      "storyQuest": "q164",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q164",
+          "scene": "rehearse"
+        },
+        {
+          "op": "narrate",
+          "text": "レンにも事情を説明し、客の言葉を最後まで聞く練習をした。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "party",
+              "text": "皆で集会所へ向かう",
+              "storyAction": {
+                "quest": "q164",
+                "action": "rehearse_party"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q164",
+                  "action": "rehearse_party"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q164.royal.explained": {
+      "storyQuest": "q164",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q164",
+          "scene": "explained"
+        },
+        {
+          "op": "narrate",
+          "text": "練習した皆が集会所へ来た。送辞を聞き、最後に短い歌を頼む。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q164",
+                "action": "explained_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q164",
+                  "action": "explained_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q164.royal.end.explain"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q164.royal.end.secret": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "短い言葉が一人ずつ届いた。レンの別れの歌は、客の話を一つも引用しなかった。"
+        },
+        {
+          "op": "add",
+          "target": "vars.secret",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q164",
+          "outcome": "secret"
+        }
+      ]
+    },
+    "q164.royal.end.explain": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "秘密はなくなったが、レンは歌わず待つ練習に加わった。会の最後の歌だけは短くした。"
+        },
+        {
+          "op": "add",
+          "target": "vars.explain",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q164",
+          "outcome": "explain"
+        }
+      ]
+    },
+    "q164.royal.end.listen": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "客が言い終えるまで歌を待った。レンは何も借りず、自分の言葉で別れを歌った。"
+        },
+        {
+          "op": "add",
+          "target": "vars.listen",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q164",
+          "outcome": "listen"
+        }
+      ]
+    },
+    "q164.royal.end.song": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "場は賑わった。言いそびれた客は送辞を紙で渡し、レンには後で一人で読む時間が残った。"
+        },
+        {
+          "op": "add",
+          "target": "vars.song",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q164",
+          "outcome": "song"
+        }
+      ]
+    },
+    "q164.royal.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q164"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q164.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q164.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q164.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "secret",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "短い言葉が一人ずつ届いた。レンの別れの歌は、客の話を一つも引用しなかった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "explain",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "秘密はなくなったが、レンは歌わず待つ練習に加わった。会の最後の歌だけは短くした。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "listen",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "客が言い終えるまで歌を待った。レンは何も借りず、自分の言葉で別れを歌った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "song",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "場は賑わった。言いそびれた客は送辞を紙で渡し、レンには後で一人で読む時間が残った。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q164"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q164.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q164.royal.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "prepare",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q164.royal.prepare"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "together",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q164.royal.together"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "invite",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q164.royal.invite"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "secret_party",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q164.royal.secret_party"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "rehearse",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q164.royal.rehearse"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "explained",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q164.royal.explained"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q164.royal.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "レンと客のいる宿",
+      "prepare": "送辞を揃える控室",
+      "hall": "送別会の集会所",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "prepare"
+      ],
+      [
+        "transit",
+        "hall"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "prepare",
+          "hall",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "secret",
+          "explain",
+          "listen",
+          "song"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "renGuestAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "prepare",
+          "hall",
+          "transit"
+        ],
+        "meaning": "renGuest の所在または保持者"
+      },
+      "guestsAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "prepare",
+          "hall",
+          "transit"
+        ],
+        "meaning": "guests の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "renGuest": {
+        "holder": "renGuestAt",
+        "kind": "person"
+      },
+      "guests": {
+        "holder": "guestsAt",
+        "kind": "group"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "本人のいない席では失敗談が悪口に聞こえるが、客はその話を送辞にするため本人の傷つく部分を削っている。ペルにも、沈黙が怖くて歌い始める理由がある。聞き耳で断片だけ得た時と、客に尋ねた時で認識を分ける。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "レンと客のいる宿",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "prepare": {
+        "title": "送辞を揃える控室",
+        "place": "prepare",
+        "cast": [],
+        "requires": true
+      },
+      "together": {
+        "title": "送別会の集会所",
+        "place": "hall",
+        "cast": [],
+        "requires": true
+      },
+      "invite": {
+        "title": "レンと客のいる宿",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "secret_party": {
+        "title": "送別会の集会所",
+        "place": "hall",
+        "cast": [],
+        "requires": true
+      },
+      "rehearse": {
+        "title": "送辞を揃える控室",
+        "place": "prepare",
+        "cast": [],
+        "requires": true
+      },
+      "explained": {
+        "title": "送別会の集会所",
+        "place": "hall",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_secret": {
+        "from": [
+          "entry"
+        ],
+        "to": "prepare",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "has_member",
+            "actor": "ren"
+          }
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "guests"
+            ],
+            "path": [
+              "transit",
+              "prepare"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "prepare",
+          "companions": [
+            "guests"
+          ]
+        },
+        "depart": []
+      },
+      "entry_explain": {
+        "from": [
+          "entry"
+        ],
+        "to": "rehearse",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "renGuest",
+              "guests"
+            ],
+            "path": [
+              "transit",
+              "prepare"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "prepare",
+          "companions": [
+            "renGuest",
+            "guests"
+          ]
+        },
+        "depart": []
+      },
+      "entry_bring": {
+        "from": [
+          "entry"
+        ],
+        "to": "together",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "renGuest",
+              "guests"
+            ],
+            "path": [
+              "transit",
+              "hall"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "hall",
+          "companions": [
+            "renGuest",
+            "guests"
+          ]
+        },
+        "depart": []
+      },
+      "prepare_party": {
+        "from": [
+          "prepare"
+        ],
+        "to": "invite",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "guests"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "guests"
+          ]
+        },
+        "depart": []
+      },
+      "together_wait": {
+        "from": [
+          "together"
+        ],
+        "ending": "listen",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "listen"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "together_song": {
+        "from": [
+          "together"
+        ],
+        "ending": "song",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "song"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "invite_escort": {
+        "from": [
+          "invite"
+        ],
+        "to": "secret_party",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "renGuest",
+              "guests"
+            ],
+            "path": [
+              "transit",
+              "hall"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "hall",
+          "companions": [
+            "renGuest",
+            "guests"
+          ]
+        },
+        "depart": []
+      },
+      "secret_party_finish": {
+        "from": [
+          "secret_party"
+        ],
+        "ending": "secret",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "secret"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "rehearse_party": {
+        "from": [
+          "rehearse"
+        ],
+        "to": "explained",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "renGuest",
+              "guests"
+            ],
+            "path": [
+              "transit",
+              "hall"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "hall",
+          "companions": [
+            "renGuest",
+            "guests"
+          ]
+        },
+        "depart": []
+      },
+      "explained_finish": {
+        "from": [
+          "explained"
+        ],
+        "ending": "explain",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "explain"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "secret": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q164.values.resolution"
+            },
+            "right": "secret"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q164.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q164.values.partyAt"
+                },
+                "right": "hall"
+              }
+            ]
+          }
+        ]
+      },
+      "explain": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q164.values.resolution"
+            },
+            "right": "explain"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q164.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q164.values.partyAt"
+                },
+                "right": "hall"
+              }
+            ]
+          }
+        ]
+      },
+      "listen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q164.values.resolution"
+            },
+            "right": "listen"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q164.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q164.values.partyAt"
+                },
+                "right": "hall"
+              }
+            ]
+          }
+        ]
+      },
+      "song": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q164.values.resolution"
+            },
+            "right": "song"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q164.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q164.values.partyAt"
+                },
+                "right": "hall"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "town",
+        "location": "oddland_village_inn"
+      },
+      "prepare": {
+        "kind": "town",
+        "location": "royal_witness"
+      },
+      "hall": {
+        "kind": "town",
+        "location": "royal_hall"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_village",
+  "receptionLocations": [
+    "royal_board"
+  ]
+}
