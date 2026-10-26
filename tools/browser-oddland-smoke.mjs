@@ -78,7 +78,28 @@ try{
     await click('親子に帰りの車を案内する');await page.evaluate(()=>h.settle());await page.evaluate(()=>h.resume());
     assert.equal(await page.evaluate(()=>h.g.state.quests.q291.outcome),'escort');
     assert.equal(await page.evaluate(()=>h.g.state.stories.q291.values.teoAt),'refuge');
-    checks.push({layout,width,...measure,quest:'q291',outcome:'escort'});
+    await page.evaluate(()=>h.walk(9,3));await cross('border_customs');await page.evaluate(()=>h.walk(9,3));await cross('oddland_surface');
+    for(const road of ['e2_market_road','e2_pilgrim_road']){
+      await click(await page.evaluate(id=>h.routeLabel(id),road+'_west'));await page.evaluate(()=>h.walk(13,5));await cross(road+'_east');
+    }
+    assert.equal(await page.evaluate(()=>h.g.state.townLocation),'oddland_plateau');
+    await click('巡礼台地の依頼所');await click('依頼掲示板を見る');assert.equal(await page.locator('.quest-card').count(),20);
+    await page.locator('.quest-card').filter({has:page.getByRole('heading',{name:'片目の聖像',exact:true})}).getByRole('button',{name:'依頼を受ける',exact:true}).click();
+    if(layout==='scene')await page.keyboard.press('Escape');else await click('巡礼台地へ戻る');
+    if(await page.evaluate(()=>h.g.state.townLocation)!=='oddland_plateau')await click('巡礼台地へ戻る');
+    await click(await page.evaluate(()=>h.routeLabel('chapel_surface')));
+    await page.evaluate(()=>{h.walk(9,11);h.dispatch({type:'story.resume',quest:'q032'});h.settle();});
+    await click('覗き窓の行先を確かめ、地下牢へ回る');await page.evaluate(()=>h.resume());
+    assert.ok(await page.evaluate(()=>h.g.state.journey));await page.evaluate(()=>{h.walk(1,8);h.settle();});
+    await click('見通せない石の目を用意する');await page.evaluate(()=>{h.walk(9,6);h.settle();});
+    await click('覗き管を塞いで不透明な目をはめる');assert.equal(await page.evaluate(()=>h.g.state.stories.q032.values.stoneAt),'party');
+    await page.evaluate(()=>h.resume());await page.evaluate(()=>{h.walk(9,11);h.settle();});
+    await page.screenshot({path:path.join(output,`${layout}-${width}-chapel.png`),fullPage:true});
+    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+    await click('現場の結果を確かめ、依頼を終える');await page.evaluate(()=>{h.settle();h.resume();});
+    assert.equal(await page.evaluate(()=>h.g.state.quests.q032.outcome),'informed');assert.equal(await page.evaluate(()=>h.g.state.stories.q032.values.stoneAt),'entry');
+    await page.evaluate(()=>h.walk(1,1));await cross('chapel_surface');assert.equal(await page.evaluate(()=>h.g.state.townLocation),'oddland_plateau');
+    checks.push({layout,width,...measure,quests:{q291:'escort',q032:'informed'},chapelReturn:'oddland_plateau'});
   }
   assert.deepEqual(errors,[]);await fs.writeFile(path.join(output,'result.json'),JSON.stringify({checks,errors},null,2));console.log(JSON.stringify({checks:checks.length,errors,output}));
 }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}

@@ -1,3 +1,4 @@
+import {loadStages} from '../tools/audit-regional-relocation.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
@@ -10,13 +11,13 @@ import {commandDialog} from '../src/core/player-commands.js';
 import {oilStore,oilTotal} from '../src/core/expedition-oil.js';
 import {applyEditionGeography} from '../src/core/edition-geography.js';
 import {drain,walk,navigateMaps,fight} from './helpers.mjs';
-import {prepareQuest,finishJourney} from './structure-routes.mjs';
+import {finishJourney} from './structure-routes.mjs';
 import {installDOM} from './view-dom.mjs';
 import {replaceView} from '../src/view/view-layout.js';
 import {handleGameKey} from '../src/view/keyboard.js';
 
 const read=file=>fs.readFile(new URL('../'+file,import.meta.url),'utf8').then(JSON.parse);
-const data=await loadContent(read,{edition:'e2'}),first=await loadContent(read);
+const data=await loadContent(read,{edition:'e2'}),first=await loadContent(read),preCut=await loadStages();
 const fresh=()=>{const g=new GameEngine(data,1907);drain(g);g.random=()=>.999999;return g;};
 const save=g=>{const raw=g.save();assert.deepEqual(validateSave(JSON.parse(raw),data),[]);g.load(raw);assert.equal(g.save(),raw);};
 function gate(g){assert.ok(g.dispatch({type:'travel',dungeon:'region_1'}));navigateMaps(g,'region_1_landing');walk(g,15,3);}
@@ -35,11 +36,12 @@ function inward(g){
 }
 
 test('first-edition geography stays byte-derived and only the second edition has the border',async()=>{
-  assert.equal(Object.keys(first.maps).length,56);assert.equal(Object.keys(data.maps).length,59);
+  assert.equal(Object.keys(first.maps).length,56);assert.equal(Object.keys(data.maps).length,62);
   assert.equal(first.worldTravel,undefined);assert.equal(first.locations.oddland_border,undefined);
   assert.deepEqual(first.maps.region_1_landing.tiles,(await read('data/maps/region_1_landing.json')).tiles);
   assert.equal(data.maps.region_1_landing.objects.filter(o=>o.id==='oddland_route_sign').length,1);
-  for(const id of Object.keys(first.locations))assert.deepEqual(data.locations[id],first.locations[id]);
+  for(const id of Object.keys(first.locations).filter(id=>id!=='hikarigaeri_square'))assert.deepEqual(data.locations[id],first.locations[id]);
+  assert.deepEqual(data.locations.hikarigaeri_square.dungeons,first.locations.hikarigaeri_square.dungeons.filter(id=>id!=='region_4'));
   assert.deepEqual(data.quests.q004,first.quests.q004);assert.equal(Object.keys(data.quests).length,300);
   const g=new GameEngine(first);drain(g);assert.equal(g.dispatch({type:'world.cross',route:'oddland_checkpoint'}),false);
 });
@@ -108,18 +110,11 @@ test('unvisited towns, remote quest departures, relays, interiors and busy state
   assert.equal(g.state.quests.q001.stage,'active');save(g);
 });
 
-test('old e2 saves migrate through the companion cohort before adding unvisited border state, preserving VM, journeys and resources',()=>{
-  for(const beforeCompanions of [false,true]){
-    const oldData=structuredClone(data.worldTravelLegacy);
-    if(beforeCompanions){for(const id of oldData.game.questAdditions[0].ids)delete oldData.quests[id];delete oldData.game.questAdditions;}
-    const old=new GameEngine(oldData,91),before=JSON.parse(old.save()),g=fresh();
-    g.load(old.save());assert.deepEqual(validateSave(JSON.parse(g.save()),data),[]);assert.equal(g.state.worldTravel.visited.oddland,undefined);
-    assert.deepEqual(g.state.vm,before.state.vm);assert.deepEqual(g.state.waiting,before.state.waiting);assert.deepEqual(g.state.expedition,before.state.expedition);
-    for(const key of ['gold','location','townLocation','journey','inventory','rng','actors'])assert.deepEqual(g.state[key],before.state[key]);
-    assert.equal(Object.keys(g.state.quests).length,300);save(g);
+test('pre-cut e2 saves with companion and border states are rejected without altering either record',()=>{
+  for(const oldData of Object.values(preCut)){
+    const old=new GameEngine(oldData,91),raw=old.save(),g=fresh(),before=g.save();
+    assert.throws(()=>g.load(raw),/旧記録は非対応/);assert.equal(g.save(),before);assert.equal(old.save(),raw);
   }
-  const old=new GameEngine(data.worldTravelLegacy);drain(old);old.teleport('region_1_landing',13,3);old.dispatch({type:'location.enter',id:'waterway_checkpoint'});
-  const g=fresh();g.load(old.save());assert.equal(g.state.townLocation,'waterway_checkpoint');save(g);assert.ok(g.dispatch({type:'location.exit'}));
 });
 
 test('partial, forged or missing world state fails atomically; foreign locations cannot be migrated as old saves',()=>{
@@ -127,12 +122,12 @@ test('partial, forged or missing world state fails atomically; foreign locations
   for(const mutate of [s=>delete s.worldTravel,s=>s.worldTravel={},s=>s.worldTravel.returnAnchor='unknown',s=>delete s.worldTravel.visited.oddland,s=>s.worldTravel.registrations={},s=>s.worldTravel.oilStores.oddland={storedOil:-1,storedBottles:0}]){
     const bad=JSON.parse(valid);mutate(bad.state);assert.throws(()=>g.load(JSON.stringify(bad)));assert.equal(g.save(),valid);
   }
-  const old=new GameEngine(data.worldTravelLegacy),bad=JSON.parse(old.save());delete bad.state.quests.q225;assert.throws(()=>g.load(JSON.stringify(bad)));assert.equal(g.save(),valid);
+  const old=new GameEngine(preCut.companions),bad=JSON.parse(old.save());delete bad.state.quests.q225;assert.throws(()=>g.load(JSON.stringify(bad)));assert.equal(g.save(),valid);
 });
 
 test('edition geography rejects stale fingerprints, duplicate replacements and invalid routes before use',async()=>{
   for(const change of [b=>b.patches[0].sha256='0'.repeat(64),b=>b.patches.push(b.patches[0]),b=>b.additions.maps.region_1_f1=b.additions.maps.e2_trade_corridor]){
-    const base=structuredClone(data.worldTravelLegacy),bundle=await read('data/scenario-editions/e2/geography.json');
+    const base=structuredClone(preCut.companions),bundle=await read('data/scenario-editions/e2/geography.json');
     // This API receives raw maps before the quest projection pass.
     base.maps.region_1_landing=await read('data/maps/region_1_landing.json');const before=JSON.stringify(base);change(bundle);
     await assert.rejects(applyEditionGeography(base,bundle));assert.equal(JSON.stringify(base),before);
@@ -164,7 +159,9 @@ for(const layout of ['scene','classic'])test(`${layout}: real view controls cros
 });
 
 for(const [outcome,choices] of [['informed',['window','inspect','return','file','submit','accompany','issue','leave','finish']],['compromise',['window','fine','leave','finish']],['contract',['force','break','escort','finish']]])test(`q004 ${outcome} keeps its real route and permits independent border registration afterwards`,()=>{
-  const old=prepareQuest('q004'),raw=JSON.parse(old.save());raw.scenarioEdition='e2';raw.state.scenarioEdition='e2';const g=fresh();g.load(JSON.stringify(raw));g.random=()=>.999999;
+  const g=fresh();g.award(0,data.system.xpBase*24*25);g.healAll();g.state.gold=5000;for(const item of ['rope','ration','potion','torch'])g.state.inventory[item]=99;
+  for(const id of ['q001','q002','q003']){assert.ok(g.accept(id));(g.state.flags.legacyStoryRoutes??={})[id]=true;g.complete(id,'compromise');}
+  assert.ok(g.accept('q004'));const p=data.quests.q004.story.worldPlaces[data.quests.q004.story.scenes.entry.place];g.teleport(p.map,p.x,p.y);g.run(data.quests.q004.model.entryScript);drain(g);
   for(const id of choices){assert.ok(g.dispatch({type:'choose',id}),`${id}: ${g.state.notice}`);drain(g);if(g.state.battle)fight(g);finishJourney(g);save(g);}
   assert.equal(g.state.quests.q004.outcome,outcome);assert.equal(g.state.worldTravel.registrations.oddland_entry,undefined);
   const sister=g.state.stories.q004.values.sisterAt;walk(g,15,3);outward(g);assert.equal(g.state.quests.q004.outcome,outcome);assert.equal(g.state.stories.q004.values.sisterAt,sister);save(g);

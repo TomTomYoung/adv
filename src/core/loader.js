@@ -1,6 +1,6 @@
 import {applyEditionGeography} from './edition-geography.js';
 import {projectQuestObjects} from './quest-events.js';
-import {LEGACY_SCENARIO_EDITIONS,resolveScenarioEdition} from './scenario-editions.js';
+import {LEGACY_SCENARIO_EDITIONS,resolveScenarioEdition,scenarioSaveRevision} from './scenario-editions.js';
 import { validateContent } from './validation.js';
 export async function loadContent(read = async path => {
   const response = await fetch(new URL(`../../${path}`, import.meta.url),{cache:'no-store'});
@@ -58,17 +58,17 @@ export async function loadContent(read = async path => {
   if(additionsPath)await addBundle(additionsPath);
   const geography=catalog.editions[data.scenarioEdition].geography;
   if(geography){
-    const legacy=structuredClone(data);projectQuestObjects(legacy);
+    const legacy=scenarioSaveRevision(data)===1?structuredClone(data):null;if(legacy)projectQuestObjects(legacy);
     await applyEditionGeography(data,await read(geography));
-    data.worldTravelLegacy=legacy;
+    if(legacy)data.worldTravelLegacy=legacy;
   }
   const regional=catalog.editions[data.scenarioEdition].regionalAdditions;
   if(regional){
     if(!data.worldTravel)throw Error('地域依頼には版別地理が必要です。');
-    const legacy=structuredClone(data);projectQuestObjects(legacy);
+    const legacy=scenarioSaveRevision(data)===1?structuredClone(data):null;if(legacy)projectQuestObjects(legacy);
     const ids=await addBundle(regional);
     for(const id of ids){const q=data.quests[id];if(!Object.hasOwn(data.worldTravel.settlements,q.settlement))throw Error('地域依頼の受付拠点が不正です。');data.worldTravel.questSettlements[id]=q.settlement;}
-    data.regionalLegacy=legacy;data.regionalQuestIds=ids;
+    if(legacy)data.regionalLegacy=legacy;data.regionalQuestIds=ids;
   }
   projectQuestObjects(data);
   const errors=validateContent(data);

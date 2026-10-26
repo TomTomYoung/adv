@@ -43,10 +43,10 @@ export function fixture(data,id,{accepted=true,entered=true,started=true,absent=
  return g;
 }
 
-export function auditQuest(data,id){
- const q=data.quests[id],g=fixture(data,id),queue=[{state:structuredClone(g.state),path:[]}],seen=new Set(),ends={},nodes=new Set(),transitions=new Set();
+export function auditQuest(data,id,{makeFixture=fixture}={}){
+ const q=data.quests[id],g=makeFixture(data,id),queue=[{state:structuredClone(g.state),path:[]}],seen=new Set(),ends={},nodes=new Set(),transitions=new Set();
  const stats={states:0,saves:0,battleSaves:0,zeroResourceChoices:0};
- if(id==='q165')queue.push({state:structuredClone(fixture(data,id,{absent:'il'}).state),path:['[イル不在]']});
+ if(id==='q165')queue.push({state:structuredClone(makeFixture(data,id,{absent:'il'}).state),path:['[イル不在]']});
  for(let i=0;i<queue.length;i++){
   const current=queue[i];g.state=structuredClone(current.state);save(g);stats.saves++;
   if(g.state.battle){
@@ -94,7 +94,10 @@ export function resolveBattle(g,result){
 }
 
 export async function loadStages(){
- const current=await loadContent(read,{edition:'e2'}),earliest=await loadContent(async file=>{const value=await read(file);if(file==='data/scenario-editions.json'){delete value.editions.e2.additions;delete value.editions.e2.geography;delete value.editions.e2.regionalAdditions;}return value;},{edition:'e2'});
+ // Historical baseline, intentionally pinned before the one-time e2 save cut.
+ // Current relocation behavior is tested separately against the live catalog.
+ const compatibleRead=async file=>{if(file==='data/scenario-editions/e2/geography.json')return read('tests/fixtures/e2-geography-before-relocation.json');const value=await read(file);if(file==='data/scenario-editions.json'){delete value.editions.e2.saveRevision;value.editions.e2.questOverrides={q001:value.editions.e2.questOverrides.q001};}return value;};
+ const current=await loadContent(compatibleRead,{edition:'e2'}),earliest=await loadContent(async file=>{const value=await compatibleRead(file);if(file==='data/scenario-editions.json'){delete value.editions.e2.additions;delete value.editions.e2.geography;delete value.editions.e2.regionalAdditions;}return value;},{edition:'e2'});
  return {q001:earliest,companions:current.worldTravelLegacy,border:current.regionalLegacy,firstTen:current};
 }
 export function replay(g,id,trace){
@@ -145,13 +148,13 @@ export async function auditAll(){
 export function reportMarkdown(report){
  const lines=['# 既存100件の移設前検証','','2026-10-26。基点master `'+report.baseline+'`。対象はオッドランド候補60件、サロメ候補40件。機械的な実行検証と、実際の移設採用を区別する。','',
  '[調査と採用条件](ODDLAND_RELOCATION_AUDIT.md) ／ [検証JSON](REGIONAL_RELOCATION_CHECK.json) ／ [再実行ツール](../../tools/audit-regional-relocation.mjs) ／ [個別の本文・帰路の作業](REGIONAL_RELOCATION_WORK.md)','',
- '## 結果と制限','',`${report.summary.quests}件・${report.summary.endings}結末の選択をVMで実行し、${report.summary.saves}回の保存再開と${report.summary.migrationFixtures}件の世代別保存移行を確認した。5迷宮の通常出口・帰還印・敗北救助は、現在の所属先である灯帰りへ戻る。`,'',
- '全100件に実座標の `story.worldPlaces` がない。場面間移動・人物同行・受渡しは旧版の文章とフラグで表現され、現地イベントの座標に隊が留まる。今回の検証成功だけを理由に入口・受付を外国へ移さない。地図上の現場・帰路と旧遠征の互換を接続するまでは全件を採用保留とする。','',
+ 'この報告は互換切断前の固定fixtureによる歴史的基準。現行の巡礼路・礼拝堂前半10件と保存改訂2は対象外。旧保存互換の条件はユーザー指示により一回限りの切断へ変更した。現在の進捗は[個別作業票](REGIONAL_RELOCATION_WORK.md)を参照する。','','## 結果と制限','',`${report.summary.quests}件・${report.summary.endings}結末の選択をVMで実行し、${report.summary.saves}回の保存再開と${report.summary.migrationFixtures}件の世代別保存移行を確認した。5迷宮の通常出口・帰還印・敗北救助は、基準時点の所属先である灯帰りへ戻る。`,'',
+ '基準時点の全100件に実座標の `story.worldPlaces` がない。場面間移動・人物同行・受渡しは旧版の文章とフラグで表現され、現地イベントの座標に隊が留まる。今回の検証成功だけを理由に入口・受付を外国へ移さない。この時点では地図上の現場・帰路と旧遠征の互換が未接続だった。','',
  '分岐の到達性を調べるため、前提完了はfixture、資金5000G・道具99・高レベルの隊を使い、決定地点へ直接配置する。物語内の戦闘は勝利・可能な逃走・敗北を実行する。現場までの往復・無資金での踏破・自然な成長を今回測ったという意味ではない。選択時に資源0でも続行手段があること、報酬が再訪で重複しないことは別に検査する。','',
- '旧e2はq001改稿期、個人80件追加後、越境追加後、第一群10件追加後の4世代を、現在の版別定義と保持された旧bundleから再構成したfixture。ユーザー実保存の収集や過去全リリースの復元ではない。各依頼の未受注・受注済み・迷宮内・本文表示中・選択待ち・環境戦闘中・完了済みを現在のe2へ読み込み、既存フィールドを逐一比較した。新しい国での旧遠征を保証する試験ではない。','',
+ '旧e2はq001改稿期、個人80件追加後、越境追加後、第一群10件追加後の4世代を、固定した改訂1の版別定義と旧bundleから再構成したfixture。ユーザー実保存の収集や過去全リリースの復元ではない。各依頼の未受注・受注済み・迷宮内・本文表示中・選択待ち・環境戦闘中・完了済みを基準時点のe2へ読み込み、既存フィールドを逐一比較した。新しい国での旧遠征を保証する試験ではない。','',
  '`npm run audit:relocation` でJSONと本文を再測定・生成し、`npm run check:relocation` で保存済み結果との一致を確認する。通常の `npm run check` でも専用試験が各依頼の実測値をJSONと照合する。固有装置の操作後の保存・帰還・再出発、入口だけを変更した場合の国表示変更とサロメ施設内保存の拒否は専用試験で別に再現する。','',
  '## 個別結果',''];
- for(const group of report.dungeons){lines.push(`### ${group.name} → ${group.location}`,'',group.note,'');for(const q of report.quests.filter(q=>q.dungeon===group.dungeon)){lines.push(`#### ${q.id} ${q.title}`,'',`決定地点：\`${q.decision.map} (${q.decision.x},${q.decision.y})\`。場面：${q.sceneIds.join('、')}。現行モデル：${q.modelVersion}。実地図への場面接続：未実装。`,'');for(const [end,route] of Object.entries(q.endings))lines.push(`- ${end}：${route.join(' → ')}`);lines.push('');}}
+ for(const group of report.dungeons){lines.push(`### ${group.name} → ${group.location}`,'',group.note,'');for(const q of report.quests.filter(q=>q.dungeon===group.dungeon)){lines.push(`#### ${q.id} ${q.title}`,'',`決定地点：\`${q.decision.map} (${q.decision.x},${q.decision.y})\`。場面：${q.sceneIds.join('、')}。基準時点のモデル：${q.modelVersion}。実地図への場面接続：未実装。`,'');for(const [end,route] of Object.entries(q.endings))lines.push(`- ${end}：${route.join(' → ')}`);lines.push('');}}
  return lines.join('\n').trimEnd()+'\n';
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href){

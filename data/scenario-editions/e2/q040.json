@@ -1,0 +1,1758 @@
+{
+  "schemaVersion": 1,
+  "id": "q040",
+  "number": 40,
+  "title": "砕けない祈り",
+  "client": "修復師のサイ",
+  "brief": "大鏡を壊せば封印が解けると分かった。封じられた声をどう扱うか決めてください。",
+  "region": 4,
+  "type": "authored_progression",
+  "recommendedLevel": 4,
+  "requires": {
+    "op": "gte",
+    "left": {
+      "ref": "vars.region_4"
+    },
+    "right": 3
+  },
+  "unlockHint": "この地域の依頼を3件完了すると受注できる。 巡礼台地の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q040_pilgrim_entry",
+      "title": "砕けない祈りの現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q040.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q040.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      },
+      "script": "q040.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "region_4",
+          "map": "region_4_f2",
+          "x": 8,
+          "y": 13
+        }
+      ]
+    },
+    {
+      "id": "q040_pilgrim_record",
+      "title": "大鏡の外の記録机",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "record",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q040.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q040.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      },
+      "script": "q040.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "region_4",
+          "map": "region_4_f2",
+          "x": 8,
+          "y": 7
+        }
+      ]
+    },
+    {
+      "id": "q040_pilgrim_isolation",
+      "title": "鏡を保管する閉鎖区画",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "isolation",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q040.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q040.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      },
+      "script": "q040.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "region_4",
+          "map": "region_4_f2",
+          "x": 3,
+          "y": 5
+        }
+      ]
+    }
+  ],
+  "locations": [],
+  "outcomes": {
+    "informed": {
+      "label": "写しを守り、敵意のある影だけ退ける",
+      "text": "鏡は小さな記録板へ分かれた。礼拝堂は祈る場であり、証言を聞く場にもなる。",
+      "gold": 93,
+      "xp": 92
+    },
+    "contract": {
+      "label": "鏡の主を倒し、全ての声を封じ直す",
+      "text": "礼拝は静かに続く。サイは銘板に封印の数だけ刻んだ。",
+      "gold": 113,
+      "xp": 68
+    },
+    "compromise": {
+      "label": "鏡を閉鎖区画へ移し、調査を続ける",
+      "text": "即座の解放は叶わなかった。初めて、封じられた者にも審査の日が決まる。",
+      "gold": 60,
+      "xp": 69
+    },
+    "fragment": {
+      "gold": 93,
+      "xp": 69,
+      "label": "聞き取れた断片だけ記録して鏡を保管する",
+      "text": "日付と追放された者の名を残した。言葉の続きは失われたまま、記録係は伝聞と明記し、別の証人を探すことにした。"
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/chapel.mjs",
+    "world": {
+      "truth": "大鏡は悪霊だけでなく、追放された者の証言も一緒に封じている。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "大鏡は悪霊だけでなく、追放された者の証言も一緒に封じている。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "大鏡を壊せば封印が解けると分かった。封じられた声をどう扱うか決めてください。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "修復師のサイ",
+        "observation": "大鏡を壊せば封印が解けると分かった。封じられた声をどう扱うか決めてください。",
+        "belief": "大鏡を壊せば封印が解けると分かった。封じられた声をどう扱うか決めてください。",
+        "goal": "大鏡を壊せば封印が解けると分かった。封じられた声をどう扱うか決めてください。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "大鏡を壊せば封印が解けると分かった。封じられた声をどう扱うか決めてください。",
+      "progression": "鏡の声を選別して記録する仕事と守護者との対決を分け、記録前の封印では証言を失う。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q040.pilgrimage.entry"
+        },
+        {
+          "id": "witness",
+          "script": "q040.pilgrimage.witness"
+        },
+        {
+          "id": "shadow",
+          "script": "q040.pilgrimage.shadow"
+        },
+        {
+          "id": "after",
+          "script": "q040.pilgrimage.after"
+        },
+        {
+          "id": "collect_mirror",
+          "script": "q040.pilgrimage.collect_mirror"
+        },
+        {
+          "id": "isolated",
+          "script": "q040.pilgrimage.isolated"
+        },
+        {
+          "id": "fragment",
+          "script": "q040.pilgrimage.fragment"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "大鏡を壊せば封印が解けると分かった。封じられた声をどう扱うか決めてください。",
+      "openQuestion": "砕けない祈りの問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "frameShift",
+      "newInformation": "大鏡は悪霊だけでなく、追放された者の証言も一緒に封じている。",
+      "retroactiveTargets": [
+        "shadow"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q040.flow.entry"
+      },
+      {
+        "id": "witness",
+        "script": "q040.flow.witness"
+      },
+      {
+        "id": "shadow",
+        "script": "q040.flow.shadow"
+      },
+      {
+        "id": "after",
+        "script": "q040.flow.after"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q040.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q040.testimony",
+        "meaning": "各場面に明記した testimony の行為・合意の記録",
+        "writer": [
+          "witness"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "鏡の声を選別して記録する仕事と守護者との対決を分け、記録前の封印では証言を失う。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "鏡の声を選別して記録する仕事と守護者との対決を分け、記録前の封印では証言を失う。",
+    "flowVersion": 2,
+    "entryScript": "q040.pilgrimage.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "大鏡の声は一つではない。助けを求める声と、こちらを呪う声が交互に来る。",
+        "options": [
+          {
+            "id": "listen",
+            "text": "一つずつ声を聞き、返事をする",
+            "to": "witness",
+            "action": "entry_listen"
+          },
+          {
+            "id": "seal",
+            "text": "鏡の主を倒し、全ての声を封じ直す",
+            "to": "@contract",
+            "action": "entry_seal"
+          },
+          {
+            "id": "isolate",
+            "text": "鏡を閉鎖区画へ移し、調査を続ける",
+            "to": "isolated",
+            "action": "entry_isolate"
+          }
+        ]
+      },
+      {
+        "id": "witness",
+        "place": "entry",
+        "text": "追放された者が門の閉じた日を語った。続く影はその名を消せと命じる。",
+        "options": [
+          {
+            "id": "copy",
+            "text": "証言を鏡の外の紙へ写す",
+            "to": "shadow",
+            "action": "witness_copy"
+          },
+          {
+            "id": "fight",
+            "text": "写さずに敵意のある影を退ける",
+            "to": "after",
+            "action": "witness_fight"
+          },
+          {
+            "id": "move",
+            "text": "ここでは選別せず、閉鎖区画へ運ぶ",
+            "to": "isolated",
+            "action": "witness_move"
+          }
+        ]
+      },
+      {
+        "id": "shadow",
+        "place": "record",
+        "text": "大鏡は悪霊だけでなく、追放された者の証言も一緒に封じている。 写しを証人へ預けた。残った影は紙を狙って鏡から出る。",
+        "options": [
+          {
+            "id": "defend",
+            "text": "写しを守り、敵意のある影だけ退ける",
+            "to": "@informed",
+            "action": "shadow_defend"
+          },
+          {
+            "id": "remove",
+            "text": "写しと鏡を閉鎖区画へ運ぶ",
+            "to": "collect_mirror",
+            "action": "shadow_remove"
+          }
+        ]
+      },
+      {
+        "id": "after",
+        "place": "entry",
+        "text": "影は退いたが、声は一緒に途切れた。日付だけは覚えている。完全な証言として書くことはできない。",
+        "options": [
+          {
+            "id": "fragment",
+            "text": "聞き取れた断片だけ記録して鏡を保管する",
+            "to": "fragment",
+            "action": "after_fragment"
+          },
+          {
+            "id": "seal",
+            "text": "残る声も封じ直す",
+            "to": "@contract",
+            "action": "after_seal"
+          }
+        ]
+      },
+      {
+        "id": "collect_mirror",
+        "place": "entry",
+        "text": "証言の写しを受け取り、大鏡の前へ戻った。鏡と写しを別々に包み、閉鎖区画へ運ぶ。",
+        "options": [
+          {
+            "id": "carry",
+            "text": "鏡と写しを閉鎖区画へ運ぶ",
+            "to": "isolated",
+            "action": "collect_mirror_carry"
+          }
+        ]
+      },
+      {
+        "id": "isolated",
+        "place": "isolation",
+        "text": "鏡を閉鎖区画へ据え、入口に調査中の札を掛けた。調べられた範囲と、まだ聞き取れていない声を区別して残す。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@compromise",
+            "action": "isolated_finish"
+          }
+        ]
+      },
+      {
+        "id": "fragment",
+        "place": "record",
+        "text": "記録机で日付と聞き取れた言葉だけを書いた。分からない箇所は空白のまま残す。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@fragment",
+            "action": "fragment_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "first-ten",
+      "settlement": "oddland_plateau",
+      "saveRevision": 2,
+      "scope": "礼拝堂20件のうち前半10件の実地接続。後半10件の出張先は未接続。"
+    }
+  },
+  "scripts": {
+    "q040.pilgrimage.entry": {
+      "storyQuest": "q040",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q040",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "大鏡の声は一つではない。助けを求める声と、こちらを呪う声が交互に来る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "listen",
+              "text": "一つずつ声を聞き、返事をする",
+              "storyAction": {
+                "quest": "q040",
+                "action": "entry_listen"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q040",
+                  "action": "entry_listen"
+                },
+                {
+                  "op": "jump",
+                  "script": "q040.pilgrimage.witness"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "鏡の主を倒し、全ての声を封じ直す",
+              "storyAction": {
+                "quest": "q040",
+                "action": "entry_seal"
+              },
+              "requirement": "戦闘。作業・報酬は勝利後に確定する。",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_4",
+                  "on_win": [
+                    {
+                      "op": "story.action",
+                      "quest": "q040",
+                      "action": "entry_seal"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q040.pilgrimage.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "narrate",
+                      "text": "戦いを切り上げた。作業は確定していない。現場で再開できる。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "narrate",
+                      "text": "救助班に巡礼台地へ運び出された。現場へ戻れば直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "isolate",
+              "text": "鏡を閉鎖区画へ移し、調査を続ける",
+              "storyAction": {
+                "quest": "q040",
+                "action": "entry_isolate"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q040",
+                  "action": "entry_isolate"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q040.pilgrimage.witness": {
+      "storyQuest": "q040",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q040",
+          "scene": "witness"
+        },
+        {
+          "op": "narrate",
+          "text": "追放された者が門の閉じた日を語った。続く影はその名を消せと命じる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "copy",
+              "text": "証言を鏡の外の紙へ写す",
+              "storyAction": {
+                "quest": "q040",
+                "action": "witness_copy"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q040",
+                  "action": "witness_copy"
+                }
+              ]
+            },
+            {
+              "id": "fight",
+              "text": "写さずに敵意のある影を退ける",
+              "storyAction": {
+                "quest": "q040",
+                "action": "witness_fight"
+              },
+              "requirement": "戦闘。作業・報酬は勝利後に確定する。",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_4",
+                  "on_win": [
+                    {
+                      "op": "story.action",
+                      "quest": "q040",
+                      "action": "witness_fight"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q040.pilgrimage.after"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "narrate",
+                      "text": "戦いを切り上げた。作業は確定していない。現場で再開できる。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "narrate",
+                      "text": "救助班に巡礼台地へ運び出された。現場へ戻れば直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "move",
+              "text": "ここでは選別せず、閉鎖区画へ運ぶ",
+              "storyAction": {
+                "quest": "q040",
+                "action": "witness_move"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q040",
+                  "action": "witness_move"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q040.pilgrimage.shadow": {
+      "storyQuest": "q040",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q040",
+          "scene": "shadow"
+        },
+        {
+          "op": "narrate",
+          "text": "大鏡は悪霊だけでなく、追放された者の証言も一緒に封じている。 写しを証人へ預けた。残った影は紙を狙って鏡から出る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "defend",
+              "text": "写しを守り、敵意のある影だけ退ける",
+              "storyAction": {
+                "quest": "q040",
+                "action": "shadow_defend"
+              },
+              "requirement": "戦闘。作業・報酬は勝利後に確定する。",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_4",
+                  "on_win": [
+                    {
+                      "op": "story.action",
+                      "quest": "q040",
+                      "action": "shadow_defend"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q040.pilgrimage.end.informed"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "narrate",
+                      "text": "戦いを切り上げた。作業は確定していない。現場で再開できる。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "narrate",
+                      "text": "救助班に巡礼台地へ運び出された。現場へ戻れば直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "remove",
+              "text": "写しと鏡を閉鎖区画へ運ぶ",
+              "storyAction": {
+                "quest": "q040",
+                "action": "shadow_remove"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q040",
+                  "action": "shadow_remove"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q040.pilgrimage.after": {
+      "storyQuest": "q040",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q040",
+          "scene": "after"
+        },
+        {
+          "op": "narrate",
+          "text": "影は退いたが、声は一緒に途切れた。日付だけは覚えている。完全な証言として書くことはできない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fragment",
+              "text": "聞き取れた断片だけ記録して鏡を保管する",
+              "storyAction": {
+                "quest": "q040",
+                "action": "after_fragment"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q040",
+                  "action": "after_fragment"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "残る声も封じ直す",
+              "storyAction": {
+                "quest": "q040",
+                "action": "after_seal"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q040",
+                  "action": "after_seal"
+                },
+                {
+                  "op": "jump",
+                  "script": "q040.pilgrimage.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q040.pilgrimage.collect_mirror": {
+      "storyQuest": "q040",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q040",
+          "scene": "collect_mirror"
+        },
+        {
+          "op": "narrate",
+          "text": "証言の写しを受け取り、大鏡の前へ戻った。鏡と写しを別々に包み、閉鎖区画へ運ぶ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "carry",
+              "text": "鏡と写しを閉鎖区画へ運ぶ",
+              "storyAction": {
+                "quest": "q040",
+                "action": "collect_mirror_carry"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q040",
+                  "action": "collect_mirror_carry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q040.pilgrimage.isolated": {
+      "storyQuest": "q040",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q040",
+          "scene": "isolated"
+        },
+        {
+          "op": "narrate",
+          "text": "鏡を閉鎖区画へ据え、入口に調査中の札を掛けた。調べられた範囲と、まだ聞き取れていない声を区別して残す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q040",
+                "action": "isolated_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q040",
+                  "action": "isolated_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q040.pilgrimage.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q040.pilgrimage.fragment": {
+      "storyQuest": "q040",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q040",
+          "scene": "fragment"
+        },
+        {
+          "op": "narrate",
+          "text": "記録机で日付と聞き取れた言葉だけを書いた。分からない箇所は空白のまま残す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q040",
+                "action": "fragment_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q040",
+                  "action": "fragment_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q040.pilgrimage.end.fragment"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q040.pilgrimage.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "鏡は小さな記録板へ分かれた。礼拝堂は祈る場であり、証言を聞く場にもなる。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q040",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q040.pilgrimage.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "礼拝は静かに続く。サイは銘板に封印の数だけ刻んだ。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q040",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q040.pilgrimage.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "即座の解放は叶わなかった。初めて、封じられた者にも審査の日が決まる。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q040",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q040.pilgrimage.end.fragment": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "日付と追放された者の名を残した。言葉の続きは失われたまま、記録係は伝聞と明記し、別の証人を探すことにした。"
+        },
+        {
+          "op": "add",
+          "target": "vars.fragment",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q040",
+          "outcome": "fragment"
+        }
+      ]
+    },
+    "q040.pilgrimage.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q040.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q040.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "鏡は小さな記録板へ分かれた。礼拝堂は祈る場であり、証言を聞く場にもなる。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "礼拝は静かに続く。サイは銘板に封印の数だけ刻んだ。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "即座の解放は叶わなかった。初めて、封じられた者にも審査の日が決まる。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "fragment",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "日付と追放された者の名を残した。言葉の続きは失われたまま、記録係は伝聞と明記し、別の証人を探すことにした。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "story.init",
+              "quest": "q040"
+            },
+            {
+              "op": "switch",
+              "value": {
+                "ref": "stories.q040.scene"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q040.pilgrimage.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "witness",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q040.pilgrimage.witness"
+                    }
+                  ]
+                },
+                {
+                  "equals": "shadow",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q040.pilgrimage.shadow"
+                    }
+                  ]
+                },
+                {
+                  "equals": "after",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q040.pilgrimage.after"
+                    }
+                  ]
+                },
+                {
+                  "equals": "collect_mirror",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q040.pilgrimage.collect_mirror"
+                    }
+                  ]
+                },
+                {
+                  "equals": "isolated",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q040.pilgrimage.isolated"
+                    }
+                  ]
+                },
+                {
+                  "equals": "fragment",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q040.pilgrimage.fragment"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q040.pilgrimage.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "砕けない祈りの現場",
+      "record": "大鏡の外の記録机",
+      "isolation": "鏡を保管する閉鎖区画",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "record"
+      ],
+      [
+        "transit",
+        "isolation"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "record",
+          "isolation",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise",
+          "fragment"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "testimony": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "testimony"
+      },
+      "mirrorAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "record",
+          "isolation",
+          "transit",
+          "party",
+          "copy",
+          "witness"
+        ],
+        "meaning": "mirror の所在または保持者"
+      },
+      "copyAt": {
+        "type": "enum",
+        "initial": "party",
+        "values": [
+          "entry",
+          "record",
+          "isolation",
+          "transit",
+          "party",
+          "mirror",
+          "witness"
+        ],
+        "meaning": "copy の所在または保持者"
+      },
+      "witnessAt": {
+        "type": "enum",
+        "initial": "record",
+        "values": [
+          "entry",
+          "record",
+          "isolation",
+          "transit"
+        ],
+        "meaning": "witness の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "mirror": {
+        "holder": "mirrorAt",
+        "kind": "item"
+      },
+      "copy": {
+        "holder": "copyAt",
+        "kind": "item"
+      },
+      "witness": {
+        "holder": "witnessAt",
+        "kind": "person"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "大鏡は悪霊だけでなく、追放された者の証言も一緒に封じている。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "砕けない祈りの現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "witness": {
+        "title": "砕けない祈りの現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "shadow": {
+        "title": "大鏡の外の記録机",
+        "place": "record",
+        "cast": [],
+        "requires": true
+      },
+      "after": {
+        "title": "砕けない祈りの現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "collect_mirror": {
+        "title": "砕けない祈りの現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "isolated": {
+        "title": "鏡を保管する閉鎖区画",
+        "place": "isolation",
+        "cast": [],
+        "requires": true
+      },
+      "fragment": {
+        "title": "大鏡の外の記録机",
+        "place": "record",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_listen": {
+        "from": [
+          "entry"
+        ],
+        "to": "witness",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "entry_seal": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "entry_isolate": {
+        "from": [
+          "entry"
+        ],
+        "to": "isolated",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "isolation"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "mirror",
+            "from": "party",
+            "to": "isolation"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "isolation",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "mirror",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      },
+      "witness_copy": {
+        "from": [
+          "witness"
+        ],
+        "to": "shadow",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "record"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "copy",
+            "from": "party",
+            "to": "witness"
+          },
+          {
+            "op": "set",
+            "key": "testimony",
+            "value": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "record",
+            "requires": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "record",
+          "companions": []
+        },
+        "depart": []
+      },
+      "witness_fight": {
+        "from": [
+          "witness"
+        ],
+        "to": "after",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "witness_move": {
+        "from": [
+          "witness"
+        ],
+        "to": "isolated",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "isolation"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "mirror",
+            "from": "party",
+            "to": "isolation"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "isolation",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "mirror",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      },
+      "shadow_defend": {
+        "from": [
+          "shadow"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "shadow_remove": {
+        "from": [
+          "shadow"
+        ],
+        "to": "collect_mirror",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "copy",
+            "from": "witness",
+            "to": "party"
+          }
+        ]
+      },
+      "after_fragment": {
+        "from": [
+          "after"
+        ],
+        "to": "fragment",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "record"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "record",
+          "companions": []
+        },
+        "depart": []
+      },
+      "after_seal": {
+        "from": [
+          "after"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "collect_mirror_carry": {
+        "from": [
+          "collect_mirror"
+        ],
+        "to": "isolated",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "isolation"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "mirror",
+            "from": "party",
+            "to": "isolation"
+          },
+          {
+            "op": "transfer",
+            "entity": "copy",
+            "from": "party",
+            "to": "isolation"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "isolation",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "mirror",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      },
+      "isolated_finish": {
+        "from": [
+          "isolated"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "fragment_finish": {
+        "from": [
+          "fragment"
+        ],
+        "ending": "fragment",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "fragment"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q040.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q040.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q040.values.partyAt"
+                },
+                "right": "record"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q040.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q040.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q040.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q040.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q040.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q040.values.partyAt"
+                },
+                "right": "isolation"
+              }
+            ]
+          }
+        ]
+      },
+      "fragment": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q040.values.resolution"
+            },
+            "right": "fragment"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q040.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q040.values.partyAt"
+                },
+                "right": "record"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_4",
+        "map": "region_4_f2",
+        "x": 8,
+        "y": 13
+      },
+      "record": {
+        "kind": "dungeon",
+        "dungeon": "region_4",
+        "map": "region_4_f2",
+        "x": 8,
+        "y": 7
+      },
+      "isolation": {
+        "kind": "dungeon",
+        "dungeon": "region_4",
+        "map": "region_4_f2",
+        "x": 3,
+        "y": 5
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_plateau",
+  "receptionLocations": [
+    "pilgrim_board"
+  ]
+}
