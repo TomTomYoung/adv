@@ -1,0 +1,35 @@
+name: Validate machinery quests in Chromium
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'data/scenario-editions/**'
+      - 'data/scenario-editions.json'
+      - 'tools/browser-machine-smoke.mjs'
+      - '.github/workflows/machine-quests.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  machine-browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser and Japanese fonts
+        run: |
+          npm install --no-save --package-lock=false playwright@1.58.2
+          npx playwright install --with-deps chromium --only-shell
+          sudo apt-get install -y fonts-noto-cjk
+      - name: Walk the worker return, ward collection, and three homes in both layouts and widths
+        run: node tools/browser-machine-smoke.mjs
+      - name: Keep machinery viewport checkpoints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: machine-browser-checkpoints
+          path: /tmp/adv-machine-browser
+          if-no-files-found: ignore

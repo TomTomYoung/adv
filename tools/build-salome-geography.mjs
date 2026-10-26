@@ -1,3 +1,4 @@
+import {extendMachineGeography} from '../authoring/editions/e2/salome/machine-geography.mjs';
 import {extendLibraryGeography} from '../authoring/editions/e2/salome/library-geography.mjs';
 import {extendLibrarySecondGeography} from '../authoring/editions/e2/salome/library-second-geography.mjs';
 import fs from 'node:fs/promises';
@@ -41,6 +42,7 @@ export async function buildSalomeGeography(previous,{check=false}={}){
  const bundle={schemaVersion:1,additions:{maps,locations,dungeons},patches,travel};
  await extendLibraryGeography(bundle,previous,oldDungeons);
  extendLibrarySecondGeography(bundle);
+ extendMachineGeography(bundle);
  const output=JSON.stringify(bundle,null,2)+'\n',file=path.join(root,'data/scenario-editions/e2/salome-geography.json');
  if(check){if(await fs.readFile(file,'utf8').catch(()=>null)!==output)throw Error('サロメ地理が古くなっています。npm run build:editions を実行してください。');}
  else await fs.writeFile(file,output);

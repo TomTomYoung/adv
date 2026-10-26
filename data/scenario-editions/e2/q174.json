@@ -1,0 +1,1671 @@
+{
+  "schemaVersion": 1,
+  "id": "q174",
+  "number": 174,
+  "title": "泣かない葬列",
+  "client": "村長",
+  "brief": "笑いながら人を連れていく葬列に対処してください。",
+  "region": 8,
+  "type": "scene_graph",
+  "recommendedLevel": 8,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 サロメの共同依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q174_scene",
+      "title": "泣かない葬列：村長",
+      "points": [
+        {
+          "map": "region_8_f1",
+          "x": 6,
+          "y": 1,
+          "dungeon": "region_8"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q174.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q174.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q174.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q174"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_8"
+    },
+    {
+      "id": "q174_machine_entry",
+      "title": "泣かない葬列の現場受付",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q174.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q174.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q174"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q174.machine.visit",
+      "points": [
+        {
+          "dungeon": "region_8",
+          "map": "region_8_f1",
+          "x": 6,
+          "y": 1
+        }
+      ]
+    },
+    {
+      "id": "q174_machine_procession",
+      "title": "止まらない葬列と棺",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "procession",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q174.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q174.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q174"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q174.machine.visit",
+      "points": [
+        {
+          "dungeon": "salome_road",
+          "map": "e2_salome_cemetery",
+          "x": 9,
+          "y": 3
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_8_f1",
+      "x": 6,
+      "y": 1,
+      "object": "q174_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "name": {
+      "label": "役柄を降りた葬儀",
+      "text": "葬列は止まった。娘は怒ったまま帰った。最後の笑いだけは、誰かが思い出したくだらない芸から自然に出た。",
+      "gold": 141,
+      "xp": 93
+    },
+    "seal": {
+      "label": "封じた棺",
+      "text": "人は歩かずに済んだ。怪異は土地へ残り、後日きちんと送る役を誰がするか相談が始まった。",
+      "gold": 141,
+      "xp": 93
+    },
+    "rescue": {
+      "label": "列からの救出",
+      "text": "足の傷んだ人を救い、次の弔いまで時間を稼いだ。葬列自体を終わらせた報告にはしなかった。",
+      "gold": 141,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/salome/machine-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381d79e52f9b1f447f1d2",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "列の人は楽しそうでも足は擦り切れている。道化師の娘だけが列に加わらず、父への怒りを抱いている。彼女は葬儀を終える道具として泣くことを要求されたくない。悲しい話を集めて涙を点数化する仕組みにはしない。",
+      "fixedPast": "笑いながら村を通る葬列に、次々と人が加わって帰らない。村長は怪異の討伐を頼む。棺の主は笑わせることに生涯を使った道化師で、泣く者がいない限り葬儀が終わらない。列の笑いは命令でなく、悲しみを見せないという観客の習慣だ。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "村長",
+        "beliefsAndGoals": "笑いながら村を通る葬列に、次々と人が加わって帰らない。村長は怪異の討伐を頼む。棺の主は笑わせることに生涯を使った道化師で、泣く者がいない限り葬儀が終わらない。列の笑いは命令でなく、悲しみを見せないという観客の習慣だ。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "笑いながら人を連れていく葬列に対処してください。"
+      }
+    ],
+    "conflict": {
+      "design": "葬列へ近づく→列の観察／娘と対話／道化師の小屋→弔いをやり直す／棺を封じる／列から人だけ救出。泣く代わりに、死者を役柄でなく個人として呼ぶ言葉でも弔いは成立すると小屋の遺書で示す。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q174.machine.entry"
+        },
+        {
+          "id": "letter",
+          "script": "q174.machine.letter"
+        },
+        {
+          "id": "onsite",
+          "script": "q174.machine.onsite"
+        },
+        {
+          "id": "sealed",
+          "script": "q174.machine.sealed"
+        },
+        {
+          "id": "named",
+          "script": "q174.machine.named"
+        },
+        {
+          "id": "rescued",
+          "script": "q174.machine.rescued"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "笑いながら人を連れていく葬列に対処してください。"
+    },
+    "reveal": {
+      "newInformation": "列の人は楽しそうでも足は擦り切れている。道化師の娘だけが列に加わらず、父への怒りを抱いている。彼女は葬儀を終える道具として泣くことを要求されたくない。悲しい話を集めて涙を点数化する仕組みにはしない。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q174.scene.entry"
+      },
+      {
+        "id": "letter",
+        "script": "q174.scene.letter"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q174.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "道化師の葬列が止まらないという知らせを受け、墓地道へ向かう。",
+        "options": [
+          {
+            "id": "visit",
+            "text": "依頼人のいる現場へ向かう",
+            "to": "onsite",
+            "action": "entry_visit"
+          }
+        ]
+      },
+      {
+        "id": "letter",
+        "place": "hut",
+        "text": "遺書には、泣くだけでなく役柄を離れた本人の名で送ってほしいとあった。娘が怒ったままでも弔いはできる。",
+        "options": [
+          {
+            "id": "name",
+            "text": "道化師でなく個人の名を呼んで送る",
+            "to": "named",
+            "action": "letter_name"
+          },
+          {
+            "id": "seal",
+            "text": "今は弔わず棺を封じる",
+            "to": "sealed",
+            "action": "letter_seal"
+          }
+        ]
+      },
+      {
+        "id": "onsite",
+        "place": "procession",
+        "text": "列の笑顔に反して足は擦り切れている。道化師の娘だけは列に加わらず、父への怒りを語った。彼女に泣く役を強いることはできない。",
+        "options": [
+          {
+            "id": "hut",
+            "text": "道化師の小屋で遺書を探す",
+            "to": "letter",
+            "action": "onsite_hut"
+          },
+          {
+            "id": "seal",
+            "text": "棺を封じ、列の動きを止める",
+            "to": "sealed",
+            "action": "onsite_seal"
+          },
+          {
+            "id": "people",
+            "text": "まず歩けない人だけを列から救い出す",
+            "to": "rescued",
+            "action": "onsite_people"
+          }
+        ]
+      },
+      {
+        "id": "sealed",
+        "place": "procession",
+        "text": "棺を封じて列の動きを止めた。弔いは未完で、土地に怪異が残る。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@seal",
+            "action": "sealed_finish"
+          }
+        ]
+      },
+      {
+        "id": "named",
+        "place": "procession",
+        "text": "本人の名を遺書で確かめて送り、葬列を終えた。娘に涙や赦しを要求しない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@name",
+            "action": "named_finish"
+          }
+        ]
+      },
+      {
+        "id": "rescued",
+        "place": "rescue",
+        "text": "歩けない人を救護先へ引き継いだ。葬列そのものは終わっていない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@rescue",
+            "action": "rescued_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "entryScript": "q174.machine.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "machine-twenty",
+      "settlement": "salome",
+      "saveRevision": 2,
+      "scope": "機関廟20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q174.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q174.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "列の笑顔に反して足は擦り切れている。道化師の娘だけは列に加わらず、父への怒りを語った。彼女に泣く役を強いることはできない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hut",
+              "text": "道化師の小屋で遺書を探す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q174.scene.letter"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "棺を封じ、列の動きを止める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q174.end.seal"
+                }
+              ]
+            },
+            {
+              "id": "people",
+              "text": "まず歩けない人だけを列から救い出す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q174.end.rescue"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q174.scene.letter": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q174.node",
+          "value": "letter"
+        },
+        {
+          "op": "say",
+          "text": "遺書には、泣くだけでなく役柄を離れた本人の名で送ってほしいとあった。娘が怒ったままでも弔いはできる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "name",
+              "text": "道化師でなく個人の名を呼んで送る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q174.end.name"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "今は弔わず棺を封じる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q174.end.seal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q174.end.name": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q174.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "葬列は止まった。娘は怒ったまま帰った。最後の笑いだけは、誰かが思い出したくだらない芸から自然に出た。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q174",
+              "outcome": "name"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q174.end.seal": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q174.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "人は歩かずに済んだ。怪異は土地へ残り、後日きちんと送る役を誰がするか相談が始まった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q174",
+              "outcome": "seal"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q174.end.rescue": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q174.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "足の傷んだ人を救い、次の弔いまで時間を稼いだ。葬列自体を終わらせた報告にはしなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q174",
+              "outcome": "rescue"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q174.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q174.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q174.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "name",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "葬列は止まった。娘は怒ったまま帰った。最後の笑いだけは、誰かが思い出したくだらない芸から自然に出た。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "seal",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "人は歩かずに済んだ。怪異は土地へ残り、後日きちんと送る役を誰がするか相談が始まった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "rescue",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "足の傷んだ人を救い、次の弔いまで時間を稼いだ。葬列自体を終わらせた報告にはしなかった。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q174.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q174.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "letter",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q174.scene.letter"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q174.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q174.machine.entry": {
+      "storyQuest": "q174",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q174",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "道化師の葬列が止まらないという知らせを受け、墓地道へ向かう。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "visit",
+              "text": "依頼人のいる現場へ向かう",
+              "storyAction": {
+                "quest": "q174",
+                "action": "entry_visit"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q174",
+                  "action": "entry_visit"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q174.machine.letter": {
+      "storyQuest": "q174",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q174",
+          "scene": "letter"
+        },
+        {
+          "op": "narrate",
+          "text": "遺書には、泣くだけでなく役柄を離れた本人の名で送ってほしいとあった。娘が怒ったままでも弔いはできる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "name",
+              "text": "道化師でなく個人の名を呼んで送る",
+              "storyAction": {
+                "quest": "q174",
+                "action": "letter_name"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q174",
+                  "action": "letter_name"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "今は弔わず棺を封じる",
+              "storyAction": {
+                "quest": "q174",
+                "action": "letter_seal"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q174",
+                  "action": "letter_seal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q174.machine.onsite": {
+      "storyQuest": "q174",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q174",
+          "scene": "onsite"
+        },
+        {
+          "op": "narrate",
+          "text": "列の笑顔に反して足は擦り切れている。道化師の娘だけは列に加わらず、父への怒りを語った。彼女に泣く役を強いることはできない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hut",
+              "text": "道化師の小屋で遺書を探す",
+              "storyAction": {
+                "quest": "q174",
+                "action": "onsite_hut"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q174",
+                  "action": "onsite_hut"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "棺を封じ、列の動きを止める",
+              "storyAction": {
+                "quest": "q174",
+                "action": "onsite_seal"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q174",
+                  "action": "onsite_seal"
+                },
+                {
+                  "op": "jump",
+                  "script": "q174.machine.sealed"
+                }
+              ]
+            },
+            {
+              "id": "people",
+              "text": "まず歩けない人だけを列から救い出す",
+              "storyAction": {
+                "quest": "q174",
+                "action": "onsite_people"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q174",
+                  "action": "onsite_people"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q174.machine.sealed": {
+      "storyQuest": "q174",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q174",
+          "scene": "sealed"
+        },
+        {
+          "op": "narrate",
+          "text": "棺を封じて列の動きを止めた。弔いは未完で、土地に怪異が残る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q174",
+                "action": "sealed_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q174",
+                  "action": "sealed_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q174.machine.end.seal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q174.machine.named": {
+      "storyQuest": "q174",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q174",
+          "scene": "named"
+        },
+        {
+          "op": "narrate",
+          "text": "本人の名を遺書で確かめて送り、葬列を終えた。娘に涙や赦しを要求しない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q174",
+                "action": "named_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q174",
+                  "action": "named_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q174.machine.end.name"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q174.machine.rescued": {
+      "storyQuest": "q174",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q174",
+          "scene": "rescued"
+        },
+        {
+          "op": "narrate",
+          "text": "歩けない人を救護先へ引き継いだ。葬列そのものは終わっていない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q174",
+                "action": "rescued_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q174",
+                  "action": "rescued_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q174.machine.end.rescue"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q174.machine.end.name": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "葬列は止まった。娘は怒ったまま帰った。最後の笑いだけは、誰かが思い出したくだらない芸から自然に出た。"
+        },
+        {
+          "op": "add",
+          "target": "vars.name",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q174",
+          "outcome": "name"
+        }
+      ]
+    },
+    "q174.machine.end.seal": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "人は歩かずに済んだ。怪異は土地へ残り、後日きちんと送る役を誰がするか相談が始まった。"
+        },
+        {
+          "op": "add",
+          "target": "vars.seal",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q174",
+          "outcome": "seal"
+        }
+      ]
+    },
+    "q174.machine.end.rescue": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "足の傷んだ人を救い、次の弔いまで時間を稼いだ。葬列自体を終わらせた報告にはしなかった。"
+        },
+        {
+          "op": "add",
+          "target": "vars.rescue",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q174",
+          "outcome": "rescue"
+        }
+      ]
+    },
+    "q174.machine.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q174"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q174.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q174.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q174.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "name",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "葬列は止まった。娘は怒ったまま帰った。最後の笑いだけは、誰かが思い出したくだらない芸から自然に出た。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "seal",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "人は歩かずに済んだ。怪異は土地へ残り、後日きちんと送る役を誰がするか相談が始まった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "rescue",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "足の傷んだ人を救い、次の弔いまで時間を稼いだ。葬列自体を終わらせた報告にはしなかった。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q174"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q174.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q174.machine.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "letter",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q174.machine.letter"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "onsite",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q174.machine.onsite"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "sealed",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q174.machine.sealed"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "named",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q174.machine.named"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "rescued",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q174.machine.rescued"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q174.machine.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "泣かない葬列の現場受付",
+      "procession": "止まらない葬列と棺",
+      "hut": "道化師の遺書のある小屋",
+      "rescue": "歩けない人の救護先",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "procession"
+      ],
+      [
+        "transit",
+        "hut"
+      ],
+      [
+        "transit",
+        "rescue"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "procession",
+          "hut",
+          "rescue",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "name",
+          "seal",
+          "rescue"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "coffinSealed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "coffinSealed"
+      },
+      "mourned": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "mourned"
+      },
+      "rescued": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "rescued"
+      },
+      "letterSheetAt": {
+        "type": "enum",
+        "initial": "hut",
+        "values": [
+          "entry",
+          "procession",
+          "hut",
+          "rescue",
+          "transit",
+          "party",
+          "injured",
+          "daughterPerson"
+        ],
+        "meaning": "letterSheet の所在または保持者"
+      },
+      "injuredAt": {
+        "type": "enum",
+        "initial": "procession",
+        "values": [
+          "entry",
+          "procession",
+          "hut",
+          "rescue",
+          "transit"
+        ],
+        "meaning": "injured の所在または保持者"
+      },
+      "daughterPersonAt": {
+        "type": "enum",
+        "initial": "procession",
+        "values": [
+          "entry",
+          "procession",
+          "hut",
+          "rescue",
+          "transit"
+        ],
+        "meaning": "daughterPerson の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "letterSheet": {
+        "holder": "letterSheetAt",
+        "kind": "item"
+      },
+      "injured": {
+        "holder": "injuredAt",
+        "kind": "group"
+      },
+      "daughterPerson": {
+        "holder": "daughterPersonAt",
+        "kind": "person"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "列の人は楽しそうでも足は擦り切れている。道化師の娘だけが列に加わらず、父への怒りを抱いている。彼女は葬儀を終える道具として泣くことを要求されたくない。悲しい話を集めて涙を点数化する仕組みにはしない。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "泣かない葬列の現場受付",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "letter": {
+        "title": "道化師の遺書のある小屋",
+        "place": "hut",
+        "cast": [],
+        "requires": true
+      },
+      "onsite": {
+        "title": "止まらない葬列と棺",
+        "place": "procession",
+        "cast": [],
+        "requires": true
+      },
+      "sealed": {
+        "title": "止まらない葬列と棺",
+        "place": "procession",
+        "cast": [],
+        "requires": true
+      },
+      "named": {
+        "title": "止まらない葬列と棺",
+        "place": "procession",
+        "cast": [],
+        "requires": true
+      },
+      "rescued": {
+        "title": "歩けない人の救護先",
+        "place": "rescue",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_visit": {
+        "from": [
+          "entry"
+        ],
+        "to": "onsite",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "procession"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "procession",
+          "companions": []
+        },
+        "depart": []
+      },
+      "letter_name": {
+        "from": [
+          "letter"
+        ],
+        "to": "named",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "procession"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "procession",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "letterSheet",
+            "from": "hut",
+            "to": "party"
+          }
+        ]
+      },
+      "letter_seal": {
+        "from": [
+          "letter"
+        ],
+        "to": "sealed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "procession"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "procession",
+          "companions": []
+        },
+        "depart": []
+      },
+      "onsite_hut": {
+        "from": [
+          "onsite"
+        ],
+        "to": "letter",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "hut"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "hut",
+          "companions": []
+        },
+        "depart": []
+      },
+      "onsite_seal": {
+        "from": [
+          "onsite"
+        ],
+        "to": "sealed",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "onsite_people": {
+        "from": [
+          "onsite"
+        ],
+        "to": "rescued",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "injured"
+            ],
+            "path": [
+              "transit",
+              "rescue"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "rescue",
+          "companions": [
+            "injured"
+          ]
+        },
+        "depart": []
+      },
+      "sealed_finish": {
+        "from": [
+          "sealed"
+        ],
+        "ending": "seal",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "coffinSealed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "seal"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "named_finish": {
+        "from": [
+          "named"
+        ],
+        "ending": "name",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "letterSheet",
+            "from": "party",
+            "to": "procession"
+          },
+          {
+            "op": "set",
+            "key": "mourned",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "name"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "rescued_finish": {
+        "from": [
+          "rescued"
+        ],
+        "ending": "rescue",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "rescued",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "rescue"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "name": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q174.values.resolution"
+            },
+            "right": "name"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q174.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q174.values.partyAt"
+                },
+                "right": "procession"
+              }
+            ]
+          }
+        ]
+      },
+      "seal": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q174.values.resolution"
+            },
+            "right": "seal"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q174.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q174.values.partyAt"
+                },
+                "right": "procession"
+              }
+            ]
+          }
+        ]
+      },
+      "rescue": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q174.values.resolution"
+            },
+            "right": "rescue"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q174.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q174.values.partyAt"
+                },
+                "right": "rescue"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_8",
+        "map": "region_8_f1",
+        "x": 6,
+        "y": 1
+      },
+      "procession": {
+        "kind": "dungeon",
+        "dungeon": "salome_road",
+        "map": "e2_salome_cemetery",
+        "x": 9,
+        "y": 3
+      },
+      "hut": {
+        "kind": "town",
+        "location": "machine_hut"
+      },
+      "rescue": {
+        "kind": "town",
+        "location": "salome_clinic"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "salome",
+  "receptionLocations": [
+    "salome_board"
+  ]
+}

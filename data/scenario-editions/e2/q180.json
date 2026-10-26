@@ -1,0 +1,2106 @@
+{
+  "schemaVersion": 1,
+  "id": "q180",
+  "number": 180,
+  "title": "最後の怪談",
+  "client": "宿主と語り部ムイ",
+  "brief": "翌夜に実現する怪談へ対処してください。",
+  "region": 8,
+  "type": "scene_graph",
+  "recommendedLevel": 8,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 サロメの共同依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q180_scene",
+      "title": "最後の怪談：宿主と語り部ムイ",
+      "points": [
+        {
+          "map": "region_8_f2",
+          "x": 8,
+          "y": 1,
+          "dungeon": "region_8"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q180.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q180.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q180.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q180"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_8"
+    },
+    {
+      "id": "q180_machine_entry",
+      "title": "最後の怪談の現場受付",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q180.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q180.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q180"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q180.machine.visit",
+      "points": [
+        {
+          "dungeon": "region_8",
+          "map": "region_8_f2",
+          "x": 8,
+          "y": 1
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_8_f2",
+      "x": 8,
+      "y": 1,
+      "object": "q180_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "home": {
+      "label": "帰る場所のある怪談",
+      "text": "怪物は村へ帰った。最後まで聞いた客は怖くなかったと残念そうに言い、その後ようやく眠れた。",
+      "gold": 141,
+      "xp": 93
+    },
+    "new": {
+      "label": "別の宿の結末",
+      "text": "怪物は別の宿へ帰るところまで語られた。先に起きた事件は消さず、次に起きる行為へ終わりを与えた。",
+      "gold": 141,
+      "xp": 93
+    },
+    "seal": {
+      "label": "語りを残す封印",
+      "text": "怪異を封じた。未完の台本は勝手に開けない保管品となり、保存の制約が残った。",
+      "gold": 141,
+      "xp": 93
+    },
+    "ban": {
+      "label": "静かな夜の宿",
+      "text": "語りは禁じられた。宿の夜は静かになったが、未完の話自体は後日どう扱うかを残した。",
+      "gold": 141,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/salome/machine-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381d79e52f9b1f447f1d2",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "現れた怪物はいつも同じ場所で止まり、その後の動きがない。散った古い台本には、村へ帰るだけの平凡な後半もある。語り部の商売の工夫が、未完の恐怖を町へ置き去りにしている。",
+      "fixedPast": "宿で語られる怪談が翌夜に実現するため、語り部ムイの口を止めてほしいと頼まれる。怪異は話そのものより、結末まで聞かれなかった話を形にする。客は怖い部分で席を立ち、ムイは客を留めるため結末を延ばし続けていた。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "宿主と語り部ムイ",
+        "beliefsAndGoals": "宿で語られる怪談が翌夜に実現するため、語り部ムイの口を止めてほしいと頼まれる。怪異は話そのものより、結末まで聞かれなかった話を形にする。客は怖い部分で席を立ち、ムイは客を留めるため結末を延ばし続けていた。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "翌夜に実現する怪談へ対処してください。"
+      }
+    ],
+    "conflict": {
+      "design": "怪異の対処→語り部／台本庫→完結した語り／即時封印／語りを禁ずる。完結には元の結末か、既出事実を否定しない新しい結末を作者が用意する。聞き手が逃げた場合は護衛してやり直せる。怪物を倒しても未完の話は残ると示す。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q180.machine.entry"
+        },
+        {
+          "id": "ending",
+          "script": "q180.machine.ending"
+        },
+        {
+          "id": "onsite",
+          "script": "q180.machine.onsite"
+        },
+        {
+          "id": "told_original",
+          "script": "q180.machine.told_original"
+        },
+        {
+          "id": "told_new",
+          "script": "q180.machine.told_new"
+        },
+        {
+          "id": "sealed_here",
+          "script": "q180.machine.sealed_here"
+        },
+        {
+          "id": "sealed_refuge",
+          "script": "q180.machine.sealed_refuge"
+        },
+        {
+          "id": "stored",
+          "script": "q180.machine.stored"
+        },
+        {
+          "id": "banned",
+          "script": "q180.machine.banned"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "翌夜に実現する怪談へ対処してください。"
+    },
+    "reveal": {
+      "newInformation": "現れた怪物はいつも同じ場所で止まり、その後の動きがない。散った古い台本には、村へ帰るだけの平凡な後半もある。語り部の商売の工夫が、未完の恐怖を町へ置き去りにしている。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q180.scene.entry"
+      },
+      {
+        "id": "ending",
+        "script": "q180.scene.ending"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q180.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "未完の怪談の怪物について、語り部ムイのいる宿を訪ねる。",
+        "options": [
+          {
+            "id": "visit",
+            "text": "依頼人のいる現場へ向かう",
+            "to": "onsite",
+            "action": "entry_visit"
+          }
+        ]
+      },
+      {
+        "id": "ending",
+        "place": "scripts_place",
+        "text": "元の後半は、村へ帰るだけの話だった。起きた事実を消さず、新しい帰着先で終えることもできる。怖い場面を最後まで聞く席を整えた。",
+        "options": [
+          {
+            "id": "original",
+            "text": "元の平凡な帰郷で話を終える",
+            "to": "told_original",
+            "action": "ending_original"
+          },
+          {
+            "id": "new",
+            "text": "怪物が遠い宿へ帰る新しい後半を語る",
+            "to": "told_new",
+            "action": "ending_new"
+          },
+          {
+            "id": "seal",
+            "text": "完結を試さず封印する",
+            "to": "sealed_here",
+            "action": "ending_seal"
+          }
+        ]
+      },
+      {
+        "id": "onsite",
+        "place": "tale",
+        "text": "怪物は怖い場面の先へ動けない。客はそこで席を立ち、ムイも引き留めるため結末を延ばしていた。",
+        "options": [
+          {
+            "id": "scripts",
+            "text": "散った台本の後半を探す",
+            "to": "ending",
+            "action": "onsite_scripts"
+          },
+          {
+            "id": "seal",
+            "text": "怪異を即時封印する",
+            "to": "sealed_here",
+            "action": "onsite_seal"
+          },
+          {
+            "id": "ban",
+            "text": "今後の語りを禁じる",
+            "to": "banned",
+            "action": "onsite_ban"
+          }
+        ]
+      },
+      {
+        "id": "told_original",
+        "place": "tale",
+        "text": "聞き手の席を整え、元の帰郷まで語り終えた。討伐したという記録は付けない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@home",
+            "action": "told_original_finish"
+          }
+        ]
+      },
+      {
+        "id": "told_new",
+        "place": "tale",
+        "text": "起きた事実を消さず、遠い宿へ帰る後半を最後まで語った。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@new",
+            "action": "told_new_finish"
+          }
+        ]
+      },
+      {
+        "id": "sealed_here",
+        "place": "tale",
+        "text": "怪異を封じた。話は未完のままなので、聞き手を退避させて台本を管理する。",
+        "options": [
+          {
+            "id": "escort",
+            "text": "ムイと聞き手を別室へ案内する",
+            "to": "sealed_refuge",
+            "action": "sealed_here_escort"
+          }
+        ]
+      },
+      {
+        "id": "sealed_refuge",
+        "place": "refuge",
+        "text": "聞き手の退避を確認した。未完の台本は勝手に開けない保管品にする。",
+        "options": [
+          {
+            "id": "store",
+            "text": "ムイと台本庫へ戻り、保管を確認する",
+            "to": "stored",
+            "action": "sealed_refuge_store"
+          }
+        ]
+      },
+      {
+        "id": "stored",
+        "place": "scripts_place",
+        "text": "台本庫に封印の制約を記した。話を完結させたことにはしない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@seal",
+            "action": "stored_finish"
+          }
+        ]
+      },
+      {
+        "id": "banned",
+        "place": "refuge",
+        "text": "語りの禁止を告知し、聞き手を静かな別室へ案内した。未完の話の扱いは後日に残す。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@ban",
+            "action": "banned_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "entryScript": "q180.machine.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "machine-twenty",
+      "settlement": "salome",
+      "saveRevision": 2,
+      "scope": "機関廟20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q180.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q180.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "怪物は怖い場面の先へ動けない。客はそこで席を立ち、ムイも引き留めるため結末を延ばしていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "scripts",
+              "text": "散った台本の後半を探す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q180.scene.ending"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "怪異を即時封印する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q180.end.seal"
+                }
+              ]
+            },
+            {
+              "id": "ban",
+              "text": "今後の語りを禁じる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q180.end.ban"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q180.scene.ending": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q180.node",
+          "value": "ending"
+        },
+        {
+          "op": "say",
+          "text": "元の後半は、村へ帰るだけの話だった。起きた事実を消さず、新しい帰着先で終えることもできる。怖い場面を最後まで聞く席を整えた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "original",
+              "text": "元の平凡な帰郷で話を終える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q180.end.home"
+                }
+              ]
+            },
+            {
+              "id": "new",
+              "text": "怪物が遠い宿へ帰る新しい後半を語る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q180.end.new"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "完結を試さず封印する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q180.end.seal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q180.end.home": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q180.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "怪物は村へ帰った。最後まで聞いた客は怖くなかったと残念そうに言い、その後ようやく眠れた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q180",
+              "outcome": "home"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q180.end.new": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q180.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "怪物は別の宿へ帰るところまで語られた。先に起きた事件は消さず、次に起きる行為へ終わりを与えた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q180",
+              "outcome": "new"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q180.end.seal": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q180.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "怪異を封じた。未完の台本は勝手に開けない保管品となり、保存の制約が残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q180",
+              "outcome": "seal"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q180.end.ban": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q180.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "語りは禁じられた。宿の夜は静かになったが、未完の話自体は後日どう扱うかを残した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q180",
+              "outcome": "ban"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q180.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q180.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q180.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "home",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "怪物は村へ帰った。最後まで聞いた客は怖くなかったと残念そうに言い、その後ようやく眠れた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "new",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "怪物は別の宿へ帰るところまで語られた。先に起きた事件は消さず、次に起きる行為へ終わりを与えた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "seal",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "怪異を封じた。未完の台本は勝手に開けない保管品となり、保存の制約が残った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "ban",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "語りは禁じられた。宿の夜は静かになったが、未完の話自体は後日どう扱うかを残した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q180.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q180.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "ending",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q180.scene.ending"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q180.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q180.machine.entry": {
+      "storyQuest": "q180",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q180",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "未完の怪談の怪物について、語り部ムイのいる宿を訪ねる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "visit",
+              "text": "依頼人のいる現場へ向かう",
+              "storyAction": {
+                "quest": "q180",
+                "action": "entry_visit"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q180",
+                  "action": "entry_visit"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q180.machine.ending": {
+      "storyQuest": "q180",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q180",
+          "scene": "ending"
+        },
+        {
+          "op": "narrate",
+          "text": "元の後半は、村へ帰るだけの話だった。起きた事実を消さず、新しい帰着先で終えることもできる。怖い場面を最後まで聞く席を整えた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "original",
+              "text": "元の平凡な帰郷で話を終える",
+              "storyAction": {
+                "quest": "q180",
+                "action": "ending_original"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q180",
+                  "action": "ending_original"
+                }
+              ]
+            },
+            {
+              "id": "new",
+              "text": "怪物が遠い宿へ帰る新しい後半を語る",
+              "storyAction": {
+                "quest": "q180",
+                "action": "ending_new"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q180",
+                  "action": "ending_new"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "完結を試さず封印する",
+              "storyAction": {
+                "quest": "q180",
+                "action": "ending_seal"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q180",
+                  "action": "ending_seal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q180.machine.onsite": {
+      "storyQuest": "q180",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q180",
+          "scene": "onsite"
+        },
+        {
+          "op": "narrate",
+          "text": "怪物は怖い場面の先へ動けない。客はそこで席を立ち、ムイも引き留めるため結末を延ばしていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "scripts",
+              "text": "散った台本の後半を探す",
+              "storyAction": {
+                "quest": "q180",
+                "action": "onsite_scripts"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q180",
+                  "action": "onsite_scripts"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "怪異を即時封印する",
+              "storyAction": {
+                "quest": "q180",
+                "action": "onsite_seal"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q180",
+                  "action": "onsite_seal"
+                },
+                {
+                  "op": "jump",
+                  "script": "q180.machine.sealed_here"
+                }
+              ]
+            },
+            {
+              "id": "ban",
+              "text": "今後の語りを禁じる",
+              "storyAction": {
+                "quest": "q180",
+                "action": "onsite_ban"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q180",
+                  "action": "onsite_ban"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q180.machine.told_original": {
+      "storyQuest": "q180",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q180",
+          "scene": "told_original"
+        },
+        {
+          "op": "narrate",
+          "text": "聞き手の席を整え、元の帰郷まで語り終えた。討伐したという記録は付けない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q180",
+                "action": "told_original_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q180",
+                  "action": "told_original_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q180.machine.end.home"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q180.machine.told_new": {
+      "storyQuest": "q180",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q180",
+          "scene": "told_new"
+        },
+        {
+          "op": "narrate",
+          "text": "起きた事実を消さず、遠い宿へ帰る後半を最後まで語った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q180",
+                "action": "told_new_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q180",
+                  "action": "told_new_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q180.machine.end.new"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q180.machine.sealed_here": {
+      "storyQuest": "q180",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q180",
+          "scene": "sealed_here"
+        },
+        {
+          "op": "narrate",
+          "text": "怪異を封じた。話は未完のままなので、聞き手を退避させて台本を管理する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "escort",
+              "text": "ムイと聞き手を別室へ案内する",
+              "storyAction": {
+                "quest": "q180",
+                "action": "sealed_here_escort"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q180",
+                  "action": "sealed_here_escort"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q180.machine.sealed_refuge": {
+      "storyQuest": "q180",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q180",
+          "scene": "sealed_refuge"
+        },
+        {
+          "op": "narrate",
+          "text": "聞き手の退避を確認した。未完の台本は勝手に開けない保管品にする。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "store",
+              "text": "ムイと台本庫へ戻り、保管を確認する",
+              "storyAction": {
+                "quest": "q180",
+                "action": "sealed_refuge_store"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q180",
+                  "action": "sealed_refuge_store"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q180.machine.stored": {
+      "storyQuest": "q180",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q180",
+          "scene": "stored"
+        },
+        {
+          "op": "narrate",
+          "text": "台本庫に封印の制約を記した。話を完結させたことにはしない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q180",
+                "action": "stored_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q180",
+                  "action": "stored_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q180.machine.end.seal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q180.machine.banned": {
+      "storyQuest": "q180",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q180",
+          "scene": "banned"
+        },
+        {
+          "op": "narrate",
+          "text": "語りの禁止を告知し、聞き手を静かな別室へ案内した。未完の話の扱いは後日に残す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q180",
+                "action": "banned_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q180",
+                  "action": "banned_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q180.machine.end.ban"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q180.machine.end.home": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "怪物は村へ帰った。最後まで聞いた客は怖くなかったと残念そうに言い、その後ようやく眠れた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.home",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q180",
+          "outcome": "home"
+        }
+      ]
+    },
+    "q180.machine.end.new": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "怪物は別の宿へ帰るところまで語られた。先に起きた事件は消さず、次に起きる行為へ終わりを与えた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.new",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q180",
+          "outcome": "new"
+        }
+      ]
+    },
+    "q180.machine.end.seal": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "怪異を封じた。未完の台本は勝手に開けない保管品となり、保存の制約が残った。"
+        },
+        {
+          "op": "add",
+          "target": "vars.seal",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q180",
+          "outcome": "seal"
+        }
+      ]
+    },
+    "q180.machine.end.ban": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "語りは禁じられた。宿の夜は静かになったが、未完の話自体は後日どう扱うかを残した。"
+        },
+        {
+          "op": "add",
+          "target": "vars.ban",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q180",
+          "outcome": "ban"
+        }
+      ]
+    },
+    "q180.machine.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q180"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q180.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q180.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q180.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "home",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "怪物は村へ帰った。最後まで聞いた客は怖くなかったと残念そうに言い、その後ようやく眠れた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "new",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "怪物は別の宿へ帰るところまで語られた。先に起きた事件は消さず、次に起きる行為へ終わりを与えた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "seal",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "怪異を封じた。未完の台本は勝手に開けない保管品となり、保存の制約が残った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "ban",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "語りは禁じられた。宿の夜は静かになったが、未完の話自体は後日どう扱うかを残した。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q180"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q180.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q180.machine.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "ending",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q180.machine.ending"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "onsite",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q180.machine.onsite"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "told_original",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q180.machine.told_original"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "told_new",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q180.machine.told_new"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "sealed_here",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q180.machine.sealed_here"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "sealed_refuge",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q180.machine.sealed_refuge"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "stored",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q180.machine.stored"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "banned",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q180.machine.banned"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q180.machine.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "最後の怪談の現場受付",
+      "tale": "語り部と聞き手のいる宿",
+      "scripts_place": "散った台本の保管庫",
+      "refuge": "聞き手が待つ別室",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "tale"
+      ],
+      [
+        "transit",
+        "scripts_place"
+      ],
+      [
+        "transit",
+        "refuge"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "tale",
+          "scripts_place",
+          "refuge",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "home",
+          "new",
+          "seal",
+          "ban"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "storyFinished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "storyFinished"
+      },
+      "phenomenonSealed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "phenomenonSealed"
+      },
+      "stored": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "stored"
+      },
+      "banned": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "banned"
+      },
+      "muiAt": {
+        "type": "enum",
+        "initial": "tale",
+        "values": [
+          "entry",
+          "tale",
+          "scripts_place",
+          "refuge",
+          "transit"
+        ],
+        "meaning": "mui の所在または保持者"
+      },
+      "listenersAt": {
+        "type": "enum",
+        "initial": "tale",
+        "values": [
+          "entry",
+          "tale",
+          "scripts_place",
+          "refuge",
+          "transit"
+        ],
+        "meaning": "listeners の所在または保持者"
+      },
+      "scriptPagesAt": {
+        "type": "enum",
+        "initial": "scripts_place",
+        "values": [
+          "entry",
+          "tale",
+          "scripts_place",
+          "refuge",
+          "transit",
+          "party",
+          "mui",
+          "listeners"
+        ],
+        "meaning": "scriptPages の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "mui": {
+        "holder": "muiAt",
+        "kind": "person"
+      },
+      "listeners": {
+        "holder": "listenersAt",
+        "kind": "group"
+      },
+      "scriptPages": {
+        "holder": "scriptPagesAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "現れた怪物はいつも同じ場所で止まり、その後の動きがない。散った古い台本には、村へ帰るだけの平凡な後半もある。語り部の商売の工夫が、未完の恐怖を町へ置き去りにしている。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "最後の怪談の現場受付",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "ending": {
+        "title": "散った台本の保管庫",
+        "place": "scripts_place",
+        "cast": [],
+        "requires": true
+      },
+      "onsite": {
+        "title": "語り部と聞き手のいる宿",
+        "place": "tale",
+        "cast": [],
+        "requires": true
+      },
+      "told_original": {
+        "title": "語り部と聞き手のいる宿",
+        "place": "tale",
+        "cast": [],
+        "requires": true
+      },
+      "told_new": {
+        "title": "語り部と聞き手のいる宿",
+        "place": "tale",
+        "cast": [],
+        "requires": true
+      },
+      "sealed_here": {
+        "title": "語り部と聞き手のいる宿",
+        "place": "tale",
+        "cast": [],
+        "requires": true
+      },
+      "sealed_refuge": {
+        "title": "聞き手が待つ別室",
+        "place": "refuge",
+        "cast": [],
+        "requires": true
+      },
+      "stored": {
+        "title": "散った台本の保管庫",
+        "place": "scripts_place",
+        "cast": [],
+        "requires": true
+      },
+      "banned": {
+        "title": "聞き手が待つ別室",
+        "place": "refuge",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_visit": {
+        "from": [
+          "entry"
+        ],
+        "to": "onsite",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "tale"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "tale",
+          "companions": []
+        },
+        "depart": []
+      },
+      "ending_original": {
+        "from": [
+          "ending"
+        ],
+        "to": "told_original",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "mui"
+            ],
+            "path": [
+              "transit",
+              "tale"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "tale",
+          "companions": [
+            "mui"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "scriptPages",
+            "from": "scripts_place",
+            "to": "party"
+          }
+        ]
+      },
+      "ending_new": {
+        "from": [
+          "ending"
+        ],
+        "to": "told_new",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "mui"
+            ],
+            "path": [
+              "transit",
+              "tale"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "tale",
+          "companions": [
+            "mui"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "scriptPages",
+            "from": "scripts_place",
+            "to": "party"
+          }
+        ]
+      },
+      "ending_seal": {
+        "from": [
+          "ending"
+        ],
+        "to": "sealed_here",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "mui"
+            ],
+            "path": [
+              "transit",
+              "tale"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "tale",
+          "companions": [
+            "mui"
+          ]
+        },
+        "depart": []
+      },
+      "onsite_scripts": {
+        "from": [
+          "onsite"
+        ],
+        "to": "ending",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "mui"
+            ],
+            "path": [
+              "transit",
+              "scripts_place"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "scripts_place",
+          "companions": [
+            "mui"
+          ]
+        },
+        "depart": []
+      },
+      "onsite_seal": {
+        "from": [
+          "onsite"
+        ],
+        "to": "sealed_here",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "onsite_ban": {
+        "from": [
+          "onsite"
+        ],
+        "to": "banned",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "mui",
+              "listeners"
+            ],
+            "path": [
+              "transit",
+              "refuge"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "refuge",
+          "companions": [
+            "mui",
+            "listeners"
+          ]
+        },
+        "depart": []
+      },
+      "told_original_finish": {
+        "from": [
+          "told_original"
+        ],
+        "ending": "home",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "scriptPages",
+            "from": "party",
+            "to": "mui"
+          },
+          {
+            "op": "set",
+            "key": "storyFinished",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "home"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "told_new_finish": {
+        "from": [
+          "told_new"
+        ],
+        "ending": "new",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "scriptPages",
+            "from": "party",
+            "to": "mui"
+          },
+          {
+            "op": "set",
+            "key": "storyFinished",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "new"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "sealed_here_escort": {
+        "from": [
+          "sealed_here"
+        ],
+        "to": "sealed_refuge",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "mui",
+              "listeners"
+            ],
+            "path": [
+              "transit",
+              "refuge"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "refuge",
+          "companions": [
+            "mui",
+            "listeners"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "phenomenonSealed",
+            "value": true
+          }
+        ]
+      },
+      "sealed_refuge_store": {
+        "from": [
+          "sealed_refuge"
+        ],
+        "to": "stored",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "mui"
+            ],
+            "path": [
+              "transit",
+              "scripts_place"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "scripts_place",
+          "companions": [
+            "mui"
+          ]
+        },
+        "depart": []
+      },
+      "stored_finish": {
+        "from": [
+          "stored"
+        ],
+        "ending": "seal",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "stored",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "seal"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "banned_finish": {
+        "from": [
+          "banned"
+        ],
+        "ending": "ban",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "banned",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "ban"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "home": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q180.values.resolution"
+            },
+            "right": "home"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q180.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q180.values.partyAt"
+                },
+                "right": "tale"
+              }
+            ]
+          }
+        ]
+      },
+      "new": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q180.values.resolution"
+            },
+            "right": "new"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q180.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q180.values.partyAt"
+                },
+                "right": "tale"
+              }
+            ]
+          }
+        ]
+      },
+      "seal": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q180.values.resolution"
+            },
+            "right": "seal"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q180.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q180.values.partyAt"
+                },
+                "right": "scripts_place"
+              }
+            ]
+          }
+        ]
+      },
+      "ban": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q180.values.resolution"
+            },
+            "right": "ban"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q180.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q180.values.partyAt"
+                },
+                "right": "refuge"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_8",
+        "map": "region_8_f2",
+        "x": 8,
+        "y": 1
+      },
+      "tale": {
+        "kind": "town",
+        "location": "salome_inn"
+      },
+      "scripts_place": {
+        "kind": "town",
+        "location": "machine_scripts"
+      },
+      "refuge": {
+        "kind": "town",
+        "location": "machine_family"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "salome",
+  "receptionLocations": [
+    "salome_board"
+  ]
+}

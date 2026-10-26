@@ -1,0 +1,2925 @@
+{
+  "schemaVersion": 1,
+  "id": "q175",
+  "number": 175,
+  "title": "狩人を待つ獣",
+  "client": "猟師ミロの妹",
+  "brief": "戦法を先回りする鏡牙獣への対処を相談してください。",
+  "region": 8,
+  "type": "authored_progression",
+  "recommendedLevel": 8,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 サロメの共同依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q175_scene",
+      "title": "狩人を待つ獣：猟師ミロの妹",
+      "points": [
+        {
+          "map": "region_8_f1",
+          "x": 8,
+          "y": 1,
+          "dungeon": "region_8"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q175.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q175.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q175.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q175"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_8"
+    },
+    {
+      "id": "q175_machine_entry",
+      "title": "狩人を待つ獣の現場受付",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q175.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q175.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q175"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q175.machine.visit",
+      "points": [
+        {
+          "dungeon": "region_8",
+          "map": "region_8_f1",
+          "x": 8,
+          "y": 1
+        }
+      ]
+    },
+    {
+      "id": "q175_machine_lair",
+      "title": "獣の寝床と訓練標",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "lair",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q175.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q175.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q175"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q175.machine.visit",
+      "points": [
+        {
+          "dungeon": "salome_road",
+          "map": "e2_salome_valley",
+          "x": 7,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "id": "q175_machine_route_place",
+      "title": "畑を避けて空ける谷道",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "route_place",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q175.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q175.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q175"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q175.machine.visit",
+      "points": [
+        {
+          "dungeon": "salome_road",
+          "map": "e2_salome_valley",
+          "x": 11,
+          "y": 5
+        }
+      ]
+    },
+    {
+      "id": "q175_machine_warning_place",
+      "title": "谷の向こうの集落の見張り場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "warning_place",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q175.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q175.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q175"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q175.machine.visit",
+      "points": [
+        {
+          "dungeon": "salome_road",
+          "map": "e2_salome_valley",
+          "x": 15,
+          "y": 7
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_8_f1",
+      "x": 8,
+      "y": 1,
+      "object": "q175_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "changed": {
+      "label": "見せない稽古",
+      "text": "別戦法で獣を退けた。ミロは妹へ変更の必要を認め、空の観客席の下で小さな稽古を続けた。",
+      "gold": 141,
+      "xp": 93
+    },
+    "drive": {
+      "label": "誘導して追う",
+      "text": "獣を遠方へ追い、行先へ警告を送った。討伐はしておらず、次の見張りを頼む仕事が残った。",
+      "gold": 141,
+      "xp": 93
+    },
+    "front": {
+      "label": "正面戦の代価",
+      "text": "磨いた技で勝ち抜いた。ミロは勝てたことと、傷を増やす戦いを選んだことを別に妹へ話した。",
+      "gold": 141,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/salome/machine-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381d79e52f9b1f447f1d2",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "獣の寝床に、人間用の訓練標が引きずり込まれている。最初にミロが人前で同じ構えを誇る場面を置き、後で獣が同じ間を取る。努力が無意味なのではなく、見せることが相手への教材になっている。",
+      "fixedPast": "村は、討伐隊が使う戦法を先回りする鏡牙獣に怯えている。猟師ミロは同じ突撃を磨けば勝てると信じ、妹は兄の傷が増えるのを見ている。獣は心を読むのでなく、村の広場で行われる公開訓練を夜に見て学んでいる。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "猟師ミロの妹",
+        "beliefsAndGoals": "村は、討伐隊が使う戦法を先回りする鏡牙獣に怯えている。猟師ミロは同じ突撃を磨けば勝てると信じ、妹は兄の傷が増えるのを見ている。獣は心を読むのでなく、村の広場で行われる公開訓練を夜に見て学んでいる。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "戦法を先回りする鏡牙獣への対処を相談してください。"
+      }
+    ],
+    "conflict": {
+      "request": "戦法を先回りする鏡牙獣への対処を相談してください。",
+      "progression": "獣が学んだ戦法を変える準備、誘導の実行、行先への警告を分けて進める。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q175.machine.entry"
+        },
+        {
+          "id": "hidden",
+          "script": "q175.machine.hidden"
+        },
+        {
+          "id": "route",
+          "script": "q175.machine.route"
+        },
+        {
+          "id": "warning",
+          "script": "q175.machine.warning"
+        },
+        {
+          "id": "onsite",
+          "script": "q175.machine.onsite"
+        },
+        {
+          "id": "battle",
+          "script": "q175.machine.battle"
+        },
+        {
+          "id": "changed",
+          "script": "q175.machine.changed"
+        },
+        {
+          "id": "warned",
+          "script": "q175.machine.warned"
+        },
+        {
+          "id": "pursuit",
+          "script": "q175.machine.pursuit"
+        },
+        {
+          "id": "pursued",
+          "script": "q175.machine.pursued"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "戦法を先回りする鏡牙獣への対処を相談してください。"
+    },
+    "reveal": {
+      "newInformation": "獣の寝床に、人間用の訓練標が引きずり込まれている。最初にミロが人前で同じ構えを誇る場面を置き、後で獣が同じ間を取る。努力が無意味なのではなく、見せることが相手への教材になっている。",
+      "retroactiveTargets": [],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする",
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q175.flow.entry"
+      },
+      {
+        "id": "hidden",
+        "script": "q175.flow.hidden"
+      },
+      {
+        "id": "route",
+        "script": "q175.flow.route"
+      },
+      {
+        "id": "warning",
+        "script": "q175.flow.warning"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": [
+        "非公開戦法と正面戦は別の固定遭遇で実現。一般的な敵AI学習は追加しない。"
+      ]
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q175.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "獣の動きを調べるため、ミロの待つ谷へ向かう。",
+        "options": [
+          {
+            "id": "visit",
+            "text": "依頼人のいる現場へ向かう",
+            "to": "onsite",
+            "action": "entry_visit"
+          }
+        ]
+      },
+      {
+        "id": "hidden",
+        "place": "practice",
+        "text": "ミロは一度退いて側面へ回る動きを練習した。妹は稽古場の出入口を見張った。",
+        "options": [
+          {
+            "id": "fight",
+            "text": "非公開で練った戦法の作戦を実行する",
+            "to": "battle",
+            "action": "hidden_fight"
+          },
+          {
+            "id": "decoy",
+            "text": "討伐をやめ、見せた突撃を使う誘導へ替える",
+            "to": "route",
+            "action": "hidden_decoy"
+          }
+        ]
+      },
+      {
+        "id": "route",
+        "place": "public",
+        "text": "獣は見せた突撃の先へ回り込む。畑から離れた谷道を空ければ、そこへ誘い出せる。",
+        "options": [
+          {
+            "id": "guide",
+            "text": "谷道を空け、偽の突撃で獣を誘導する",
+            "to": "warning",
+            "action": "route_guide"
+          },
+          {
+            "id": "hidden",
+            "text": "谷へ追うのをやめ、非公開の戦法へ戻る",
+            "to": "hidden",
+            "action": "route_hidden"
+          }
+        ]
+      },
+      {
+        "id": "warning",
+        "place": "route_place",
+        "text": "獣は谷へ去った。倒してはいない。向こう側には別の村がある。",
+        "options": [
+          {
+            "id": "warn",
+            "text": "行先の村へ警告と見張りを引き継ぐ",
+            "to": "warned",
+            "action": "warning_warn"
+          },
+          {
+            "id": "pursue",
+            "text": "警告だけでは終えず、別戦法で追って退ける",
+            "to": "pursuit",
+            "action": "warning_pursue"
+          }
+        ]
+      },
+      {
+        "id": "onsite",
+        "place": "lair",
+        "text": "獣の寝床に広場の訓練標がある。ミロの突撃を見て学んでいるらしい。",
+        "options": [
+          {
+            "id": "hidden",
+            "text": "誰にも見せず別の戦法を練る",
+            "to": "hidden",
+            "action": "onsite_hidden"
+          },
+          {
+            "id": "fake",
+            "text": "広場で偽の突撃を見せる",
+            "to": "route",
+            "action": "onsite_fake"
+          },
+          {
+            "id": "front",
+            "text": "従来の正面戦を押し通す",
+            "to": "@front",
+            "action": "onsite_front"
+          }
+        ]
+      },
+      {
+        "id": "battle",
+        "place": "lair",
+        "text": "非公開で練った戦法を、獣のいる現場で実行する。",
+        "options": [
+          {
+            "id": "fight",
+            "text": "別戦法で獣と戦う",
+            "to": "changed",
+            "action": "battle_fight"
+          },
+          {
+            "id": "retreat",
+            "text": "戦場を離れ、非公開の稽古場へ戻る",
+            "to": "hidden",
+            "action": "battle_retreat"
+          }
+        ]
+      },
+      {
+        "id": "changed",
+        "place": "lair",
+        "text": "別戦法で獣を退けた。ミロが妹へ変更の必要を認める。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@changed",
+            "action": "changed_finish"
+          }
+        ]
+      },
+      {
+        "id": "warned",
+        "place": "warning_place",
+        "text": "集落の見張りへ獣の行先を伝え、警戒を引き継いだ。誘導は討伐ではない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@drive",
+            "action": "warned_finish"
+          }
+        ]
+      },
+      {
+        "id": "pursuit",
+        "place": "warning_place",
+        "text": "獣を谷の先まで追った。現地で戦い、逃れた場合は谷道へ戻れる。",
+        "options": [
+          {
+            "id": "fight",
+            "text": "別戦法で獣を退ける",
+            "to": "pursued",
+            "action": "pursuit_fight"
+          },
+          {
+            "id": "retreat",
+            "text": "戦いを切り上げ、谷道へ戻る",
+            "to": "warning",
+            "action": "pursuit_retreat"
+          }
+        ]
+      },
+      {
+        "id": "pursued",
+        "place": "warning_place",
+        "text": "追って獣を退け、向こう側の見張りへ結果を伝えた。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@changed",
+            "action": "pursued_finish"
+          }
+        ]
+      }
+    ],
+    "progression": "獣が学んだ戦法を変える準備、誘導の実行、行先への警告を分けて進める。",
+    "flowVersion": 2,
+    "entryScript": "q175.machine.visit",
+    "choiceContract": {
+      "progression": "獣が学んだ戦法を変える準備、誘導の実行、行先への警告を分けて進める。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "machine-twenty",
+      "settlement": "salome",
+      "saveRevision": 2,
+      "scope": "機関廟20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q175.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q175.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "ミロは同じ突撃を広場で磨く。獣の寝床には訓練標が運び込まれていた。心を読むのでなく、見て学んでいる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hidden",
+              "text": "観客のいない場所で別戦法を練る",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_175",
+                  "on_win": [
+                    {
+                      "op": "set",
+                      "target": "flags.quest.q175.changed",
+                      "value": true
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q175.end.changed"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q175.scene.entry"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "fake",
+              "text": "偽の訓練を見せ、誘導用の道へ追い込む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q175.end.drive"
+                }
+              ]
+            },
+            {
+              "id": "front",
+              "text": "従来の正面戦を押し通す（強い固定遭遇）",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_8",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q175.end.front"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q175.scene.entry"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q175.end.changed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q175.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "別戦法で獣を退けた。ミロは妹へ変更の必要を認め、空の観客席の下で小さな稽古を続けた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q175",
+              "outcome": "changed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q175.end.drive": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q175.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "獣を遠方へ追い、行先へ警告を送った。討伐はしておらず、次の見張りを頼む仕事が残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q175",
+              "outcome": "drive"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q175.end.front": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q175.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "磨いた技で勝ち抜いた。ミロは勝てたことと、傷を増やす戦いを選んだことを別に妹へ話した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q175",
+              "outcome": "front"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q175.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q175.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q175.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "changed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "別戦法で獣を退けた。ミロは妹へ変更の必要を認め、空の観客席の下で小さな稽古を続けた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "drive",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "獣を遠方へ追い、行先へ警告を送った。討伐はしておらず、次の見張りを頼む仕事が残った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "front",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "磨いた技で勝ち抜いた。ミロは勝てたことと、傷を増やす戦いを選んだことを別に妹へ話した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q175.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q175.scene.entry"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q175.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q175.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q175.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "獣の寝床に広場の訓練標がある。ミロの突撃を見て学んでいるらしい。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hidden",
+              "text": "誰にも見せず別の戦法を練る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q175.flow.hidden"
+                }
+              ]
+            },
+            {
+              "id": "fake",
+              "text": "広場で偽の突撃を見せる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q175.flow.route"
+                }
+              ]
+            },
+            {
+              "id": "front",
+              "text": "従来の正面戦を押し通す",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_8",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q175.flow.end.front"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q175.flow.hidden": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q175.node",
+          "value": "hidden"
+        },
+        {
+          "op": "say",
+          "text": "ミロは一度退いて側面へ回る動きを練習した。妹は稽古場の出入口を見張った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fight",
+              "text": "非公開で練った戦法の作戦を実行する",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_175",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q175.flow.end.changed"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q175.flow.hidden"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "decoy",
+              "text": "討伐をやめ、見せた突撃を使う誘導へ替える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q175.flow.route"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q175.flow.route": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q175.node",
+          "value": "route"
+        },
+        {
+          "op": "say",
+          "text": "獣は見せた突撃の先へ回り込む。畑から離れた谷道を空ければ、そこへ誘い出せる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "guide",
+              "text": "谷道を空け、偽の突撃で獣を誘導する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q175.flow.warning"
+                }
+              ]
+            },
+            {
+              "id": "hidden",
+              "text": "谷へ追うのをやめ、非公開の戦法へ戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q175.flow.hidden"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q175.flow.warning": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q175.node",
+          "value": "warning"
+        },
+        {
+          "op": "say",
+          "text": "獣は谷へ去った。倒してはいない。向こう側には別の村がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "warn",
+              "text": "行先の村へ警告と見張りを引き継ぐ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q175.flow.end.drive"
+                }
+              ]
+            },
+            {
+              "id": "pursue",
+              "text": "警告だけでは終えず、別戦法で追って退ける",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_175",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q175.flow.end.changed"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q175.flow.warning"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q175.flow.end.changed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q175.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "別戦法で獣を退けた。ミロは妹へ変更の必要を認め、空の観客席の下で小さな稽古を続けた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q175",
+              "outcome": "changed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q175.flow.end.drive": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q175.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "獣を遠方へ追い、行先へ警告を送った。討伐はしておらず、次の見張りを頼む仕事が残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q175",
+              "outcome": "drive"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q175.flow.end.front": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q175.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "磨いた技で勝ち抜いた。ミロは勝てたことと、傷を増やす戦いを選んだことを別に妹へ話した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q175",
+              "outcome": "front"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q175.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q175.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q175.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "changed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "別戦法で獣を退けた。ミロは妹へ変更の必要を認め、空の観客席の下で小さな稽古を続けた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "drive",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "獣を遠方へ追い、行先へ警告を送った。討伐はしておらず、次の見張りを頼む仕事が残った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "front",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "磨いた技で勝ち抜いた。ミロは勝てたことと、傷を増やす戦いを選んだことを別に妹へ話した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q175"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q175.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q175.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q175.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "hidden",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q175.flow.hidden"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "route",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q175.flow.route"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "warning",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q175.flow.warning"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q175.flow.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q175.machine.entry": {
+      "storyQuest": "q175",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q175",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "獣の動きを調べるため、ミロの待つ谷へ向かう。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "visit",
+              "text": "依頼人のいる現場へ向かう",
+              "storyAction": {
+                "quest": "q175",
+                "action": "entry_visit"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q175",
+                  "action": "entry_visit"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q175.machine.hidden": {
+      "storyQuest": "q175",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q175",
+          "scene": "hidden"
+        },
+        {
+          "op": "narrate",
+          "text": "ミロは一度退いて側面へ回る動きを練習した。妹は稽古場の出入口を見張った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fight",
+              "text": "非公開で練った戦法の作戦を実行する",
+              "storyAction": {
+                "quest": "q175",
+                "action": "hidden_fight"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q175",
+                  "action": "hidden_fight"
+                }
+              ]
+            },
+            {
+              "id": "decoy",
+              "text": "討伐をやめ、見せた突撃を使う誘導へ替える",
+              "storyAction": {
+                "quest": "q175",
+                "action": "hidden_decoy"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q175",
+                  "action": "hidden_decoy"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q175.machine.route": {
+      "storyQuest": "q175",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q175",
+          "scene": "route"
+        },
+        {
+          "op": "narrate",
+          "text": "獣は見せた突撃の先へ回り込む。畑から離れた谷道を空ければ、そこへ誘い出せる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "guide",
+              "text": "谷道を空け、偽の突撃で獣を誘導する",
+              "storyAction": {
+                "quest": "q175",
+                "action": "route_guide"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q175",
+                  "action": "route_guide"
+                }
+              ]
+            },
+            {
+              "id": "hidden",
+              "text": "谷へ追うのをやめ、非公開の戦法へ戻る",
+              "storyAction": {
+                "quest": "q175",
+                "action": "route_hidden"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q175",
+                  "action": "route_hidden"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q175.machine.warning": {
+      "storyQuest": "q175",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q175",
+          "scene": "warning"
+        },
+        {
+          "op": "narrate",
+          "text": "獣は谷へ去った。倒してはいない。向こう側には別の村がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "warn",
+              "text": "行先の村へ警告と見張りを引き継ぐ",
+              "storyAction": {
+                "quest": "q175",
+                "action": "warning_warn"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q175",
+                  "action": "warning_warn"
+                }
+              ]
+            },
+            {
+              "id": "pursue",
+              "text": "警告だけでは終えず、別戦法で追って退ける",
+              "storyAction": {
+                "quest": "q175",
+                "action": "warning_pursue"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q175",
+                  "action": "warning_pursue"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q175.machine.onsite": {
+      "storyQuest": "q175",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q175",
+          "scene": "onsite"
+        },
+        {
+          "op": "narrate",
+          "text": "獣の寝床に広場の訓練標がある。ミロの突撃を見て学んでいるらしい。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hidden",
+              "text": "誰にも見せず別の戦法を練る",
+              "storyAction": {
+                "quest": "q175",
+                "action": "onsite_hidden"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q175",
+                  "action": "onsite_hidden"
+                }
+              ]
+            },
+            {
+              "id": "fake",
+              "text": "広場で偽の突撃を見せる",
+              "storyAction": {
+                "quest": "q175",
+                "action": "onsite_fake"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q175",
+                  "action": "onsite_fake"
+                }
+              ]
+            },
+            {
+              "id": "front",
+              "text": "従来の正面戦を押し通す",
+              "storyAction": {
+                "quest": "q175",
+                "action": "onsite_front"
+              },
+              "requirement": "戦闘。作業・報酬は勝利後に確定する。",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_8",
+                  "on_win": [
+                    {
+                      "op": "story.action",
+                      "quest": "q175",
+                      "action": "onsite_front"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q175.machine.end.front"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "narrate",
+                      "text": "戦いを切り上げた。作業は確定していない。現場で再開できる。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q175.machine.onsite"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "narrate",
+                      "text": "救助班にサロメへ運び出された。現場へ戻れば直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q175.machine.battle": {
+      "storyQuest": "q175",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q175",
+          "scene": "battle"
+        },
+        {
+          "op": "narrate",
+          "text": "非公開で練った戦法を、獣のいる現場で実行する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fight",
+              "text": "別戦法で獣と戦う",
+              "storyAction": {
+                "quest": "q175",
+                "action": "battle_fight"
+              },
+              "requirement": "戦闘。作業・報酬は勝利後に確定する。",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_175",
+                  "on_win": [
+                    {
+                      "op": "story.action",
+                      "quest": "q175",
+                      "action": "battle_fight"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q175.machine.changed"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "narrate",
+                      "text": "戦いを切り上げた。作業は確定していない。現場で再開できる。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q175.machine.battle"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "narrate",
+                      "text": "救助班にサロメへ運び出された。現場へ戻れば直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "retreat",
+              "text": "戦場を離れ、非公開の稽古場へ戻る",
+              "storyAction": {
+                "quest": "q175",
+                "action": "battle_retreat"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q175",
+                  "action": "battle_retreat"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q175.machine.changed": {
+      "storyQuest": "q175",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q175",
+          "scene": "changed"
+        },
+        {
+          "op": "narrate",
+          "text": "別戦法で獣を退けた。ミロが妹へ変更の必要を認める。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q175",
+                "action": "changed_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q175",
+                  "action": "changed_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q175.machine.end.changed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q175.machine.warned": {
+      "storyQuest": "q175",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q175",
+          "scene": "warned"
+        },
+        {
+          "op": "narrate",
+          "text": "集落の見張りへ獣の行先を伝え、警戒を引き継いだ。誘導は討伐ではない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q175",
+                "action": "warned_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q175",
+                  "action": "warned_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q175.machine.end.drive"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q175.machine.pursuit": {
+      "storyQuest": "q175",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q175",
+          "scene": "pursuit"
+        },
+        {
+          "op": "narrate",
+          "text": "獣を谷の先まで追った。現地で戦い、逃れた場合は谷道へ戻れる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fight",
+              "text": "別戦法で獣を退ける",
+              "storyAction": {
+                "quest": "q175",
+                "action": "pursuit_fight"
+              },
+              "requirement": "戦闘。作業・報酬は勝利後に確定する。",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_175",
+                  "on_win": [
+                    {
+                      "op": "story.action",
+                      "quest": "q175",
+                      "action": "pursuit_fight"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q175.machine.pursued"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "narrate",
+                      "text": "戦いを切り上げた。作業は確定していない。現場で再開できる。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q175.machine.pursuit"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "narrate",
+                      "text": "救助班にサロメへ運び出された。現場へ戻れば直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "retreat",
+              "text": "戦いを切り上げ、谷道へ戻る",
+              "storyAction": {
+                "quest": "q175",
+                "action": "pursuit_retreat"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q175",
+                  "action": "pursuit_retreat"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q175.machine.pursued": {
+      "storyQuest": "q175",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q175",
+          "scene": "pursued"
+        },
+        {
+          "op": "narrate",
+          "text": "追って獣を退け、向こう側の見張りへ結果を伝えた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q175",
+                "action": "pursued_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q175",
+                  "action": "pursued_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q175.machine.end.changed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q175.machine.end.changed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "別戦法で獣を退けた。ミロは妹へ変更の必要を認め、空の観客席の下で小さな稽古を続けた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.changed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q175",
+          "outcome": "changed"
+        }
+      ]
+    },
+    "q175.machine.end.drive": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "獣を遠方へ追い、行先へ警告を送った。討伐はしておらず、次の見張りを頼む仕事が残った。"
+        },
+        {
+          "op": "add",
+          "target": "vars.drive",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q175",
+          "outcome": "drive"
+        }
+      ]
+    },
+    "q175.machine.end.front": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "磨いた技で勝ち抜いた。ミロは勝てたことと、傷を増やす戦いを選んだことを別に妹へ話した。"
+        },
+        {
+          "op": "add",
+          "target": "vars.front",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q175",
+          "outcome": "front"
+        }
+      ]
+    },
+    "q175.machine.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q175"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q175.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q175.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q175.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "changed",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "別戦法で獣を退けた。ミロは妹へ変更の必要を認め、空の観客席の下で小さな稽古を続けた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "drive",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "獣を遠方へ追い、行先へ警告を送った。討伐はしておらず、次の見張りを頼む仕事が残った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "front",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "磨いた技で勝ち抜いた。ミロは勝てたことと、傷を増やす戦いを選んだことを別に妹へ話した。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q175"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q175.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q175.machine.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "hidden",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q175.machine.hidden"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "route",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q175.machine.route"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "warning",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q175.machine.warning"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "onsite",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q175.machine.onsite"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "battle",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q175.machine.battle"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "changed",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q175.machine.changed"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "warned",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q175.machine.warned"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "pursuit",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q175.machine.pursuit"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "pursued",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q175.machine.pursued"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q175.machine.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "狩人を待つ獣の現場受付",
+      "lair": "獣の寝床と訓練標",
+      "practice": "非公開の稽古場",
+      "public": "偽の突撃を見せる広場",
+      "route_place": "畑を避けて空ける谷道",
+      "warning_place": "谷の向こうの集落の見張り場",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "lair"
+      ],
+      [
+        "transit",
+        "practice"
+      ],
+      [
+        "transit",
+        "public"
+      ],
+      [
+        "transit",
+        "route_place"
+      ],
+      [
+        "transit",
+        "warning_place"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "lair",
+          "practice",
+          "public",
+          "route_place",
+          "warning_place",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "changed",
+          "drive",
+          "front"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "secretPractice": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "secretPractice"
+      },
+      "driven": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "driven"
+      },
+      "defeated": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "defeated"
+      },
+      "warned": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "warned"
+      },
+      "reported": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "reported"
+      },
+      "miroAt": {
+        "type": "enum",
+        "initial": "lair",
+        "values": [
+          "entry",
+          "lair",
+          "practice",
+          "public",
+          "route_place",
+          "warning_place",
+          "transit"
+        ],
+        "meaning": "miro の所在または保持者"
+      },
+      "sisterAt": {
+        "type": "enum",
+        "initial": "lair",
+        "values": [
+          "entry",
+          "lair",
+          "practice",
+          "public",
+          "route_place",
+          "warning_place",
+          "transit"
+        ],
+        "meaning": "sister の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "miro": {
+        "holder": "miroAt",
+        "kind": "person"
+      },
+      "sister": {
+        "holder": "sisterAt",
+        "kind": "person"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "獣の寝床に、人間用の訓練標が引きずり込まれている。最初にミロが人前で同じ構えを誇る場面を置き、後で獣が同じ間を取る。努力が無意味なのではなく、見せることが相手への教材になっている。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "狩人を待つ獣の現場受付",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "hidden": {
+        "title": "非公開の稽古場",
+        "place": "practice",
+        "cast": [],
+        "requires": true
+      },
+      "route": {
+        "title": "偽の突撃を見せる広場",
+        "place": "public",
+        "cast": [],
+        "requires": true
+      },
+      "warning": {
+        "title": "畑を避けて空ける谷道",
+        "place": "route_place",
+        "cast": [],
+        "requires": true
+      },
+      "onsite": {
+        "title": "獣の寝床と訓練標",
+        "place": "lair",
+        "cast": [],
+        "requires": true
+      },
+      "battle": {
+        "title": "獣の寝床と訓練標",
+        "place": "lair",
+        "cast": [],
+        "requires": true
+      },
+      "changed": {
+        "title": "獣の寝床と訓練標",
+        "place": "lair",
+        "cast": [],
+        "requires": true
+      },
+      "warned": {
+        "title": "谷の向こうの集落の見張り場",
+        "place": "warning_place",
+        "cast": [],
+        "requires": true
+      },
+      "pursuit": {
+        "title": "谷の向こうの集落の見張り場",
+        "place": "warning_place",
+        "cast": [],
+        "requires": true
+      },
+      "pursued": {
+        "title": "谷の向こうの集落の見張り場",
+        "place": "warning_place",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_visit": {
+        "from": [
+          "entry"
+        ],
+        "to": "onsite",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "lair"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "lair",
+          "companions": []
+        },
+        "depart": []
+      },
+      "hidden_fight": {
+        "from": [
+          "hidden"
+        ],
+        "to": "battle",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "miro",
+              "sister"
+            ],
+            "path": [
+              "transit",
+              "lair"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "lair",
+          "companions": [
+            "miro",
+            "sister"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "secretPractice",
+            "value": true
+          }
+        ]
+      },
+      "hidden_decoy": {
+        "from": [
+          "hidden"
+        ],
+        "to": "route",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "miro",
+              "sister"
+            ],
+            "path": [
+              "transit",
+              "public"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "public",
+          "companions": [
+            "miro",
+            "sister"
+          ]
+        },
+        "depart": []
+      },
+      "route_guide": {
+        "from": [
+          "route"
+        ],
+        "to": "warning",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "miro",
+              "sister"
+            ],
+            "path": [
+              "transit",
+              "route_place"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "driven",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "route_place",
+          "companions": [
+            "miro",
+            "sister"
+          ]
+        },
+        "depart": []
+      },
+      "route_hidden": {
+        "from": [
+          "route"
+        ],
+        "to": "hidden",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "miro",
+              "sister"
+            ],
+            "path": [
+              "transit",
+              "practice"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "practice",
+          "companions": [
+            "miro",
+            "sister"
+          ]
+        },
+        "depart": []
+      },
+      "warning_warn": {
+        "from": [
+          "warning"
+        ],
+        "to": "warned",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "miro",
+              "sister"
+            ],
+            "path": [
+              "transit",
+              "warning_place"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "warning_place",
+          "companions": [
+            "miro",
+            "sister"
+          ]
+        },
+        "depart": []
+      },
+      "warning_pursue": {
+        "from": [
+          "warning"
+        ],
+        "to": "pursuit",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "miro",
+              "sister"
+            ],
+            "path": [
+              "transit",
+              "warning_place"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "warning_place",
+          "companions": [
+            "miro",
+            "sister"
+          ]
+        },
+        "depart": []
+      },
+      "onsite_hidden": {
+        "from": [
+          "onsite"
+        ],
+        "to": "hidden",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "miro",
+              "sister"
+            ],
+            "path": [
+              "transit",
+              "practice"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "practice",
+          "companions": [
+            "miro",
+            "sister"
+          ]
+        },
+        "depart": []
+      },
+      "onsite_fake": {
+        "from": [
+          "onsite"
+        ],
+        "to": "route",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "miro",
+              "sister"
+            ],
+            "path": [
+              "transit",
+              "public"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "public",
+          "companions": [
+            "miro",
+            "sister"
+          ]
+        },
+        "depart": []
+      },
+      "onsite_front": {
+        "from": [
+          "onsite"
+        ],
+        "ending": "front",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "front"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "battle_fight": {
+        "from": [
+          "battle"
+        ],
+        "to": "changed",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "battle_retreat": {
+        "from": [
+          "battle"
+        ],
+        "to": "hidden",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "miro",
+              "sister"
+            ],
+            "path": [
+              "transit",
+              "practice"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "practice",
+          "companions": [
+            "miro",
+            "sister"
+          ]
+        },
+        "depart": []
+      },
+      "changed_finish": {
+        "from": [
+          "changed"
+        ],
+        "ending": "changed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "defeated",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "changed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "warned_finish": {
+        "from": [
+          "warned"
+        ],
+        "ending": "drive",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "warned",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "drive"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "pursuit_fight": {
+        "from": [
+          "pursuit"
+        ],
+        "to": "pursued",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "pursuit_retreat": {
+        "from": [
+          "pursuit"
+        ],
+        "to": "warning",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "miro",
+              "sister"
+            ],
+            "path": [
+              "transit",
+              "route_place"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "route_place",
+          "companions": [
+            "miro",
+            "sister"
+          ]
+        },
+        "depart": []
+      },
+      "pursued_finish": {
+        "from": [
+          "pursued"
+        ],
+        "ending": "changed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "defeated",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "reported",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "changed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "changed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q175.values.resolution"
+            },
+            "right": "changed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q175.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q175.values.partyAt"
+                },
+                "right": "lair"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q175.values.partyAt"
+                },
+                "right": "warning_place"
+              }
+            ]
+          }
+        ]
+      },
+      "drive": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q175.values.resolution"
+            },
+            "right": "drive"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q175.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q175.values.partyAt"
+                },
+                "right": "warning_place"
+              }
+            ]
+          }
+        ]
+      },
+      "front": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q175.values.resolution"
+            },
+            "right": "front"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q175.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q175.values.partyAt"
+                },
+                "right": "lair"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_8",
+        "map": "region_8_f1",
+        "x": 8,
+        "y": 1
+      },
+      "lair": {
+        "kind": "dungeon",
+        "dungeon": "salome_road",
+        "map": "e2_salome_valley",
+        "x": 7,
+        "y": 3
+      },
+      "practice": {
+        "kind": "town",
+        "location": "library_rehearsal"
+      },
+      "public": {
+        "kind": "town",
+        "location": "library_stage"
+      },
+      "route_place": {
+        "kind": "dungeon",
+        "dungeon": "salome_road",
+        "map": "e2_salome_valley",
+        "x": 11,
+        "y": 5
+      },
+      "warning_place": {
+        "kind": "dungeon",
+        "dungeon": "salome_road",
+        "map": "e2_salome_valley",
+        "x": 15,
+        "y": 7
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "salome",
+  "receptionLocations": [
+    "salome_board"
+  ]
+}

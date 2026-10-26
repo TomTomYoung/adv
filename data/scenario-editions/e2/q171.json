@@ -1,0 +1,3957 @@
+{
+  "schemaVersion": 1,
+  "id": "q171",
+  "number": 171,
+  "title": "足音を持ち帰る",
+  "client": "靴職人ダイの妻",
+  "brief": "夫の後ろへ付く足音を、家へ入れる前に調べてください。",
+  "region": 8,
+  "type": "scene_graph",
+  "recommendedLevel": 8,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 サロメの共同依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q171_scene",
+      "title": "足音を持ち帰る：靴職人ダイの妻",
+      "points": [
+        {
+          "map": "region_8_f1",
+          "x": 3,
+          "y": 1,
+          "dungeon": "region_8"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q171.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q171.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q171.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q171"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_8"
+    },
+    {
+      "id": "q171_machine_entry",
+      "title": "足音を持ち帰るの現場受付",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q171.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q171.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q171"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q171.machine.visit",
+      "points": [
+        {
+          "dungeon": "region_8",
+          "map": "region_8_f1",
+          "x": 3,
+          "y": 1
+        }
+      ]
+    },
+    {
+      "id": "q171_machine_boundary",
+      "title": "家から離れた調査の境界",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "boundary",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q171.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q171.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q171"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q171.machine.visit",
+      "points": [
+        {
+          "dungeon": "salome_road",
+          "map": "e2_salome_outskirts",
+          "x": 3,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "id": "q171_machine_rule_place",
+      "title": "閉じた輪の境界標",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "rule_place",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q171.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q171.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q171"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q171.machine.visit",
+      "points": [
+        {
+          "dungeon": "salome_road",
+          "map": "e2_salome_outskirts",
+          "x": 7,
+          "y": 1
+        }
+      ]
+    },
+    {
+      "id": "q171_machine_test_place",
+      "title": "足音の歩行試験路",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "test_place",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q171.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q171.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q171"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q171.machine.visit",
+      "points": [
+        {
+          "dungeon": "salome_road",
+          "map": "e2_salome_outskirts",
+          "x": 7,
+          "y": 5
+        }
+      ]
+    },
+    {
+      "id": "q171_machine_ring",
+      "title": "封じの輪を刻む場所",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "ring",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q171.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q171.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q171"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q171.machine.visit",
+      "points": [
+        {
+          "dungeon": "salome_road",
+          "map": "e2_salome_outskirts",
+          "x": 13,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "id": "q171_machine_return_path",
+      "title": "足音を返す機関廟の入口",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "return_path",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q171.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q171.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q171"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q171.machine.visit",
+      "points": [
+        {
+          "dungeon": "region_8",
+          "map": "region_8_f1",
+          "x": 1,
+          "y": 1
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_8_f1",
+      "x": 3,
+      "y": 1,
+      "object": "q171_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "loop": {
+      "label": "輪の維持",
+      "text": "足音は閉じた輪を歩く。維持の当番が残り、夫婦の言い争いはそれとは別に話し直した。",
+      "gold": 141,
+      "xp": 93
+    },
+    "return": {
+      "label": "道を返す",
+      "text": "迷宮への道で足音を切り離した。一人分の音がしてから、妻が戸を開けた。",
+      "gold": 141,
+      "xp": 93
+    },
+    "fight": {
+      "label": "家の防衛",
+      "text": "追跡者を退けた。脅威が実在したことを夫も認め、戸口の外で妻へ言い直した。",
+      "gold": 141,
+      "xp": 93
+    },
+    "evacuate": {
+      "label": "覚えられた家を離れる",
+      "text": "家族は避難した。家への道は知られており、帰宅前に後続の対処が必要と報告した。",
+      "gold": 141,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/salome/machine-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381d79e52f9b1f447f1d2",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "ダイが止まると音も止まるが、彼が寝た後も、昼間歩いた道を小さく再現する。最初は気のせいに見せ、雨の降らない軒下にも濡れた靴跡が続くことで外在する脅威と示す。妻は冷たいのではなく、家の入口を教えることを恐れている。",
+      "fixedPast": "迷宮から戻った靴職人ダイの後ろで、必ず一歩遅れて足音がする。妻は家へ入れたくなく、ダイは自分が疑われたと怒っている。足音は、迷宮の追跡者が地上への道を覚えるため付けたものだ。悪意ある怪異として、家族の不信とは別に実在させる。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "靴職人ダイの妻",
+        "beliefsAndGoals": "迷宮から戻った靴職人ダイの後ろで、必ず一歩遅れて足音がする。妻は家へ入れたくなく、ダイは自分が疑われたと怒っている。足音は、迷宮の追跡者が地上への道を覚えるため付けたものだ。悪意ある怪異として、家族の不信とは別に実在させる。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "夫の後ろへ付く足音を、家へ入れる前に調べてください。"
+      }
+    ],
+    "conflict": {
+      "design": "靴店→境界調査／歩行試験→迷宮へ戻す／閉じた輪を歩かせ封じる／家の周囲を防衛。輪の封じは境界の規則と準備した護符が必要だ。期限に達した場合は追跡者が現れ、戦闘または避難へ接続する。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q171.machine.entry"
+        },
+        {
+          "id": "watch",
+          "script": "q171.machine.watch"
+        },
+        {
+          "id": "onsite",
+          "script": "q171.machine.onsite"
+        },
+        {
+          "id": "rule_done",
+          "script": "q171.machine.rule_done"
+        },
+        {
+          "id": "ward_done",
+          "script": "q171.machine.ward_done"
+        },
+        {
+          "id": "wait_done",
+          "script": "q171.machine.wait_done"
+        },
+        {
+          "id": "ring",
+          "script": "q171.machine.ring"
+        },
+        {
+          "id": "loop_home",
+          "script": "q171.machine.loop_home"
+        },
+        {
+          "id": "returned",
+          "script": "q171.machine.returned"
+        },
+        {
+          "id": "return_home",
+          "script": "q171.machine.return_home"
+        },
+        {
+          "id": "defense",
+          "script": "q171.machine.defense"
+        },
+        {
+          "id": "defended",
+          "script": "q171.machine.defended"
+        },
+        {
+          "id": "collect_family",
+          "script": "q171.machine.collect_family"
+        },
+        {
+          "id": "evacuated",
+          "script": "q171.machine.evacuated"
+        },
+        {
+          "id": "watch_ward_ready",
+          "script": "q171.machine.watch_ward_ready"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "夫の後ろへ付く足音を、家へ入れる前に調べてください。"
+    },
+    "reveal": {
+      "newInformation": "ダイが止まると音も止まるが、彼が寝た後も、昼間歩いた道を小さく再現する。最初は気のせいに見せ、雨の降らない軒下にも濡れた靴跡が続くことで外在する脅威と示す。妻は冷たいのではなく、家の入口を教えることを恐れている。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q171.scene.entry"
+      },
+      {
+        "id": "watch",
+        "script": "q171.scene.watch"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q171.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q171.time",
+        "meaning": "作者原稿の time に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry",
+          "watch"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q171.rule",
+        "meaning": "作者原稿の rule に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "watch"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q171.ward",
+        "meaning": "作者原稿の ward に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "watch"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "機関廟の作業口で、ダイの帰宅路に続く足音の相談を受けた。家の外で本人を訪ねる。",
+        "options": [
+          {
+            "id": "visit",
+            "text": "依頼人のいる現場へ向かう",
+            "to": "onsite",
+            "action": "entry_visit"
+          }
+        ]
+      },
+      {
+        "id": "watch",
+        "place": "boundary",
+        "text": [
+          {
+            "when": {
+              "op": "gte",
+              "left": {
+                "ref": "stories.q171.values.time"
+              },
+              "right": 3
+            },
+            "yes": "足音が追いついた。追跡者が姿を現した。封印の準備は間に合わない。",
+            "no": "帰宅路を教えないよう家の外に留まる。試験か待機を確定すると一回進む。"
+          }
+        ],
+        "options": [
+          {
+            "id": "rule",
+            "text": "閉じた輪を歩かせる境界の規則を調べる",
+            "to": "rule_done",
+            "action": "watch_rule"
+          },
+          {
+            "id": "ward",
+            "text": "20Gで輪を封じる護符を用意する",
+            "to": "watch_ward_ready",
+            "action": "watch_ward"
+          },
+          {
+            "id": "wait",
+            "text": "もう一回、歩く足音を観察する",
+            "to": "wait_done",
+            "action": "watch_wait"
+          },
+          {
+            "id": "loop",
+            "text": "規則と護符で閉じた輪へ封じる",
+            "to": "ring",
+            "action": "watch_loop"
+          },
+          {
+            "id": "return",
+            "text": "追跡者が現れる前に迷宮へ道を返す",
+            "to": "returned",
+            "action": "watch_return"
+          },
+          {
+            "id": "fight",
+            "text": "現れた追跡者から家を守る",
+            "to": "defense",
+            "action": "watch_fight"
+          },
+          {
+            "id": "leave",
+            "text": "家族と避難する",
+            "to": "collect_family",
+            "action": "watch_leave"
+          }
+        ]
+      },
+      {
+        "id": "onsite",
+        "place": "home",
+        "text": "軒下にも濡れた靴跡が続く。職人が眠ると、足音だけが昼間の道を再現した。三回の試験・待機で追跡者が道を覚えると、境界守が警告した。",
+        "options": [
+          {
+            "id": "begin",
+            "text": "家の外で調査を始める",
+            "to": "watch",
+            "action": "onsite_begin"
+          }
+        ]
+      },
+      {
+        "id": "rule_done",
+        "place": "rule_place",
+        "text": "境界標で、閉じた輪を歩かせる規則を確認した。",
+        "options": [
+          {
+            "id": "return",
+            "text": "ダイと調査の境界へ戻る",
+            "to": "watch",
+            "action": "rule_done_return"
+          }
+        ]
+      },
+      {
+        "id": "ward_done",
+        "place": "shoes",
+        "text": "靴店で支払済みの札を確かめ、輪を封じる護符を受け取った。",
+        "options": [
+          {
+            "id": "return",
+            "text": "ダイと調査の境界へ戻る",
+            "to": "watch",
+            "action": "ward_done_return"
+          }
+        ]
+      },
+      {
+        "id": "wait_done",
+        "place": "test_place",
+        "text": "帰宅路を避けて一巡歩き、足音の追従を観察した。",
+        "options": [
+          {
+            "id": "return",
+            "text": "ダイと調査の境界へ戻る",
+            "to": "watch",
+            "action": "wait_done_return"
+          }
+        ]
+      },
+      {
+        "id": "ring",
+        "place": "ring",
+        "text": "規則どおりの輪へ足音を導き、護符で封じた。維持の当番を確認して帰宅する。",
+        "options": [
+          {
+            "id": "home",
+            "text": "ダイと家へ戻る",
+            "to": "loop_home",
+            "action": "ring_home"
+          }
+        ]
+      },
+      {
+        "id": "loop_home",
+        "place": "home",
+        "text": "戸口で封じと当番を伝えた。夫婦の話は別にやり直す。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@loop",
+            "action": "loop_home_finish"
+          }
+        ]
+      },
+      {
+        "id": "returned",
+        "place": "return_path",
+        "text": "機関廟へ続く道を歩き、足音を切り離した。",
+        "options": [
+          {
+            "id": "home",
+            "text": "一人分の足音を確かめ、ダイと帰る",
+            "to": "return_home",
+            "action": "returned_home"
+          }
+        ]
+      },
+      {
+        "id": "return_home",
+        "place": "home",
+        "text": "戸口で一人分の音を聞いた妻が、戸を開けた。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@return",
+            "action": "return_home_finish"
+          }
+        ]
+      },
+      {
+        "id": "defense",
+        "place": "home",
+        "text": "姿を現した追跡者が家へ迫る。家族の避難路を残して迎える。",
+        "options": [
+          {
+            "id": "fight",
+            "text": "追跡者と戦い、家を守る",
+            "to": "defended",
+            "action": "defense_fight"
+          },
+          {
+            "id": "evacuate",
+            "text": "家族と避難する",
+            "to": "evacuated",
+            "action": "defense_evacuate"
+          }
+        ]
+      },
+      {
+        "id": "defended",
+        "place": "home",
+        "text": "追跡者を退け、ダイが妻へ戸口の外で言い直した。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@fight",
+            "action": "defended_finish"
+          }
+        ]
+      },
+      {
+        "id": "collect_family",
+        "place": "home",
+        "text": "家族に脅威と退避先を伝え、必要な荷だけを持つ。",
+        "options": [
+          {
+            "id": "escort",
+            "text": "家族を下宿屋へ案内する",
+            "to": "evacuated",
+            "action": "collect_family_escort"
+          }
+        ]
+      },
+      {
+        "id": "evacuated",
+        "place": "refuge",
+        "text": "家族の到着を確認した。家への道が知られており、対処前には帰れないと報告する。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@evacuate",
+            "action": "evacuated_finish"
+          }
+        ]
+      },
+      {
+        "id": "watch_ward_ready",
+        "place": "boundary",
+        "text": "必要な道具を使って準備を整えた。ここから目的地まで運ぶ。",
+        "options": [
+          {
+            "id": "continue",
+            "text": "準備した相手・品物と目的地へ向かう",
+            "to": "ward_done",
+            "action": "watch_ward_ready_continue"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q171.scene.watch",
+        "action": "ward",
+        "option": "ward_supplies",
+        "shortage": "q171.scene.watch.ward.shortage",
+        "resume": "q171.scene.watch.ward.resume",
+        "cost": {
+          "gold": 20
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q171.visit"
+    ],
+    "entryScript": "q171.machine.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "machine-twenty",
+      "settlement": "salome",
+      "saveRevision": 2,
+      "scope": "機関廟20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q171.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q171.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "軒下にも濡れた靴跡が続く。職人が眠ると、足音だけが昼間の道を再現した。三回の試験・待機で追跡者が道を覚えると、境界守が警告した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "begin",
+              "text": "家の外で調査を始める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q171.time",
+                  "value": 0
+                },
+                {
+                  "op": "jump",
+                  "script": "q171.scene.watch"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q171.scene.watch": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q171.node",
+          "value": "watch"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "gte",
+            "left": {
+              "ref": "flags.quest.q171.time"
+            },
+            "right": 3
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "足音が追いついた。追跡者が姿を現した。封印の準備は間に合わない。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "帰宅路を教えないよう家の外に留まる。試験か待機を確定すると一回進む。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "rule",
+              "text": "閉じた輪を歩かせる境界の規則を調べる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "lt",
+                        "left": {
+                          "ref": "flags.quest.q171.time"
+                        },
+                        "right": 3
+                      },
+                      {
+                        "op": "not",
+                        "arg": {
+                          "op": "eq",
+                          "left": {
+                            "ref": "flags.quest.q171.rule"
+                          },
+                          "right": true
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q171.rule",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.quest.q171.time",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "flags.quest.q171.time"
+                      },
+                      1
+                    ]
+                  }
+                },
+                {
+                  "op": "jump",
+                  "script": "q171.scene.watch"
+                }
+              ]
+            },
+            {
+              "id": "ward",
+              "text": "20Gで輪を封じる護符を用意する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "lt",
+                        "left": {
+                          "ref": "flags.quest.q171.time"
+                        },
+                        "right": 3
+                      },
+                      {
+                        "op": "not",
+                        "arg": {
+                          "op": "eq",
+                          "left": {
+                            "ref": "flags.quest.q171.ward"
+                          },
+                          "right": true
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 20
+                  }
+                ]
+              },
+              "requirement": "G 20消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -20
+                },
+                {
+                  "op": "set",
+                  "target": "flags.quest.q171.ward",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.quest.q171.time",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "flags.quest.q171.time"
+                      },
+                      1
+                    ]
+                  }
+                },
+                {
+                  "op": "jump",
+                  "script": "q171.scene.watch"
+                }
+              ]
+            },
+            {
+              "id": "wait",
+              "text": "もう一回、歩く足音を観察する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "flags.quest.q171.time"
+                    },
+                    "right": 3
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q171.time",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "flags.quest.q171.time"
+                      },
+                      1
+                    ]
+                  }
+                },
+                {
+                  "op": "jump",
+                  "script": "q171.scene.watch"
+                }
+              ]
+            },
+            {
+              "id": "loop",
+              "text": "規則と護符で閉じた輪へ封じる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "flags.quest.q171.time"
+                    },
+                    "right": 3
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q171.rule"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q171.ward"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q171.end.loop"
+                }
+              ]
+            },
+            {
+              "id": "return",
+              "text": "追跡者が現れる前に迷宮へ道を返す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "flags.quest.q171.time"
+                    },
+                    "right": 3
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q171.end.return"
+                }
+              ]
+            },
+            {
+              "id": "fight",
+              "text": "現れた追跡者から家を守る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "flags.quest.q171.time"
+                    },
+                    "right": 3
+                  }
+                ]
+              },
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_171",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q171.end.fight"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q171.end.evacuate"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q171.end.evacuate"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "家族と避難する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q171.end.evacuate"
+                }
+              ]
+            },
+            {
+              "id": "ward_supplies",
+              "text": "20Gを用意しに戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "flags.quest.q171.time"
+                    },
+                    "right": 3
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q171.ward"
+                      },
+                      "right": true
+                    }
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "gte",
+                      "left": {
+                        "ref": "gold"
+                      },
+                      "right": 20
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "flags.quest.q171.time"
+                    },
+                    "right": 3
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q171.ward"
+                      },
+                      "right": true
+                    }
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "gte",
+                      "left": {
+                        "ref": "gold"
+                      },
+                      "right": 20
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q171.scene.watch.ward.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q171.end.loop": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q171.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "足音は閉じた輪を歩く。維持の当番が残り、夫婦の言い争いはそれとは別に話し直した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q171",
+              "outcome": "loop"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q171.end.return": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q171.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "迷宮への道で足音を切り離した。一人分の音がしてから、妻が戸を開けた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q171",
+              "outcome": "return"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q171.end.fight": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q171.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "追跡者を退けた。脅威が実在したことを夫も認め、戸口の外で妻へ言い直した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q171",
+              "outcome": "fight"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q171.end.evacuate": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q171.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "家族は避難した。家への道は知られており、帰宅前に後続の対処が必要と報告した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q171",
+              "outcome": "evacuate"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q171.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q171"
+          },
+          "cases": [
+            {
+              "equals": "q171.scene.watch.ward.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q171.scene.watch.ward.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q171.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q171.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "loop",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "足音は閉じた輪を歩く。維持の当番が残り、夫婦の言い争いはそれとは別に話し直した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "return",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "迷宮への道で足音を切り離した。一人分の音がしてから、妻が戸を開けた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "fight",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "追跡者を退けた。脅威が実在したことを夫も認め、戸口の外で妻へ言い直した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "evacuate",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "家族は避難した。家への道は知られており、帰宅前に後続の対処が必要と報告した。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q171.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q171.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "watch",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q171.scene.watch"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q171.scene.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q171.scene.watch.ward.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q171",
+          "value": "q171.scene.watch.ward.resume"
+        },
+        {
+          "op": "say",
+          "text": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q171.scene.watch.ward.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q171",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "20Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q171.scene.watch"
+        }
+      ]
+    },
+    "q171.machine.entry": {
+      "storyQuest": "q171",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q171",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "機関廟の作業口で、ダイの帰宅路に続く足音の相談を受けた。家の外で本人を訪ねる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "visit",
+              "text": "依頼人のいる現場へ向かう",
+              "storyAction": {
+                "quest": "q171",
+                "action": "entry_visit"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q171",
+                  "action": "entry_visit"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q171.machine.watch": {
+      "storyQuest": "q171",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q171",
+          "scene": "watch"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "gte",
+            "left": {
+              "ref": "stories.q171.values.time"
+            },
+            "right": 3
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "足音が追いついた。追跡者が姿を現した。封印の準備は間に合わない。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "帰宅路を教えないよう家の外に留まる。試験か待機を確定すると一回進む。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "rule",
+              "text": "閉じた輪を歩かせる境界の規則を調べる",
+              "storyAction": {
+                "quest": "q171",
+                "action": "watch_rule"
+              },
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "stories.q171.values.time"
+                    },
+                    "right": 3
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q171.values.rule"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q171",
+                  "action": "watch_rule"
+                }
+              ]
+            },
+            {
+              "id": "ward",
+              "text": "20Gで輪を封じる護符を用意する",
+              "storyAction": {
+                "quest": "q171",
+                "action": "watch_ward"
+              },
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "stories.q171.values.time"
+                    },
+                    "right": 3
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q171.values.ward"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "gold 20消費",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q171",
+                  "action": "watch_ward"
+                },
+                {
+                  "op": "jump",
+                  "script": "q171.machine.watch_ward_ready"
+                }
+              ]
+            },
+            {
+              "id": "wait",
+              "text": "もう一回、歩く足音を観察する",
+              "storyAction": {
+                "quest": "q171",
+                "action": "watch_wait"
+              },
+              "condition": {
+                "op": "lt",
+                "left": {
+                  "ref": "stories.q171.values.time"
+                },
+                "right": 3
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q171",
+                  "action": "watch_wait"
+                }
+              ]
+            },
+            {
+              "id": "loop",
+              "text": "規則と護符で閉じた輪へ封じる",
+              "storyAction": {
+                "quest": "q171",
+                "action": "watch_loop"
+              },
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "stories.q171.values.time"
+                    },
+                    "right": 3
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q171.values.rule"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q171.values.ward"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q171",
+                  "action": "watch_loop"
+                }
+              ]
+            },
+            {
+              "id": "return",
+              "text": "追跡者が現れる前に迷宮へ道を返す",
+              "storyAction": {
+                "quest": "q171",
+                "action": "watch_return"
+              },
+              "condition": {
+                "op": "lt",
+                "left": {
+                  "ref": "stories.q171.values.time"
+                },
+                "right": 3
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q171",
+                  "action": "watch_return"
+                }
+              ]
+            },
+            {
+              "id": "fight",
+              "text": "現れた追跡者から家を守る",
+              "storyAction": {
+                "quest": "q171",
+                "action": "watch_fight"
+              },
+              "condition": {
+                "op": "gte",
+                "left": {
+                  "ref": "stories.q171.values.time"
+                },
+                "right": 3
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q171",
+                  "action": "watch_fight"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "家族と避難する",
+              "storyAction": {
+                "quest": "q171",
+                "action": "watch_leave"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q171",
+                  "action": "watch_leave"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q171.machine.onsite": {
+      "storyQuest": "q171",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q171",
+          "scene": "onsite"
+        },
+        {
+          "op": "narrate",
+          "text": "軒下にも濡れた靴跡が続く。職人が眠ると、足音だけが昼間の道を再現した。三回の試験・待機で追跡者が道を覚えると、境界守が警告した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "begin",
+              "text": "家の外で調査を始める",
+              "storyAction": {
+                "quest": "q171",
+                "action": "onsite_begin"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q171",
+                  "action": "onsite_begin"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q171.machine.rule_done": {
+      "storyQuest": "q171",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q171",
+          "scene": "rule_done"
+        },
+        {
+          "op": "narrate",
+          "text": "境界標で、閉じた輪を歩かせる規則を確認した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "ダイと調査の境界へ戻る",
+              "storyAction": {
+                "quest": "q171",
+                "action": "rule_done_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q171",
+                  "action": "rule_done_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q171.machine.ward_done": {
+      "storyQuest": "q171",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q171",
+          "scene": "ward_done"
+        },
+        {
+          "op": "narrate",
+          "text": "靴店で支払済みの札を確かめ、輪を封じる護符を受け取った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "ダイと調査の境界へ戻る",
+              "storyAction": {
+                "quest": "q171",
+                "action": "ward_done_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q171",
+                  "action": "ward_done_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q171.machine.wait_done": {
+      "storyQuest": "q171",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q171",
+          "scene": "wait_done"
+        },
+        {
+          "op": "narrate",
+          "text": "帰宅路を避けて一巡歩き、足音の追従を観察した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "ダイと調査の境界へ戻る",
+              "storyAction": {
+                "quest": "q171",
+                "action": "wait_done_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q171",
+                  "action": "wait_done_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q171.machine.ring": {
+      "storyQuest": "q171",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q171",
+          "scene": "ring"
+        },
+        {
+          "op": "narrate",
+          "text": "規則どおりの輪へ足音を導き、護符で封じた。維持の当番を確認して帰宅する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "home",
+              "text": "ダイと家へ戻る",
+              "storyAction": {
+                "quest": "q171",
+                "action": "ring_home"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q171",
+                  "action": "ring_home"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q171.machine.loop_home": {
+      "storyQuest": "q171",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q171",
+          "scene": "loop_home"
+        },
+        {
+          "op": "narrate",
+          "text": "戸口で封じと当番を伝えた。夫婦の話は別にやり直す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q171",
+                "action": "loop_home_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q171",
+                  "action": "loop_home_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q171.machine.end.loop"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q171.machine.returned": {
+      "storyQuest": "q171",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q171",
+          "scene": "returned"
+        },
+        {
+          "op": "narrate",
+          "text": "機関廟へ続く道を歩き、足音を切り離した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "home",
+              "text": "一人分の足音を確かめ、ダイと帰る",
+              "storyAction": {
+                "quest": "q171",
+                "action": "returned_home"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q171",
+                  "action": "returned_home"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q171.machine.return_home": {
+      "storyQuest": "q171",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q171",
+          "scene": "return_home"
+        },
+        {
+          "op": "narrate",
+          "text": "戸口で一人分の音を聞いた妻が、戸を開けた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q171",
+                "action": "return_home_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q171",
+                  "action": "return_home_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q171.machine.end.return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q171.machine.defense": {
+      "storyQuest": "q171",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q171",
+          "scene": "defense"
+        },
+        {
+          "op": "narrate",
+          "text": "姿を現した追跡者が家へ迫る。家族の避難路を残して迎える。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fight",
+              "text": "追跡者と戦い、家を守る",
+              "storyAction": {
+                "quest": "q171",
+                "action": "defense_fight"
+              },
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.relocatedBattleResult.q171"
+                      },
+                      "right": "escape"
+                    }
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.relocatedBattleResult.q171"
+                      },
+                      "right": "lose"
+                    }
+                  }
+                ]
+              },
+              "requirement": "戦闘。勝利・撤退・敗北に応じて続きが変わる。",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_171",
+                  "on_win": [
+                    {
+                      "op": "set",
+                      "target": "flags.relocatedBattleResult.q171",
+                      "value": "win"
+                    },
+                    {
+                      "op": "story.action",
+                      "quest": "q171",
+                      "action": "defense_fight"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q171.machine.defended"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "set",
+                      "target": "flags.relocatedBattleResult.q171",
+                      "value": "escape"
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "戦いから撤退した。勝利の報告にはせず、同行者と次の行動を相談する。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q171.machine.defense"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "set",
+                      "target": "flags.relocatedBattleResult.q171",
+                      "value": "lose"
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "救助班にサロメへ運び出された。現場へ戻って同行者と合流し、撤退の結果を報告する。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "evacuate",
+              "text": "家族と避難する",
+              "storyAction": {
+                "quest": "q171",
+                "action": "defense_evacuate"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q171",
+                  "action": "defense_evacuate"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q171.machine.defended": {
+      "storyQuest": "q171",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q171",
+          "scene": "defended"
+        },
+        {
+          "op": "narrate",
+          "text": "追跡者を退け、ダイが妻へ戸口の外で言い直した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q171",
+                "action": "defended_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q171",
+                  "action": "defended_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q171.machine.end.fight"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q171.machine.collect_family": {
+      "storyQuest": "q171",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q171",
+          "scene": "collect_family"
+        },
+        {
+          "op": "narrate",
+          "text": "家族に脅威と退避先を伝え、必要な荷だけを持つ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "escort",
+              "text": "家族を下宿屋へ案内する",
+              "storyAction": {
+                "quest": "q171",
+                "action": "collect_family_escort"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q171",
+                  "action": "collect_family_escort"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q171.machine.evacuated": {
+      "storyQuest": "q171",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q171",
+          "scene": "evacuated"
+        },
+        {
+          "op": "narrate",
+          "text": "家族の到着を確認した。家への道が知られており、対処前には帰れないと報告する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q171",
+                "action": "evacuated_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q171",
+                  "action": "evacuated_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q171.machine.end.evacuate"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q171.machine.watch_ward_ready": {
+      "storyQuest": "q171",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q171",
+          "scene": "watch_ward_ready"
+        },
+        {
+          "op": "narrate",
+          "text": "必要な道具を使って準備を整えた。ここから目的地まで運ぶ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "continue",
+              "text": "準備した相手・品物と目的地へ向かう",
+              "storyAction": {
+                "quest": "q171",
+                "action": "watch_ward_ready_continue"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q171",
+                  "action": "watch_ward_ready_continue"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q171.machine.end.loop": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "足音は閉じた輪を歩く。維持の当番が残り、夫婦の言い争いはそれとは別に話し直した。"
+        },
+        {
+          "op": "add",
+          "target": "vars.loop",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q171",
+          "outcome": "loop"
+        }
+      ]
+    },
+    "q171.machine.end.return": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "迷宮への道で足音を切り離した。一人分の音がしてから、妻が戸を開けた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.return",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q171",
+          "outcome": "return"
+        }
+      ]
+    },
+    "q171.machine.end.fight": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "追跡者を退けた。脅威が実在したことを夫も認め、戸口の外で妻へ言い直した。"
+        },
+        {
+          "op": "add",
+          "target": "vars.fight",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q171",
+          "outcome": "fight"
+        }
+      ]
+    },
+    "q171.machine.end.evacuate": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "家族は避難した。家への道は知られており、帰宅前に後続の対処が必要と報告した。"
+        },
+        {
+          "op": "add",
+          "target": "vars.evacuate",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q171",
+          "outcome": "evacuate"
+        }
+      ]
+    },
+    "q171.machine.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q171"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q171.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q171.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q171.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "loop",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "足音は閉じた輪を歩く。維持の当番が残り、夫婦の言い争いはそれとは別に話し直した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "return",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "迷宮への道で足音を切り離した。一人分の音がしてから、妻が戸を開けた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "fight",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "追跡者を退けた。脅威が実在したことを夫も認め、戸口の外で妻へ言い直した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "evacuate",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "家族は避難した。家への道は知られており、帰宅前に後続の対処が必要と報告した。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q171"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q171.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q171.machine.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "watch",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q171.machine.watch"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "onsite",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q171.machine.onsite"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "rule_done",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q171.machine.rule_done"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "ward_done",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q171.machine.ward_done"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "wait_done",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q171.machine.wait_done"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "ring",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q171.machine.ring"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "loop_home",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q171.machine.loop_home"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "returned",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q171.machine.returned"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "return_home",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q171.machine.return_home"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "defense",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q171.machine.defense"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "defended",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q171.machine.defended"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "collect_family",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q171.machine.collect_family"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "evacuated",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q171.machine.evacuated"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "watch_ward_ready",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q171.machine.watch_ward_ready"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q171.machine.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "足音を持ち帰るの現場受付",
+      "home": "ダイの家の外戸口",
+      "shoes": "境界の護符を受け取る靴店",
+      "refuge": "家族の避難する下宿屋",
+      "boundary": "家から離れた調査の境界",
+      "rule_place": "閉じた輪の境界標",
+      "test_place": "足音の歩行試験路",
+      "ring": "封じの輪を刻む場所",
+      "return_path": "足音を返す機関廟の入口",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "home"
+      ],
+      [
+        "transit",
+        "shoes"
+      ],
+      [
+        "transit",
+        "refuge"
+      ],
+      [
+        "transit",
+        "boundary"
+      ],
+      [
+        "transit",
+        "rule_place"
+      ],
+      [
+        "transit",
+        "test_place"
+      ],
+      [
+        "transit",
+        "ring"
+      ],
+      [
+        "transit",
+        "return_path"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "home",
+          "shoes",
+          "refuge",
+          "boundary",
+          "rule_place",
+          "test_place",
+          "ring",
+          "return_path",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "loop",
+          "return",
+          "fight",
+          "evacuate"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "rule": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "rule"
+      },
+      "ward": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "ward"
+      },
+      "wardPaid": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "wardPaid"
+      },
+      "sealed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "sealed"
+      },
+      "homeReached": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "homeReached"
+      },
+      "detached": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "detached"
+      },
+      "defended": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "defended"
+      },
+      "evacuated": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "evacuated"
+      },
+      "time": {
+        "type": "integer",
+        "initial": 0,
+        "min": 0,
+        "max": 3,
+        "meaning": "time"
+      },
+      "daiAt": {
+        "type": "enum",
+        "initial": "home",
+        "values": [
+          "entry",
+          "home",
+          "shoes",
+          "refuge",
+          "boundary",
+          "rule_place",
+          "test_place",
+          "ring",
+          "return_path",
+          "transit"
+        ],
+        "meaning": "dai の所在または保持者"
+      },
+      "familyAt": {
+        "type": "enum",
+        "initial": "home",
+        "values": [
+          "entry",
+          "home",
+          "shoes",
+          "refuge",
+          "boundary",
+          "rule_place",
+          "test_place",
+          "ring",
+          "return_path",
+          "transit"
+        ],
+        "meaning": "family の所在または保持者"
+      },
+      "wardPaperAt": {
+        "type": "enum",
+        "initial": "shoes",
+        "values": [
+          "entry",
+          "home",
+          "shoes",
+          "refuge",
+          "boundary",
+          "rule_place",
+          "test_place",
+          "ring",
+          "return_path",
+          "transit",
+          "party",
+          "dai",
+          "family"
+        ],
+        "meaning": "wardPaper の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "dai": {
+        "holder": "daiAt",
+        "kind": "person"
+      },
+      "family": {
+        "holder": "familyAt",
+        "kind": "group"
+      },
+      "wardPaper": {
+        "holder": "wardPaperAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "ダイが止まると音も止まるが、彼が寝た後も、昼間歩いた道を小さく再現する。最初は気のせいに見せ、雨の降らない軒下にも濡れた靴跡が続くことで外在する脅威と示す。妻は冷たいのではなく、家の入口を教えることを恐れている。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "足音を持ち帰るの現場受付",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "watch": {
+        "title": "家から離れた調査の境界",
+        "place": "boundary",
+        "cast": [],
+        "requires": true
+      },
+      "onsite": {
+        "title": "ダイの家の外戸口",
+        "place": "home",
+        "cast": [],
+        "requires": true
+      },
+      "rule_done": {
+        "title": "閉じた輪の境界標",
+        "place": "rule_place",
+        "cast": [],
+        "requires": true
+      },
+      "ward_done": {
+        "title": "境界の護符を受け取る靴店",
+        "place": "shoes",
+        "cast": [],
+        "requires": true
+      },
+      "wait_done": {
+        "title": "足音の歩行試験路",
+        "place": "test_place",
+        "cast": [],
+        "requires": true
+      },
+      "ring": {
+        "title": "封じの輪を刻む場所",
+        "place": "ring",
+        "cast": [],
+        "requires": true
+      },
+      "loop_home": {
+        "title": "ダイの家の外戸口",
+        "place": "home",
+        "cast": [],
+        "requires": true
+      },
+      "returned": {
+        "title": "足音を返す機関廟の入口",
+        "place": "return_path",
+        "cast": [],
+        "requires": true
+      },
+      "return_home": {
+        "title": "ダイの家の外戸口",
+        "place": "home",
+        "cast": [],
+        "requires": true
+      },
+      "defense": {
+        "title": "ダイの家の外戸口",
+        "place": "home",
+        "cast": [],
+        "requires": true
+      },
+      "defended": {
+        "title": "ダイの家の外戸口",
+        "place": "home",
+        "cast": [],
+        "requires": true
+      },
+      "collect_family": {
+        "title": "ダイの家の外戸口",
+        "place": "home",
+        "cast": [],
+        "requires": true
+      },
+      "evacuated": {
+        "title": "家族の避難する下宿屋",
+        "place": "refuge",
+        "cast": [],
+        "requires": true
+      },
+      "watch_ward_ready": {
+        "title": "家から離れた調査の境界",
+        "place": "boundary",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_visit": {
+        "from": [
+          "entry"
+        ],
+        "to": "onsite",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "home"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "home",
+          "companions": []
+        },
+        "depart": []
+      },
+      "watch_rule": {
+        "from": [
+          "watch"
+        ],
+        "to": "rule_done",
+        "requires": {
+          "op": "and",
+          "args": [
+            {
+              "op": "lt",
+              "left": {
+                "ref": "stories.q171.values.time"
+              },
+              "right": 3
+            },
+            {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q171.values.rule"
+                },
+                "right": true
+              }
+            }
+          ]
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "dai"
+            ],
+            "path": [
+              "transit",
+              "rule_place"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "rule",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "time",
+            "value": {
+              "op": "add",
+              "args": [
+                {
+                  "ref": "stories.q171.values.time"
+                },
+                1
+              ]
+            }
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "rule_place",
+          "companions": [
+            "dai"
+          ]
+        },
+        "depart": []
+      },
+      "watch_ward": {
+        "from": [
+          "watch"
+        ],
+        "to": "watch_ward_ready",
+        "requires": {
+          "op": "and",
+          "args": [
+            {
+              "op": "lt",
+              "left": {
+                "ref": "stories.q171.values.time"
+              },
+              "right": 3
+            },
+            {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q171.values.ward"
+                },
+                "right": true
+              }
+            }
+          ]
+        },
+        "effects": [
+          {
+            "op": "set",
+            "key": "wardPaid",
+            "value": true
+          }
+        ],
+        "cost": {
+          "gold": 20
+        },
+        "once": false
+      },
+      "watch_wait": {
+        "from": [
+          "watch"
+        ],
+        "to": "wait_done",
+        "requires": {
+          "op": "lt",
+          "left": {
+            "ref": "stories.q171.values.time"
+          },
+          "right": 3
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "dai"
+            ],
+            "path": [
+              "transit",
+              "test_place"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "time",
+            "value": {
+              "op": "add",
+              "args": [
+                {
+                  "ref": "stories.q171.values.time"
+                },
+                1
+              ]
+            }
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "test_place",
+          "companions": [
+            "dai"
+          ]
+        },
+        "depart": []
+      },
+      "watch_loop": {
+        "from": [
+          "watch"
+        ],
+        "to": "ring",
+        "requires": {
+          "op": "and",
+          "args": [
+            {
+              "op": "lt",
+              "left": {
+                "ref": "stories.q171.values.time"
+              },
+              "right": 3
+            },
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q171.values.rule"
+              },
+              "right": true
+            },
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q171.values.ward"
+              },
+              "right": true
+            }
+          ]
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "dai"
+            ],
+            "path": [
+              "transit",
+              "ring"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "ring",
+          "companions": [
+            "dai"
+          ]
+        },
+        "depart": []
+      },
+      "watch_return": {
+        "from": [
+          "watch"
+        ],
+        "to": "returned",
+        "requires": {
+          "op": "lt",
+          "left": {
+            "ref": "stories.q171.values.time"
+          },
+          "right": 3
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "dai"
+            ],
+            "path": [
+              "transit",
+              "return_path"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "return_path",
+          "companions": [
+            "dai"
+          ]
+        },
+        "depart": []
+      },
+      "watch_fight": {
+        "from": [
+          "watch"
+        ],
+        "to": "defense",
+        "requires": {
+          "op": "gte",
+          "left": {
+            "ref": "stories.q171.values.time"
+          },
+          "right": 3
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "dai"
+            ],
+            "path": [
+              "transit",
+              "home"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "home",
+          "companions": [
+            "dai"
+          ]
+        },
+        "depart": []
+      },
+      "watch_leave": {
+        "from": [
+          "watch"
+        ],
+        "to": "collect_family",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "dai"
+            ],
+            "path": [
+              "transit",
+              "home"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "home",
+          "companions": [
+            "dai"
+          ]
+        },
+        "depart": []
+      },
+      "onsite_begin": {
+        "from": [
+          "onsite"
+        ],
+        "to": "watch",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "dai"
+            ],
+            "path": [
+              "transit",
+              "boundary"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "time",
+            "value": 0
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "boundary",
+          "companions": [
+            "dai"
+          ]
+        },
+        "depart": []
+      },
+      "rule_done_return": {
+        "from": [
+          "rule_done"
+        ],
+        "to": "watch",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "dai"
+            ],
+            "path": [
+              "transit",
+              "boundary"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "boundary",
+          "companions": [
+            "dai"
+          ]
+        },
+        "depart": []
+      },
+      "ward_done_return": {
+        "from": [
+          "ward_done"
+        ],
+        "to": "watch",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "dai"
+            ],
+            "path": [
+              "transit",
+              "boundary"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "boundary",
+          "companions": [
+            "dai"
+          ]
+        },
+        "depart": []
+      },
+      "wait_done_return": {
+        "from": [
+          "wait_done"
+        ],
+        "to": "watch",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "dai"
+            ],
+            "path": [
+              "transit",
+              "boundary"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "boundary",
+          "companions": [
+            "dai"
+          ]
+        },
+        "depart": []
+      },
+      "ring_home": {
+        "from": [
+          "ring"
+        ],
+        "to": "loop_home",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "dai"
+            ],
+            "path": [
+              "transit",
+              "home"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "home",
+          "companions": [
+            "dai"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "wardPaper",
+            "from": "party",
+            "to": "ring"
+          },
+          {
+            "op": "set",
+            "key": "sealed",
+            "value": true
+          }
+        ]
+      },
+      "loop_home_finish": {
+        "from": [
+          "loop_home"
+        ],
+        "ending": "loop",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "homeReached",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "loop"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "returned_home": {
+        "from": [
+          "returned"
+        ],
+        "to": "return_home",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "dai"
+            ],
+            "path": [
+              "transit",
+              "home"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "home",
+          "companions": [
+            "dai"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "detached",
+            "value": true
+          }
+        ]
+      },
+      "return_home_finish": {
+        "from": [
+          "return_home"
+        ],
+        "ending": "return",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "homeReached",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "return"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "defense_fight": {
+        "from": [
+          "defense"
+        ],
+        "to": "defended",
+        "requires": {
+          "op": "and",
+          "args": [
+            {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.relocatedBattleResult.q171"
+                },
+                "right": "escape"
+              }
+            },
+            {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.relocatedBattleResult.q171"
+                },
+                "right": "lose"
+              }
+            }
+          ]
+        },
+        "effects": [],
+        "once": false
+      },
+      "defense_evacuate": {
+        "from": [
+          "defense"
+        ],
+        "to": "evacuated",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "dai",
+              "family"
+            ],
+            "path": [
+              "transit",
+              "refuge"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "refuge",
+          "companions": [
+            "dai",
+            "family"
+          ]
+        },
+        "depart": []
+      },
+      "defended_finish": {
+        "from": [
+          "defended"
+        ],
+        "ending": "fight",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "defended",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "fight"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "collect_family_escort": {
+        "from": [
+          "collect_family"
+        ],
+        "to": "evacuated",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "dai",
+              "family"
+            ],
+            "path": [
+              "transit",
+              "refuge"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "refuge",
+          "companions": [
+            "dai",
+            "family"
+          ]
+        },
+        "depart": []
+      },
+      "evacuated_finish": {
+        "from": [
+          "evacuated"
+        ],
+        "ending": "evacuate",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "evacuated",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "evacuate"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "watch_ward_ready_continue": {
+        "from": [
+          "watch_ward_ready"
+        ],
+        "to": "ward_done",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "dai"
+            ],
+            "path": [
+              "transit",
+              "shoes"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "wardPaper",
+            "from": "shoes",
+            "to": "party"
+          },
+          {
+            "op": "set",
+            "key": "ward",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "time",
+            "value": {
+              "op": "add",
+              "args": [
+                {
+                  "ref": "stories.q171.values.time"
+                },
+                1
+              ]
+            }
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "shoes",
+          "companions": [
+            "dai"
+          ]
+        },
+        "depart": []
+      }
+    },
+    "endings": {
+      "loop": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q171.values.resolution"
+            },
+            "right": "loop"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q171.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q171.values.partyAt"
+                },
+                "right": "home"
+              }
+            ]
+          }
+        ]
+      },
+      "return": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q171.values.resolution"
+            },
+            "right": "return"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q171.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q171.values.partyAt"
+                },
+                "right": "home"
+              }
+            ]
+          }
+        ]
+      },
+      "fight": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q171.values.resolution"
+            },
+            "right": "fight"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q171.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q171.values.partyAt"
+                },
+                "right": "home"
+              }
+            ]
+          }
+        ]
+      },
+      "evacuate": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q171.values.resolution"
+            },
+            "right": "evacuate"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q171.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q171.values.partyAt"
+                },
+                "right": "refuge"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_8",
+        "map": "region_8_f1",
+        "x": 3,
+        "y": 1
+      },
+      "home": {
+        "kind": "town",
+        "location": "machine_home"
+      },
+      "shoes": {
+        "kind": "town",
+        "location": "machine_shoes"
+      },
+      "refuge": {
+        "kind": "town",
+        "location": "salome_inn"
+      },
+      "boundary": {
+        "kind": "dungeon",
+        "dungeon": "salome_road",
+        "map": "e2_salome_outskirts",
+        "x": 3,
+        "y": 3
+      },
+      "rule_place": {
+        "kind": "dungeon",
+        "dungeon": "salome_road",
+        "map": "e2_salome_outskirts",
+        "x": 7,
+        "y": 1
+      },
+      "test_place": {
+        "kind": "dungeon",
+        "dungeon": "salome_road",
+        "map": "e2_salome_outskirts",
+        "x": 7,
+        "y": 5
+      },
+      "ring": {
+        "kind": "dungeon",
+        "dungeon": "salome_road",
+        "map": "e2_salome_outskirts",
+        "x": 13,
+        "y": 3
+      },
+      "return_path": {
+        "kind": "dungeon",
+        "dungeon": "region_8",
+        "map": "region_8_f1",
+        "x": 1,
+        "y": 1
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "salome",
+  "receptionLocations": [
+    "salome_board"
+  ]
+}
