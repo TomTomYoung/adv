@@ -70,6 +70,17 @@ export async function loadContent(read = async path => {
     for(const id of ids){const q=data.quests[id];if(!Object.hasOwn(data.worldTravel.settlements,q.settlement))throw Error('地域依頼の受付拠点が不正です。');data.worldTravel.questSettlements[id]=q.settlement;}
     if(legacy)data.regionalLegacy=legacy;data.regionalQuestIds=ids;
   }
+  const upgrade=catalog.editions[data.scenarioEdition].geographyUpgrade;
+  if(upgrade){
+    // Keep the shipped geography for full validation of pre-relocation saves.
+    // Only maps need a deep copy: quest projection appends their objects below.
+    const previous={...data,maps:structuredClone(data.maps),locations:{...data.locations},dungeons:{...data.dungeons},scripts:{...data.scripts}};
+    projectQuestObjects(previous);
+    await applyEditionGeography(data,await read(upgrade));
+    for(const id of data.regionalQuestIds??[])data.worldTravel.questSettlements[id]=data.quests[id].settlement;
+    if(previous.worldTravel?.version!==1||data.worldTravel?.version!==2)throw Error('未対応の地理更新です。');
+    data.settlementMigration={previous,settlements:Object.entries(data.worldTravel.settlements).filter(([id,s])=>!previous.worldTravel.settlements[id]&&previous.locations[s.root]).map(([id])=>id)};
+  }
   projectQuestObjects(data);
   const errors=validateContent(data);
   if(errors.length) throw new Error(`シナリオ検証エラー\n${errors.join('\n')}`);

@@ -16,7 +16,7 @@ function operate(g,id){
 function leave(g,id,kind){if(kind==='exit'){walk(g,1,1);inspect(g,'exit');drain(g);}else if(kind==='cross'){walk(g,1,1);assert.ok(g.dispatch({type:'world.cross',route:id==='region_7'?'sunken_surface':'observatory_surface'}));}else if(kind==='mark')assert.ok(g.dispatch({type:'retreat'}));else g.defeat();drain(g);}
 for(const id of ['region_7','region_9'])for(const kind of ['exit','cross','mark','defeat'])test(`${id}/${kind}: old expeditions keep country, equipment and home; subsequent village trips return to the village`,()=>{
  const old=new GameEngine(previous,1907);drain(old);old.random=()=>.999999;assert.ok(old.dispatch({type:'travel',dungeon:id}));operate(old,id);const raw=old.save(),g=new GameEngine(data);g.load(raw);g.random=()=>.999999;
- assert.equal(g.save(),raw);assert.equal(worldTravelView(g).country,'聖王国トルネア領');assert.deepEqual(g.state.worldTravel.visited,{hikarigaeri:true});assert.deepEqual(g.state.worldTravel.registrations,{});checkpoint(g);
+ const expected=JSON.parse(raw);expected.state.worldTravel.version=2;assert.deepEqual(JSON.parse(g.save()),expected);assert.equal(worldTravelView(g).country,'聖王国トルネア領');assert.deepEqual(g.state.worldTravel.visited,{hikarigaeri:true});assert.deepEqual(g.state.worldTravel.registrations,{});checkpoint(g);
  leave(g,id,kind);assert.equal(g.state.townLocation,'hikarigaeri_square');assert.equal(g.dispatch({type:'travel',dungeon:id}),false);assert.equal(g.dispatch({type:'world.cross',route:id==='region_7'?'sunken_surface':'observatory_surface'}),false);checkpoint(g);
  // A fresh registered party is a navigation fixture, not an invented visit in
  // the loaded record. Compare persistence when the old party really walks in.
@@ -24,7 +24,7 @@ for(const id of ['region_7','region_9'])for(const kind of ['exit','cross','mark'
 });
 test('all forty receptions move together; inherited dungeon definitions and first-edition quests stay unchanged',async()=>{
  for(const id of ['region_7','region_9']){assert.deepEqual(data.dungeons[id],previous.dungeons[id]);assert.ok(!data.locations.hikarigaeri_square.dungeons.includes(id));for(const map of data.dungeons[id].maps){const withoutQuestObjects=m=>({...m,objects:m.objects.filter(o=>!o.quest)});assert.deepEqual(withoutQuestObjects(data.maps[map]),withoutQuestObjects(previous.maps[map]));}}
- assert.equal(Object.keys(data.maps).length,80);assert.equal(Object.keys(data.dungeons).length,19);assert.equal(Object.keys(data.quests).length,300);assert.equal(data.scenarioEditions.editions.e2.saveRevision,2);
+ assert.equal(Object.keys(data.maps).length,82);assert.equal(Object.keys(data.dungeons).length,20);assert.equal(Object.keys(data.quests).length,300);assert.equal(data.scenarioEditions.editions.e2.saveRevision,2);
  const g=ready();for(const id of ['q061','q081','q161','q181'])assert.equal(g.accept(id),false);for(const id of ['region_7','region_9'])assert.equal(g.dispatch({type:'travel',dungeon:id}),false);
  roadGo(g,{kind:'town',location:'royal_board'});assert.equal(projectGame(g).quests.filter(q=>q.stage==='available'&&q.receptionHere).length,40);
  assert.equal(g.accept('q070'),false);assert.equal(g.accept('q090'),false);

@@ -1,8 +1,8 @@
 # 学術都市サロメの設計
 
-設計日: 2026-10-25。**設計のみ。都市名「サロメ」はユーザー指定。以下の地区名・新事件・人物・技能は提案で、ゲームへ未実装**。[地域別100件の配分](../scenarios/REGIONAL_QUEST_ALLOCATION.md) ／ [新規100件](../scenarios/SALOME_100_QUEST_DESIGN.md) ／ [追加職・人物](../battle/SALOME_CLASSES_AND_CHARACTERS_DESIGN.md)。
+設計日: 2026-10-25。都市名「サロメ」はユーザー指定。2026-10-26に[街道・既存施設・個人20件の往復と保存移行](SALOME_ACCESS_IMPLEMENTATION.md)を実装。以下の新事件・人物・技能と旧地域40件の移設は後続。[地域別100件の配分](../scenarios/REGIONAL_QUEST_ALLOCATION.md) ／ [新規100件](../scenarios/SALOME_100_QUEST_DESIGN.md) ／ [追加職・人物](../battle/SALOME_CLASSES_AND_CHARACTERS_DESIGN.md)。
 
-2026-10-26に[旧地域40件を含む移設前検証](../dungeons/REGIONAL_RELOCATION_CHECK.md)と[個別作業票](../dungeons/REGIONAL_RELOCATION_WORK.md)を追加した。既存の学術都市6施設とイル・ミカの個人20件は現行e2に存在する。今回の互換切断前の旧e2は対象外になった。ただし改訂2にも既存学術施設があり、今後これらを新しい町の根へ移すだけでは施設内保存が拒否されるため、現地訪問の根拠と進行中の旅程を保持する移行を先に実装する。今回の検証はサロメ街道や都市統合の完了を意味しない。
+2026-10-26に[旧地域40件を含む移設前検証](../dungeons/REGIONAL_RELOCATION_CHECK.md)と[個別作業票](../dungeons/REGIONAL_RELOCATION_WORK.md)を追加した。既存の学術都市6施設とイル・ミカの個人20件は現行e2に存在する。今回の互換切断前の旧e2は対象外になった。ただし改訂2にも既存学術施設があり、今後これらを新しい町の根へ移すだけでは施設内保存が拒否されるため、現地訪問の根拠と進行中の旅程を保持する移行を先に実装する。この移設前検証だけでは街道や都市統合の完了を意味しない。その後の実装と検証は上記の実装記録を参照。
 
 ## 都市の位置づけ
 

@@ -7,7 +7,7 @@ import {read,fixture,auditQuest,replay} from '../tools/audit-regional-relocation
 import {data,ready,go,checkpoint,drain} from './royal-helpers.mjs';
 const previous=await loadContent(async file=>{
  if(file==='data/scenario-editions/e2/geography.json')return read('tests/fixtures/e2-geography-before-sunken-second.json');
- const value=await read(file);if(file==='data/scenario-editions.json')for(const n of [...Array.from({length:10},(_,i)=>81+i),...Array.from({length:10},(_,i)=>181+i)])delete value.editions.e2.questOverrides['q'+String(n).padStart(3,'0')];if(file==='data/scenario-editions.json')for(let n=161;n<=170;n++)delete value.editions.e2.questOverrides['q'+n];return value;
+ const value=await read(file);if(file==='data/scenario-editions.json')delete value.editions.e2.geographyUpgrade;if(file==='data/scenario-editions.json')for(const n of [...Array.from({length:10},(_,i)=>81+i),...Array.from({length:10},(_,i)=>181+i)])delete value.editions.e2.questOverrides['q'+String(n).padStart(3,'0')];if(file==='data/scenario-editions.json')for(let n=161;n<=170;n++)delete value.editions.e2.questOverrides['q'+n];return value;
 },{edition:'e2'});
 function oldFixture(id,{accepted=true,entered=true,started=true,absent=null}={}){
  const g=fixture(previous,id,{accepted:false,entered:false,started:false,absent});
@@ -21,14 +21,14 @@ for(let n=161;n<=170;n++){const id='q'+n;test(`${id}: all old endings and seven 
   const old=oldFixture(id,{accepted:stage!=='unaccepted',entered:!['unaccepted','accepted'].includes(stage),started:!['unaccepted','accepted','dungeon','battle'].includes(stage)});
   if(stage==='choice')drain(old);if(stage==='battle')old.startBattle(old.map().encounter,{win:[],escape:[],lose:[]});if(stage==='completed')replay(old,id,path);
   const raw=old.save(),expected=JSON.parse(raw),g=new GameEngine(data);g.load(raw);if(stage!=='unaccepted')(expected.state.flags.legacyStoryRoutes??={})[id]=true;
-  assert.deepEqual(JSON.parse(g.save()),expected,id+'/'+stage);assert.equal(old.save(),raw);checkpoint(g);
+  expected.state.worldTravel.version=2;assert.deepEqual(JSON.parse(g.save()),expected,id+'/'+stage);assert.equal(old.save(),raw);checkpoint(g);
   if(!['unaccepted','completed'].includes(stage))assert.equal(nextQuestPlace(data,g.state,id).map,previous.quests[id].locations[0].map);
  }
  auditQuest(data,id,{makeFixture:(_data,_id,options)=>{const old=oldFixture(id,options),g=new GameEngine(data);g.load(old.save());return g;}});
  assert.deepEqual(data.quests[id].outcomes,previous.quests[id].outcomes);assert.deepEqual(data.quests[id].requires,previous.quests[id].requires);
 });}
 test('unaccepted revision-2 saves adopt the new route only on acceptance and reject mixed route flags atomically',()=>{
- const old=new GameEngine(previous),raw=old.save(),g=new GameEngine(data);g.load(raw);assert.equal(g.save(),raw);assert.equal(g.state.scenarioRevision,2);
+ const old=new GameEngine(previous),raw=old.save(),g=new GameEngine(data);g.load(raw);const expected=JSON.parse(raw);expected.state.worldTravel.version=2;assert.deepEqual(JSON.parse(g.save()),expected);assert.equal(g.state.scenarioRevision,2);
  const now=ready();go(now,{kind:'town',location:'royal_board'});assert.ok(now.accept('q161'));assert.equal(now.state.flags.currentStoryRoutes.q161,true);checkpoint(now);const before=now.save();
  for(const mutate of [s=>{s.flags.currentStoryRoutes.q161=false;},s=>{s.flags.legacyStoryRoutes={q161:true};}]){const bad=JSON.parse(before);mutate(bad.state);assert.throws(()=>now.load(JSON.stringify(bad)));assert.equal(now.save(),before);}
 });
