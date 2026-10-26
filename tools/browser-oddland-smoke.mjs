@@ -35,7 +35,8 @@ try{
     };
     document.addEventListener('keydown',e=>handleGameKey(e,{view,model:view.model,dispatch}));
   });
-  const click=async label=>{for(let n=0;n<50&&await page.evaluate(()=>h.view.canChoose?.()===false);n++)await page.keyboard.press('Enter');const button=page.getByRole('button',{name:label,exact:true});await button.scrollIntoViewIfNeeded();await button.click();};
+  const revealChoices=async()=>{for(let n=0;n<50&&await page.evaluate(()=>h.view.canChoose?.()===false);n++)await page.keyboard.press('Enter');};
+  const click=async label=>{await revealChoices();const button=page.getByRole('button',{name:label,exact:true});await button.scrollIntoViewIfNeeded();await button.click();};
   async function cross(route){
     const label=await page.evaluate(id=>h.routeLabel(id),route);
     await click('任意調べる');await click(label);await click(label);await page.evaluate(()=>h.settle());
@@ -99,7 +100,22 @@ try{
     await click('現場の結果を確かめ、依頼を終える');await page.evaluate(()=>{h.settle();h.resume();});
     assert.equal(await page.evaluate(()=>h.g.state.quests.q032.outcome),'informed');assert.equal(await page.evaluate(()=>h.g.state.stories.q032.values.stoneAt),'entry');
     await page.evaluate(()=>h.walk(1,1));await click('任意調べる');await click('地上への階段');await click('調べる');await page.evaluate(()=>h.settle());assert.equal(await page.evaluate(()=>h.g.state.townLocation),'oddland_plateau');
-    checks.push({layout,width,...measure,quests:{q291:'escort',q032:'informed'},chapelReturn:'oddland_plateau'});
+    await click('巡礼台地の依頼所');await click('依頼掲示板を見る');assert.equal(await page.locator('.quest-card').count(),19);
+    assert.equal(await page.locator('.quest-card').filter({has:page.getByRole('heading',{name:'片目の聖像',exact:true})}).count(),0);
+    await page.locator('.quest-card').filter({has:page.getByRole('heading',{name:'燃え残る図書館',exact:true})}).getByRole('button',{name:'依頼を受ける',exact:true}).click();
+    if(layout==='scene')await page.keyboard.press('Escape');else await click('巡礼台地へ戻る');
+    if(await page.evaluate(()=>h.g.state.townLocation)!=='oddland_plateau')await click('巡礼台地へ戻る');
+    await click(await page.evaluate(()=>h.routeLabel('e2_burnt_library_surface')));await page.evaluate(()=>{h.walk(3,1);h.dispatch({type:'story.resume',quest:'q137'});h.settle();});
+    await click('薬学書を選ぶ');await page.evaluate(()=>{h.walk(7,3);h.settle();h.resume();});
+    await revealChoices();assert.equal(await page.getByRole('button',{name:'読み終えた本を回収する',exact:true}).count(),1,`${layout} ${width}: selected book carry option`);
+    assert.ok(await page.getByRole('button',{name:'読み終えた本を回収する',exact:true}).isDisabled());
+    for(let i=0;i<3;i++){await click('次の段階を読み終える');await page.evaluate(()=>h.settle());}
+    await click('読み終えた本を回収する');await page.evaluate(()=>h.resume());assert.equal(await page.evaluate(()=>h.g.state.stories.q137.values.medicineAt),'party');
+    await page.evaluate(()=>h.walk(1,1));await cross('e2_burnt_library_surface');await click('巡礼台地の資料受入室');await page.evaluate(()=>h.settle());
+    await page.screenshot({path:path.join(output,`${layout}-${width}-library.png`),fullPage:true});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+    await click('現場の結果を確かめ、依頼を終える');await page.evaluate(()=>{h.settle();h.resume();});
+    assert.equal(await page.evaluate(()=>h.g.state.quests.q137.outcome),'medicine');assert.deepEqual(await page.evaluate(()=>{const v=h.g.state.stories.q137.values;return [v.medicineAt,v.familyAt,v.languageAt,v.medicinePages];}),['archive','entry','entry',3]);
+    checks.push({layout,width,...measure,quests:{q291:'escort',q032:'informed',q137:'medicine'},chapelReturn:'oddland_plateau'});
   }
   assert.deepEqual(errors,[]);await fs.writeFile(path.join(output,'result.json'),JSON.stringify({checks,errors},null,2));console.log(JSON.stringify({checks:checks.length,errors,output}));
 }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}

@@ -132,5 +132,5 @@ export async function buildScenarioEditions({check=false}={}){
 
 if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href){
  await buildScenarioEditions({check:process.argv.includes('--check')});
- console.log(`SCENARIO EDITIONS ${process.argv.includes('--check')?'OK':'BUILT'}: e2 q001 and chapel q031–040; e1 unchanged`);
+ console.log(`SCENARIO EDITIONS ${process.argv.includes('--check')?'OK':'BUILT'}: e2 q001 and chapel q031–040/q131–140; e1 unchanged`);
 }

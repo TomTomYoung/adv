@@ -33,7 +33,7 @@ export async function loadContent(read = async path => {
       if(value.objects.some(o=>o.quest))throw Error(`${value.id}: クエスト専用objectはクエストJSONに定義してください`);
       merge(data.maps,{[value.id]:value},type);
     }
-    else if(type==='quest') {const quest=selectedQuests.get(value.id)??value;merge(data.quests,{[quest.id]:quest},type);merge(data.scripts,quest.scripts,'script');}
+    else if(type==='quest') {const quest=selectedQuests.get(value.id)??value;if(quest.model?.preserveAcceptedRoute){if(value.story||!quest.story)throw Error('受注済み経路の保持は旧イベント形式からの更新に限ります。');(data.previousQuestRoutes??={})[value.id]=value;}merge(data.quests,{[quest.id]:quest},type);merge(data.scripts,quest.scripts,'script');}
     else if(type==='script') merge(data.scripts,value.scripts,type);
     else data[type]=value;
   }

@@ -110,7 +110,7 @@ export class GameEngine {
     const q=this.data.quests[id];if(!q||!this.unlocked(q))return false;
     const qs=this.state.quests[id];if(qs.stage==='completed')return false;
     const reception=qs.stage==='available'&&questReceptionReason(this.data,this.state,id);if(reception){this.notify(reception);return false;}
-    if(qs.stage==='available')this.state.records.baselines[id]=snapshotRecords(this.state.records);
+    if(qs.stage==='available'){this.state.records.baselines[id]=snapshotRecords(this.state.records);if(q.model?.preserveAcceptedRoute)(this.state.flags.currentStoryRoutes??={})[id]=true;}
     qs.stage='active';this.state.trackedQuest=id;
     this.notify(`依頼「${q.title}」を手帳に記しました。`);return true;
   }

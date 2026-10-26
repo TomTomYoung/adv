@@ -163,13 +163,24 @@ function migrateContentSave(original,data){
 
   return save;
 }
+// Only the newly adopted quests need their old accepted routes. The rest of
+// revision 2, including VM positions and geography, is left byte-for-byte intact.
+function preserveAcceptedQuestRoutes(original,data){
+ const previous=data.previousQuestRoutes;if(!previous)return original;
+ const state=original.state,ids=Object.keys(previous).filter(id=>['active','completed'].includes(state.quests?.[id]?.stage)&&!Object.hasOwn(state.flags?.currentStoryRoutes??{},id)&&!Object.hasOwn(state.flags?.legacyStoryRoutes??{},id));
+ if(!ids.length)return original;
+ const legacy={...data,quests:{...data.quests,...Object.fromEntries(ids.map(id=>[id,previous[id]]))}};
+ if(validateSave(original,legacy).length)return original;
+ const save=clone(original);for(const id of ids)(save.state.flags.legacyStoryRoutes??={})[id]=true;
+ return save;
+}
 export function migrateSave(original,data){
   let edition;
   try{edition=readSavedScenarioEdition(original);if(edition!==resolveScenarioEdition(data.scenarioEditions,data.scenarioEdition??'e1'))return original;}catch{return original;}
   if(scenarioRevisionError(original,data))return original;
   // Revision 2 is a new save lineage. Do not reinterpret missing cohorts or
   // world state as the pre-cut e2 format. Later migrations must be explicit.
-  if(scenarioSaveRevision(data)>1)return original;
+  if(scenarioSaveRevision(data)>1)return preserveAcceptedQuestRoutes(original,data);
   if(data.regionalLegacy&&isRecord(original.state.quests)&&data.regionalQuestIds.every(id=>!Object.hasOwn(original.state.quests,id)&&!Object.hasOwn(original.state.stories??{},id))){
     const legacy=data.regionalLegacy,previous=migrateSave(original,legacy);
     if(validateSave(previous,legacy).length)return original;
@@ -277,6 +288,11 @@ export function validateSave(save,data){
   errors.push(...gearErrors(data,s),...carriedErrors(data,s),...validateJobState(data,s),...battleTurnSaveErrors(s),...gridSaveErrors(s),...frontlineSaveErrors(s,data));
   for(const [id,count] of Object.entries(s.inventory))if(!data.items[id]||!integer(count,0,data.system.maxStack))fail('所持品不正');
   for(const [id,q] of Object.entries(data.quests)){
+    if(q.model?.preserveAcceptedRoute){
+      const current=s.flags.currentStoryRoutes?.[id],legacy=s.flags.legacyStoryRoutes?.[id],stage=s.quests[id]?.stage;
+      if(stage==='available'?(current!==undefined||legacy!==undefined):!((current===true&&legacy===undefined)||(legacy===true&&current===undefined)))fail('依頼の採用経路が不正です');
+      if(legacy===true&&s.stories?.[id])fail('旧経路と新しい物語状態が混在しています');
+    }
     const qs=s.quests[id];if(!isRecord(qs)||!['available','active','completed'].includes(qs.stage)||!Array.isArray(qs.evidence)){fail('依頼状態不正');continue;}
     if(data.game.recordVersion===1&&qs.stage==='active'&&!s.records?.baselines?.[id])fail('受注時の戦績がありません');
     const evidenceKeys=q.locations.filter(loc=>loc.role!=='decision').map(loc=>loc.role);
