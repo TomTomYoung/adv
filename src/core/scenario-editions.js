@@ -13,6 +13,7 @@ export function resolveScenarioEdition(catalog=LEGACY_SCENARIO_EDITIONS,requeste
     if(!known(id)||!isRecord(edition)||typeof edition.label!=='string'||!edition.label.trim()||!isRecord(edition.questOverrides))throw Error('シナリオ版の定義が不正です。');
     for(const [quest,path] of Object.entries(edition.questOverrides))if(!/^[a-z][a-z0-9_]*$/.test(quest)||!dataPath(path))throw Error('シナリオ版の差替え先が不正です。');
     if(edition.geography!==undefined&&!dataPath(edition.geography))throw Error('シナリオ版の地理定義先が不正です。');
+    if(edition.geographyUpgrade!==undefined&&(!dataPath(edition.geographyUpgrade)||!edition.geography))throw Error('シナリオ版の地理更新先が不正です。');
     if(edition.additions!==undefined&&!dataPath(edition.additions))throw Error('シナリオ版の追加定義先が不正です。');
     if(edition.regionalAdditions!==undefined&&!dataPath(edition.regionalAdditions))throw Error('シナリオ版の地域追加先が不正です。');
     if(edition.saveRevision!==undefined&&(!Number.isSafeInteger(edition.saveRevision)||edition.saveRevision<1))throw Error('シナリオ版の保存改訂番号が不正です。');

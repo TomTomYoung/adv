@@ -4,7 +4,9 @@
 
 [TORNEA_ODDLAND.md](TORNEA_ODDLAND.md)：聖王国に属するトルネアの都市・古代の大水門、水門警備隊・灯番・魔力溜まり、オッドランド・狂火・狂王・巫女、機械学会と北の独立国である帝国の背景設定。現行シナリオへの接続境界を記載。平時の往来と100件の設計へ着手し、侵攻・大水門開放・アダの最終盤は保留します。
 
-[SALOME_DESIGN.md](SALOME_DESIGN.md)：学術都市サロメの六地区、三学、既存施設の統合、書庫・機関廟の配置、新規100企画と初期100件の組み方。設計のみです。
+[SALOME_DESIGN.md](SALOME_DESIGN.md)：学術都市サロメの六地区、三学、既存施設の統合、書庫・機関廟の配置、新規100企画と初期100件の組み方。街道と既存施設は実装済みで、新作・旧40件の移設は後続です。
+
+[SALOME_ACCESS_IMPLEMENTATION.md](SALOME_ACCESS_IMPLEMENTATION.md)：高台街道、既存6施設、個人20件の往復、乗合便と旧地理保存の移行。
 
 [ODDLAND_ACCESS_DESIGN.md](ODDLAND_ACCESS_DESIGN.md)：地下関所からの越境、五拠点、100件の受付、国別の出発・帰還、旧保存と版差分、実装順。[第1段階の実装](ODDLAND_ACCESS_IMPLEMENTATION.md)では関所から宿場までの往復、施設、受付・帰還先、版差分と保存移行を接続しました。[第一群10件](../scenarios/editions/e2/ODDLAND_FIRST_TEN.md)まで実装済み。後続4拠点と残る地域依頼は未実装です。
 

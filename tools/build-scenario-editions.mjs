@@ -5,6 +5,7 @@ import {buildSunkenQuests} from './build-sunken-quests.mjs';
 import {buildOddlandQuests} from './build-oddland-quests.mjs';
 import fs from 'node:fs/promises';
 import {buildOddlandGeography} from './build-oddland-geography.mjs';
+import {buildSalomeGeography} from './build-salome-geography.mjs';
 import {buildCompanionEdition} from './build-companion-edition.mjs';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
@@ -116,7 +117,8 @@ export function secondEditionDocument(q,firstSha){
 
 export async function buildScenarioEditions({check=false}={}){
  await buildCompanionEdition({check});
- await buildOddlandGeography({check});
+ const geography=await buildOddlandGeography({check});
+ await buildSalomeGeography(geography,{check});
  await buildOddlandQuests({check});
  await buildChapelQuests({check});
  await buildSunkenQuests({check});

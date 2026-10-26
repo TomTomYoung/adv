@@ -29,7 +29,7 @@ import {voxelMapState,voxelOccupancyReason,voxelAt,voxelPoint} from './voxels.js
 import {scaledEnemy} from './enemy.js';
 import {freshDungeons,enterDungeon,validateDungeonState,DUNGEON_SYSTEMS,dungeonTile,dungeonBlock,dungeonWaterAccess} from './dungeons.js';
 import {storyStateErrors,storyEnding,journeyErrors} from './story.js';
-import {atWorldPlace,hasWorldConversation,savedWorldConversation,resolveStoryWorldPlace,storyArrivalEntryId} from './world.js';
+import {atWorldPlace,hasWorldConversation,savedWorldConversation,resolveStoryWorldPlace,storyArrivalEntryId,locationRoot} from './world.js';
 import {actorStats,canEquip} from './jobs.js';
 import {validateJobState} from './job-validation.js';
 import {layersValid} from './feedback-validation.js';
@@ -174,13 +174,35 @@ function preserveAcceptedQuestRoutes(original,data){
  const save=clone(original);for(const id of ids)(save.state.flags.legacyStoryRoutes??={})[id]=true;
  return save;
 }
+function migrateSettlementGeography(original,data){
+  const migration=data.settlementMigration;
+  if(!migration||original.state?.worldTravel?.version!==migration.previous.worldTravel.version)return original;
+  const previous=preserveAcceptedQuestRoutes(original,migration.previous);
+  if(validateSave(previous,migration.previous).length)return original;
+  const save=clone(previous),state=save.state;
+  state.worldTravel.version=data.worldTravel.version;
+  for(const settlement of migration.settlements){
+    const root=data.worldTravel.settlements[settlement].root;
+    const moved=place=>place?.kind==='town'&&locationRoot(data,place.location)?.id===root;
+    // A current facility, a completed physical action, or a pending departure
+    // proves a visit. Accepting a quest or merely having its definition does not.
+    const visited=state.mode==='town'&&locationRoot(data,state.townLocation)?.id===root||Object.entries(state.stories??{}).some(([id,story])=>{
+      const definition=data.quests[id]?.story;if(!definition?.worldPlaces)return false;
+      const atScene=scene=>moved(definition.worldPlaces[definition.scenes[scene]?.place]);
+      if(state.journey?.quest===id&&atScene(state.journey.from))return true;
+      return story.events.some(event=>{const action=definition.actions[event];return action&&(action.from.some(atScene)||atScene(action.to));});
+    });
+    if(visited)state.worldTravel.visited[settlement]=true;
+  }
+  return save;
+}
 export function migrateSave(original,data){
   let edition;
   try{edition=readSavedScenarioEdition(original);if(edition!==resolveScenarioEdition(data.scenarioEditions,data.scenarioEdition??'e1'))return original;}catch{return original;}
   if(scenarioRevisionError(original,data))return original;
   // Revision 2 is a new save lineage. Do not reinterpret missing cohorts or
   // world state as the pre-cut e2 format. Later migrations must be explicit.
-  if(scenarioSaveRevision(data)>1)return preserveAcceptedQuestRoutes(original,data);
+  if(scenarioSaveRevision(data)>1)return preserveAcceptedQuestRoutes(migrateSettlementGeography(original,data),data);
   if(data.regionalLegacy&&isRecord(original.state.quests)&&data.regionalQuestIds.every(id=>!Object.hasOwn(original.state.quests,id)&&!Object.hasOwn(original.state.stories??{},id))){
     const legacy=data.regionalLegacy,previous=migrateSave(original,legacy);
     if(validateSave(previous,legacy).length)return original;

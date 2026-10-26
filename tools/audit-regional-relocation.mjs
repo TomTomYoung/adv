@@ -96,7 +96,7 @@ export function resolveBattle(g,result){
 export async function loadStages(){
  // Historical baseline, intentionally pinned before the one-time e2 save cut.
  // Current relocation behavior is tested separately against the live catalog.
- const compatibleRead=async file=>{if(file==='data/scenario-editions/e2/geography.json')return read('tests/fixtures/e2-geography-before-relocation.json');const value=await read(file);if(file==='data/scenario-editions.json'){delete value.editions.e2.saveRevision;value.editions.e2.questOverrides={q001:value.editions.e2.questOverrides.q001};}return value;};
+ const compatibleRead=async file=>{if(file==='data/scenario-editions/e2/geography.json')return read('tests/fixtures/e2-geography-before-relocation.json');const value=await read(file);if(file==='data/scenario-editions.json')delete value.editions.e2.geographyUpgrade;if(file==='data/scenario-editions.json'){delete value.editions.e2.saveRevision;value.editions.e2.questOverrides={q001:value.editions.e2.questOverrides.q001};}return value;};
  const current=await loadContent(compatibleRead,{edition:'e2'}),earliest=await loadContent(async file=>{const value=await compatibleRead(file);if(file==='data/scenario-editions.json'){delete value.editions.e2.additions;delete value.editions.e2.geography;delete value.editions.e2.regionalAdditions;}return value;},{edition:'e2'});
  return {q001:earliest,companions:current.worldTravelLegacy,border:current.regionalLegacy,firstTen:current};
 }

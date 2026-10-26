@@ -4,7 +4,7 @@ import {dungeonRestrictionReason} from './dungeon-restrictions.js';
 import {managesOil,oilRoom} from './expedition-oil.js';
 
 const own=(o,k)=>typeof k==='string'&&Object.hasOwn(o??{},k);
-export const freshWorldTravel=data=>({version:1,visited:{[data.worldTravel.home]:true},registrations:{},returnAnchor:data.worldTravel.home,oilStores:{}});
+export const freshWorldTravel=data=>({version:data.worldTravel.version,visited:{[data.worldTravel.home]:true},registrations:{},returnAnchor:data.worldTravel.home,oilStores:{}});
 export function townSettlement(data,state){
   if(state.mode!=='town'||dungeonInterior(data,state))return null;
   const root=locationRoot(data,state.townLocation)?.id;
@@ -85,18 +85,37 @@ export function publicSupply(engine){
   }else {state.light=data.system.lightCapacity;if(state.expedition)state.expedition.lamp={fuel:state.light,effect:null};}
   engine.notify('公開給油所で携行灯に油を補充した。手当と宿泊は別の窓口で受けられる。');return true;
 }
+export function shuttlePlan(engine,id){
+  const {data,state}=engine,route=data.worldTravel?.shuttles?.find(r=>r.id===id),from=townSettlement(data,state);
+  if(!route||!route.stops.includes(from)||state.townLocation!==data.worldTravel.settlements[from].root)return {ok:false,reason:'乗合便は町の停留所から利用してください。'};
+  if(state.waiting||state.battle||state.battleResult||state.vm.length)return {ok:false,reason:'会話・戦闘を終えてから乗車してください。'};
+  const to=route.stops.find(s=>s!==from);
+  if(!route.stops.every(s=>state.worldTravel.visited[s]))return {ok:false,reason:'初めてのサロメへは高台街道を歩いてください。'};
+  if(state.gold<route.cost)return {ok:false,reason:'乗車賃が足りません。高台街道は無料で歩けます。'};
+  return {ok:true,route,to};
+}
+export function rideShuttle(engine,id){
+  const p=shuttlePlan(engine,id);if(!p.ok){engine.notify(p.reason);return false;}
+  engine.state.gold-=p.route.cost;engine.arriveSettlement(engine.data.worldTravel.settlements[p.to].root);
+  engine.notify(`${engine.data.worldTravel.settlements[p.to].name}に着いた。乗車賃 ${p.route.cost}G。`);return true;
+}
 export function worldTravelView(engine){
   const {data,state}=engine;if(!data.worldTravel)return null;
   const config=data.worldTravel,settlement=config.settlements[townSettlement(data,state)],anchor=config.settlements[state.worldTravel.returnAnchor],legacy=config.settlements[legacyExpeditionSettlement(data,state)],routes=config.routes.map(r=>expeditionRoute(data,state,r));
   const actions=routes.filter(r=>sideAt(state,r)).map(r=>({label:r.registration&&!state.worldTravel.registrations[r.registration]?'探索隊を記帳してオッドランド方面へ進む（無料）':r.name,intent:{type:'world.cross',route:r.id},enabled:worldCrossPlan(engine,r.id).ok,reason:worldCrossPlan(engine,r.id).reason??''}));
   if(settlement?.publicSupply===state.townLocation)actions.push({label:'携行油を補充する（無料）',intent:{type:'world.supply'},enabled:!state.waiting&&!state.battle&&!state.vm.length});
+  for(const route of config.shuttles??[]){
+    if(!route.stops.some(id=>config.settlements[id].root===state.townLocation))continue;
+    const plan=shuttlePlan(engine,route.id),destination=route.stops.find(id=>id!==townSettlement(data,state));
+    actions.push({label:`${config.settlements[destination].name}への乗合便（${route.cost}G）`,intent:{type:'world.ride',route:route.id},enabled:plan.ok,reason:plan.reason??''});
+  }
   const country=settlement?.country??legacy?.country??config.mapCountries[state.location?.map]??config.settlements[config.home].country;
   return {country:config.countries[country],settlement:settlement?.name??null,returnAnchor:anchor.name,actions,markers:routes.flatMap(r=>[r.a,r.b].filter(p=>p.kind==='dungeon'&&p.map===state.location?.map).map(p=>({id:`route:${r.id}`,name:r.name,x:p.x,y:p.y,kind:'map_connection',glyph:'⇄',inInteractionRange:atWorldPlace(state,p)})))};
 }
 export function worldTravelDefinitionErrors(data){
   const d=data.worldTravel;if(!d)return [];
   const errors=[],bad=message=>errors.push(`地域移動: ${message}`),id=x=>typeof x==='string'&&/^[a-z][a-z0-9_]*$/.test(x);
-  if(!isRecord(d)||d.version!==1||!isRecord(d.settlements)||!isRecord(d.countries)||!isRecord(d.mapCountries)||!isRecord(d.mapRegistrations)||!isRecord(d.questSettlements)||!isRecord(d.dungeonSettlements)||!Array.isArray(d.routes)||!own(d.settlements,d.home))return ['地域移動: 基本定義不正'];
+  if(!isRecord(d)||![1,2].includes(d.version)||!isRecord(d.settlements)||!isRecord(d.countries)||!isRecord(d.mapCountries)||!isRecord(d.mapRegistrations)||!isRecord(d.questSettlements)||!isRecord(d.dungeonSettlements)||!Array.isArray(d.routes)||!own(d.settlements,d.home))return ['地域移動: 基本定義不正'];
   const roots=new Set(),ids=new Set(),registrations=new Set(d.routes.filter(isRecord).map(r=>r.registration).filter(Boolean));
   for(const [key,s] of Object.entries(d.settlements)){
     if(!isRecord(s)){bad(`拠点不正 ${key}`);continue;}
@@ -126,12 +145,19 @@ export function worldTravelDefinitionErrors(data){
     if(r.a?.kind==='town'&&r.b?.kind==='town')bad('徒歩経路のない拠点間接続');
     if(r.a?.kind==='dungeon'&&r.b?.kind==='dungeon'&&r.a.dungeon!==r.b.dungeon)bad('探索番号を保持する接続は同一迷宮内に定義してください');
   }
+  if(d.shuttles!==undefined){
+    if(!Array.isArray(d.shuttles))bad('乗合便の一覧不正');
+    else for(const r of d.shuttles){
+      if(!isRecord(r)||!id(r.id)||ids.has(r.id)||!Number.isSafeInteger(r.cost)||r.cost<0||!Array.isArray(r.stops)||r.stops.length!==2||r.stops[0]===r.stops[1]||r.stops.some(s=>!own(d.settlements,s))){bad('乗合便の定義不正');continue;}
+      ids.add(r.id);if(d.settlements[r.stops[0]].country!==d.settlements[r.stops[1]].country)bad('乗合便は国内の訪問済み拠点間だけです');
+    }
+  }
   return errors;
 }
 export function worldTravelSaveErrors(data,state){
   if(!data.worldTravel)return state.worldTravel===undefined?[]:['この版には地域移動の記録がありません'];
   const t=state.worldTravel,d=data.worldTravel,fail=()=>['地域移動・帰還先の保存状態不正'];
-  if(!isRecord(t)||t.version!==1||Object.keys(t).some(k=>!['version','visited','registrations','returnAnchor','oilStores'].includes(k))||!isRecord(t.visited)||!isRecord(t.registrations)||!isRecord(t.oilStores)||!own(d.settlements,t.returnAnchor)||t.visited[t.returnAnchor]!==true||t.visited[d.home]!==true)return fail();
+  if(!isRecord(t)||t.version!==d.version||Object.keys(t).some(k=>!['version','visited','registrations','returnAnchor','oilStores'].includes(k))||!isRecord(t.visited)||!isRecord(t.registrations)||!isRecord(t.oilStores)||!own(d.settlements,t.returnAnchor)||t.visited[t.returnAnchor]!==true||t.visited[d.home]!==true)return fail();
   for(const [id,value] of Object.entries(t.visited))if(!own(d.settlements,id)||value!==true)return fail();
   const registrations=new Set(d.routes.map(r=>r.registration).filter(Boolean));
   if(Object.entries(t.registrations).some(([id,v])=>!registrations.has(id)||v!==true))return fail();
