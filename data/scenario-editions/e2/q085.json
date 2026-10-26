@@ -1,0 +1,2677 @@
+{
+  "schemaVersion": 1,
+  "id": "q085",
+  "number": 85,
+  "title": "方位のない羅針盤",
+  "client": "探検家のルウ",
+  "brief": "羅針盤が人を指す。地図作りに使えるか試してください。",
+  "region": 9,
+  "type": "authored_progression",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。 旧王領の村の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q085_clue_a",
+      "title": "方位のない羅針盤：現場の痕跡",
+      "points": [
+        {
+          "map": "region_9_f1",
+          "x": 6,
+          "y": 3,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q085.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q085.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q085"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q085"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "q085_clue_b",
+      "title": "方位のない羅針盤：記録と証言",
+      "points": [
+        {
+          "map": "region_9_f1",
+          "x": 5,
+          "y": 11,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q085.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q085.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q085"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q085"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "q085_decision",
+      "title": "方位のない羅針盤：決着の場",
+      "points": [
+        {
+          "map": "region_9_f1",
+          "x": 17,
+          "y": 3,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q085.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q085.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q085.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q085"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "q085_observatory_entry",
+      "title": "方位のない羅針盤の現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q085.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q085.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q085"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q085.observatory.visit",
+      "points": [
+        {
+          "dungeon": "region_9",
+          "map": "region_9_f1",
+          "x": 17,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "id": "q085_observatory_exit",
+      "title": "帰還標を据える入口",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "exit",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q085.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q085.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q085"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q085.observatory.visit",
+      "points": [
+        {
+          "dungeon": "region_9",
+          "map": "region_9_f1",
+          "x": 1,
+          "y": 1
+        }
+      ]
+    },
+    {
+      "id": "q085_observatory_corner",
+      "title": "針を試す曲がり角",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "corner",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q085.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q085.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q085"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q085.observatory.visit",
+      "points": [
+        {
+          "dungeon": "region_9",
+          "map": "region_9_f1",
+          "x": 7,
+          "y": 3
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_9_f1",
+      "x": 6,
+      "y": 3,
+      "object": "q085_clue_a",
+      "role": "clue_a"
+    },
+    {
+      "map": "region_9_f1",
+      "x": 5,
+      "y": 11,
+      "object": "q085_clue_b",
+      "role": "clue_b"
+    },
+    {
+      "map": "region_9_f1",
+      "x": 17,
+      "y": 3,
+      "object": "q085_decision",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "入口の標を固定し、脱出用具として登録する",
+      "text": "迷宮で迷っても戻る向きが分かる。ルウは方角用の盤を別に持つ。",
+      "gold": 153,
+      "xp": 132
+    },
+    "contract": {
+      "label": "盤を磁化し、北を指すよう直す",
+      "text": "北は指した。対の標を使う帰還機能は失われる。",
+      "gold": 173,
+      "xp": 103
+    },
+    "compromise": {
+      "label": "標の受渡しを決めて道案内に使う",
+      "text": "道案内には使えた。先導者が倒れた時の交代手順も決める。",
+      "gold": 99,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/observatory-first.mjs",
+    "world": {
+      "truth": "羅針盤は方角でなく持主の対になる帰還標を追い、標が人の荷に移されている。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "羅針盤は方角でなく持主の対になる帰還標を追い、標が人の荷に移されている。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "羅針盤が人を指す。地図作りに使えるか試してください。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "探検家のルウ",
+        "observation": "羅針盤が人を指す。地図作りに使えるか試してください。",
+        "belief": "羅針盤が人を指す。地図作りに使えるか試してください。",
+        "goal": "羅針盤が人を指す。地図作りに使えるか試してください。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "羅針盤が人を指す。地図作りに使えるか試してください。",
+      "progression": "帰還標を実際に置き替え、針が何を追うか確かめた上で隊の運用を試す。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q085.observatory.entry"
+        },
+        {
+          "id": "marker",
+          "script": "q085.observatory.marker"
+        },
+        {
+          "id": "entrance",
+          "script": "q085.observatory.entrance"
+        },
+        {
+          "id": "leader",
+          "script": "q085.observatory.leader"
+        },
+        {
+          "id": "place_marker",
+          "script": "q085.observatory.place_marker"
+        },
+        {
+          "id": "recover_marker",
+          "script": "q085.observatory.recover_marker"
+        },
+        {
+          "id": "fixed",
+          "script": "q085.observatory.fixed"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "羅針盤が人を指す。地図作りに使えるか試してください。",
+      "openQuestion": "方位のない羅針盤の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "frameShift",
+      "newInformation": "羅針盤は方角でなく持主の対になる帰還標を追い、標が人の荷に移されている。",
+      "retroactiveTargets": [
+        "marker"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q085.flow.entry"
+      },
+      {
+        "id": "marker",
+        "script": "q085.flow.marker"
+      },
+      {
+        "id": "entrance",
+        "script": "q085.flow.entrance"
+      },
+      {
+        "id": "leader",
+        "script": "q085.flow.leader"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q085.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "帰還標を実際に置き替え、針が何を追うか確かめた上で隊の運用を試す。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "帰還標を実際に置き替え、針が何を追うか確かめた上で隊の運用を試す。",
+    "flowVersion": 2,
+    "entryScript": "q085.observatory.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "羅針盤が隊員の荷袋へ向く。荷袋を置けば針もそこで止まる。",
+        "options": [
+          {
+            "id": "bag",
+            "text": "荷袋の中の対の標を取り出す",
+            "to": "marker",
+            "action": "entry_bag"
+          },
+          {
+            "id": "north",
+            "text": "盤を磁化し、北を指すよう直す",
+            "to": "@contract",
+            "action": "entry_north"
+          }
+        ]
+      },
+      {
+        "id": "marker",
+        "place": "entry",
+        "text": "羅針盤は方角でなく持主の対になる帰還標を追い、標が人の荷に移されている。 標を入口へ置くか、動く先導者へ渡すかを試せる。",
+        "options": [
+          {
+            "id": "entrance",
+            "text": "標を入口に置いて一つ曲がり角を進む",
+            "to": "place_marker",
+            "action": "marker_entrance"
+          },
+          {
+            "id": "leader",
+            "text": "標を先導者へ渡して隊を動かす",
+            "to": "leader",
+            "action": "marker_leader"
+          }
+        ]
+      },
+      {
+        "id": "entrance",
+        "place": "corner",
+        "text": "角を曲がっても針は入口へ向く。方角ではなく、帰る先が定まった。",
+        "options": [
+          {
+            "id": "exit",
+            "text": "入口の標を固定し、脱出用具として登録する",
+            "to": "fixed",
+            "action": "entrance_exit"
+          },
+          {
+            "id": "leader",
+            "text": "固定せず、先導者の交代を試す",
+            "to": "recover_marker",
+            "action": "entrance_leader"
+          }
+        ]
+      },
+      {
+        "id": "leader",
+        "place": "corner",
+        "text": "標を次の隊員へ渡すと針が向きを変えた。先導者が動けなくても役を交代できる。",
+        "options": [
+          {
+            "id": "relay",
+            "text": "標の受渡しを決めて道案内に使う",
+            "to": "@compromise",
+            "action": "leader_relay"
+          },
+          {
+            "id": "entrance",
+            "text": "先導者の追跡はやめ、入口を試す",
+            "to": "place_marker",
+            "action": "leader_entrance"
+          }
+        ]
+      },
+      {
+        "id": "place_marker",
+        "place": "exit",
+        "text": "帰還標を入口へ置く。先導役の二人と曲がり角へ進み、針の向きを試す。",
+        "options": [
+          {
+            "id": "walk",
+            "text": "標を置き、曲がり角まで歩く",
+            "to": "entrance",
+            "action": "place_marker_walk"
+          }
+        ]
+      },
+      {
+        "id": "recover_marker",
+        "place": "exit",
+        "text": "入口へ戻り、置いてあった帰還標を確かめた。今度は動く先導者に持ってもらう。",
+        "options": [
+          {
+            "id": "leader",
+            "text": "標を拾って先導者へ渡し、角で交代を試す",
+            "to": "leader",
+            "action": "recover_marker_leader"
+          }
+        ]
+      },
+      {
+        "id": "fixed",
+        "place": "exit",
+        "text": "入口へ戻り、標を固定して脱出用具として登録する。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@informed",
+            "action": "fixed_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "observatory-twenty",
+      "settlement": "oddland_village",
+      "saveRevision": 2,
+      "scope": "観測所20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q085.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "針は北へ向かず、荷袋を置くとその場へ止まる。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q085",
+          "key": "clue_a",
+          "text": "針は北へ向かず、荷袋を置くとその場へ止まる。"
+        }
+      ]
+    },
+    "q085.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "探検家のルウ",
+          "text": "製作票には航法でなく回収用と書かれ、対の番号があります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q085",
+          "key": "clue_b",
+          "text": "製作票には航法でなく回収用と書かれ、対の番号がある。"
+        }
+      ]
+    },
+    "q085.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "方位のない羅針盤\n\n羅針盤が人を指す。地図作りに使えるか試してください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "針を引く魔物を倒し盤を磁化し直す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "北は指した。対の標を使う帰還機能は失われる。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q085",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "帰還標を入口へ据え脱出具として使う",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q085.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q085.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "羅針盤は方角でなく持主の対になる帰還標を追い、標が人の荷に移されている。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "迷宮で迷っても戻る向きが分かる。ルウは方角用の盤を別に持つ。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q085",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "標を先導者に持たせ隊を離さない",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "道案内には使えた。先導者が倒れた時の交代手順も決める。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q085",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q085.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "方位のない羅針盤\n\n羅針盤が人を指す。地図作りに使えるか試してください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q085.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q085.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "羅針盤は方角でなく持主の対になる帰還標を追い、標が人の荷に移されている。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q085.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "針を引く魔物を倒し盤を磁化し直す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "北は指した。対の標を使う帰還機能は失われる。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q085",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "帰還標を入口へ据え脱出具として使う",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q085.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q085.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "迷宮で迷っても戻る向きが分かる。ルウは方角用の盤を別に持つ。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q085",
+                  "outcome": "informed"
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q085.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q085.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "compromise",
+              "text": "標を先導者に持たせ隊を離さない",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "道案内には使えた。先導者が倒れた時の交代手順も決める。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q085",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」探検家のルウは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられる。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q085.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q085.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q085.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "迷宮で迷っても戻る向きが分かる。ルウは方角用の盤を別に持つ。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q085.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "北は指した。対の標を使う帰還機能は失われる。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q085.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "道案内には使えた。先導者が倒れた時の交代手順も決める。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q085.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q085.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q085.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q085.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q085.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q085.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q085.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "羅針盤が隊員の荷袋へ向く。荷袋を置けば針もそこで止まる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "bag",
+              "text": "荷袋の中の対の標を取り出す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q085.flow.marker"
+                }
+              ]
+            },
+            {
+              "id": "north",
+              "text": "盤を磁化し、北を指すよう直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q085.flow.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q085.flow.marker": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q085.node",
+          "value": "marker"
+        },
+        {
+          "op": "say",
+          "text": "羅針盤は方角でなく持主の対になる帰還標を追い、標が人の荷に移されている。 標を入口へ置くか、動く先導者へ渡すかを試せる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "entrance",
+              "text": "標を入口に置いて一つ曲がり角を進む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q085.flow.entrance"
+                }
+              ]
+            },
+            {
+              "id": "leader",
+              "text": "標を先導者へ渡して隊を動かす",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q085.flow.leader"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q085.flow.entrance": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q085.node",
+          "value": "entrance"
+        },
+        {
+          "op": "say",
+          "text": "角を曲がっても針は入口へ向く。方角ではなく、帰る先が定まった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "exit",
+              "text": "入口の標を固定し、脱出用具として登録する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q085.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "leader",
+              "text": "固定せず、先導者の交代を試す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q085.flow.leader"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q085.flow.leader": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q085.node",
+          "value": "leader"
+        },
+        {
+          "op": "say",
+          "text": "標を次の隊員へ渡すと針が向きを変えた。先導者が動けなくても役を交代できる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "relay",
+              "text": "標の受渡しを決めて道案内に使う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q085.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "entrance",
+              "text": "先導者の追跡はやめ、入口を試す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q085.flow.entrance"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q085.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q085.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "迷宮で迷っても戻る向きが分かる。ルウは方角用の盤を別に持つ。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q085",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q085.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q085.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "北は指した。対の標を使う帰還機能は失われる。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q085",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q085.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q085.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "道案内には使えた。先導者が倒れた時の交代手順も決める。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q085",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q085.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q085.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q085.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "迷宮で迷っても戻る向きが分かる。ルウは方角用の盤を別に持つ。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "北は指した。対の標を使う帰還機能は失われる。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "道案内には使えた。先導者が倒れた時の交代手順も決める。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q085"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q085.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q085.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q085.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "marker",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q085.flow.marker"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "entrance",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q085.flow.entrance"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "leader",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q085.flow.leader"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q085.flow.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q085.observatory.entry": {
+      "storyQuest": "q085",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q085",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "羅針盤が隊員の荷袋へ向く。荷袋を置けば針もそこで止まる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "bag",
+              "text": "荷袋の中の対の標を取り出す",
+              "storyAction": {
+                "quest": "q085",
+                "action": "entry_bag"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q085",
+                  "action": "entry_bag"
+                },
+                {
+                  "op": "jump",
+                  "script": "q085.observatory.marker"
+                }
+              ]
+            },
+            {
+              "id": "north",
+              "text": "盤を磁化し、北を指すよう直す",
+              "storyAction": {
+                "quest": "q085",
+                "action": "entry_north"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q085",
+                  "action": "entry_north"
+                },
+                {
+                  "op": "jump",
+                  "script": "q085.observatory.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q085.observatory.marker": {
+      "storyQuest": "q085",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q085",
+          "scene": "marker"
+        },
+        {
+          "op": "narrate",
+          "text": "羅針盤は方角でなく持主の対になる帰還標を追い、標が人の荷に移されている。 標を入口へ置くか、動く先導者へ渡すかを試せる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "entrance",
+              "text": "標を入口に置いて一つ曲がり角を進む",
+              "storyAction": {
+                "quest": "q085",
+                "action": "marker_entrance"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q085",
+                  "action": "marker_entrance"
+                }
+              ]
+            },
+            {
+              "id": "leader",
+              "text": "標を先導者へ渡して隊を動かす",
+              "storyAction": {
+                "quest": "q085",
+                "action": "marker_leader"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q085",
+                  "action": "marker_leader"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q085.observatory.entrance": {
+      "storyQuest": "q085",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q085",
+          "scene": "entrance"
+        },
+        {
+          "op": "narrate",
+          "text": "角を曲がっても針は入口へ向く。方角ではなく、帰る先が定まった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "exit",
+              "text": "入口の標を固定し、脱出用具として登録する",
+              "storyAction": {
+                "quest": "q085",
+                "action": "entrance_exit"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q085",
+                  "action": "entrance_exit"
+                }
+              ]
+            },
+            {
+              "id": "leader",
+              "text": "固定せず、先導者の交代を試す",
+              "storyAction": {
+                "quest": "q085",
+                "action": "entrance_leader"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q085",
+                  "action": "entrance_leader"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q085.observatory.leader": {
+      "storyQuest": "q085",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q085",
+          "scene": "leader"
+        },
+        {
+          "op": "narrate",
+          "text": "標を次の隊員へ渡すと針が向きを変えた。先導者が動けなくても役を交代できる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "relay",
+              "text": "標の受渡しを決めて道案内に使う",
+              "storyAction": {
+                "quest": "q085",
+                "action": "leader_relay"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q085",
+                  "action": "leader_relay"
+                },
+                {
+                  "op": "jump",
+                  "script": "q085.observatory.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "entrance",
+              "text": "先導者の追跡はやめ、入口を試す",
+              "storyAction": {
+                "quest": "q085",
+                "action": "leader_entrance"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q085",
+                  "action": "leader_entrance"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q085.observatory.place_marker": {
+      "storyQuest": "q085",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q085",
+          "scene": "place_marker"
+        },
+        {
+          "op": "narrate",
+          "text": "帰還標を入口へ置く。先導役の二人と曲がり角へ進み、針の向きを試す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "walk",
+              "text": "標を置き、曲がり角まで歩く",
+              "storyAction": {
+                "quest": "q085",
+                "action": "place_marker_walk"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q085",
+                  "action": "place_marker_walk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q085.observatory.recover_marker": {
+      "storyQuest": "q085",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q085",
+          "scene": "recover_marker"
+        },
+        {
+          "op": "narrate",
+          "text": "入口へ戻り、置いてあった帰還標を確かめた。今度は動く先導者に持ってもらう。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "leader",
+              "text": "標を拾って先導者へ渡し、角で交代を試す",
+              "storyAction": {
+                "quest": "q085",
+                "action": "recover_marker_leader"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q085",
+                  "action": "recover_marker_leader"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q085.observatory.fixed": {
+      "storyQuest": "q085",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q085",
+          "scene": "fixed"
+        },
+        {
+          "op": "narrate",
+          "text": "入口へ戻り、標を固定して脱出用具として登録する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q085",
+                "action": "fixed_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q085",
+                  "action": "fixed_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q085.observatory.end.informed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q085.observatory.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "迷宮で迷っても戻る向きが分かる。ルウは方角用の盤を別に持つ。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q085",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q085.observatory.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "北は指した。対の標を使う帰還機能は失われる。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q085",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q085.observatory.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "道案内には使えた。先導者が倒れた時の交代手順も決める。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q085",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q085.observatory.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q085"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q085.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q085.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q085.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "迷宮で迷っても戻る向きが分かる。ルウは方角用の盤を別に持つ。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "北は指した。対の標を使う帰還機能は失われる。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "道案内には使えた。先導者が倒れた時の交代手順も決める。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q085"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q085.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q085.observatory.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "marker",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q085.observatory.marker"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "entrance",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q085.observatory.entrance"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "leader",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q085.observatory.leader"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "place_marker",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q085.observatory.place_marker"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "recover_marker",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q085.observatory.recover_marker"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "fixed",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q085.observatory.fixed"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q085.observatory.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "方位のない羅針盤の現場",
+      "exit": "帰還標を据える入口",
+      "corner": "針を試す曲がり角",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "exit"
+      ],
+      [
+        "transit",
+        "corner"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "exit",
+          "corner",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "magnetized": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "magnetized"
+      },
+      "fixed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "fixed"
+      },
+      "bagAt": {
+        "type": "enum",
+        "initial": "party",
+        "values": [
+          "entry",
+          "exit",
+          "corner",
+          "transit",
+          "party",
+          "marker",
+          "compass",
+          "guide",
+          "nextGuide"
+        ],
+        "meaning": "bag の所在または保持者"
+      },
+      "markerAt": {
+        "type": "enum",
+        "initial": "bag",
+        "values": [
+          "entry",
+          "exit",
+          "corner",
+          "transit",
+          "party",
+          "bag",
+          "compass",
+          "guide",
+          "nextGuide"
+        ],
+        "meaning": "marker の所在または保持者"
+      },
+      "compassAt": {
+        "type": "enum",
+        "initial": "party",
+        "values": [
+          "entry",
+          "exit",
+          "corner",
+          "transit",
+          "party",
+          "bag",
+          "marker",
+          "guide",
+          "nextGuide"
+        ],
+        "meaning": "compass の所在または保持者"
+      },
+      "guideAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "exit",
+          "corner",
+          "transit"
+        ],
+        "meaning": "guide の所在または保持者"
+      },
+      "nextGuideAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "exit",
+          "corner",
+          "transit"
+        ],
+        "meaning": "nextGuide の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "bag": {
+        "holder": "bagAt",
+        "kind": "item"
+      },
+      "marker": {
+        "holder": "markerAt",
+        "kind": "item"
+      },
+      "compass": {
+        "holder": "compassAt",
+        "kind": "item"
+      },
+      "guide": {
+        "holder": "guideAt",
+        "kind": "person"
+      },
+      "nextGuide": {
+        "holder": "nextGuideAt",
+        "kind": "person"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "羅針盤は方角でなく持主の対になる帰還標を追い、標が人の荷に移されている。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "方位のない羅針盤の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "marker": {
+        "title": "方位のない羅針盤の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "entrance": {
+        "title": "針を試す曲がり角",
+        "place": "corner",
+        "cast": [],
+        "requires": true
+      },
+      "leader": {
+        "title": "針を試す曲がり角",
+        "place": "corner",
+        "cast": [],
+        "requires": true
+      },
+      "place_marker": {
+        "title": "帰還標を据える入口",
+        "place": "exit",
+        "cast": [],
+        "requires": true
+      },
+      "recover_marker": {
+        "title": "帰還標を据える入口",
+        "place": "exit",
+        "cast": [],
+        "requires": true
+      },
+      "fixed": {
+        "title": "帰還標を据える入口",
+        "place": "exit",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_bag": {
+        "from": [
+          "entry"
+        ],
+        "to": "marker",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "marker",
+            "from": "bag",
+            "to": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "entry",
+            "requires": true
+          }
+        ],
+        "once": false
+      },
+      "entry_north": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "magnetized",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "marker_entrance": {
+        "from": [
+          "marker"
+        ],
+        "to": "place_marker",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "guide",
+              "nextGuide"
+            ],
+            "path": [
+              "transit",
+              "exit"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "exit",
+          "companions": [
+            "guide",
+            "nextGuide"
+          ]
+        },
+        "depart": []
+      },
+      "marker_leader": {
+        "from": [
+          "marker"
+        ],
+        "to": "leader",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "guide",
+              "nextGuide"
+            ],
+            "path": [
+              "transit",
+              "corner"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "marker",
+            "from": "guide",
+            "to": "nextGuide"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "corner",
+          "companions": [
+            "guide",
+            "nextGuide"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "marker",
+            "from": "party",
+            "to": "guide"
+          }
+        ]
+      },
+      "entrance_exit": {
+        "from": [
+          "entrance"
+        ],
+        "to": "fixed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "guide",
+              "nextGuide"
+            ],
+            "path": [
+              "transit",
+              "exit"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "exit",
+          "companions": [
+            "guide",
+            "nextGuide"
+          ]
+        },
+        "depart": []
+      },
+      "entrance_leader": {
+        "from": [
+          "entrance"
+        ],
+        "to": "recover_marker",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "guide",
+              "nextGuide"
+            ],
+            "path": [
+              "transit",
+              "exit"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "exit",
+          "companions": [
+            "guide",
+            "nextGuide"
+          ]
+        },
+        "depart": []
+      },
+      "leader_relay": {
+        "from": [
+          "leader"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "leader_entrance": {
+        "from": [
+          "leader"
+        ],
+        "to": "place_marker",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "guide",
+              "nextGuide"
+            ],
+            "path": [
+              "transit",
+              "exit"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "exit",
+          "companions": [
+            "guide",
+            "nextGuide"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "marker",
+            "from": "nextGuide",
+            "to": "party"
+          }
+        ]
+      },
+      "place_marker_walk": {
+        "from": [
+          "place_marker"
+        ],
+        "to": "entrance",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "guide",
+              "nextGuide"
+            ],
+            "path": [
+              "transit",
+              "corner"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "corner",
+          "companions": [
+            "guide",
+            "nextGuide"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "marker",
+            "from": "party",
+            "to": "exit"
+          }
+        ]
+      },
+      "recover_marker_leader": {
+        "from": [
+          "recover_marker"
+        ],
+        "to": "leader",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "guide",
+              "nextGuide"
+            ],
+            "path": [
+              "transit",
+              "corner"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "marker",
+            "from": "guide",
+            "to": "nextGuide"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "corner",
+          "companions": [
+            "guide",
+            "nextGuide"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "marker",
+            "from": "exit",
+            "to": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "marker",
+            "from": "party",
+            "to": "guide"
+          }
+        ]
+      },
+      "fixed_finish": {
+        "from": [
+          "fixed"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "fixed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q085.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q085.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q085.values.partyAt"
+                },
+                "right": "exit"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q085.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q085.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q085.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q085.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q085.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q085.values.partyAt"
+                },
+                "right": "corner"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_9",
+        "map": "region_9_f1",
+        "x": 17,
+        "y": 3
+      },
+      "exit": {
+        "kind": "dungeon",
+        "dungeon": "region_9",
+        "map": "region_9_f1",
+        "x": 1,
+        "y": 1
+      },
+      "corner": {
+        "kind": "dungeon",
+        "dungeon": "region_9",
+        "map": "region_9_f1",
+        "x": 7,
+        "y": 3
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_village",
+  "receptionLocations": [
+    "royal_board"
+  ]
+}

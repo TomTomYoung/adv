@@ -1,0 +1,2930 @@
+{
+  "schemaVersion": 1,
+  "id": "q084",
+  "number": 84,
+  "title": "帰還信号",
+  "client": "遭難者家族のマオ",
+  "brief": "死んだはずの隊から帰還信号が届いた。発信元を探してください。",
+  "region": 9,
+  "type": "authored_progression",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。 旧王領の村の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q084_clue_a",
+      "title": "帰還信号：現場の痕跡",
+      "points": [
+        {
+          "map": "region_9_f1",
+          "x": 4,
+          "y": 5,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q084.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q084.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q084"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q084"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "q084_clue_b",
+      "title": "帰還信号：記録と証言",
+      "points": [
+        {
+          "map": "region_9_f1",
+          "x": 3,
+          "y": 13,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q084.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q084.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q084"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q084"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "q084_decision",
+      "title": "帰還信号：決着の場",
+      "points": [
+        {
+          "map": "region_9_f1",
+          "x": 9,
+          "y": 11,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q084.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q084.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q084.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q084"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "q084_observatory_entry",
+      "title": "帰還信号の現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q084.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q084.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q084"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q084.observatory.visit",
+      "points": [
+        {
+          "dungeon": "region_9",
+          "map": "region_9_f1",
+          "x": 9,
+          "y": 11
+        }
+      ]
+    },
+    {
+      "id": "q084_observatory_beacon",
+      "title": "反復する救助標と矢印",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "beacon",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q084.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q084.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q084"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q084.observatory.visit",
+      "points": [
+        {
+          "dungeon": "region_9",
+          "map": "region_9_f1",
+          "x": 3,
+          "y": 13
+        }
+      ]
+    },
+    {
+      "id": "q084_observatory_crossing",
+      "title": "担架の跡がある上層の空気室",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "crossing",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q084.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q084.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q084"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q084.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_rescue",
+          "map": "e2_observatory_rescue",
+          "x": 7,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "id": "q084_observatory_survivors",
+      "title": "返事をする一行の空気室",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "survivors",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q084.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q084.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q084"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q084.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_rescue",
+          "map": "e2_observatory_rescue",
+          "x": 13,
+          "y": 7
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_9_f1",
+      "x": 4,
+      "y": 5,
+      "object": "q084_clue_a",
+      "role": "clue_a"
+    },
+    {
+      "map": "region_9_f1",
+      "x": 3,
+      "y": 13,
+      "object": "q084_clue_b",
+      "role": "clue_b"
+    },
+    {
+      "map": "region_9_f1",
+      "x": 9,
+      "y": 11,
+      "object": "q084_decision",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "返事を聞きながら担架の一行へ追い付く",
+      "text": "生存者へ追い付いた。マオは帰還信号に現在地を付ける案を出す。",
+      "gold": 153,
+      "xp": 132
+    },
+    "contract": {
+      "label": "発信機だけを回収して家族へ返す",
+      "text": "機械は戻った。家族は声を聴けるが、本人の行方は残る。",
+      "gold": 173,
+      "xp": 103
+    },
+    "compromise": {
+      "label": "移動先の矢印を専門の救助隊へ送る",
+      "text": "専門の隊が後を引き受けた。反復信号は中継の役に立つ。",
+      "gold": 99,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/observatory-first.mjs",
+    "world": {
+      "truth": "信号は隊が残した救助標の反復で、遭難者は発信後に別ルートへ移動している。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "信号は隊が残した救助標の反復で、遭難者は発信後に別ルートへ移動している。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "死んだはずの隊から帰還信号が届いた。発信元を探してください。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "遭難者家族のマオ",
+        "observation": "死んだはずの隊から帰還信号が届いた。発信元を探してください。",
+        "belief": "死んだはずの隊から帰還信号が届いた。発信元を探してください。",
+        "goal": "死んだはずの隊から帰還信号が届いた。発信元を探してください。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "死んだはずの隊から帰還信号が届いた。発信元を探してください。",
+      "progression": "信号発信器を発見してから捜索の本体が始まり、移動先の追跡か専門隊への引継ぎを行う。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q084.observatory.entry"
+        },
+        {
+          "id": "beacon",
+          "script": "q084.observatory.beacon"
+        },
+        {
+          "id": "crossing",
+          "script": "q084.observatory.crossing"
+        },
+        {
+          "id": "recovery",
+          "script": "q084.observatory.recovery"
+        },
+        {
+          "id": "recovered",
+          "script": "q084.observatory.recovered"
+        },
+        {
+          "id": "route_check",
+          "script": "q084.observatory.route_check"
+        },
+        {
+          "id": "reached",
+          "script": "q084.observatory.reached"
+        },
+        {
+          "id": "handoff",
+          "script": "q084.observatory.handoff"
+        },
+        {
+          "id": "call_report",
+          "script": "q084.observatory.call_report"
+        },
+        {
+          "id": "expert_arrived",
+          "script": "q084.observatory.expert_arrived"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "死んだはずの隊から帰還信号が届いた。発信元を探してください。",
+      "openQuestion": "帰還信号の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "referenceSwap",
+      "newInformation": "信号は隊が残した救助標の反復で、遭難者は発信後に別ルートへ移動している。",
+      "retroactiveTargets": [],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q084.flow.entry"
+      },
+      {
+        "id": "beacon",
+        "script": "q084.flow.beacon"
+      },
+      {
+        "id": "crossing",
+        "script": "q084.flow.crossing"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q084.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "信号発信器を発見してから捜索の本体が始まり、移動先の追跡か専門隊への引継ぎを行う。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "信号発信器を発見してから捜索の本体が始まり、移動先の追跡か専門隊への引継ぎを行う。",
+    "flowVersion": 2,
+    "entryScript": "q084.observatory.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "帰還信号が同じ間隔で届く。雑音まで繰り返している。",
+        "options": [
+          {
+            "id": "source",
+            "text": "信号の発信地点へ向かう",
+            "to": "beacon",
+            "action": "entry_source"
+          },
+          {
+            "id": "recover",
+            "text": "発信機だけを回収して家族へ返す",
+            "to": "recovery",
+            "action": "entry_recover"
+          }
+        ]
+      },
+      {
+        "id": "beacon",
+        "place": "beacon",
+        "text": "発信元は反復する救助標だった。脇には担架の跡と、新しい矢印が先へ続く。",
+        "options": [
+          {
+            "id": "trail",
+            "text": "救助標を残し、矢印の先へ進む",
+            "to": "route_check",
+            "action": "beacon_trail"
+          },
+          {
+            "id": "handoff",
+            "text": "移動先の矢印を専門の救助隊へ送る",
+            "to": "handoff",
+            "action": "beacon_handoff"
+          }
+        ]
+      },
+      {
+        "id": "crossing",
+        "place": "crossing",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "quests.q061.outcome"
+              },
+              "right": "informed"
+            },
+            "yes": "救難隊から借りた空気の地図の写しで、担架が通った上層の息継ぎ場所を確認できた。",
+            "no": "担架の跡は上層の空気室へ続く。各室で息を整えた跡を一つずつ確かめる。"
+          },
+          "遠くから生きた人の返事がある。"
+        ],
+        "options": [
+          {
+            "id": "reach",
+            "text": "返事を聞きながら担架の一行へ追い付く",
+            "to": "reached",
+            "action": "crossing_reach"
+          },
+          {
+            "id": "call",
+            "text": "現在地を専門隊へ届け、現場で到着を待つ",
+            "to": "call_report",
+            "action": "crossing_call"
+          }
+        ]
+      },
+      {
+        "id": "recovery",
+        "place": "beacon",
+        "text": "発信地点へ来た。機械だけを持ち帰る場合、本人を見つけたことにはしない。",
+        "options": [
+          {
+            "id": "carry",
+            "text": "発信機を家族へ持ち帰る",
+            "to": "recovered",
+            "action": "recovery_carry"
+          }
+        ]
+      },
+      {
+        "id": "recovered",
+        "place": "family",
+        "text": "反復する発信機を家族へ渡し、本人の行方はまだ分からないと伝える。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@contract",
+            "action": "recovered_finish"
+          }
+        ]
+      },
+      {
+        "id": "route_check",
+        "place": "rescue",
+        "text": "救助標の矢印を詰所へ伝え、上層水路の入口を確かめる。既に救難図を渡していれば、その写しを借りられる。",
+        "options": [
+          {
+            "id": "follow",
+            "text": "担架の跡を上層の空気室までたどる",
+            "to": "crossing",
+            "action": "route_check_follow"
+          }
+        ]
+      },
+      {
+        "id": "reached",
+        "place": "survivors",
+        "text": "返事を確かめながら次の空気室へ進み、担架の一行と合流した。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@informed",
+            "action": "reached_finish"
+          }
+        ]
+      },
+      {
+        "id": "handoff",
+        "place": "rescue",
+        "text": "救助標は現場に残し、矢印の向きと場所を専門隊へ引き継ぐ。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@compromise",
+            "action": "handoff_finish"
+          }
+        ]
+      },
+      {
+        "id": "call_report",
+        "place": "rescue",
+        "text": "詰所へ現在地を届けた。専門隊と上層の空気室へ戻る。",
+        "options": [
+          {
+            "id": "escort",
+            "text": "専門隊と空気室へ戻る",
+            "to": "expert_arrived",
+            "action": "call_report_escort"
+          }
+        ]
+      },
+      {
+        "id": "expert_arrived",
+        "place": "crossing",
+        "text": "専門隊が担架の跡のある空気室へ着き、ここから先を引き受けた。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@compromise",
+            "action": "expert_arrived_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "observatory-twenty",
+      "settlement": "oddland_village",
+      "saveRevision": 2,
+      "scope": "観測所20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q084.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "信号の間隔は完全に等しく、雑音の形まで繰り返す。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q084",
+          "key": "clue_a",
+          "text": "信号の間隔は完全に等しく、雑音の形まで繰り返す。"
+        }
+      ]
+    },
+    "q084.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "遭難者家族のマオ",
+          "text": "標識の脇に新しい矢印と、手で運ばれた担架の跡が続きます。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q084",
+          "key": "clue_b",
+          "text": "標識の脇に新しい矢印と、手で運ばれた担架の跡が続く。"
+        }
+      ]
+    },
+    "q084.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "帰還信号\n\n死んだはずの隊から帰還信号が届いた。発信元を探してください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "信号地点から先の移動跡を追う",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q084.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q084.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "信号は隊が残した救助標の反復で、遭難者は発信後に別ルートへ移動している。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "生存者へ追い付いた。マオは帰還信号に現在地を付ける案を出す。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q084",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "信号を真似る影を倒し発信機だけ回収する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "機械は戻った。家族は声を聴けるが、本人の行方は残る。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q084",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "移動先を救助隊へ送り標識を残す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "専門の隊が後を引き受けた。反復信号は中継の役に立つ。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q084",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q084.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "帰還信号\n\n死んだはずの隊から帰還信号が届いた。発信元を探してください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q084.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q084.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "信号は隊が残した救助標の反復で、遭難者は発信後に別ルートへ移動している。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q084.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "信号地点から先の移動跡を追う",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q084.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q084.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "生存者へ追い付いた。マオは帰還信号に現在地を付ける案を出す。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q084",
+                  "outcome": "informed"
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q084.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q084.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "contract",
+              "text": "信号を真似る影を倒し発信機だけ回収する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "機械は戻った。家族は声を聴けるが、本人の行方は残る。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q084",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "移動先を救助隊へ送り標識を残す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "専門の隊が後を引き受けた。反復信号は中継の役に立つ。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q084",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」遭難者家族のマオは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられる。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q084.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q084.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q084.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "生存者へ追い付いた。マオは帰還信号に現在地を付ける案を出す。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q084.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "機械は戻った。家族は声を聴けるが、本人の行方は残る。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q084.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "専門の隊が後を引き受けた。反復信号は中継の役に立つ。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q084.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q084.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q084.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q084.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q084.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q084.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q084.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "帰還信号が同じ間隔で届く。雑音まで繰り返している。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "source",
+              "text": "信号の発信地点へ向かう",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q084.flow.beacon"
+                }
+              ]
+            },
+            {
+              "id": "recover",
+              "text": "発信機だけを回収して家族へ返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q084.flow.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q084.flow.beacon": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q084.node",
+          "value": "beacon"
+        },
+        {
+          "op": "say",
+          "text": "発信元は反復する救助標だった。脇には担架の跡と、新しい矢印が先へ続く。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "trail",
+              "text": "救助標を残し、矢印の先へ進む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q084.flow.crossing"
+                }
+              ]
+            },
+            {
+              "id": "handoff",
+              "text": "移動先の矢印を専門の救助隊へ送る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q084.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q084.flow.crossing": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q084.node",
+          "value": "crossing"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q061.outcome"
+            },
+            "right": "informed"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "救難隊へ渡した空気の地図を借り、担架が通った上層の息継ぎ場所を確認できた。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "担架の跡は上層の空気室へ続く。各室で息を整えた跡を一つずつ確かめる。"
+            }
+          ]
+        },
+        {
+          "op": "say",
+          "text": "遠くから生きた人の返事がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "reach",
+              "text": "返事を聞きながら担架の一行へ追い付く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q084.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "call",
+              "text": "現在地を中継し、専門隊の到着を待つ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q084.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q084.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q084.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "生存者へ追い付いた。マオは帰還信号に現在地を付ける案を出す。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q084",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q084.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q084.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "機械は戻った。家族は声を聴けるが、本人の行方は残る。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q084",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q084.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q084.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "専門の隊が後を引き受けた。反復信号は中継の役に立つ。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q084",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q084.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q084.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q084.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "生存者へ追い付いた。マオは帰還信号に現在地を付ける案を出す。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "機械は戻った。家族は声を聴けるが、本人の行方は残る。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "専門の隊が後を引き受けた。反復信号は中継の役に立つ。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q084"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q084.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q084.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q084.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "beacon",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q084.flow.beacon"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "crossing",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q084.flow.crossing"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q084.flow.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q084.observatory.entry": {
+      "storyQuest": "q084",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q084",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "帰還信号が同じ間隔で届く。雑音まで繰り返している。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "source",
+              "text": "信号の発信地点へ向かう",
+              "storyAction": {
+                "quest": "q084",
+                "action": "entry_source"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q084",
+                  "action": "entry_source"
+                }
+              ]
+            },
+            {
+              "id": "recover",
+              "text": "発信機だけを回収して家族へ返す",
+              "storyAction": {
+                "quest": "q084",
+                "action": "entry_recover"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q084",
+                  "action": "entry_recover"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q084.observatory.beacon": {
+      "storyQuest": "q084",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q084",
+          "scene": "beacon"
+        },
+        {
+          "op": "narrate",
+          "text": "発信元は反復する救助標だった。脇には担架の跡と、新しい矢印が先へ続く。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "trail",
+              "text": "救助標を残し、矢印の先へ進む",
+              "storyAction": {
+                "quest": "q084",
+                "action": "beacon_trail"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q084",
+                  "action": "beacon_trail"
+                }
+              ]
+            },
+            {
+              "id": "handoff",
+              "text": "移動先の矢印を専門の救助隊へ送る",
+              "storyAction": {
+                "quest": "q084",
+                "action": "beacon_handoff"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q084",
+                  "action": "beacon_handoff"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q084.observatory.crossing": {
+      "storyQuest": "q084",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q084",
+          "scene": "crossing"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q061.outcome"
+            },
+            "right": "informed"
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "救難隊から借りた空気の地図の写しで、担架が通った上層の息継ぎ場所を確認できた。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "担架の跡は上層の空気室へ続く。各室で息を整えた跡を一つずつ確かめる。"
+            }
+          ]
+        },
+        {
+          "op": "narrate",
+          "text": "遠くから生きた人の返事がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "reach",
+              "text": "返事を聞きながら担架の一行へ追い付く",
+              "storyAction": {
+                "quest": "q084",
+                "action": "crossing_reach"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q084",
+                  "action": "crossing_reach"
+                }
+              ]
+            },
+            {
+              "id": "call",
+              "text": "現在地を専門隊へ届け、現場で到着を待つ",
+              "storyAction": {
+                "quest": "q084",
+                "action": "crossing_call"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q084",
+                  "action": "crossing_call"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q084.observatory.recovery": {
+      "storyQuest": "q084",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q084",
+          "scene": "recovery"
+        },
+        {
+          "op": "narrate",
+          "text": "発信地点へ来た。機械だけを持ち帰る場合、本人を見つけたことにはしない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "carry",
+              "text": "発信機を家族へ持ち帰る",
+              "storyAction": {
+                "quest": "q084",
+                "action": "recovery_carry"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q084",
+                  "action": "recovery_carry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q084.observatory.recovered": {
+      "storyQuest": "q084",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q084",
+          "scene": "recovered"
+        },
+        {
+          "op": "narrate",
+          "text": "反復する発信機を家族へ渡し、本人の行方はまだ分からないと伝える。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q084",
+                "action": "recovered_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q084",
+                  "action": "recovered_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q084.observatory.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q084.observatory.route_check": {
+      "storyQuest": "q084",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q084",
+          "scene": "route_check"
+        },
+        {
+          "op": "narrate",
+          "text": "救助標の矢印を詰所へ伝え、上層水路の入口を確かめる。既に救難図を渡していれば、その写しを借りられる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "follow",
+              "text": "担架の跡を上層の空気室までたどる",
+              "storyAction": {
+                "quest": "q084",
+                "action": "route_check_follow"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q084",
+                  "action": "route_check_follow"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q084.observatory.reached": {
+      "storyQuest": "q084",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q084",
+          "scene": "reached"
+        },
+        {
+          "op": "narrate",
+          "text": "返事を確かめながら次の空気室へ進み、担架の一行と合流した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q084",
+                "action": "reached_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q084",
+                  "action": "reached_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q084.observatory.end.informed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q084.observatory.handoff": {
+      "storyQuest": "q084",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q084",
+          "scene": "handoff"
+        },
+        {
+          "op": "narrate",
+          "text": "救助標は現場に残し、矢印の向きと場所を専門隊へ引き継ぐ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q084",
+                "action": "handoff_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q084",
+                  "action": "handoff_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q084.observatory.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q084.observatory.call_report": {
+      "storyQuest": "q084",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q084",
+          "scene": "call_report"
+        },
+        {
+          "op": "narrate",
+          "text": "詰所へ現在地を届けた。専門隊と上層の空気室へ戻る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "escort",
+              "text": "専門隊と空気室へ戻る",
+              "storyAction": {
+                "quest": "q084",
+                "action": "call_report_escort"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q084",
+                  "action": "call_report_escort"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q084.observatory.expert_arrived": {
+      "storyQuest": "q084",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q084",
+          "scene": "expert_arrived"
+        },
+        {
+          "op": "narrate",
+          "text": "専門隊が担架の跡のある空気室へ着き、ここから先を引き受けた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q084",
+                "action": "expert_arrived_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q084",
+                  "action": "expert_arrived_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q084.observatory.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q084.observatory.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "生存者へ追い付いた。マオは帰還信号に現在地を付ける案を出す。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q084",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q084.observatory.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "機械は戻った。家族は声を聴けるが、本人の行方は残る。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q084",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q084.observatory.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "専門の隊が後を引き受けた。反復信号は中継の役に立つ。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q084",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q084.observatory.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q084"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q084.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q084.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q084.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "生存者へ追い付いた。マオは帰還信号に現在地を付ける案を出す。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "機械は戻った。家族は声を聴けるが、本人の行方は残る。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "専門の隊が後を引き受けた。反復信号は中継の役に立つ。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q084"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q084.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q084.observatory.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "beacon",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q084.observatory.beacon"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "crossing",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q084.observatory.crossing"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "recovery",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q084.observatory.recovery"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "recovered",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q084.observatory.recovered"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "route_check",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q084.observatory.route_check"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "reached",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q084.observatory.reached"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "handoff",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q084.observatory.handoff"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "call_report",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q084.observatory.call_report"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "expert_arrived",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q084.observatory.expert_arrived"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q084.observatory.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "帰還信号の現場",
+      "beacon": "反復する救助標と矢印",
+      "crossing": "担架の跡がある上層の空気室",
+      "survivors": "返事をする一行の空気室",
+      "rescue": "専門隊の引継ぎ詰所",
+      "family": "発信機を待つ家",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "beacon"
+      ],
+      [
+        "transit",
+        "crossing"
+      ],
+      [
+        "transit",
+        "survivors"
+      ],
+      [
+        "transit",
+        "rescue"
+      ],
+      [
+        "transit",
+        "family"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "beacon",
+          "crossing",
+          "survivors",
+          "rescue",
+          "family",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "reached": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "reached"
+      },
+      "beaconDeviceAt": {
+        "type": "enum",
+        "initial": "beacon",
+        "values": [
+          "entry",
+          "beacon",
+          "crossing",
+          "survivors",
+          "rescue",
+          "family",
+          "transit",
+          "party",
+          "stretcherParty",
+          "specialists",
+          "chartCopy"
+        ],
+        "meaning": "beaconDevice の所在または保持者"
+      },
+      "stretcherPartyAt": {
+        "type": "enum",
+        "initial": "survivors",
+        "values": [
+          "entry",
+          "beacon",
+          "crossing",
+          "survivors",
+          "rescue",
+          "family",
+          "transit"
+        ],
+        "meaning": "stretcherParty の所在または保持者"
+      },
+      "specialistsAt": {
+        "type": "enum",
+        "initial": "rescue",
+        "values": [
+          "entry",
+          "beacon",
+          "crossing",
+          "survivors",
+          "rescue",
+          "family",
+          "transit"
+        ],
+        "meaning": "specialists の所在または保持者"
+      },
+      "chartCopyAt": {
+        "type": "enum",
+        "initial": "rescue",
+        "values": [
+          "entry",
+          "beacon",
+          "crossing",
+          "survivors",
+          "rescue",
+          "family",
+          "transit",
+          "party",
+          "beaconDevice",
+          "stretcherParty",
+          "specialists"
+        ],
+        "meaning": "chartCopy の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "beaconDevice": {
+        "holder": "beaconDeviceAt",
+        "kind": "item"
+      },
+      "stretcherParty": {
+        "holder": "stretcherPartyAt",
+        "kind": "group"
+      },
+      "specialists": {
+        "holder": "specialistsAt",
+        "kind": "group"
+      },
+      "chartCopy": {
+        "holder": "chartCopyAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "信号は隊が残した救助標の反復で、遭難者は発信後に別ルートへ移動している。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "帰還信号の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "beacon": {
+        "title": "反復する救助標と矢印",
+        "place": "beacon",
+        "cast": [],
+        "requires": true
+      },
+      "crossing": {
+        "title": "担架の跡がある上層の空気室",
+        "place": "crossing",
+        "cast": [],
+        "requires": true
+      },
+      "recovery": {
+        "title": "反復する救助標と矢印",
+        "place": "beacon",
+        "cast": [],
+        "requires": true
+      },
+      "recovered": {
+        "title": "発信機を待つ家",
+        "place": "family",
+        "cast": [],
+        "requires": true
+      },
+      "route_check": {
+        "title": "専門隊の引継ぎ詰所",
+        "place": "rescue",
+        "cast": [],
+        "requires": true
+      },
+      "reached": {
+        "title": "返事をする一行の空気室",
+        "place": "survivors",
+        "cast": [],
+        "requires": true
+      },
+      "handoff": {
+        "title": "専門隊の引継ぎ詰所",
+        "place": "rescue",
+        "cast": [],
+        "requires": true
+      },
+      "call_report": {
+        "title": "専門隊の引継ぎ詰所",
+        "place": "rescue",
+        "cast": [],
+        "requires": true
+      },
+      "expert_arrived": {
+        "title": "担架の跡がある上層の空気室",
+        "place": "crossing",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_source": {
+        "from": [
+          "entry"
+        ],
+        "to": "beacon",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "beacon"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "beacon",
+          "companions": []
+        },
+        "depart": []
+      },
+      "entry_recover": {
+        "from": [
+          "entry"
+        ],
+        "to": "recovery",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "beacon"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "beacon",
+          "companions": []
+        },
+        "depart": []
+      },
+      "beacon_trail": {
+        "from": [
+          "beacon"
+        ],
+        "to": "route_check",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "rescue"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "rescue",
+          "companions": []
+        },
+        "depart": []
+      },
+      "beacon_handoff": {
+        "from": [
+          "beacon"
+        ],
+        "to": "handoff",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "rescue"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "rescue",
+          "companions": []
+        },
+        "depart": []
+      },
+      "crossing_reach": {
+        "from": [
+          "crossing"
+        ],
+        "to": "reached",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "survivors"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "survivors",
+          "companions": []
+        },
+        "depart": []
+      },
+      "crossing_call": {
+        "from": [
+          "crossing"
+        ],
+        "to": "call_report",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "rescue"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "rescue",
+          "companions": []
+        },
+        "depart": []
+      },
+      "recovery_carry": {
+        "from": [
+          "recovery"
+        ],
+        "to": "recovered",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "family"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "family",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "beaconDevice",
+            "from": "beacon",
+            "to": "party"
+          }
+        ]
+      },
+      "recovered_finish": {
+        "from": [
+          "recovered"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "beaconDevice",
+            "from": "party",
+            "to": "family"
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "route_check_follow": {
+        "from": [
+          "route_check"
+        ],
+        "to": "crossing",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "crossing"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "crossing",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "chartCopy",
+            "from": "rescue",
+            "to": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "quests.q061.outcome"
+              },
+              "right": "informed"
+            }
+          }
+        ]
+      },
+      "reached_finish": {
+        "from": [
+          "reached"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "reached",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "handoff_finish": {
+        "from": [
+          "handoff"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "call_report_escort": {
+        "from": [
+          "call_report"
+        ],
+        "to": "expert_arrived",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "specialists"
+            ],
+            "path": [
+              "transit",
+              "crossing"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "crossing",
+          "companions": [
+            "specialists"
+          ]
+        },
+        "depart": []
+      },
+      "expert_arrived_finish": {
+        "from": [
+          "expert_arrived"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q084.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q084.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q084.values.partyAt"
+                },
+                "right": "survivors"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q084.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q084.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q084.values.partyAt"
+                },
+                "right": "family"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q084.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q084.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q084.values.partyAt"
+                },
+                "right": "rescue"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q084.values.partyAt"
+                },
+                "right": "crossing"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_9",
+        "map": "region_9_f1",
+        "x": 9,
+        "y": 11
+      },
+      "beacon": {
+        "kind": "dungeon",
+        "dungeon": "region_9",
+        "map": "region_9_f1",
+        "x": 3,
+        "y": 13
+      },
+      "crossing": {
+        "kind": "dungeon",
+        "dungeon": "observatory_rescue",
+        "map": "e2_observatory_rescue",
+        "x": 7,
+        "y": 3
+      },
+      "survivors": {
+        "kind": "dungeon",
+        "dungeon": "observatory_rescue",
+        "map": "e2_observatory_rescue",
+        "x": 13,
+        "y": 7
+      },
+      "rescue": {
+        "kind": "town",
+        "location": "royal_rescue"
+      },
+      "family": {
+        "kind": "town",
+        "location": "observatory_family"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_village",
+  "receptionLocations": [
+    "royal_board"
+  ]
+}

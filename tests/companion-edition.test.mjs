@@ -8,19 +8,13 @@ import {projectGame} from '../src/application/projection.js';
 import {storyCanAct} from '../src/core/story.js';
 import {arcs,buildCompanionEdition} from '../tools/build-companion-edition.mjs';
 import {drain} from './helpers.mjs';
+import {go as goWorld} from './oddland-helpers.mjs';
 
 const read=file=>fs.readFile(new URL('../'+file,import.meta.url),'utf8').then(JSON.parse);
 const first=await loadContent(read),data=await loadContent(read,{edition:'e2'});
 const added=Object.values(data.quests).filter(q=>q.number>=211&&q.number<=290);
 export function go(g,to){
- const queue=[g.state.townLocation],seen=new Map([[queue[0],null]]);
- for(let i=0;i<queue.length&&!seen.has(to);i++){
-  const here=data.locations[queue[i]],next=[here.parent,...(here.links??[]),...Object.values(data.locations).filter(l=>l.parent===here.id).map(l=>l.id)].filter(Boolean);
-  for(const n of next)if(!seen.has(n)){seen.set(n,here.id);queue.push(n);}
- }
- assert.ok(seen.has(to),to);const route=[];for(let n=to;seen.get(n);n=seen.get(n))route.unshift(n);
- for(const id of route)assert.ok(g.dispatch({type:'location.move',id}));
- assert.equal(g.state.townLocation,to);
+ goWorld(g,{kind:'town',location:to});
 }
 function ready(actor){
  const g=new GameEngine(data,43);drain(g);go(g,'hikarigaeri_tavern');
@@ -30,7 +24,7 @@ function ready(actor){
 function checkpoint(g){const save=g.save();assert.deepEqual(validateSave(JSON.parse(save),data),[]);g.load(save);assert.equal(g.save(),save);}
 function choose(g,id){assert.ok(g.dispatch({type:'choose',id}),`${id}: ${g.state.notice}`);drain(g);}
 function arrive(g){const j=g.state.journey;assert.ok(j);const q=data.quests[j.quest],p=q.story.worldPlaces[q.story.actions[j.action].journey.to];go(g,p.location);if(g.state.journey)assert.ok(g.dispatch({type:'story.resume',quest:q.id}),g.state.notice);assert.equal(g.state.journey,null);drain(g);}
-function start(g,q){assert.ok(g.accept(q.id),q.id);go(g,q.story.worldPlaces.base.location);assert.ok(g.dispatch({type:'story.resume',quest:q.id}));drain(g);}
+function start(g,q){go(g,q.story.worldPlaces.base.location);assert.ok(g.accept(q.id),q.id);assert.ok(g.dispatch({type:'story.resume',quest:q.id}));drain(g);}
 function finish(g,q,outcome,{save=false}={}){
  choose(g,'go');if(save)checkpoint(g);arrive(g);if(save)checkpoint(g);
  const before=g.state.gold,cost=q.story.actions[`survey_${outcome}`].cost?.gold??0;
@@ -52,7 +46,7 @@ test('e2 adds exactly eight ten-quest arcs, locations and presentation order wit
  for(const id of Object.keys(first.quests))if(!Object.hasOwn(data.scenarioEditions.editions.e2.questOverrides,id))assert.deepEqual(data.quests[id],first.quests[id]);
  for(const id of Object.keys(first.locations).filter(id=>id!=='hikarigaeri_square'))assert.deepEqual(data.locations[id],first.locations[id]);
  assert.deepEqual(data.actors,first.actors);for(const [id,map] of Object.entries(first.maps))assert.deepEqual(data.maps[id].tiles,map.tiles);
- for(const id of Object.keys(first.maps))if(!['region_1_landing','region_4_f1','region_4_f2','region_7_f1','region_7_f2'].includes(id))assert.deepEqual(data.maps[id],first.maps[id]);
+ for(const id of Object.keys(first.maps))if(!['region_1_landing','region_4_f1','region_4_f2','region_7_f1','region_7_f2','region_9_f1','region_9_f2'].includes(id))assert.deepEqual(data.maps[id],first.maps[id]);
  const g=ready('nio'),view=projectGame(g);assert.equal(view.quests.length,300);assert.equal(new Set(view.quests.map(q=>q.id)).size,300);
  assert.equal(view.quests.find(q=>q.id==='q221').regionName,'仲間と巡るトルネア');
  assert.equal(g.dispatch({type:'travel',region:11}),false);

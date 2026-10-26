@@ -1,0 +1,2458 @@
+{
+  "schemaVersion": 1,
+  "id": "q187",
+  "number": 187,
+  "title": "旗を持たない兵士",
+  "client": "国境村",
+  "brief": "所属を示さない兵士カドを調べ、村への関わり方を決めてください。",
+  "region": 9,
+  "type": "scene_graph",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 旧王領の村の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q187_scene",
+      "title": "旗を持たない兵士：国境村",
+      "points": [
+        {
+          "map": "region_9_f2",
+          "x": 4,
+          "y": 1,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q187.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q187.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q187.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q187"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "q187_observatory_entry",
+      "title": "カドが話をする村の入口",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q187.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q187.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q187"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q187.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_village",
+          "x": 3,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "id": "q187_observatory_gate",
+      "title": "野盗を防ぐ村の外縁",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "gate",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q187.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q187.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q187"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q187.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_village",
+          "x": 9,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "id": "q187_observatory_refuge",
+      "title": "住民が退避する場所",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "refuge",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q187.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q187.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q187"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q187.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_village",
+          "x": 1,
+          "y": 7
+        }
+      ]
+    },
+    {
+      "id": "q187_observatory_contract",
+      "title": "村長と相談する井戸の前",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "contract",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q187.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q187.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q187"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q187.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_village",
+          "x": 9,
+          "y": 5
+        }
+      ]
+    },
+    {
+      "id": "q187_observatory_officer",
+      "title": "将校の任用窓口",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "officer",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q187.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q187.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q187"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q187.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_village",
+          "x": 13,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "id": "q187_observatory_bridge",
+      "title": "限定契約で守る橋",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "bridge",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q187.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q187.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q187"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q187.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_village",
+          "x": 11,
+          "y": 7
+        }
+      ]
+    },
+    {
+      "id": "q187_observatory_exit",
+      "title": "村から出る道",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "exit",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q187.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q187.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q187"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q187.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_village",
+          "x": 1,
+          "y": 1
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_9_f2",
+      "x": 4,
+      "y": 1,
+      "object": "q187_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "army": {
+      "label": "国軍の補給と命令",
+      "text": "カドは国軍へ入った。補給は安定し、村だけを選んで守る自由は制限された。",
+      "gold": 153,
+      "xp": 99
+    },
+    "village": {
+      "label": "守る場所の名",
+      "text": "外套には旗でなく橋と井戸の名が縫われた。村も契約の責任と費用を引き受けた。",
+      "gold": 153,
+      "xp": 99
+    },
+    "leave": {
+      "label": "退去後の村",
+      "text": "将校は安堵した。村には守る人手が足りず、別の雇用を急ぐ仕事が残った。",
+      "gold": 153,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/observatory-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38166a207eb49f89ac578",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "過去の隊章が外套の裏へ縫われ、隠し持った工作員に見える。だがどの章にも同じ救護所の糸が使われている。彼を無条件の善人にはせず、敵軍として村から徴発した過去も本人が認める。",
+      "fixedPast": "国境村は、所属を示さない武装者の調査を頼む。彼は三度所属を変えた兵カドで、村を守る仕事だけを続けている。村長は実績を信用し、駐留将校は忠誠の証明を求める。カドは旗が変わるたび同じ村が敵領になることに耐えられない。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "国境村",
+        "beliefsAndGoals": "国境村は、所属を示さない武装者の調査を頼む。彼は三度所属を変えた兵カドで、村を守る仕事だけを続けている。村長は実績を信用し、駐留将校は忠誠の証明を求める。カドは旗が変わるたび同じ村が敵領になることに耐えられない。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "所属を示さない兵士カドを調べ、村への関わり方を決めてください。"
+      }
+    ],
+    "conflict": {
+      "design": "調査→駐留所／住民／本人→野盗防衛→任用の判断。国旗を掲げる条件、村への限定契約、退去がある。戦わず住民を退避させても守った行為として報告できる。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q187.observatory.entry"
+        },
+        {
+          "id": "contract",
+          "script": "q187.observatory.contract"
+        },
+        {
+          "id": "defend",
+          "script": "q187.observatory.defend"
+        },
+        {
+          "id": "evacuated",
+          "script": "q187.observatory.evacuated"
+        },
+        {
+          "id": "army",
+          "script": "q187.observatory.army"
+        },
+        {
+          "id": "bridge",
+          "script": "q187.observatory.bridge"
+        },
+        {
+          "id": "village_done",
+          "script": "q187.observatory.village_done"
+        },
+        {
+          "id": "left",
+          "script": "q187.observatory.left"
+        },
+        {
+          "id": "defend_battle_ready",
+          "script": "q187.observatory.defend_battle_ready"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "所属を示さない兵士カドを調べ、村への関わり方を決めてください。"
+    },
+    "reveal": {
+      "newInformation": "過去の隊章が外套の裏へ縫われ、隠し持った工作員に見える。だがどの章にも同じ救護所の糸が使われている。彼を無条件の善人にはせず、敵軍として村から徴発した過去も本人が認める。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q187.scene.entry"
+      },
+      {
+        "id": "contract",
+        "script": "q187.scene.contract"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q187.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "外套の裏に三つの隊章がある。どれも同じ救護所の糸で縫われていた。カドは村を守ったことも、昔は徴発したことも認めた。",
+        "options": [
+          {
+            "id": "fight",
+            "text": "一緒に野盗から村を守る",
+            "to": "defend",
+            "action": "entry_fight"
+          },
+          {
+            "id": "evac",
+            "text": "戦わず住民を安全な場所へ導く",
+            "to": "evacuated",
+            "action": "entry_evac"
+          }
+        ]
+      },
+      {
+        "id": "contract",
+        "place": "contract",
+        "text": "村長は働きを頼り、将校は忠誠を求める。国軍なら補給と命令を、村契約なら守る範囲と責任を決める。",
+        "options": [
+          {
+            "id": "army",
+            "text": "国旗と命令を受け入れる任用を仲介する",
+            "to": "army",
+            "action": "contract_army"
+          },
+          {
+            "id": "village",
+            "text": "橋と井戸を守る限定契約を結ぶ",
+            "to": "bridge",
+            "action": "contract_village"
+          },
+          {
+            "id": "leave",
+            "text": "任用せず退去を求める",
+            "to": "left",
+            "action": "contract_leave"
+          }
+        ]
+      },
+      {
+        "id": "defend",
+        "place": "gate",
+        "text": "カドと村の外縁へ来た。逃走した場合も、勝利を前提にせず契約を相談できる。",
+        "options": [
+          {
+            "id": "battle",
+            "text": "カドと野盗に対処する",
+            "to": "defend_battle_ready",
+            "action": "defend_battle"
+          },
+          {
+            "id": "escaped",
+            "text": "撤退の結果を持って村長のもとへ戻る",
+            "to": "contract",
+            "action": "defend_escaped"
+          },
+          {
+            "id": "back",
+            "text": "入口へ戻って避難を相談する",
+            "to": "entry",
+            "action": "defend_back"
+          }
+        ]
+      },
+      {
+        "id": "evacuated",
+        "place": "refuge",
+        "text": "カドと住民を退避先まで案内した。村長のもとへ戻って今後の責任を相談する。",
+        "options": [
+          {
+            "id": "contract",
+            "text": "カドと井戸の前へ戻る",
+            "to": "contract",
+            "action": "evacuated_contract"
+          }
+        ]
+      },
+      {
+        "id": "army",
+        "place": "officer",
+        "text": "カドと任用窓口へ来た。補給と命令を受け入れる条件を本人と将校が確認する。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@army",
+            "action": "army_finish"
+          }
+        ]
+      },
+      {
+        "id": "bridge",
+        "place": "bridge",
+        "text": "カドと守る橋を確かめた。井戸へ戻り、村長と範囲と費用を署名する。",
+        "options": [
+          {
+            "id": "sign",
+            "text": "カドと井戸へ戻り契約を結ぶ",
+            "to": "village_done",
+            "action": "bridge_sign"
+          }
+        ]
+      },
+      {
+        "id": "village_done",
+        "place": "contract",
+        "text": "橋と井戸を守る範囲、責任、村の費用を取り決める。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@village",
+            "action": "village_done_finish"
+          }
+        ]
+      },
+      {
+        "id": "left",
+        "place": "exit",
+        "text": "カドを村から出る道まで案内した。村は別の人手を探す。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@leave",
+            "action": "left_finish"
+          }
+        ]
+      },
+      {
+        "id": "defend_battle_ready",
+        "place": "gate",
+        "text": "戦いに勝利し、先へ進む道が開いた。次の場所まで歩いて確かめる。",
+        "options": [
+          {
+            "id": "continue",
+            "text": "準備した相手・品物と目的地へ向かう",
+            "to": "contract",
+            "action": "defend_battle_ready_continue"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "entryScript": "q187.observatory.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "observatory-twenty",
+      "settlement": "oddland_village",
+      "saveRevision": 2,
+      "scope": "観測所20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q187.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q187.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "外套の裏に三つの隊章がある。どれも同じ救護所の糸で縫われていた。カドは村を守ったことも、昔は徴発したことも認めた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fight",
+              "text": "一緒に野盗から村を守る",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q187.scene.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q187.scene.contract"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "evac",
+              "text": "戦わず住民を安全な場所へ導く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q187.scene.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q187.scene.contract": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q187.node",
+          "value": "contract"
+        },
+        {
+          "op": "say",
+          "text": "村長は働きを頼り、将校は忠誠を求める。国軍なら補給と命令を、村契約なら守る範囲と責任を決める。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "army",
+              "text": "国旗と命令を受け入れる任用を仲介する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q187.end.army"
+                }
+              ]
+            },
+            {
+              "id": "village",
+              "text": "橋と井戸を守る限定契約を結ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q187.end.village"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "任用せず退去を求める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q187.end.leave"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q187.end.army": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q187.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "カドは国軍へ入った。補給は安定し、村だけを選んで守る自由は制限された。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q187",
+              "outcome": "army"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q187.end.village": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q187.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "外套には旗でなく橋と井戸の名が縫われた。村も契約の責任と費用を引き受けた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q187",
+              "outcome": "village"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q187.end.leave": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q187.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "将校は安堵した。村には守る人手が足りず、別の雇用を急ぐ仕事が残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q187",
+              "outcome": "leave"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q187.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q187.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q187.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "army",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "カドは国軍へ入った。補給は安定し、村だけを選んで守る自由は制限された。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "village",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "外套には旗でなく橋と井戸の名が縫われた。村も契約の責任と費用を引き受けた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "leave",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "将校は安堵した。村には守る人手が足りず、別の雇用を急ぐ仕事が残った。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q187.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q187.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q187.scene.contract"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q187.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q187.observatory.entry": {
+      "storyQuest": "q187",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q187",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "外套の裏に三つの隊章がある。どれも同じ救護所の糸で縫われていた。カドは村を守ったことも、昔は徴発したことも認めた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fight",
+              "text": "一緒に野盗から村を守る",
+              "storyAction": {
+                "quest": "q187",
+                "action": "entry_fight"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q187",
+                  "action": "entry_fight"
+                }
+              ]
+            },
+            {
+              "id": "evac",
+              "text": "戦わず住民を安全な場所へ導く",
+              "storyAction": {
+                "quest": "q187",
+                "action": "entry_evac"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q187",
+                  "action": "entry_evac"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q187.observatory.contract": {
+      "storyQuest": "q187",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q187",
+          "scene": "contract"
+        },
+        {
+          "op": "narrate",
+          "text": "村長は働きを頼り、将校は忠誠を求める。国軍なら補給と命令を、村契約なら守る範囲と責任を決める。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "army",
+              "text": "国旗と命令を受け入れる任用を仲介する",
+              "storyAction": {
+                "quest": "q187",
+                "action": "contract_army"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q187",
+                  "action": "contract_army"
+                }
+              ]
+            },
+            {
+              "id": "village",
+              "text": "橋と井戸を守る限定契約を結ぶ",
+              "storyAction": {
+                "quest": "q187",
+                "action": "contract_village"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q187",
+                  "action": "contract_village"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "任用せず退去を求める",
+              "storyAction": {
+                "quest": "q187",
+                "action": "contract_leave"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q187",
+                  "action": "contract_leave"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q187.observatory.defend": {
+      "storyQuest": "q187",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q187",
+          "scene": "defend"
+        },
+        {
+          "op": "narrate",
+          "text": "カドと村の外縁へ来た。逃走した場合も、勝利を前提にせず契約を相談できる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "battle",
+              "text": "カドと野盗に対処する",
+              "storyAction": {
+                "quest": "q187",
+                "action": "defend_battle"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "flags.relocatedBattleResult.q187"
+                  },
+                  "right": "escape"
+                }
+              },
+              "requirement": "戦闘。勝利・撤退・敗北に応じて続きが変わる。",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "set",
+                      "target": "flags.relocatedBattleResult.q187",
+                      "value": "win"
+                    },
+                    {
+                      "op": "story.action",
+                      "quest": "q187",
+                      "action": "defend_battle"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q187.observatory.defend_battle_ready"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "set",
+                      "target": "flags.relocatedBattleResult.q187",
+                      "value": "escape"
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "戦いから撤退した。勝利の報告にはせず、同行者と次の行動を相談する。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q187.observatory.defend"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "set",
+                      "target": "flags.relocatedBattleResult.q187",
+                      "value": "lose"
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "救助班に旧王領の村へ運び出された。現場へ戻れば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "escaped",
+              "text": "撤退の結果を持って村長のもとへ戻る",
+              "storyAction": {
+                "quest": "q187",
+                "action": "defend_escaped"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.relocatedBattleResult.q187"
+                },
+                "right": "escape"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q187",
+                  "action": "defend_escaped"
+                }
+              ]
+            },
+            {
+              "id": "back",
+              "text": "入口へ戻って避難を相談する",
+              "storyAction": {
+                "quest": "q187",
+                "action": "defend_back"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "flags.relocatedBattleResult.q187"
+                  },
+                  "right": "escape"
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q187",
+                  "action": "defend_back"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q187.observatory.evacuated": {
+      "storyQuest": "q187",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q187",
+          "scene": "evacuated"
+        },
+        {
+          "op": "narrate",
+          "text": "カドと住民を退避先まで案内した。村長のもとへ戻って今後の責任を相談する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "カドと井戸の前へ戻る",
+              "storyAction": {
+                "quest": "q187",
+                "action": "evacuated_contract"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q187",
+                  "action": "evacuated_contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q187.observatory.army": {
+      "storyQuest": "q187",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q187",
+          "scene": "army"
+        },
+        {
+          "op": "narrate",
+          "text": "カドと任用窓口へ来た。補給と命令を受け入れる条件を本人と将校が確認する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q187",
+                "action": "army_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q187",
+                  "action": "army_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q187.observatory.end.army"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q187.observatory.bridge": {
+      "storyQuest": "q187",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q187",
+          "scene": "bridge"
+        },
+        {
+          "op": "narrate",
+          "text": "カドと守る橋を確かめた。井戸へ戻り、村長と範囲と費用を署名する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sign",
+              "text": "カドと井戸へ戻り契約を結ぶ",
+              "storyAction": {
+                "quest": "q187",
+                "action": "bridge_sign"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q187",
+                  "action": "bridge_sign"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q187.observatory.village_done": {
+      "storyQuest": "q187",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q187",
+          "scene": "village_done"
+        },
+        {
+          "op": "narrate",
+          "text": "橋と井戸を守る範囲、責任、村の費用を取り決める。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q187",
+                "action": "village_done_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q187",
+                  "action": "village_done_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q187.observatory.end.village"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q187.observatory.left": {
+      "storyQuest": "q187",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q187",
+          "scene": "left"
+        },
+        {
+          "op": "narrate",
+          "text": "カドを村から出る道まで案内した。村は別の人手を探す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q187",
+                "action": "left_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q187",
+                  "action": "left_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q187.observatory.end.leave"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q187.observatory.defend_battle_ready": {
+      "storyQuest": "q187",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q187",
+          "scene": "defend_battle_ready"
+        },
+        {
+          "op": "narrate",
+          "text": "戦いに勝利し、先へ進む道が開いた。次の場所まで歩いて確かめる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "continue",
+              "text": "準備した相手・品物と目的地へ向かう",
+              "storyAction": {
+                "quest": "q187",
+                "action": "defend_battle_ready_continue"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q187",
+                  "action": "defend_battle_ready_continue"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q187.observatory.end.army": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "カドは国軍へ入った。補給は安定し、村だけを選んで守る自由は制限された。"
+        },
+        {
+          "op": "add",
+          "target": "vars.army",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q187",
+          "outcome": "army"
+        }
+      ]
+    },
+    "q187.observatory.end.village": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "外套には旗でなく橋と井戸の名が縫われた。村も契約の責任と費用を引き受けた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.village",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q187",
+          "outcome": "village"
+        }
+      ]
+    },
+    "q187.observatory.end.leave": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "将校は安堵した。村には守る人手が足りず、別の雇用を急ぐ仕事が残った。"
+        },
+        {
+          "op": "add",
+          "target": "vars.leave",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q187",
+          "outcome": "leave"
+        }
+      ]
+    },
+    "q187.observatory.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q187"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q187.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q187.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q187.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "army",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "カドは国軍へ入った。補給は安定し、村だけを選んで守る自由は制限された。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "village",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "外套には旗でなく橋と井戸の名が縫われた。村も契約の責任と費用を引き受けた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "leave",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "将校は安堵した。村には守る人手が足りず、別の雇用を急ぐ仕事が残った。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q187"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q187.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q187.observatory.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q187.observatory.contract"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "defend",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q187.observatory.defend"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "evacuated",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q187.observatory.evacuated"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "army",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q187.observatory.army"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "bridge",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q187.observatory.bridge"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "village_done",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q187.observatory.village_done"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "left",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q187.observatory.left"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "defend_battle_ready",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q187.observatory.defend_battle_ready"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q187.observatory.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "カドが話をする村の入口",
+      "gate": "野盗を防ぐ村の外縁",
+      "refuge": "住民が退避する場所",
+      "contract": "村長と相談する井戸の前",
+      "officer": "将校の任用窓口",
+      "bridge": "限定契約で守る橋",
+      "exit": "村から出る道",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "gate"
+      ],
+      [
+        "transit",
+        "refuge"
+      ],
+      [
+        "transit",
+        "contract"
+      ],
+      [
+        "transit",
+        "officer"
+      ],
+      [
+        "transit",
+        "bridge"
+      ],
+      [
+        "transit",
+        "exit"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "gate",
+          "refuge",
+          "contract",
+          "officer",
+          "bridge",
+          "exit",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "army",
+          "village",
+          "leave"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "kadoAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "gate",
+          "refuge",
+          "contract",
+          "officer",
+          "bridge",
+          "exit",
+          "transit"
+        ],
+        "meaning": "kado の所在または保持者"
+      },
+      "residentsAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "gate",
+          "refuge",
+          "contract",
+          "officer",
+          "bridge",
+          "exit",
+          "transit"
+        ],
+        "meaning": "residents の所在または保持者"
+      },
+      "mayorAt": {
+        "type": "enum",
+        "initial": "contract",
+        "values": [
+          "entry",
+          "gate",
+          "refuge",
+          "contract",
+          "officer",
+          "bridge",
+          "exit",
+          "transit"
+        ],
+        "meaning": "mayor の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "kado": {
+        "holder": "kadoAt",
+        "kind": "person"
+      },
+      "residents": {
+        "holder": "residentsAt",
+        "kind": "group"
+      },
+      "mayor": {
+        "holder": "mayorAt",
+        "kind": "person"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "過去の隊章が外套の裏へ縫われ、隠し持った工作員に見える。だがどの章にも同じ救護所の糸が使われている。彼を無条件の善人にはせず、敵軍として村から徴発した過去も本人が認める。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "カドが話をする村の入口",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "contract": {
+        "title": "村長と相談する井戸の前",
+        "place": "contract",
+        "cast": [],
+        "requires": true
+      },
+      "defend": {
+        "title": "野盗を防ぐ村の外縁",
+        "place": "gate",
+        "cast": [],
+        "requires": true
+      },
+      "evacuated": {
+        "title": "住民が退避する場所",
+        "place": "refuge",
+        "cast": [],
+        "requires": true
+      },
+      "army": {
+        "title": "将校の任用窓口",
+        "place": "officer",
+        "cast": [],
+        "requires": true
+      },
+      "bridge": {
+        "title": "限定契約で守る橋",
+        "place": "bridge",
+        "cast": [],
+        "requires": true
+      },
+      "village_done": {
+        "title": "村長と相談する井戸の前",
+        "place": "contract",
+        "cast": [],
+        "requires": true
+      },
+      "left": {
+        "title": "村から出る道",
+        "place": "exit",
+        "cast": [],
+        "requires": true
+      },
+      "defend_battle_ready": {
+        "title": "野盗を防ぐ村の外縁",
+        "place": "gate",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_fight": {
+        "from": [
+          "entry"
+        ],
+        "to": "defend",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "kado"
+            ],
+            "path": [
+              "transit",
+              "gate"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "gate",
+          "companions": [
+            "kado"
+          ]
+        },
+        "depart": []
+      },
+      "entry_evac": {
+        "from": [
+          "entry"
+        ],
+        "to": "evacuated",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "kado",
+              "residents"
+            ],
+            "path": [
+              "transit",
+              "refuge"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "refuge",
+          "companions": [
+            "kado",
+            "residents"
+          ]
+        },
+        "depart": []
+      },
+      "contract_army": {
+        "from": [
+          "contract"
+        ],
+        "to": "army",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "kado"
+            ],
+            "path": [
+              "transit",
+              "officer"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "officer",
+          "companions": [
+            "kado"
+          ]
+        },
+        "depart": []
+      },
+      "contract_village": {
+        "from": [
+          "contract"
+        ],
+        "to": "bridge",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "kado"
+            ],
+            "path": [
+              "transit",
+              "bridge"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "bridge",
+          "companions": [
+            "kado"
+          ]
+        },
+        "depart": []
+      },
+      "contract_leave": {
+        "from": [
+          "contract"
+        ],
+        "to": "left",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "kado"
+            ],
+            "path": [
+              "transit",
+              "exit"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "exit",
+          "companions": [
+            "kado"
+          ]
+        },
+        "depart": []
+      },
+      "defend_battle": {
+        "from": [
+          "defend"
+        ],
+        "to": "defend_battle_ready",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.relocatedBattleResult.q187"
+            },
+            "right": "escape"
+          }
+        },
+        "effects": [],
+        "once": false
+      },
+      "defend_escaped": {
+        "from": [
+          "defend"
+        ],
+        "to": "contract",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.relocatedBattleResult.q187"
+          },
+          "right": "escape"
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "kado"
+            ],
+            "path": [
+              "transit",
+              "contract"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "contract",
+          "companions": [
+            "kado"
+          ]
+        },
+        "depart": []
+      },
+      "defend_back": {
+        "from": [
+          "defend"
+        ],
+        "to": "entry",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.relocatedBattleResult.q187"
+            },
+            "right": "escape"
+          }
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "kado"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "kado"
+          ]
+        },
+        "depart": []
+      },
+      "evacuated_contract": {
+        "from": [
+          "evacuated"
+        ],
+        "to": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "kado"
+            ],
+            "path": [
+              "transit",
+              "contract"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "contract",
+          "companions": [
+            "kado"
+          ]
+        },
+        "depart": []
+      },
+      "army_finish": {
+        "from": [
+          "army"
+        ],
+        "ending": "army",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "army"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "bridge_sign": {
+        "from": [
+          "bridge"
+        ],
+        "to": "village_done",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "kado"
+            ],
+            "path": [
+              "transit",
+              "contract"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "contract",
+          "companions": [
+            "kado"
+          ]
+        },
+        "depart": []
+      },
+      "village_done_finish": {
+        "from": [
+          "village_done"
+        ],
+        "ending": "village",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "village"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "left_finish": {
+        "from": [
+          "left"
+        ],
+        "ending": "leave",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "leave"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "defend_battle_ready_continue": {
+        "from": [
+          "defend_battle_ready"
+        ],
+        "to": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "kado"
+            ],
+            "path": [
+              "transit",
+              "contract"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "contract",
+          "companions": [
+            "kado"
+          ]
+        },
+        "depart": []
+      }
+    },
+    "endings": {
+      "army": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q187.values.resolution"
+            },
+            "right": "army"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q187.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q187.values.partyAt"
+                },
+                "right": "officer"
+              }
+            ]
+          }
+        ]
+      },
+      "village": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q187.values.resolution"
+            },
+            "right": "village"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q187.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q187.values.partyAt"
+                },
+                "right": "contract"
+              }
+            ]
+          }
+        ]
+      },
+      "leave": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q187.values.resolution"
+            },
+            "right": "leave"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q187.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q187.values.partyAt"
+                },
+                "right": "exit"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_village",
+        "x": 3,
+        "y": 3
+      },
+      "gate": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_village",
+        "x": 9,
+        "y": 3
+      },
+      "refuge": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_village",
+        "x": 1,
+        "y": 7
+      },
+      "contract": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_village",
+        "x": 9,
+        "y": 5
+      },
+      "officer": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_village",
+        "x": 13,
+        "y": 3
+      },
+      "bridge": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_village",
+        "x": 11,
+        "y": 7
+      },
+      "exit": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_village",
+        "x": 1,
+        "y": 1
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_village",
+  "receptionLocations": [
+    "royal_board"
+  ]
+}

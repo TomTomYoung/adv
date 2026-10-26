@@ -13,7 +13,7 @@ export const fresh=()=>{const g=new GameEngine(data,1907);drain(g);g.random=()=>
 export function checkpoint(g){const raw=g.save();assert.deepEqual(validateSave(JSON.parse(raw),data),[]);g.load(raw);assert.equal(g.save(),raw);}
 const key=p=>p.kind==='town'?'town:'+p.location:p.map;
 export function go(g,p){
- const routes=data.worldTravel.routes;
+ const data=g.data,routes=data.worldTravel.routes;
  const root=()=>g.state.mode==='town'?locationRoot(data,g.state.townLocation).id:null;
  const here=()=>g.state.mode==='town'?'town:'+root():g.state.location.map;
  const target=p.kind==='town'?'town:'+locationRoot(data,p.location).id:p.map;
@@ -26,6 +26,7 @@ export function go(g,p){
  if(p.kind==='town')town(g,p.location);else walk(g,p.x,p.y);drain(g);assert.ok(atWorldPlace(g.state,p));
 }
 export function town(g,id){
+ const data=g.data;
  const queue=[g.state.townLocation],seen=new Map([[queue[0],null]]);
  for(let i=0;i<queue.length&&!seen.has(id);i++){const here=data.locations[queue[i]];for(const next of [here.parent,...here.links,...Object.values(data.locations).filter(l=>l.parent===here.id).map(l=>l.id)].filter(Boolean))if(!seen.has(next)){seen.set(next,here.id);queue.push(next);}}
  assert.ok(seen.has(id),`town route to ${id}`);const steps=[];for(let n=id;seen.get(n);n=seen.get(n))steps.unshift(n);

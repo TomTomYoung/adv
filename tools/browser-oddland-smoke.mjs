@@ -160,7 +160,29 @@ try{
     await click('旧王領の村へ戻る');await click('旧王領の村の港');await page.evaluate(()=>h.settle());await revealChoices();
     await page.screenshot({path:path.join(output,`${layout}-${width}-last-freight.png`),fullPage:true});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
     await click('相手と結果を確かめ、依頼を終える');await page.evaluate(()=>{h.settle();h.resume();});assert.equal(await page.evaluate(()=>h.g.state.quests.q170.outcome),'role');assert.equal(await page.evaluate(()=>h.g.state.stories.q170.values.cargoAt),'entry');
-    checks.push({layout,width,...measure,quests:{q291:'escort',q032:'informed',q137:'medicine',q061:'informed',q169:'corrected',q170:'role'},chapelReturn:'oddland_plateau',royalReturn:'oddland_village'});
+    const actionLabel=async(id,choice)=>page.evaluate(({id,choice})=>h.g.data.quests[id].model.graph.find(n=>n.id===h.g.state.stories[id].scene).options.find(a=>a.id===choice).text,{id,choice});
+    const act=async(id,choice)=>{await click(await actionLabel(id,choice));await page.evaluate(()=>{h.settle();h.resume();});};
+    const at=async(id,place)=>{await page.evaluate(({id,place})=>{const p=h.g.data.quests[id].story.worldPlaces[place];h.walk(p.x,p.y);h.settle();h.resume();},{id,place});};
+    const enterOrrery=async()=>{
+      await click(await page.evaluate(()=>h.routeLabel('observatory_surface')));await page.evaluate(()=>h.walk(13,12));await click('任意調べる');await click('地下二層への階段');await click('調べる');await page.evaluate(()=>h.settle());await at('q089','entry');
+    };
+    const leaveOrrery=async()=>{
+      await page.evaluate(()=>h.walk(1,1));await click('任意調べる');await click('地下一層への階段');await click('調べる');await page.evaluate(()=>{h.settle();h.walk(1,1);});await click('任意調べる');await click('地上への階段');await click('調べる');await page.evaluate(()=>h.settle());
+    };
+    await click('旧王領の村へ戻る');await acceptVillage('q089');await enterOrrery();await page.evaluate(()=>{h.dispatch({type:'story.resume',quest:'q089'});h.settle();});await act('q089','turn');
+    await revealChoices();assert.ok(await page.getByRole('button',{name:await actionLabel('q089','switch'),exact:true}).isDisabled());
+    for(const [key,facility] of [['wedding','村の集会所'],['wages','観測器の工房']]){
+      await act('q089',key);assert.equal(await page.evaluate(key=>h.g.state.stories.q089.values[key],key),false);await leaveOrrery();await click(facility);await page.evaluate(()=>{h.settle();h.resume();});assert.equal(await page.evaluate(key=>h.g.state.stories.q089.values[key],key),true);await act('q089','return');await click('旧王領の村へ戻る');await enterOrrery();
+    }
+    await revealChoices();await page.screenshot({path:path.join(output,`${layout}-${width}-orrery-calendar.png`),fullPage:true});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+    await act('q089','switch');assert.equal(await page.evaluate(()=>h.g.state.quests.q089.outcome),'informed');await leaveOrrery();
+    await acceptVillage('q182');await click(await page.evaluate(()=>h.routeLabel('e2_observatory_artillery_surface')));await page.evaluate(()=>{h.dispatch({type:'story.resume',quest:'q182'});h.settle();});await act('q182','deploy');await at('q182','gun');
+    await revealChoices();assert.ok(await page.getByRole('button',{name:await actionLabel('q182','light'),exact:true}).isDisabled());
+    for(const key of ['command','evac']){await act('q182',key);await at('q182',key);await act('q182','return');await at('q182','gun');}
+    await act('q182','light');assert.deepEqual(await page.evaluate(()=>{const v=h.g.state.stories.q182.values;return [v.charge,v.spent,v.evacueesAt];}),[0,1,'evac']);await act('q182','join');await at('q182','evac');await act('q182','escort');assert.equal(await page.evaluate(()=>h.g.state.stories.q182.values.evacueesAt),'transit');await at('q182','safe');
+    await revealChoices();await page.screenshot({path:path.join(output,`${layout}-${width}-evacuation.png`),fullPage:true});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));await act('q182','finish');assert.equal(await page.evaluate(()=>h.g.state.quests.q182.outcome),'light');assert.equal(await page.evaluate(()=>h.g.state.stories.q182.values.evacueesAt),'safe');
+    await page.evaluate(()=>h.walk(1,1));await cross('e2_observatory_artillery_surface');assert.equal(await page.evaluate(()=>h.g.state.townLocation),'oddland_village');
+    checks.push({layout,width,...measure,quests:{q291:'escort',q032:'informed',q137:'medicine',q061:'informed',q169:'corrected',q170:'role',q089:'informed',q182:'light'},chapelReturn:'oddland_plateau',royalReturn:'oddland_village'});
   }
   assert.deepEqual(errors,[]);await fs.writeFile(path.join(output,'result.json'),JSON.stringify({checks,errors},null,2));console.log(JSON.stringify({checks:checks.length,errors,output}));
 }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}

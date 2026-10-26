@@ -8,7 +8,7 @@ import {read,fixture,auditQuest,replay,resolveBattle} from '../tools/audit-regio
 import {data,ready,checkpoint,drain,go,start,choose} from './pilgrimage-helpers.mjs';
 export const previous=await loadContent(async file=>{
  if(file==='data/scenario-editions/e2/geography.json')return read('tests/fixtures/e2-geography-before-chapel-second.json');
- const value=await read(file);if(file==='data/scenario-editions.json'){for(let n=131;n<=140;n++)delete value.editions.e2.questOverrides['q'+n];for(let n=161;n<=170;n++)delete value.editions.e2.questOverrides['q'+n];for(let n=61;n<=70;n++)delete value.editions.e2.questOverrides['q0'+n];}return value;
+ const value=await read(file);if(file==='data/scenario-editions.json')delete value.editions.e2.geographyUpgrade;if(file==='data/scenario-editions.json')for(const n of [...Array.from({length:10},(_,i)=>81+i),...Array.from({length:10},(_,i)=>181+i)])delete value.editions.e2.questOverrides['q'+String(n).padStart(3,'0')];if(file==='data/scenario-editions.json'){for(let n=131;n<=140;n++)delete value.editions.e2.questOverrides['q'+n];for(let n=161;n<=170;n++)delete value.editions.e2.questOverrides['q'+n];for(let n=61;n<=70;n++)delete value.editions.e2.questOverrides['q0'+n];}return value;
 },{edition:'e2'});
 function oldFixture(id,options={}){
  const {accepted=true,entered=true,started=true}=options,g=fixture(previous,id,{accepted:false,entered:false,started:false});
@@ -24,7 +24,7 @@ for(let n=131;n<=140;n++){const id='q'+n;test(`${id}: accepted revision-2 routes
   if(stage==='choice')drain(g);if(stage==='battle')g.startBattle(g.map().encounter,{win:[],escape:[],lose:[]});if(stage==='completed')replay(g,id,path);
   const raw=g.save(),saved=JSON.parse(raw),now=new GameEngine(data);now.load(raw);
   const expected=structuredClone(saved);if(stage!=='unaccepted')(expected.state.flags.legacyStoryRoutes??={})[id]=true;
-  assert.deepEqual(JSON.parse(now.save()),expected,id+'/'+stage);assert.equal(g.save(),raw);checkpoint(now);
+  expected.state.worldTravel.version=2;assert.deepEqual(JSON.parse(now.save()),expected,id+'/'+stage);assert.equal(g.save(),raw);checkpoint(now);
   if(stage!=='unaccepted'&&stage!=='completed')assert.equal(nextQuestPlace(data,now.state,id).map,previous.quests[id].locations[0].map);
  }
  auditQuest(data,id,{makeFixture:()=>{const old=oldFixture(id),g=new GameEngine(data);g.load(old.save());return g;}});
@@ -35,5 +35,5 @@ test('newly accepted revision-2 routes stay current before their first scene, an
  start(g,'q132');choose(g,'q132','room');const valid=g.save(),bad=JSON.parse(valid);delete bad.state.flags.currentStoryRoutes.q132;assert.throws(()=>g.load(JSON.stringify(bad)));assert.equal(g.save(),valid);
 });
 test('available revision-2 save remains unchanged, then adopts the new route at acceptance',()=>{
- const old=new GameEngine(previous),raw=old.save(),g=new GameEngine(data);g.load(raw);assert.equal(g.save(),raw);assert.equal(g.state.scenarioRevision,2);
+ const old=new GameEngine(previous),raw=old.save(),g=new GameEngine(data);g.load(raw);const expected=JSON.parse(raw);expected.state.worldTravel.version=2;assert.deepEqual(JSON.parse(g.save()),expected);assert.equal(g.state.scenarioRevision,2);
 });

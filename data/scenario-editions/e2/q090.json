@@ -1,0 +1,3144 @@
+{
+  "schemaVersion": 1,
+  "id": "q090",
+  "number": 90,
+  "title": "空を返す日",
+  "client": "遭難者家族のマオ",
+  "brief": "天井を開くと星が見えるが地下の生活灯が消える。最後の操作を選んでください。",
+  "region": 9,
+  "type": "authored_progression",
+  "recommendedLevel": 9,
+  "requires": {
+    "op": "gte",
+    "left": {
+      "ref": "vars.region_9"
+    },
+    "right": 3
+  },
+  "unlockHint": "この地域の依頼を3件完了すると受注できる。 旧王領の村の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q090_clue_a",
+      "title": "空を返す日：現場の痕跡",
+      "points": [
+        {
+          "map": "region_9_f2",
+          "x": 2,
+          "y": 7,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q090.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q090.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q090"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q090"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "q090_clue_b",
+      "title": "空を返す日：記録と証言",
+      "points": [
+        {
+          "map": "region_9_f2",
+          "x": 9,
+          "y": 6,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q090.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q090.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q090"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q090"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "q090_decision",
+      "title": "空を返す日：決着の場",
+      "points": [
+        {
+          "map": "region_9_f2",
+          "x": 12,
+          "y": 9,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q090.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q090.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q090.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q090"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "region_9",
+      "title": "観測のための足場",
+      "dungeon": "region_9",
+      "points": [
+        {
+          "map": "region_9_f1",
+          "x": 1,
+          "y": 2,
+          "dungeon": "region_9"
+        }
+      ],
+      "trigger": "action",
+      "script": "dungeon.scene.region_9.v1",
+      "condition": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q090.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      },
+      "requirement": "関連する依頼を受けると調査できる。",
+      "note": {
+        "text": "天球儀の操作によって通路の配置が変わることを確認した。観測場所への経路は選べるが、生活灯への給電方法は別途確認する。",
+        "when": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.dungeonNotes.region_9"
+          },
+          "right": true
+        }
+      },
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          null,
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q090"
+              },
+              "right": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "q090_observatory_entry",
+      "title": "空を返す日の現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q090.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q090.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q090"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q090.observatory.visit",
+      "points": [
+        {
+          "dungeon": "region_9",
+          "map": "region_9_f2",
+          "x": 12,
+          "y": 9
+        }
+      ]
+    },
+    {
+      "id": "q090_observatory_battery",
+      "title": "封印された蓄電器",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "battery",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q090.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q090.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q090"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q090.observatory.visit",
+      "points": [
+        {
+          "dungeon": "region_9",
+          "map": "region_9_f2",
+          "x": 11,
+          "y": 5
+        }
+      ]
+    },
+    {
+      "id": "q090_observatory_sky",
+      "title": "蓋の下の観測席",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "sky",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q090.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q090.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q090"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q090.observatory.visit",
+      "points": [
+        {
+          "dungeon": "region_9",
+          "map": "region_9_f2",
+          "x": 9,
+          "y": 11
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_9_f2",
+      "x": 2,
+      "y": 7,
+      "object": "q090_clue_a",
+      "role": "clue_a"
+    },
+    {
+      "map": "region_9_f2",
+      "x": 9,
+      "y": 6,
+      "object": "q090_clue_b",
+      "role": "clue_b"
+    },
+    {
+      "map": "region_9_f2",
+      "x": 12,
+      "y": 9,
+      "object": "q090_decision",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "予定内に蓋を閉じ、生活灯を通常電源へ戻す",
+      "text": "地下で働く人も、本当の星を見た。マオは帰らぬ名を読み終えて蓋を閉じる。",
+      "gold": 153,
+      "xp": 132
+    },
+    "contract": {
+      "label": "天球の主を倒し、全電力で天井を開く",
+      "text": "広い空が見えた。暗い作業場の人は、足を止めて夜が終わるのを待つ。",
+      "gold": 173,
+      "xp": 103
+    },
+    "compromise": {
+      "label": "地下の灯を保ち、地上への観測行を組む",
+      "text": "地下の灯は残った。外へ出る列には、初めて空を見る人も並ぶ。",
+      "gold": 99,
+      "xp": 99
+    },
+    "overrun": {
+      "gold": 153,
+      "xp": 99,
+      "label": "観測を延長し、蓄電の残りを使い切る",
+      "text": "星を見る時間は延びた。蓄電が切れて生活灯が消え、保守員が暗い作業場から蓋を閉じた。次の公開観測には終了役を別に置くと決まった。"
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/observatory-first.mjs",
+    "world": {
+      "truth": "生活灯と観測蓋は同じ電源を奪い合うが、観測中だけ蓄電器から給電できる。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "生活灯と観測蓋は同じ電源を奪い合うが、観測中だけ蓄電器から給電できる。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "天井を開くと星が見えるが地下の生活灯が消える。最後の操作を選んでください。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "遭難者家族のマオ",
+        "observation": "天井を開くと星が見えるが地下の生活灯が消える。最後の操作を選んでください。",
+        "belief": "天井を開くと星が見えるが地下の生活灯が消える。最後の操作を選んでください。",
+        "goal": "天井を開くと星が見えるが地下の生活灯が消える。最後の操作を選んでください。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "天井を開くと星が見えるが地下の生活灯が消える。最後の操作を選んでください。",
+      "progression": "蓄電の点検と観測時間の配分を行い、開いた天井を閉じる帰りの操作まで担当する。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q090.observatory.entry"
+        },
+        {
+          "id": "schedule",
+          "script": "q090.observatory.schedule"
+        },
+        {
+          "id": "open",
+          "script": "q090.observatory.open"
+        },
+        {
+          "id": "reserve",
+          "script": "q090.observatory.reserve"
+        },
+        {
+          "id": "opened",
+          "script": "q090.observatory.opened"
+        },
+        {
+          "id": "close",
+          "script": "q090.observatory.close"
+        },
+        {
+          "id": "exhausted",
+          "script": "q090.observatory.exhausted"
+        },
+        {
+          "id": "overrun",
+          "script": "q090.observatory.overrun"
+        },
+        {
+          "id": "assemble",
+          "script": "q090.observatory.assemble"
+        },
+        {
+          "id": "surface",
+          "script": "q090.observatory.surface"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "天井を開くと星が見えるが地下の生活灯が消える。最後の操作を選んでください。",
+      "openQuestion": "空を返す日の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "frameShift",
+      "newInformation": "生活灯と観測蓋は同じ電源を奪い合うが、観測中だけ蓄電器から給電できる。",
+      "retroactiveTargets": [
+        "schedule"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q090.flow.entry"
+      },
+      {
+        "id": "schedule",
+        "script": "q090.flow.schedule"
+      },
+      {
+        "id": "open",
+        "script": "q090.flow.open"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q090.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "蓄電の点検と観測時間の配分を行い、開いた天井を閉じる帰りの操作まで担当する。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "蓄電の点検と観測時間の配分を行い、開いた天井を閉じる帰りの操作まで担当する。",
+    "flowVersion": 2,
+    "entryScript": "q090.observatory.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "天井を開く柄の隣に、生活灯の給電札がある。マオは読み上げる名簿を持っている。",
+        "options": [
+          {
+            "id": "battery",
+            "text": "封印された蓄電器を点検する",
+            "to": "schedule",
+            "action": "entry_battery"
+          },
+          {
+            "id": "full",
+            "text": "天球の主を倒し、全電力で天井を開く",
+            "to": "@contract",
+            "action": "entry_full"
+          },
+          {
+            "id": "surface",
+            "text": "地下の灯を保ち、地上への観測行を組む",
+            "to": "assemble",
+            "action": "entry_surface"
+          }
+        ]
+      },
+      {
+        "id": "schedule",
+        "place": "battery",
+        "text": "生活灯と観測蓋は同じ電源を奪い合うが、観測中だけ蓄電器から給電できる。 蓄電器で生活灯を保てるのは一時間。マオは四十分で名前を読み終えられるという。",
+        "options": [
+          {
+            "id": "hour",
+            "text": "切替を予約し、一時間の観測を始める",
+            "to": "reserve",
+            "action": "schedule_hour"
+          },
+          {
+            "id": "trip",
+            "text": "蓄電器を使わず、地上の観測行へ替える",
+            "to": "assemble",
+            "action": "schedule_trip"
+          }
+        ]
+      },
+      {
+        "id": "open",
+        "place": "sky",
+        "text": "星が見え、生活灯も点いている。名簿が読み終わり、残る二十分が告げられた。",
+        "options": [
+          {
+            "id": "close",
+            "text": "予定内に蓋を閉じ、生活灯を通常電源へ戻す",
+            "to": "close",
+            "action": "open_close"
+          },
+          {
+            "id": "longer",
+            "text": "観測を延長し、蓄電の残りを使い切る",
+            "to": "exhausted",
+            "action": "open_longer"
+          }
+        ]
+      },
+      {
+        "id": "reserve",
+        "place": "entry",
+        "text": "マオと蓋の制御台へ戻った。一時間で閉じる役を決め、生活灯を蓄電器へ切り替える。",
+        "options": [
+          {
+            "id": "start",
+            "text": "生活灯の切替と観測蓋の開放を行う",
+            "to": "opened",
+            "action": "reserve_start"
+          }
+        ]
+      },
+      {
+        "id": "opened",
+        "place": "entry",
+        "text": "蓋が開き、生活灯は蓄電器で点いている。名簿を持つマオと観覧者を観測席へ案内する。",
+        "options": [
+          {
+            "id": "escort",
+            "text": "皆で観測席へ向かう",
+            "to": "open",
+            "action": "opened_escort"
+          }
+        ]
+      },
+      {
+        "id": "close",
+        "place": "entry",
+        "text": "制御台へ戻った。予定内に蓋を閉じ、生活灯を通常電源へ戻す。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@informed",
+            "action": "close_finish"
+          }
+        ]
+      },
+      {
+        "id": "exhausted",
+        "place": "sky",
+        "text": "観測を延長し、蓄電が尽きて生活灯が消えた。保守員のいる制御台へ戻る。",
+        "options": [
+          {
+            "id": "return",
+            "text": "観覧者と制御台へ戻る",
+            "to": "overrun",
+            "action": "exhausted_return"
+          }
+        ]
+      },
+      {
+        "id": "overrun",
+        "place": "entry",
+        "text": "保守員が制御台で蓋を閉じる。次回は終了役を別に置くことを申し送る。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@overrun",
+            "action": "overrun_finish"
+          }
+        ]
+      },
+      {
+        "id": "assemble",
+        "place": "entry",
+        "text": "地下の生活灯を保ったまま、地上へ向かう列を集めた。",
+        "options": [
+          {
+            "id": "escort",
+            "text": "マオと列を地上の観測台へ案内する",
+            "to": "surface",
+            "action": "assemble_escort"
+          }
+        ]
+      },
+      {
+        "id": "surface",
+        "place": "surface",
+        "text": "皆が地上の観測台へ到着した。地下の給電を変えず、本当の空を見る。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@compromise",
+            "action": "surface_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "observatory-twenty",
+      "settlement": "oddland_village",
+      "saveRevision": 2,
+      "scope": "観測所20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q090.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "蓄電室は空でなく、切替札が封印されているだけだ。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q090",
+          "key": "clue_a",
+          "text": "蓄電室は空でなく、切替札が封印されているだけだ。"
+        }
+      ]
+    },
+    "q090.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "遭難者家族のマオ",
+          "text": "過去の公開観測には一時間の切替記録と生活灯の点灯記録が両方あります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q090",
+          "key": "clue_b",
+          "text": "過去の公開観測には一時間の切替記録と生活灯の点灯記録が両方ある。"
+        }
+      ]
+    },
+    "q090.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "空を返す日\n\n天井を開くと星が見えるが地下の生活灯が消える。最後の操作を選んでください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "蓄電器を点検し時間を決めて天井を開く",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q090.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q090.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "生活灯と観測蓋は同じ電源を奪い合うが、観測中だけ蓄電器から給電できる。"
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "地下で働く人も、本当の星を見た。マオは帰らぬ名を読み終えて蓋を閉じる。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q090",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "天球の主を倒し全電力で天井を開く",
+              "requirement": "戦闘あり・逃走不可",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "広い空が見えた。暗い作業場の人は、足を止めて夜が終わるのを待つ。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q090",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "天井を閉じたまま地上への観測行を組む",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "地下の灯は残った。外へ出る列には、初めて空を見る人も並ぶ。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q090",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q090.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "空を返す日\n\n天井を開くと星が見えるが地下の生活灯が消える。最後の操作を選んでください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q090.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q090.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "生活灯と観測蓋は同じ電源を奪い合うが、観測中だけ蓄電器から給電できる。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q090.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "蓄電器を点検し時間を決めて天井を開く",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q090.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q090.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合・戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "地下で働く人も、本当の星を見た。マオは帰らぬ名を読み終えて蓋を閉じる。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q090",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q090.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q090.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "contract",
+              "text": "天球の主を倒し全電力で天井を開く",
+              "requirement": "戦闘あり・逃走不可",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "広い空が見えた。暗い作業場の人は、足を止めて夜が終わるのを待つ。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q090",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "天井を閉じたまま地上への観測行を組む",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "地下の灯は残った。外へ出る列には、初めて空を見る人も並ぶ。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q090",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」遭難者家族のマオは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられる。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q090.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q090.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q090.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "地下で働く人も、本当の星を見た。マオは帰らぬ名を読み終えて蓋を閉じる。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q090.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "広い空が見えた。暗い作業場の人は、足を止めて夜が終わるのを待つ。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q090.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "地下の灯は残った。外へ出る列には、初めて空を見る人も並ぶ。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q090.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q090.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q090.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q090.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q090.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q090.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q090.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "天井を開く柄の隣に、生活灯の給電札がある。マオは読み上げる名簿を持っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "battery",
+              "text": "封印された蓄電器を点検する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q090.flow.schedule"
+                }
+              ]
+            },
+            {
+              "id": "full",
+              "text": "天球の主を倒し、全電力で天井を開く",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_9",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q090.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "surface",
+              "text": "地下の灯を保ち、地上への観測行を組む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q090.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q090.flow.schedule": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q090.node",
+          "value": "schedule"
+        },
+        {
+          "op": "say",
+          "text": "生活灯と観測蓋は同じ電源を奪い合うが、観測中だけ蓄電器から給電できる。 蓄電器で生活灯を保てるのは一時間。マオは四十分で名前を読み終えられるという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hour",
+              "text": "切替を予約し、一時間の観測を始める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q090.flow.open"
+                }
+              ]
+            },
+            {
+              "id": "trip",
+              "text": "蓄電器を使わず、地上の観測行へ替える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q090.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q090.flow.open": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q090.node",
+          "value": "open"
+        },
+        {
+          "op": "say",
+          "text": "星が見え、生活灯も点いている。名簿が読み終わり、残る二十分が告げられた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "close",
+              "text": "予定内に蓋を閉じ、生活灯を通常電源へ戻す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q090.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "longer",
+              "text": "観測を延長し、蓄電の残りを使い切る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q090.flow.end.overrun"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q090.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q090.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "地下で働く人も、本当の星を見た。マオは帰らぬ名を読み終えて蓋を閉じる。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q090",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q090.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q090.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "広い空が見えた。暗い作業場の人は、足を止めて夜が終わるのを待つ。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q090",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q090.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q090.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "地下の灯は残った。外へ出る列には、初めて空を見る人も並ぶ。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q090",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q090.flow.end.overrun": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q090.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "星を見る時間は延びた。蓄電が切れて生活灯が消え、保守員が暗い作業場から蓋を閉じた。次の公開観測には終了役を別に置くと決まった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q090",
+              "outcome": "overrun"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q090.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q090.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q090.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "地下で働く人も、本当の星を見た。マオは帰らぬ名を読み終えて蓋を閉じる。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "広い空が見えた。暗い作業場の人は、足を止めて夜が終わるのを待つ。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "地下の灯は残った。外へ出る列には、初めて空を見る人も並ぶ。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "overrun",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "星を見る時間は延びた。蓄電が切れて生活灯が消え、保守員が暗い作業場から蓋を閉じた。次の公開観測には終了役を別に置くと決まった。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q090"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q090.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q090.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q090.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "schedule",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q090.flow.schedule"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "open",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q090.flow.open"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q090.flow.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "dungeon.scene.region_9.v1": {
+      "dungeonScene": "region_9",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "天球儀の環には、周囲の床を動かす連結部がある。観測蓋と生活灯の電源を調べるため、まず現地の移動手段を確かめる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "gte",
+            "left": {
+              "ref": "dungeons.active.systems.terrain.changes"
+            },
+            "right": 1
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "今回の探索で天球儀を操作し、接続する床と通路の配置が変わることを確認した。操作するタイミングは隊で選べる。蓄電器の働きや生活灯への給電は、設備の記録と照合しよう。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.region_9"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.region_9",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "今回の探索では、まだ天球儀による地形変化を確認していない。現在と異なる地形を選んでから、改めて調べよう。"
+            }
+          ]
+        }
+      ]
+    },
+    "q090.observatory.entry": {
+      "storyQuest": "q090",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q090",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "天井を開く柄の隣に、生活灯の給電札がある。マオは読み上げる名簿を持っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "battery",
+              "text": "封印された蓄電器を点検する",
+              "storyAction": {
+                "quest": "q090",
+                "action": "entry_battery"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q090",
+                  "action": "entry_battery"
+                }
+              ]
+            },
+            {
+              "id": "full",
+              "text": "天球の主を倒し、全電力で天井を開く",
+              "storyAction": {
+                "quest": "q090",
+                "action": "entry_full"
+              },
+              "requirement": "戦闘。作業・報酬は勝利後に確定する。",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_9",
+                  "on_win": [
+                    {
+                      "op": "story.action",
+                      "quest": "q090",
+                      "action": "entry_full"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q090.observatory.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "narrate",
+                      "text": "戦いを切り上げた。作業は確定していない。現場で再開できる。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q090.observatory.entry"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "narrate",
+                      "text": "救助班に旧王領の村へ運び出された。現場へ戻れば直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "surface",
+              "text": "地下の灯を保ち、地上への観測行を組む",
+              "storyAction": {
+                "quest": "q090",
+                "action": "entry_surface"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q090",
+                  "action": "entry_surface"
+                },
+                {
+                  "op": "jump",
+                  "script": "q090.observatory.assemble"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q090.observatory.schedule": {
+      "storyQuest": "q090",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q090",
+          "scene": "schedule"
+        },
+        {
+          "op": "narrate",
+          "text": "生活灯と観測蓋は同じ電源を奪い合うが、観測中だけ蓄電器から給電できる。 蓄電器で生活灯を保てるのは一時間。マオは四十分で名前を読み終えられるという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hour",
+              "text": "切替を予約し、一時間の観測を始める",
+              "storyAction": {
+                "quest": "q090",
+                "action": "schedule_hour"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q090",
+                  "action": "schedule_hour"
+                }
+              ]
+            },
+            {
+              "id": "trip",
+              "text": "蓄電器を使わず、地上の観測行へ替える",
+              "storyAction": {
+                "quest": "q090",
+                "action": "schedule_trip"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q090",
+                  "action": "schedule_trip"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q090.observatory.open": {
+      "storyQuest": "q090",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q090",
+          "scene": "open"
+        },
+        {
+          "op": "narrate",
+          "text": "星が見え、生活灯も点いている。名簿が読み終わり、残る二十分が告げられた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "close",
+              "text": "予定内に蓋を閉じ、生活灯を通常電源へ戻す",
+              "storyAction": {
+                "quest": "q090",
+                "action": "open_close"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q090",
+                  "action": "open_close"
+                }
+              ]
+            },
+            {
+              "id": "longer",
+              "text": "観測を延長し、蓄電の残りを使い切る",
+              "storyAction": {
+                "quest": "q090",
+                "action": "open_longer"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q090",
+                  "action": "open_longer"
+                },
+                {
+                  "op": "jump",
+                  "script": "q090.observatory.exhausted"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q090.observatory.reserve": {
+      "storyQuest": "q090",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q090",
+          "scene": "reserve"
+        },
+        {
+          "op": "narrate",
+          "text": "マオと蓋の制御台へ戻った。一時間で閉じる役を決め、生活灯を蓄電器へ切り替える。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "start",
+              "text": "生活灯の切替と観測蓋の開放を行う",
+              "storyAction": {
+                "quest": "q090",
+                "action": "reserve_start"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q090",
+                  "action": "reserve_start"
+                },
+                {
+                  "op": "jump",
+                  "script": "q090.observatory.opened"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q090.observatory.opened": {
+      "storyQuest": "q090",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q090",
+          "scene": "opened"
+        },
+        {
+          "op": "narrate",
+          "text": "蓋が開き、生活灯は蓄電器で点いている。名簿を持つマオと観覧者を観測席へ案内する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "escort",
+              "text": "皆で観測席へ向かう",
+              "storyAction": {
+                "quest": "q090",
+                "action": "opened_escort"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q090",
+                  "action": "opened_escort"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q090.observatory.close": {
+      "storyQuest": "q090",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q090",
+          "scene": "close"
+        },
+        {
+          "op": "narrate",
+          "text": "制御台へ戻った。予定内に蓋を閉じ、生活灯を通常電源へ戻す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q090",
+                "action": "close_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q090",
+                  "action": "close_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q090.observatory.end.informed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q090.observatory.exhausted": {
+      "storyQuest": "q090",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q090",
+          "scene": "exhausted"
+        },
+        {
+          "op": "narrate",
+          "text": "観測を延長し、蓄電が尽きて生活灯が消えた。保守員のいる制御台へ戻る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "観覧者と制御台へ戻る",
+              "storyAction": {
+                "quest": "q090",
+                "action": "exhausted_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q090",
+                  "action": "exhausted_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q090.observatory.overrun": {
+      "storyQuest": "q090",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q090",
+          "scene": "overrun"
+        },
+        {
+          "op": "narrate",
+          "text": "保守員が制御台で蓋を閉じる。次回は終了役を別に置くことを申し送る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q090",
+                "action": "overrun_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q090",
+                  "action": "overrun_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q090.observatory.end.overrun"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q090.observatory.assemble": {
+      "storyQuest": "q090",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q090",
+          "scene": "assemble"
+        },
+        {
+          "op": "narrate",
+          "text": "地下の生活灯を保ったまま、地上へ向かう列を集めた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "escort",
+              "text": "マオと列を地上の観測台へ案内する",
+              "storyAction": {
+                "quest": "q090",
+                "action": "assemble_escort"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q090",
+                  "action": "assemble_escort"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q090.observatory.surface": {
+      "storyQuest": "q090",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q090",
+          "scene": "surface"
+        },
+        {
+          "op": "narrate",
+          "text": "皆が地上の観測台へ到着した。地下の給電を変えず、本当の空を見る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q090",
+                "action": "surface_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q090",
+                  "action": "surface_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q090.observatory.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q090.observatory.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "地下で働く人も、本当の星を見た。マオは帰らぬ名を読み終えて蓋を閉じる。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q090",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q090.observatory.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "広い空が見えた。暗い作業場の人は、足を止めて夜が終わるのを待つ。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q090",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q090.observatory.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "地下の灯は残った。外へ出る列には、初めて空を見る人も並ぶ。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q090",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q090.observatory.end.overrun": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "星を見る時間は延びた。蓄電が切れて生活灯が消え、保守員が暗い作業場から蓋を閉じた。次の公開観測には終了役を別に置くと決まった。"
+        },
+        {
+          "op": "add",
+          "target": "vars.overrun",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q090",
+          "outcome": "overrun"
+        }
+      ]
+    },
+    "q090.observatory.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q090"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q090.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q090.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q090.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "地下で働く人も、本当の星を見た。マオは帰らぬ名を読み終えて蓋を閉じる。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "広い空が見えた。暗い作業場の人は、足を止めて夜が終わるのを待つ。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "地下の灯は残った。外へ出る列には、初めて空を見る人も並ぶ。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "overrun",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "星を見る時間は延びた。蓄電が切れて生活灯が消え、保守員が暗い作業場から蓋を閉じた。次の公開観測には終了役を別に置くと決まった。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q090"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q090.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q090.observatory.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "schedule",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q090.observatory.schedule"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "open",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q090.observatory.open"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "reserve",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q090.observatory.reserve"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "opened",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q090.observatory.opened"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "close",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q090.observatory.close"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "exhausted",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q090.observatory.exhausted"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "overrun",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q090.observatory.overrun"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "assemble",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q090.observatory.assemble"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "surface",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q090.observatory.surface"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q090.observatory.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "空を返す日の現場",
+      "battery": "封印された蓄電器",
+      "sky": "蓋の下の観測席",
+      "surface": "地上の観測行の到着先",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "battery"
+      ],
+      [
+        "transit",
+        "sky"
+      ],
+      [
+        "transit",
+        "surface"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "battery",
+          "sky",
+          "surface",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise",
+          "overrun"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "lidOpen": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "lidOpen"
+      },
+      "fullPower": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "fullPower"
+      },
+      "backup": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "backup"
+      },
+      "exhausted": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "exhausted"
+      },
+      "restored": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "restored"
+      },
+      "maoAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "battery",
+          "sky",
+          "surface",
+          "transit"
+        ],
+        "meaning": "mao の所在または保持者"
+      },
+      "visitorsAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "battery",
+          "sky",
+          "surface",
+          "transit"
+        ],
+        "meaning": "visitors の所在または保持者"
+      },
+      "maintenanceAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "battery",
+          "sky",
+          "surface",
+          "transit"
+        ],
+        "meaning": "maintenance の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "mao": {
+        "holder": "maoAt",
+        "kind": "person"
+      },
+      "visitors": {
+        "holder": "visitorsAt",
+        "kind": "group"
+      },
+      "maintenance": {
+        "holder": "maintenanceAt",
+        "kind": "group"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "生活灯と観測蓋は同じ電源を奪い合うが、観測中だけ蓄電器から給電できる。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "空を返す日の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "schedule": {
+        "title": "封印された蓄電器",
+        "place": "battery",
+        "cast": [],
+        "requires": true
+      },
+      "open": {
+        "title": "蓋の下の観測席",
+        "place": "sky",
+        "cast": [],
+        "requires": true
+      },
+      "reserve": {
+        "title": "空を返す日の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "opened": {
+        "title": "空を返す日の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "close": {
+        "title": "空を返す日の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "exhausted": {
+        "title": "蓋の下の観測席",
+        "place": "sky",
+        "cast": [],
+        "requires": true
+      },
+      "overrun": {
+        "title": "空を返す日の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "assemble": {
+        "title": "空を返す日の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "surface": {
+        "title": "地上の観測行の到着先",
+        "place": "surface",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_battery": {
+        "from": [
+          "entry"
+        ],
+        "to": "schedule",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "mao"
+            ],
+            "path": [
+              "transit",
+              "battery"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "battery",
+            "requires": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "battery",
+          "companions": [
+            "mao"
+          ]
+        },
+        "depart": []
+      },
+      "entry_full": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "lidOpen",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "fullPower",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "entry_surface": {
+        "from": [
+          "entry"
+        ],
+        "to": "assemble",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "schedule_hour": {
+        "from": [
+          "schedule"
+        ],
+        "to": "reserve",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "mao"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "mao"
+          ]
+        },
+        "depart": []
+      },
+      "schedule_trip": {
+        "from": [
+          "schedule"
+        ],
+        "to": "assemble",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "mao"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "mao"
+          ]
+        },
+        "depart": []
+      },
+      "open_close": {
+        "from": [
+          "open"
+        ],
+        "to": "close",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "mao",
+              "visitors"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "mao",
+            "visitors"
+          ]
+        },
+        "depart": []
+      },
+      "open_longer": {
+        "from": [
+          "open"
+        ],
+        "to": "exhausted",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "backup",
+            "value": false
+          },
+          {
+            "op": "set",
+            "key": "exhausted",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "reserve_start": {
+        "from": [
+          "reserve"
+        ],
+        "to": "opened",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "backup",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "lidOpen",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "opened_escort": {
+        "from": [
+          "opened"
+        ],
+        "to": "open",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "mao",
+              "visitors"
+            ],
+            "path": [
+              "transit",
+              "sky"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "sky",
+          "companions": [
+            "mao",
+            "visitors"
+          ]
+        },
+        "depart": []
+      },
+      "close_finish": {
+        "from": [
+          "close"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "lidOpen",
+            "value": false
+          },
+          {
+            "op": "set",
+            "key": "backup",
+            "value": false
+          },
+          {
+            "op": "set",
+            "key": "restored",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "exhausted_return": {
+        "from": [
+          "exhausted"
+        ],
+        "to": "overrun",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "mao",
+              "visitors"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "mao",
+            "visitors"
+          ]
+        },
+        "depart": []
+      },
+      "overrun_finish": {
+        "from": [
+          "overrun"
+        ],
+        "ending": "overrun",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "lidOpen",
+            "value": false
+          },
+          {
+            "op": "set",
+            "key": "restored",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "overrun"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "assemble_escort": {
+        "from": [
+          "assemble"
+        ],
+        "to": "surface",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "mao",
+              "visitors"
+            ],
+            "path": [
+              "transit",
+              "surface"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "surface",
+          "companions": [
+            "mao",
+            "visitors"
+          ]
+        },
+        "depart": []
+      },
+      "surface_finish": {
+        "from": [
+          "surface"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q090.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q090.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q090.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q090.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q090.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q090.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q090.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q090.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q090.values.partyAt"
+                },
+                "right": "surface"
+              }
+            ]
+          }
+        ]
+      },
+      "overrun": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q090.values.resolution"
+            },
+            "right": "overrun"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q090.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q090.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_9",
+        "map": "region_9_f2",
+        "x": 12,
+        "y": 9
+      },
+      "battery": {
+        "kind": "dungeon",
+        "dungeon": "region_9",
+        "map": "region_9_f2",
+        "x": 11,
+        "y": 5
+      },
+      "sky": {
+        "kind": "dungeon",
+        "dungeon": "region_9",
+        "map": "region_9_f2",
+        "x": 9,
+        "y": 11
+      },
+      "surface": {
+        "kind": "town",
+        "location": "observatory_platform"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_village",
+  "receptionLocations": [
+    "royal_board"
+  ]
+}
