@@ -1,0 +1,2627 @@
+{
+  "schemaVersion": 1,
+  "id": "q065",
+  "number": 65,
+  "title": "水中の火葬",
+  "client": "葬送師のアオ",
+  "brief": "水中で燃える灯へ遺灰を届けてください。途中で灯が消える。",
+  "region": 7,
+  "type": "authored_progression",
+  "recommendedLevel": 7,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。 旧王領の村の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q065_clue_a",
+      "title": "水中の火葬：現場の痕跡",
+      "points": [
+        {
+          "map": "region_7_f1",
+          "x": 4,
+          "y": 5,
+          "dungeon": "region_7"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q065.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q065.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q065"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q065"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_7"
+    },
+    {
+      "id": "q065_clue_b",
+      "title": "水中の火葬：記録と証言",
+      "points": [
+        {
+          "map": "region_7_f1",
+          "x": 7,
+          "y": 9,
+          "dungeon": "region_7"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q065.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q065.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q065"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q065"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_7"
+    },
+    {
+      "id": "q065_decision",
+      "title": "水中の火葬：決着の場",
+      "points": [
+        {
+          "map": "region_7_f1",
+          "x": 15,
+          "y": 5,
+          "dungeon": "region_7"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q065.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q065.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q065.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q065"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_7"
+    },
+    {
+      "id": "q065_sunken_entry",
+      "title": "水中の火葬の現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q065.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q065.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q065"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q065.sunken.visit",
+      "points": [
+        {
+          "dungeon": "region_7",
+          "map": "region_7_f1",
+          "x": 15,
+          "y": 5
+        }
+      ]
+    },
+    {
+      "id": "q065_sunken_supply",
+      "title": "油膜をつなぐ供油路",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "supply",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q065.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q065.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q065"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q065.sunken.visit",
+      "points": [
+        {
+          "dungeon": "region_7",
+          "map": "region_7_f1",
+          "x": 15,
+          "y": 3
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_7_f1",
+      "x": 4,
+      "y": 5,
+      "object": "q065_clue_a",
+      "role": "clue_a"
+    },
+    {
+      "map": "region_7_f1",
+      "x": 7,
+      "y": 9,
+      "object": "q065_clue_b",
+      "role": "clue_b"
+    },
+    {
+      "map": "region_7_f1",
+      "x": 15,
+      "y": 5,
+      "object": "q065_decision",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "止まった潮で供油路をつなぎ、灯を送る",
+      "text": "灯は遺灰と進んだ。葬送師は待つ時間も儀式へ組み込む。",
+      "gold": 129,
+      "xp": 116
+    },
+    "contract": {
+      "label": "強い油を流し、灯を長く燃やす",
+      "text": "火は通った。水面に残る油を、翌日漁師が回収する。",
+      "gold": 149,
+      "xp": 89
+    },
+    "compromise": {
+      "label": "灯を岸へ持ち帰って弔う",
+      "text": "海へ届く道は変わった。遺族は火を見ながら別れを言えた。",
+      "gold": 83,
+      "xp": 87
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/sunken-first.mjs",
+    "world": {
+      "truth": "灯は油の膜を辿り、潮の切替で流れが途切れると消える。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "灯は油の膜を辿り、潮の切替で流れが途切れると消える。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "水中で燃える灯へ遺灰を届けてください。途中で灯が消える。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "葬送師のアオ",
+        "observation": "水中で燃える灯へ遺灰を届けてください。途中で灯が消える。",
+        "belief": "水中で燃える灯へ遺灰を届けてください。途中で灯が消える。",
+        "goal": "水中で燃える灯へ遺灰を届けてください。途中で灯が消える。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "水中で燃える灯へ遺灰を届けてください。途中で灯が消える。",
+      "progression": "潮の切替を待って供油路をつなぐ儀礼。待機を打ち切って岸へ戻ることもできる。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q065.sunken.entry"
+        },
+        {
+          "id": "tide",
+          "script": "q065.sunken.tide"
+        },
+        {
+          "id": "sent",
+          "script": "q065.sunken.sent"
+        },
+        {
+          "id": "oil_supply",
+          "script": "q065.sunken.oil_supply"
+        },
+        {
+          "id": "oiled",
+          "script": "q065.sunken.oiled"
+        },
+        {
+          "id": "ashore",
+          "script": "q065.sunken.ashore"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "水中で燃える灯へ遺灰を届けてください。途中で灯が消える。",
+      "openQuestion": "水中の火葬の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "frameShift",
+      "newInformation": "灯は油の膜を辿り、潮の切替で流れが途切れると消える。",
+      "retroactiveTargets": [],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q065.flow.entry"
+      },
+      {
+        "id": "tide",
+        "script": "q065.flow.tide"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q065.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q065.phase",
+        "meaning": "各場面に明記した phase の行為・合意の記録",
+        "writer": [
+          "entry",
+          "tide"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "潮の切替を待って供油路をつなぐ儀礼。待機を打ち切って岸へ戻ることもできる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "潮の切替を待って供油路をつなぐ儀礼。待機を打ち切って岸へ戻ることもできる。",
+    "flowVersion": 2,
+    "entryScript": "q065.sunken.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "水上の灯が潮目で消えた。油膜は二つに切れている。",
+        "options": [
+          {
+            "id": "wait",
+            "text": "潮の変わり目まで灯を預かる",
+            "to": "tide",
+            "action": "entry_wait"
+          },
+          {
+            "id": "oil",
+            "text": "強い油を流し、灯を長く燃やす",
+            "to": "oil_supply",
+            "action": "entry_oil"
+          },
+          {
+            "id": "shore",
+            "text": "灯を岸へ持ち帰って弔う",
+            "to": "ashore",
+            "action": "entry_shore"
+          }
+        ]
+      },
+      {
+        "id": "tide",
+        "place": "supply",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q065.values.phase"
+              },
+              "right": 0
+            },
+            "yes": "流れはまだ外へ向く。継ぎ足した油も離れていく。",
+            "no": {
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q065.values.phase"
+                },
+                "right": 1
+              },
+              "yes": "潮が止まり、二つの油膜の端が近づいた。今なら供油路をつなげられる。",
+              "no": "潮は内側へ向き、油膜はつながる場所を過ぎた。次の切替を待てる。"
+            }
+          }
+        ],
+        "options": [
+          {
+            "id": "wait",
+            "text": "潮をもう一段待つ",
+            "to": "tide",
+            "action": "tide_wait"
+          },
+          {
+            "id": "cycle",
+            "text": "次の潮替わりまで待ち直す",
+            "to": "tide",
+            "action": "tide_cycle"
+          },
+          {
+            "id": "join",
+            "text": "止まった潮で供油路をつなぎ、灯を送る",
+            "to": "sent",
+            "action": "tide_join"
+          },
+          {
+            "id": "return",
+            "text": "待つのをやめ、岸で弔う",
+            "to": "ashore",
+            "action": "tide_return"
+          }
+        ]
+      },
+      {
+        "id": "sent",
+        "place": "entry",
+        "text": "供油路をつないだ灯を儀礼の場へ戻し、止まった潮へ送った。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@informed",
+            "action": "sent_finish"
+          }
+        ]
+      },
+      {
+        "id": "oil_supply",
+        "place": "supply",
+        "text": "葬送師の供油路から儀礼用の油を受け取る。携行灯の燃料とは別に運ぶ。",
+        "options": [
+          {
+            "id": "pour",
+            "text": "儀礼用の油を灯へ運ぶ",
+            "to": "oiled",
+            "action": "oil_supply_pour"
+          }
+        ]
+      },
+      {
+        "id": "oiled",
+        "place": "entry",
+        "text": "灯の場へ儀礼用の油を運び、火が通るのを確かめた。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@contract",
+            "action": "oiled_finish"
+          }
+        ]
+      },
+      {
+        "id": "ashore",
+        "place": "shore",
+        "text": "岸へ灯を持ち帰り、遺族の前へ置いた。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@compromise",
+            "action": "ashore_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "sunken-first-ten",
+      "settlement": "oddland_village",
+      "saveRevision": 2,
+      "scope": "沈没城前半10件の現場接続。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q065.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "消える地点に灰はなく、油膜だけが二方向へ裂けている。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q065",
+          "key": "clue_a",
+          "text": "消える地点に灰はなく、油膜だけが二方向へ裂けている。"
+        }
+      ]
+    },
+    "q065.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "葬送師のアオ",
+          "text": "供油室の潮見表は、灯の消えた時刻と一致します。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q065",
+          "key": "clue_b",
+          "text": "供油室の潮見表は、灯の消えた時刻と一致する。"
+        }
+      ]
+    },
+    "q065.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "水中の火葬\n\n水中で燃える灯へ遺灰を届けてください。途中で灯が消える。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "灯を呑む影を倒して強い油を流す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_7",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "火は通った。水面に残る油を、翌日漁師が回収する。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q065",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "潮の切替を待ち供油路をつなぐ",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q065.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q065.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "灯は油の膜を辿り、潮の切替で流れが途切れると消える。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "灯は遺灰と進んだ。葬送師は待つ時間も儀式へ組み込む。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q065",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "灯を持ち帰り岸で弔う",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "海へ届く道は変わった。遺族は火を見ながら別れを言えた。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q065",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q065.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "水中の火葬\n\n水中で燃える灯へ遺灰を届けてください。途中で灯が消える。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q065.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q065.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "灯は油の膜を辿り、潮の切替で流れが途切れると消える。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q065.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "灯を呑む影を倒して強い油を流す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_7",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "火は通った。水面に残る油を、翌日漁師が回収する。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q065",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "潮の切替を待ち供油路をつなぐ",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q065.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q065.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "灯は遺灰と進んだ。葬送師は待つ時間も儀式へ組み込む。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q065",
+                  "outcome": "informed"
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q065.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q065.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "compromise",
+              "text": "灯を持ち帰り岸で弔う",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "海へ届く道は変わった。遺族は火を見ながら別れを言えた。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q065",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」葬送師のアオは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられる。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q065.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q065.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q065.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "灯は遺灰と進んだ。葬送師は待つ時間も儀式へ組み込む。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q065.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "火は通った。水面に残る油を、翌日漁師が回収する。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q065.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "海へ届く道は変わった。遺族は火を見ながら別れを言えた。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q065.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q065.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q065.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q065.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q065.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q065.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q065.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "水上の灯が潮目で消えた。油膜は二つに切れている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wait",
+              "text": "潮の変わり目まで灯を預かる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q065.phase",
+                  "value": 0
+                },
+                {
+                  "op": "jump",
+                  "script": "q065.flow.tide"
+                }
+              ]
+            },
+            {
+              "id": "oil",
+              "text": "強い油を流し、灯を長く燃やす",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q065.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "shore",
+              "text": "灯を岸へ持ち帰って弔う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q065.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q065.flow.tide": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q065.node",
+          "value": "tide"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q065.phase"
+            },
+            "right": 0
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "流れはまだ外へ向く。継ぎ足した油も離れていく。"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.flow.q065.phase"
+                },
+                "right": 1
+              },
+              "then": [
+                {
+                  "op": "say",
+                  "text": "潮が止まり、二つの油膜の端が近づいた。今なら供油路をつなげられる。"
+                }
+              ],
+              "else": [
+                {
+                  "op": "say",
+                  "text": "潮は内側へ向き、油膜はつながる場所を過ぎた。次の切替を待てる。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wait",
+              "text": "潮をもう一段待つ",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "flags.flow.q065.phase"
+                    },
+                    "right": 2
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q065.phase",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "flags.flow.q065.phase"
+                      },
+                      1
+                    ]
+                  }
+                },
+                {
+                  "op": "jump",
+                  "script": "q065.flow.tide"
+                }
+              ]
+            },
+            {
+              "id": "cycle",
+              "text": "次の潮替わりまで待ち直す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q065.phase"
+                    },
+                    "right": 2
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q065.phase",
+                  "value": 0
+                },
+                {
+                  "op": "jump",
+                  "script": "q065.flow.tide"
+                }
+              ]
+            },
+            {
+              "id": "join",
+              "text": "止まった潮で供油路をつなぎ、灯を送る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q065.phase"
+                    },
+                    "right": 1
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q065.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "return",
+              "text": "待つのをやめ、岸で弔う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q065.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q065.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q065.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "灯は遺灰と進んだ。葬送師は待つ時間も儀式へ組み込む。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q065",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q065.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q065.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "火は通った。水面に残る油を、翌日漁師が回収する。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q065",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q065.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q065.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "海へ届く道は変わった。遺族は火を見ながら別れを言えた。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q065",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q065.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q065.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q065.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "灯は遺灰と進んだ。葬送師は待つ時間も儀式へ組み込む。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "火は通った。水面に残る油を、翌日漁師が回収する。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "海へ届く道は変わった。遺族は火を見ながら別れを言えた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q065"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q065.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q065.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q065.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "tide",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q065.flow.tide"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q065.flow.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q065.sunken.entry": {
+      "storyQuest": "q065",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q065",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "水上の灯が潮目で消えた。油膜は二つに切れている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wait",
+              "text": "潮の変わり目まで灯を預かる",
+              "storyAction": {
+                "quest": "q065",
+                "action": "entry_wait"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q065",
+                  "action": "entry_wait"
+                }
+              ]
+            },
+            {
+              "id": "oil",
+              "text": "強い油を流し、灯を長く燃やす",
+              "storyAction": {
+                "quest": "q065",
+                "action": "entry_oil"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q065",
+                  "action": "entry_oil"
+                }
+              ]
+            },
+            {
+              "id": "shore",
+              "text": "灯を岸へ持ち帰って弔う",
+              "storyAction": {
+                "quest": "q065",
+                "action": "entry_shore"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q065",
+                  "action": "entry_shore"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q065.sunken.tide": {
+      "storyQuest": "q065",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q065",
+          "scene": "tide"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q065.values.phase"
+            },
+            "right": 0
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "流れはまだ外へ向く。継ぎ足した油も離れていく。"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q065.values.phase"
+                },
+                "right": 1
+              },
+              "then": [
+                {
+                  "op": "narrate",
+                  "text": "潮が止まり、二つの油膜の端が近づいた。今なら供油路をつなげられる。"
+                }
+              ],
+              "else": [
+                {
+                  "op": "narrate",
+                  "text": "潮は内側へ向き、油膜はつながる場所を過ぎた。次の切替を待てる。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wait",
+              "text": "潮をもう一段待つ",
+              "storyAction": {
+                "quest": "q065",
+                "action": "tide_wait"
+              },
+              "condition": {
+                "op": "lt",
+                "left": {
+                  "ref": "stories.q065.values.phase"
+                },
+                "right": 2
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q065",
+                  "action": "tide_wait"
+                },
+                {
+                  "op": "jump",
+                  "script": "q065.sunken.tide"
+                }
+              ]
+            },
+            {
+              "id": "cycle",
+              "text": "次の潮替わりまで待ち直す",
+              "storyAction": {
+                "quest": "q065",
+                "action": "tide_cycle"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q065.values.phase"
+                },
+                "right": 2
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q065",
+                  "action": "tide_cycle"
+                },
+                {
+                  "op": "jump",
+                  "script": "q065.sunken.tide"
+                }
+              ]
+            },
+            {
+              "id": "join",
+              "text": "止まった潮で供油路をつなぎ、灯を送る",
+              "storyAction": {
+                "quest": "q065",
+                "action": "tide_join"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q065.values.phase"
+                },
+                "right": 1
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q065",
+                  "action": "tide_join"
+                }
+              ]
+            },
+            {
+              "id": "return",
+              "text": "待つのをやめ、岸で弔う",
+              "storyAction": {
+                "quest": "q065",
+                "action": "tide_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q065",
+                  "action": "tide_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q065.sunken.sent": {
+      "storyQuest": "q065",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q065",
+          "scene": "sent"
+        },
+        {
+          "op": "narrate",
+          "text": "供油路をつないだ灯を儀礼の場へ戻し、止まった潮へ送った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q065",
+                "action": "sent_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q065",
+                  "action": "sent_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q065.sunken.end.informed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q065.sunken.oil_supply": {
+      "storyQuest": "q065",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q065",
+          "scene": "oil_supply"
+        },
+        {
+          "op": "narrate",
+          "text": "葬送師の供油路から儀礼用の油を受け取る。携行灯の燃料とは別に運ぶ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "pour",
+              "text": "儀礼用の油を灯へ運ぶ",
+              "storyAction": {
+                "quest": "q065",
+                "action": "oil_supply_pour"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q065",
+                  "action": "oil_supply_pour"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q065.sunken.oiled": {
+      "storyQuest": "q065",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q065",
+          "scene": "oiled"
+        },
+        {
+          "op": "narrate",
+          "text": "灯の場へ儀礼用の油を運び、火が通るのを確かめた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q065",
+                "action": "oiled_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q065",
+                  "action": "oiled_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q065.sunken.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q065.sunken.ashore": {
+      "storyQuest": "q065",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q065",
+          "scene": "ashore"
+        },
+        {
+          "op": "narrate",
+          "text": "岸へ灯を持ち帰り、遺族の前へ置いた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q065",
+                "action": "ashore_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q065",
+                  "action": "ashore_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q065.sunken.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q065.sunken.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "灯は遺灰と進んだ。葬送師は待つ時間も儀式へ組み込む。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q065",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q065.sunken.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "火は通った。水面に残る油を、翌日漁師が回収する。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q065",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q065.sunken.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "海へ届く道は変わった。遺族は火を見ながら別れを言えた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q065",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q065.sunken.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q065"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q065.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q065.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q065.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "灯は遺灰と進んだ。葬送師は待つ時間も儀式へ組み込む。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "火は通った。水面に残る油を、翌日漁師が回収する。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "海へ届く道は変わった。遺族は火を見ながら別れを言えた。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q065"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q065.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q065.sunken.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "tide",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q065.sunken.tide"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "sent",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q065.sunken.sent"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "oil_supply",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q065.sunken.oil_supply"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "oiled",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q065.sunken.oiled"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "ashore",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q065.sunken.ashore"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q065.sunken.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "水中の火葬の現場",
+      "supply": "油膜をつなぐ供油路",
+      "shore": "岸の葬送の場",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "supply"
+      ],
+      [
+        "transit",
+        "shore"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "supply",
+          "shore",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "connected": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "connected"
+      },
+      "phase": {
+        "type": "integer",
+        "initial": 0,
+        "min": 0,
+        "max": 2,
+        "meaning": "phase"
+      },
+      "lampAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "supply",
+          "shore",
+          "transit",
+          "party",
+          "ritualOil"
+        ],
+        "meaning": "lamp の所在または保持者"
+      },
+      "ritualOilAt": {
+        "type": "enum",
+        "initial": "supply",
+        "values": [
+          "entry",
+          "supply",
+          "shore",
+          "transit",
+          "party",
+          "lamp"
+        ],
+        "meaning": "ritualOil の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "lamp": {
+        "holder": "lampAt",
+        "kind": "item"
+      },
+      "ritualOil": {
+        "holder": "ritualOilAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "灯は油の膜を辿り、潮の切替で流れが途切れると消える。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "水中の火葬の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "tide": {
+        "title": "油膜をつなぐ供油路",
+        "place": "supply",
+        "cast": [],
+        "requires": true
+      },
+      "sent": {
+        "title": "水中の火葬の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "oil_supply": {
+        "title": "油膜をつなぐ供油路",
+        "place": "supply",
+        "cast": [],
+        "requires": true
+      },
+      "oiled": {
+        "title": "水中の火葬の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "ashore": {
+        "title": "岸の葬送の場",
+        "place": "shore",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_wait": {
+        "from": [
+          "entry"
+        ],
+        "to": "tide",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "supply"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "phase",
+            "value": 0
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "supply",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "lamp",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      },
+      "entry_oil": {
+        "from": [
+          "entry"
+        ],
+        "to": "oil_supply",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "supply"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "supply",
+          "companions": []
+        },
+        "depart": []
+      },
+      "entry_shore": {
+        "from": [
+          "entry"
+        ],
+        "to": "ashore",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "shore"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "lamp",
+            "from": "party",
+            "to": "shore"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "shore",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "lamp",
+            "from": "entry",
+            "to": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q065.values.lampAt"
+              },
+              "right": "entry"
+            }
+          }
+        ]
+      },
+      "tide_wait": {
+        "from": [
+          "tide"
+        ],
+        "to": "tide",
+        "requires": {
+          "op": "lt",
+          "left": {
+            "ref": "stories.q065.values.phase"
+          },
+          "right": 2
+        },
+        "effects": [
+          {
+            "op": "set",
+            "key": "phase",
+            "value": {
+              "op": "add",
+              "args": [
+                {
+                  "ref": "stories.q065.values.phase"
+                },
+                1
+              ]
+            }
+          }
+        ],
+        "once": false
+      },
+      "tide_cycle": {
+        "from": [
+          "tide"
+        ],
+        "to": "tide",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q065.values.phase"
+          },
+          "right": 2
+        },
+        "effects": [
+          {
+            "op": "set",
+            "key": "phase",
+            "value": 0
+          }
+        ],
+        "once": false
+      },
+      "tide_join": {
+        "from": [
+          "tide"
+        ],
+        "to": "sent",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q065.values.phase"
+          },
+          "right": 1
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "connected",
+            "value": true
+          },
+          {
+            "op": "transfer",
+            "entity": "lamp",
+            "from": "party",
+            "to": "entry"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "tide_return": {
+        "from": [
+          "tide"
+        ],
+        "to": "ashore",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "shore"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "lamp",
+            "from": "party",
+            "to": "shore"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "shore",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "lamp",
+            "from": "entry",
+            "to": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q065.values.lampAt"
+              },
+              "right": "entry"
+            }
+          }
+        ]
+      },
+      "sent_finish": {
+        "from": [
+          "sent"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "oil_supply_pour": {
+        "from": [
+          "oil_supply"
+        ],
+        "to": "oiled",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "ritualOil",
+            "from": "party",
+            "to": "lamp"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "ritualOil",
+            "from": "supply",
+            "to": "party"
+          }
+        ]
+      },
+      "oiled_finish": {
+        "from": [
+          "oiled"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "ashore_finish": {
+        "from": [
+          "ashore"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q065.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q065.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q065.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q065.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q065.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q065.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q065.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q065.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q065.values.partyAt"
+                },
+                "right": "shore"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_7",
+        "map": "region_7_f1",
+        "x": 15,
+        "y": 5
+      },
+      "supply": {
+        "kind": "dungeon",
+        "dungeon": "region_7",
+        "map": "region_7_f1",
+        "x": 15,
+        "y": 3
+      },
+      "shore": {
+        "kind": "town",
+        "location": "royal_harbor"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_village",
+  "receptionLocations": [
+    "royal_board"
+  ]
+}
