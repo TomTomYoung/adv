@@ -1,0 +1,2143 @@
+{
+  "schemaVersion": 1,
+  "id": "q170",
+  "number": 170,
+  "title": "別れるための冒険",
+  "client": "旅仲間セフ",
+  "brief": "最後に一度、湖の島の野営跡を訪ねたいのだ。",
+  "region": 7,
+  "type": "scene_graph",
+  "recommendedLevel": 7,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 旧王領の村の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q170_scene",
+      "title": "別れるための冒険：旅仲間セフ",
+      "points": [
+        {
+          "map": "region_7_f2",
+          "x": 9,
+          "y": 1,
+          "dungeon": "region_7"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q170.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q170.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q170.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q170"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_7"
+    },
+    {
+      "id": "q170_royal_shore",
+      "title": "湖の渡し場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "shore",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q170.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q170.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q170"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q170.royal.visit",
+      "points": [
+        {
+          "dungeon": "royal_sites",
+          "map": "e2_royal_lakeshore",
+          "x": 13,
+          "y": 7
+        }
+      ]
+    },
+    {
+      "id": "q170_royal_camp",
+      "title": "島の古い鍋のある野営地",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "camp",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q170.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q170.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q170"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q170.royal.visit",
+      "points": [
+        {
+          "dungeon": "royal_sites",
+          "map": "e2_royal_island",
+          "x": 9,
+          "y": 5
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_7_f2",
+      "x": 9,
+      "y": 1,
+      "object": "q170_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "send": {
+      "label": "店へ帰る仲間",
+      "text": "セフは店へ戻った。次の野営では別の者が鍋を置き、その向きが少し違った。",
+      "gold": 129,
+      "xp": 87
+    },
+    "holiday": {
+      "label": "条件のある再会",
+      "text": "開店後の便りで再会を相談すると決めた。帰隊を自動的に確約させず、次の返事を待つ関係にした。",
+      "gold": 129,
+      "xp": 87
+    },
+    "role": {
+      "label": "最後の一便",
+      "text": "補給の一便を手伝ってからセフは帰った。鍋を置く役も選ぶ仕事となり、別れの約束は守られた。",
+      "gold": 129,
+      "xp": 87
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/sunken-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3816fa85bc3dd738a74b8",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "島には財宝でなく、初めて野営した時の鍋が残っている。セフは自分が食事を作ったことしか覚えられていないと考えている。同行時の救助や約束が記録されていれば、その具体的な出来事を返せる。未記録の功績を突然作らない。",
+      "fixedPast": "初期からの仲間セフが、最後に一度だけ湖の島へ行きたいと言う。故郷で店を継ぐことを決めているが、引き留められるのが怖く、遺跡の調査依頼に見せている。主人公の過去の戦績が高いほど、セフは足を引っ張ると思っていた理由を語れる。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "旅仲間セフ",
+        "beliefsAndGoals": "初期からの仲間セフが、最後に一度だけ湖の島へ行きたいと言う。故郷で店を継ぐことを決めているが、引き留められるのが怖く、遺跡の調査依頼に見せている。主人公の過去の戦績が高いほど、セフは足を引っ張ると思っていた理由を語れる。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "最後に一度、湖の島の野営跡を訪ねたいのだ。"
+      }
+    ],
+    "conflict": {
+      "design": "島行き→野営跡→告白→送り出す／期間を決めて休む／残留を相談。残留は本人が別の役割を望み、双方が条件を合意した場合だけだ。引留めに失敗しても関係を失敗値に固定しない。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "camp",
+          "script": "q170.royal.camp"
+        },
+        {
+          "id": "role",
+          "script": "q170.royal.role"
+        },
+        {
+          "id": "entry",
+          "script": "q170.royal.entry"
+        },
+        {
+          "id": "shore",
+          "script": "q170.royal.shore"
+        },
+        {
+          "id": "ashore_send",
+          "script": "q170.royal.ashore_send"
+        },
+        {
+          "id": "farewell_send",
+          "script": "q170.royal.farewell_send"
+        },
+        {
+          "id": "ashore_holiday",
+          "script": "q170.royal.ashore_holiday"
+        },
+        {
+          "id": "farewell_holiday",
+          "script": "q170.royal.farewell_holiday"
+        },
+        {
+          "id": "ashore_role",
+          "script": "q170.royal.ashore_role"
+        },
+        {
+          "id": "farewell_role",
+          "script": "q170.royal.farewell_role"
+        },
+        {
+          "id": "cargo",
+          "script": "q170.royal.cargo"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "最後に一度、湖の島の野営跡を訪ねたいのだ。"
+    },
+    "reveal": {
+      "newInformation": "島には財宝でなく、初めて野営した時の鍋が残っている。セフは自分が食事を作ったことしか覚えられていないと考えている。同行時の救助や約束が記録されていれば、その具体的な出来事を返せる。未記録の功績を突然作らない。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q170.scene.entry"
+      },
+      {
+        "id": "role",
+        "script": "q170.scene.role"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": [
+        "セフは本篇の旅仲間NPC。既存actorの加入履歴や未記録の功績を捏造せず、パーティーを強制変更しない。"
+      ]
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q170.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "camp",
+        "place": "camp",
+        "text": "島に残ったのは財宝でなく古い鍋だった。セフは故郷で店を継ぐと決めていた。「引き留められるのが怖くて、調査と言った」",
+        "options": [
+          {
+            "id": "send",
+            "text": "故郷の店へ送り出す",
+            "to": "ashore_send",
+            "action": "camp_send"
+          },
+          {
+            "id": "holiday",
+            "text": "再会の条件を決めた休暇を相談する",
+            "to": "ashore_holiday",
+            "action": "camp_holiday"
+          },
+          {
+            "id": "role",
+            "text": "戦う以外の役割で残りたいか、本人へ聞く",
+            "to": "role",
+            "action": "camp_role"
+          }
+        ]
+      },
+      {
+        "id": "role",
+        "place": "camp",
+        "text": "セフは無期限には残れないが、開店前の一便だけ補給を手伝えると言う。店を継ぐ決断を取り消す承諾ではない。",
+        "options": [
+          {
+            "id": "agree",
+            "text": "一便だけの役割と出発日を合意する",
+            "to": "ashore_role",
+            "action": "role_agree"
+          },
+          {
+            "id": "send",
+            "text": "今すぐ送り出す",
+            "to": "ashore_send",
+            "action": "role_send"
+          }
+        ]
+      },
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "セフと湖の島を調べに行く約束をした。港から湖岸へ歩き、渡し舟で島へ渡る。",
+        "options": [
+          {
+            "id": "lake",
+            "text": "セフと湖の渡し場へ向かう",
+            "to": "shore",
+            "action": "entry_lake"
+          }
+        ]
+      },
+      {
+        "id": "shore",
+        "place": "shore",
+        "text": "湖の渡し場へ着いた。舟で島に渡り、野営地へ向かう。",
+        "options": [
+          {
+            "id": "island",
+            "text": "セフと島の野営地へ向かう",
+            "to": "camp",
+            "action": "shore_island"
+          }
+        ]
+      },
+      {
+        "id": "ashore_send",
+        "place": "shore",
+        "text": "セフと渡し舟で湖岸へ戻った。港で別れの支度をする。",
+        "options": [
+          {
+            "id": "continue",
+            "text": "セフと港へ戻る",
+            "to": "farewell_send",
+            "action": "ashore_send_continue"
+          }
+        ]
+      },
+      {
+        "id": "farewell_send",
+        "place": "entry",
+        "text": "セフと港へ戻った。本人の決めた別れ方で送り出す。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@send",
+            "action": "farewell_send_finish"
+          }
+        ]
+      },
+      {
+        "id": "ashore_holiday",
+        "place": "shore",
+        "text": "セフと渡し舟で湖岸へ戻った。港で別れの支度をする。",
+        "options": [
+          {
+            "id": "continue",
+            "text": "セフと港へ戻る",
+            "to": "farewell_holiday",
+            "action": "ashore_holiday_continue"
+          }
+        ]
+      },
+      {
+        "id": "farewell_holiday",
+        "place": "entry",
+        "text": "セフと港へ戻った。本人の決めた別れ方で送り出す。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@holiday",
+            "action": "farewell_holiday_finish"
+          }
+        ]
+      },
+      {
+        "id": "ashore_role",
+        "place": "shore",
+        "text": "セフと渡し舟で湖岸へ戻った。約束した一便の荷を受け取りに行く。",
+        "options": [
+          {
+            "id": "continue",
+            "text": "セフと補給店へ行く",
+            "to": "cargo",
+            "action": "ashore_role_continue"
+          }
+        ]
+      },
+      {
+        "id": "farewell_role",
+        "place": "entry",
+        "text": "セフと港へ戻った。運んだ一便の荷を引き渡し、合意した出発日を守って送り出す。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@role",
+            "action": "farewell_role_finish"
+          }
+        ]
+      },
+      {
+        "id": "cargo",
+        "place": "supply",
+        "text": "セフと約束した一便の補給を受け取る。これを港へ届けてから送り出す。",
+        "options": [
+          {
+            "id": "carry",
+            "text": "一便の荷をセフと港へ運ぶ",
+            "to": "farewell_role",
+            "action": "cargo_carry"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "entryScript": "q170.royal.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "sunken-second-ten",
+      "settlement": "oddland_village",
+      "saveRevision": 2,
+      "scope": "沈没城後半10件の村・橋・試験場・砦・湖の現場接続。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q170.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q170.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "島に残ったのは財宝でなく古い鍋だった。セフは故郷で店を継ぐと決めていた。「引き留められるのが怖くて、調査と言った」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "send",
+              "text": "故郷の店へ送り出す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q170.end.send"
+                }
+              ]
+            },
+            {
+              "id": "holiday",
+              "text": "再会の条件を決めた休暇を相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q170.end.holiday"
+                }
+              ]
+            },
+            {
+              "id": "role",
+              "text": "戦う以外の役割で残りたいか、本人へ聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q170.scene.role"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q170.scene.role": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q170.node",
+          "value": "role"
+        },
+        {
+          "op": "say",
+          "text": "セフは無期限には残れないが、開店前の一便だけ補給を手伝えると言う。店を継ぐ決断を取り消す承諾ではない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "一便だけの役割と出発日を合意する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q170.end.role"
+                }
+              ]
+            },
+            {
+              "id": "send",
+              "text": "今すぐ送り出す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q170.end.send"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q170.end.send": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q170.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "セフは店へ戻った。次の野営では別の者が鍋を置き、その向きが少し違った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q170",
+              "outcome": "send"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q170.end.holiday": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q170.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "開店後の便りで再会を相談すると決めた。帰隊を自動的に確約させず、次の返事を待つ関係にした。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q170",
+              "outcome": "holiday"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q170.end.role": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q170.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "補給の一便を手伝ってからセフは帰った。鍋を置く役も選ぶ仕事となり、別れの約束は守られた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q170",
+              "outcome": "role"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q170.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q170.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q170.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "send",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "セフは店へ戻った。次の野営では別の者が鍋を置き、その向きが少し違った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "holiday",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "開店後の便りで再会を相談すると決めた。帰隊を自動的に確約させず、次の返事を待つ関係にした。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "role",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "補給の一便を手伝ってからセフは帰った。鍋を置く役も選ぶ仕事となり、別れの約束は守られた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q170.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q170.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "role",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q170.scene.role"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q170.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q170.royal.camp": {
+      "storyQuest": "q170",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q170",
+          "scene": "camp"
+        },
+        {
+          "op": "narrate",
+          "text": "島に残ったのは財宝でなく古い鍋だった。セフは故郷で店を継ぐと決めていた。「引き留められるのが怖くて、調査と言った」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "send",
+              "text": "故郷の店へ送り出す",
+              "storyAction": {
+                "quest": "q170",
+                "action": "camp_send"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q170",
+                  "action": "camp_send"
+                }
+              ]
+            },
+            {
+              "id": "holiday",
+              "text": "再会の条件を決めた休暇を相談する",
+              "storyAction": {
+                "quest": "q170",
+                "action": "camp_holiday"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q170",
+                  "action": "camp_holiday"
+                }
+              ]
+            },
+            {
+              "id": "role",
+              "text": "戦う以外の役割で残りたいか、本人へ聞く",
+              "storyAction": {
+                "quest": "q170",
+                "action": "camp_role"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q170",
+                  "action": "camp_role"
+                },
+                {
+                  "op": "jump",
+                  "script": "q170.royal.role"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q170.royal.role": {
+      "storyQuest": "q170",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q170",
+          "scene": "role"
+        },
+        {
+          "op": "narrate",
+          "text": "セフは無期限には残れないが、開店前の一便だけ補給を手伝えると言う。店を継ぐ決断を取り消す承諾ではない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "一便だけの役割と出発日を合意する",
+              "storyAction": {
+                "quest": "q170",
+                "action": "role_agree"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q170",
+                  "action": "role_agree"
+                }
+              ]
+            },
+            {
+              "id": "send",
+              "text": "今すぐ送り出す",
+              "storyAction": {
+                "quest": "q170",
+                "action": "role_send"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q170",
+                  "action": "role_send"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q170.royal.entry": {
+      "storyQuest": "q170",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q170",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "セフと湖の島を調べに行く約束をした。港から湖岸へ歩き、渡し舟で島へ渡る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "lake",
+              "text": "セフと湖の渡し場へ向かう",
+              "storyAction": {
+                "quest": "q170",
+                "action": "entry_lake"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q170",
+                  "action": "entry_lake"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q170.royal.shore": {
+      "storyQuest": "q170",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q170",
+          "scene": "shore"
+        },
+        {
+          "op": "narrate",
+          "text": "湖の渡し場へ着いた。舟で島に渡り、野営地へ向かう。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "island",
+              "text": "セフと島の野営地へ向かう",
+              "storyAction": {
+                "quest": "q170",
+                "action": "shore_island"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q170",
+                  "action": "shore_island"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q170.royal.ashore_send": {
+      "storyQuest": "q170",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q170",
+          "scene": "ashore_send"
+        },
+        {
+          "op": "narrate",
+          "text": "セフと渡し舟で湖岸へ戻った。港で別れの支度をする。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "continue",
+              "text": "セフと港へ戻る",
+              "storyAction": {
+                "quest": "q170",
+                "action": "ashore_send_continue"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q170",
+                  "action": "ashore_send_continue"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q170.royal.farewell_send": {
+      "storyQuest": "q170",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q170",
+          "scene": "farewell_send"
+        },
+        {
+          "op": "narrate",
+          "text": "セフと港へ戻った。本人の決めた別れ方で送り出す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q170",
+                "action": "farewell_send_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q170",
+                  "action": "farewell_send_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q170.royal.end.send"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q170.royal.ashore_holiday": {
+      "storyQuest": "q170",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q170",
+          "scene": "ashore_holiday"
+        },
+        {
+          "op": "narrate",
+          "text": "セフと渡し舟で湖岸へ戻った。港で別れの支度をする。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "continue",
+              "text": "セフと港へ戻る",
+              "storyAction": {
+                "quest": "q170",
+                "action": "ashore_holiday_continue"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q170",
+                  "action": "ashore_holiday_continue"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q170.royal.farewell_holiday": {
+      "storyQuest": "q170",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q170",
+          "scene": "farewell_holiday"
+        },
+        {
+          "op": "narrate",
+          "text": "セフと港へ戻った。本人の決めた別れ方で送り出す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q170",
+                "action": "farewell_holiday_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q170",
+                  "action": "farewell_holiday_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q170.royal.end.holiday"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q170.royal.ashore_role": {
+      "storyQuest": "q170",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q170",
+          "scene": "ashore_role"
+        },
+        {
+          "op": "narrate",
+          "text": "セフと渡し舟で湖岸へ戻った。約束した一便の荷を受け取りに行く。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "continue",
+              "text": "セフと補給店へ行く",
+              "storyAction": {
+                "quest": "q170",
+                "action": "ashore_role_continue"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q170",
+                  "action": "ashore_role_continue"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q170.royal.farewell_role": {
+      "storyQuest": "q170",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q170",
+          "scene": "farewell_role"
+        },
+        {
+          "op": "narrate",
+          "text": "セフと港へ戻った。運んだ一便の荷を引き渡し、合意した出発日を守って送り出す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q170",
+                "action": "farewell_role_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q170",
+                  "action": "farewell_role_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q170.royal.end.role"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q170.royal.cargo": {
+      "storyQuest": "q170",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q170",
+          "scene": "cargo"
+        },
+        {
+          "op": "narrate",
+          "text": "セフと約束した一便の補給を受け取る。これを港へ届けてから送り出す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "carry",
+              "text": "一便の荷をセフと港へ運ぶ",
+              "storyAction": {
+                "quest": "q170",
+                "action": "cargo_carry"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q170",
+                  "action": "cargo_carry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q170.royal.end.send": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "セフは店へ戻った。次の野営では別の者が鍋を置き、その向きが少し違った。"
+        },
+        {
+          "op": "add",
+          "target": "vars.send",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q170",
+          "outcome": "send"
+        }
+      ]
+    },
+    "q170.royal.end.holiday": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "開店後の便りで再会を相談すると決めた。帰隊を自動的に確約させず、次の返事を待つ関係にした。"
+        },
+        {
+          "op": "add",
+          "target": "vars.holiday",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q170",
+          "outcome": "holiday"
+        }
+      ]
+    },
+    "q170.royal.end.role": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "補給の一便を手伝ってからセフは帰った。鍋を置く役も選ぶ仕事となり、別れの約束は守られた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.role",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q170",
+          "outcome": "role"
+        }
+      ]
+    },
+    "q170.royal.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q170"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q170.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q170.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q170.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "send",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "セフは店へ戻った。次の野営では別の者が鍋を置き、その向きが少し違った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "holiday",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "開店後の便りで再会を相談すると決めた。帰隊を自動的に確約させず、次の返事を待つ関係にした。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "role",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "補給の一便を手伝ってからセフは帰った。鍋を置く役も選ぶ仕事となり、別れの約束は守られた。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q170"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q170.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "camp",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q170.royal.camp"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "role",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q170.royal.role"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q170.royal.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "shore",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q170.royal.shore"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "ashore_send",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q170.royal.ashore_send"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "farewell_send",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q170.royal.farewell_send"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "ashore_holiday",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q170.royal.ashore_holiday"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "farewell_holiday",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q170.royal.farewell_holiday"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "ashore_role",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q170.royal.ashore_role"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "farewell_role",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q170.royal.farewell_role"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "cargo",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q170.royal.cargo"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q170.royal.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "セフと出発する港",
+      "shore": "湖の渡し場",
+      "camp": "島の古い鍋のある野営地",
+      "supply": "一便の荷を受け取る補給店",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "shore"
+      ],
+      [
+        "transit",
+        "camp"
+      ],
+      [
+        "transit",
+        "supply"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "shore",
+          "camp",
+          "supply",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "send",
+          "holiday",
+          "role"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "sefAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "shore",
+          "camp",
+          "supply",
+          "transit"
+        ],
+        "meaning": "sef の所在または保持者"
+      },
+      "cargoAt": {
+        "type": "enum",
+        "initial": "supply",
+        "values": [
+          "entry",
+          "shore",
+          "camp",
+          "supply",
+          "transit",
+          "party",
+          "sef",
+          "pot"
+        ],
+        "meaning": "cargo の所在または保持者"
+      },
+      "potAt": {
+        "type": "enum",
+        "initial": "camp",
+        "values": [
+          "entry",
+          "shore",
+          "camp",
+          "supply",
+          "transit",
+          "party",
+          "sef",
+          "cargo"
+        ],
+        "meaning": "pot の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "sef": {
+        "holder": "sefAt",
+        "kind": "person"
+      },
+      "cargo": {
+        "holder": "cargoAt",
+        "kind": "item"
+      },
+      "pot": {
+        "holder": "potAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "島には財宝でなく、初めて野営した時の鍋が残っている。セフは自分が食事を作ったことしか覚えられていないと考えている。同行時の救助や約束が記録されていれば、その具体的な出来事を返せる。未記録の功績を突然作らない。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "camp": {
+        "title": "島の古い鍋のある野営地",
+        "place": "camp",
+        "cast": [],
+        "requires": true
+      },
+      "role": {
+        "title": "島の古い鍋のある野営地",
+        "place": "camp",
+        "cast": [],
+        "requires": true
+      },
+      "entry": {
+        "title": "セフと出発する港",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "shore": {
+        "title": "湖の渡し場",
+        "place": "shore",
+        "cast": [],
+        "requires": true
+      },
+      "ashore_send": {
+        "title": "湖の渡し場",
+        "place": "shore",
+        "cast": [],
+        "requires": true
+      },
+      "farewell_send": {
+        "title": "セフと出発する港",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "ashore_holiday": {
+        "title": "湖の渡し場",
+        "place": "shore",
+        "cast": [],
+        "requires": true
+      },
+      "farewell_holiday": {
+        "title": "セフと出発する港",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "ashore_role": {
+        "title": "湖の渡し場",
+        "place": "shore",
+        "cast": [],
+        "requires": true
+      },
+      "farewell_role": {
+        "title": "セフと出発する港",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "cargo": {
+        "title": "一便の荷を受け取る補給店",
+        "place": "supply",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "camp_send": {
+        "from": [
+          "camp"
+        ],
+        "to": "ashore_send",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "sef"
+            ],
+            "path": [
+              "transit",
+              "shore"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "shore",
+          "companions": [
+            "sef"
+          ]
+        },
+        "depart": []
+      },
+      "camp_holiday": {
+        "from": [
+          "camp"
+        ],
+        "to": "ashore_holiday",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "sef"
+            ],
+            "path": [
+              "transit",
+              "shore"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "shore",
+          "companions": [
+            "sef"
+          ]
+        },
+        "depart": []
+      },
+      "camp_role": {
+        "from": [
+          "camp"
+        ],
+        "to": "role",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "role_agree": {
+        "from": [
+          "role"
+        ],
+        "to": "ashore_role",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "sef"
+            ],
+            "path": [
+              "transit",
+              "shore"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "shore",
+          "companions": [
+            "sef"
+          ]
+        },
+        "depart": []
+      },
+      "role_send": {
+        "from": [
+          "role"
+        ],
+        "to": "ashore_send",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "sef"
+            ],
+            "path": [
+              "transit",
+              "shore"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "shore",
+          "companions": [
+            "sef"
+          ]
+        },
+        "depart": []
+      },
+      "entry_lake": {
+        "from": [
+          "entry"
+        ],
+        "to": "shore",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "sef"
+            ],
+            "path": [
+              "transit",
+              "shore"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "shore",
+          "companions": [
+            "sef"
+          ]
+        },
+        "depart": []
+      },
+      "shore_island": {
+        "from": [
+          "shore"
+        ],
+        "to": "camp",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "sef"
+            ],
+            "path": [
+              "transit",
+              "camp"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "camp",
+          "companions": [
+            "sef"
+          ]
+        },
+        "depart": []
+      },
+      "ashore_send_continue": {
+        "from": [
+          "ashore_send"
+        ],
+        "to": "farewell_send",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "sef"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "sef"
+          ]
+        },
+        "depart": []
+      },
+      "farewell_send_finish": {
+        "from": [
+          "farewell_send"
+        ],
+        "ending": "send",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "send"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "ashore_holiday_continue": {
+        "from": [
+          "ashore_holiday"
+        ],
+        "to": "farewell_holiday",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "sef"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "sef"
+          ]
+        },
+        "depart": []
+      },
+      "farewell_holiday_finish": {
+        "from": [
+          "farewell_holiday"
+        ],
+        "ending": "holiday",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "holiday"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "ashore_role_continue": {
+        "from": [
+          "ashore_role"
+        ],
+        "to": "cargo",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "sef"
+            ],
+            "path": [
+              "transit",
+              "supply"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "supply",
+          "companions": [
+            "sef"
+          ]
+        },
+        "depart": []
+      },
+      "farewell_role_finish": {
+        "from": [
+          "farewell_role"
+        ],
+        "ending": "role",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "cargo",
+            "from": "party",
+            "to": "entry"
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "role"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "cargo_carry": {
+        "from": [
+          "cargo"
+        ],
+        "to": "farewell_role",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "sef"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "sef"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "cargo",
+            "from": "supply",
+            "to": "party"
+          }
+        ]
+      }
+    },
+    "endings": {
+      "send": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q170.values.resolution"
+            },
+            "right": "send"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q170.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q170.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "holiday": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q170.values.resolution"
+            },
+            "right": "holiday"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q170.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q170.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "role": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q170.values.resolution"
+            },
+            "right": "role"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q170.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q170.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "town",
+        "location": "royal_harbor"
+      },
+      "shore": {
+        "kind": "dungeon",
+        "dungeon": "royal_sites",
+        "map": "e2_royal_lakeshore",
+        "x": 13,
+        "y": 7
+      },
+      "camp": {
+        "kind": "dungeon",
+        "dungeon": "royal_sites",
+        "map": "e2_royal_island",
+        "x": 9,
+        "y": 5
+      },
+      "supply": {
+        "kind": "town",
+        "location": "oddland_village_supply"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_village",
+  "receptionLocations": [
+    "royal_board"
+  ]
+}

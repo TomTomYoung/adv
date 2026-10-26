@@ -133,7 +133,34 @@ try{
     await click('現場の結果を確かめ、依頼を終える');await page.evaluate(()=>{h.settle();h.resume();});assert.equal(await page.evaluate(()=>h.g.state.quests.q061.outcome),'informed');
     await click('旧王領の村へ戻る');await click(await page.evaluate(()=>h.routeLabel('observatory_surface')));await page.evaluate(()=>h.resume());assert.equal(await page.evaluate(()=>h.g.state.worldTravel.returnAnchor),'oddland_village');
     await click('任意調べる');await click('地上への階段');await click('調べる');await page.evaluate(()=>h.settle());assert.equal(await page.evaluate(()=>h.g.state.townLocation),'oddland_village');
-    checks.push({layout,width,...measure,quests:{q291:'escort',q032:'informed',q137:'medicine',q061:'informed'},chapelReturn:'oddland_plateau',royalReturn:'oddland_village'});
+    const acceptVillage=async id=>{
+      await click('旧王領の村の依頼所');await click('依頼掲示板を見る');
+      const title=await page.evaluate(id=>h.g.data.quests[id].title,id);
+      await page.locator('.quest-card').filter({has:page.getByRole('heading',{name:title,exact:true})}).getByRole('button',{name:'依頼を受ける',exact:true}).click();
+      if(layout==='scene')await page.keyboard.press('Escape');else await click('旧王領の村へ戻る');
+      if(await page.evaluate(()=>h.g.state.townLocation)!=='oddland_village')await click('旧王領の村へ戻る');
+    };
+    await acceptVillage('q169');await click('マオの家');await click('誰にも贈れない指輪の続きを話す');await page.evaluate(()=>h.settle());
+    await click('指輪を預かり、旅仲間の今の家へ届ける');await click('旧王領の村へ戻る');await click('かつての旅仲間の家');await page.evaluate(()=>{h.settle();h.resume();});
+    assert.equal(await page.evaluate(()=>h.g.state.stories.q169.values.ringAt),'party');
+    await click('旅以外の交流も断るのか、返事として確認する');await page.evaluate(()=>h.settle());await click('二つの返事を分けて預かり、マオへ戻る');
+    await click('旧王領の村へ戻る');await click('マオの家');await page.evaluate(()=>h.settle());await click('受け取ったと嘘をつき、指輪を隠す');
+    await click('旧王領の村へ戻る');await click('村の航路記録室');await page.evaluate(()=>{h.settle();h.resume();});
+    await click('手紙を持ってマオへ戻る');assert.equal(await page.evaluate(()=>h.g.state.stories.q169.values.letterAt),'party');
+    await click('旧王領の村へ戻る');await click('マオの家');await page.evaluate(()=>{h.settle();h.resume();});
+    await revealChoices();await page.screenshot({path:path.join(output,`${layout}-${width}-ring-return.png`),fullPage:true});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+    await click('指輪を返し、虚偽の報告を認める');await page.evaluate(()=>{h.settle();h.resume();});assert.equal(await page.evaluate(()=>h.g.state.quests.q169.outcome),'corrected');assert.equal(await page.evaluate(()=>h.g.state.stories.q169.values.ringAt),'mao');
+    await click('旧王領の村へ戻る');await acceptVillage('q170');await click('旧王領の村の港');await click('別れるための冒険の続きを話す');await page.evaluate(()=>h.settle());
+    await click('セフと湖の渡し場へ向かう');await click('旧王領の村へ戻る');await click(await page.evaluate(()=>h.routeLabel('e2_royal_lakeshore_surface')));await page.evaluate(()=>{h.walk(13,7);h.settle();});
+    await click('セフと島の野営地へ向かう');await cross('royal_lake_boat');await page.evaluate(()=>{h.walk(9,5);h.settle();h.resume();});assert.equal(await page.evaluate(()=>h.g.state.location.map),'e2_royal_island');
+    await click('戦う以外の役割で残りたいか、本人へ聞く');await page.evaluate(()=>h.settle());await click('一便だけの役割と出発日を合意する');
+    await page.evaluate(()=>h.walk(1,1));await cross('royal_lake_boat');await page.evaluate(()=>h.settle());assert.equal(await page.evaluate(()=>h.g.state.stories.q170.values.sefAt),'shore');
+    await click('セフと補給店へ行く');await page.evaluate(()=>h.walk(1,1));await cross('e2_royal_lakeshore_surface');await click('旧王領の村の補給店');await page.evaluate(()=>h.settle());
+    await click('一便の荷をセフと港へ運ぶ');await page.evaluate(()=>h.resume());assert.equal(await page.evaluate(()=>h.g.state.stories.q170.values.cargoAt),'party');
+    await click('旧王領の村へ戻る');await click('旧王領の村の港');await page.evaluate(()=>h.settle());await revealChoices();
+    await page.screenshot({path:path.join(output,`${layout}-${width}-last-freight.png`),fullPage:true});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+    await click('相手と結果を確かめ、依頼を終える');await page.evaluate(()=>{h.settle();h.resume();});assert.equal(await page.evaluate(()=>h.g.state.quests.q170.outcome),'role');assert.equal(await page.evaluate(()=>h.g.state.stories.q170.values.cargoAt),'entry');
+    checks.push({layout,width,...measure,quests:{q291:'escort',q032:'informed',q137:'medicine',q061:'informed',q169:'corrected',q170:'role'},chapelReturn:'oddland_plateau',royalReturn:'oddland_village'});
   }
   assert.deepEqual(errors,[]);await fs.writeFile(path.join(output,'result.json'),JSON.stringify({checks,errors},null,2));console.log(JSON.stringify({checks:checks.length,errors,output}));
 }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
