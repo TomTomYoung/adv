@@ -20,5 +20,6 @@ for(const layout of ['classic','scene'])test(`${layout}: plateau board and stone
  arrive('entry');dispatch({type:'story.resume',quest:'q032'});advance();click('覗き窓の行先を確かめ、地下牢へ回る');assert.ok(g.state.journey);checkpoint(g);
  arrive('cell');click('見通せない石の目を用意する');arrive('workshop');click('覗き管を塞いで不透明な目をはめる');assert.equal(g.state.stories.q032.values.stoneAt,'party');checkpoint(g);
  arrive('entry');click('現場の結果を確かめ、依頼を終える');advance();assert.equal(g.state.quests.q032.outcome,'informed');assert.equal(g.state.stories.q032.values.stoneAt,'entry');checkpoint(g);
+ go(g,{kind:'dungeon',dungeon:'region_4',map:'region_4_f1',x:1,y:1});render();click('任意調べる');click('地上への階段');click('調べる');advance();assert.equal(g.state.townLocation,'oddland_plateau');checkpoint(g);
  }finally{view?.destroy();dom.restore();}
 });
