@@ -9,12 +9,8 @@ import {data,border,drain,walk,inspect,roadGo,go,start,choose,checkpoint,ready,a
 
 const reports={};
 for(let n=31;n<=40;n++){const id='q'+String(n).padStart(3,'0');test(`${id}: every ending walks to its physical scenes, resumes saves and pays once`,()=>{reports[id]=audit(id);});}
-for(let n=131;n<=140;n++){const id='q'+n;test(`${id}: the retained event-hub story still reaches every ending from its plateau entrance`,()=>{
- auditQuest(data,id,{makeFixture:()=>{const g=ready();g.state.vars.region_4=3;roadGo(g,{kind:'town',location:'pilgrim_board'});assert.ok(g.accept(id));const q=data.quests[id],p=q.locations.find(p=>p.role==='decision');go(g,{kind:'dungeon',dungeon:'region_4',...p});g.run(q.model.entryScript??id+'.visit');delete g.random;return g;}});
-});}
-
 test('relocation preserves all original quest IDs, prerequisites and reward amounts',async()=>{
- for(let n=31;n<=40;n++){const id='q'+String(n).padStart(3,'0'),old=await read('data/quests/'+id+'.json'),q=data.quests[id];assert.deepEqual(q.outcomes,old.outcomes);assert.deepEqual(q.requires,old.requires);assert.equal(q.region,old.region);}
+ for(const n of [...Array.from({length:10},(_,i)=>31+i),...Array.from({length:10},(_,i)=>131+i)]){const id='q'+String(n).padStart(3,'0'),old=await read('data/quests/'+id+'.json'),q=data.quests[id];assert.deepEqual(q.outcomes,old.outcomes);assert.deepEqual(q.requires,old.requires);assert.equal(q.region,old.region);}
  assert.equal(Object.keys(data.quests).length,300);assert.equal(data.scenarioEditions.editions.e2.saveRevision,2);assert.equal(data.worldTravelLegacy,undefined);assert.equal(data.regionalLegacy,undefined);
 });
 

@@ -222,7 +222,7 @@ export function encounterStoryJourney(engine,encounter){
 }
 export function resumeWorldStory(engine,id){
   const q=engine.data.quests[id],s=engine.state.stories?.[id];
-  if(engine.state.quests[id]?.stage!=='active'||!q?.story?.worldPlaces)return false;
+  if(engine.state.quests[id]?.stage!=='active'||!q?.story?.worldPlaces||engine.state.flags.legacyStoryRoutes?.[id])return false;
   if(q.requiredParty?.some(actor=>!engine.state.members.includes(actor))){engine.notify('この依頼の同行者を編成してから再開してください。');return false;}
   if(engine.state.journey)return engine.state.journey.quest===id&&arriveStoryJourney(engine);
   const scene=s?.scene??'entry';if(!atWorldPlace(engine.state,resolveStoryWorldPlace(q.story,s,q.story.scenes[scene].place)))return false;

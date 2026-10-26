@@ -1,0 +1,1411 @@
+{
+  "schemaVersion": 1,
+  "id": "q133",
+  "number": 133,
+  "title": "一段足りない階段",
+  "client": "建築師ドマ",
+  "brief": "設計図より一段少ない階段を調べてください。",
+  "region": 4,
+  "type": "scene_graph",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 巡礼台地の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q133_scene",
+      "title": "一段足りない階段：建築師ドマ",
+      "points": [
+        {
+          "map": "region_4_f1",
+          "x": 6,
+          "y": 1,
+          "dungeon": "region_4"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q133.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q133.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q133.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q133"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_4"
+    },
+    {
+      "id": "q133_pilgrim_entry",
+      "title": "一段足りない階段の現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q133.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q133.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q133"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q133.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "region_4",
+          "map": "region_4_f1",
+          "x": 6,
+          "y": 1
+        }
+      ]
+    },
+    {
+      "id": "q133_pilgrim_platform",
+      "title": "棺を載せる荷台",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "platform",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q133.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q133.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q133"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q133.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "region_4",
+          "map": "region_4_f1",
+          "x": 7,
+          "y": 3
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_4_f1",
+      "x": 6,
+      "y": 1,
+      "object": "q133_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "save": {
+      "label": "重さのある図面",
+      "text": "機構を残した。ドマは師を讃える題より大きく、必要な荷の重さを書き足した。",
+      "gold": 93,
+      "xp": 69
+    },
+    "stairs": {
+      "label": "毎日の階段",
+      "text": "古い機構を記録してから改修した。棺のための図面は残り、生きた参拝者の足跡が増えた。",
+      "gold": 93,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/chapel-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38158877be064f30e374c",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "足りない一段は、重い石棺を運ぶ時だけ沈んで現れる荷台だ。図面は人が歩く時でなく葬列の状態を描いている。擦れた肩の高さの溝と、靴跡のない段を先に見せる。師匠は正しかったが、説明を省いたため後世に伝わらなかったという結論だ。",
+      "fixedPast": "地下礼拝堂へ向かう階段が、何度数えても設計図より一段少ない。建築師ドマは師匠の図面を守りたいと調査を頼む。同行の石工は図面の誤りを疑い、ドマはそれを侮辱と受け取る。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "建築師ドマ",
+        "beliefsAndGoals": "地下礼拝堂へ向かう階段が、何度数えても設計図より一段少ない。建築師ドマは師匠の図面を守りたいと調査を頼む。同行の石工は図面の誤りを疑い、ドマはそれを侮辱と受け取る。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "設計図より一段少ない階段を調べてください。"
+      }
+    ],
+    "conflict": {
+      "design": "階段の計測→図面の読み直し／実物の試験→荷台を下ろす→礼拝堂。錘を人の代わりに載せる道と、石工の手動固定で下りる道がある。能力不足は共同作業か道具の調達で代替できる。準備なしに踏めば落下直前の退避となり、再準備へ戻す。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q133.pilgrimage.entry"
+        },
+        {
+          "id": "warning",
+          "script": "q133.pilgrimage.warning"
+        },
+        {
+          "id": "platform",
+          "script": "q133.pilgrimage.platform"
+        },
+        {
+          "id": "drawing",
+          "script": "q133.pilgrimage.drawing"
+        },
+        {
+          "id": "stairs",
+          "script": "q133.pilgrimage.stairs"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "設計図より一段少ない階段を調べてください。"
+    },
+    "reveal": {
+      "newInformation": "足りない一段は、重い石棺を運ぶ時だけ沈んで現れる荷台だ。図面は人が歩く時でなく葬列の状態を描いている。擦れた肩の高さの溝と、靴跡のない段を先に見せる。師匠は正しかったが、説明を省いたため後世に伝わらなかったという結論だ。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q133.scene.entry"
+      },
+      {
+        "id": "warning",
+        "script": "q133.scene.warning"
+      },
+      {
+        "id": "platform",
+        "script": "q133.scene.platform"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q133.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "一段には靴跡がなく、肩の高さに擦れた溝があった。ドマは師の図面の誤りを認めまいとする。",
+        "options": [
+          {
+            "id": "weight",
+            "text": "人を載せず錘で試す",
+            "to": "platform",
+            "action": "entry_weight"
+          },
+          {
+            "id": "fix",
+            "text": "石工と協力し、荷台を手動で固定する",
+            "to": "platform",
+            "action": "entry_fix"
+          },
+          {
+            "id": "step",
+            "text": "準備をせず踏んでみる",
+            "to": "warning",
+            "action": "entry_step"
+          }
+        ]
+      },
+      {
+        "id": "warning",
+        "place": "entry",
+        "text": "足元が沈み始め、石工が腕を引いた。落下の前に戻れたが、次は重量か固定を確かめる必要がある。",
+        "options": [
+          {
+            "id": "back",
+            "text": "準備をやり直す",
+            "to": "entry",
+            "action": "warning_back"
+          }
+        ]
+      },
+      {
+        "id": "platform",
+        "place": "platform",
+        "text": "重い棺を載せる時だけ下がる荷台だった。図面は葬列の状態を描いていたが、重さの説明がない。",
+        "options": [
+          {
+            "id": "save",
+            "text": "荷台を保存し、重量条件を図面へ追記する",
+            "to": "drawing",
+            "action": "platform_save"
+          },
+          {
+            "id": "stairs",
+            "text": "機構を通常の参拝階段に改修する",
+            "to": "stairs",
+            "action": "platform_stairs"
+          }
+        ]
+      },
+      {
+        "id": "drawing",
+        "place": "entry",
+        "text": "階段の上へ戻り、図面へ実測した重量条件を記した。参拝者にも読める位置へ掲げる。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@save",
+            "action": "drawing_finish"
+          }
+        ]
+      },
+      {
+        "id": "stairs",
+        "place": "entry",
+        "text": "荷台の構造を記録し、石工と通常の参拝階段への改修を終えた。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@stairs",
+            "action": "stairs_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "entryScript": "q133.pilgrimage.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "second-ten",
+      "settlement": "oddland_plateau",
+      "saveRevision": 2,
+      "scope": "後半10件の実地接続。既に受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q133.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q133.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "一段には靴跡がなく、肩の高さに擦れた溝があった。ドマは師の図面の誤りを認めまいとする。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "weight",
+              "text": "人を載せず錘で試す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q133.scene.platform"
+                }
+              ]
+            },
+            {
+              "id": "fix",
+              "text": "石工と協力し、荷台を手動で固定する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q133.scene.platform"
+                }
+              ]
+            },
+            {
+              "id": "step",
+              "text": "準備をせず踏んでみる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q133.scene.warning"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q133.scene.warning": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q133.node",
+          "value": "warning"
+        },
+        {
+          "op": "say",
+          "text": "足元が沈み始め、石工が腕を引いた。落下の前に戻れたが、次は重量か固定を確かめる必要がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "back",
+              "text": "準備をやり直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q133.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q133.scene.platform": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q133.node",
+          "value": "platform"
+        },
+        {
+          "op": "say",
+          "text": "重い棺を載せる時だけ下がる荷台だった。図面は葬列の状態を描いていたが、重さの説明がない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "save",
+              "text": "荷台を保存し、重量条件を図面へ追記する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q133.end.save"
+                }
+              ]
+            },
+            {
+              "id": "stairs",
+              "text": "機構を通常の参拝階段に改修する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q133.end.stairs"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q133.end.save": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q133.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "機構を残した。ドマは師を讃える題より大きく、必要な荷の重さを書き足した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q133",
+              "outcome": "save"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q133.end.stairs": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q133.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "古い機構を記録してから改修した。棺のための図面は残り、生きた参拝者の足跡が増えた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q133",
+              "outcome": "stairs"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q133.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q133.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q133.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "save",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "機構を残した。ドマは師を讃える題より大きく、必要な荷の重さを書き足した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "stairs",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "古い機構を記録してから改修した。棺のための図面は残り、生きた参拝者の足跡が増えた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q133.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q133.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "warning",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q133.scene.warning"
+                    }
+                  ]
+                },
+                {
+                  "equals": "platform",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q133.scene.platform"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q133.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q133.pilgrimage.entry": {
+      "storyQuest": "q133",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q133",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "一段には靴跡がなく、肩の高さに擦れた溝があった。ドマは師の図面の誤りを認めまいとする。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "weight",
+              "text": "人を載せず錘で試す",
+              "storyAction": {
+                "quest": "q133",
+                "action": "entry_weight"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q133",
+                  "action": "entry_weight"
+                }
+              ]
+            },
+            {
+              "id": "fix",
+              "text": "石工と協力し、荷台を手動で固定する",
+              "storyAction": {
+                "quest": "q133",
+                "action": "entry_fix"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q133",
+                  "action": "entry_fix"
+                }
+              ]
+            },
+            {
+              "id": "step",
+              "text": "準備をせず踏んでみる",
+              "storyAction": {
+                "quest": "q133",
+                "action": "entry_step"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q133",
+                  "action": "entry_step"
+                },
+                {
+                  "op": "jump",
+                  "script": "q133.pilgrimage.warning"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q133.pilgrimage.warning": {
+      "storyQuest": "q133",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q133",
+          "scene": "warning"
+        },
+        {
+          "op": "narrate",
+          "text": "足元が沈み始め、石工が腕を引いた。落下の前に戻れたが、次は重量か固定を確かめる必要がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "back",
+              "text": "準備をやり直す",
+              "storyAction": {
+                "quest": "q133",
+                "action": "warning_back"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q133",
+                  "action": "warning_back"
+                },
+                {
+                  "op": "jump",
+                  "script": "q133.pilgrimage.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q133.pilgrimage.platform": {
+      "storyQuest": "q133",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q133",
+          "scene": "platform"
+        },
+        {
+          "op": "narrate",
+          "text": "重い棺を載せる時だけ下がる荷台だった。図面は葬列の状態を描いていたが、重さの説明がない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "save",
+              "text": "荷台を保存し、重量条件を図面へ追記する",
+              "storyAction": {
+                "quest": "q133",
+                "action": "platform_save"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q133",
+                  "action": "platform_save"
+                }
+              ]
+            },
+            {
+              "id": "stairs",
+              "text": "機構を通常の参拝階段に改修する",
+              "storyAction": {
+                "quest": "q133",
+                "action": "platform_stairs"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q133",
+                  "action": "platform_stairs"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q133.pilgrimage.drawing": {
+      "storyQuest": "q133",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q133",
+          "scene": "drawing"
+        },
+        {
+          "op": "narrate",
+          "text": "階段の上へ戻り、図面へ実測した重量条件を記した。参拝者にも読める位置へ掲げる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q133",
+                "action": "drawing_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q133",
+                  "action": "drawing_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q133.pilgrimage.end.save"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q133.pilgrimage.stairs": {
+      "storyQuest": "q133",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q133",
+          "scene": "stairs"
+        },
+        {
+          "op": "narrate",
+          "text": "荷台の構造を記録し、石工と通常の参拝階段への改修を終えた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q133",
+                "action": "stairs_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q133",
+                  "action": "stairs_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q133.pilgrimage.end.stairs"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q133.pilgrimage.end.save": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "機構を残した。ドマは師を讃える題より大きく、必要な荷の重さを書き足した。"
+        },
+        {
+          "op": "add",
+          "target": "vars.save",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q133",
+          "outcome": "save"
+        }
+      ]
+    },
+    "q133.pilgrimage.end.stairs": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "古い機構を記録してから改修した。棺のための図面は残り、生きた参拝者の足跡が増えた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.stairs",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q133",
+          "outcome": "stairs"
+        }
+      ]
+    },
+    "q133.pilgrimage.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q133"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q133.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q133.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q133.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "save",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "機構を残した。ドマは師を讃える題より大きく、必要な荷の重さを書き足した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "stairs",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "古い機構を記録してから改修した。棺のための図面は残り、生きた参拝者の足跡が増えた。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q133"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q133.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q133.pilgrimage.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "warning",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q133.pilgrimage.warning"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "platform",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q133.pilgrimage.platform"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "drawing",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q133.pilgrimage.drawing"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "stairs",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q133.pilgrimage.stairs"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q133.pilgrimage.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "一段足りない階段の現場",
+      "platform": "棺を載せる荷台",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "platform"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "platform",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "save",
+          "stairs"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "weightChecked": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "weightChecked"
+      },
+      "fixed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "fixed"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "足りない一段は、重い石棺を運ぶ時だけ沈んで現れる荷台だ。図面は人が歩く時でなく葬列の状態を描いている。擦れた肩の高さの溝と、靴跡のない段を先に見せる。師匠は正しかったが、説明を省いたため後世に伝わらなかったという結論だ。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "一段足りない階段の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "warning": {
+        "title": "一段足りない階段の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "platform": {
+        "title": "棺を載せる荷台",
+        "place": "platform",
+        "cast": [],
+        "requires": true
+      },
+      "drawing": {
+        "title": "一段足りない階段の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "stairs": {
+        "title": "一段足りない階段の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_weight": {
+        "from": [
+          "entry"
+        ],
+        "to": "platform",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "platform"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "weightChecked",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "platform",
+          "companions": []
+        },
+        "depart": []
+      },
+      "entry_fix": {
+        "from": [
+          "entry"
+        ],
+        "to": "platform",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "platform"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "fixed",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "platform",
+          "companions": []
+        },
+        "depart": []
+      },
+      "entry_step": {
+        "from": [
+          "entry"
+        ],
+        "to": "warning",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "warning_back": {
+        "from": [
+          "warning"
+        ],
+        "to": "entry",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "platform_save": {
+        "from": [
+          "platform"
+        ],
+        "to": "drawing",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "platform_stairs": {
+        "from": [
+          "platform"
+        ],
+        "to": "stairs",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "drawing_finish": {
+        "from": [
+          "drawing"
+        ],
+        "ending": "save",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "save"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "stairs_finish": {
+        "from": [
+          "stairs"
+        ],
+        "ending": "stairs",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "stairs"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "save": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q133.values.resolution"
+            },
+            "right": "save"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q133.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q133.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "stairs": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q133.values.resolution"
+            },
+            "right": "stairs"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q133.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q133.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_4",
+        "map": "region_4_f1",
+        "x": 6,
+        "y": 1
+      },
+      "platform": {
+        "kind": "dungeon",
+        "dungeon": "region_4",
+        "map": "region_4_f1",
+        "x": 7,
+        "y": 3
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_plateau",
+  "receptionLocations": [
+    "pilgrim_board"
+  ]
+}

@@ -1,0 +1,2222 @@
+{
+  "schemaVersion": 1,
+  "id": "q134",
+  "number": 134,
+  "title": "敗者の宝物庫",
+  "client": "剣士ザグ",
+  "brief": "敗者だけが入れるという宝物庫を調べてください。",
+  "region": 4,
+  "type": "scene_graph",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 巡礼台地の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q134_scene",
+      "title": "敗者の宝物庫：剣士ザグ",
+      "points": [
+        {
+          "map": "region_4_f1",
+          "x": 8,
+          "y": 1,
+          "dungeon": "region_4"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q134.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q134.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q134.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q134"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_4"
+    },
+    {
+      "id": "q134_pilgrim_entry",
+      "title": "敗者の宝物庫の現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q134.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q134.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q134"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q134.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "region_4",
+          "map": "region_4_f1",
+          "x": 8,
+          "y": 1
+        }
+      ]
+    },
+    {
+      "id": "q134_pilgrim_keeper",
+      "title": "庫番の返却受付",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "keeper",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q134.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q134.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q134"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q134.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "region_4",
+          "map": "region_4_f1",
+          "x": 9,
+          "y": 5
+        }
+      ]
+    },
+    {
+      "id": "q134_pilgrim_vault",
+      "title": "宝物庫の内側",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "vault",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q134.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q134.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q134"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q134.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "region_4",
+          "map": "region_4_f1",
+          "x": 11,
+          "y": 5
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_4_f1",
+      "x": 8,
+      "y": 1,
+      "object": "q134_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "sword": {
+      "label": "返した剣",
+      "text": "ザグは師の剣を返し、別の練習剣を受け取った。新しい剣の由来を、話した相手の名で語った。",
+      "gold": 93,
+      "xp": 69
+    },
+    "parcel": {
+      "label": "届けた品",
+      "text": "預かり物が持主へ届き、正式な受領者として庫へ入れた。持主のない品だけを、庫番が選んで譲った。",
+      "gold": 93,
+      "xp": 69
+    },
+    "break": {
+      "label": "破られた庫",
+      "text": "入口は開いた。回収した品の持主は消えず、庫番は返却を求める名簿を組合へ送った。",
+      "gold": 93,
+      "xp": 69
+    },
+    "decline": {
+      "label": "挑戦の辞退",
+      "text": "挑戦料は精算された。ザグは模擬戦の敗北を、討伐や敗走の記録へ足すよう求めなかった。",
+      "gold": 93,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/chapel-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38158877be064f30e374c",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "扉が求めるのは戦闘結果ではなく、所有権の主張を一つ手放す宣言だ。入口に並ぶ名札は倒した相手ではなく返却先だ。ザグはかつて拾った師の剣を自分の継承の証にしており、返す相手はまだ生きている。",
+      "fixedPast": "剣士ザグは、敗北を認めた者だけが入れる宝物庫へ挑む。彼はわざと決闘に負けるが扉は開かない。修道士は、ここに集められた品が敵から奪った戦利品ではなく、返してほしいと頼めなかった遺失物だと知っている。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "剣士ザグ",
+        "beliefsAndGoals": "剣士ザグは、敗北を認めた者だけが入れる宝物庫へ挑む。彼はわざと決闘に負けるが扉は開かない。修道士は、ここに集められた品が敵から奪った戦利品ではなく、返してほしいと頼めなかった遺失物だと知っている。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "敗者だけが入れるという宝物庫を調べてください。"
+      }
+    ],
+    "conflict": {
+      "design": "挑戦→模擬決闘／庫の調査→返却先と会う→扉を開く。ザグの剣でなく、自分が預かった返却可能な品でも条件を満たせる。渡す物がなければ庫番の届け物を引き受ける道がある。庫を破るなら番人戦となり、宝物の正当な受領とは別の結末だ。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q134.pilgrimage.entry"
+        },
+        {
+          "id": "return",
+          "script": "q134.pilgrimage.return"
+        },
+        {
+          "id": "broken",
+          "script": "q134.pilgrimage.broken"
+        },
+        {
+          "id": "sword_home",
+          "script": "q134.pilgrimage.sword_home"
+        },
+        {
+          "id": "delivered",
+          "script": "q134.pilgrimage.delivered"
+        },
+        {
+          "id": "receipt",
+          "script": "q134.pilgrimage.receipt"
+        },
+        {
+          "id": "parcel_end",
+          "script": "q134.pilgrimage.parcel_end"
+        },
+        {
+          "id": "entry_break_ready",
+          "script": "q134.pilgrimage.entry_break_ready"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "敗者だけが入れるという宝物庫を調べてください。"
+    },
+    "reveal": {
+      "newInformation": "扉が求めるのは戦闘結果ではなく、所有権の主張を一つ手放す宣言だ。入口に並ぶ名札は倒した相手ではなく返却先だ。ザグはかつて拾った師の剣を自分の継承の証にしており、返す相手はまだ生きている。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q134.scene.entry"
+      },
+      {
+        "id": "return",
+        "script": "q134.scene.return"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q134.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "ザグは模擬決闘でわざと負けた。扉は動かない。入口の名札には、倒した相手でなく返却先が書いてある。",
+        "options": [
+          {
+            "id": "rule",
+            "text": "庫番へ名札の意味を尋ねる",
+            "to": "return",
+            "action": "entry_rule"
+          },
+          {
+            "id": "break",
+            "text": "番人を退け、入口を破る",
+            "to": "entry_break_ready",
+            "action": "entry_break"
+          },
+          {
+            "id": "decline",
+            "text": "庫への挑戦を辞退する",
+            "to": "@decline",
+            "action": "entry_decline"
+          }
+        ]
+      },
+      {
+        "id": "return",
+        "place": "keeper",
+        "text": "手放すのは勝敗ではなく所有の主張だった。ザグが拾った師の剣には、まだ生きている持主がいる。代わりに庫番の届け物を運ぶ道もある。",
+        "options": [
+          {
+            "id": "sword",
+            "text": "本人の同意で、師へ剣を返す",
+            "to": "sword_home",
+            "action": "return_sword"
+          },
+          {
+            "id": "parcel",
+            "text": "庫番の預かり物を持主へ届ける",
+            "to": "delivered",
+            "action": "return_parcel"
+          },
+          {
+            "id": "decline",
+            "text": "返却を引き受けず辞退する",
+            "to": "@decline",
+            "action": "return_decline"
+          }
+        ]
+      },
+      {
+        "id": "broken",
+        "place": "vault",
+        "text": "番人を退けた穴から庫へ入った。品々の名札にある持主は変わっていない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@break",
+            "action": "broken_finish"
+          }
+        ]
+      },
+      {
+        "id": "sword_home",
+        "place": "master",
+        "text": "ザグが師へ剣を返し、別の練習剣を受け取るところを見届けた。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@sword",
+            "action": "sword_home_finish"
+          }
+        ]
+      },
+      {
+        "id": "delivered",
+        "place": "owner",
+        "text": "持主が品を受け取り、受領証を渡した。これを庫番へ持ち帰る。",
+        "options": [
+          {
+            "id": "back",
+            "text": "受領証を庫番へ届ける",
+            "to": "receipt",
+            "action": "delivered_back"
+          }
+        ]
+      },
+      {
+        "id": "receipt",
+        "place": "keeper",
+        "text": "庫番は受領証と名簿を照合し、庫の内側を指した。",
+        "options": [
+          {
+            "id": "enter",
+            "text": "正式な受領者として庫へ入る",
+            "to": "parcel_end",
+            "action": "receipt_enter"
+          }
+        ]
+      },
+      {
+        "id": "parcel_end",
+        "place": "vault",
+        "text": "庫番と持主のない品を確かめて受け取った。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@parcel",
+            "action": "parcel_end_finish"
+          }
+        ]
+      },
+      {
+        "id": "entry_break_ready",
+        "place": "entry",
+        "text": "戦いに勝利し、先へ進む道が開いた。次の場所まで歩いて確かめる。",
+        "options": [
+          {
+            "id": "continue",
+            "text": "準備した相手・品物と目的地へ向かう",
+            "to": "broken",
+            "action": "entry_break_ready_continue"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "entryScript": "q134.pilgrimage.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "second-ten",
+      "settlement": "oddland_plateau",
+      "saveRevision": 2,
+      "scope": "後半10件の実地接続。既に受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q134.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q134.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "ザグは模擬決闘でわざと負けた。扉は動かない。入口の名札には、倒した相手でなく返却先が書いてある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "rule",
+              "text": "庫番へ名札の意味を尋ねる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q134.scene.return"
+                }
+              ]
+            },
+            {
+              "id": "break",
+              "text": "番人を退け、入口を破る",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_4",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q134.end.break"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q134.scene.entry"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "decline",
+              "text": "庫への挑戦を辞退する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q134.end.decline"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q134.scene.return": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q134.node",
+          "value": "return"
+        },
+        {
+          "op": "say",
+          "text": "手放すのは勝敗ではなく所有の主張だった。ザグが拾った師の剣には、まだ生きている持主がいる。代わりに庫番の届け物を運ぶ道もある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sword",
+              "text": "本人の同意で、師へ剣を返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q134.end.sword"
+                }
+              ]
+            },
+            {
+              "id": "parcel",
+              "text": "庫番の預かり物を持主へ届ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q134.end.parcel"
+                }
+              ]
+            },
+            {
+              "id": "decline",
+              "text": "返却を引き受けず辞退する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q134.end.decline"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q134.end.sword": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q134.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "ザグは師の剣を返し、別の練習剣を受け取った。新しい剣の由来を、話した相手の名で語った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q134",
+              "outcome": "sword"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q134.end.parcel": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q134.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "預かり物が持主へ届き、正式な受領者として庫へ入れた。持主のない品だけを、庫番が選んで譲った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q134",
+              "outcome": "parcel"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q134.end.break": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q134.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "入口は開いた。回収した品の持主は消えず、庫番は返却を求める名簿を組合へ送った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q134",
+              "outcome": "break"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q134.end.decline": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q134.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "挑戦料は精算された。ザグは模擬戦の敗北を、討伐や敗走の記録へ足すよう求めなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q134",
+              "outcome": "decline"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q134.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q134.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q134.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "sword",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "ザグは師の剣を返し、別の練習剣を受け取った。新しい剣の由来を、話した相手の名で語った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "parcel",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "預かり物が持主へ届き、正式な受領者として庫へ入れた。持主のない品だけを、庫番が選んで譲った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "break",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "入口は開いた。回収した品の持主は消えず、庫番は返却を求める名簿を組合へ送った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "decline",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "挑戦料は精算された。ザグは模擬戦の敗北を、討伐や敗走の記録へ足すよう求めなかった。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q134.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q134.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "return",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q134.scene.return"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q134.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q134.pilgrimage.entry": {
+      "storyQuest": "q134",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q134",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "ザグは模擬決闘でわざと負けた。扉は動かない。入口の名札には、倒した相手でなく返却先が書いてある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "rule",
+              "text": "庫番へ名札の意味を尋ねる",
+              "storyAction": {
+                "quest": "q134",
+                "action": "entry_rule"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q134",
+                  "action": "entry_rule"
+                }
+              ]
+            },
+            {
+              "id": "break",
+              "text": "番人を退け、入口を破る",
+              "storyAction": {
+                "quest": "q134",
+                "action": "entry_break"
+              },
+              "requirement": "戦闘。作業・報酬は勝利後に確定する。",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_4",
+                  "on_win": [
+                    {
+                      "op": "story.action",
+                      "quest": "q134",
+                      "action": "entry_break"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q134.pilgrimage.entry_break_ready"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "narrate",
+                      "text": "戦いを切り上げた。作業は確定していない。現場で再開できる。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q134.pilgrimage.entry"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "narrate",
+                      "text": "救助班に巡礼台地へ運び出された。現場へ戻れば直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "decline",
+              "text": "庫への挑戦を辞退する",
+              "storyAction": {
+                "quest": "q134",
+                "action": "entry_decline"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q134",
+                  "action": "entry_decline"
+                },
+                {
+                  "op": "jump",
+                  "script": "q134.pilgrimage.end.decline"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q134.pilgrimage.return": {
+      "storyQuest": "q134",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q134",
+          "scene": "return"
+        },
+        {
+          "op": "narrate",
+          "text": "手放すのは勝敗ではなく所有の主張だった。ザグが拾った師の剣には、まだ生きている持主がいる。代わりに庫番の届け物を運ぶ道もある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sword",
+              "text": "本人の同意で、師へ剣を返す",
+              "storyAction": {
+                "quest": "q134",
+                "action": "return_sword"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q134",
+                  "action": "return_sword"
+                }
+              ]
+            },
+            {
+              "id": "parcel",
+              "text": "庫番の預かり物を持主へ届ける",
+              "storyAction": {
+                "quest": "q134",
+                "action": "return_parcel"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q134",
+                  "action": "return_parcel"
+                }
+              ]
+            },
+            {
+              "id": "decline",
+              "text": "返却を引き受けず辞退する",
+              "storyAction": {
+                "quest": "q134",
+                "action": "return_decline"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q134",
+                  "action": "return_decline"
+                },
+                {
+                  "op": "jump",
+                  "script": "q134.pilgrimage.end.decline"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q134.pilgrimage.broken": {
+      "storyQuest": "q134",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q134",
+          "scene": "broken"
+        },
+        {
+          "op": "narrate",
+          "text": "番人を退けた穴から庫へ入った。品々の名札にある持主は変わっていない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q134",
+                "action": "broken_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q134",
+                  "action": "broken_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q134.pilgrimage.end.break"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q134.pilgrimage.sword_home": {
+      "storyQuest": "q134",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q134",
+          "scene": "sword_home"
+        },
+        {
+          "op": "narrate",
+          "text": "ザグが師へ剣を返し、別の練習剣を受け取るところを見届けた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q134",
+                "action": "sword_home_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q134",
+                  "action": "sword_home_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q134.pilgrimage.end.sword"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q134.pilgrimage.delivered": {
+      "storyQuest": "q134",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q134",
+          "scene": "delivered"
+        },
+        {
+          "op": "narrate",
+          "text": "持主が品を受け取り、受領証を渡した。これを庫番へ持ち帰る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "back",
+              "text": "受領証を庫番へ届ける",
+              "storyAction": {
+                "quest": "q134",
+                "action": "delivered_back"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q134",
+                  "action": "delivered_back"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q134.pilgrimage.receipt": {
+      "storyQuest": "q134",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q134",
+          "scene": "receipt"
+        },
+        {
+          "op": "narrate",
+          "text": "庫番は受領証と名簿を照合し、庫の内側を指した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "enter",
+              "text": "正式な受領者として庫へ入る",
+              "storyAction": {
+                "quest": "q134",
+                "action": "receipt_enter"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q134",
+                  "action": "receipt_enter"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q134.pilgrimage.parcel_end": {
+      "storyQuest": "q134",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q134",
+          "scene": "parcel_end"
+        },
+        {
+          "op": "narrate",
+          "text": "庫番と持主のない品を確かめて受け取った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q134",
+                "action": "parcel_end_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q134",
+                  "action": "parcel_end_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q134.pilgrimage.end.parcel"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q134.pilgrimage.entry_break_ready": {
+      "storyQuest": "q134",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q134",
+          "scene": "entry_break_ready"
+        },
+        {
+          "op": "narrate",
+          "text": "戦いに勝利し、先へ進む道が開いた。次の場所まで歩いて確かめる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "continue",
+              "text": "準備した相手・品物と目的地へ向かう",
+              "storyAction": {
+                "quest": "q134",
+                "action": "entry_break_ready_continue"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q134",
+                  "action": "entry_break_ready_continue"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q134.pilgrimage.end.sword": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "ザグは師の剣を返し、別の練習剣を受け取った。新しい剣の由来を、話した相手の名で語った。"
+        },
+        {
+          "op": "add",
+          "target": "vars.sword",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q134",
+          "outcome": "sword"
+        }
+      ]
+    },
+    "q134.pilgrimage.end.parcel": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "預かり物が持主へ届き、正式な受領者として庫へ入れた。持主のない品だけを、庫番が選んで譲った。"
+        },
+        {
+          "op": "add",
+          "target": "vars.parcel",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q134",
+          "outcome": "parcel"
+        }
+      ]
+    },
+    "q134.pilgrimage.end.break": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "入口は開いた。回収した品の持主は消えず、庫番は返却を求める名簿を組合へ送った。"
+        },
+        {
+          "op": "add",
+          "target": "vars.break",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q134",
+          "outcome": "break"
+        }
+      ]
+    },
+    "q134.pilgrimage.end.decline": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "挑戦料は精算された。ザグは模擬戦の敗北を、討伐や敗走の記録へ足すよう求めなかった。"
+        },
+        {
+          "op": "add",
+          "target": "vars.decline",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q134",
+          "outcome": "decline"
+        }
+      ]
+    },
+    "q134.pilgrimage.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q134"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q134.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q134.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q134.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "sword",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "ザグは師の剣を返し、別の練習剣を受け取った。新しい剣の由来を、話した相手の名で語った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "parcel",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "預かり物が持主へ届き、正式な受領者として庫へ入れた。持主のない品だけを、庫番が選んで譲った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "break",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "入口は開いた。回収した品の持主は消えず、庫番は返却を求める名簿を組合へ送った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "decline",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "挑戦料は精算された。ザグは模擬戦の敗北を、討伐や敗走の記録へ足すよう求めなかった。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q134"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q134.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q134.pilgrimage.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "return",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q134.pilgrimage.return"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "broken",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q134.pilgrimage.broken"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "sword_home",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q134.pilgrimage.sword_home"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "delivered",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q134.pilgrimage.delivered"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "receipt",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q134.pilgrimage.receipt"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "parcel_end",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q134.pilgrimage.parcel_end"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "entry_break_ready",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q134.pilgrimage.entry_break_ready"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q134.pilgrimage.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "敗者の宝物庫の現場",
+      "keeper": "庫番の返却受付",
+      "vault": "宝物庫の内側",
+      "master": "剣の持主の家",
+      "owner": "預かり物の持主宅",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "keeper"
+      ],
+      [
+        "transit",
+        "vault"
+      ],
+      [
+        "transit",
+        "master"
+      ],
+      [
+        "transit",
+        "owner"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "keeper",
+          "vault",
+          "master",
+          "owner",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "sword",
+          "parcel",
+          "break",
+          "decline"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "zagAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "keeper",
+          "vault",
+          "master",
+          "owner",
+          "transit"
+        ],
+        "meaning": "zag の所在または保持者"
+      },
+      "masterAt": {
+        "type": "enum",
+        "initial": "master",
+        "values": [
+          "entry",
+          "keeper",
+          "vault",
+          "master",
+          "owner",
+          "transit"
+        ],
+        "meaning": "master の所在または保持者"
+      },
+      "ownerAt": {
+        "type": "enum",
+        "initial": "owner",
+        "values": [
+          "entry",
+          "keeper",
+          "vault",
+          "master",
+          "owner",
+          "transit"
+        ],
+        "meaning": "owner の所在または保持者"
+      },
+      "swordAt": {
+        "type": "enum",
+        "initial": "zag",
+        "values": [
+          "entry",
+          "keeper",
+          "vault",
+          "master",
+          "owner",
+          "transit",
+          "party",
+          "zag",
+          "master",
+          "owner",
+          "practice",
+          "parcel",
+          "receipt"
+        ],
+        "meaning": "sword の所在または保持者"
+      },
+      "practiceAt": {
+        "type": "enum",
+        "initial": "master",
+        "values": [
+          "entry",
+          "keeper",
+          "vault",
+          "master",
+          "owner",
+          "transit",
+          "party",
+          "zag",
+          "master",
+          "owner",
+          "sword",
+          "parcel",
+          "receipt"
+        ],
+        "meaning": "practice の所在または保持者"
+      },
+      "parcelAt": {
+        "type": "enum",
+        "initial": "keeper",
+        "values": [
+          "entry",
+          "keeper",
+          "vault",
+          "master",
+          "owner",
+          "transit",
+          "party",
+          "zag",
+          "master",
+          "owner",
+          "sword",
+          "practice",
+          "receipt"
+        ],
+        "meaning": "parcel の所在または保持者"
+      },
+      "receiptAt": {
+        "type": "enum",
+        "initial": "owner",
+        "values": [
+          "entry",
+          "keeper",
+          "vault",
+          "master",
+          "owner",
+          "transit",
+          "party",
+          "zag",
+          "master",
+          "owner",
+          "sword",
+          "practice",
+          "parcel"
+        ],
+        "meaning": "receipt の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "zag": {
+        "holder": "zagAt",
+        "kind": "person"
+      },
+      "master": {
+        "holder": "masterAt",
+        "kind": "person"
+      },
+      "owner": {
+        "holder": "ownerAt",
+        "kind": "person"
+      },
+      "sword": {
+        "holder": "swordAt",
+        "kind": "item"
+      },
+      "practice": {
+        "holder": "practiceAt",
+        "kind": "item"
+      },
+      "parcel": {
+        "holder": "parcelAt",
+        "kind": "item"
+      },
+      "receipt": {
+        "holder": "receiptAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "扉が求めるのは戦闘結果ではなく、所有権の主張を一つ手放す宣言だ。入口に並ぶ名札は倒した相手ではなく返却先だ。ザグはかつて拾った師の剣を自分の継承の証にしており、返す相手はまだ生きている。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "敗者の宝物庫の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "return": {
+        "title": "庫番の返却受付",
+        "place": "keeper",
+        "cast": [],
+        "requires": true
+      },
+      "broken": {
+        "title": "宝物庫の内側",
+        "place": "vault",
+        "cast": [],
+        "requires": true
+      },
+      "sword_home": {
+        "title": "剣の持主の家",
+        "place": "master",
+        "cast": [],
+        "requires": true
+      },
+      "delivered": {
+        "title": "預かり物の持主宅",
+        "place": "owner",
+        "cast": [],
+        "requires": true
+      },
+      "receipt": {
+        "title": "庫番の返却受付",
+        "place": "keeper",
+        "cast": [],
+        "requires": true
+      },
+      "parcel_end": {
+        "title": "宝物庫の内側",
+        "place": "vault",
+        "cast": [],
+        "requires": true
+      },
+      "entry_break_ready": {
+        "title": "敗者の宝物庫の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_rule": {
+        "from": [
+          "entry"
+        ],
+        "to": "return",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "zag"
+            ],
+            "path": [
+              "transit",
+              "keeper"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "keeper",
+          "companions": [
+            "zag"
+          ]
+        },
+        "depart": []
+      },
+      "entry_break": {
+        "from": [
+          "entry"
+        ],
+        "to": "entry_break_ready",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "entry_decline": {
+        "from": [
+          "entry"
+        ],
+        "ending": "decline",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "decline"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "return_sword": {
+        "from": [
+          "return"
+        ],
+        "to": "sword_home",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "zag"
+            ],
+            "path": [
+              "transit",
+              "master"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "sword",
+            "from": "zag",
+            "to": "master"
+          },
+          {
+            "op": "transfer",
+            "entity": "practice",
+            "from": "master",
+            "to": "zag"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "master",
+          "companions": [
+            "zag"
+          ]
+        },
+        "depart": []
+      },
+      "return_parcel": {
+        "from": [
+          "return"
+        ],
+        "to": "delivered",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "owner"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "parcel",
+            "from": "party",
+            "to": "owner"
+          },
+          {
+            "op": "transfer",
+            "entity": "receipt",
+            "from": "owner",
+            "to": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "owner",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "parcel",
+            "from": "keeper",
+            "to": "party"
+          }
+        ]
+      },
+      "return_decline": {
+        "from": [
+          "return"
+        ],
+        "ending": "decline",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "decline"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "broken_finish": {
+        "from": [
+          "broken"
+        ],
+        "ending": "break",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "break"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "sword_home_finish": {
+        "from": [
+          "sword_home"
+        ],
+        "ending": "sword",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "sword"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "delivered_back": {
+        "from": [
+          "delivered"
+        ],
+        "to": "receipt",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "keeper"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "receipt",
+            "from": "party",
+            "to": "keeper"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "keeper",
+          "companions": []
+        },
+        "depart": []
+      },
+      "receipt_enter": {
+        "from": [
+          "receipt"
+        ],
+        "to": "parcel_end",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "vault"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "vault",
+          "companions": []
+        },
+        "depart": []
+      },
+      "parcel_end_finish": {
+        "from": [
+          "parcel_end"
+        ],
+        "ending": "parcel",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "parcel"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "entry_break_ready_continue": {
+        "from": [
+          "entry_break_ready"
+        ],
+        "to": "broken",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "vault"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "vault",
+          "companions": []
+        },
+        "depart": []
+      }
+    },
+    "endings": {
+      "sword": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q134.values.resolution"
+            },
+            "right": "sword"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q134.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q134.values.partyAt"
+                },
+                "right": "master"
+              }
+            ]
+          }
+        ]
+      },
+      "parcel": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q134.values.resolution"
+            },
+            "right": "parcel"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q134.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q134.values.partyAt"
+                },
+                "right": "vault"
+              }
+            ]
+          }
+        ]
+      },
+      "break": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q134.values.resolution"
+            },
+            "right": "break"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q134.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q134.values.partyAt"
+                },
+                "right": "vault"
+              }
+            ]
+          }
+        ]
+      },
+      "decline": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q134.values.resolution"
+            },
+            "right": "decline"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q134.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q134.values.partyAt"
+                },
+                "right": "entry"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q134.values.partyAt"
+                },
+                "right": "keeper"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_4",
+        "map": "region_4_f1",
+        "x": 8,
+        "y": 1
+      },
+      "keeper": {
+        "kind": "dungeon",
+        "dungeon": "region_4",
+        "map": "region_4_f1",
+        "x": 9,
+        "y": 5
+      },
+      "vault": {
+        "kind": "dungeon",
+        "dungeon": "region_4",
+        "map": "region_4_f1",
+        "x": 11,
+        "y": 5
+      },
+      "master": {
+        "kind": "town",
+        "location": "pilgrim_master"
+      },
+      "owner": {
+        "kind": "town",
+        "location": "pilgrim_parcel_owner"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_plateau",
+  "receptionLocations": [
+    "pilgrim_board"
+  ]
+}

@@ -1,0 +1,2119 @@
+{
+  "schemaVersion": 1,
+  "id": "q140",
+  "number": 140,
+  "title": "迷宮の休業日",
+  "client": "探索組合",
+  "brief": "迷宮の罠が止まる日の事情を調べてください。",
+  "region": 4,
+  "type": "scene_graph",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 巡礼台地の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q140_scene",
+      "title": "迷宮の休業日：探索組合",
+      "points": [
+        {
+          "map": "region_4_f2",
+          "x": 9,
+          "y": 1,
+          "dungeon": "region_4"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q140.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q140.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q140.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q140"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_4"
+    },
+    {
+      "id": "q140_pilgrim_entry",
+      "title": "整備別棟の休業札",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q140.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q140.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q140"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q140.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "pilgrim_sites",
+          "map": "e2_chapel_works",
+          "x": 1,
+          "y": 1
+        }
+      ]
+    },
+    {
+      "id": "q140_pilgrim_treasure",
+      "title": "別棟の財宝庫",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "treasure",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q140.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q140.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q140"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q140.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "pilgrim_sites",
+          "map": "e2_chapel_works",
+          "x": 11,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "id": "q140_pilgrim_accident",
+      "title": "整備員の事故現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "accident",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q140.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q140.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q140"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q140.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "pilgrim_sites",
+          "map": "e2_chapel_works",
+          "x": 3,
+          "y": 7
+        }
+      ]
+    },
+    {
+      "id": "q140_pilgrim_maintenance",
+      "title": "隊長ボロの整備区画",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "maintenance",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q140.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q140.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q140"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q140.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "pilgrim_sites",
+          "map": "e2_chapel_works",
+          "x": 11,
+          "y": 7
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_4_f2",
+      "x": 9,
+      "y": 1,
+      "object": "q140_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "loot": {
+      "label": "休みの日の略取",
+      "text": "回収益は出た。整備隊は次回の侵入へ備えると通告し、休業をめぐる争いは悪くなった。",
+      "gold": 93,
+      "xp": 69
+    },
+    "treaty": {
+      "label": "限られた入域",
+      "text": "持出申告と休業日を記した協定が結ばれた。ボロは札を裏返し、入口でなく部下へ「帰れ」と言った。",
+      "gold": 93,
+      "xp": 69
+    },
+    "close": {
+      "label": "修理のための閉鎖",
+      "text": "組合は修理期間の閉鎖を受け入れた。次の探索は未定だが、整備員が先に帰れる夜になった。",
+      "gold": 93,
+      "xp": 69
+    },
+    "leave": {
+      "label": "調査して退く",
+      "text": "調査報告は残した。入域権を得たとは扱わず、組合と整備隊の交渉へ引き継いだ。",
+      "gold": 93,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/chapel-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38158877be064f30e374c",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "入口に並ぶ札を呪文と思わせ、実際は当番表だと分かる。ただし整備隊は侵入者を歓迎しておらず、罠の危険は本物だ。人間側の組合も、迷宮を無制限に採掘する権利を持っているわけではない。",
+      "fixedPast": "毎週同じ日に迷宮の罠が止まる理由を、探索組合が調べている。罠を修理する小鬼の整備隊には休業日があり、人間がその日だけ財宝を持ち出すため、責任者ボロは休みを撤廃しようとしている。部下は疲れて事故を起こし始めている。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "探索組合",
+        "beliefsAndGoals": "毎週同じ日に迷宮の罠が止まる理由を、探索組合が調べている。罠を修理する小鬼の整備隊には休業日があり、人間がその日だけ財宝を持ち出すため、責任者ボロは休みを撤廃しようとしている。部下は疲れて事故を起こし始めている。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "迷宮の罠が止まる日の事情を調べてください。"
+      }
+    ],
+    "conflict": {
+      "design": "停止した罠→財宝庫へ急ぐ／整備区画へ入る→事故または会談→略取・入域協定・一時閉鎖。救助だけでも会談は始められるが、協定には持出品を申告する必要がある。交渉決裂なら外へ退くか、敵対する整備隊と戦って脱出する。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q140.pilgrimage.entry"
+        },
+        {
+          "id": "talk",
+          "script": "q140.pilgrimage.talk"
+        },
+        {
+          "id": "take",
+          "script": "q140.pilgrimage.take"
+        },
+        {
+          "id": "looted",
+          "script": "q140.pilgrimage.looted"
+        },
+        {
+          "id": "accident",
+          "script": "q140.pilgrimage.accident"
+        },
+        {
+          "id": "declared",
+          "script": "q140.pilgrimage.declared"
+        },
+        {
+          "id": "closed",
+          "script": "q140.pilgrimage.closed"
+        },
+        {
+          "id": "left",
+          "script": "q140.pilgrimage.left"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "迷宮の罠が止まる日の事情を調べてください。"
+    },
+    "reveal": {
+      "newInformation": "入口に並ぶ札を呪文と思わせ、実際は当番表だと分かる。ただし整備隊は侵入者を歓迎しておらず、罠の危険は本物だ。人間側の組合も、迷宮を無制限に採掘する権利を持っているわけではない。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q140.scene.entry"
+      },
+      {
+        "id": "talk",
+        "script": "q140.scene.talk"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q140.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "罠の横の札は呪文でなく当番表だった。整備隊の休みを狙う探索者が増え、隊長ボロは休業をなくそうとしていた。",
+        "options": [
+          {
+            "id": "loot",
+            "text": "止まった罠を通り、持出品を得て帰る",
+            "to": "take",
+            "action": "entry_loot"
+          },
+          {
+            "id": "rescue",
+            "text": "疲れた整備員の事故を手伝う",
+            "to": "accident",
+            "action": "entry_rescue"
+          },
+          {
+            "id": "talk",
+            "text": "整備区画で入域の条件を聞く",
+            "to": "talk",
+            "action": "entry_talk"
+          }
+        ]
+      },
+      {
+        "id": "talk",
+        "place": "maintenance",
+        "text": "ボロは侵入を歓迎していない。だが休みがなくなれば事故が増える。持出品を申告し、入域日を限る協定なら検討すると言った。",
+        "options": [
+          {
+            "id": "declare",
+            "text": "持出品を申告し、入域制限を受け入れる",
+            "to": "declared",
+            "action": "talk_declare"
+          },
+          {
+            "id": "close",
+            "text": "修理期間の一時閉鎖を組合へ提案する",
+            "to": "closed",
+            "action": "talk_close"
+          },
+          {
+            "id": "leave",
+            "text": "協定を結ばず、今回は調査だけで帰る",
+            "to": "left",
+            "action": "talk_leave"
+          }
+        ]
+      },
+      {
+        "id": "take",
+        "place": "treasure",
+        "text": "止まった罠の先の庫へ着いた。回収した品を携え、地上へ退く。",
+        "options": [
+          {
+            "id": "leave",
+            "text": "持出品を持って組合へ帰る",
+            "to": "looted",
+            "action": "take_leave"
+          }
+        ]
+      },
+      {
+        "id": "looted",
+        "place": "union",
+        "text": "回収品を持って帰着した。入域の許可を得たことにはしない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@loot",
+            "action": "looted_finish"
+          }
+        ]
+      },
+      {
+        "id": "accident",
+        "place": "accident",
+        "text": "倒れた整備員を作業場所から引き出した。隊長の区画へ支えて運ぶ。",
+        "options": [
+          {
+            "id": "carry",
+            "text": "整備員をボロの区画へ運ぶ",
+            "to": "talk",
+            "action": "accident_carry"
+          }
+        ]
+      },
+      {
+        "id": "declared",
+        "place": "union",
+        "text": "入域制限と持出申告の協定を組合へ届けた。持出品がない今回の記録も記した。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@treaty",
+            "action": "declared_finish"
+          }
+        ]
+      },
+      {
+        "id": "closed",
+        "place": "union",
+        "text": "修理期間の閉鎖を組合へ提案し、受理されたことを確かめた。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@close",
+            "action": "closed_finish"
+          }
+        ]
+      },
+      {
+        "id": "left",
+        "place": "union",
+        "text": "別棟を出て組合へ帰り、調査した範囲だけを引き継いだ。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@leave",
+            "action": "left_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "entryScript": "q140.pilgrimage.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "second-ten",
+      "settlement": "oddland_plateau",
+      "saveRevision": 2,
+      "scope": "後半10件の実地接続。既に受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q140.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q140.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "罠の横の札は呪文でなく当番表だった。整備隊の休みを狙う探索者が増え、隊長ボロは休業をなくそうとしていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "loot",
+              "text": "止まった罠を通り、持出品を得て帰る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q140.end.loot"
+                }
+              ]
+            },
+            {
+              "id": "rescue",
+              "text": "疲れた整備員の事故を手伝う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q140.scene.talk"
+                }
+              ]
+            },
+            {
+              "id": "talk",
+              "text": "整備区画で入域の条件を聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q140.scene.talk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q140.scene.talk": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q140.node",
+          "value": "talk"
+        },
+        {
+          "op": "say",
+          "text": "ボロは侵入を歓迎していない。だが休みがなくなれば事故が増える。持出品を申告し、入域日を限る協定なら検討すると言った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "declare",
+              "text": "持出品を申告し、入域制限を受け入れる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q140.end.treaty"
+                }
+              ]
+            },
+            {
+              "id": "close",
+              "text": "修理期間の一時閉鎖を組合へ提案する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q140.end.close"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "協定を結ばず、今回は調査だけで帰る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q140.end.leave"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q140.end.loot": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q140.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "回収益は出た。整備隊は次回の侵入へ備えると通告し、休業をめぐる争いは悪くなった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q140",
+              "outcome": "loot"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q140.end.treaty": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q140.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "持出申告と休業日を記した協定が結ばれた。ボロは札を裏返し、入口でなく部下へ「帰れ」と言った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q140",
+              "outcome": "treaty"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q140.end.close": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q140.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "組合は修理期間の閉鎖を受け入れた。次の探索は未定だが、整備員が先に帰れる夜になった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q140",
+              "outcome": "close"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q140.end.leave": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q140.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "調査報告は残した。入域権を得たとは扱わず、組合と整備隊の交渉へ引き継いだ。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q140",
+              "outcome": "leave"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q140.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q140.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q140.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "loot",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "回収益は出た。整備隊は次回の侵入へ備えると通告し、休業をめぐる争いは悪くなった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "treaty",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "持出申告と休業日を記した協定が結ばれた。ボロは札を裏返し、入口でなく部下へ「帰れ」と言った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "close",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "組合は修理期間の閉鎖を受け入れた。次の探索は未定だが、整備員が先に帰れる夜になった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "leave",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "調査報告は残した。入域権を得たとは扱わず、組合と整備隊の交渉へ引き継いだ。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q140.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q140.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "talk",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q140.scene.talk"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q140.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q140.pilgrimage.entry": {
+      "storyQuest": "q140",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q140",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "罠の横の札は呪文でなく当番表だった。整備隊の休みを狙う探索者が増え、隊長ボロは休業をなくそうとしていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "loot",
+              "text": "止まった罠を通り、持出品を得て帰る",
+              "storyAction": {
+                "quest": "q140",
+                "action": "entry_loot"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q140",
+                  "action": "entry_loot"
+                }
+              ]
+            },
+            {
+              "id": "rescue",
+              "text": "疲れた整備員の事故を手伝う",
+              "storyAction": {
+                "quest": "q140",
+                "action": "entry_rescue"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q140",
+                  "action": "entry_rescue"
+                }
+              ]
+            },
+            {
+              "id": "talk",
+              "text": "整備区画で入域の条件を聞く",
+              "storyAction": {
+                "quest": "q140",
+                "action": "entry_talk"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q140",
+                  "action": "entry_talk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q140.pilgrimage.talk": {
+      "storyQuest": "q140",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q140",
+          "scene": "talk"
+        },
+        {
+          "op": "narrate",
+          "text": "ボロは侵入を歓迎していない。だが休みがなくなれば事故が増える。持出品を申告し、入域日を限る協定なら検討すると言った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "declare",
+              "text": "持出品を申告し、入域制限を受け入れる",
+              "storyAction": {
+                "quest": "q140",
+                "action": "talk_declare"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q140",
+                  "action": "talk_declare"
+                }
+              ]
+            },
+            {
+              "id": "close",
+              "text": "修理期間の一時閉鎖を組合へ提案する",
+              "storyAction": {
+                "quest": "q140",
+                "action": "talk_close"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q140",
+                  "action": "talk_close"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "協定を結ばず、今回は調査だけで帰る",
+              "storyAction": {
+                "quest": "q140",
+                "action": "talk_leave"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q140",
+                  "action": "talk_leave"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q140.pilgrimage.take": {
+      "storyQuest": "q140",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q140",
+          "scene": "take"
+        },
+        {
+          "op": "narrate",
+          "text": "止まった罠の先の庫へ着いた。回収した品を携え、地上へ退く。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "leave",
+              "text": "持出品を持って組合へ帰る",
+              "storyAction": {
+                "quest": "q140",
+                "action": "take_leave"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q140",
+                  "action": "take_leave"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q140.pilgrimage.looted": {
+      "storyQuest": "q140",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q140",
+          "scene": "looted"
+        },
+        {
+          "op": "narrate",
+          "text": "回収品を持って帰着した。入域の許可を得たことにはしない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q140",
+                "action": "looted_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q140",
+                  "action": "looted_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q140.pilgrimage.end.loot"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q140.pilgrimage.accident": {
+      "storyQuest": "q140",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q140",
+          "scene": "accident"
+        },
+        {
+          "op": "narrate",
+          "text": "倒れた整備員を作業場所から引き出した。隊長の区画へ支えて運ぶ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "carry",
+              "text": "整備員をボロの区画へ運ぶ",
+              "storyAction": {
+                "quest": "q140",
+                "action": "accident_carry"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q140",
+                  "action": "accident_carry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q140.pilgrimage.declared": {
+      "storyQuest": "q140",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q140",
+          "scene": "declared"
+        },
+        {
+          "op": "narrate",
+          "text": "入域制限と持出申告の協定を組合へ届けた。持出品がない今回の記録も記した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q140",
+                "action": "declared_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q140",
+                  "action": "declared_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q140.pilgrimage.end.treaty"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q140.pilgrimage.closed": {
+      "storyQuest": "q140",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q140",
+          "scene": "closed"
+        },
+        {
+          "op": "narrate",
+          "text": "修理期間の閉鎖を組合へ提案し、受理されたことを確かめた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q140",
+                "action": "closed_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q140",
+                  "action": "closed_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q140.pilgrimage.end.close"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q140.pilgrimage.left": {
+      "storyQuest": "q140",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q140",
+          "scene": "left"
+        },
+        {
+          "op": "narrate",
+          "text": "別棟を出て組合へ帰り、調査した範囲だけを引き継いだ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q140",
+                "action": "left_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q140",
+                  "action": "left_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q140.pilgrimage.end.leave"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q140.pilgrimage.end.loot": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "回収益は出た。整備隊は次回の侵入へ備えると通告し、休業をめぐる争いは悪くなった。"
+        },
+        {
+          "op": "add",
+          "target": "vars.loot",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q140",
+          "outcome": "loot"
+        }
+      ]
+    },
+    "q140.pilgrimage.end.treaty": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "持出申告と休業日を記した協定が結ばれた。ボロは札を裏返し、入口でなく部下へ「帰れ」と言った。"
+        },
+        {
+          "op": "add",
+          "target": "vars.treaty",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q140",
+          "outcome": "treaty"
+        }
+      ]
+    },
+    "q140.pilgrimage.end.close": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "組合は修理期間の閉鎖を受け入れた。次の探索は未定だが、整備員が先に帰れる夜になった。"
+        },
+        {
+          "op": "add",
+          "target": "vars.close",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q140",
+          "outcome": "close"
+        }
+      ]
+    },
+    "q140.pilgrimage.end.leave": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "調査報告は残した。入域権を得たとは扱わず、組合と整備隊の交渉へ引き継いだ。"
+        },
+        {
+          "op": "add",
+          "target": "vars.leave",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q140",
+          "outcome": "leave"
+        }
+      ]
+    },
+    "q140.pilgrimage.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q140"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q140.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q140.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q140.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "loot",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "回収益は出た。整備隊は次回の侵入へ備えると通告し、休業をめぐる争いは悪くなった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "treaty",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "持出申告と休業日を記した協定が結ばれた。ボロは札を裏返し、入口でなく部下へ「帰れ」と言った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "close",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "組合は修理期間の閉鎖を受け入れた。次の探索は未定だが、整備員が先に帰れる夜になった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "leave",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "調査報告は残した。入域権を得たとは扱わず、組合と整備隊の交渉へ引き継いだ。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q140"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q140.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q140.pilgrimage.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "talk",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q140.pilgrimage.talk"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "take",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q140.pilgrimage.take"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "looted",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q140.pilgrimage.looted"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "accident",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q140.pilgrimage.accident"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "declared",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q140.pilgrimage.declared"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "closed",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q140.pilgrimage.closed"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "left",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q140.pilgrimage.left"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q140.pilgrimage.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "整備別棟の休業札",
+      "treasure": "別棟の財宝庫",
+      "accident": "整備員の事故現場",
+      "maintenance": "隊長ボロの整備区画",
+      "union": "探索組合の申告受付",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "treasure"
+      ],
+      [
+        "transit",
+        "accident"
+      ],
+      [
+        "transit",
+        "maintenance"
+      ],
+      [
+        "transit",
+        "union"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "treasure",
+          "accident",
+          "maintenance",
+          "union",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "loot",
+          "treaty",
+          "close",
+          "leave"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "helped": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "helped"
+      },
+      "declared": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "declared"
+      },
+      "goodsAt": {
+        "type": "enum",
+        "initial": "treasure",
+        "values": [
+          "entry",
+          "treasure",
+          "accident",
+          "maintenance",
+          "union",
+          "transit",
+          "party",
+          "worker"
+        ],
+        "meaning": "goods の所在または保持者"
+      },
+      "workerAt": {
+        "type": "enum",
+        "initial": "accident",
+        "values": [
+          "entry",
+          "treasure",
+          "accident",
+          "maintenance",
+          "union",
+          "transit"
+        ],
+        "meaning": "worker の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "goods": {
+        "holder": "goodsAt",
+        "kind": "item"
+      },
+      "worker": {
+        "holder": "workerAt",
+        "kind": "person"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "入口に並ぶ札を呪文と思わせ、実際は当番表だと分かる。ただし整備隊は侵入者を歓迎しておらず、罠の危険は本物だ。人間側の組合も、迷宮を無制限に採掘する権利を持っているわけではない。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "整備別棟の休業札",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "talk": {
+        "title": "隊長ボロの整備区画",
+        "place": "maintenance",
+        "cast": [],
+        "requires": true
+      },
+      "take": {
+        "title": "別棟の財宝庫",
+        "place": "treasure",
+        "cast": [],
+        "requires": true
+      },
+      "looted": {
+        "title": "探索組合の申告受付",
+        "place": "union",
+        "cast": [],
+        "requires": true
+      },
+      "accident": {
+        "title": "整備員の事故現場",
+        "place": "accident",
+        "cast": [],
+        "requires": true
+      },
+      "declared": {
+        "title": "探索組合の申告受付",
+        "place": "union",
+        "cast": [],
+        "requires": true
+      },
+      "closed": {
+        "title": "探索組合の申告受付",
+        "place": "union",
+        "cast": [],
+        "requires": true
+      },
+      "left": {
+        "title": "探索組合の申告受付",
+        "place": "union",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_loot": {
+        "from": [
+          "entry"
+        ],
+        "to": "take",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "treasure"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "treasure",
+          "companions": []
+        },
+        "depart": []
+      },
+      "entry_rescue": {
+        "from": [
+          "entry"
+        ],
+        "to": "accident",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "accident"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "accident",
+          "companions": []
+        },
+        "depart": []
+      },
+      "entry_talk": {
+        "from": [
+          "entry"
+        ],
+        "to": "talk",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "maintenance"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "maintenance",
+          "companions": []
+        },
+        "depart": []
+      },
+      "talk_declare": {
+        "from": [
+          "talk"
+        ],
+        "to": "declared",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "union"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "declared",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "union",
+          "companions": []
+        },
+        "depart": []
+      },
+      "talk_close": {
+        "from": [
+          "talk"
+        ],
+        "to": "closed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "union"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "union",
+          "companions": []
+        },
+        "depart": []
+      },
+      "talk_leave": {
+        "from": [
+          "talk"
+        ],
+        "to": "left",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "union"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "union",
+          "companions": []
+        },
+        "depart": []
+      },
+      "take_leave": {
+        "from": [
+          "take"
+        ],
+        "to": "looted",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "union"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "union",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "goods",
+            "from": "treasure",
+            "to": "party"
+          }
+        ]
+      },
+      "looted_finish": {
+        "from": [
+          "looted"
+        ],
+        "ending": "loot",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "loot"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "accident_carry": {
+        "from": [
+          "accident"
+        ],
+        "to": "talk",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "worker"
+            ],
+            "path": [
+              "transit",
+              "maintenance"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "helped",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "maintenance",
+          "companions": [
+            "worker"
+          ]
+        },
+        "depart": []
+      },
+      "declared_finish": {
+        "from": [
+          "declared"
+        ],
+        "ending": "treaty",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "treaty"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "closed_finish": {
+        "from": [
+          "closed"
+        ],
+        "ending": "close",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "close"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "left_finish": {
+        "from": [
+          "left"
+        ],
+        "ending": "leave",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "leave"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "loot": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q140.values.resolution"
+            },
+            "right": "loot"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q140.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q140.values.partyAt"
+                },
+                "right": "union"
+              }
+            ]
+          }
+        ]
+      },
+      "treaty": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q140.values.resolution"
+            },
+            "right": "treaty"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q140.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q140.values.partyAt"
+                },
+                "right": "union"
+              }
+            ]
+          }
+        ]
+      },
+      "close": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q140.values.resolution"
+            },
+            "right": "close"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q140.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q140.values.partyAt"
+                },
+                "right": "union"
+              }
+            ]
+          }
+        ]
+      },
+      "leave": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q140.values.resolution"
+            },
+            "right": "leave"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q140.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q140.values.partyAt"
+                },
+                "right": "union"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "pilgrim_sites",
+        "map": "e2_chapel_works",
+        "x": 1,
+        "y": 1
+      },
+      "treasure": {
+        "kind": "dungeon",
+        "dungeon": "pilgrim_sites",
+        "map": "e2_chapel_works",
+        "x": 11,
+        "y": 3
+      },
+      "accident": {
+        "kind": "dungeon",
+        "dungeon": "pilgrim_sites",
+        "map": "e2_chapel_works",
+        "x": 3,
+        "y": 7
+      },
+      "maintenance": {
+        "kind": "dungeon",
+        "dungeon": "pilgrim_sites",
+        "map": "e2_chapel_works",
+        "x": 11,
+        "y": 7
+      },
+      "union": {
+        "kind": "town",
+        "location": "pilgrim_union"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_plateau",
+  "receptionLocations": [
+    "pilgrim_board"
+  ]
+}
