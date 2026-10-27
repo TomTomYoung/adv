@@ -2,7 +2,8 @@
 // Appearance is new art direction; story identity, knowledge and location stay intact.
 export const KAGARIBI_CHARACTER_ART=Object.freeze(Object.fromEntries([
   {batch:'kagaribi-2026-10-27',ids:['q201_clerk','q201_porter','q202_trainee','q202_trainer']},
-  {batch:'kagaribi-q203-2026-10-27',ids:['q203_seller','q203_tester']}
+  {batch:'kagaribi-q203-2026-10-27',ids:['q203_seller','q203_tester']},
+  {batch:'kagaribi-q204-2026-10-27',ids:['q204_scribe','q204_survivor']}
 ].flatMap(({batch,ids})=>ids.map(id=>[id,Object.freeze({asset:`npc_${id}`,file:`assets/images/characters/kagaribi/${id}.webp`,source:`assets/source/characters/${batch}/${id}.png`,manifest:`assets/source/characters/${batch}.json`})]))));
 export const kagaribiCharacterImages=()=>Object.fromEntries(Object.values(KAGARIBI_CHARACTER_ART).map(a=>[a.asset,a.file]));
 export function kagaribiCharacterArt(id){

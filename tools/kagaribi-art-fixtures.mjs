@@ -54,6 +54,27 @@ export async function kagaribiArtFixtures(){
     assert.equal(q203.state.quests.q203.outcome,'limited');outcomes.push(`${edition}/q203/limited`);
     q203.load(result203);choose(q203,'public');sample('tester',[1,1,1]);
     assert.equal(q203.state.quests.q203.outcome,'public');outcomes.push(`${edition}/q203/public`);
+    const q204=prepare('q204');checkpoint(q204,'q204','entry',['q204_scribe']);
+    const records=(copy,statement,consent,record='open')=>{
+      const v=q204.state.stories.q204.values;
+      assert.deepEqual([v.copyAt,v.statementAt,v.consent,v.record],[copy,statement,consent,record]);
+      assert.equal(v.scribeAt,'shelf');assert.equal(v.survivorAt,'bench');
+    };
+    records('scribe','survivor','none');choose(q204,'visit');records('party','survivor','none');arrive(q204);
+    const meeting=checkpoint(q204,'q204','meeting',['q204_survivor']);
+    for(const [consent,action,outcome,blockedChoice] of [['named','add','addendum','seal'],['sealed','seal','sealed','add']]){
+      q204.load(meeting);choose(q204,consent);records('party','party',consent);
+      checkpoint(q204,'q204','report',['q204_survivor'],{variant:consent});choose(q204,'carry');arrive(q204);
+      const filing=checkpoint(q204,'q204','filing',['q204_scribe'],{variant:consent,blockedChoice,availableChoice:action});
+      const options=projectGame(q204).dialog.options;
+      assert.equal(options.find(o=>o.id===action)?.enabled,true);assert.equal(options.find(o=>o.id===blockedChoice)?.enabled,false);
+      assert.equal(q204.dispatch({type:'choose',id:blockedChoice}),false);assert.equal(q204.save(),filing);
+      q204.load(filing);records('party','party',consent);choose(q204,action);records('scribe','scribe',consent,outcome);
+      assert.equal(q204.state.quests.q204.outcome,outcome);outcomes.push(`${edition}/q204/${outcome}`);
+    }
+    q204.load(meeting);choose(q204,'pending');arrive(q204);records('party','survivor','none');
+    checkpoint(q204,'q204','pending',['q204_scribe']);choose(q204,'correct');records('scribe','survivor','none','pending');
+    assert.equal(q204.state.quests.q204.outcome,'pending');outcomes.push(`${edition}/q204/pending`);
   }
   return {fixtures,outcomes};
 }
