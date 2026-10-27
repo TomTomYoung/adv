@@ -48,10 +48,12 @@ try{
       await page.evaluate(async()=>{await document.fonts.ready;await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});
       const sample=await canvas.evaluate(c=>{
         const ctx=c.getContext('2d'),sky=[...ctx.getImageData(400,30,1,1).data],r=c.getBoundingClientRect();
-        return {sky,width:c.width,height:c.height,shownWidth:r.width,shownHeight:r.height,frame:c.toDataURL(),viewport:innerWidth,document:document.documentElement.scrollWidth,pageHeight:document.documentElement.scrollHeight,viewportHeight:innerHeight};
+        return {sky,canvasWidth:c.width,canvasHeight:c.height,shownWidth:r.width,shownHeight:r.height,frame:c.toDataURL(),viewport:innerWidth,document:document.documentElement.scrollWidth,pageHeight:document.documentElement.scrollHeight,viewportHeight:innerHeight};
       });
       assert.equal(await page.evaluate(()=>h.view.model.dungeon.outdoor),theme);
-      assert.deepEqual([sample.width,sample.height],[800,400]);assert.ok(sample.shownWidth>0&&sample.shownHeight>0);
+      assert.deepEqual([sample.canvasWidth,sample.canvasHeight],[800,400]);assert.ok(sample.shownWidth>0&&sample.shownHeight>0);
+      const label=page.locator(layout==='scene'?'.scene-place .eyebrow':'.scene-location .eyebrow');assert.match(await label.innerText(),/屋外/);
+      if(layout==='classic')assert.equal(await page.locator('.scene-location').evaluate(el=>getComputedStyle(el).backgroundColor),'rgba(8, 20, 23, 0.88)');
       assert.ok(sample.sky.slice(0,3).every(v=>v>65),'outdoor sky is visible');
       assert.ok(sample.document<=sample.viewport+1,'horizontal overflow');
       if(layout==='scene')assert.ok(sample.pageHeight<=sample.viewportHeight+1,'Scene stays within one screen');

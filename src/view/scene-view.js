@@ -106,7 +106,7 @@ export class SceneView extends GameView{
     const world=make('div','scene-world');world.dataset.fx='screen';stage.append(world);
     const hud=make('div','scene-hud'),dock=make('div','scene-dock');stage.append(hud,dock);
     const header=make('header','scene-header'),place=make('div','scene-place');
-    place.append(make('span','eyebrow',model.town?.breadcrumbs.map(p=>p.name).join(' / ')??`${model.dungeon?.name??''} / ${model.dungeon?.floor??''}階`),make('span','scene-title',model.town?.name??model.dungeon?.name??model.title));
+    place.append(make('span','eyebrow',model.town?.breadcrumbs.map(p=>p.name).join(' / ')??`${model.dungeon?.name??''} / ${model.dungeon?.outdoor?'屋外':`${model.dungeon?.floor??''}階`}`),make('span','scene-title',model.town?.name??model.dungeon?.name??model.title));
     if(model.worldTravel)place.append(make('span','world-travel-status',`${model.worldTravel.country} ／ 帰還先：${model.worldTravel.returnAnchor}`));
     const toolbar=make('nav','scene-toolbar');toolbar.setAttribute('aria-label','管理メニュー');
     for(const [id,label] of [['journal','手帳'],['bag','旅支度'],['party','隊'],...(model.dungeon?[['map','地図']]:[])]){
