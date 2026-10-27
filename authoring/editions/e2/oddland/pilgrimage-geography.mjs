@@ -9,7 +9,7 @@ export async function extendPilgrimageGeography(bundle,read){
   ['oddland_plateau','巡礼台地','石段を上がると、礼拝堂の入口と旅人の泊まる家々が見える。祈る人と修繕に来た職人が同じ広場を横切る。'],
   ['oddland_village','旧王領の村','畑の間の道が井戸のそばへ出る。村の人は交易市へ荷を運び、夕方には同じ道を帰ってくる。城と観測所への道はまだ開通していない。']
  ]){
-  add(id,name,null,description,'location_square',id==='oddland_plateau'?{dungeons:['region_4']}:{});
+  add(id,name,null,description,`location_${id}`,id==='oddland_plateau'?{dungeons:['region_4']}:{});
   add(id+'_inn',name+'の宿',id,'旅の支度を整え、休息と隊の編成ができる。','location_tavern',{services:['inn'],party:true});
   add(id+'_clinic',name+'の施療所',id,'所持金がなくても応急手当を受けられる。','location_medical',{services:['clinic']});
   add(id+'_supply',name+'の補給店',id,'道具の購入と携行油の補充ができる。預けた油はこの拠点で保管する。','location_shop',{shop:true});

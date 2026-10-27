@@ -11,7 +11,7 @@ export async function buildSalomeGeography(previous,{check=false}={}){
  const travel=structuredClone(previous.travel),maps={},locations={},patches=[];
  travel.version=2;
  const patch=async(id,changes)=>patches.push({group:'locations',id,sha256:await geographyFingerprint(previousLocations[id]),value:{...structuredClone(previousLocations[id]),...changes}});
- await patch('e2_academy',{parent:null,name:'サロメ・学門前',description:'高台街道を上がると、神学校と魔術協会、機械学会の屋根が見える。書庫の受付と遺物管理室へは広場から進める。坂を下れば灯帰りへ戻れる。'});
+ await patch('e2_academy',{parent:null,name:'サロメ・学門前',background:'location_salome_gate',description:'高台街道を上がると、神学校と魔術協会、機械学会の屋根が見える。書庫の受付と遺物管理室へは広場から進める。坂を下れば灯帰りへ戻れる。'});
  await patch('e2_road',{description:'灯帰りの乗合馬車停留所。行政都市、開拓地、街道の施療院へ向かう人が待っている。サロメへの高台街道と乗合便は、灯帰りの広場から出る。'});
  const add=(id,name,description,background,extra={})=>locations[id]={id,name,parent:'e2_academy',description,background,links:[],...extra};
  add('salome_inn','サロメの下宿屋','空いた寝床で休息し、同行する仲間を相談できる。','location_tavern',{party:true,services:['inn']});

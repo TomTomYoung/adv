@@ -6,6 +6,9 @@ on:
       - 'data/scenario-editions/**'
       - 'data/scenario-editions.json'
       - 'tools/browser-oddland-smoke.mjs'
+      - 'tools/browser-settlement-checkpoint.mjs'
+      - 'assets/images/locations/**'
+      - 'data/assets.json'
       - '.github/workflows/oddland-quests.yml'
   workflow_dispatch:
 permissions:
@@ -13,7 +16,7 @@ permissions:
 jobs:
   oddland-browser:
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -23,6 +26,8 @@ jobs:
         run: |
           npm install --no-save --package-lock=false playwright@1.58.2
           npx playwright install --with-deps chromium --only-shell
+          # Playwright's Linux dependencies include IPA Gothic for Japanese.
+          test -n "$(fc-list :lang=ja)"
       - name: Verify border, pilgrimage roads and complete quests in both layouts and widths
         run: node tools/browser-oddland-smoke.mjs
       - name: Keep Oddland viewport checkpoints

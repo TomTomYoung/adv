@@ -6,6 +6,9 @@ on:
       - 'data/scenario-editions/**'
       - 'data/scenario-editions.json'
       - 'tools/browser-salome-smoke.mjs'
+      - 'tools/browser-settlement-checkpoint.mjs'
+      - 'assets/images/locations/**'
+      - 'data/assets.json'
       - '.github/workflows/salome-quests.yml'
   workflow_dispatch:
 permissions:
@@ -23,7 +26,8 @@ jobs:
         run: |
           npm install --no-save --package-lock=false playwright@1.58.2
           npx playwright install --with-deps chromium --only-shell
-          sudo apt-get install -y fonts-noto-cjk
+          # Playwright's Linux dependencies include IPA Gothic for Japanese.
+          test -n "$(fc-list :lang=ja)"
       - name: Walk to Salome, complete personal and regional library quests, and return in both layouts and widths
         run: node tools/browser-salome-smoke.mjs
       - name: Keep Salome viewport checkpoints
