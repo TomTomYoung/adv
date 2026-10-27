@@ -126,6 +126,24 @@ export async function kagaribiArtFixtures(){
     choose(q206,'hand');meal('sister','rest',false,false,'returned');
     assert.equal(q206.state.quests.q206.outcome,'returned');outcomes.push(`${edition}/q206/returned`);
     delivered=q206.save();q206.load(delivered);assert.equal(q206.save(),delivered);
+    const q207=prepare('q207'),surveyPair=['q207_surveyor','q207_assistant'];
+    const survey=(place,calibrated=false,remeasured=false,joint=false,filing='none',sheet='surveyor')=>{
+      const v=q207.state.stories.q207.values;
+      assert.deepEqual([v.partyAt,v.surveyorAt,v.assistantAt],[place,place,place]);
+      assert.deepEqual([v.rodAt,v.sheetAt,v.calibrated,v.remeasured,v.joint,v.filing],['surveyor',sheet,calibrated,remeasured,joint,filing]);
+    };
+    const base=checkpoint(q207,'q207','entry',surveyPair);survey('base');
+    choose(q207,'unverified');survey('base',false,false,false,'unverified');
+    assert.equal(q207.state.quests.q207.outcome,'unverified');outcomes.push(`${edition}/q207/unverified`);
+    const unverified=q207.save();q207.load(unverified);assert.equal(q207.save(),unverified);
+    q207.load(base);choose(q207,'check');survey('base',true);checkpoint(q207,'q207','calibrated',surveyPair);
+    choose(q207,'go');survey('transit',true);arrive(q207);survey('mark',true);checkpoint(q207,'q207','measure',surveyPair);
+    choose(q207,'read');survey('mark',true,true,true);const measured=checkpoint(q207,'q207','result',surveyPair);
+    for(const [action,outcome,holder] of [['joint','joint','assistant'],['withdraw','withdrawn','surveyor']]){
+      q207.load(measured);choose(q207,action);survey('mark',true,true,true,outcome,holder);
+      assert.equal(q207.state.quests.q207.outcome,outcome);outcomes.push(`${edition}/q207/${outcome}`);
+      const completed=q207.save();q207.load(completed);assert.equal(q207.save(),completed);
+    }
   }
   return {fixtures,outcomes};
 }

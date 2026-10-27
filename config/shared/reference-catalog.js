@@ -43952,10 +43952,14 @@ export const referenceData={
         "portrait": "npc_q206_worker"
       },
       "q207_surveyor": {
-        "name": "オセ"
+        "name": "オセ",
+        "sprite": "npc_q207_surveyor",
+        "portrait": "npc_q207_surveyor"
       },
       "q207_assistant": {
-        "name": "ハル"
+        "name": "ハル",
+        "sprite": "npc_q207_assistant",
+        "portrait": "npc_q207_assistant"
       },
       "q208_keeper": {
         "name": "メア"
@@ -76124,7 +76128,9 @@ export const referenceData={
       "npc_q205_pupil": "assets/images/characters/kagaribi/q205_pupil.webp",
       "npc_q205_master": "assets/images/characters/kagaribi/q205_master.webp",
       "npc_q206_sister": "assets/images/characters/kagaribi/q206_sister.webp",
-      "npc_q206_worker": "assets/images/characters/kagaribi/q206_worker.webp"
+      "npc_q206_worker": "assets/images/characters/kagaribi/q206_worker.webp",
+      "npc_q207_surveyor": "assets/images/characters/kagaribi/q207_surveyor.webp",
+      "npc_q207_assistant": "assets/images/characters/kagaribi/q207_assistant.webp"
     },
     "audio": {
       "exploration": "assets/audio/exploration-v2.ogg",

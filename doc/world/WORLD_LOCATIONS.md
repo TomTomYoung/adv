@@ -53,7 +53,7 @@
 
 ## 篝火の追加10編の実際の場所
 
-q201〜q210は `story.worldPlaces` で篝火の既存9区画へ配置し、`story.journey` で出発・同行・実到着を接続しています。本文は `authoring/stories-kagaribi.mjs`、配置は `config/quests/q201.events.json`〜`q210.events.json` が正本です。専用NPC20人の名前・役割・所在は定義済みです。[q201〜q206の12人](../scenarios/KAGARIBI_CHARACTER_ART.md)は専用透過画を肖像・立ち絵へ接続し、残る8人は未制作です。[10編の配置と行為](../scenarios/KAGARIBI_TEN_QUESTS.md)を参照してください。
+q201〜q210は `story.worldPlaces` で篝火の既存9区画へ配置し、`story.journey` で出発・同行・実到着を接続しています。本文は `authoring/stories-kagaribi.mjs`、配置は `config/quests/q201.events.json`〜`q210.events.json` が正本です。専用NPC20人の名前・役割・所在は定義済みです。[q201〜q207の14人](../scenarios/KAGARIBI_CHARACTER_ART.md)は専用透過画を肖像・立ち絵へ接続し、残る6人は未制作です。[10編の配置と行為](../scenarios/KAGARIBI_TEN_QUESTS.md)を参照してください。
 
 ## 出発・到着・中断
 
@@ -81,7 +81,7 @@ Coreのフィールドイベントは、目的地への実到着で到着効果�
 
 Coreが現在地・会話・人物・物品・移動記録を所有し、Applicationの `world-projection.js` が表示用の町・移動案内を返します。Viewは背景、透過立ち絵、場所名、本文、選択肢を描画します。取引と隊編成は施設から開く追加パネルです。背景へ表示した人物の肖像を会話欄へ重複表示しません。
 
-現行登録の施設・町背景は関所と新しい到着口5枚を含む13枚、NPC48人に会話用画像を接続済みです。第2版151ロケーションの共用と未制作30NPC、人物表示の未接続を[不足素材台帳](ASSET_BACKLOG.md)へ集約します。[到着背景5枚の原本・英日プロンプト・配布情報](../../assets/source/world-locations/settlements-2026-10-27.json)は別に保持します。以下は初期制作分の記録です。背景7枚は `assets/images/locations/`、標本係・運搬人・審査官の立ち絵3枚は `assets/images/characters/sprites/` です。既存の生成肖像を参照して透過立ち絵を生成しました。背景1536×1024、立ち絵1173×1341。元の生成PNGは保持し、配布画像はサイズ変更・描き直しをせずWebPへ符号化しました。
+現行登録の施設・町背景は関所と新しい到着口5枚を含む13枚、NPC50人に会話用画像を接続済みです。第2版151ロケーションの共用と未制作28NPC、人物表示の未接続を[不足素材台帳](ASSET_BACKLOG.md)へ集約します。[到着背景5枚の原本・英日プロンプト・配布情報](../../assets/source/world-locations/settlements-2026-10-27.json)は別に保持します。以下は初期制作分の記録です。背景7枚は `assets/images/locations/`、標本係・運搬人・審査官の立ち絵3枚は `assets/images/characters/sprites/` です。既存の生成肖像を参照して透過立ち絵を生成しました。背景1536×1024、立ち絵1173×1341。元の生成PNGは保持し、配布画像はサイズ変更・描き直しをせずWebPへ符号化しました。
 
 英語・日本語プロンプト、参照画像、生成元・配布画像のSHA-256は [素材manifest](../../assets/source/world-locations/manifest.json)、概要は [PROVENANCE](../../assets/PROVENANCE.md) にあります。背景と立ち絵の単体を目視確認し、透過・寸法・ファイル参照を検査しました。
 

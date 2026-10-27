@@ -4,7 +4,7 @@
 
 作品版 1.34.0。配布JSONから生成した作者向けページ。真相と結末を含む。
 
-<!-- quest-page-source:dda69d86ba3fd30cf1ecc854fde4ddfd1f2cfe519c56f654b581df2b90f40468 -->
+<!-- quest-page-source:2af65d8cfbfce6b5625845dcd3457b95ef89c8b9edff184b40d6dd3df98a5c08 -->
 
 本編は8場面・3結末、物語状態の改訂2。地下水道の荷揚げ場、医学校の標本室、保険審査所を往復する。6本の移動行為は出発後に実際の場所へ到着して確定する。
 
