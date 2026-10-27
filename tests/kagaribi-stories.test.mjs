@@ -116,9 +116,17 @@ test('new people display dedicated art when available without exposing author-on
       const person=dom.root.querySelector(`[data-character="${id}"]`);
       assert.ok(person);assert.ok(person.textContent.includes(name));assert.equal(person.querySelector('img').src,data.assets.images[`npc_${id}`]);
     }
-    view.render(projectGame(prepareQuest('q208')));
-    const pending=dom.root.querySelector('[data-character="q208_keeper"]');
-    assert.ok(pending);assert.match(pending.textContent,/メア/);assert.equal(pending.querySelector('img'),null);
+    const memorial=prepareQuest('q208');
+    for(const [action,id] of [[null,'q208_keeper'],['ask','q208_daughter'],['take','q208_keeper'],['private','q208_daughter']]){
+      if(action){choose(memorial,action);finishJourney(memorial);}
+      view.render(projectGame(memorial));
+      const person=dom.root.querySelector(`[data-character="${id}"]`);
+      assert.equal(dom.root.querySelectorAll('[data-character]').length,1);
+      assert.ok(person);assert.ok(person.textContent.includes(data.characters[id].name));assert.equal(person.querySelector('img').src,data.assets.images[`npc_${id}`]);
+    }
+    view.render(projectGame(prepareQuest('q209')));
+    const pending=dom.root.querySelector('[data-character="q209_guard"]');
+    assert.ok(pending);assert.match(pending.textContent,/ゼド/);assert.equal(pending.querySelector('img'),null);
   }}finally{view?.destroy();dom.restore();}
 });
 

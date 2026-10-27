@@ -144,6 +144,29 @@ export async function kagaribiArtFixtures(){
       assert.equal(q207.state.quests.q207.outcome,outcome);outcomes.push(`${edition}/q207/${outcome}`);
       const completed=q207.save();q207.load(completed);assert.equal(q207.save(),completed);
     }
+    const q208=prepare('q208');
+    const memorial=(place,screen='shelf',card='keeper',lit=true,visible=true,requested=false,installed=false,choice='none')=>{
+      const v=q208.state.stories.q208.values;
+      assert.deepEqual([v.partyAt,v.keeperAt,v.daughterAt,v.lampAt],[place,'rest','shelf','rest']);
+      assert.deepEqual([v.screenAt,v.namecardAt,v.lampLit,v.nameVisible,v.request,v.installed,v.choice],[screen,card,lit,visible,requested,installed,choice]);
+    };
+    const fireState=()=>structuredClone({run:q208.state.dungeons.active.systems,persistent:q208.state.dungeons.persistent.kagaribi.systems});
+    const endMemorial=action=>{
+      const fire=fireState();choose(q208,action);assert.deepEqual(fireState(),fire,'private memorial choices preserve dungeon fires');
+      assert.equal(q208.state.quests.q208.outcome,action==='hand'?'private':action);outcomes.push(`${edition}/q208/${q208.state.quests.q208.outcome}`);
+      const done=q208.save();q208.load(done);assert.equal(q208.save(),done);
+    };
+    checkpoint(q208,'q208','entry',['q208_keeper']);memorial('rest');
+    choose(q208,'ask');memorial('transit');arrive(q208);memorial('shelf');checkpoint(q208,'q208','request',['q208_daughter']);
+    choose(q208,'take');memorial('transit','party','keeper',true,true,true);arrive(q208);memorial('rest','party','keeper',true,true,true);
+    checkpoint(q208,'q208','decide',['q208_keeper']);q208.state.inventory.rope=0;
+    const noMemorialRope=checkpoint(q208,'q208','decide',['q208_keeper'],{variant:'no-rope',blockedChoice:'screen',availableChoice:'off'});
+    assert.equal(q208.dispatch({type:'choose',id:'screen'}),false);assert.equal(q208.save(),noMemorialRope);
+    endMemorial('off');memorial('rest','keeper','keeper',false,false,true,false,'off');assert.equal(q208.state.inventory.rope,0);
+    q208.load(noMemorialRope);q208.state.inventory.rope=1;endMemorial('screen');memorial('rest','rest','keeper',true,false,true,true,'screen');assert.equal(q208.state.inventory.rope,0);
+    q208.load(noMemorialRope);choose(q208,'private');memorial('transit','party','party',true,false,true);arrive(q208);
+    memorial('shelf','party','party',true,false,true);checkpoint(q208,'q208','return',['q208_daughter']);
+    endMemorial('hand');memorial('shelf','daughter','daughter',true,false,true,false,'private');assert.equal(q208.state.inventory.rope,0);
   }
   return {fixtures,outcomes};
 }
