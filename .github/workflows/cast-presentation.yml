@@ -3,7 +3,13 @@ on:
   pull_request:
     paths:
       - 'src/**'
+      - 'data/characters.json'
+      - 'data/assets.json'
+      - 'assets/images/characters/**'
+      - 'authoring/kagaribi-character-art.mjs'
       - 'tools/browser-cast-smoke.mjs'
+      - 'tools/browser-kagaribi-art-smoke.mjs'
+      - 'tools/kagaribi-art-fixtures.mjs'
       - '.github/workflows/cast-presentation.yml'
   workflow_dispatch:
 permissions:
@@ -12,7 +18,7 @@ jobs:
   cast-browser:
     # Match the pinned Playwright release; ubuntu-latest may move ahead of its supported OSes.
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -22,12 +28,17 @@ jobs:
         run: |
           npm install --no-save --package-lock=false playwright@1.58.2
           npx playwright install --with-deps chromium --only-shell
+          test -n "$(fc-list :lang=ja)"
       - name: Verify native cast animations and script waits
         run: node tools/browser-cast-smoke.mjs
+      - name: Verify Kagaribi character art in both editions, layouts and widths
+        run: node tools/browser-kagaribi-art-smoke.mjs
       - name: Keep animation checkpoints
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: cast-presentation-checkpoints
-          path: /tmp/adv-cast-browser
+          path: |
+            /tmp/adv-cast-browser
+            /tmp/adv-kagaribi-art-browser
           if-no-files-found: ignore

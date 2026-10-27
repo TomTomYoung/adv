@@ -7,6 +7,7 @@ import stories1 from '../authoring/stories-v11-1.mjs';
 import stories2 from '../authoring/stories-v11-2.mjs';
 import originalCharacters from '../authoring/characters.mjs';
 import kagaribiStories from '../authoring/stories-kagaribi.mjs';
+import {kagaribiCharacterImages} from '../authoring/kagaribi-character-art.mjs';
 import {seedKagaribiStories} from './seed-kagaribi-stories.mjs';
 import {ref,eq} from '../authoring/story-kit.mjs';
 import {applyCatalogRevisions} from './apply-catalog-revisions.mjs';
@@ -55,7 +56,7 @@ for(const file of game.files.quests){
  await write(file,q);quests.push(q);
 }
 await applyQuestEvents(root);
-const assets=await read('data/assets.json');for(const c of originalCharacters)assets.images[c.portrait]=`assets/images/characters/generated/${c.id}.webp`;await write('data/assets.json',assets);
+const assets=await read('data/assets.json');for(const c of originalCharacters)assets.images[c.portrait]=`assets/images/characters/generated/${c.id}.webp`;Object.assign(assets.images,kagaribiCharacterImages());await write('data/assets.json',assets);
 await write('data/characters.json',Object.fromEntries(characters.map(({design,...c})=>[c.id,{...c,visualDesign:design}])));
 game.version='1.4.0';game.storyVersion=1;game.files.databases.characters='data/characters.json';
 game.migrations['1.3.2']={actors:Object.keys(await read('data/actors.json')),quests:quests.map(q=>q.id),scenarioRevision:true,preserveRecords:true};await write('data/game.json',game);
