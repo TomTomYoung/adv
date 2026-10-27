@@ -14,7 +14,7 @@ export function projectDungeonSurfaces(engine,systems){
   const terrain=map.voxels?projectVoxels(engine):{cells:map.tiles.map((row,y)=>Array.from(row,(_,x)=>{
     const cell=dungeonCell(data,state,map,x,y),{wall,floor,opaque,material,image}=cell.visual,door=map.objects.some(o=>o.x===x&&o.y===y&&objectBlocks(state,map,o));
     const waterDepth=!data.game.cellLayerVersion&&wall?0:dungeonWaterDepth(data,state,map,x,y);
-    const art=image?{url:data.assets.images[image],rect:{x:0,y:0,width:1,height:1}}:map.outdoor?null:projectArt(data,dungeonForMap(data,map.id)?.art?.[material]);
+    const art=image?{url:data.assets.images[image],rect:{x:0,y:0,width:1,height:1}}:map.outdoor||map.indoor?null:projectArt(data,dungeonForMap(data,map.id)?.art?.[material]);
     const p=cell.parameters,relief=p.floor_depth>0||p.bottomless?{depth:p.floor_depth??0,bottomless:Boolean(p.bottomless),waterLevel:waterDepth>0?(waterDepth===3?0:p.water_level??-.1):null}:undefined;
     return {relief,x,y,known:seen.has(`${x},${y}`),wall,opaque:opaque||door||Boolean(!data.game.cellLayerVersion&&dungeonBlock(data,state,map,x,y)&&!waterDepth),blocked:!engine.walkable(map,x,y),water:waterDepth>0,waterDepth,waterLabel:depthName(waterDepth),floor,art,surface:cell.visual.surface,cellName:cell.name,parameters:{...cell.parameters}};
   }))};
@@ -45,5 +45,6 @@ export function projectDungeonSurfaces(engine,systems){
   const wait=waterMarker?.waitable?waterSystem.actions.find(a=>a.intent.action==='wait'):null;
   terrain.surfaceNotice=text?{text,action:ahead?.blocked&&ahead.waterDepth&&!ahead.opaque&&!closedFace&&wait?structuredClone({...wait,label:'ここで水位を待つ'}):null}:null;
   if(map.outdoor)terrain.outdoor=map.outdoor;
+  if(map.indoor)terrain.indoor=map.indoor;
   return terrain;
 }

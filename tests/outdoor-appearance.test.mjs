@@ -15,7 +15,8 @@ test('all second-edition outdoor themes have renderers; the first edition has no
   assert.deepEqual(Object.keys(OUTDOOR_PALETTES).sort(),[...OUTDOOR_THEMES].sort());
   assert.deepEqual(Object.values(data.maps).filter(m=>m.outdoor).map(m=>m.outdoor).sort(),[...OUTDOOR_THEMES].sort());
   const first=await loadContent(read);assert.ok(Object.values(first.maps).every(m=>m.outdoor===undefined));
-  for(const id of ['region_4_f1','region_5_f1','region_8_f1','e2_observatory_rescue','e2_sunken_inn']){const d=projectGame(at(data,id)).dungeon;assert.equal(d.outdoor,undefined);assert.ok(d.wall?.url&&d.floorArt?.url);}
+  for(const id of ['region_4_f1','region_5_f1','region_8_f1']){const d=projectGame(at(data,id)).dungeon;assert.equal(d.outdoor,undefined);assert.ok(d.wall?.url&&d.floorArt?.url);}
+  for(const id of ['e2_observatory_rescue','e2_sunken_inn']){const d=projectGame(at(data,id)).dungeon;assert.equal(d.outdoor,undefined);assert.equal(d.indoor,id.slice(3));}
 });
 test('outdoor appearance changes neither collision, occlusion, lighting nor save state',()=>{
   for(const theme of OUTDOOR_THEMES){

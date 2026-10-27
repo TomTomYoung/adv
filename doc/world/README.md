@@ -10,7 +10,7 @@
 
 [ODDLAND_ACCESS_DESIGN.md](ODDLAND_ACCESS_DESIGN.md)：地下関所からの越境、五拠点、100件の受付、国別の出発・帰還、旧保存と版差分、実装順。[第1段階の実装](ODDLAND_ACCESS_IMPLEMENTATION.md)では関所から宿場までの往復、施設、受付・帰還先、版差分と保存移行を接続しました。[第一群10件](../scenarios/editions/e2/ODDLAND_FIRST_TEN.md)まで実装済み。国境宿場・石橋の交易市・巡礼台地・旧王領の村と3街道、旧60件の現場接続も実装済み。残る構想上の拠点と地域新作は後続です。
 
-[ASSET_BACKLOG.md](ASSET_BACKLOG.md)：現行第2版全体の不足素材。到着背景5枚と屋外21区画の描画分離、151ロケーション・追加9マップの残る仮素材、42NPC、旧100件753場面の人物表示未接続、制作優先順。
+[ASSET_BACKLOG.md](ASSET_BACKLOG.md)：現行第2版全体の不足素材。到着背景5枚と追加30マップの基本描画の分離、151ロケーションの施設背景・個別現場の残る仮素材、42NPC、旧100件753場面の人物表示未接続、制作優先順。
 
 [SCENE_SWITCH_PLAN.md](SCENE_SWITCH_PLAN.md)：既存6拠点と独立町の候補、サロメ地区、住居・作業室・墓地・湖岸などの切替案。実装済みの場所と未実装の提案を区別。
 
@@ -29,3 +29,5 @@
 [LOCATION_CATALOG.md](LOCATION_CATALOG.md)：初版15ロケーションのID・機能・背景・参照場面の生成一覧。第2版151か所の差分は上記の台帳と地理JSONを参照。
 
 [OUTDOOR_APPEARANCE.md](OUTDOOR_APPEARANCE.md)：街道・サロメ外縁・旧王領・観測所の屋外21区画の描画テーマ、保存と通行を保つ実装、検証範囲と個別現場の残作業。
+
+[INDOOR_APPEARANCE.md](INDOOR_APPEARANCE.md)：国境・調査地・水中9区画の壁床、現在セルの水深と空気室に連動する表示、保存と通行を保つ実装。

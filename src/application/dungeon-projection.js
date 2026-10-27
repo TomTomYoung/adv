@@ -13,19 +13,20 @@ export function projectQuestLinks(data,state,quest){
 export function projectDungeonEvents(engine,systems){
   const {data,state}=engine,definition=dungeonForMap(data,state.location?.map);
   if(!definition)return {systems,scenes:[],wall:null,floorArt:null};
-  const outdoor=engine.map()?.outdoor,device=outdoor?null:projectArt(data,definition.art?.device);
-  const decorated=systems.map(system=>({...system,art:['map_connections','compartment_water'].includes(system.kind)?null:device,cards:system.cards?.map(card=>({...card,art:['map_connections','compartment_water'].includes(system.kind)?null:projectArt(data,definition.art?.variants?.[card.artKey]??definition.art?.device)})),markers:system.markers?.map(marker=>({...marker,art:['vector','water','boundary','voxel_link','map_connection','water_control'].includes(marker.kind)?null:device}))}));
+  const map=engine.map(),themed=map?.outdoor||map?.indoor,device=themed?null:projectArt(data,definition.art?.device);
+  const decorated=systems.map(system=>({...system,art:['map_connections','compartment_water'].includes(system.kind)?null:device,cards:system.cards?.map(card=>({...card,art:['map_connections','compartment_water'].includes(system.kind)?null:projectArt(data,definition.art?.variants?.[card.artKey]??(map?.indoor?null:definition.art?.device))})),markers:system.markers?.map(marker=>({...marker,art:['vector','water','boundary','voxel_link','map_connection','water_control'].includes(marker.kind)?null:device}))}));
   const events=questEvents(data).filter(e=>e.trigger==='action'&&eventVisible(state,e)&&(!e.dungeon||e.dungeon===definition.id)&&canInteractWithEvent(data,state,e)).map(e=>{
     const plan=questEventPlan(data,state,e.quest,e.id),recorded=e.note&&evaluate(e.note.when,state);
     return {name:e.title,art:device,text:`関連依頼：${data.quests[e.quest].title}${recorded?' ／ 観察を記録済み':''}`,actions:[{label:'現地を調査する',enabled:plan.ok,reason:plan.reason??'',intent:{type:'quest.event',quest:e.quest,id:e.id}}]};
   });
   const panels=events.length?[{kind:'quest_events',id:'quest_events',title:'依頼と現地の調査',summary:'仕掛けを操作した後で調べると、観察できる内容が変わります。',cards:events,actions:[],markers:[]}]:[];
-  return {systems:decorated,scenes:panels,wall:outdoor?null:projectArt(data,definition.art?.wall),floorArt:outdoor?null:projectArt(data,definition.art?.floor)};
+  return {systems:decorated,scenes:panels,wall:themed?null:projectArt(data,definition.art?.wall),floorArt:themed?null:projectArt(data,definition.art?.floor)};
 }
 export function projectEventArt(data,state){
   const scriptId=state.vm.at(-1)?.script;
   // Old revisions keep dungeonScene metadata and their immutable VM addresses.
   const legacyId=data.scripts[scriptId]?.dungeonScene;
   const event=questEvents(data).find(e=>e.trigger==='action'&&(e.script===scriptId||e.id===legacyId));
-  return event?{title:event.title,art:data.maps[state.location?.map]?.outdoor?null:projectArt(data,data.dungeons[event.dungeon]?.art?.device)}:null;
+  const map=data.maps[state.location?.map];
+  return event?{title:event.title,art:map?.outdoor||map?.indoor?null:projectArt(data,data.dungeons[event.dungeon]?.art?.device)}:null;
 }

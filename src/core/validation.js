@@ -21,6 +21,7 @@ import {BATTLE_EVENT_PHASES} from './battle-events.js';
 import {voxelAt} from './voxels.js';
 import {validateDungeonArt} from './dungeon-art.js';
 import {OUTDOOR_THEMES} from './outdoor-appearance.js';
+import {INDOOR_THEMES} from './indoor-appearance.js';
 import {validateQuestEvents} from './quest-events.js';
 import {validateDungeons} from './dungeons.js';
 import {validateConditionalFieldEvents} from './field-event-validation.js';
@@ -169,6 +170,8 @@ export function validateContent(data){
   for(const region of data.regions)if(region.kind==='story'){if(!region.name||!region.description||region.entrance!==undefined)fail('region','物語地域は名前・説明が必要で、迷宮入口を持ちません');}else reference(data.maps,region.entrance,'region');
   for(const [id,map] of Object.entries(data.maps)){
     if(map.outdoor!==undefined&&!OUTDOOR_THEMES.includes(map.outdoor))fail(id,'屋外描画テーマが不正です');
+    if(map.indoor!==undefined&&!INDOOR_THEMES.includes(map.indoor))fail(id,'室内描画テーマが不正です');
+    if(map.indoor!==undefined&&map.outdoor!==undefined)fail(id,'屋外と室内の描画テーマは併用できません');
     if(id!==map.id||!Array.isArray(map.tiles)||!map.tiles.length){fail(id,'マップ構造不正');continue;}
     const width=map.tiles[0].length;
     if(map.tiles.some(row=>typeof row!=='string'||row.length!==width||/[^#.]/.test(row)))fail(id,'タイルは同じ幅の #/. 文字列です');
