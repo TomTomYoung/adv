@@ -4,7 +4,7 @@ import fs from 'node:fs/promises';
 import {loadContent} from '../src/core/loader.js';
 import {GameEngine} from '../src/core/engine.js';
 import {projectGame} from '../src/application/projection.js';
-import {drain} from '../tests/helpers.mjs';
+import {drain,fight} from '../tests/helpers.mjs';
 import {finishJourney} from '../tests/structure-routes.mjs';
 const read=file=>fs.readFile(new URL('../'+file,import.meta.url),'utf8').then(JSON.parse);
 export async function kagaribiArtFixtures(){
@@ -75,6 +75,32 @@ export async function kagaribiArtFixtures(){
     q204.load(meeting);choose(q204,'pending');arrive(q204);records('party','survivor','none');
     checkpoint(q204,'q204','pending',['q204_scribe']);choose(q204,'correct');records('scribe','survivor','none','pending');
     assert.equal(q204.state.quests.q204.outcome,'pending');outcomes.push(`${edition}/q204/pending`);
+    const q205=prepare('q205'),pair=['q205_pupil','q205_master'];checkpoint(q205,'q205','entry',pair);
+    const plate=(holder,recovered,told=false,future='open')=>{
+      const v=q205.state.stories.q205.values;
+      assert.deepEqual([v.plateAt,v.recovered,v.told,v.future],[holder,recovered,told,future]);
+      assert.equal(v.pupilAt,'bench');assert.equal(v.masterAt,'bench');
+    };
+    plate('ash',false);choose(q205,'go');arrive(q205);const ash=checkpoint(q205,'q205','ash',[]);
+    q205.state.inventory.rope=0;const noRope=checkpoint(q205,'q205','ash',[],{variant:'no-rope',blockedChoice:'hook',availableChoice:'fight'});
+    assert.equal(q205.dispatch({type:'choose',id:'hook'}),false);assert.equal(q205.save(),noRope);plate('ash',false);
+    q205.load(noRope);q205.state.inventory.rope=1;choose(q205,'hook');assert.equal(q205.state.inventory.rope,0);plate('party',true);
+    checkpoint(q205,'q205','recovered',[],{variant:'hook'});choose(q205,'return');arrive(q205);plate('party',true,true);
+    const talk=checkpoint(q205,'q205','talk',pair,{variant:'hook'});
+    for(const [outcome,holder] of [['revise','pupil'],['preserve','master'],['stop','bench']]){
+      q205.load(talk);choose(q205,outcome);plate(holder,true,true,outcome);
+      assert.equal(q205.state.quests.q205.outcome,outcome);outcomes.push(`${edition}/q205/${outcome}`);
+    }
+    q205.load(ash);choose(q205,'fight');assert.equal(q205.state.battle.encounter,'kagaribi_pests');plate('ash',false);
+    const battle=q205.save();q205.load(battle);assert.equal(q205.save(),battle);
+    // Inject non-victory results to inspect the continuation boundary, not battle difficulty.
+    for(const result of ['escape','lose']){
+      q205.load(battle);q205.finishBattle(result);drain(q205);plate('ash',false);
+      assert.notEqual(q205.state.quests.q205.stage,'completed');const save=q205.save();q205.load(save);assert.equal(q205.save(),save);
+    }
+    q205.load(battle);fight(q205);plate('party',true);checkpoint(q205,'q205','recovered',[],{variant:'fight'});
+    choose(q205,'return');arrive(q205);plate('party',true,true);checkpoint(q205,'q205','talk',pair,{variant:'fight'});
+    choose(q205,'revise');plate('pupil',true,true,'revise');assert.equal(q205.state.quests.q205.outcome,'revise');
   }
   return {fixtures,outcomes};
 }

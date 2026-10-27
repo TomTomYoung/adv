@@ -37,6 +37,7 @@ try{
       await page.evaluate(({index,layout})=>h.start(index,layout),{index,layout});
       const before=await page.evaluate(()=>h.g.save());await page.evaluate(()=>h.resume());assert.equal(await page.evaluate(()=>h.g.save()),before);
       assert.deepEqual(await page.evaluate(()=>h.view.model.dialog.scene.cast.map(c=>c.id)),f.cast);
+      assert.equal(await page.locator('[data-character]').count(),f.cast.length,'only the scene cast is displayed');
       const images=[];
       for(const id of f.cast){
         const figure=page.locator(`[data-character="${id}"]`),img=figure.locator('img');assert.equal(await img.count(),1);

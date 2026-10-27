@@ -97,8 +97,13 @@ test('new people display dedicated art when available without exposing author-on
     const scribe=dom.root.querySelector('[data-character="q204_scribe"]');
     assert.ok(scribe);assert.match(scribe.textContent,/エイン/);assert.equal(scribe.querySelector('img').src,data.assets.images.npc_q204_scribe);
     view.render(projectGame(prepareQuest('q205')));
-    const pending=dom.root.querySelector('[data-character="q205_pupil"]');
-    assert.ok(pending);assert.match(pending.textContent,/ノノ/);assert.equal(pending.querySelector('img'),null);
+    for(const [id,name] of [['q205_pupil','ノノ'],['q205_master','ダン']]){
+      const person=dom.root.querySelector(`[data-character="${id}"]`);
+      assert.ok(person);assert.ok(person.textContent.includes(name));assert.equal(person.querySelector('img').src,data.assets.images[`npc_${id}`]);
+    }
+    view.render(projectGame(prepareQuest('q206')));
+    const pending=dom.root.querySelector('[data-character="q206_sister"]');
+    assert.ok(pending);assert.match(pending.textContent,/ミナ/);assert.equal(pending.querySelector('img'),null);
   }}finally{view?.destroy();dom.restore();}
 });
 
