@@ -4,7 +4,7 @@
 
 作品版 1.34.0。配布JSONから生成した作者向けページ。真相と結末を含む。
 
-<!-- quest-page-source:dda69d86ba3fd30cf1ecc854fde4ddfd1f2cfe519c56f654b581df2b90f40468 -->
+<!-- quest-page-source:2af65d8cfbfce6b5625845dcd3457b95ef89c8b9edff184b40d6dd3df98a5c08 -->
 
 本編は8場面、2結末。ダンジョン内の必須経路は`kagaribi_f1`の1フロアで、町の篝火広場・灯番組合を経て灯番詰所へ帰還する。町はセルマップではなく、親子関係を持つロケーション間の選択移動で表現する。
 

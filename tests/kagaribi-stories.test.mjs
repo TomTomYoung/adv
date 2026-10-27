@@ -112,8 +112,13 @@ test('new people display dedicated art when available without exposing author-on
       }
     }
     view.render(projectGame(prepareQuest('q207')));
-    const pending=dom.root.querySelector('[data-character="q207_surveyor"]');
-    assert.ok(pending);assert.match(pending.textContent,/オセ/);assert.equal(pending.querySelector('img'),null);
+    for(const [id,name] of [['q207_surveyor','オセ'],['q207_assistant','ハル']]){
+      const person=dom.root.querySelector(`[data-character="${id}"]`);
+      assert.ok(person);assert.ok(person.textContent.includes(name));assert.equal(person.querySelector('img').src,data.assets.images[`npc_${id}`]);
+    }
+    view.render(projectGame(prepareQuest('q208')));
+    const pending=dom.root.querySelector('[data-character="q208_keeper"]');
+    assert.ok(pending);assert.match(pending.textContent,/メア/);assert.equal(pending.querySelector('img'),null);
   }}finally{view?.destroy();dom.restore();}
 });
 

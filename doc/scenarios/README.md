@@ -24,7 +24,7 @@
 
 [KAGARIBI_TEN_QUESTS.md](KAGARIBI_TEN_QUESTS.md)：篝火迷宮の追加10編。人物の動機・固定過去・介入・結末・編集元。
 
-[KAGARIBI_CHARACTER_ART.md](KAGARIBI_CHARACTER_ART.md)：q201〜q206の12人に専用の透過画像を接続。原本・制作記録・表示対象・検証範囲。
+[KAGARIBI_CHARACTER_ART.md](KAGARIBI_CHARACTER_ART.md)：q201〜q207の14人に専用の透過画像を接続。原本・制作記録・表示対象・検証範囲。
 
 ## 設計と実行
 
