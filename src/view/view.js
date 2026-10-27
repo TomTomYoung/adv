@@ -206,7 +206,8 @@ export class GameView {
   }
   scene(parent,m){
     const scene=node('div','dungeon-scene'),canvas=node(m.dungeon?'canvas':'img','dungeon-canvas');if(m.dungeon)canvas.setAttribute('aria-label',`${m.dungeon.name}、${{north:'北',east:'東',south:'南',west:'西'}[m.dungeon.location.facing]}向きの通路`);else{canvas.src=m.battle.background;canvas.alt='戦場';}scene.dataset.fx='scene';scene.append(canvas);
-    const location=node('div','scene-location');if(m.dungeon)location.append(node('span','eyebrow',`B${m.dungeon.floor} / ${m.dungeon.location.x}, ${m.dungeon.location.y}${m.dungeon.voxel?' / 高さ '+m.dungeon.z:''}`));location.append(node('span','',m.dungeon?.name??m.title));scene.append(location);
+    if(m.dungeon?.outdoor)scene.classList.add('outdoor-scene');
+    const location=node('div','scene-location');if(m.dungeon)location.append(node('span','eyebrow',`${m.dungeon.outdoor?'屋外':`B${m.dungeon.floor}`} / ${m.dungeon.location.x}, ${m.dungeon.location.y}${m.dungeon.voxel?' / 高さ '+m.dungeon.z:''}`));location.append(node('span','',m.dungeon?.name??m.title));scene.append(location);
     if(m.dungeon){const direction=node('span','compass',({north:'N 北',east:'E 東',south:'S 南',west:'W 西'})[m.dungeon.location.facing]);scene.append(direction);}
     if(m.battle?.frontline)frontlineScene(this,scene,m);
     else if(m.battle?.grid)gridScene(this,scene,m);
