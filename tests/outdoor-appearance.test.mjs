@@ -11,11 +11,11 @@ import {data,read,drain} from './oddland-helpers.mjs';
 const old=structuredClone(data);for(const map of Object.values(old.maps))delete map.outdoor;
 function at(content,id){const g=new GameEngine(content,1907);drain(g);g.state.worldTravel.registrations.oddland_entry=true;g.teleport(id,1,1,'east');return g;}
 
-test('nine second-edition outdoor themes have renderers; the first edition has none',async()=>{
+test('all second-edition outdoor themes have renderers; the first edition has none',async()=>{
   assert.deepEqual(Object.keys(OUTDOOR_PALETTES).sort(),[...OUTDOOR_THEMES].sort());
   assert.deepEqual(Object.values(data.maps).filter(m=>m.outdoor).map(m=>m.outdoor).sort(),[...OUTDOOR_THEMES].sort());
   const first=await loadContent(read);assert.ok(Object.values(first.maps).every(m=>m.outdoor===undefined));
-  for(const id of ['region_4_f1','region_5_f1','region_8_f1']){const d=projectGame(at(data,id)).dungeon;assert.equal(d.outdoor,undefined);assert.ok(d.wall?.url&&d.floorArt?.url);}
+  for(const id of ['region_4_f1','region_5_f1','region_8_f1','e2_observatory_rescue','e2_sunken_inn']){const d=projectGame(at(data,id)).dungeon;assert.equal(d.outdoor,undefined);assert.ok(d.wall?.url&&d.floorArt?.url);}
 });
 test('outdoor appearance changes neither collision, occlusion, lighting nor save state',()=>{
   for(const theme of OUTDOOR_THEMES){
