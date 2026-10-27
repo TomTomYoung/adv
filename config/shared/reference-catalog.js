@@ -43922,10 +43922,14 @@ export const referenceData={
         "portrait": "npc_q203_tester"
       },
       "q204_scribe": {
-        "name": "エイン"
+        "name": "エイン",
+        "sprite": "npc_q204_scribe",
+        "portrait": "npc_q204_scribe"
       },
       "q204_survivor": {
-        "name": "リュカ"
+        "name": "リュカ",
+        "sprite": "npc_q204_survivor",
+        "portrait": "npc_q204_survivor"
       },
       "q205_pupil": {
         "name": "ノノ"
@@ -76106,7 +76110,9 @@ export const referenceData={
       "npc_q202_trainee": "assets/images/characters/kagaribi/q202_trainee.webp",
       "npc_q202_trainer": "assets/images/characters/kagaribi/q202_trainer.webp",
       "npc_q203_seller": "assets/images/characters/kagaribi/q203_seller.webp",
-      "npc_q203_tester": "assets/images/characters/kagaribi/q203_tester.webp"
+      "npc_q203_tester": "assets/images/characters/kagaribi/q203_tester.webp",
+      "npc_q204_scribe": "assets/images/characters/kagaribi/q204_scribe.webp",
+      "npc_q204_survivor": "assets/images/characters/kagaribi/q204_survivor.webp"
     },
     "audio": {
       "exploration": "assets/audio/exploration-v2.ogg",
