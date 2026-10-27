@@ -6,6 +6,9 @@ on:
       - 'data/scenario-editions/**'
       - 'data/scenario-editions.json'
       - 'tools/browser-oddland-smoke.mjs'
+      - 'tools/browser-settlement-checkpoint.mjs'
+      - 'assets/images/locations/**'
+      - 'data/assets.json'
       - '.github/workflows/oddland-quests.yml'
   workflow_dispatch:
 permissions:
@@ -23,6 +26,7 @@ jobs:
         run: |
           npm install --no-save --package-lock=false playwright@1.58.2
           npx playwright install --with-deps chromium --only-shell
+          sudo apt-get install -y fonts-noto-cjk
       - name: Verify border, pilgrimage roads and complete quests in both layouts and widths
         run: node tools/browser-oddland-smoke.mjs
       - name: Keep Oddland viewport checkpoints

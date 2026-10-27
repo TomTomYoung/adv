@@ -4,6 +4,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import http from 'node:http';
 import {createRequire} from 'node:module';
+import {settlementCheckpoint} from './browser-settlement-checkpoint.mjs';
 const require=createRequire(import.meta.url);
 const {chromium}=require(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES?`${process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES}/playwright`:'playwright');
 const root=path.resolve(import.meta.dirname,'..'),output=process.env.ADV_BROWSER_OUTPUT??'/tmp/adv-oddland-browser';
@@ -51,6 +52,7 @@ try{
     await page.evaluate(()=>h.resume());
     for(const route of ['trade_refuge','border_customs','oddland_surface']){await page.evaluate(()=>h.walk(9,3));await cross(route);}
     assert.equal(await page.evaluate(()=>h.g.state.townLocation),'oddland_border');
+    await settlementCheckpoint(page,{location:'oddland_border',asset:'oddland_border',layout,width,output});
     await click('国境宿場の補給店');await click('携行油を補充する（無料）');
     assert.equal(await page.evaluate(()=>h.g.state.light),90);
     await click('オッドランド・国境宿場へ戻る');await click('国境宿場の共同依頼所');await click('依頼掲示板を見る');
@@ -82,6 +84,8 @@ try{
     await page.evaluate(()=>h.walk(9,3));await cross('border_customs');await page.evaluate(()=>h.walk(9,3));await cross('oddland_surface');
     for(const road of ['e2_market_road','e2_pilgrim_road']){
       await click(await page.evaluate(id=>h.routeLabel(id),road+'_west'));await page.evaluate(()=>h.walk(13,5));await cross(road+'_east');
+      const location=road==='e2_market_road'?'oddland_market':'oddland_plateau';
+      await settlementCheckpoint(page,{location,asset:location,layout,width,output});
     }
     assert.equal(await page.evaluate(()=>h.g.state.townLocation),'oddland_plateau');
     await click('巡礼台地の依頼所');await click('依頼掲示板を見る');assert.equal(await page.locator('.quest-card').count(),20);
@@ -117,6 +121,7 @@ try{
     assert.equal(await page.evaluate(()=>h.g.state.quests.q137.outcome),'medicine');assert.deepEqual(await page.evaluate(()=>{const v=h.g.state.stories.q137.values;return [v.medicineAt,v.familyAt,v.languageAt,v.medicinePages];}),['archive','entry','entry',3]);
     await click('巡礼台地へ戻る');await click(await page.evaluate(()=>h.routeLabel('e2_pilgrim_road_east')));await page.evaluate(()=>h.walk(1,1));await cross('e2_pilgrim_road_west');
     await click(await page.evaluate(()=>h.routeLabel('e2_village_road_west')));await page.evaluate(()=>h.walk(13,5));await cross('e2_village_road_east');
+    await settlementCheckpoint(page,{location:'oddland_village',asset:'oddland_village',layout,width,output});
     await click('旧王領の村の依頼所');await click('依頼掲示板を見る');assert.equal(await page.locator('.quest-card').count(),40);
     const chartTitle=await page.evaluate(()=>h.g.data.quests.q061.title);
     await page.locator('.quest-card').filter({has:page.getByRole('heading',{name:chartTitle,exact:true})}).getByRole('button',{name:'依頼を受ける',exact:true}).click();

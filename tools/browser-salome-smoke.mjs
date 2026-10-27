@@ -4,6 +4,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import http from 'node:http';
 import {createRequire} from 'node:module';
+import {settlementCheckpoint} from './browser-settlement-checkpoint.mjs';
 const require=createRequire(import.meta.url);
 const {chromium}=require(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES?`${process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES}/playwright`:'playwright');
 const root=path.resolve(import.meta.dirname,'..'),output=process.env.ADV_BROWSER_OUTPUT??'/tmp/adv-salome-browser';
@@ -54,6 +55,7 @@ try{
     await click('灯帰りから高台街道へ');await page.evaluate(()=>h.walk(13,5));await cross('salome_road_slope');
     assert.equal(await page.evaluate(()=>h.g.state.worldTravel.visited.salome),undefined);await page.evaluate(()=>h.resume());
     await page.evaluate(()=>h.walk(13,5));await cross('salome_road_gate');assert.equal(await page.evaluate(()=>h.g.state.townLocation),'e2_academy');
+    await settlementCheckpoint(page,{location:'e2_academy',asset:'salome_gate',layout,width,output});
     assert.equal(await page.evaluate(()=>h.g.state.worldTravel.visited.salome),true);assert.deepEqual(await page.evaluate(()=>h.g.state.worldTravel.registrations),{});
     await click('サロメの補給店');await click('携行油を補充する（無料）');assert.equal(await page.evaluate(()=>h.g.state.light),90);
     await click('サロメ・学門前へ戻る');await click('サロメの共同依頼所');await click('依頼掲示板を見る');

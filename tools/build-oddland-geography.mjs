@@ -27,7 +27,7 @@ export async function buildOddlandGeography({check=false}={}){
     patchDungeon.maps.push(id);
   }
   const locations={},add=(id,name,parent,description,background,extra={})=>locations[id]={id,name,parent,description,background,links:[],...extra};
-  add('oddland_border','オッドランド・国境宿場',null,'石段を上がると、荷車の車輪が鳴る宿場へ出た。背後の出入窓口から交易回廊を戻れば、地下関所と灯帰りへ帰れる。','location_square');
+  add('oddland_border','オッドランド・国境宿場',null,'石段を上がると、荷車の車輪が鳴る宿場へ出た。背後の出入窓口から交易回廊を戻れば、地下関所と灯帰りへ帰れる。','location_oddland_border');
   add('oddland_inn','国境宿場の旅籠','oddland_border','荷を下ろす旅人たちの宿。寝床を借り、同行する仲間を相談できる。','location_tavern',{party:true,services:['inn']});
   add('oddland_clinic','国境宿場の施療所','oddland_border','街道から戻る人のための施療所。所持金がなくても応急手当を受けられる。','location_medical',{services:['clinic']});
   add('oddland_supply','国境宿場の補給店','oddland_border','縄と薬を並べた店。店先の公開給油所では携行油を無料で補充できる。預けた油はこの宿場で保管される。','location_shop',{shop:true});
