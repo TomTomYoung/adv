@@ -45,10 +45,17 @@ try{
         assert.ok((await figure.textContent()).includes(await page.evaluate(id=>h.g.data.characters[id].name,id)));images.push({id,...info});
       }
       await page.evaluate(async()=>{await document.fonts.ready;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));});
+      if(f.blockedChoice){
+        const choice=page.locator(`[data-focus="choice:${f.blockedChoice}"]`);
+        for(let n=0;await choice.count()===0&&n<32;n++)await page.locator('[data-focus="message:next"]').click();
+        assert.equal(await choice.count(),1);assert.ok(await choice.isDisabled());
+        assert.equal(await page.evaluate(id=>h.g.dispatch({type:'choose',id}),f.blockedChoice),false);
+        assert.equal(await page.evaluate(()=>h.g.save()),before);
+      }
       const measure=await page.evaluate(()=>({viewport:innerWidth,document:document.documentElement.scrollWidth,height:innerHeight,pageHeight:document.documentElement.scrollHeight}));
       assert.ok(measure.document<=measure.viewport+1,'horizontal overflow');if(layout==='scene')assert.ok(measure.pageHeight<=measure.height+1,'Scene height');
-      await page.screenshot({path:path.join(output,`${f.edition}-${layout}-${width}-${f.quest}-${f.scene}.png`),fullPage:true});
-      checks.push({edition:f.edition,quest:f.quest,scene:f.scene,layout,width,images,...measure});
+      await page.screenshot({path:path.join(output,`${f.edition}-${layout}-${width}-${f.quest}-${f.scene}${f.variant?`-${f.variant}`:''}.png`),fullPage:true});
+      checks.push({edition:f.edition,quest:f.quest,scene:f.scene,variant:f.variant,blockedChoice:f.blockedChoice,layout,width,images,...measure});
     }
   }
   assert.deepEqual(errors,[]);console.log(JSON.stringify({checks:checks.length,outcomes:outcomes.length,errors,output}));

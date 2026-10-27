@@ -8,11 +8,13 @@
 
 ## 会話用の透過立ち絵
 
-現在はNPC56定義中、40人の会話用画像を参照できます。人物のsprite指定を優先し、省略時はsprite_<ID>、それもなければ肖像へフォールバックします。以下にカード画像と会話画像を分けて示します。
+現在はNPC56定義中、42人の会話用画像を参照できます。人物のsprite指定を優先し、省略時はsprite_<ID>、それもなければ肖像へフォールバックします。以下にカード画像と会話画像を分けて示します。
 
 2026-09-24の追加対象は人物30点とくらがり1点で、全31点の適用を完了しました。[回収・適用記録](../../assets/source/characters/recovery-2026-09-24.json)に対応とハッシュを保持します。各場面の配置演出や公開画面の通し確認まで完了したという意味ではありません。
 
 2026-10-27にq201・q202の4人へ専用の透過人物画を接続しました。腰までの画像を肖像・立ち絵で共用し、既存の所在と出演条件を保持します。[原本・英語プロンプト・日本語訳・ハッシュ](../../assets/source/characters/kagaribi-2026-10-27.json)。
+
+同日にq203のゲル・ユハ2人を追加し、篝火の専用人物画は6人になりました。試料瓶や油量を人物画へ固定せず、受渡し・燃焼量は既存の物語状態で扱います。[q203の原本・英日プロンプト・ハッシュ](../../assets/source/characters/kagaribi-q203-2026-10-27.json)。
 
 q001では老人とルーキーを左、リネを右へ配置し、発話者を手前へ出します。[人物演出仕様](../ui/CHARACTER_STAGING.md)、[初期の立ち絵・ハッシュ](../../assets/source/characters/dialogue-sprites-manifest.json)、[使用プロンプト](../../assets/source/characters/dialogue-sprites-prompts.json)を参照してください。
 
@@ -504,7 +506,11 @@ q001とq010は同一人物。依頼受付・救助名簿・報告を担当する
 
 雨ざらしの漏斗を使った。水が入った経緯は知るが、燃焼試験をしていない。
 
-専用画像は未制作。本文と人物名で登場し、既存人物の画像は流用しません。
+![ゲルのカード肖像](../../assets/images/characters/kagaribi/q203_seller.webp)
+
+[会話用立ち絵](../../assets/images/characters/kagaribi/q203_seller.webp)
+
+[生成PNG原本](../../assets/source/characters/kagaribi-q203-2026-10-27/q203_seller.png) ／ [生成・変換記録](../../assets/source/characters/kagaribi-q203-2026-10-27.json)
 
 ### ユハ (q203_tester)
 
@@ -512,7 +518,11 @@ q001とq010は同一人物。依頼受付・救助名簿・報告を担当する
 
 試験皿と目盛り管を持つ。納入時の作業は見ていない。
 
-専用画像は未制作。本文と人物名で登場し、既存人物の画像は流用しません。
+![ユハのカード肖像](../../assets/images/characters/kagaribi/q203_tester.webp)
+
+[会話用立ち絵](../../assets/images/characters/kagaribi/q203_tester.webp)
+
+[生成PNG原本](../../assets/source/characters/kagaribi-q203-2026-10-27/q203_tester.png) ／ [生成・変換記録](../../assets/source/characters/kagaribi-q203-2026-10-27.json)
 
 ### エイン (q204_scribe)
 
