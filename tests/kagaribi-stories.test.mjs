@@ -81,7 +81,7 @@ test('a gift travels with its actual holder, while the sister does not learn an 
   assert.equal(v.resignationTold,false);
 });
 
-test('new people display their own names without requiring borrowed portraits or exposing author-only motives',()=>{
+test('new people display dedicated art when available without exposing author-only motives',()=>{
   const g=prepareQuest('q201'),vm=projectGame(g);
   assert.equal(vm.dialog.scene.cast[0].name,'ナヴィア');
   assert.ok(!JSON.stringify(vm.dialog).includes('休憩を欠勤と扱う支払規則'));
@@ -89,7 +89,10 @@ test('new people display their own names without requiring borrowed portraits or
   try{for(const layout of ['scene','classic']){
     view=replaceView(view,layout,dom.root,()=>{},{status(){},menu(){},help(){},soundEnabled:()=>false,effectsMode:()=> 'off'});
     view.render(vm);const person=dom.root.querySelector('[data-character="q201_clerk"]');
-    assert.ok(person);assert.match(person.textContent,/ナヴィア/);assert.equal(person.querySelector('img'),null);
+    assert.ok(person);assert.match(person.textContent,/ナヴィア/);assert.equal(person.querySelector('img').src,data.assets.images.npc_q201_clerk);
+    view.render(projectGame(prepareQuest('q203')));
+    const pending=dom.root.querySelector('[data-character="q203_seller"]');
+    assert.ok(pending);assert.match(pending.textContent,/ゲル/);assert.equal(pending.querySelector('img'),null);
   }}finally{view?.destroy();dom.restore();}
 });
 

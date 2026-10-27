@@ -43892,16 +43892,24 @@ export const referenceData={
         "portrait": "npc_pumpcrew"
       },
       "q201_clerk": {
-        "name": "ナヴィア"
+        "name": "ナヴィア",
+        "sprite": "npc_q201_clerk",
+        "portrait": "npc_q201_clerk"
       },
       "q201_porter": {
-        "name": "エン"
+        "name": "エン",
+        "sprite": "npc_q201_porter",
+        "portrait": "npc_q201_porter"
       },
       "q202_trainee": {
-        "name": "トマ"
+        "name": "トマ",
+        "sprite": "npc_q202_trainee",
+        "portrait": "npc_q202_trainee"
       },
       "q202_trainer": {
-        "name": "セナ"
+        "name": "セナ",
+        "sprite": "npc_q202_trainer",
+        "portrait": "npc_q202_trainer"
       },
       "q203_seller": {
         "name": "ゲル"
@@ -76088,7 +76096,11 @@ export const referenceData={
       "location_oddland_market": "assets/images/locations/oddland_market.webp",
       "location_oddland_plateau": "assets/images/locations/oddland_plateau.webp",
       "location_oddland_village": "assets/images/locations/oddland_village.webp",
-      "location_salome_gate": "assets/images/locations/salome_gate.webp"
+      "location_salome_gate": "assets/images/locations/salome_gate.webp",
+      "npc_q201_clerk": "assets/images/characters/kagaribi/q201_clerk.webp",
+      "npc_q201_porter": "assets/images/characters/kagaribi/q201_porter.webp",
+      "npc_q202_trainee": "assets/images/characters/kagaribi/q202_trainee.webp",
+      "npc_q202_trainer": "assets/images/characters/kagaribi/q202_trainer.webp"
     },
     "audio": {
       "exploration": "assets/audio/exploration-v2.ogg",

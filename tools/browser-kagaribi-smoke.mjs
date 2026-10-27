@@ -56,8 +56,7 @@ try{
   await page.screenshot({path:path.join(output,`post-${width}.png`)});
   checkpoint=`${width}: exit`;console.log(checkpoint);
   await page.getByRole('button',{name:'詰所を出る',exact:true}).click();assert.equal(await page.evaluate(()=>g.state.location.map),'kagaribi_crossroads');
-  // New people intentionally have no borrowed artwork. Both renderers must
-  // show their own names without requesting an undefined image URL.
+  // Adopted artwork appears on its own person; pending characters keep names.
   for(const layout of ['scene','classic'])for(let n=201;n<=210;n++){
    const id=`q${n}`;checkpoint=`${width}: ${layout}/${id}`;
    const cast=await page.evaluate(async({id,layout})=>{
@@ -70,10 +69,10 @@ try{
     const app=document.querySelector('#app');app.dataset.view=layout;
     window.view=new (layout==='classic'?GameView:SceneView)(app,intent=>{g.dispatch(intent);show();},{status(){},menu(){},help(){},soundEnabled:()=>false,effectsMode:()=> 'off'});
     window.show=()=>view.render(projectGame(g));show();
-    return projectGame(g).dialog.scene.cast.map(c=>({id:c.id,name:c.name}));
+    return projectGame(g).dialog.scene.cast.map(c=>({id:c.id,name:c.name,sprite:c.sprite}));
    },{id,layout});
    await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
-   for(const c of cast){const person=page.locator(`[data-character="${c.id}"]`);assert.ok((await person.textContent()).includes(c.name));assert.equal(await person.locator('img').count(),0);}
+   for(const c of cast){const person=page.locator(`[data-character="${c.id}"]`);assert.ok((await person.textContent()).includes(c.name));assert.equal(await person.locator('img').count(),c.sprite?1:0);if(c.sprite)assert.ok(await person.locator('img').evaluate(async img=>{await img.decode();return img.naturalWidth>0;}));}
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,checkpoint);
    if(n===201||n===210)await page.screenshot({path:path.join(output,`${id}-${layout}-${width}.png`)});
   }

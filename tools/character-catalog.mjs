@@ -1,4 +1,5 @@
 import {orderedQuests} from '../src/core/quest-order.js';
+import {KAGARIBI_CHARACTER_ART} from '../authoring/kagaribi-character-art.mjs';
 // Links are composed relative to doc/ and relocated by the writer.
 export function characterCatalog(data) {
   const characters=Object.values(data.characters),quests=orderedQuests(data);
@@ -10,13 +11,14 @@ export function characterCatalog(data) {
     '## 会話用の透過立ち絵','',
     `現在はNPC${characters.length}定義中、${characters.filter(c=>sprite(c)).length}人の会話用画像を参照できます。人物のsprite指定を優先し、省略時はsprite_<ID>、それもなければ肖像へフォールバックします。以下にカード画像と会話画像を分けて示します。`,'',
     '2026-09-24の追加対象は人物30点とくらがり1点で、全31点の適用を完了しました。[回収・適用記録](../assets/source/characters/recovery-2026-09-24.json)に対応とハッシュを保持します。各場面の配置演出や公開画面の通し確認まで完了したという意味ではありません。','',
+    '2026-10-27にq201・q202の4人へ専用の透過人物画を接続しました。腰までの画像を肖像・立ち絵で共用し、既存の所在と出演条件を保持します。[原本・英語プロンプト・日本語訳・ハッシュ](../assets/source/characters/kagaribi-2026-10-27.json)。','',
     'q001では老人とルーキーを左、リネを右へ配置し、発話者を手前へ出します。[人物演出仕様](CHARACTER_STAGING.md)、[初期の立ち絵・ハッシュ](../assets/source/characters/dialogue-sprites-manifest.json)、[使用プロンプト](../assets/source/characters/dialogue-sprites-prompts.json)を参照してください。','',
     '## 所在モデルを持つ実装済み人物',''];
   for (const c of characters) out.push(`### ${c.name} (${c.id})`,'',
     `役割：${c.role}。登場：${c.quests.join('・')}。動機：${c.goal}。`,'',c.detail,'',
     ...(c.portrait?[`![${c.name}のカード肖像](../${data.assets.images[c.portrait]})`,'',
       sprite(c)?`[会話用立ち絵](../${sprite(c)})`:'会話用画像は肖像へフォールバックします。','',
-      `[旧AIPaint PNG](../assets/images/characters/${c.id}.png) ／ [編集原稿](../assets/source/characters/${c.id}.paint.json) ／ [描画コマンド](../assets/source/characters/${c.id}.commands.json)`,'']:
+      KAGARIBI_CHARACTER_ART[c.id]?`[生成PNG原本](../assets/source/characters/kagaribi-2026-10-27/${c.id}.png) ／ [生成・変換記録](../assets/source/characters/kagaribi-2026-10-27.json)`:`[旧AIPaint PNG](../assets/images/characters/${c.id}.png) ／ [編集原稿](../assets/source/characters/${c.id}.paint.json) ／ [描画コマンド](../assets/source/characters/${c.id}.commands.json)`,'']:
       ['専用画像は未制作。本文と人物名で登場し、既存人物の画像は流用しません。','']));
   out.push('## 歴史上・物語内で言及される人物','',
     'ミレの夫：q007、弟の兄。故人であり声の主ではありません。生存NPCの所在を持たせません。','',

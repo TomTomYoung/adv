@@ -42,7 +42,7 @@
 
 ## 実装と維持するもの
 
-[原稿側の割当](../../authoring/editions/e2/outdoor-appearance.mjs)が地理生成時に `map.outdoor` を付ける。[許可するテーマ](../../src/core/outdoor-appearance.js)と[描画](../../src/view/outdoor.js)・[調査地の遠景](../../src/view/outdoor-fields.js)を分け、未知のテーマは内容検証で拒否する。今回の絵はCanvasのコードによる少色の図形・模様で、生成画像や新規画像ファイルの追加ではない。画像131・音声30の登録数は変わらない。
+[原稿側の割当](../../authoring/editions/e2/outdoor-appearance.mjs)が地理生成時に `map.outdoor` を付ける。[許可するテーマ](../../src/core/outdoor-appearance.js)と[描画](../../src/view/outdoor.js)・[調査地の遠景](../../src/view/outdoor-fields.js)を分け、未知のテーマは内容検証で拒否する。今回の絵はCanvasのコードによる少色の図形・模様で、生成画像や新規画像ファイルの追加ではない。導入時は画像131・音声30の登録数を維持した。現在の素材数は[不足素材台帳](ASSET_BACKLOG.md)を参照する。
 
 対象区画では継承した礼拝堂・書庫の壁、床、汎用装置画を探索画面へ出さない。明示されたセル画像、特殊床、水深、扉、エッジは既存処理を優先する。地形・通行・遮蔽・照明の判定、費用、イベント座標、帰路、初版の描画は保持する。低い境界の外側は従来どおり通行できない。
 

@@ -10,7 +10,7 @@
 
 [サロメ新規100企画](scenarios/SALOME_100_QUEST_DESIGN.md)、[オッドランド100企画](scenarios/ODDLAND_100_QUEST_DESIGN.md)、[三地域の条件付き配分](scenarios/REGIONAL_QUEST_ALLOCATION.md)、[移設調査](dungeons/ODDLAND_RELOCATION_AUDIT.md)、[移設前の基準検証](dungeons/REGIONAL_RELOCATION_CHECK.md)、[2職・2人の候補](battle/SALOME_CLASSES_AND_CHARACTERS_DESIGN.md)は設計・検証資料です。次は旧100件の移設採否と配分を確定し、残る地域新作へ進みます。PR #135で実施した一度限りの旧e2互換切断を繰り返さず、現在の保存改訂2・地理版2と初版を維持します。
 
-[不足素材台帳](world/ASSET_BACKLOG.md)と[町・シーンの切替候補](world/SCENE_SWITCH_PLAN.md)を現行データから整理しました。5拠点の専用到着背景を接続し、151ロケーションの背景は13種になりました。[屋外21区画の描画](world/OUTDOOR_APPEARANCE.md)も分離しました。[室内・水中9区画](world/INDOOR_APPEARANCE.md)も専用描画へ分離し、追加30マップの基本描画が揃いました。残る施設背景の共用、個別現場差分、専用絵のない42NPC、旧100件753場面の人物表示未接続を区別しています。[国境第一群の素材詳細](world/ODDLAND_ASSETS.md)も更新しました。次はNPCと出演、施設背景、探索中の個別装置や作業状態の差分です。新しい独立拠点や局所シーンの追加は提案段階です。
+[不足素材台帳](world/ASSET_BACKLOG.md)と[町・シーンの切替候補](world/SCENE_SWITCH_PLAN.md)を現行データから整理しました。5拠点の専用到着背景を接続し、151ロケーションの背景は13種になりました。[屋外21区画の描画](world/OUTDOOR_APPEARANCE.md)も分離しました。[室内・水中9区画](world/INDOOR_APPEARANCE.md)も専用描画へ分離し、追加30マップの基本描画が揃いました。残る施設背景の共用、個別現場差分、専用絵のない38NPC、旧100件753場面の人物表示未接続を区別しています。[国境第一群の素材詳細](world/ODDLAND_ASSETS.md)も更新しました。次はNPCと出演、施設背景、探索中の個別装置や作業状態の差分です。新しい独立拠点や局所シーンの追加は提案段階です。
 
 [ショップ・スキル屋と旅支度](ui/SHOP_AND_PREPARATIONS.md)では、商品購入・独立施設のスキル屋・旅道具店の補給工房を分離しました。商品一覧と技能一覧はそれぞれ固定領域内をスクロールします。
 
@@ -18,7 +18,7 @@
 
 [4迷宮・各20FとLv30までの進行設計](dungeons/FOUR_DUNGEON_PROGRESSION_DESIGN.md)と[敵・武器・購入技能の設計](battle/FOUR_DUNGEON_COMBAT_DESIGN.md)は、篝火・地下水道・廃坑・庭園の80階を対象とする後続計画です。残る40階（4迷宮それぞれの1〜10F地形を除く。各10F主も実装済み）・Lv15以後の新EXP曲線・24深層敵・8主・T3/T4武器18種・13購入技能・深層帰路は未実装です。[篝火単独の初案](dungeons/KAGARIBI_PROGRESSION_DESIGN.md)は設計経緯として保持します。
 
-[篝火の追加10編](scenarios/KAGARIBI_TEN_QUESTS.md)はq201〜q210、表示002〜011です。45場面・30結末の実移動を接続済みで、専用20NPCの絵は未制作です。初版の実移動接続はq001〜q004・q201〜q210、第2版ではこれに旧100件の現場接続・仲間80件・国境新作10件が加わります。
+[篝火の追加10編](scenarios/KAGARIBI_TEN_QUESTS.md)はq201〜q210、表示002〜011です。45場面・30結末の実移動を接続済みで、専用20NPCのうち[q201・q202の4人](scenarios/KAGARIBI_CHARACTER_ART.md)は専用透過画を接続し、残る16人は未制作です。初版の実移動接続はq001〜q004・q201〜q210、第2版ではこれに旧100件の現場接続・仲間80件・国境新作10件が加わります。
 
 [Grid](battle/GRID_BATTLE.md)と[Frontline](battle/FRONTLINE_BATTLE.md)はClassicと共存します。Frontlineの可変行数・戦闘不能者退避・排除・ノックバックまで実装し、本編の具体的な編成・技能・数値を調整する段階です。[状態異常](battle/STATUS_EFFECTS.md)のLv1〜Lv3、[斥候技能](battle/SCOUT_SKILLS.md)、先制・スタンも実装済みです。
 
