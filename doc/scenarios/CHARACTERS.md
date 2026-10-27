@@ -8,7 +8,7 @@
 
 ## 会話用の透過立ち絵
 
-現在はNPC56定義中、50人の会話用画像を参照できます。人物のsprite指定を優先し、省略時はsprite_<ID>、それもなければ肖像へフォールバックします。以下にカード画像と会話画像を分けて示します。
+現在はNPC56定義中、52人の会話用画像を参照できます。人物のsprite指定を優先し、省略時はsprite_<ID>、それもなければ肖像へフォールバックします。以下にカード画像と会話画像を分けて示します。
 
 2026-09-24の追加対象は人物30点とくらがり1点で、全31点の適用を完了しました。[回収・適用記録](../../assets/source/characters/recovery-2026-09-24.json)に対応とハッシュを保持します。各場面の配置演出や公開画面の通し確認まで完了したという意味ではありません。
 
@@ -23,6 +23,8 @@
 同日にq206のミナ・ナギ2人を追加し、篝火の専用人物画は12人になりました。弁当を人物画へ固定せず、姉・弟それぞれの単独場面と同行帰着後の同席を既存castで切り替えます。[q206の原本・英日プロンプト・ハッシュ](../../assets/source/characters/kagaribi-q206-2026-10-27.json)。
 
 同日にq207のオセ・ハル2人を追加し、篝火の専用人物画は14人になりました。測り竿や測量票を人物画へ固定せず、基準石から測点までの同行と全4場面の同席を既存castで示します。[q207の原本・英日プロンプト・ハッシュ](../../assets/source/characters/kagaribi-q207-2026-10-27.json)。
+
+2026-10-28にq208のメア・フユ2人を追加し、篝火の専用人物画は16人になりました。名札・覆い・小灯を人物画へ固定せず、追悼台のメアと納骨所のフユを既存castで切り替えます。[q208の原本・英日プロンプト・ハッシュ](../../assets/source/characters/kagaribi-q208-2026-10-28.json)。
 
 q001では老人とルーキーを左、リネを右へ配置し、発話者を手前へ出します。[人物演出仕様](../ui/CHARACTER_STAGING.md)、[初期の立ち絵・ハッシュ](../../assets/source/characters/dialogue-sprites-manifest.json)、[使用プロンプト](../../assets/source/characters/dialogue-sprites-prompts.json)を参照してください。
 
@@ -634,7 +636,11 @@ q001とq010は同一人物。依頼受付・救助名簿・報告を担当する
 
 フユの父を同僚として知る。家庭での暴力については知らない。
 
-専用画像は未制作。本文と人物名で登場し、既存人物の画像は流用しません。
+![メアのカード肖像](../../assets/images/characters/kagaribi/q208_keeper.webp)
+
+[会話用立ち絵](../../assets/images/characters/kagaribi/q208_keeper.webp)
+
+[生成PNG原本](../../assets/source/characters/kagaribi-q208-2026-10-28/q208_keeper.png) ／ [生成・変換記録](../../assets/source/characters/kagaribi-q208-2026-10-28.json)
 
 ### フユ (q208_daughter)
 
@@ -642,7 +648,11 @@ q001とq010は同一人物。依頼受付・救助名簿・報告を担当する
 
 父の職場での働きは否定しないが、自分へ向けた暴力を忘れたくない。
 
-専用画像は未制作。本文と人物名で登場し、既存人物の画像は流用しません。
+![フユのカード肖像](../../assets/images/characters/kagaribi/q208_daughter.webp)
+
+[会話用立ち絵](../../assets/images/characters/kagaribi/q208_daughter.webp)
+
+[生成PNG原本](../../assets/source/characters/kagaribi-q208-2026-10-28/q208_daughter.png) ／ [生成・変換記録](../../assets/source/characters/kagaribi-q208-2026-10-28.json)
 
 ### ゼド (q209_guard)
 

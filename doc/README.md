@@ -1,6 +1,6 @@
 # adv ドキュメント
 
-現行説明の照合日: 2026-10-27。作品版1.34.0。[現在の状態](CURRENT_STATUS.md)、[現行仕様](SPEC.md)、[採用仕様と次工程](HANDOFF.md)、[浅層工房と封蝋](dungeons/SHALLOW_WORKSHOP.md)から確認してください。実施時点の履歴は[検証記録](development/PROGRESS.md)、整理前の本文は[保存原文](legacy/2026-10-20/README.md)に分けます。
+現行説明の照合日: 2026-10-28。作品版1.34.0。[現在の状態](CURRENT_STATUS.md)、[現行仕様](SPEC.md)、[採用仕様と次工程](HANDOFF.md)、[浅層工房と封蝋](dungeons/SHALLOW_WORKSHOP.md)から確認してください。実施時点の履歴は[検証記録](development/PROGRESS.md)、整理前の本文は[保存原文](legacy/2026-10-20/README.md)に分けます。
 
 ## 現在の実装と続く設計
 
@@ -18,7 +18,7 @@
 
 [4迷宮・各20FとLv30までの進行設計](dungeons/FOUR_DUNGEON_PROGRESSION_DESIGN.md)と[敵・武器・購入技能の設計](battle/FOUR_DUNGEON_COMBAT_DESIGN.md)は、篝火・地下水道・廃坑・庭園の80階を対象とする後続計画です。残る40階（4迷宮それぞれの1〜10F地形を除く。各10F主も実装済み）・Lv15以後の新EXP曲線・24深層敵・8主・T3/T4武器18種・13購入技能・深層帰路は未実装です。[篝火単独の初案](dungeons/KAGARIBI_PROGRESSION_DESIGN.md)は設計経緯として保持します。
 
-[篝火の追加10編](scenarios/KAGARIBI_TEN_QUESTS.md)はq201〜q210、表示002〜011です。45場面・30結末の実移動を接続済みで、専用20NPCのうち[q201〜q207の14人](scenarios/KAGARIBI_CHARACTER_ART.md)は専用透過画を接続し、残る6人は未制作です。初版の実移動接続はq001〜q004・q201〜q210、第2版ではこれに旧100件の現場接続・仲間80件・国境新作10件が加わります。
+[篝火の追加10編](scenarios/KAGARIBI_TEN_QUESTS.md)はq201〜q210、表示002〜011です。45場面・30結末の実移動を接続済みで、専用20NPCのうち[q201〜q208の16人](scenarios/KAGARIBI_CHARACTER_ART.md)は専用透過画を接続し、残る4人は未制作です。初版の実移動接続はq001〜q004・q201〜q210、第2版ではこれに旧100件の現場接続・仲間80件・国境新作10件が加わります。
 
 [Grid](battle/GRID_BATTLE.md)と[Frontline](battle/FRONTLINE_BATTLE.md)はClassicと共存します。Frontlineの可変行数・戦闘不能者退避・排除・ノックバックまで実装し、本編の具体的な編成・技能・数値を調整する段階です。[状態異常](battle/STATUS_EFFECTS.md)のLv1〜Lv3、[斥候技能](battle/SCOUT_SKILLS.md)、先制・スタンも実装済みです。
 
