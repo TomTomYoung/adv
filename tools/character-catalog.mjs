@@ -14,6 +14,7 @@ export function characterCatalog(data) {
     '2026-10-27にq201・q202の4人へ専用の透過人物画を接続しました。腰までの画像を肖像・立ち絵で共用し、既存の所在と出演条件を保持します。[原本・英語プロンプト・日本語訳・ハッシュ](../assets/source/characters/kagaribi-2026-10-27.json)。','',
     '同日にq203のゲル・ユハ2人を追加し、篝火の専用人物画は6人になりました。試料瓶や油量を人物画へ固定せず、受渡し・燃焼量は既存の物語状態で扱います。[q203の原本・英日プロンプト・ハッシュ](../assets/source/characters/kagaribi-q203-2026-10-27.json)。','',
     '同日にq204のエイン・リュカ2人を追加し、篝火の専用人物画は8人になりました。写し・証言書・封緘を人物画へ固定せず、同意と保持者は既存の物語状態で扱います。[q204の原本・英日プロンプト・ハッシュ](../assets/source/characters/kagaribi-q204-2026-10-27.json)。','',
+    '同日にq205のノノ・ダン2人を追加し、篝火の専用人物画は10人になりました。配合板を人物画へ固定せず、師弟の同席と灰溜まりの無人場面を既存castで切り替えます。[q205の原本・英日プロンプト・ハッシュ](../assets/source/characters/kagaribi-q205-2026-10-27.json)。','',
     'q001では老人とルーキーを左、リネを右へ配置し、発話者を手前へ出します。[人物演出仕様](CHARACTER_STAGING.md)、[初期の立ち絵・ハッシュ](../assets/source/characters/dialogue-sprites-manifest.json)、[使用プロンプト](../assets/source/characters/dialogue-sprites-prompts.json)を参照してください。','',
     '## 所在モデルを持つ実装済み人物',''];
   for (const c of characters) out.push(`### ${c.name} (${c.id})`,'',
