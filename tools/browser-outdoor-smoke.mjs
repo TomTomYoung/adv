@@ -1,4 +1,4 @@
-// Visual fixtures for all nine maps. Regional smoke tests cover real route traversal.
+// Visual fixtures for every outdoor map. Regional smoke tests cover real route traversal.
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import path from 'node:path';
