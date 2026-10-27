@@ -1,16 +1,20 @@
 # 世界設定と町の接続
 
-確認日: 2026-10-25。作品版1.34.0。[文書全体へ戻る](../README.md)。
+確認日: 2026-10-27。作品版1.34.0。[文書全体へ戻る](../README.md)。
 
 [TORNEA_ODDLAND.md](TORNEA_ODDLAND.md)：聖王国に属するトルネアの都市・古代の大水門、水門警備隊・灯番・魔力溜まり、オッドランド・狂火・狂王・巫女、機械学会と北の独立国である帝国の背景設定。現行シナリオへの接続境界を記載。平時の往来と100件の設計へ着手し、侵攻・大水門開放・アダの最終盤は保留します。
 
-[SALOME_DESIGN.md](SALOME_DESIGN.md)：学術都市サロメの六地区、三学、既存施設の統合、書庫・機関廟の配置、新規100企画と初期100件の組み方。街道と既存施設は実装済みで、新作・旧40件の移設は後続です。
+[SALOME_DESIGN.md](SALOME_DESIGN.md)：学術都市サロメの六地区、三学、既存施設の統合、書庫・機関廟の配置、新規100企画と初期100件の組み方。街道・既存施設・旧40件の現場接続は実装済み。六地区全体の整備と地域新作は後続です。
 
-[SALOME_ACCESS_IMPLEMENTATION.md](SALOME_ACCESS_IMPLEMENTATION.md)：高台街道、既存6施設、個人20件の往復、乗合便と旧地理保存の移行。
+[SALOME_ACCESS_IMPLEMENTATION.md](SALOME_ACCESS_IMPLEMENTATION.md)：高台街道、既存6施設、個人20件の往復、乗合便と旧地理保存の移行。書庫・機関廟40件、水路・外縁と追加施設の接続状況も記載。
 
-[ODDLAND_ACCESS_DESIGN.md](ODDLAND_ACCESS_DESIGN.md)：地下関所からの越境、五拠点、100件の受付、国別の出発・帰還、旧保存と版差分、実装順。[第1段階の実装](ODDLAND_ACCESS_IMPLEMENTATION.md)では関所から宿場までの往復、施設、受付・帰還先、版差分と保存移行を接続しました。[第一群10件](../scenarios/editions/e2/ODDLAND_FIRST_TEN.md)まで実装済み。後続4拠点と残る地域依頼は未実装です。
+[ODDLAND_ACCESS_DESIGN.md](ODDLAND_ACCESS_DESIGN.md)：地下関所からの越境、五拠点、100件の受付、国別の出発・帰還、旧保存と版差分、実装順。[第1段階の実装](ODDLAND_ACCESS_IMPLEMENTATION.md)では関所から宿場までの往復、施設、受付・帰還先、版差分と保存移行を接続しました。[第一群10件](../scenarios/editions/e2/ODDLAND_FIRST_TEN.md)まで実装済み。国境宿場・石橋の交易市・巡礼台地・旧王領の村と3街道、旧60件の現場接続も実装済み。残る構想上の拠点と地域新作は後続です。
 
-[ODDLAND_ASSETS.md](ODDLAND_ASSETS.md)：第一群の必要背景・地図・道具と22人の人物素材。現行の仮素材と制作対象を区別します。
+[ASSET_BACKLOG.md](ASSET_BACKLOG.md)：現行第2版全体の不足素材。151ロケーション・追加30マップの仮素材、42NPC、旧100件753場面の人物表示未接続、制作優先順。
+
+[SCENE_SWITCH_PLAN.md](SCENE_SWITCH_PLAN.md)：既存6拠点と独立町の候補、サロメ地区、住居・作業室・墓地・湖岸などの切替案。実装済みの場所と未実装の提案を区別。
+
+[ODDLAND_ASSETS.md](ODDLAND_ASSETS.md)：国境第一群の背景・地図・道具と22人、巡礼・旧王領・観測所の追加素材。全体台帳の地域別詳細。
 
 [ADA.md](ADA.md)：夫を追う表向きの目的、四村の水没の真相、記憶の封印・改ざんと証言、死の神と二つの精神、大水門の鍵の獲得、最終盤の侵攻・水没・アダ離脱と夫のプレイアブル化。追跡と被災者に関わる第2版の10件を実装しました。真相開示と最終盤は保留です。
 
@@ -20,6 +24,6 @@
 
 [DARKNESS.md](DARKNESS.md)：恐怖・後悔・精神的ショックからの浸食、操られた人間や魔物の襲撃による増幅、火による対処、生死の曖昧さ、各勢力と災害経験者の認識。新たなゲーム処理は定義しません。
 
-[WORLD_LOCATIONS.md](WORLD_LOCATIONS.md)：町とq001〜q004・q201〜q210の実移動による出発・到着。
+[WORLD_LOCATIONS.md](WORLD_LOCATIONS.md)：町・室内の接続、初版と第2版の正本、実移動と版別保存、素材と場面の境界。
 
-[LOCATION_CATALOG.md](LOCATION_CATALOG.md)：町10ロケーションのID・機能・背景・参照場面の生成一覧。
+[LOCATION_CATALOG.md](LOCATION_CATALOG.md)：初版15ロケーションのID・機能・背景・参照場面の生成一覧。第2版151か所の差分は上記の台帳と地理JSONを参照。
