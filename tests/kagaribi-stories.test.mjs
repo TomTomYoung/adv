@@ -101,9 +101,19 @@ test('new people display dedicated art when available without exposing author-on
       const person=dom.root.querySelector(`[data-character="${id}"]`);
       assert.ok(person);assert.ok(person.textContent.includes(name));assert.equal(person.querySelector('img').src,data.assets.images[`npc_${id}`]);
     }
-    view.render(projectGame(prepareQuest('q206')));
-    const pending=dom.root.querySelector('[data-character="q206_sister"]');
-    assert.ok(pending);assert.match(pending.textContent,/ミナ/);assert.equal(pending.querySelector('img'),null);
+    const delivery=prepareQuest('q206');
+    for(const [scene,ids] of [['entry',['q206_sister']],['offer',['q206_worker']],['home',['q206_sister','q206_worker']]]){
+      if(scene==='offer'){choose(delivery,'carry');finishJourney(delivery);}
+      if(scene==='home'){choose(delivery,'together');finishJourney(delivery);}
+      view.render(projectGame(delivery));
+      for(const id of ids){
+        const person=dom.root.querySelector(`[data-character="${id}"]`);
+        assert.ok(person);assert.ok(person.textContent.includes(data.characters[id].name));assert.equal(person.querySelector('img').src,data.assets.images[`npc_${id}`]);
+      }
+    }
+    view.render(projectGame(prepareQuest('q207')));
+    const pending=dom.root.querySelector('[data-character="q207_surveyor"]');
+    assert.ok(pending);assert.match(pending.textContent,/オセ/);assert.equal(pending.querySelector('img'),null);
   }}finally{view?.destroy();dom.restore();}
 });
 

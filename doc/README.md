@@ -18,7 +18,7 @@
 
 [4迷宮・各20FとLv30までの進行設計](dungeons/FOUR_DUNGEON_PROGRESSION_DESIGN.md)と[敵・武器・購入技能の設計](battle/FOUR_DUNGEON_COMBAT_DESIGN.md)は、篝火・地下水道・廃坑・庭園の80階を対象とする後続計画です。残る40階（4迷宮それぞれの1〜10F地形を除く。各10F主も実装済み）・Lv15以後の新EXP曲線・24深層敵・8主・T3/T4武器18種・13購入技能・深層帰路は未実装です。[篝火単独の初案](dungeons/KAGARIBI_PROGRESSION_DESIGN.md)は設計経緯として保持します。
 
-[篝火の追加10編](scenarios/KAGARIBI_TEN_QUESTS.md)はq201〜q210、表示002〜011です。45場面・30結末の実移動を接続済みで、専用20NPCのうち[q201〜q205の10人](scenarios/KAGARIBI_CHARACTER_ART.md)は専用透過画を接続し、残る10人は未制作です。初版の実移動接続はq001〜q004・q201〜q210、第2版ではこれに旧100件の現場接続・仲間80件・国境新作10件が加わります。
+[篝火の追加10編](scenarios/KAGARIBI_TEN_QUESTS.md)はq201〜q210、表示002〜011です。45場面・30結末の実移動を接続済みで、専用20NPCのうち[q201〜q206の12人](scenarios/KAGARIBI_CHARACTER_ART.md)は専用透過画を接続し、残る8人は未制作です。初版の実移動接続はq001〜q004・q201〜q210、第2版ではこれに旧100件の現場接続・仲間80件・国境新作10件が加わります。
 
 [Grid](battle/GRID_BATTLE.md)と[Frontline](battle/FRONTLINE_BATTLE.md)はClassicと共存します。Frontlineの可変行数・戦闘不能者退避・排除・ノックバックまで実装し、本編の具体的な編成・技能・数値を調整する段階です。[状態異常](battle/STATUS_EFFECTS.md)のLv1〜Lv3、[斥候技能](battle/SCOUT_SKILLS.md)、先制・スタンも実装済みです。
 

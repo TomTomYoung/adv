@@ -8,7 +8,7 @@
 
 ## 会話用の透過立ち絵
 
-現在はNPC56定義中、46人の会話用画像を参照できます。人物のsprite指定を優先し、省略時はsprite_<ID>、それもなければ肖像へフォールバックします。以下にカード画像と会話画像を分けて示します。
+現在はNPC56定義中、48人の会話用画像を参照できます。人物のsprite指定を優先し、省略時はsprite_<ID>、それもなければ肖像へフォールバックします。以下にカード画像と会話画像を分けて示します。
 
 2026-09-24の追加対象は人物30点とくらがり1点で、全31点の適用を完了しました。[回収・適用記録](../../assets/source/characters/recovery-2026-09-24.json)に対応とハッシュを保持します。各場面の配置演出や公開画面の通し確認まで完了したという意味ではありません。
 
@@ -19,6 +19,8 @@
 同日にq204のエイン・リュカ2人を追加し、篝火の専用人物画は8人になりました。写し・証言書・封緘を人物画へ固定せず、同意と保持者は既存の物語状態で扱います。[q204の原本・英日プロンプト・ハッシュ](../../assets/source/characters/kagaribi-q204-2026-10-27.json)。
 
 同日にq205のノノ・ダン2人を追加し、篝火の専用人物画は10人になりました。配合板を人物画へ固定せず、師弟の同席と灰溜まりの無人場面を既存castで切り替えます。[q205の原本・英日プロンプト・ハッシュ](../../assets/source/characters/kagaribi-q205-2026-10-27.json)。
+
+同日にq206のミナ・ナギ2人を追加し、篝火の専用人物画は12人になりました。弁当を人物画へ固定せず、姉・弟それぞれの単独場面と同行帰着後の同席を既存castで切り替えます。[q206の原本・英日プロンプト・ハッシュ](../../assets/source/characters/kagaribi-q206-2026-10-27.json)。
 
 q001では老人とルーキーを左、リネを右へ配置し、発話者を手前へ出します。[人物演出仕様](../ui/CHARACTER_STAGING.md)、[初期の立ち絵・ハッシュ](../../assets/source/characters/dialogue-sprites-manifest.json)、[使用プロンプト](../../assets/source/characters/dialogue-sprites-prompts.json)を参照してください。
 
@@ -582,7 +584,11 @@ q001とq010は同一人物。依頼受付・救助名簿・報告を担当する
 
 弟が退職を申し出たことは知らない。弁当は勤務の対価ではなく差し入れ。
 
-専用画像は未制作。本文と人物名で登場し、既存人物の画像は流用しません。
+![ミナのカード肖像](../../assets/images/characters/kagaribi/q206_sister.webp)
+
+[会話用立ち絵](../../assets/images/characters/kagaribi/q206_sister.webp)
+
+[生成PNG原本](../../assets/source/characters/kagaribi-q206-2026-10-27/q206_sister.png) ／ [生成・変換記録](../../assets/source/characters/kagaribi-q206-2026-10-27.json)
 
 ### ナギ (q206_worker)
 
@@ -590,7 +596,11 @@ q001とq010は同一人物。依頼受付・救助名簿・報告を担当する
 
 当番を終えて退職を申し出た。今は中継広間で帰る決心がつかずにいる。
 
-専用画像は未制作。本文と人物名で登場し、既存人物の画像は流用しません。
+![ナギのカード肖像](../../assets/images/characters/kagaribi/q206_worker.webp)
+
+[会話用立ち絵](../../assets/images/characters/kagaribi/q206_worker.webp)
+
+[生成PNG原本](../../assets/source/characters/kagaribi-q206-2026-10-27/q206_worker.png) ／ [生成・変換記録](../../assets/source/characters/kagaribi-q206-2026-10-27.json)
 
 ### オセ (q207_surveyor)
 
