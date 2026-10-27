@@ -18,10 +18,10 @@ export async function kagaribiArtFixtures(){
       assert.ok(g.accept(id));const q=data.quests[id],p=q.story.worldPlaces[q.story.scenes.entry.place];
       g.teleport(p.map,p.x,p.y);g.setPortableFire({fuel:90,effect:'ward'});g.run(q.model.entryScript);drain(g);return g;
     };
-    const checkpoint=(g,id,scene,cast)=>{
+    const checkpoint=(g,id,scene,cast,extra={})=>{
       assert.equal(g.state.stories[id].scene,scene);assert.deepEqual(projectGame(g).dialog.scene.cast.map(c=>c.id),cast);
       const save=g.save();g.load(save);assert.equal(g.save(),save);
-      fixtures.push({edition,quest:id,scene,cast,save});return save;
+      fixtures.push({edition,quest:id,scene,cast,save,...extra});return save;
     };
     const choose=(g,key)=>{assert.ok(g.dispatch({type:'choose',id:key}),key);drain(g);};
     const arrive=g=>{assert.ok(g.state.journey);const save=g.save();g.load(save);assert.equal(g.save(),save);finishJourney(g);};
@@ -36,6 +36,24 @@ export async function kagaribiArtFixtures(){
     choose(q202,'test');const result=checkpoint(q202,'q202','result',['q202_trainee','q202_trainer']);
     for(const [action,outcome] of [['pair','paired'],['visual','visual']]){q202.load(result);choose(q202,action);assert.equal(q202.state.quests.q202.outcome,outcome);outcomes.push(`${edition}/q202/${outcome}`);}
     q202.load(lesson);choose(q202,'defer');assert.equal(q202.state.quests.q202.outcome,'retrain');outcomes.push(`${edition}/q202/retrain`);
+    const q203=prepare('q203');checkpoint(q203,'q203','entry',['q203_seller']);
+    const sample=(holder,amounts)=>{
+      const v=q203.state.stories.q203.values;assert.equal(v.bottleAt,holder);assert.equal(v.cupAt,'tester');
+      assert.deepEqual([v.sample,v.portion,v.burned],amounts);assert.equal(v.sample+v.portion+v.burned,3);
+    };
+    sample('seller',[3,0,0]);choose(q203,'carry');sample('party',[3,0,0]);arrive(q203);
+    const inspect=checkpoint(q203,'q203','inspect',['q203_tester']);sample('party',[3,0,0]);
+    choose(q203,'return');arrive(q203);checkpoint(q203,'q203','return',['q203_seller']);choose(q203,'hand');sample('seller',[3,0,0]);
+    assert.equal(q203.state.quests.q203.outcome,'returned');outcomes.push(`${edition}/q203/returned`);
+    q203.load(inspect);choose(q203,'pour');sample('party',[1,2,0]);checkpoint(q203,'q203','portion',['q203_tester']);
+    q203.state.inventory.torch=0;const shortage=checkpoint(q203,'q203','portion',['q203_tester'],{variant:'no-torch',blockedChoice:'burn'});
+    assert.equal(q203.dispatch({type:'choose',id:'burn'}),false);assert.equal(q203.save(),shortage);
+    q203.load(shortage);q203.state.inventory.torch=1;choose(q203,'burn');assert.equal(q203.state.inventory.torch,0);sample('party',[1,1,1]);
+    const result203=checkpoint(q203,'q203','result',['q203_tester']);
+    choose(q203,'limited');arrive(q203);checkpoint(q203,'q203','limited',['q203_seller']);choose(q203,'hand');sample('seller',[1,1,1]);
+    assert.equal(q203.state.quests.q203.outcome,'limited');outcomes.push(`${edition}/q203/limited`);
+    q203.load(result203);choose(q203,'public');sample('tester',[1,1,1]);
+    assert.equal(q203.state.quests.q203.outcome,'public');outcomes.push(`${edition}/q203/public`);
   }
   return {fixtures,outcomes};
 }

@@ -20,11 +20,11 @@
 
 [quests/README.md](quests/README.md)：q001〜q010の個別ページ一覧。本文・選択後の処理・イベントID・場所・分岐・結末を集約。q003〜q010には人物と証拠の所在、行為ごとの条件・費用・状態変化、資材不足時の再開、編集時の確認事項も掲載します。
 
-[CHARACTERS.md](CHARACTERS.md)：56人のNPC（40人に専用画像）、依頼人索引。仲間の編成は [COMPANION_CATALOG.md](../battle/COMPANION_CATALOG.md)。
+[CHARACTERS.md](CHARACTERS.md)：56人のNPC（42人に専用画像）、依頼人索引。仲間の編成は [COMPANION_CATALOG.md](../battle/COMPANION_CATALOG.md)。
 
 [KAGARIBI_TEN_QUESTS.md](KAGARIBI_TEN_QUESTS.md)：篝火迷宮の追加10編。人物の動機・固定過去・介入・結末・編集元。
 
-[KAGARIBI_CHARACTER_ART.md](KAGARIBI_CHARACTER_ART.md)：q201・q202の4人に専用の透過画像を接続。原本・制作記録・表示対象・検証範囲。
+[KAGARIBI_CHARACTER_ART.md](KAGARIBI_CHARACTER_ART.md)：q201〜q203の6人に専用の透過画像を接続。原本・制作記録・表示対象・検証範囲。
 
 ## 設計と実行
 

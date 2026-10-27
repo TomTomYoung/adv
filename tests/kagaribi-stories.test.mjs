@@ -91,8 +91,11 @@ test('new people display dedicated art when available without exposing author-on
     view.render(vm);const person=dom.root.querySelector('[data-character="q201_clerk"]');
     assert.ok(person);assert.match(person.textContent,/ナヴィア/);assert.equal(person.querySelector('img').src,data.assets.images.npc_q201_clerk);
     view.render(projectGame(prepareQuest('q203')));
-    const pending=dom.root.querySelector('[data-character="q203_seller"]');
-    assert.ok(pending);assert.match(pending.textContent,/ゲル/);assert.equal(pending.querySelector('img'),null);
+    const seller=dom.root.querySelector('[data-character="q203_seller"]');
+    assert.ok(seller);assert.match(seller.textContent,/ゲル/);assert.equal(seller.querySelector('img').src,data.assets.images.npc_q203_seller);
+    view.render(projectGame(prepareQuest('q204')));
+    const pending=dom.root.querySelector('[data-character="q204_scribe"]');
+    assert.ok(pending);assert.match(pending.textContent,/エイン/);assert.equal(pending.querySelector('img'),null);
   }}finally{view?.destroy();dom.restore();}
 });
 

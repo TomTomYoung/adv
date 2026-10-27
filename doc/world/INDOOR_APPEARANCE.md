@@ -36,4 +36,4 @@
 
 [Chromium検査](../../tools/browser-indoor-smoke.mjs)は11地点状態×Scene／Classic×1440／390pxの44条件。描画差分、保存再開、向き、横はみ出し、Sceneの画面高、水中から空気室への往復と空気量を検査する。初期地点を直接配置する描画検査と、既存の地域別実歩行CIを併用する。実行結果は[検証履歴](../development/PROGRESS.md)に記録する。
 
-今後は[不足素材台帳](ASSET_BACKLOG.md)の未制作38NPC・旧100件の出演、施設背景、井戸・戸口・個別装置・作業状態の絵を優先する。町・地区・局所シーンの再編は[切替計画](SCENE_SWITCH_PLAN.md)に残す。
+今後は[不足素材台帳](ASSET_BACKLOG.md)の未制作36NPC・旧100件の出演、施設背景、井戸・戸口・個別装置・作業状態の絵を優先する。町・地区・局所シーンの再編は[切替計画](SCENE_SWITCH_PLAN.md)に残す。
