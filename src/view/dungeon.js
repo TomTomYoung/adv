@@ -1,6 +1,7 @@
 import {eyeElevation,traceFloorSegments,paintReliefPixels} from './dungeon-relief.js';
 import {artRect} from './dungeon-art.js';
 import {OUTDOOR_PALETTES,outdoorFloorColor,paintOutdoorSky,outdoorBoundaryHeight,paintOutdoorBoundary} from './outdoor.js';
+import {INDOOR_PALETTES,indoorFloorMaterial,indoorCeilingColor,paintIndoorWall,paintIndoorBackdrop,paintIndoorWater} from './indoor.js';
 // Presentation only: collision, water depth and material references arrive in the snapshot.
 const WIDTH=800,HEIGHT=400,FOCAL=WIDTH/(2*Math.tan(Math.PI/5.2)),EYE=.5,STRIDE=2;
 const textures=new Map(),floorPixels=new WeakMap(),loaded=new WeakSet();
@@ -70,9 +71,11 @@ export function paintDungeon(canvas,dungeon,battle){
   const draw=()=>{
     if(!canvas.isConnected)return;ctx.imageSmoothingEnabled=false;
     const outdoor=Object.hasOwn(OUTDOOR_PALETTES,dungeon.outdoor)?dungeon.outdoor:null;
+    const indoor=Object.hasOwn(INDOOR_PALETTES,dungeon.indoor)?dungeon.indoor:null;
     const sky=ctx.createLinearGradient(0,0,0,HEIGHT);sky.addColorStop(0,'#101a1e');sky.addColorStop(.5,'#202d2b');sky.addColorStop(.5,'#30332d');sky.addColorStop(1,'#161e1e');ctx.fillStyle=sky;ctx.fillRect(0,0,WIDTH,HEIGHT);
     if(outdoor)paintOutdoorSky(ctx,outdoor,dungeon.location.facing,WIDTH,HEIGHT);
-    const wall=texture(dungeon.wall?.url??(outdoor?null:dungeon.background),draw),floor=texture(dungeon.floorArt?.url,draw),material=materialPixels(canvas,floor,dungeon.floorArt);
+    if(indoor)paintIndoorBackdrop(ctx,indoor,WIDTH,HEIGHT);
+    const wall=texture(dungeon.wall?.url??(outdoor||indoor?null:dungeon.background),draw),floor=texture(dungeon.floorArt?.url,draw),material=materialPixels(canvas,floor,dungeon.floorArt)??(indoor?indoorFloorMaterial(indoor):null);
     const materials=new Map();
     for(const row of dungeon.cells)for(const cell of row)if(cell.art&&cell.floor)materials.set(cell,materialPixels(canvas,texture(cell.art.url,draw),cell.art));
     const {x,y,facing}=dungeon.location,angle={north:-Math.PI/2,east:0,south:Math.PI/2,west:Math.PI}[facing],vx=Math.cos(angle),vy=Math.sin(angle);
@@ -87,6 +90,7 @@ export function paintDungeon(canvas,dungeon,battle){
         const useOutdoor=outdoor&&!cell.art&&cell.floor&&!cell.waterDepth&&!cell.surface;
         const [r,g,b]=useOutdoor?outdoorFloorColor(outdoor,wx,wy,cell,distance):floorColor(materials.has(cell)?materials.get(cell):material,wx,wy,cell,distance);
         for(let yy=row;yy<Math.min(HEIGHT,row+STRIDE);yy++)for(let xx=ray.column;xx<ray.column+STRIDE;xx++){const i=(yy*WIDTH+xx)*4;pixels.data[i]=r;pixels.data[i+1]=g;pixels.data[i+2]=b;pixels.data[i+3]=255;}
+        if(indoor){const [cr,cg,cb]=indoorCeilingColor(indoor,wx,wy,cell,distance);for(let yy=row;yy<Math.min(HEIGHT,row+STRIDE);yy++)for(let xx=ray.column;xx<ray.column+STRIDE;xx++){const i=((HEIGHT-1-yy)*WIDTH+xx)*4;pixels.data[i]=cr;pixels.data[i+1]=cg;pixels.data[i+2]=cb;pixels.data[i+3]=255;}}
       }
     }
     ctx.putImageData(pixels,0,0);
@@ -104,6 +108,7 @@ export function paintDungeon(canvas,dungeon,battle){
         const wheel=Math.abs(u-.73);if(wheel<.10){const radius=Math.sqrt(.01-wheel*wheel);ctx.fillStyle='#d4dbce';ctx.fillRect(column,top+h*(.57-radius),STRIDE,h*radius*2);if(wheel<.065){const inner=Math.sqrt(.065**2-wheel**2);ctx.fillStyle='#425859';ctx.fillRect(column,top+h*(.57-inner),STRIDE,h*inner*2);}}
       }
       else if(outdoorBoundary)paintOutdoorBoundary(ctx,outdoor,{column,...hit},top,h,STRIDE);
+      else if(indoor&&!hit.edge&&!dungeon.cells[hit.y]?.[hit.x]?.art)paintIndoorWall(ctx,indoor,{column,...hit},top,h,STRIDE);
       else{
         const art=hit.edge?.art??dungeon.cells[hit.y]?.[hit.x]?.art??dungeon.wall,image=art?texture(art.url,draw):wall;
         if(drawable(image)){const rect=art?artRect(image,art):[18,45,50,76];ctx.drawImage(image,rect[0]+hit.u*(rect[2]-1),rect[1],1,rect[3],column,top,STRIDE,h);}
@@ -111,7 +116,7 @@ export function paintDungeon(canvas,dungeon,battle){
       }
       const surface=hit.edge?.visual.surface??dungeon.cells[hit.y]?.[hit.x]?.surface,color={wood:'rgba(124,84,42,.55)',earth:'rgba(111,75,42,.55)',salt:'rgba(215,200,181,.55)',rock:'rgba(73,79,86,.55)',thorns:'rgba(58,93,38,.55)'}[surface];if(color&&!hit.door){ctx.fillStyle=color;ctx.fillRect(column,top,STRIDE,h);}
       ctx.fillStyle=`rgba(2,9,11,${outdoor?Math.min(.5,.04+hit.distance*.035):Math.min(.82,.12+hit.distance*.075)})`;ctx.fillRect(column,top,STRIDE,h);
-      const level=outdoor?dungeon.lighting.current:dungeon.cells[hit.y]?.[hit.x]?.illumination??0;
+      const level=outdoor||indoor?dungeon.lighting.current:dungeon.cells[hit.y]?.[hit.x]?.illumination??0;
       ctx.fillStyle=`rgba(0,0,0,${.72*(1-level/8)})`;ctx.fillRect(column,top,STRIDE,h);
     }
     if(relief){
@@ -121,6 +126,7 @@ export function paintDungeon(canvas,dungeon,battle){
       ctx.putImageData(terrainPixels,0,0);
     }
     const shade=ctx.createRadialGradient(WIDTH*.5,HEIGHT*.55,100,WIDTH*.5,HEIGHT*.5,WIDTH*.65);shade.addColorStop(0,'#00000000');shade.addColorStop(1,outdoor?'#00000038':'#000000b0');ctx.fillStyle=shade;ctx.fillRect(0,0,WIDTH,HEIGHT);
+    if(indoor)paintIndoorWater(ctx,dungeon.cells[y]?.[x]?.waterDepth,dungeon.location,WIDTH,HEIGHT);
     if(!battle){
       const ahead=visibleDungeonObjects(dungeon).filter(o=>o.unread!==false);
       const object=ahead.find(o=>!o.edge&&o.art)??ahead.find(o=>!o.edge);if(object){const sprite=object.art?texture(object.art.url,draw):null;
