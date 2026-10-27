@@ -101,6 +101,31 @@ export async function kagaribiArtFixtures(){
     q205.load(battle);fight(q205);plate('party',true);checkpoint(q205,'q205','recovered',[],{variant:'fight'});
     choose(q205,'return');arrive(q205);plate('party',true,true);checkpoint(q205,'q205','talk',pair,{variant:'fight'});
     choose(q205,'revise');plate('pupil',true,true,'revise');assert.equal(q205.state.quests.q205.outcome,'revise');
+    const q206=prepare('q206');
+    const meal=(holder,worker,explained=false,told=false,delivery='none')=>{
+      const v=q206.state.stories.q206.values;
+      assert.deepEqual([v.mealAt,v.workerAt,v.explained,v.resignationTold,v.delivery],[holder,worker,explained,told,delivery]);
+      assert.equal(v.sisterAt,'entry');
+    };
+    checkpoint(q206,'q206','entry',['q206_sister']);meal('sister','rest');
+    choose(q206,'carry');meal('party','rest');assert.equal(q206.state.stories.q206.values.partyAt,'transit');arrive(q206);
+    const offer=checkpoint(q206,'q206','offer',['q206_worker']);meal('party','rest');
+    choose(q206,'gift');checkpoint(q206,'q206','gift',['q206_worker']);meal('party','rest',true);
+    choose(q206,'hand');meal('worker','rest',true,false,'gift');
+    assert.equal(q206.state.quests.q206.outcome,'gift');outcomes.push(`${edition}/q206/gift`);
+    let delivered=q206.save();q206.load(delivered);assert.equal(q206.save(),delivered);
+    q206.load(offer);choose(q206,'together');meal('party','transit');
+    assert.equal(q206.state.stories.q206.values.partyAt,'transit');arrive(q206);
+    checkpoint(q206,'q206','home',['q206_sister','q206_worker']);meal('party','entry');
+    choose(q206,'hand');meal('worker','entry',false,true,'together');
+    assert.equal(q206.state.quests.q206.outcome,'together');outcomes.push(`${edition}/q206/together`);
+    delivered=q206.save();q206.load(delivered);assert.equal(q206.save(),delivered);
+    q206.load(offer);choose(q206,'return');meal('party','rest');
+    assert.equal(q206.state.stories.q206.values.partyAt,'transit');arrive(q206);
+    checkpoint(q206,'q206','returned',['q206_sister']);meal('party','rest');
+    choose(q206,'hand');meal('sister','rest',false,false,'returned');
+    assert.equal(q206.state.quests.q206.outcome,'returned');outcomes.push(`${edition}/q206/returned`);
+    delivered=q206.save();q206.load(delivered);assert.equal(q206.save(),delivered);
   }
   return {fixtures,outcomes};
 }

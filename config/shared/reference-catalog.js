@@ -43942,10 +43942,14 @@ export const referenceData={
         "portrait": "npc_q205_master"
       },
       "q206_sister": {
-        "name": "ミナ"
+        "name": "ミナ",
+        "sprite": "npc_q206_sister",
+        "portrait": "npc_q206_sister"
       },
       "q206_worker": {
-        "name": "ナギ"
+        "name": "ナギ",
+        "sprite": "npc_q206_worker",
+        "portrait": "npc_q206_worker"
       },
       "q207_surveyor": {
         "name": "オセ"
@@ -76118,7 +76122,9 @@ export const referenceData={
       "npc_q204_scribe": "assets/images/characters/kagaribi/q204_scribe.webp",
       "npc_q204_survivor": "assets/images/characters/kagaribi/q204_survivor.webp",
       "npc_q205_pupil": "assets/images/characters/kagaribi/q205_pupil.webp",
-      "npc_q205_master": "assets/images/characters/kagaribi/q205_master.webp"
+      "npc_q205_master": "assets/images/characters/kagaribi/q205_master.webp",
+      "npc_q206_sister": "assets/images/characters/kagaribi/q206_sister.webp",
+      "npc_q206_worker": "assets/images/characters/kagaribi/q206_worker.webp"
     },
     "audio": {
       "exploration": "assets/audio/exploration-v2.ogg",
