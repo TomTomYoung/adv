@@ -159,7 +159,65 @@ async function q293ArtFixtures(){
   return {fixtures,outcomes};
 }
 
+async function q294ArtFixtures(){
+  const fixtures=[],outcomes=[],g=border(),q=start(g,294);
+  const first=await loadContent(read,{edition:'e1'});
+  assert.equal(first.quests.q294,undefined);
+  for(const id of ['od_ver','od_clerk','od_sor'])assert.equal(first.characters[id],undefined);
+  assert.deepEqual(Object.values(q.outcomes).map(o=>[o.gold,o.xp,o.gems]),[[25,11,0],[30,13,0]]);
+  const state=(party,sor,card,resolution='pending',finished=false)=>{
+    const v=g.state.stories.q294.values;
+    assert.deepEqual([v.partyAt,v.verAt,v.clerkAt,v.sorAt,v.cardAt,v.resolution,v.finished],
+      [party,'registry','customs',sor,card,resolution,finished]);
+  };
+  const capture=(scene,cast)=>{
+    assert.equal(g.state.stories.q294.scene,scene);
+    assert.deepEqual(projectGame(g).dialog.scene.cast.map(c=>c.id),cast);
+    checkpoint(g);const save=g.save();const faces=scene==='testify'?{od_sor:[.46,.14,.62,.24],od_clerk:[.40,.18,.55,.28]}:scene==='witnessed'?{od_ver:[.48,.16,.65,.25],od_sor:[.46,.14,.62,.24]}:undefined;
+    fixtures.push({edition:'e2',quest:'q294',scene,cast,save,...(faces?{faces}:{})});return save;
+  };
+  const choose=id=>{
+    const scene=g.state.stories.q294.scene,action=q.story.actions[`${scene}_${id}`];assert.ok(action);
+    const before=structuredClone(g.state.stories.q294.values),gold=g.state.gold;
+    assert.ok(g.dispatch({type:'choose',id}));drain(g);checkpoint(g);
+    if(action.journey){
+      assert.ok(g.state.journey);assert.equal(g.state.quests.q294.stage,'active');
+      const v=g.state.stories.q294.values;
+      assert.equal(v.partyAt,'transit');assert.equal(v.finished,false);
+      assert.equal(v.verAt,'registry','Ver waits at the registration room');
+      assert.equal(v.clerkAt,'customs','Mire stays at the service counter');
+      assert.equal(v.cardAt,before.cardAt,'travelling does not hand over the card');
+      assert.equal(v.resolution,before.resolution,'witness route takes effect on arrival');
+      const escort=scene==='sor'||scene==='testify';
+      assert.deepEqual(action.journey.companions,escort?['sor']:[]);
+      assert.equal(v.sorAt,escort?'transit':before.sorAt);
+      go(g,q.story.worldPlaces[action.journey.to]);
+      if(g.state.journey)assert.ok(g.dispatch({type:'story.resume',quest:q.id}));
+      drain(g);assert.equal(g.state.journey,null);checkpoint(g);
+    }
+    assert.equal(g.state.gold,gold+(action.ending?q.outcomes[action.ending].gold:0));
+  };
+  const complete=outcome=>{
+    choose('finish');assert.equal(g.state.quests.q294.outcome,outcome);
+    assert.equal(g.state.quests.q294.stage,'completed');assert.equal(g.state.vars.region_12,1);
+    checkpoint(g);outcomes.push(`e2/q294/${outcome}`);
+  };
+  state('registry','refuge','ver');capture('entry',['od_ver']);
+  assert.ok(!(g.state.stories.q294.knowledge.party??[]).includes('name'));
+  choose('listen');assert.ok(g.state.stories.q294.knowledge.party.includes('name'));
+  state('registry','refuge','ver');const choice=capture('choice',['od_ver']);
+  choose('record');state('registry','refuge','party','record');capture('card',['od_ver']);
+  choose('go');state('customs','refuge','party','record');capture('compare',['od_clerk']);
+  choose('return');state('registry','refuge','party','record');capture('recorded',['od_ver']);
+  complete('record');state('registry','refuge','ver','record',true);
+  g.load(choice);choose('witness');state('refuge','refuge','ver','witness');capture('sor',['od_sor']);
+  choose('go');state('customs','customs','ver','witness');capture('testify',['od_sor','od_clerk']);
+  choose('return');state('registry','registry','ver','witness');capture('witnessed',['od_ver','od_sor']);
+  complete('witness');state('registry','registry','ver','witness',true);
+  return {fixtures,outcomes};
+}
+
 export async function oddlandArtFixtures(){
-  const groups=[await q291ArtFixtures(),await q292ArtFixtures(),await q293ArtFixtures()];
+  const groups=[await q291ArtFixtures(),await q292ArtFixtures(),await q293ArtFixtures(),await q294ArtFixtures()];
   return {fixtures:groups.flatMap(g=>g.fixtures),outcomes:groups.flatMap(g=>g.outcomes)};
 }
