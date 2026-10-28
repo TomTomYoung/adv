@@ -1,6 +1,8 @@
 # adv ドキュメント
 
-現行説明の照合日: 2026-10-28。作品版1.34.0。[現在の状態](CURRENT_STATUS.md)、[現行仕様](SPEC.md)、[採用仕様と次工程](HANDOFF.md)、[浅層工房と封蝋](dungeons/SHALLOW_WORKSHOP.md)から確認してください。実施時点の履歴は[検証記録](development/PROGRESS.md)、整理前の本文は[保存原文](legacy/2026-10-20/README.md)に分けます。
+現行説明の照合日: 2026-10-29。作品版1.34.0。[現在の状態](CURRENT_STATUS.md)、[現行仕様](SPEC.md)、[採用仕様と次工程](HANDOFF.md)、[浅層工房と封蝋](dungeons/SHALLOW_WORKSHOP.md)から確認してください。実施時点の履歴は[検証記録](development/PROGRESS.md)、整理前の本文は[保存原文](legacy/2026-10-20/README.md)に分けます。
+
+[旧100件の人物・出演監査](scenarios/RELOCATED_CAST_AUDIT.md)：753場面の自動集計とq031・q032の8場面の精読。出演根拠・制作候補・未精読を分けます。
 
 ## 現在の実装と続く設計
 

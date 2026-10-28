@@ -1,4 +1,5 @@
 import {buildQuestOrder} from './build-quest-order.mjs';
+import {buildRelocatedCastAudit} from './audit-relocated-cast.mjs';
 import {docPath,relocateDoc,currentMarkdown,docGroups} from './doc-layout.mjs';
 import {catalogContentHash,questPages} from './quest-catalog.mjs';
 import {questRouteSummary} from './quest-route-summary.mjs';
@@ -21,6 +22,7 @@ import {EXPRESSION_OPS} from '../src/core/expression.js';
 const root=path.resolve(import.meta.dirname,'..'),folder=path.join(root,'doc');
 const read=async file=>JSON.parse(await fs.readFile(path.join(root,file),'utf8'));
 await buildQuestOrder(root,{check:true});
+await buildRelocatedCastAudit({check:true});
 const errors=[],check=(ok,message)=>{if(!ok)errors.push(message);};
 const current=(await currentMarkdown(folder)).map(f=>'doc/'+f);
 for(const name of Object.values(docGroups).flatMap(names=>[...names])){
