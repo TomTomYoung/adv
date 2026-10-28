@@ -271,7 +271,66 @@ async function q295ArtFixtures(){
   return {fixtures,outcomes};
 }
 
+
+async function q296ArtFixtures(){
+  const fixtures=[],outcomes=[],g=border(),q=start(g,296);
+  const first=await loadContent(read,{edition:'e1'});
+  assert.equal(first.quests.q296,undefined);
+  for(const id of ['od_bek','od_oil_seller','od_stock'])assert.equal(first.characters[id],undefined);
+  assert.deepEqual(Object.values(q.outcomes).map(o=>[o.gold,o.xp,o.gems]),[[23,10,0],[31,13,0]]);
+  const supply=()=>structuredClone({light:g.state.light,expedition:g.state.expedition,inventory:g.state.inventory});
+  const initialSupply=supply();
+  const state=(party,sample,resolution='pending',finished=false)=>{
+    const v=g.state.stories.q296.values;
+    assert.deepEqual([v.partyAt,v.bekAt,v.oil_sellerAt,v.stockAt,v.sampleAt,v.resolution,v.finished],
+      [party,'inn','oil','warehouse',sample,resolution,finished]);
+    assert.deepEqual(supply(),initialSupply,'inspection, handover and town travel do not change expedition supplies');
+  };
+  const capture=(scene,id)=>{
+    assert.equal(g.state.stories.q296.scene,scene);
+    assert.deepEqual(projectGame(g).dialog.scene.cast.map(c=>c.id),[id]);
+    checkpoint(g);const save=g.save();
+    const regions={od_bek:[.44,.17,.60,.28],od_oil_seller:[.45,.17,.61,.28],od_stock:[.36,.16,.51,.26]};
+    fixtures.push({edition:'e2',quest:'q296',scene,cast:[id],save,imageExtension:'png',faces:{[id]:regions[id]}});return save;
+  };
+  const choose=id=>{
+    const scene=g.state.stories.q296.scene,action=q.story.actions[scene+'_'+id];assert.ok(action);
+    const before=structuredClone(g.state.stories.q296.values),gold=g.state.gold;
+    assert.ok(g.dispatch({type:'choose',id}));drain(g);checkpoint(g);
+    if(action.journey){
+      assert.ok(g.state.journey);assert.equal(g.state.quests.q296.stage,'active');
+      state('transit',before.sampleAt,before.resolution);
+      assert.deepEqual(action.journey.companions,[]);
+      if(scene==='depart')assert.ok(!(g.state.stories.q296.knowledge.party??[]).includes('smoke'));
+      go(g,q.story.worldPlaces[action.journey.to]);
+      if(g.state.journey)assert.ok(g.dispatch({type:'story.resume',quest:q.id}));
+      drain(g);assert.equal(g.state.journey,null);checkpoint(g);
+    }
+    assert.equal(g.state.gold,gold+(action.ending?q.outcomes[action.ending].gold:0));
+    assert.deepEqual(supply(),initialSupply);
+  };
+  const complete=(outcome,holder)=>{
+    choose('finish');assert.equal(g.state.quests.q296.outcome,outcome);
+    assert.equal(g.state.quests.q296.stage,'completed');assert.equal(g.state.vars.region_12,1);
+    state('inn',holder,outcome,true);checkpoint(g);outcomes.push('e2/q296/'+outcome);
+  };
+  state('inn','bek');capture('entry','od_bek');
+  assert.ok(!(g.state.stories.q296.knowledge.party??[]).includes('smoke'));
+  choose('take');state('inn','party');capture('depart','od_bek');
+  choose('go');state('oil','party');assert.ok(g.state.stories.q296.knowledge.party.includes('smoke'));
+  const tested=capture('test','od_oil_seller');
+  choose('exchange');state('oil','oil_seller','exchange');capture('exchanged','od_oil_seller');
+  choose('return');state('inn','oil_seller','exchange');capture('exchange_end','od_bek');
+  complete('exchange','oil_seller');
+  g.load(tested);choose('recover');state('oil','party','recover');capture('carry','od_oil_seller');
+  choose('go');state('warehouse','party','recover');capture('separate','od_stock');
+  choose('hand');state('warehouse','stock','recover');capture('stored','od_stock');
+  choose('return');state('inn','stock','recover');capture('recover_end','od_bek');
+  complete('recover','stock');
+  return {fixtures,outcomes};
+}
+
 export async function oddlandArtFixtures(){
-  const groups=[await q291ArtFixtures(),await q292ArtFixtures(),await q293ArtFixtures(),await q294ArtFixtures(),await q295ArtFixtures()];
+  const groups=[await q291ArtFixtures(),await q292ArtFixtures(),await q293ArtFixtures(),await q294ArtFixtures(),await q295ArtFixtures(),await q296ArtFixtures()];
   return {fixtures:groups.flatMap(g=>g.fixtures),outcomes:groups.flatMap(g=>g.outcomes)};
 }

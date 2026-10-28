@@ -33,19 +33,20 @@ try{
   for(const layout of ['scene','classic'])for(const width of [1440,390]){
     await page.setViewportSize({width,height:width===390?844:1000});
     for(const [index,f] of fixtures.entries()){
+      const extension=f.imageExtension??'webp';
       await page.evaluate(({index,layout})=>h.start(index,layout),{index,layout});
       const before=await page.evaluate(()=>h.g.save());await page.evaluate(()=>h.resume());assert.equal(await page.evaluate(()=>h.g.save()),before);
       assert.deepEqual(await page.evaluate(()=>h.view.model.dialog.scene.cast.map(c=>c.id)),f.cast);
       assert.equal(await page.locator('[data-character]').count(),f.cast.length,'only the scene cast is displayed');
       if(group==='oddland'&&layout==='classic'&&await page.locator('.town-scene').count()){
         const shown=await page.locator('.town-character').evaluateAll(images=>images.map(i=>i.getAttribute('src')).sort());
-        assert.deepEqual(shown,f.cast.map(id=>`assets/images/characters/${folder}/${id}.webp`).sort(),'town backdrop must not reveal an offstage character');
+        assert.deepEqual(shown,f.cast.map(id=>`assets/images/characters/${folder}/${id}.${extension}`).sort(),'town backdrop must not reveal an offstage character');
       }
       const images=[];
       for(const id of f.cast){
         const figure=page.locator(`[data-character="${id}"]`),img=figure.locator('img');assert.equal(await img.count(),1);
         const info=await img.evaluate(async i=>{await i.decode();const c=document.createElement('canvas');c.width=i.naturalWidth;c.height=i.naturalHeight;const ctx=c.getContext('2d');ctx.drawImage(i,0,0);return {src:i.getAttribute('src'),width:i.naturalWidth,height:i.naturalHeight,cornerAlpha:ctx.getImageData(0,0,1,1).data[3],bodyAlpha:ctx.getImageData(512,700,1,1).data[3]};});
-        assert.equal(info.src,`assets/images/characters/${folder}/${id}.webp`);assert.deepEqual([info.width,info.height],[1024,1536]);assert.equal(info.cornerAlpha,0);assert.ok(info.bodyAlpha>240);
+        assert.equal(info.src,`assets/images/characters/${folder}/${id}.${extension}`);assert.deepEqual([info.width,info.height],[1024,1536]);assert.equal(info.cornerAlpha,0);assert.ok(info.bodyAlpha>240);
         assert.ok((await figure.textContent()).includes(await page.evaluate(id=>h.g.data.characters[id].name,id)));images.push({id,...info});
       }
       await page.evaluate(async()=>{await document.fonts.ready;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));});
