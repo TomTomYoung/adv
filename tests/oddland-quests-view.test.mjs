@@ -25,8 +25,8 @@ for(const layout of ['classic','scene'])test(`${layout}: accept a local job, spe
  click('退避所へ父を迎えに行く');go(g,data.quests.q291.story.worldPlaces.refuge);render();advance();cast(['od_rad']);assert.equal(g.state.stories.q291.values.teoAt,'clinic');checkpoint(g);
  click('ラドを支え、施療所へ戻る');go(g,data.quests.q291.story.worldPlaces.clinic);render();advance();cast(['od_nurse','od_rad','od_teo']);checkpoint(g);
  click('親子の休む場所をユナに引き継ぐ');advance();assert.equal(g.state.quests.q291.outcome,'protect');checkpoint(g);
- start(g,293);render();advance();const pending=dom.root.querySelector('[data-character="od_nel"]');
- assert.ok(pending);assert.ok(pending.textContent.includes(data.characters.od_nel.name));assert.equal(pending.querySelector('img'),null);
+ start(g,294);render();advance();const pending=dom.root.querySelector('[data-character="od_ver"]');
+ assert.ok(pending);assert.ok(pending.textContent.includes(data.characters.od_ver.name));assert.equal(pending.querySelector('img'),null);
 
  }finally{view?.destroy();dom.restore();}
 });
@@ -55,5 +55,28 @@ for(const layout of ['classic','scene'])test(`${layout}: q292 pot delivery and a
   click('ヘナと反対側の炊事場へ歩く');assert.equal(v().henaAt,'transit');assert.equal(v().orenAt,'kitchen');checkpoint(g);
   arrive('kitchen');cast(['od_hena','od_oren']);assert.equal(v().henaAt,'kitchen');assert.equal(v().potAt,'oren');
   click('二人の休憩を見届ける');assert.equal(g.state.quests.q292.outcome,'together');checkpoint(g);
+ }finally{view?.destroy();dom.restore();}
+});
+
+
+for(const layout of ['classic','scene'])test(`${layout}: q293 keeps the cobbler at the workshop and returns boots after either repair route`,()=>{
+ const g=border(),q=start(g,293),dom=installDOM();let view;
+ const render=()=>view.render(projectGame(g));
+ const advance=()=>{let n=100;while(g.state.waiting?.type==='text'){assert.ok(--n);view.advanceText();}};
+ const click=label=>{let n=100;while(view.canChoose?.()===false){assert.ok(--n);view.advanceText();}const b=[...dom.root.querySelectorAll('button')].find(b=>b.textContent===label);assert.ok(b,`missing: ${label}`);assert.ok(!b.disabled);b.click();advance();};
+ const cast=ids=>{assert.equal(dom.root.querySelectorAll('[data-character]').length,ids.length);for(const id of ids){const person=dom.root.querySelector(`[data-character="${id}"]`);assert.ok(person);assert.ok(person.textContent.includes(data.characters[id].name));assert.equal(person.querySelector('img').src,data.assets.images[`npc_${id}`]);}assert.equal(g.state.stories.q293.values.nelAt,'cobbler');};
+ const arrive=place=>{go(g,q.story.worldPlaces[place]);render();advance();checkpoint(g);};
+ const v=()=>g.state.stories.q293.values;
+ try{
+  view=replaceView(null,layout,dom.root,intent=>{const ok=g.dispatch(intent);render();return ok;},{status(){},menu(){},help(){},soundEnabled:()=>false,effectsMode:()=> 'off'});render();advance();
+  cast(['od_nel']);assert.equal(v().bootsAt,'nel');
+  click('修理済みの靴を預かる');cast(['od_nel']);assert.equal(v().bootsAt,'party');
+  click('靴を持って濡れた石床へ行く');assert.equal(v().nelAt,'cobbler');assert.equal(v().bootsAt,'party');checkpoint(g);
+  arrive('salt');cast([]);assert.ok(g.state.stories.q293.knowledge.party.includes('salt'));const floor=g.save();
+  click('耐水の底材をネルと試す');assert.equal(v().resolution,'pending');arrive('cobbler');cast(['od_nel']);assert.equal(v().resolution,'sole');assert.equal(v().bootsAt,'party');
+  click('預かった靴を返し、修繕方法を残す');assert.equal(v().bootsAt,'nel');assert.equal(g.state.quests.q293.outcome,'sole');checkpoint(g);
+  g.load(floor);render();advance();cast([]);click('近くに洗い場を整える');assert.equal(v().resolution,'pending');arrive('wash');cast([]);assert.equal(v().resolution,'wash');assert.equal(v().bootsAt,'party');
+  click('洗った靴と手入れの方法をネルへ届ける');arrive('cobbler');cast(['od_nel']);assert.equal(v().bootsAt,'party');
+  click('靴を返し、洗い場の案内を頼む');assert.equal(v().bootsAt,'nel');assert.equal(g.state.quests.q293.outcome,'wash');checkpoint(g);
  }finally{view?.destroy();dom.restore();}
 });
