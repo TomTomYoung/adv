@@ -8,6 +8,13 @@ on:
       - 'assets/images/characters/**'
       - 'authoring/kagaribi-character-art.mjs'
       - 'authoring/oddland-character-art.mjs'
+      - 'authoring/relocated-character-art.mjs'
+      - 'authoring/editions/e2/oddland/chapel.mjs'
+      - 'data/scenario-editions/e2/q032.json'
+      - 'tools/compile-relocated-quest.mjs'
+      - 'tools/build-chapel-quests.mjs'
+      - 'tools/chapel-art-fixtures.mjs'
+      - 'tools/browser-chapel-art-smoke.mjs'
       - 'data/scenario-editions/e2/oddland-first-ten.json'
       - 'tools/character-art-browser.mjs'
       - 'tools/oddland-art-fixtures.mjs'
@@ -40,6 +47,8 @@ jobs:
         run: node tools/browser-kagaribi-art-smoke.mjs
       - name: Verify Oddland character art in both layouts and widths
         run: node tools/browser-oddland-art-smoke.mjs
+      - name: Verify chapel cast and migrated saves in both layouts and widths
+        run: node tools/browser-chapel-art-smoke.mjs
       - name: Keep animation checkpoints
         if: always()
         uses: actions/upload-artifact@v4
@@ -49,4 +58,11 @@ jobs:
             /tmp/adv-cast-browser
             /tmp/adv-kagaribi-art-browser
             /tmp/adv-oddland-art-browser
+          if-no-files-found: ignore
+      - name: Keep chapel cast checkpoints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: chapel-cast-checkpoints
+          path: /tmp/adv-chapel-art-browser
           if-no-files-found: ignore

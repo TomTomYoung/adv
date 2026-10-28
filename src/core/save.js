@@ -163,15 +163,18 @@ function migrateContentSave(original,data){
 
   return save;
 }
-// Only the newly adopted quests need their old accepted routes. The rest of
-// revision 2, including VM positions and geography, is left byte-for-byte intact.
+// Preserve accepted routes while applying only declared individual story upgrades.
+// VM positions stay intact; settlement geography is migrated by its own step.
 function preserveAcceptedQuestRoutes(original,data){
- const previous=data.previousQuestRoutes;if(!previous)return original;
+ const previous=data.previousQuestRoutes??{};
  const state=original.state,ids=Object.keys(previous).filter(id=>['active','completed'].includes(state.quests?.[id]?.stage)&&!Object.hasOwn(state.flags?.currentStoryRoutes??{},id)&&!Object.hasOwn(state.flags?.legacyStoryRoutes??{},id));
- if(!ids.length)return original;
+ if(!ids.length)return upgradeStoryRevisions(original,data);
  const legacy={...data,quests:{...data.quests,...Object.fromEntries(ids.map(id=>[id,previous[id]]))}};
- if(validateSave(original,legacy).length)return original;
- const save=clone(original);for(const id of ids)(save.state.flags.legacyStoryRoutes??={})[id]=true;
+ // Explicit story revisions may coexist with old accepted routes and the old
+ // geography. Validate against both shipped definitions before either change.
+ const revised=upgradeStoryRevisions(original,legacy);
+ if(validateSave(revised,legacy).length)return original;
+ const save=clone(revised);for(const id of ids)(save.state.flags.legacyStoryRoutes??={})[id]=true;
  return save;
 }
 function migrateSettlementGeography(original,data){

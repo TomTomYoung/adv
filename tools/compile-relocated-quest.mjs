@@ -10,9 +10,9 @@ export function compileRelocatedQuest(first,x,{prefix,eventPrefix,settlement,set
  s.enum('resolution','pending',['pending',...Object.keys(q.outcomes)],'現地で実行した解決方法');s.bool('finished',false,'現地の結果を確認して依頼を終えた');
  for(const [key,value] of Object.entries(x.flags))s.bool(key,value,key);
  for(const [key,r] of Object.entries(x.registry??{}))s.story.registry[key]=r;
- for(const [key,e] of Object.entries(x.entities))s.entity(key,e.holder,null,{kind:e.kind});
+ for(const [key,e] of Object.entries(x.entities))s.entity(key,e.holder,e.character??null,{kind:e.kind});
  s.fact('truth',q.model.reveal.newInformation);
- for(const n of x.nodes)s.node(n.id,n.place,[],n.text,n.options.map(a=>O(a.id,a.text,a.to,[...(a.effects??[]),...(a.to.startsWith('@')?[set('resolution',a.to.slice(1)),set('finished')]:[])],{when:a.when??true,...(a.cost?{cost:a.cost}:{}),once:false})));
+ for(const n of x.nodes)s.node(n.id,n.place,n.cast??[],n.text,n.options.map(a=>O(a.id,a.text,a.to,[...(a.effects??[]),...(a.to.startsWith('@')?[set('resolution',a.to.slice(1)),set('finished')]:[])],{when:a.when??true,...(a.cost?{cost:a.cost}:{}),once:false})));
  const route=connectWorld(s,Object.fromEntries(Object.entries(x.places).map(([key,p])=>[key,p.world])),1);
  for(const n of x.nodes)for(const a of n.options){
   const target=x.nodes.find(t=>t.id===a.to),action=s.story.actions[`${n.id}_${a.id}`];

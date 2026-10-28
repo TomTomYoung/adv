@@ -6,9 +6,10 @@ import middle from '../authoring/editions/e2/oddland/middle.mjs';
 import finale from '../authoring/editions/e2/oddland/finale.mjs';
 import {compileQuest,locations,characters,places} from '../authoring/editions/e2/oddland/kit.mjs';
 import {revise,revisions} from '../authoring/editions/e2/oddland/prose-revisions.mjs';
+import {relocatedCharacters} from '../authoring/relocated-character-art.mjs';
 const root=path.resolve(import.meta.dirname,'..');
 export const sources=revise([...first,...middle,...finale]);
-export function oddlandBundle(){return {schemaVersion:1,locations,characters,regions:[{id:12,kind:'story',name:'オッドランド・国境宿場',description:'国境を歩いて訪れ、現地の仕事と生活へ関わる地域依頼。',color:'#d7ac7b',recommendedLevel:3}],quests:sources.map(compileQuest)};}
+export function oddlandBundle(){return {schemaVersion:1,locations,characters:{...characters,...relocatedCharacters},regions:[{id:12,kind:'story',name:'オッドランド・国境宿場',description:'国境を歩いて訪れ、現地の仕事と生活へ関わる地域依頼。',color:'#d7ac7b',recommendedLevel:3}],quests:sources.map(compileQuest)};}
 const prose=text=>typeof text==='string'?text:text.map(c=>c.op==='narrate'?c.text:`条件 ${JSON.stringify(c.condition)}\n\n成立時：${prose(c.then)}\n\n不成立時：${prose(c.else)}`).join('\n\n');
 function document(bundle){
  const lines=['# オッドランド第一群の第2版・全10件','','2026-10-26。OD001〜010、実装ID q291〜q300。第2版だけに追加し、合計300件。地域の新作10件と個人80件を区別する。',[`[越境基盤](../../../world/ODDLAND_ACCESS_IMPLEMENTATION.md) ／ [100企画](../../ODDLAND_100_QUEST_DESIGN.md) ／ [三地域配分](../../REGIONAL_QUEST_ALLOCATION.md) ／ [シナリオモデル](../../SCENARIO_MODEL_V12B.md) ／ [文章モデル](../../PROSE_MODEL_V1.md) ／ [点検基準](../../PROSE_CHECKLIST.md)`],'',

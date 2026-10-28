@@ -39,7 +39,11 @@ export function auditRelocatedCast(quests,review=RELOCATED_CAST_REVIEW){
   }
   for(const [person,p] of Object.entries(r.people)){
    assert.ok(used.has(person),`${id}: role ${person} has no scene evidence`);
-   assert.ok(p.label&&p.need&&p.status==='candidate',`${id}: invalid candidate ${person}`);
+   assert.ok(p.label&&p.need&&['candidate','connected'].includes(p.status),`${id}: invalid role ${person}`);
+   if(p.status==='connected'){
+    assert.equal(q.story.entities[p.entity]?.character,person,`${id}: connected role ${person} lacks its character`);
+    for(const [sceneId,s] of Object.entries(r.scenes))assert.equal(q.story.scenes[sceneId].cast.some(c=>c.entity===p.entity),s.people.includes(person),`${id}/${sceneId}: connected cast differs from evidence`);
+   }
   }
  }
  const entries=quests.slice().sort((a,b)=>a.number-b.number).map(q=>{
@@ -55,7 +59,8 @@ export function auditRelocatedCast(quests,review=RELOCATED_CAST_REVIEW){
   reviewedQuests:rows.filter(q=>q.review).length,reviewedScenes:rows.reduce((n,q)=>n+q.scenes.filter(s=>s.review).length,0),
   noPersonEvidenceScenes:rows.reduce((n,q)=>n+q.scenes.filter(s=>s.review?.decision==='no-person-evidence').length,0),
   personEvidenceScenes:rows.reduce((n,q)=>n+q.scenes.filter(s=>s.review?.decision==='person-evidence').length,0),
-  candidateRoles:rows.reduce((n,q)=>n+count(q.review?.people),0)});
+  candidateRoles:rows.reduce((n,q)=>n+Object.values(q.review?.people??{}).filter(p=>p.status==='candidate').length,0),
+  connectedRoles:rows.reduce((n,q)=>n+Object.values(q.review?.people??{}).filter(p=>p.status==='connected').length,0)});
  const summary=summarize(entries);summary.unreviewedScenes=summary.scenes-summary.reviewedScenes;
  return {reviewedAt:review.reviewedAt,scope:'relocated-e2-100',summary,regions:regions.map(r=>({...r,...summarize(entries.filter(q=>q.region===r.id))})),quests:entries};
 }
@@ -68,14 +73,14 @@ export function relocatedCastMarkdown(report){
   '## 現在の結果','',
   `- ${s.scenes}場面中${s.emptyCastScenes}場面のcastが空。空であることだけから人物画の不足とは判定しない。`,
   `- 人物エンティティは延べ${s.personEntities}件、そのうちcharacter接続は${s.characterLinkedEntities}件。依頼間の重複や集団を含み、新規人物数ではない。`,
-  `- 精読${s.reviewedScenes}場面のうち、特定人物の同席根拠なし${s.noPersonEvidenceScenes}場面、人物の発言・動作あり${s.personEvidenceScenes}場面。制作候補は${s.candidateRoles}役で、独立人物としての最終確定数ではない。`,
+  `- 精読${s.reviewedScenes}場面のうち、特定人物の同席根拠なし${s.noPersonEvidenceScenes}場面、人物の発言・動作や所在から出演根拠あり${s.personEvidenceScenes}場面。接続済み${s.connectedRoles}役、未接続の制作候補${s.candidateRoles}役。候補数は独立人物としての最終確定数ではない。`,
   `- 残る${s.unreviewedScenes}場面は未精読。未精読を「人物なし」や「制作不要」に変換しない。`,'',
   '## 精読済みの依頼',''];
  for(const q of report.quests.filter(q=>q.review)){
   lines.push(`### ${q.id} ${q.title}`,'',`依頼人: ${q.client}。[配布JSON](../../data/scenario-editions/e2/${q.id}.json) ／ [現場接続の原稿](../../${q.source})。`,'',...q.review.identityNotes.flatMap(n=>[n,'']));
-  for(const [id,p] of Object.entries(q.review.people))lines.push(`- 制作候補 \`${id}\`：${p.label}。${p.need}`);
+  for(const [id,p] of Object.entries(q.review.people))lines.push(`- ${p.status==='connected'?'接続済み':'制作候補'} \`${id}\`：${p.label}。${p.need}`);
   if(count(q.review.people))lines.push('');
-  for(const n of q.scenes){const r=n.review;lines.push(`#### ${n.id}`,'',`場所: ${location(n.world)}。判定: ${r.decision==='person-evidence'?'人物の出演根拠あり':'特定人物の同席根拠なし'}。${r.people.length?'候補: '+r.people.map(id=>`\`${id}\``).join('、')+'。':''}`,'',`本文の根拠: ${r.evidence}`,'',r.reason,'',`描き分け候補: ${r.visual}`,'');}
+  for(const n of q.scenes){const r=n.review;lines.push(`#### ${n.id}`,'',`場所: ${location(n.world)}。判定: ${r.decision==='person-evidence'?'人物の出演根拠あり':'特定人物の同席根拠なし'}。${r.people.length?'出演役: '+r.people.map(id=>`\`${id}\``).join('、')+'。':''}`,'',`本文の根拠: ${r.evidence}`,'',r.reason,'',`描き分け候補: ${r.visual}`,'');}
   lines.push(`次の作業: ${q.review.next}`,'');
  }
  lines.push('## 全100件の集計','', '次の「人物」はstory.entitiesのkind: personの延べ件数。「精読」は出演根拠の確認範囲で、人物画の接続済み数ではない。','');
@@ -85,7 +90,7 @@ export function relocatedCastMarkdown(report){
  }
  lines.push('## 更新と検査','',
   '`node tools/audit-relocated-cast.mjs` で本書とJSONを再生成し、`node tools/audit-relocated-cast.mjs --check` で照合する。通常の `npm run check:docs` とCIでも照合する。精読済み依頼は配布JSON全体のSHA-256を固定し、本文・状態・場所・出演・結末等が変われば精読し直すまで検査を失敗させる。再生成だけで精読印を更新しない。関連依頼人の表記変更、根拠の引用消失、場面の追加・欠落、未定義の候補役も拒否する。','',
-  '本書の候補IDは監査内だけの識別子。character、story.entities、cast、画像は追加していない。初版・第2版のゲームデータ、本文、移動・同行・費用・報酬、保存改訂2・地理版2は変更しない。q031・q032の局所シーン差分も制作候補の段階である。','');
+  '候補IDは監査内だけの識別子。接続済みの役は実際のcharacterとentity・castも照合する。q032の匿名2役と専用画は第2版へ接続済み。初版は保持し、全体の保存改訂2・地理版2も維持する。q032だけ物語改訂2へ移し、旧物語改訂1の正当な保存に2人の所在を補う。q031〜q033の局所背景と道具差分は制作候補の段階である。','');
  return lines.join('\n');
 }
 
