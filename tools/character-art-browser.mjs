@@ -37,6 +37,10 @@ try{
       const before=await page.evaluate(()=>h.g.save());await page.evaluate(()=>h.resume());assert.equal(await page.evaluate(()=>h.g.save()),before);
       assert.deepEqual(await page.evaluate(()=>h.view.model.dialog.scene.cast.map(c=>c.id)),f.cast);
       assert.equal(await page.locator('[data-character]').count(),f.cast.length,'only the scene cast is displayed');
+      if(group==='oddland'&&layout==='classic'&&await page.locator('.town-scene').count()){
+        const shown=await page.locator('.town-character').evaluateAll(images=>images.map(i=>i.getAttribute('src')).sort());
+        assert.deepEqual(shown,f.cast.map(id=>`assets/images/characters/${folder}/${id}.webp`).sort(),'town backdrop must not reveal an offstage character');
+      }
       const images=[];
       for(const id of f.cast){
         const figure=page.locator(`[data-character="${id}"]`),img=figure.locator('img');assert.equal(await img.count(),1);
