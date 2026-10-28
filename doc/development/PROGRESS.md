@@ -11,7 +11,7 @@ q300は17場面に所持金0G／7G／8Gとq292両結末後の台詞を加えた2
 
 [人物画と出演](../scenarios/ODDLAND_CHARACTER_ART.md)、[不足素材台帳](../world/ASSET_BACKLOG.md)、[国境素材台帳](../world/ODDLAND_ASSETS.md)、現況・引継ぎを更新した。食堂の招待前／継続する大鍋／持ち寄りと皿洗い、炊事場の交代後、窓口の招待状／一皿の受領前後は[局所シーンと道具差分](../world/SCENE_SWITCH_PLAN.md)の候補。旧100件753場面のcast未接続、施設背景・道具差分は残る。次は旧100件の人物同一性・出演を依頼単位で整理する。
 
-追加した両レイアウトのq300操作2試験と、受付から実歩行で進む101状態・21結末の作成・保存照合は成功した。全体チェック、ブラウザー結果、目視範囲、CI・統合は[この変更のPR](https://github.com/TomTomYoung/adv/pulls?q=is%3Apr%20head%3Afeature%2Foddland-q300-display-20261029)へ記録する。
+追加した両レイアウトのq300操作2試験と、受付から実歩行で進む101状態・21結末の作成・保存照合は成功した。`npm run check` は2,308試験すべて成功（失敗・中断・スキップ0）。文書166件・相対リンク5,617件・原文アーカイブ26件、静的ファイル2,224件も照合済み。ブラウザー結果、目視範囲、CI・統合は[この変更のPR](https://github.com/TomTomYoung/adv/pulls?q=is%3Apr%20head%3Afeature%2Foddland-q300-display-20261029)へ記録する。
 
 ## 2026-10-29 国境q299のマヤ・ヘルの人物画
 
