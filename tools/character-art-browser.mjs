@@ -66,6 +66,11 @@ try{
           assert.equal(await allowed.count(),1);assert.ok(await allowed.isEnabled());
         }
       }
+      if(f.expectedText){
+        const text=await page.locator('.story-text').textContent();
+        assert.ok(text.includes(f.expectedText),`missing conditional dialogue: ${f.expectedText}`);
+        if(f.absentText)assert.ok(!text.includes(f.absentText),`unexpected conditional dialogue: ${f.absentText}`);
+      }
       await page.evaluate(async()=>{await document.fonts.ready;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));});
       // These central face regions belong to the reviewed character artwork. Sample
       // foreground alpha, since DOM presence alone cannot detect an obscured face.
@@ -98,7 +103,7 @@ try{
       const measure=await page.evaluate(()=>({viewport:innerWidth,document:document.documentElement.scrollWidth,height:innerHeight,pageHeight:document.documentElement.scrollHeight}));
       assert.ok(measure.document<=measure.viewport+1,'horizontal overflow');if(layout==='scene')assert.ok(measure.pageHeight<=measure.height+1,'Scene height');
       await page.screenshot({path:path.join(output,`${f.edition}-${layout}-${width}-${f.quest}-${f.scene}${f.variant?`-${f.variant}`:''}.png`),fullPage:true});
-      checks.push({edition:f.edition,quest:f.quest,scene:f.scene,variant:f.variant,blockedChoice:f.blockedChoice,blockedChoices:f.blockedChoices,availableChoice:f.availableChoice,layout,width,images,faces,...measure});
+      checks.push({edition:f.edition,quest:f.quest,scene:f.scene,variant:f.variant,blockedChoice:f.blockedChoice,blockedChoices:f.blockedChoices,availableChoice:f.availableChoice,expectedText:f.expectedText,absentText:f.absentText,layout,width,images,faces,...measure});
     }
   }
   assert.deepEqual(errors,[]);console.log(JSON.stringify({checks:checks.length,outcomes:outcomes.length,errors,output}));

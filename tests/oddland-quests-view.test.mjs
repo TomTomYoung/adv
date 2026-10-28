@@ -263,3 +263,62 @@ for(const layout of ['classic','scene'])test(layout+': q299 pays once or carries
   click('旅籠の相部屋へ戻る');state('transit','inn');assert.deepEqual(q.story.actions.inn_paid_go.journey.companions,[]);checkpoint(g);arrive('inn');state('inn','inn');cast(['od_maya','od_worker']);assert.equal(g.state.gold,0);finish('inn');assert.equal(g.state.gold,48);
  }finally{view?.destroy();dom.restore();}
 });
+
+for(const layout of ['classic','scene'])test(layout+': q300 hands over both invitations and the meal, escorts only Oren and earns the conditional thanks',()=>{
+ const g=border();prepare(g,300);const prepared=g.save(),q=start(g,300),dom=installDOM();let view;
+ const render=()=>view.render(projectGame(g));
+ const advance=()=>{let n=100;while(g.state.waiting?.type==='text'){assert.ok(--n);view.advanceText();}};
+ const reveal=()=>{let n=100;while(view.canChoose?.()===false){assert.ok(--n);view.advanceText();}};
+ const button=label=>[...dom.root.querySelectorAll('button')].find(b=>b.querySelector('span')?.textContent===label||b.textContent===label);
+ const click=label=>{reveal();const b=button(label);assert.ok(b,'missing: '+label);assert.ok(!b.disabled);b.click();advance();};
+ const v=()=>g.state.stories.q300.values,inventory=structuredClone(g.state.inventory);
+ const position=(party,oren='canteen')=>{assert.deepEqual([v().partyAt,v().henaAt,v().orenAt,v().clerkAt],[party,'canteen',oren,'customs']);assert.deepEqual(g.state.inventory,inventory);};
+ const holders=(window,kitchen,portion='hena')=>assert.deepEqual([v().window_noteAt,v().kitchen_noteAt,v().portionAt],[window,kitchen,portion]);
+ const flags=(window=false,kitchen=false,delivered=false)=>assert.deepEqual([v().windowInvited,v().kitchenInvited,v().delivered],[window,kitchen,delivered]);
+ const cast=ids=>{
+  assert.equal(dom.root.querySelectorAll('[data-character]').length,ids.length);
+  for(const id of ids){const p=dom.root.querySelector('[data-character="'+id+'"]');assert.ok(p);assert.ok(p.textContent.includes(data.characters[id].name));assert.equal(p.querySelector('img').src,data.assets.images['npc_'+id]);}
+  if(projectGame(g).town)assert.deepEqual(projectGame(g).town.cast.map(c=>c.id).sort(),[...ids].sort());checkpoint(g);
+ };
+ const arrive=place=>{go(g,q.story.worldPlaces[place]);render();advance();assert.equal(g.state.journey,null);checkpoint(g);};
+ const invite=()=>{
+  position('canteen','kitchen');holders('hena','hena');flags();cast(['od_hena']);
+  click('二通の招待状を預かる');holders('party','party');flags();cast(['od_hena']);
+  click('出入窓口へ招待状を運ぶ');position('transit','kitchen');holders('party','party');flags();checkpoint(g);
+  arrive('customs');position('customs','kitchen');holders('party','party');flags();cast(['od_clerk']);
+  click('招待状を渡し、配達を約束する');holders('clerk','party');flags(true);cast(['od_clerk']);
+  click('反対側の炊事場へもう一通を届ける');position('transit','kitchen');holders('clerk','party');flags(true);checkpoint(g);
+  arrive('kitchen');position('kitchen','kitchen');holders('clerk','party');flags(true);cast(['od_oren']);
+  click('招待状を渡す');holders('clerk','oren');flags(true,true);cast(['od_oren']);
+  click('オレンと宿場の食堂へ戻る');position('transit','transit');holders('clerk','oren');flags(true,true);assert.deepEqual(q.story.actions.kitchen_done_go.journey.companions,['oren']);checkpoint(g);
+  arrive('canteen');position('canteen');holders('clerk','oren');flags(true,true);cast(['od_hena','od_oren']);reveal();
+ };
+ const table='材料代8Gを出し、食堂の鍋を支える',potluck='持ち寄りの料理を分け、皿洗いを受け持つ';
+ const thanks='この間の食事も、助かったんです',welcome='配達が終わったら、あなたも座っていって';
+ const dialogue=(present,absent)=>{const text=dom.root.querySelector('.story-text').textContent;assert.ok(text.includes(present));assert.ok(!text.includes(absent));};
+ const deliver=outcome=>{
+  click(outcome==='table'?table:potluck);assert.equal(v().resolution,outcome);assert.equal(g.state.gold,0);holders('clerk','oren');flags(true,true);cast(['od_hena','od_oren']);
+  click('窓口へ届ける料理を預かる');holders('clerk','oren','party');flags(true,true);cast(['od_hena','od_oren']);
+  click('ミレのいる出入窓口へ料理を運ぶ');position('transit');holders('clerk','oren','party');flags(true,true);assert.deepEqual(q.story.actions[outcome+'_delivery_go'].journey.companions,[]);checkpoint(g);
+  arrive('customs');position('customs');holders('clerk','oren','party');flags(true,true);cast(['od_clerk']);assert.equal(v().finished,false);
+  {const before=g.save();assert.equal(g.dispatch({type:'choose',id:'finish'}),false);assert.equal(g.save(),before);}
+  click(outcome==='table'?'料理を渡す':'料理を渡し、次の持ち寄り先を伝える');holders('clerk','oren','clerk');flags(true,true,true);cast(['od_clerk']);
+  click('宿場の食堂へ戻る');position('transit');holders('clerk','oren','clerk');flags(true,true,true);checkpoint(g);
+  arrive('canteen');position('canteen');holders('clerk','oren','clerk');flags(true,true,true);cast(['od_hena','od_oren']);assert.equal(g.state.gold,0);
+  const count=g.state.vars.region_12;
+  click(outcome==='table'?'食堂で続く会に席を残す':'持ち寄りの会へ次の当番を残す');
+  assert.equal(g.state.quests.q300.outcome,outcome);assert.equal(g.state.quests.q300.stage,'completed');assert.equal(v().finished,true);assert.equal(g.state.vars.region_12,count+1);assert.equal(g.state.gold,outcome==='table'?52:44);checkpoint(g);
+  const complete=JSON.parse(g.save());assert.equal(g.dispatch({type:'choose',id:'finish'}),false);
+  const retried=JSON.parse(g.save());retried.state.notice=complete.state.notice;assert.deepEqual(retried,complete,'rejected replay only clears the completed notice');
+ };
+ try{
+  view=replaceView(null,layout,dom.root,intent=>{const ok=g.dispatch(intent);render();return ok;},{status(){},menu(){},help(){},soundEnabled:()=>false,effectsMode:()=> 'off'});render();advance();
+  invite();dialogue(welcome,thanks);const choice=g.save();
+  for(const gold of [7,0]){g.load(choice);g.state.gold=gold;render();advance();reveal();assert.ok(button(table).disabled);assert.equal(button(potluck).disabled,false);const before=g.save();assert.equal(g.dispatch({type:'choose',id:'table'}),false);assert.equal(g.save(),before);}
+  deliver('potluck');
+  g.load(choice);g.state.gold=8;render();advance();reveal();assert.equal(button(table).disabled,false);deliver('table');
+  for(const outcome of ['delivery','together']){
+   g.load(prepared);play(g,292,paths(292).find(p=>p.outcome===outcome));start(g,300);render();advance();invite();dialogue(thanks,welcome);assert.equal(g.state.quests.q292.outcome,outcome);checkpoint(g);
+  }
+ }finally{view?.destroy();dom.restore();}
+});

@@ -499,7 +499,83 @@ async function q299ArtFixtures(){
   return {fixtures,outcomes};
 }
 
+async function q300ArtFixtures(){
+  const fixtures=[],outcomes=[],g=border();prepare(g,300);const prepared=g.save(),q=start(g,300);
+  const first=await loadContent(read,{edition:'e1'});assert.equal(first.quests.q300,undefined);
+  for(const id of ['od_hena','od_oren','od_clerk'])assert.equal(first.characters[id],undefined);
+  assert.deepEqual(Object.values(q.outcomes).map(o=>[o.gold,o.xp,o.gems]),[[52,24,0],[44,22,0]]);
+  const inventory=structuredClone(g.state.inventory),v=()=>g.state.stories.q300.values;
+  const initial={partyAt:'canteen',resolution:'pending',finished:false,henaAt:'canteen',orenAt:'kitchen',clerkAt:'customs',window_noteAt:'hena',kitchen_noteAt:'hena',portionAt:'hena',windowInvited:false,kitchenInvited:false,delivered:false};
+  let expected={...initial};
+  const state=changes=>{Object.assign(expected,changes);assert.deepEqual(v(),expected);assert.deepEqual(g.state.inventory,inventory,'notes and a meal use story holders, not inventory items');};
+  const thanks='この間の食事も、助かったんです',welcome='配達が終わったら、あなたも座っていって';
+  const capture=(scene,cast,extra={})=>{
+    assert.equal(g.state.stories.q300.scene,scene);assert.deepEqual(projectGame(g).dialog.scene.cast.map(c=>c.id),cast);
+    checkpoint(g);const save=g.save(),regions={od_hena:[.37,.17,.58,.27],od_oren:[.45,.16,.66,.27],od_clerk:[.40,.18,.55,.28]};
+    fixtures.push({edition:'e2',quest:'q300',scene,cast,save,faces:Object.fromEntries(cast.map(id=>[id,regions[id]])),...extra});return save;
+  };
+  const choose=id=>{
+    const action=q.story.actions[g.state.stories.q300.scene+'_'+id];assert.ok(action);
+    const before=structuredClone(v()),gold=g.state.gold;
+    assert.ok(g.dispatch({type:'choose',id}));drain(g);checkpoint(g);
+    if(action.journey){
+      const escort=action===q.story.actions.kitchen_done_go;
+      assert.deepEqual(action.journey.companions,escort?['oren']:[]);assert.ok(g.state.journey);
+      assert.equal(g.state.quests.q300.stage,'active');
+      assert.deepEqual(v(),{...before,partyAt:'transit',...(escort?{orenAt:'transit'}:{})},'walking does not deliver notes, food or invitation flags');
+      go(g,q.story.worldPlaces[action.journey.to]);
+      if(g.state.journey)assert.ok(g.dispatch({type:'story.resume',quest:q.id}));
+      drain(g);assert.equal(g.state.journey,null);checkpoint(g);
+    }
+    assert.equal(g.state.gold,gold-(action.cost?.gold??0)+(action.ending?q.outcomes[action.ending].gold:0));
+  };
+  const invite=(record=true)=>{
+    state({});if(record)capture('entry',['od_hena']);
+    choose('take');state({window_noteAt:'party',kitchen_noteAt:'party'});if(record)capture('depart',['od_hena']);
+    choose('go');state({partyAt:'customs'});if(record)capture('window',['od_clerk']);
+    choose('hand');state({window_noteAt:'clerk',windowInvited:true});if(record)capture('window_done',['od_clerk']);
+    choose('go');state({partyAt:'kitchen'});if(record)capture('kitchen',['od_oren']);
+    choose('hand');state({kitchen_noteAt:'oren',kitchenInvited:true});if(record)capture('kitchen_done',['od_oren']);
+    choose('go');state({partyAt:'canteen',orenAt:'canteen'});
+  };
+  const finish=outcome=>{
+    const count=g.state.vars.region_12;assert.equal(v().delivered,true);
+    choose('finish');state({finished:true});assert.equal(g.state.quests.q300.outcome,outcome);
+    assert.equal(g.state.quests.q300.stage,'completed');assert.equal(g.state.vars.region_12,count+1);checkpoint(g);
+    const complete=JSON.parse(g.save());assert.equal(g.dispatch({type:'choose',id:'finish'}),false);
+    const retried=JSON.parse(g.save());retried.state.notice=complete.state.notice;assert.deepEqual(retried,complete,'rejected replay only clears the completed notice');
+    outcomes.push('e2/q300/'+outcome);
+  };
+  const deliver=outcome=>{
+    choose(outcome);state({resolution:outcome});capture(outcome+'_ready',['od_hena','od_oren']);
+    choose('take');state({portionAt:'party'});capture(outcome+'_delivery',['od_hena','od_oren']);
+    choose('go');state({partyAt:'customs'});capture(outcome+'_window',['od_clerk']);
+    {const before=g.save();assert.equal(g.dispatch({type:'choose',id:'finish'}),false);assert.equal(g.save(),before);assert.equal(v().delivered,false);}
+    choose('hand');state({portionAt:'clerk',delivered:true});capture(outcome+'_return',['od_clerk']);
+    choose('return');state({partyAt:'canteen'});capture(outcome+'_end',['od_hena','od_oren']);finish(outcome);
+  };
+  invite();assert.notEqual(g.state.quests.q292.stage,'completed');
+  const choice=capture('choice',['od_hena','od_oren'],{availableChoice:'table',expectedText:welcome,absentText:thanks}),choiceState={...expected};
+  for(const [gold,variant] of [[7,'7-gold'],[8,'8-gold']]){
+    g.load(choice);g.state.gold=gold;expected={...choiceState};state({});
+    const save=capture('choice',['od_hena','od_oren'],{variant,...(gold<8?{blockedChoice:'table',availableChoice:'potluck'}:{availableChoice:'table'}),expectedText:welcome,absentText:thanks});
+    if(gold<8){assert.equal(g.dispatch({type:'choose',id:'table'}),false);assert.equal(g.save(),save);}
+    else {deliver('table');assert.equal(g.state.gold,52);}
+  }
+  g.load(choice);g.state.gold=0;expected={...choiceState};state({});
+  const shortage=capture('choice',['od_hena','od_oren'],{variant:'no-gold',blockedChoice:'table',availableChoice:'potluck',expectedText:welcome,absentText:thanks});
+  assert.equal(g.dispatch({type:'choose',id:'table'}),false);assert.equal(g.save(),shortage);
+  deliver('potluck');assert.equal(g.state.gold,44);
+  for(const outcome of ['delivery','together']){
+    g.load(prepared);play(g,292,paths(292).find(p=>p.outcome===outcome));start(g,300);expected={...initial};invite(false);
+    assert.equal(g.state.quests.q292.outcome,outcome);
+    capture('choice',['od_hena','od_oren'],{variant:'thanks-'+outcome,availableChoice:'table',expectedText:thanks,absentText:welcome});
+    assert.ok(projectGame(g).dialog.text.includes(thanks));assert.ok(!projectGame(g).dialog.text.includes(welcome));
+  }
+  return {fixtures,outcomes};
+}
+
 export async function oddlandArtFixtures(){
-  const groups=[await q291ArtFixtures(),await q292ArtFixtures(),await q293ArtFixtures(),await q294ArtFixtures(),await q295ArtFixtures(),await q296ArtFixtures(),await q297ArtFixtures(),await q298ArtFixtures(),await q299ArtFixtures()];
+  const groups=[await q291ArtFixtures(),await q292ArtFixtures(),await q293ArtFixtures(),await q294ArtFixtures(),await q295ArtFixtures(),await q296ArtFixtures(),await q297ArtFixtures(),await q298ArtFixtures(),await q299ArtFixtures(),await q300ArtFixtures()];
   return {fixtures:groups.flatMap(g=>g.fixtures),outcomes:groups.flatMap(g=>g.outcomes)};
 }
