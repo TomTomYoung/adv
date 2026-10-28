@@ -76158,7 +76158,9 @@ export const referenceData={
       "npc_od_nel": "assets/images/characters/oddland/od_nel.webp",
       "npc_od_ver": "assets/images/characters/oddland/od_ver.webp",
       "npc_od_clerk": "assets/images/characters/oddland/od_clerk.webp",
-      "npc_od_sor": "assets/images/characters/oddland/od_sor.webp"
+      "npc_od_sor": "assets/images/characters/oddland/od_sor.webp",
+      "npc_od_dan": "assets/images/characters/oddland/od_dan.webp",
+      "npc_od_passenger": "assets/images/characters/oddland/od_passenger.webp"
     },
     "audio": {
       "exploration": "assets/audio/exploration-v2.ogg",

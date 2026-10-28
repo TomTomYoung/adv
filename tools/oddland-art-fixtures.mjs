@@ -217,7 +217,61 @@ async function q294ArtFixtures(){
   return {fixtures,outcomes};
 }
 
+async function q295ArtFixtures(){
+  const fixtures=[],outcomes=[],g=border(),q=start(g,295),cast=['od_dan','od_passenger'];
+  const first=await loadContent(read,{edition:'e1'});
+  assert.equal(first.quests.q295,undefined);
+  for(const id of cast)assert.equal(first.characters[id],undefined);
+  assert.deepEqual(Object.values(q.outcomes).map(o=>[o.gold,o.xp,o.gems]),[[38,16,0],[29,15,0]]);
+  assert.equal(q.story.actions.choice_shared.cost.gold,6);
+  const state=(place,resolution='pending',finished=false)=>{
+    const v=g.state.stories.q295.values;
+    assert.deepEqual([v.partyAt,v.danAt,v.passengerAt,v.resolution,v.finished],[place,place,place,resolution,finished]);
+  };
+  const capture=(scene,extra={})=>{
+    assert.equal(g.state.stories.q295.scene,scene);
+    assert.deepEqual(projectGame(g).dialog.scene.cast.map(c=>c.id),cast);
+    checkpoint(g);const save=g.save();fixtures.push({edition:'e2',quest:'q295',scene,cast,save,faces:{od_dan:[.44,.17,.60,.26],od_passenger:[.43,.14,.59,.24]},...extra});return save;
+  };
+  const choose=id=>{
+    const action=q.story.actions[`${g.state.stories.q295.scene}_${id}`];assert.ok(action);
+    const before=structuredClone(g.state.stories.q295.values),gold=g.state.gold;
+    assert.ok(g.dispatch({type:'choose',id}));drain(g);checkpoint(g);
+    if(action.journey){
+      assert.ok(g.state.journey);assert.equal(g.state.quests.q295.stage,'active');
+      state('transit',before.resolution);
+      assert.deepEqual(action.journey.companions,['dan','passenger']);
+      go(g,q.story.worldPlaces[action.journey.to]);
+      if(g.state.journey)assert.ok(g.dispatch({type:'story.resume',quest:q.id}));
+      drain(g);assert.equal(g.state.journey,null);checkpoint(g);
+    }
+    assert.equal(g.state.gold,gold-(action.cost?.gold??0)+(action.ending?q.outcomes[action.ending].gold:0));
+  };
+  const complete=outcome=>{
+    choose('finish');assert.equal(g.state.quests.q295.outcome,outcome);
+    assert.equal(g.state.quests.q295.stage,'completed');assert.equal(g.state.vars.region_12,1);
+    state('yard',outcome,true);checkpoint(g);outcomes.push(`e2/q295/${outcome}`);
+  };
+  state('yard');capture('entry');assert.ok(!(g.state.stories.q295.knowledge.party??[]).includes('fares'));
+  choose('check');state('yard');assert.ok(g.state.stories.q295.knowledge.party.includes('fares'));
+  const choice=capture('choice'),gold=g.state.gold;
+  choose('shared');state('yard','shared');assert.equal(g.state.gold,gold-6);capture('shared_ready');
+  choose('go');state('refuge','shared');capture('shared_test');
+  choose('return');state('yard','shared');capture('shared_end');
+  complete('shared');assert.equal(g.state.gold,gold-6+38);
+  g.load(choice);g.state.gold=0;
+  const shortage=capture('choice',{variant:'no-gold',blockedChoice:'shared',availableChoice:'mixed'});
+  const options=projectGame(g).dialog.options;
+  assert.equal(options.find(o=>o.id==='shared')?.enabled,false);assert.equal(options.find(o=>o.id==='mixed')?.enabled,true);
+  assert.equal(g.dispatch({type:'choose',id:'shared'}),false);assert.equal(g.save(),shortage);
+  state('yard');choose('mixed');state('yard','mixed');assert.equal(g.state.gold,0);capture('mixed_ready');
+  choose('go');state('refuge','mixed');capture('mixed_test');
+  choose('return');state('yard','mixed');capture('mixed_end');
+  complete('mixed');assert.equal(g.state.gold,29);
+  return {fixtures,outcomes};
+}
+
 export async function oddlandArtFixtures(){
-  const groups=[await q291ArtFixtures(),await q292ArtFixtures(),await q293ArtFixtures(),await q294ArtFixtures()];
+  const groups=[await q291ArtFixtures(),await q292ArtFixtures(),await q293ArtFixtures(),await q294ArtFixtures(),await q295ArtFixtures()];
   return {fixtures:groups.flatMap(g=>g.fixtures),outcomes:groups.flatMap(g=>g.outcomes)};
 }
