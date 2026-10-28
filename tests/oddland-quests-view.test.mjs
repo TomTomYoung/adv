@@ -25,8 +25,8 @@ for(const layout of ['classic','scene'])test(`${layout}: accept a local job, spe
  click('退避所へ父を迎えに行く');go(g,data.quests.q291.story.worldPlaces.refuge);render();advance();cast(['od_rad']);assert.equal(g.state.stories.q291.values.teoAt,'clinic');checkpoint(g);
  click('ラドを支え、施療所へ戻る');go(g,data.quests.q291.story.worldPlaces.clinic);render();advance();cast(['od_nurse','od_rad','od_teo']);checkpoint(g);
  click('親子の休む場所をユナに引き継ぐ');advance();assert.equal(g.state.quests.q291.outcome,'protect');checkpoint(g);
- start(g,296);render();advance();const pending=dom.root.querySelector('[data-character="od_bek"]');
- assert.ok(pending);assert.ok(pending.textContent.includes(data.characters.od_bek.name));assert.equal(pending.querySelector('img'),null);
+ start(g,297);render();advance();const pending=dom.root.querySelector('[data-character="od_rugo"]');
+ assert.ok(pending);assert.ok(pending.textContent.includes(data.characters.od_rugo.name));assert.equal(pending.querySelector('img'),null);
 
  }finally{view?.destroy();dom.restore();}
 });
@@ -129,5 +129,33 @@ for(const layout of ['classic','scene'])test(`${layout}: q295 charges the shared
   click('混載車に付き添って退避所へ歩く');position('transit');checkpoint(g);arrive('refuge');assert.equal(g.state.gold,0);
   click('試乗の一行と荷車溜まりへ戻る');position('transit');checkpoint(g);arrive('yard');
   click('料金と待ち時間のある帰り便を見届ける');assert.equal(g.state.quests.q295.outcome,'mixed');assert.equal(g.state.gold,29);checkpoint(g);
+ }finally{view?.destroy();dom.restore();}
+});
+
+for(const layout of ['classic','scene'])test(layout+': q296 keeps residents at work and separates the inspection sample from expedition oil',()=>{
+ const g=border(),q=start(g,296),dom=installDOM();let view;
+ const render=()=>view.render(projectGame(g));
+ const advance=()=>{let n=100;while(g.state.waiting?.type==='text'){assert.ok(--n);view.advanceText();}};
+ const click=label=>{let n=100;while(view.canChoose?.()===false){assert.ok(--n);view.advanceText();}const b=[...dom.root.querySelectorAll('button')].find(b=>b.textContent===label);assert.ok(b,'missing: '+label);assert.ok(!b.disabled);b.click();advance();};
+ const v=()=>g.state.stories.q296.values;
+ const supply=()=>structuredClone({light:g.state.light,expedition:g.state.expedition,inventory:g.state.inventory});
+ const initialSupply=supply();
+ const state=(party,sample,resolution='pending',finished=false)=>{assert.deepEqual([v().partyAt,v().bekAt,v().oil_sellerAt,v().stockAt,v().sampleAt,v().resolution,v().finished],[party,'inn','oil','warehouse',sample,resolution,finished]);assert.deepEqual(supply(),initialSupply);};
+ const cast=id=>{assert.equal(dom.root.querySelectorAll('[data-character]').length,1);const person=dom.root.querySelector('[data-character="'+id+'"]');assert.ok(person);assert.ok(person.textContent.includes(data.characters[id].name));assert.equal(person.querySelector('img').src,'assets/images/characters/oddland/'+id+'.png');assert.deepEqual(projectGame(g).town.cast.map(c=>c.id),[id]);};
+ const arrive=place=>{go(g,q.story.worldPlaces[place]);render();advance();assert.equal(g.state.journey,null);checkpoint(g);};
+ try{
+  view=replaceView(null,layout,dom.root,intent=>{const ok=g.dispatch(intent);render();return ok;},{status(){},menu(){},help(){},soundEnabled:()=>false,effectsMode:()=> 'off'});render();advance();
+  state('inn','bek');cast('od_bek');assert.ok(!(g.state.stories.q296.knowledge.party??[]).includes('smoke'));const gold=g.state.gold;
+  click('検査用の小瓶だけを預かる');state('inn','party');cast('od_bek');checkpoint(g);
+  click('補給店裏の検査場へ行く');state('transit','party');assert.deepEqual(q.story.actions.depart_go.journey.companions,[]);assert.ok(!(g.state.stories.q296.knowledge.party??[]).includes('smoke'));checkpoint(g);
+  arrive('oil');state('oil','party');cast('od_oil_seller');assert.ok(g.state.stories.q296.knowledge.party.includes('smoke'));const tested=g.save();
+  click('灯用の正規品へ交換してもらう');state('oil','oil_seller','exchange');cast('od_oil_seller');checkpoint(g);
+  click('旅籠へ交換の段取りを伝える');state('transit','oil_seller','exchange');checkpoint(g);arrive('inn');state('inn','oil_seller','exchange');cast('od_bek');
+  click('交換と引取りをベクに引き継ぐ');state('inn','oil_seller','exchange',true);assert.equal(g.state.quests.q296.outcome,'exchange');assert.equal(g.state.gold,gold+23);checkpoint(g);
+  g.load(tested);render();advance();click('用途を分け、倉庫で回収品を隔離する');state('oil','party','recover');cast('od_oil_seller');checkpoint(g);
+  click('小瓶を持って倉庫係へ相談する');state('transit','party','recover');checkpoint(g);arrive('warehouse');state('warehouse','party','recover');cast('od_stock');
+  click('検査見本をタルへ渡す');state('warehouse','stock','recover');cast('od_stock');checkpoint(g);
+  click('旅籠で回収先をベクに知らせる');state('transit','stock','recover');checkpoint(g);arrive('inn');state('inn','stock','recover');cast('od_bek');
+  click('回収品を灯へ戻さないことを確認する');state('inn','stock','recover',true);assert.equal(g.state.quests.q296.outcome,'recover');assert.equal(g.state.gold,gold+31);checkpoint(g);
  }finally{view?.destroy();dom.restore();}
 });
