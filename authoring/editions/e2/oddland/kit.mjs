@@ -1,5 +1,5 @@
 import {story,O,set,see,eq,ref,and,or,give} from '../../../story-kit.mjs';
-import {oddlandCharacterArt} from '../../../oddland-character-art.mjs';
+import {oddlandCharacterArt,ODDLAND_SCENE_BLOCKING} from '../../../oddland-character-art.mjs';
 import {connectWorld} from '../../../world-story-kit.mjs';
 export {set,see,eq,ref,and,or,give};
 export const completed=n=>eq(ref(`quests.q${n}.stage`),'completed');
@@ -34,6 +34,7 @@ export function compileQuest(x){
  for(const [key,value] of Object.entries(x.flags??{}))s.bool(key,value,key);
  for(const [key,text] of Object.entries(x.facts??{}))s.fact(key,text);
  for(const n of x.nodes)s.node(n.id,n.place,n.cast??[],n.text,n.options.map(a=>O(a.id,a.label,a.to,[...(a.resolution?[set('resolution',a.resolution)]:[]),...(a.effects??[]),...(a.to.startsWith('@')?[set('finished')]:[])],{...(a.when?{when:a.when}:{}),...(a.cost?{cost:a.cost}:{})})),n.requires??true);
+ for(const [scene,positions] of Object.entries(ODDLAND_SCENE_BLOCKING[id]??{}))for(const c of s.story.scenes[scene].cast)c.display=positions[c.entity];
  const route=connectWorld(s,Object.fromEntries(keys.map(k=>[k,places[k].world])),1);
  for(const n of x.nodes)for(const a of n.options){const target=x.nodes.find(t=>t.id===a.to);if(target&&target.place!==n.place){
   const action=s.story.actions[`${n.id}_${a.id}`],effects=action.effects;

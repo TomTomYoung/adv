@@ -45,6 +45,34 @@ try{
         assert.ok((await figure.textContent()).includes(await page.evaluate(id=>h.g.data.characters[id].name,id)));images.push({id,...info});
       }
       await page.evaluate(async()=>{await document.fonts.ready;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));});
+      // These central face regions belong to the reviewed q291 artwork. Sample
+      // foreground alpha, since DOM presence alone cannot detect an obscured face.
+      let faces;
+      if(f.faces&&layout==='scene'){
+        faces=await page.evaluate(regions=>{
+          const cast=[...document.querySelectorAll('[data-character]')].map(figure=>{
+            const img=figure.querySelector('img'),r=img.getBoundingClientRect(),style=getComputedStyle(img);
+            const scale=Math.min(r.width/img.naturalWidth,r.height/img.naturalHeight),position=style.objectPosition.split(' ').map(v=>parseFloat(v)/100);
+            const x=r.x+(r.width-img.naturalWidth*scale)*position[0],y=r.y+(r.height-img.naturalHeight*scale)*position[1];
+            const canvas=document.createElement('canvas');canvas.width=img.naturalWidth;canvas.height=img.naturalHeight;const ctx=canvas.getContext('2d');ctx.drawImage(img,0,0);
+            return {id:figure.dataset.character,z:Number(getComputedStyle(figure).zIndex),x,y,scale,w:img.naturalWidth,h:img.naturalHeight,ctx};
+          });
+          const dock=document.querySelector('.scene-dock').getBoundingClientRect();
+          return Object.entries(regions).map(([id,[x1,y1,x2,y2]])=>{
+            const c=cast.find(c=>c.id===id),points=[];
+            for(const u of [x1,(x1+x2)/2,x2])for(const v of [y1,(y1+y2)/2,y2]){
+              const x=c.x+u*c.w*c.scale,y=c.y+v*c.h*c.scale;
+              const covered=cast.filter(other=>other.z>c.z).some(other=>{
+                const px=(x-other.x)/other.scale,py=(y-other.y)/other.scale;
+                return px>=0&&py>=0&&px<other.w&&py<other.h&&other.ctx.getImageData(Math.floor(px),Math.floor(py),1,1).data[3]>64;
+              });
+              points.push({x,y,visible:x>=0&&x<innerWidth&&y>=0&&y<dock.top&&!covered});
+            }
+            return {id,points};
+          });
+        },f.faces);
+        assert.ok(faces.every(face=>face.points.every(p=>p.visible)),`occluded face: ${JSON.stringify(faces)}`);
+      }
       if(f.blockedChoice){
         const choice=page.locator(`[data-focus="choice:${f.blockedChoice}"]`);
         for(let n=0;await choice.count()===0&&n<32;n++)await page.locator('[data-focus="message:next"]').click();
@@ -59,7 +87,7 @@ try{
       const measure=await page.evaluate(()=>({viewport:innerWidth,document:document.documentElement.scrollWidth,height:innerHeight,pageHeight:document.documentElement.scrollHeight}));
       assert.ok(measure.document<=measure.viewport+1,'horizontal overflow');if(layout==='scene')assert.ok(measure.pageHeight<=measure.height+1,'Scene height');
       await page.screenshot({path:path.join(output,`${f.edition}-${layout}-${width}-${f.quest}-${f.scene}${f.variant?`-${f.variant}`:''}.png`),fullPage:true});
-      checks.push({edition:f.edition,quest:f.quest,scene:f.scene,variant:f.variant,blockedChoice:f.blockedChoice,availableChoice:f.availableChoice,layout,width,images,...measure});
+      checks.push({edition:f.edition,quest:f.quest,scene:f.scene,variant:f.variant,blockedChoice:f.blockedChoice,availableChoice:f.availableChoice,layout,width,images,faces,...measure});
     }
   }
   assert.deepEqual(errors,[]);console.log(JSON.stringify({checks:checks.length,outcomes:outcomes.length,errors,output}));

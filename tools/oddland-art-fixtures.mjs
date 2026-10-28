@@ -17,7 +17,7 @@ export async function oddlandArtFixtures(){
   const capture=(scene,cast)=>{
     assert.equal(g.state.stories.q291.scene,scene);
     assert.deepEqual(projectGame(g).dialog.scene.cast.map(c=>c.id),cast);
-    checkpoint(g);const save=g.save();fixtures.push({edition:'e2',quest:'q291',scene,cast,save});return save;
+    checkpoint(g);const save=g.save();fixtures.push({edition:'e2',quest:'q291',scene,cast,save,...(scene==='protected'?{faces:{od_nurse:[.42,.20,.62,.32],od_rad:[.38,.21,.56,.32],od_teo:[.40,.23,.62,.36]}}:{})});return save;
   };
   const choose=id=>{
     const action=q.story.actions[`${g.state.stories.q291.scene}_${id}`];assert.ok(action);
