@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {installDOM} from './view-dom.mjs';
 import {replaceView} from '../src/view/view-layout.js';
 import {projectGame} from '../src/application/projection.js';
-import {border,go,start,data,checkpoint,prepare} from './oddland-helpers.mjs';
+import {border,go,start,data,checkpoint,prepare,play,paths} from './oddland-helpers.mjs';
 for(const layout of ['classic','scene'])test(`${layout}: accept a local job, speak at the yard, escort or protect on foot with the correct dedicated cast`,()=>{
  const g=border(),dom=installDOM();let view;
  const render=()=>view.render(projectGame(g)),dispatch=intent=>{const ok=g.dispatch(intent);render();return ok;};
@@ -25,8 +25,8 @@ for(const layout of ['classic','scene'])test(`${layout}: accept a local job, spe
  click('退避所へ父を迎えに行く');go(g,data.quests.q291.story.worldPlaces.refuge);render();advance();cast(['od_rad']);assert.equal(g.state.stories.q291.values.teoAt,'clinic');checkpoint(g);
  click('ラドを支え、施療所へ戻る');go(g,data.quests.q291.story.worldPlaces.clinic);render();advance();cast(['od_nurse','od_rad','od_teo']);checkpoint(g);
  click('親子の休む場所をユナに引き継ぐ');advance();assert.equal(g.state.quests.q291.outcome,'protect');checkpoint(g);
- prepare(g,298);start(g,298);render();advance();const pending=dom.root.querySelector('[data-character="od_eme"]');
- assert.ok(pending);assert.ok(pending.textContent.includes(data.characters.od_eme.name));assert.equal(pending.querySelector('img'),null);
+ prepare(g,299);start(g,299);render();advance();const pending=dom.root.querySelector('[data-character="od_maya"]');
+ assert.ok(pending);assert.ok(pending.textContent.includes(data.characters.od_maya.name));assert.equal(pending.querySelector('img'),null);
 
  }finally{view?.destroy();dom.restore();}
 });
@@ -180,5 +180,39 @@ for(const layout of ['classic','scene'])test(layout+': q297 leaves both cargo wo
   click('合図板を持って退避所へ戻る');state('transit','signals');assert.deepEqual(q.story.actions.materials_return.journey.companions,[]);checkpoint(g);
   arrive('signals');state('signals','signals');cast();
   click('共通の手信号を荷役の交代に残す');state('signals','signals',true);assert.equal(g.state.quests.q297.outcome,'signals');assert.equal(g.state.gold,gold+27);checkpoint(g);
+ }finally{view?.destroy();dom.restore();}
+});
+
+for(const layout of ['classic','scene'])test(layout+': q298 keeps cargo holders, earned signals and the selected relief worker across all four routes',()=>{
+ const g=border();prepare(g,298);const prepared=g.save(),q=start(g,298),dom=installDOM();let view;
+ const render=()=>view.render(projectGame(g));
+ const advance=()=>{let n=100;while(g.state.waiting?.type==='text'){assert.ok(--n);view.advanceText();}};
+ const button=label=>[...dom.root.querySelectorAll('button')].find(b=>b.querySelector('span')?.textContent===label||b.textContent===label);
+ const click=label=>{let n=100;while(view.canChoose?.()===false){assert.ok(--n);view.advanceText();}const b=button(label);assert.ok(b,'missing: '+label);assert.ok(!b.disabled);b.click();advance();};
+ const v=()=>g.state.stories.q298.values,inventory=structuredClone(g.state.inventory);
+ const state=(party,crate='loader',resolution='pending',relief='inn',pella='signals',finished=false)=>{
+  assert.deepEqual([v().partyAt,v().emeAt,v().loaderAt,v().crateAt,v().resolution,v().reliefAt,v().pellaAt,v().finished],[party,'customs','yard',crate,resolution,relief,pella,finished]);assert.deepEqual(g.state.inventory,inventory);
+ };
+ const cast=id=>{assert.equal(dom.root.querySelectorAll('[data-character]').length,1);const person=dom.root.querySelector('[data-character="'+id+'"]');assert.ok(person);assert.ok(person.textContent.includes(data.characters[id].name));assert.equal(person.querySelector('img').src,'assets/images/characters/oddland/'+id+'.webp');if(projectGame(g).town)assert.deepEqual(projectGame(g).town.cast.map(c=>c.id),[id]);};
+ const arrive=place=>{go(g,q.story.worldPlaces[place]);render();advance();assert.equal(g.state.journey,null);checkpoint(g);};
+ const signalLabel='手信号を共有したペラに交代の応援を頼む';
+ try{
+  view=replaceView(null,layout,dom.root,intent=>{const ok=g.dispatch(intent);render();return ok;},{status(){},menu(){},help(){},soundEnabled:()=>false,effectsMode:()=> 'off'});render();advance();
+  state('customs');cast('od_eme');{let n=100;while(view.canChoose?.()===false){assert.ok(--n);view.advanceText();}}assert.ok(button(signalLabel).disabled);
+  const entry=g.save(),gold=g.state.gold;assert.equal(g.dispatch({type:'choose',id:'signals'}),false);assert.equal(g.save(),entry);
+  click('食料の小箱を運び、当直を運搬から外す');state('transit');checkpoint(g);arrive('yard');state('yard','loader','carry');cast('od_loader');
+  click('食料の小箱を受け取る');state('yard','party','carry');cast('od_loader');checkpoint(g);
+  click('小箱を外国側窓口へ運ぶ');state('transit','party','carry');checkpoint(g);arrive('customs');state('customs','party','carry');cast('od_eme');assert.equal(g.state.gold,gold);
+  click('食料を渡し、当直の休憩を確認する');state('customs','eme','carry','inn','signals',true);assert.equal(g.state.quests.q298.outcome,'carry');assert.equal(g.state.gold,gold+45);checkpoint(g);
+  g.load(entry);render();advance();click('旅籠で交代員を探す');state('transit');checkpoint(g);arrive('inn');state('inn','loader','relief');cast('od_relief');
+  click('サイを外国側窓口へ案内する');state('transit','loader','relief','transit');assert.deepEqual(q.story.actions.recruit_go.journey.companions,['relief']);checkpoint(g);arrive('customs');state('customs','loader','relief','customs');cast('od_eme');assert.equal(g.state.gold,gold);
+  click('交代の引継ぎを見届ける');state('customs','loader','relief','customs','signals',true);assert.equal(g.state.quests.q298.outcome,'relief');assert.equal(g.state.gold,gold+37);checkpoint(g);
+  g.load(entry);render();advance();click('荷主と相談し、今夜の残りを翌便へ回す');state('transit');checkpoint(g);arrive('yard');state('yard','loader','defer');cast('od_loader');
+  click('延期を外国側窓口へ伝える');state('transit','loader','defer');checkpoint(g);arrive('customs');state('customs','loader','defer');cast('od_eme');
+  click('今夜の業務を区切る');state('customs','loader','defer','inn','signals',true);assert.equal(g.state.quests.q298.outcome,'defer');assert.equal(g.state.gold,gold+28);checkpoint(g);
+  g.load(prepared);play(g,297,paths(297).find(p=>p.outcome==='signals'));start(g,298);render();advance();state('customs');cast('od_eme');{let n=100;while(view.canChoose?.()===false){assert.ok(--n);view.advanceText();}}assert.equal(button(signalLabel).disabled,false);const signalGold=g.state.gold;
+  click(signalLabel);state('transit');checkpoint(g);arrive('signals');state('signals','loader','relief');cast('od_pella');
+  click('ペラと合図板を外国側窓口へ運ぶ');state('transit','loader','relief','inn','transit');assert.deepEqual(q.story.actions.signal_help_go.journey.companions,['pella']);checkpoint(g);arrive('customs');state('customs','loader','relief','inn','customs');cast('od_eme');assert.equal(g.state.gold,signalGold);
+  click('交代の引継ぎを見届ける');state('customs','loader','relief','inn','customs',true);assert.equal(g.state.quests.q298.outcome,'relief');assert.equal(g.state.gold,signalGold+37);checkpoint(g);
  }finally{view?.destroy();dom.restore();}
 });

@@ -49,6 +49,21 @@ try{
         assert.equal(info.src,`assets/images/characters/${folder}/${id}.${extension}`);assert.deepEqual([info.width,info.height],[1024,1536]);assert.equal(info.cornerAlpha,0);assert.ok(info.bodyAlpha>240);
         assert.ok((await figure.textContent()).includes(await page.evaluate(id=>h.g.data.characters[id].name,id)));images.push({id,...info});
       }
+      if(f.blockedChoice||f.availableChoice){
+        const target=f.blockedChoice??f.availableChoice;
+        const choice=page.locator(`[data-focus="choice:${target}"]`);
+        for(let n=0;await choice.count()===0&&n<32;n++)await page.locator('[data-focus="message:next"]').click();
+        assert.equal(await choice.count(),1);
+        if(f.blockedChoice){
+          assert.ok(await choice.isDisabled());
+          assert.equal(await page.evaluate(id=>h.g.dispatch({type:'choose',id}),f.blockedChoice),false);
+          assert.equal(await page.evaluate(()=>h.g.save()),before);
+        }
+        if(f.availableChoice){
+          const allowed=page.locator(`[data-focus="choice:${f.availableChoice}"]`);
+          assert.equal(await allowed.count(),1);assert.ok(await allowed.isEnabled());
+        }
+      }
       await page.evaluate(async()=>{await document.fonts.ready;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));});
       // These central face regions belong to the reviewed character artwork. Sample
       // foreground alpha, since DOM presence alone cannot detect an obscured face.
@@ -77,17 +92,6 @@ try{
           });
         },f.faces);
         assert.ok(faces.every(face=>face.points.every(p=>p.visible)),`occluded face: ${JSON.stringify(faces)}`);
-      }
-      if(f.blockedChoice){
-        const choice=page.locator(`[data-focus="choice:${f.blockedChoice}"]`);
-        for(let n=0;await choice.count()===0&&n<32;n++)await page.locator('[data-focus="message:next"]').click();
-        assert.equal(await choice.count(),1);assert.ok(await choice.isDisabled());
-        if(f.availableChoice){
-          const allowed=page.locator(`[data-focus="choice:${f.availableChoice}"]`);
-          assert.equal(await allowed.count(),1);assert.ok(await allowed.isEnabled());
-        }
-        assert.equal(await page.evaluate(id=>h.g.dispatch({type:'choose',id}),f.blockedChoice),false);
-        assert.equal(await page.evaluate(()=>h.g.save()),before);
       }
       const measure=await page.evaluate(()=>({viewport:innerWidth,document:document.documentElement.scrollWidth,height:innerHeight,pageHeight:document.documentElement.scrollHeight}));
       assert.ok(measure.document<=measure.viewport+1,'horizontal overflow');if(layout==='scene')assert.ok(measure.pageHeight<=measure.height+1,'Scene height');
