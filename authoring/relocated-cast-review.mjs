@@ -1,0 +1,44 @@
+// Editorial audit only. These role IDs do not register game characters or casts.
+// Update a fingerprint only after rereading the changed quest and its evidence.
+export const RELOCATED_CAST_REVIEW={
+ reviewedAt:'2026-10-29',
+ quests:{
+  q031:{
+   sourceSha256:'ab2cb40f75d0a430e00077b936b338b23736b74b01034aeaeb9333cda16cecf7',
+   identityNotes:[
+    '依頼人は聖歌隊のキリ。q036にも同じ役職・名の依頼人がいるが、q031の現場本文に本人の同席は書かれていない。依頼人欄からcastへ自動追加しない。',
+    '夜に聞く声は探索隊が吹き込んだ録音。録音した本人の立ち絵や、亡き家族の肖像を新規NPCとして配置しない。結末の参拝者は場面の固定出演と区別する。'
+   ],
+   relatedClients:{q036:'聖歌隊のキリ'},
+   people:{},
+   scenes:{
+    entry:{decision:'no-person-evidence',people:[],evidence:'水晶の横には録音用の小さな窪みがある。',reason:'録音水晶を調べる場面。探索隊以外の特定人物が同席する記述はない。',visual:'録音水晶・吹込み用の窪み・日付の機構。人物画の追加は不要。'},
+    night:{decision:'no-person-evidence',people:[],evidence:'自分の言った日付が流れた。',reason:'声は再生された録音。キリや別の話者が現場へ来たと解釈しない。',visual:'同じ足元で夜の礼拝と録音再生を示す差分。場面内の時間経過として扱う。'}
+   },
+   next:'人物を追加せず、録音水晶と日付表示の局所差分を制作候補にする。人物監査の次はq033。'
+  },
+  q032:{
+   sourceSha256:'b36cb72545ceb06dee6cea8365b0fa6dbf967af238ed13c0b324adbea3d795e1',
+   identityNotes:[
+    '依頼人は修復師のサイ。q040にも同じ役職・名の依頼人がいる。q032の石工台の「職人」をサイ本人と同定する記述はなく、匿名の役として保留する。',
+    '国境q298の交代員サイ（od_relief）や既存人物の絵へ名前だけで統合しない。囚人と職人には固有名・年齢・性別・外見・他依頼との同一性を追加しない。',
+    '囚人は地下牢、職人は石工台でのみ出演根拠がある。聖像前への同行は原稿にない。依頼完了文の修復師・囚人を帰還場面の同席へ変換しない。',
+    '小物の表示には未整理点がある。workshop本文では宝玉と石を並べるが、jewelAtはentryから移らない。stoneAtはworkshop→party→entryと受け渡す。宝玉の現物を石工台へ描く前に、本文と保持者の整合方針を決める。今回この状態や本文は変更しない。'
+   ],
+   relatedClients:{q040:'修復師のサイ'},
+   people:{
+    q032_prisoner:{label:'地下牢の囚人（匿名）',status:'candidate',need:'人物定義・所在・cellのcast・専用画が未接続。顔を隠す反応を表現できる構図を検討する。牢や格子は人物画へ固定しない。'},
+    q032_craftsperson:{label:'石工台の職人（匿名）',status:'candidate',need:'人物定義・所在・workshopのcast・専用画が未接続。修復師サイとの同一性は未確定。宝玉と石は人物画へ固定しない。'}
+   },
+   scenes:{
+    entry:{decision:'no-person-evidence',people:[],evidence:'宝玉は元の棚へ戻っている。',reason:'聖像と宝玉を調べる場面。依頼人や職人の同席は書かれていない。',visual:'片目の聖像・棚の透明な宝玉・覗き管。'},
+    cell:{decision:'person-evidence',people:['q032_prisoner'],evidence:'囚人が「誰が見ている」と顔を隠す。',reason:'囚人の発言と動作が明示される。職人・依頼人は加えない。',visual:'地下牢側から見える覗き窓と囚人。聖像前とは実座標が異なる。'},
+    workshop:{decision:'person-evidence',people:['q032_craftsperson'],evidence:'職人が透明な宝玉と不透明な石を並べた。',reason:'石工台の職人の動作が明示される。地下牢の囚人は加えない。',visual:'石工台と比較する透明な宝玉・不透明な石。'},
+    fit_stone:{decision:'no-person-evidence',people:[],evidence:'石工台から不透明な目を持ち帰った。',reason:'探索隊だけが聖像へ戻る。職人が同行したとは扱わない。',visual:'未取付の石と塞ぐ覗き管。finish前に修復完了の状態を描かない。'},
+    fit_original:{decision:'no-person-evidence',people:[],evidence:'透明な宝玉のある棚へ戻った。',reason:'探索隊が棚へ戻る。囚人・職人・依頼人を同席させない。',visual:'棚の宝玉と監視につながる穴。finish前に宝玉の取付完了を描かない。'},
+    plate:{decision:'no-person-evidence',people:[],evidence:'片目を塞がず保存する方針',reason:'聖像前で由来を記す。地下牢の囚人は遠隔地のまま。',visual:'片目を残した像と由来の銘板。'}
+   },
+   next:'匿名2役の制作候補を保持し、人物定義・所在・castと専用画を一組で接続する。現段階の監査だけでは出演実装済みと数えない。'
+  }
+ }
+};
