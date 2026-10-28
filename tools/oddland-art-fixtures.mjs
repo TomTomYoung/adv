@@ -330,7 +330,51 @@ async function q296ArtFixtures(){
   return {fixtures,outcomes};
 }
 
+async function q297ArtFixtures(){
+  const fixtures=[],outcomes=[],g=border(),q=start(g,297);
+  const first=await loadContent(read,{edition:'e1'});
+  assert.equal(first.quests.q297,undefined);
+  for(const id of ['od_rugo','od_pella'])assert.equal(first.characters[id],undefined);
+  assert.deepEqual(Object.values(q.outcomes).map(o=>[o.gold,o.xp,o.gems]),[[20,9,0],[27,12,0]]);
+  const inventory=structuredClone(g.state.inventory);
+  const state=(party,resolution='pending',finished=false)=>{
+    const v=g.state.stories.q297.values;
+    assert.deepEqual([v.partyAt,v.rugoAt,v.pellaAt,v.resolution,v.finished],[party,'signals','signals',resolution,finished]);
+    assert.deepEqual(g.state.inventory,inventory,'borrowed signal boards do not add an inventory item');
+  };
+  const capture=(scene,cast=['od_rugo','od_pella'])=>{
+    assert.equal(g.state.stories.q297.scene,scene);
+    assert.deepEqual(projectGame(g).dialog.scene.cast.map(c=>c.id),cast);
+    checkpoint(g);const save=g.save();
+    fixtures.push({edition:'e2',quest:'q297',scene,cast,save,...(cast.length?{faces:{od_rugo:[.48,.17,.62,.26],od_pella:[.40,.19,.53,.28]}}:{})});return save;
+  };
+  const choose=id=>{
+    const action=q.story.actions[g.state.stories.q297.scene+'_'+id];assert.ok(action);
+    const before=structuredClone(g.state.stories.q297.values),gold=g.state.gold;
+    assert.ok(g.dispatch({type:'choose',id}));drain(g);checkpoint(g);
+    if(action.journey){
+      assert.ok(g.state.journey);assert.equal(g.state.quests.q297.stage,'active');
+      assert.deepEqual(action.journey.companions,[]);state('transit',before.resolution);
+      go(g,q.story.worldPlaces[action.journey.to]);
+      if(g.state.journey)assert.ok(g.dispatch({type:'story.resume',quest:q.id}));
+      drain(g);assert.equal(g.state.journey,null);checkpoint(g);
+    }
+    assert.equal(g.state.gold,gold+(action.ending?q.outcomes[action.ending].gold:0));
+  };
+  const complete=outcome=>{
+    choose('finish');assert.equal(g.state.quests.q297.outcome,outcome);
+    assert.equal(g.state.quests.q297.stage,'completed');assert.equal(g.state.vars.region_12,1);
+    state('signals',outcome,true);checkpoint(g);outcomes.push('e2/q297/'+outcome);
+  };
+  state('signals');capture('entry');assert.ok(!(g.state.stories.q297.knowledge.party??[]).includes('word'));
+  choose('listen');state('signals');assert.ok(g.state.stories.q297.knowledge.party.includes('word'));const meaning=capture('meaning');
+  choose('demo');state('signals','demo');capture('demonstrate');complete('demo');
+  g.load(meaning);choose('signals');state('yard','signals');capture('materials',[]);
+  choose('return');state('signals','signals');capture('signs');complete('signals');
+  return {fixtures,outcomes};
+}
+
 export async function oddlandArtFixtures(){
-  const groups=[await q291ArtFixtures(),await q292ArtFixtures(),await q293ArtFixtures(),await q294ArtFixtures(),await q295ArtFixtures(),await q296ArtFixtures()];
+  const groups=[await q291ArtFixtures(),await q292ArtFixtures(),await q293ArtFixtures(),await q294ArtFixtures(),await q295ArtFixtures(),await q296ArtFixtures(),await q297ArtFixtures()];
   return {fixtures:groups.flatMap(g=>g.fixtures),outcomes:groups.flatMap(g=>g.outcomes)};
 }

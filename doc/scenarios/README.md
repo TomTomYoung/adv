@@ -26,7 +26,7 @@
 
 [KAGARIBI_CHARACTER_ART.md](KAGARIBI_CHARACTER_ART.md)：q201〜q210の全20人に専用の透過画像を接続。原本・制作記録・表示対象・検証範囲。
 
-[ODDLAND_CHARACTER_ART.md](ODDLAND_CHARACTER_ART.md)：国境q291〜q296の15人の専用画。46場面と所持金0Gの計47状態・12結末・第2版だけへの接続・原本と制作記録。残る未制作7人と次のq297。
+[ODDLAND_CHARACTER_ART.md](ODDLAND_CHARACTER_ART.md)：国境q291〜q297の17人の専用画。51場面と所持金0Gの計52状態・14結末・第2版だけへの接続・原本と制作記録。残る未制作5人と次のq298。
 
 ## 設計と実行
 
