@@ -25,8 +25,8 @@ for(const layout of ['classic','scene'])test(`${layout}: accept a local job, spe
  click('退避所へ父を迎えに行く');go(g,data.quests.q291.story.worldPlaces.refuge);render();advance();cast(['od_rad']);assert.equal(g.state.stories.q291.values.teoAt,'clinic');checkpoint(g);
  click('ラドを支え、施療所へ戻る');go(g,data.quests.q291.story.worldPlaces.clinic);render();advance();cast(['od_nurse','od_rad','od_teo']);checkpoint(g);
  click('親子の休む場所をユナに引き継ぐ');advance();assert.equal(g.state.quests.q291.outcome,'protect');checkpoint(g);
- start(g,295);render();advance();const pending=dom.root.querySelector('[data-character="od_dan"]');
- assert.ok(pending);assert.ok(pending.textContent.includes(data.characters.od_dan.name));assert.equal(pending.querySelector('img'),null);
+ start(g,296);render();advance();const pending=dom.root.querySelector('[data-character="od_bek"]');
+ assert.ok(pending);assert.ok(pending.textContent.includes(data.characters.od_bek.name));assert.equal(pending.querySelector('img'),null);
 
  }finally{view?.destroy();dom.restore();}
 });
@@ -101,5 +101,33 @@ for(const layout of ['classic','scene'])test(`${layout}: q294 preserves the card
   click('ソルと出入窓口へ行く');assert.equal(v().sorAt,'transit');assert.equal(v().verAt,'registry');assert.equal(v().cardAt,'ver');checkpoint(g);arrive('customs');cast(['od_sor','od_clerk']);assert.equal(v().sorAt,'customs');
   click('ソルと登録相談室へ戻る');assert.equal(v().sorAt,'transit');assert.equal(v().clerkAt,'customs');checkpoint(g);arrive('registry');cast(['od_ver','od_sor']);assert.equal(v().sorAt,'registry');assert.equal(v().cardAt,'ver');
   click('本人の名で登録できたことを確かめる');assert.equal(g.state.quests.q294.outcome,'witness');checkpoint(g);
+ }finally{view?.destroy();dom.restore();}
+});
+
+for(const layout of ['classic','scene'])test(`${layout}: q295 charges the shared trial once and keeps a zero-gold mixed route with both travellers`,()=>{
+ const g=border(),q=start(g,295),dom=installDOM();let view;
+ const render=()=>view.render(projectGame(g));
+ const advance=()=>{let n=100;while(g.state.waiting?.type==='text'){assert.ok(--n);view.advanceText();}};
+ const button=label=>[...dom.root.querySelectorAll('button')].find(b=>b.querySelector('span')?.textContent===label||b.textContent===label);
+ const click=label=>{let n=100;while(view.canChoose?.()===false){assert.ok(--n);view.advanceText();}const b=button(label);assert.ok(b,`missing: ${label}`);assert.ok(!b.disabled);b.click();advance();};
+ const v=()=>g.state.stories.q295.values;
+ const cast=()=>{const ids=['od_dan','od_passenger'];assert.equal(dom.root.querySelectorAll('[data-character]').length,2);for(const id of ids){const person=dom.root.querySelector(`[data-character="${id}"]`);assert.ok(person);assert.ok(person.textContent.includes(data.characters[id].name));assert.equal(person.querySelector('img').src,data.assets.images[`npc_${id}`]);}if(projectGame(g).town)assert.deepEqual(projectGame(g).town.cast.map(c=>c.id).sort(),ids);};
+ const position=place=>assert.deepEqual([v().partyAt,v().danAt,v().passengerAt],[place,place,place]);
+ const arrive=place=>{go(g,q.story.worldPlaces[place]);render();advance();position(place);cast();checkpoint(g);};
+ try{
+  view=replaceView(null,layout,dom.root,intent=>{const ok=g.dispatch(intent);render();return ok;},{status(){},menu(){},help(){},soundEnabled:()=>false,effectsMode:()=> 'off'});render();advance();
+  cast();position('yard');assert.ok(!(g.state.stories.q295.knowledge.party??[]).includes('fares'));
+  click('料金と試乗の条件を聞く');cast();assert.ok(g.state.stories.q295.knowledge.party.includes('fares'));checkpoint(g);const choice=g.save(),gold=g.state.gold;
+  click('6Gを払い、相乗りの試乗を手配する');cast();position('yard');assert.equal(v().resolution,'shared');assert.equal(g.state.gold,gold-6);checkpoint(g);
+  click('試乗車に付き添って退避所へ歩く');position('transit');assert.equal(v().finished,false);checkpoint(g);arrive('refuge');assert.equal(g.state.gold,gold-6);
+  click('試乗の一行と荷車溜まりへ戻る');position('transit');checkpoint(g);arrive('yard');
+  click('料金を掲げた帰り便を見届ける');assert.equal(g.state.quests.q295.outcome,'shared');assert.equal(g.state.gold,gold-6+38);checkpoint(g);
+  g.load(choice);g.state.gold=0;render();advance();cast();checkpoint(g);const shortage=g.save();
+  assert.ok(button('6Gを払い、相乗りの試乗を手配する').disabled);assert.equal(button('荷を積み分け、混載の試乗を手伝う').disabled,false);
+  assert.equal(g.dispatch({type:'choose',id:'shared'}),false);assert.equal(g.save(),shortage);assert.equal(v().resolution,'pending');
+  click('荷を積み分け、混載の試乗を手伝う');cast();position('yard');assert.equal(v().resolution,'mixed');assert.equal(g.state.gold,0);
+  click('混載車に付き添って退避所へ歩く');position('transit');checkpoint(g);arrive('refuge');assert.equal(g.state.gold,0);
+  click('試乗の一行と荷車溜まりへ戻る');position('transit');checkpoint(g);arrive('yard');
+  click('料金と待ち時間のある帰り便を見届ける');assert.equal(g.state.quests.q295.outcome,'mixed');assert.equal(g.state.gold,29);checkpoint(g);
  }finally{view?.destroy();dom.restore();}
 });
