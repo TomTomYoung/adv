@@ -49,7 +49,7 @@ try{
         assert.ok((await figure.textContent()).includes(await page.evaluate(id=>h.g.data.characters[id].name,id)));images.push({id,...info});
       }
       await page.evaluate(async()=>{await document.fonts.ready;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));});
-      // These central face regions belong to the reviewed q291 artwork. Sample
+      // These central face regions belong to the reviewed character artwork. Sample
       // foreground alpha, since DOM presence alone cannot detect an obscured face.
       let faces;
       if(f.faces&&layout==='scene'){

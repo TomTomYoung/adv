@@ -76152,7 +76152,9 @@ export const referenceData={
       "npc_od_marta": "assets/images/characters/oddland/od_marta.webp",
       "npc_od_teo": "assets/images/characters/oddland/od_teo.webp",
       "npc_od_rad": "assets/images/characters/oddland/od_rad.webp",
-      "npc_od_nurse": "assets/images/characters/oddland/od_nurse.webp"
+      "npc_od_nurse": "assets/images/characters/oddland/od_nurse.webp",
+      "npc_od_hena": "assets/images/characters/oddland/od_hena.webp",
+      "npc_od_oren": "assets/images/characters/oddland/od_oren.webp"
     },
     "audio": {
       "exploration": "assets/audio/exploration-v2.ogg",
