@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict';
 import {loadContent} from '../src/core/loader.js';
 import {projectGame} from '../src/application/projection.js';
-import {border,start,go,drain,checkpoint,data,read} from '../tests/oddland-helpers.mjs';
+import {border,start,go,drain,checkpoint,data,read,prepare,play,paths} from '../tests/oddland-helpers.mjs';
 
 async function q291ArtFixtures(){
   const fixtures=[],outcomes=[],g=border(),q=start(g,291);
@@ -374,7 +374,66 @@ async function q297ArtFixtures(){
   return {fixtures,outcomes};
 }
 
+async function q298ArtFixtures(){
+  const fixtures=[],outcomes=[],routes=[],g=border();prepare(g,298);const prepared=g.save(),q=start(g,298);
+  const first=await loadContent(read,{edition:'e1'});
+  assert.equal(first.quests.q298,undefined);
+  for(const id of ['od_eme','od_relief','od_loader'])assert.equal(first.characters[id],undefined);
+  assert.deepEqual(Object.values(q.outcomes).map(o=>[o.gold,o.xp,o.gems]),[[45,20,0],[37,18,0],[28,16,0]]);
+  const inventory=structuredClone(g.state.inventory);
+  const state=(party,crate='loader',resolution='pending',relief='inn',pella='signals',finished=false)=>{
+    const v=g.state.stories.q298.values;
+    assert.deepEqual([v.partyAt,v.emeAt,v.loaderAt,v.crateAt,v.resolution,v.reliefAt,v.pellaAt,v.finished],
+      [party,'customs','yard',crate,resolution,relief,pella,finished]);
+    assert.deepEqual(g.state.inventory,inventory,'story cargo is not expedition food or an inventory item');
+  };
+  const capture=(scene,id,extra={})=>{
+    assert.equal(g.state.stories.q298.scene,scene);
+    assert.deepEqual(projectGame(g).dialog.scene.cast.map(c=>c.id),[id]);
+    checkpoint(g);const save=g.save();
+    const regions={od_eme:[.39,.17,.53,.26],od_relief:[.50,.18,.64,.27],od_loader:[.47,.16,.61,.25],od_pella:[.40,.19,.53,.28]};
+    fixtures.push({edition:'e2',quest:'q298',scene,cast:[id],save,faces:{[id]:regions[id]},...extra});return save;
+  };
+  const choose=id=>{
+    const action=q.story.actions[g.state.stories.q298.scene+'_'+id];assert.ok(action);
+    const before=structuredClone(g.state.stories.q298.values),gold=g.state.gold;
+    assert.ok(g.dispatch({type:'choose',id}));drain(g);checkpoint(g);
+    if(action.journey){
+      assert.ok(g.state.journey);assert.equal(g.state.quests.q298.stage,'active');
+      state('transit',before.crateAt,before.resolution,
+        action.journey.companions.includes('relief')?'transit':before.reliefAt,
+        action.journey.companions.includes('pella')?'transit':before.pellaAt);
+      go(g,q.story.worldPlaces[action.journey.to]);
+      if(g.state.journey)assert.ok(g.dispatch({type:'story.resume',quest:q.id}));
+      drain(g);assert.equal(g.state.journey,null);checkpoint(g);
+    }
+    assert.equal(g.state.gold,gold+(action.ending?q.outcomes[action.ending].gold:0),'relief allowance belongs to the window, not the party');
+  };
+  const complete=(outcome,route,crate='loader',relief='inn',pella='signals')=>{
+    const count=g.state.vars.region_12;assert.equal(g.unlocked(data.quests.q299),false);
+    choose('finish');assert.equal(g.state.quests.q298.outcome,outcome);
+    assert.equal(g.state.quests.q298.stage,'completed');assert.equal(g.state.vars.region_12,count+1);
+    assert.equal(g.unlocked(data.quests.q299),true);state('customs',crate,outcome,relief,pella,true);checkpoint(g);
+    routes.push(route);const key='e2/q298/'+outcome;if(!outcomes.includes(key))outcomes.push(key);
+  };
+  state('customs');const entry=capture('entry','od_eme',{blockedChoice:'signals',availableChoice:'carry'});
+  assert.equal(g.dispatch({type:'choose',id:'signals'}),false);assert.equal(g.save(),entry);
+  choose('carry');state('yard','loader','carry');capture('load','od_loader');
+  choose('take');state('yard','party','carry');capture('loaded','od_loader');
+  choose('go');state('customs','party','carry');capture('carry_end','od_eme');complete('carry','carry','eme');
+  g.load(entry);choose('relief');state('inn','loader','relief');capture('recruit','od_relief');
+  choose('go');state('customs','loader','relief','customs');capture('relief_end','od_eme');complete('relief','sai','loader','customs');
+  g.load(entry);choose('defer');state('yard','loader','defer');capture('postpone','od_loader');
+  choose('go');state('customs','loader','defer');capture('defer_end','od_eme');complete('defer','defer');
+  g.load(prepared);play(g,297,paths(297).find(p=>p.outcome==='signals'));start(g,298);
+  state('customs');capture('entry','od_eme',{variant:'signals',availableChoice:'signals'});
+  choose('signals');state('signals','loader','relief');capture('signal_help','od_pella');
+  choose('go');state('customs','loader','relief','inn','customs');capture('relief_end','od_eme',{variant:'pella'});
+  complete('relief','pella','loader','inn','customs');assert.deepEqual(routes,['carry','sai','defer','pella']);
+  return {fixtures,outcomes};
+}
+
 export async function oddlandArtFixtures(){
-  const groups=[await q291ArtFixtures(),await q292ArtFixtures(),await q293ArtFixtures(),await q294ArtFixtures(),await q295ArtFixtures(),await q296ArtFixtures(),await q297ArtFixtures()];
+  const groups=[await q291ArtFixtures(),await q292ArtFixtures(),await q293ArtFixtures(),await q294ArtFixtures(),await q295ArtFixtures(),await q296ArtFixtures(),await q297ArtFixtures(),await q298ArtFixtures()];
   return {fixtures:groups.flatMap(g=>g.fixtures),outcomes:groups.flatMap(g=>g.outcomes)};
 }
