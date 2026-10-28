@@ -1,4 +1,5 @@
 import {story,O,set,see,eq,ref,and,or,give} from '../../../story-kit.mjs';
+import {oddlandCharacterArt} from '../../../oddland-character-art.mjs';
 import {connectWorld} from '../../../world-story-kit.mjs';
 export {set,see,eq,ref,and,or,give};
 export const completed=n=>eq(ref(`quests.q${n}.stage`),'completed');
@@ -21,7 +22,7 @@ const specs=[
 ];
 export const locations=Object.fromEntries(specs.map(([id,name,parent,description,background])=>['oddland_'+id,{id:'oddland_'+id,name,parent,description,background,links:[]} ]));
 export const characters={};
-export const person=(key,name,place,goal)=>{characters['od_'+key]={id:'od_'+key,name,goal,role:'国境宿場の住民',detail:'オッドランド第一群の人物。外見・肖像は未制作。'};return {key,name,place,goal};};
+export const person=(key,name,place,goal)=>{characters['od_'+key]={id:'od_'+key,name,goal,role:'国境宿場の住民',detail:'オッドランド第一群の人物。外見・肖像は未制作。',...oddlandCharacterArt('od_'+key)};return {key,name,place,goal};};
 export const A=(id,label,to,extra={})=>({id,label,to,...extra});
 export const N=(id,place,text,options,extra={})=>({id,place,text,options,...extra});
 const render=text=>typeof text==='string'?[{op:'narrate',text}]:text;

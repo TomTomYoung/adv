@@ -7,6 +7,11 @@ on:
       - 'data/assets.json'
       - 'assets/images/characters/**'
       - 'authoring/kagaribi-character-art.mjs'
+      - 'authoring/oddland-character-art.mjs'
+      - 'data/scenario-editions/e2/oddland-first-ten.json'
+      - 'tools/character-art-browser.mjs'
+      - 'tools/oddland-art-fixtures.mjs'
+      - 'tools/browser-oddland-art-smoke.mjs'
       - 'tools/browser-cast-smoke.mjs'
       - 'tools/browser-kagaribi-art-smoke.mjs'
       - 'tools/kagaribi-art-fixtures.mjs'
@@ -33,6 +38,8 @@ jobs:
         run: node tools/browser-cast-smoke.mjs
       - name: Verify Kagaribi character art in both editions, layouts and widths
         run: node tools/browser-kagaribi-art-smoke.mjs
+      - name: Verify Oddland character art in both layouts and widths
+        run: node tools/browser-oddland-art-smoke.mjs
       - name: Keep animation checkpoints
         if: always()
         uses: actions/upload-artifact@v4
@@ -41,4 +48,5 @@ jobs:
           path: |
             /tmp/adv-cast-browser
             /tmp/adv-kagaribi-art-browser
+            /tmp/adv-oddland-art-browser
           if-no-files-found: ignore
