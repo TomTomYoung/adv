@@ -2,7 +2,7 @@ import {set,give,ref,eq,and,not} from '../../../story-kit.mjs';
 
 // Keep the existing request, truth, choices and endings. Add concrete arrivals
 // where the old prose used to finish a trip at the decision event's single cell.
-export function chapelSource(q){
+export function chapelSource(q,{cast=true}={}){
  const x={nodes:structuredClone(q.model.graph),places:{},flags:{},entities:{}};
  const scene=id=>x.nodes.find(n=>n.id===id),option=(id,key)=>scene(id).options.find(o=>o.id===key);
  const cell=(key,name,role)=>{const p=q.locations.find(p=>p.role===role);x.places[key]={name,world:{kind:'dungeon',dungeon:'region_4',map:p.map,x:p.x,y:p.y}};};
@@ -21,6 +21,14 @@ export function chapelSource(q){
   cell('cell','聖像の下の地下牢','clue_a');cell('workshop','礼拝堂の石工台','clue_b');scene('cell').place='cell';scene('workshop').place='workshop';
   option('entry','look').text='覗き窓の行先を確かめ、地下牢へ回る';
   entity('stone','workshop');entity('jewel','entry');
+  // The original jewel stays on the statue shelf. Describe the stone here;
+  // do not silently invent a journey or transfer for the jewel.
+  scene('workshop').text='職人が不透明な石を台に置いた。「この石でも、棚にある元の宝玉でも、像の輪郭は戻せます」。';
+  if(cast){
+   x.entities.prisoner={holder:'cell',kind:'person',character:'q032_prisoner'};
+   x.entities.craftsperson={holder:'workshop',kind:'person',character:'q032_craftsperson'};
+   scene('cell').cast=['prisoner'];scene('workshop').cast=['craftsperson'];
+  }
   route('workshop','stone','fit_stone',{depart:[give('stone','workshop','party')]});
   end('fit_stone','entry','石工台から不透明な目を持ち帰った。覗き管を塞ぐ位置と、像の輪郭をもう一度確かめる。','informed',[give('stone','party','entry')]);
   route('workshop','original','fit_original');end('fit_original','entry','透明な宝玉のある棚へ戻った。元の目を戻すと、地下牢を見張る穴も再び通る。','contract');

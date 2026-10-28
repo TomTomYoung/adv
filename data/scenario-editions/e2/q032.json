@@ -312,7 +312,7 @@
       {
         "id": "workshop",
         "place": "workshop",
-        "text": "職人が透明な宝玉と不透明な石を並べた。像の輪郭はどちらでも戻る。",
+        "text": "職人が不透明な石を台に置いた。「この石でも、棚にある元の宝玉でも、像の輪郭は戻せます」。",
         "options": [
           {
             "id": "stone",
@@ -403,7 +403,7 @@
     ],
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -411,7 +411,537 @@
       "settlement": "oddland_plateau",
       "saveRevision": 2,
       "scope": "礼拝堂20件のうち前半10件の実地接続。後半10件はchapel-second.mjsで接続。"
-    }
+    },
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "片目の聖像の現場",
+            "cell": "聖像の下の地下牢",
+            "workshop": "礼拝堂の石工台",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "cell"
+            ],
+            [
+              "transit",
+              "workshop"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "cell",
+                "workshop",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "informed",
+                "contract",
+                "compromise"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "stoneAt": {
+              "type": "enum",
+              "initial": "workshop",
+              "values": [
+                "entry",
+                "cell",
+                "workshop",
+                "transit",
+                "party",
+                "jewel"
+              ],
+              "meaning": "stone の所在または保持者"
+            },
+            "jewelAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "cell",
+                "workshop",
+                "transit",
+                "party",
+                "stone"
+              ],
+              "meaning": "jewel の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "stone": {
+              "holder": "stoneAt",
+              "kind": "item"
+            },
+            "jewel": {
+              "holder": "jewelAt",
+              "kind": "item"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "片目は地下牢への覗き窓で、両目を戻すと囚人の見張りが再開する。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "片目の聖像の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "cell": {
+              "title": "聖像の下の地下牢",
+              "place": "cell",
+              "cast": [],
+              "requires": true
+            },
+            "workshop": {
+              "title": "礼拝堂の石工台",
+              "place": "workshop",
+              "cast": [],
+              "requires": true
+            },
+            "fit_stone": {
+              "title": "片目の聖像の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "fit_original": {
+              "title": "片目の聖像の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "plate": {
+              "title": "片目の聖像の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_look": {
+              "from": [
+                "entry"
+              ],
+              "to": "cell",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "cell"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "observe",
+                  "observer": "party",
+                  "proposition": "truth",
+                  "source": "cell",
+                  "requires": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "cell",
+                "companions": []
+              },
+              "depart": []
+            },
+            "entry_restore": {
+              "from": [
+                "entry"
+              ],
+              "ending": "contract",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "contract"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "entry_plate": {
+              "from": [
+                "entry"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "cell_opaque": {
+              "from": [
+                "cell"
+              ],
+              "to": "workshop",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "workshop"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "workshop",
+                "companions": []
+              },
+              "depart": []
+            },
+            "cell_leave": {
+              "from": [
+                "cell"
+              ],
+              "to": "plate",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "workshop_stone": {
+              "from": [
+                "workshop"
+              ],
+              "to": "fit_stone",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "stone",
+                  "from": "workshop",
+                  "to": "party"
+                }
+              ]
+            },
+            "workshop_original": {
+              "from": [
+                "workshop"
+              ],
+              "to": "fit_original",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "fit_stone_finish": {
+              "from": [
+                "fit_stone"
+              ],
+              "ending": "informed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "stone",
+                  "from": "party",
+                  "to": "entry"
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "informed"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "fit_original_finish": {
+              "from": [
+                "fit_original"
+              ],
+              "ending": "contract",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "contract"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "plate_finish": {
+              "from": [
+                "plate"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "informed": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q032.values.resolution"
+                  },
+                  "right": "informed"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q032.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q032.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "contract": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q032.values.resolution"
+                  },
+                  "right": "contract"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q032.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q032.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compromise": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q032.values.resolution"
+                  },
+                  "right": "compromise"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q032.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q032.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_4",
+              "map": "region_4_f1",
+              "x": 9,
+              "y": 11
+            },
+            "cell": {
+              "kind": "dungeon",
+              "dungeon": "region_4",
+              "map": "region_4_f1",
+              "x": 1,
+              "y": 8
+            },
+            "workshop": {
+              "kind": "dungeon",
+              "dungeon": "region_4",
+              "map": "region_4_f1",
+              "x": 9,
+              "y": 6
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "prisonerAt",
+            "value": "cell"
+          },
+          {
+            "key": "craftspersonAt",
+            "value": "workshop"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q032.pilgrimage.entry": {
@@ -550,7 +1080,7 @@
         },
         {
           "op": "narrate",
-          "text": "職人が透明な宝玉と不透明な石を並べた。像の輪郭はどちらでも戻る。"
+          "text": "職人が不透明な石を台に置いた。「この石でも、棚にある元の宝玉でも、像の輪郭は戻せます」。"
         },
         {
           "op": "choice",
@@ -949,7 +1479,9 @@
           "workshop",
           "transit",
           "party",
-          "jewel"
+          "jewel",
+          "prisoner",
+          "craftsperson"
         ],
         "meaning": "stone の所在または保持者"
       },
@@ -962,9 +1494,33 @@
           "workshop",
           "transit",
           "party",
-          "stone"
+          "stone",
+          "prisoner",
+          "craftsperson"
         ],
         "meaning": "jewel の所在または保持者"
+      },
+      "prisonerAt": {
+        "type": "enum",
+        "initial": "cell",
+        "values": [
+          "entry",
+          "cell",
+          "workshop",
+          "transit"
+        ],
+        "meaning": "prisoner の所在または保持者"
+      },
+      "craftspersonAt": {
+        "type": "enum",
+        "initial": "workshop",
+        "values": [
+          "entry",
+          "cell",
+          "workshop",
+          "transit"
+        ],
+        "meaning": "craftsperson の所在または保持者"
       }
     },
     "entities": {
@@ -979,6 +1535,16 @@
       "jewel": {
         "holder": "jewelAt",
         "kind": "item"
+      },
+      "prisoner": {
+        "holder": "prisonerAt",
+        "kind": "person",
+        "character": "q032_prisoner"
+      },
+      "craftsperson": {
+        "holder": "craftspersonAt",
+        "kind": "person",
+        "character": "q032_craftsperson"
       }
     },
     "propositions": {
@@ -998,13 +1564,21 @@
       "cell": {
         "title": "聖像の下の地下牢",
         "place": "cell",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "prisoner"
+          }
+        ],
         "requires": true
       },
       "workshop": {
         "title": "礼拝堂の石工台",
         "place": "workshop",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "craftsperson"
+          }
+        ],
         "requires": true
       },
       "fit_stone": {
@@ -1401,7 +1975,7 @@
         "y": 6
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "oddland_plateau",
   "receptionLocations": [

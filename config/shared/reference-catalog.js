@@ -76170,7 +76170,9 @@ export const referenceData={
       "npc_od_relief": "assets/images/characters/oddland/od_relief.webp",
       "npc_od_loader": "assets/images/characters/oddland/od_loader.webp",
       "npc_od_maya": "assets/images/characters/oddland/od_maya.webp",
-      "npc_od_worker": "assets/images/characters/oddland/od_worker.webp"
+      "npc_od_worker": "assets/images/characters/oddland/od_worker.webp",
+      "npc_q032_prisoner": "assets/images/characters/relocated/q032_prisoner.webp",
+      "npc_q032_craftsperson": "assets/images/characters/relocated/q032_craftsperson.webp"
     },
     "audio": {
       "exploration": "assets/audio/exploration-v2.ogg",

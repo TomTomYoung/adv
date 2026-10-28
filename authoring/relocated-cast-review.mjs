@@ -1,4 +1,4 @@
-// Editorial audit only. These role IDs do not register game characters or casts.
+// Editorial audit: candidate IDs are local; connected roles cite their game entity.
 // Update a fingerprint only after rereading the changed quest and its evidence.
 export const RELOCATED_CAST_REVIEW={
  reviewedAt:'2026-10-29',
@@ -15,30 +15,48 @@ export const RELOCATED_CAST_REVIEW={
     entry:{decision:'no-person-evidence',people:[],evidence:'水晶の横には録音用の小さな窪みがある。',reason:'録音水晶を調べる場面。探索隊以外の特定人物が同席する記述はない。',visual:'録音水晶・吹込み用の窪み・日付の機構。人物画の追加は不要。'},
     night:{decision:'no-person-evidence',people:[],evidence:'自分の言った日付が流れた。',reason:'声は再生された録音。キリや別の話者が現場へ来たと解釈しない。',visual:'同じ足元で夜の礼拝と録音再生を示す差分。場面内の時間経過として扱う。'}
    },
-   next:'人物を追加せず、録音水晶と日付表示の局所差分を制作候補にする。人物監査の次はq033。'
+   next:'人物を追加せず、録音水晶と日付表示の局所差分を制作候補にする。人物監査の次はq034。'
   },
   q032:{
-   sourceSha256:'b36cb72545ceb06dee6cea8365b0fa6dbf967af238ed13c0b324adbea3d795e1',
+   sourceSha256:'8ea3083df1503f6511263214481d9045c5c9565b430c97fedb00018cc25d95f1',
    identityNotes:[
     '依頼人は修復師のサイ。q040にも同じ役職・名の依頼人がいる。q032の石工台の「職人」をサイ本人と同定する記述はなく、匿名の役として保留する。',
-    '国境q298の交代員サイ（od_relief）や既存人物の絵へ名前だけで統合しない。囚人と職人には固有名・年齢・性別・外見・他依頼との同一性を追加しない。',
+    '国境q298の交代員サイ（od_relief）や既存人物の絵へ名前だけで統合しない。囚人と職人の固有名・他依頼との同一性は未設定。具体的な外見・年齢感・服装は今回の美術設定として制作記録へ分ける。',
     '囚人は地下牢、職人は石工台でのみ出演根拠がある。聖像前への同行は原稿にない。依頼完了文の修復師・囚人を帰還場面の同席へ変換しない。',
-    '小物の表示には未整理点がある。workshop本文では宝玉と石を並べるが、jewelAtはentryから移らない。stoneAtはworkshop→party→entryと受け渡す。宝玉の現物を石工台へ描く前に、本文と保持者の整合方針を決める。今回この状態や本文は変更しない。'
+    '石工台では不透明な石を示し、棚にある宝玉と比較する説明へ本文を整えた。jewelAtはentryのまま、stoneAtはworkshop→party→entryと受け渡す。宝玉の運搬は追加しない。既存セーブの表示待ちの旧本文は保存した一節を読み終えてから新しい本文へ進む。'
    ],
    relatedClients:{q040:'修復師のサイ'},
    people:{
-    q032_prisoner:{label:'地下牢の囚人（匿名）',status:'candidate',need:'人物定義・所在・cellのcast・専用画が未接続。顔を隠す反応を表現できる構図を検討する。牢や格子は人物画へ固定しない。'},
-    q032_craftsperson:{label:'石工台の職人（匿名）',status:'candidate',need:'人物定義・所在・workshopのcast・専用画が未接続。修復師サイとの同一性は未確定。宝玉と石は人物画へ固定しない。'}
+    q032_prisoner:{label:'地下牢の囚人（匿名）',status:'connected',entity:'prisoner',need:'人物定義・cellの所在とcast・専用透過画を接続済み。口元へ手を上げる姿。牢や格子は人物画へ固定しない。'},
+    q032_craftsperson:{label:'石工台の職人（匿名）',status:'connected',entity:'craftsperson',need:'人物定義・workshopの所在とcast・専用透過画を接続済み。修復師サイとの同一性は未確定。宝玉と石は人物画へ固定しない。'}
    },
    scenes:{
     entry:{decision:'no-person-evidence',people:[],evidence:'宝玉は元の棚へ戻っている。',reason:'聖像と宝玉を調べる場面。依頼人や職人の同席は書かれていない。',visual:'片目の聖像・棚の透明な宝玉・覗き管。'},
     cell:{decision:'person-evidence',people:['q032_prisoner'],evidence:'囚人が「誰が見ている」と顔を隠す。',reason:'囚人の発言と動作が明示される。職人・依頼人は加えない。',visual:'地下牢側から見える覗き窓と囚人。聖像前とは実座標が異なる。'},
-    workshop:{decision:'person-evidence',people:['q032_craftsperson'],evidence:'職人が透明な宝玉と不透明な石を並べた。',reason:'石工台の職人の動作が明示される。地下牢の囚人は加えない。',visual:'石工台と比較する透明な宝玉・不透明な石。'},
+    workshop:{decision:'person-evidence',people:['q032_craftsperson'],evidence:'職人が不透明な石を台に置いた。',reason:'石工台の職人の動作が明示される。地下牢の囚人は加えない。',visual:'石工台と不透明な石。宝玉の現物は聖像前の棚に残る。'},
     fit_stone:{decision:'no-person-evidence',people:[],evidence:'石工台から不透明な目を持ち帰った。',reason:'探索隊だけが聖像へ戻る。職人が同行したとは扱わない。',visual:'未取付の石と塞ぐ覗き管。finish前に修復完了の状態を描かない。'},
     fit_original:{decision:'no-person-evidence',people:[],evidence:'透明な宝玉のある棚へ戻った。',reason:'探索隊が棚へ戻る。囚人・職人・依頼人を同席させない。',visual:'棚の宝玉と監視につながる穴。finish前に宝玉の取付完了を描かない。'},
     plate:{decision:'no-person-evidence',people:[],evidence:'片目を塞がず保存する方針',reason:'聖像前で由来を記す。地下牢の囚人は遠隔地のまま。',visual:'片目を残した像と由来の銘板。'}
    },
-   next:'匿名2役の制作候補を保持し、人物定義・所在・castと専用画を一組で接続する。現段階の監査だけでは出演実装済みと数えない。'
+   next:'匿名2役の接続を完了。聖像・地下牢・石工台の背景と道具の状態差分は残る。'
+  },
+  q033:{
+   sourceSha256:'7195dd4184536aaf1ec3636b797b16bb8ac735b2c671edd848003cce9572d1ba',
+   identityNotes:[
+    '依頼人は宿坊のウラ。現場で話し、客室・水盤・鏡へ同行する巡礼者とは別の役。ウラの同席を本文からは確認できない。',
+    '巡礼者は既存personエンティティpilgrimとして所在を持つが、characterとcastは未接続。5場面とも同じ巡礼者の出演候補。固有名・性別・年齢・宗派・狂火との関係を本文へ付与しない。',
+    '外套は衣服として人物と持物を分ける。guestで椅子に掛ける描写がある一方、cloakAtはpilgrimのまま。未洗浄・洗濯中・濡れた袖・客室での脱衣を一枚に焼き込まず、道具表示の前に着用と保持の扱いを整理する。'
+   ],
+   relatedClients:{},
+   people:{q033_pilgrim:{label:'鏡に映らない巡礼者（匿名）',status:'candidate',need:'既存pilgrimの所在と同行を保持し、character・5場面のcast・人物画を接続する候補。依頼人ウラの画を流用しない。'}},
+   scenes:{
+    entry:{decision:'person-evidence',people:['q033_pilgrim'],evidence:'巡礼者が鏡へ触れると白く曇った。',reason:'巡礼者の動作と発言がある。ウラは同席の根拠なし。',visual:'曇る鏡と外套。鏡像を別の人物として表示しない。'},
+    powder:{decision:'person-evidence',people:['q033_pilgrim'],evidence:'巡礼者は以前、鏡磨きの作業をしていた。',reason:'直前の調査を同じ場所で続ける。pilgrimAtはentryにあり、退場・移動はない。',visual:'拭いた布と銀磨き粉、曇りを拭いた鏡。'},
+    guest:{decision:'person-evidence',people:['q033_pilgrim'],evidence:'巡礼者と鏡のない客室まで来た。',reason:'同行して到着した本人から話を聞く。ウラは加えない。',visual:'鏡のない客室と椅子の外套。cloakAtの保持と着用状態は別途整理する。'},
+    wash:{decision:'person-evidence',people:['q033_pilgrim'],evidence:'巡礼者は濡れた袖を絞り、鏡へ戻ろうと言う。',reason:'水盤へ実際に同行した本人の動作と発言がある。',visual:'水盤、洗い落ちた粉、濡れた外套。'},
+    clean:{decision:'person-evidence',people:['q033_pilgrim'],evidence:'巡礼者と残る曇りを拭き取った。',reason:'水盤から一緒に戻り、同じ巡礼者と作業する。',visual:'拭いた鏡と映る手。新しい人物を増やさない。'}
+   },
+   next:'巡礼者1役の画と5場面のcastを接続する。人物監査はq034から続ける。'
   }
  }
 };
