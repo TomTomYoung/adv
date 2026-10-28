@@ -433,7 +433,73 @@ async function q298ArtFixtures(){
   return {fixtures,outcomes};
 }
 
+async function q299ArtFixtures(){
+  const fixtures=[],outcomes=[],routes=[],g=border();prepare(g,299);const q=start(g,299);
+  const first=await loadContent(read,{edition:'e1'});
+  assert.equal(first.quests.q299,undefined);
+  for(const id of ['od_maya','od_worker'])assert.equal(first.characters[id],undefined);
+  assert.deepEqual(Object.values(q.outcomes).map(o=>[o.gold,o.xp,o.gems]),[[42,19,0],[48,17,0]]);
+  const inventory=structuredClone(g.state.inventory);
+  const state=(party,resolution='pending',worker='inn',finished=false)=>{
+    const v=g.state.stories.q299.values;
+    assert.deepEqual([v.partyAt,v.mayaAt,v.stockAt,v.workerAt,v.resolution,v.finished],[party,'inn','warehouse',worker,resolution,finished]);
+    assert.deepEqual(g.state.inventory,inventory,'bedding and cleaning tools are not new inventory items');
+  };
+  const capture=(scene,cast,extra={})=>{
+    assert.equal(g.state.stories.q299.scene,scene);
+    assert.deepEqual(projectGame(g).dialog.scene.cast.map(c=>c.id),cast);
+    checkpoint(g);const save=g.save();
+    const regions={od_maya:[.46,.15,.60,.23],od_worker:[.36,.13,.50,.21],od_stock:[.36,.16,.51,.26]};
+    fixtures.push({edition:'e2',quest:'q299',scene,cast,save,faces:Object.fromEntries(cast.map(id=>[id,regions[id]])),...(cast.includes('od_stock')?{imageExtension:'png'}:{}),...extra});return save;
+  };
+  const choose=id=>{
+    const action=q.story.actions[g.state.stories.q299.scene+'_'+id];assert.ok(action);
+    const before=structuredClone(g.state.stories.q299.values),gold=g.state.gold;
+    assert.ok(g.dispatch({type:'choose',id}));drain(g);checkpoint(g);
+    if(action.journey){
+      assert.ok(g.state.journey);assert.equal(g.state.quests.q299.stage,'active');
+      assert.deepEqual(action.journey.companions,action===q.story.actions.invite_guide?['worker']:[]);
+      state('transit',before.resolution,action.journey.companions.includes('worker')?'transit':before.workerAt);
+      go(g,q.story.worldPlaces[action.journey.to]);
+      if(g.state.journey)assert.ok(g.dispatch({type:'story.resume',quest:q.id}));
+      drain(g);assert.equal(g.state.journey,null);checkpoint(g);
+    }
+    assert.equal(g.state.gold,gold-(action.cost?.gold??0)+(action.ending?q.outcomes[action.ending].gold:0));
+  };
+  const complete=(outcome,route)=>{
+    const count=g.state.vars.region_12;assert.equal(g.unlocked(data.quests.q300),false);
+    choose('finish');assert.equal(g.state.quests.q299.outcome,outcome);
+    assert.equal(g.state.quests.q299.stage,'completed');assert.equal(g.state.vars.region_12,count+1);
+    assert.equal(g.unlocked(data.quests.q300),true);state(outcome,outcome,outcome,true);checkpoint(g);
+    routes.push(route);const key='e2/q299/'+outcome;if(!outcomes.includes(key))outcomes.push(key);
+  };
+  state('inn');capture('entry',['od_maya','od_worker']);
+  choose('inspect');state('warehouse');const survey=capture('survey',['od_stock'],{availableChoice:'annex'}),gold=g.state.gold;
+  choose('annex');state('warehouse','annex');capture('paid',['od_stock']);assert.equal(g.state.gold,gold-12);
+  choose('go');state('annex','annex');capture('ready',[]);
+  choose('fetch');state('inn','annex');capture('invite',['od_maya','od_worker']);
+  choose('guide');state('annex','annex','annex');capture('annex_end',['od_worker']);complete('annex','paid');assert.equal(g.state.gold,gold-12+42);
+  g.load(survey);g.state.gold=0;
+  const shortage=capture('survey',['od_stock'],{variant:'no-gold',blockedChoices:['annex','inn'],availableChoice:'work'});
+  for(const id of ['annex','inn']){assert.equal(g.dispatch({type:'choose',id}),false);assert.equal(g.save(),shortage);}
+  choose('work');state('warehouse','annex');capture('work',['od_stock']);assert.equal(g.state.gold,0);
+  choose('go');state('annex','annex');capture('clean',[]);
+  {const before=g.save();assert.equal(g.dispatch({type:'choose',id:'guide'}),false);assert.equal(g.save(),before);assert.equal(g.unlocked(data.quests.q300),false);}
+  choose('fetch');state('warehouse','annex');capture('bedding',['od_stock']);
+  choose('carry');state('annex','annex');capture('ready',[],{variant:'work'});
+  choose('fetch');state('inn','annex');capture('invite',['od_maya','od_worker'],{variant:'work'});
+  choose('guide');state('annex','annex','annex');capture('annex_end',['od_worker'],{variant:'work'});assert.equal(g.state.gold,0);complete('annex','work');assert.equal(g.state.gold,42);
+  g.load(survey);g.state.gold=12;
+  const limited=capture('survey',['od_stock'],{variant:'12-gold',blockedChoice:'inn',availableChoice:'annex'});
+  assert.equal(g.dispatch({type:'choose',id:'inn'}),false);assert.equal(g.save(),limited);
+  choose('annex');assert.equal(g.state.gold,0);state('warehouse','annex');
+  g.load(survey);choose('inn');state('warehouse','inn');capture('inn_paid',['od_stock']);assert.equal(g.state.gold,gold-18);
+  choose('go');state('inn','inn');capture('inn_end',['od_maya','od_worker']);complete('inn','inn');assert.equal(g.state.gold,gold-18+48);
+  assert.deepEqual(routes,['paid','work','inn']);
+  return {fixtures,outcomes};
+}
+
 export async function oddlandArtFixtures(){
-  const groups=[await q291ArtFixtures(),await q292ArtFixtures(),await q293ArtFixtures(),await q294ArtFixtures(),await q295ArtFixtures(),await q296ArtFixtures(),await q297ArtFixtures(),await q298ArtFixtures()];
+  const groups=[await q291ArtFixtures(),await q292ArtFixtures(),await q293ArtFixtures(),await q294ArtFixtures(),await q295ArtFixtures(),await q296ArtFixtures(),await q297ArtFixtures(),await q298ArtFixtures(),await q299ArtFixtures()];
   return {fixtures:groups.flatMap(g=>g.fixtures),outcomes:groups.flatMap(g=>g.outcomes)};
 }

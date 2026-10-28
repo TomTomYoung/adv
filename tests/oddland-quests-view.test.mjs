@@ -25,8 +25,6 @@ for(const layout of ['classic','scene'])test(`${layout}: accept a local job, spe
  click('退避所へ父を迎えに行く');go(g,data.quests.q291.story.worldPlaces.refuge);render();advance();cast(['od_rad']);assert.equal(g.state.stories.q291.values.teoAt,'clinic');checkpoint(g);
  click('ラドを支え、施療所へ戻る');go(g,data.quests.q291.story.worldPlaces.clinic);render();advance();cast(['od_nurse','od_rad','od_teo']);checkpoint(g);
  click('親子の休む場所をユナに引き継ぐ');advance();assert.equal(g.state.quests.q291.outcome,'protect');checkpoint(g);
- prepare(g,299);start(g,299);render();advance();const pending=dom.root.querySelector('[data-character="od_maya"]');
- assert.ok(pending);assert.ok(pending.textContent.includes(data.characters.od_maya.name));assert.equal(pending.querySelector('img'),null);
 
  }finally{view?.destroy();dom.restore();}
 });
@@ -214,5 +212,54 @@ for(const layout of ['classic','scene'])test(layout+': q298 keeps cargo holders,
   click(signalLabel);state('transit');checkpoint(g);arrive('signals');state('signals','loader','relief');cast('od_pella');
   click('ペラと合図板を外国側窓口へ運ぶ');state('transit','loader','relief','inn','transit');assert.deepEqual(q.story.actions.signal_help_go.journey.companions,['pella']);checkpoint(g);arrive('customs');state('customs','loader','relief','inn','customs');cast('od_eme');assert.equal(g.state.gold,signalGold);
   click('交代の引継ぎを見届ける');state('customs','loader','relief','inn','customs',true);assert.equal(g.state.quests.q298.outcome,'relief');assert.equal(g.state.gold,signalGold+37);checkpoint(g);
+ }finally{view?.destroy();dom.restore();}
+});
+
+for(const layout of ['classic','scene'])test(layout+': q299 pays once or carries bedding for free, keeping the innkeeper and storekeeper at work',()=>{
+ const g=border();prepare(g,299);const q=start(g,299),dom=installDOM();let view;
+ const render=()=>view.render(projectGame(g));
+ const advance=()=>{let n=100;while(g.state.waiting?.type==='text'){assert.ok(--n);view.advanceText();}};
+ const reveal=()=>{let n=100;while(view.canChoose?.()===false){assert.ok(--n);view.advanceText();}};
+ const button=label=>[...dom.root.querySelectorAll('button')].find(b=>b.querySelector('span')?.textContent===label||b.textContent===label);
+ const click=label=>{reveal();const b=button(label);assert.ok(b,'missing: '+label);assert.ok(!b.disabled);b.click();advance();};
+ const labels={annex:'寝具代12Gを払い、別棟を整える',work:'掃除と寝具運びを引き受ける',inn:'部屋代18Gを預け、旅籠の相部屋を使う'};
+ const inventory=structuredClone(g.state.inventory),v=()=>g.state.stories.q299.values;
+ const state=(party,resolution='pending',worker='inn',finished=false)=>{
+  assert.deepEqual([v().partyAt,v().mayaAt,v().stockAt,v().workerAt,v().resolution,v().finished],[party,'inn','warehouse',worker,resolution,finished]);assert.deepEqual(g.state.inventory,inventory);
+ };
+ const cast=ids=>{
+  assert.equal(dom.root.querySelectorAll('[data-character]').length,ids.length);
+  for(const id of ids){const p=dom.root.querySelector('[data-character="'+id+'"]');assert.ok(p);assert.ok(p.textContent.includes(data.characters[id].name));assert.equal(p.querySelector('img').src,data.assets.images['npc_'+id]);}
+  assert.deepEqual(projectGame(g).town.cast.map(c=>c.id).sort(),[...ids].sort());checkpoint(g);
+ };
+ const arrive=place=>{go(g,q.story.worldPlaces[place]);render();advance();assert.equal(g.state.journey,null);checkpoint(g);};
+ const finish=outcome=>{
+  const count=g.state.vars.region_12;assert.equal(g.unlocked(data.quests.q300),false);
+  click(outcome==='annex'?'休める寝床へ引き継ぐ':'相部屋の支度を確かめ、ヘルに休んでもらう');
+  assert.equal(g.state.quests.q299.outcome,outcome);assert.equal(g.state.vars.region_12,count+1);assert.equal(g.unlocked(data.quests.q300),true);state(outcome,outcome,outcome,true);checkpoint(g);
+ };
+ const escort=()=>{
+  click('旅籠で待つ労働者を迎えに行く');state('transit','annex');checkpoint(g);arrive('inn');state('inn','annex');cast(['od_maya','od_worker']);
+  click('ヘルを別棟の寝床へ案内する');state('transit','annex','transit');assert.deepEqual(q.story.actions.invite_guide.journey.companions,['worker']);checkpoint(g);
+  arrive('annex');state('annex','annex','annex');cast(['od_worker']);
+ };
+ try{
+  view=replaceView(null,layout,dom.root,intent=>{const ok=g.dispatch(intent);render();return ok;},{status(){},menu(){},help(){},soundEnabled:()=>false,effectsMode:()=> 'off'});render();advance();
+  state('inn');cast(['od_maya','od_worker']);click('共同倉庫の置き場を確かめる');state('transit');checkpoint(g);arrive('warehouse');state('warehouse');cast(['od_stock']);const survey=g.save(),gold=g.state.gold;
+  click(labels.annex);state('warehouse','annex');cast(['od_stock']);assert.equal(g.state.gold,gold-12);
+  click('空き別棟で寝床を確かめる');state('transit','annex');checkpoint(g);arrive('annex');state('annex','annex');cast([]);assert.equal(g.state.stories.q299.scene,'ready');
+  escort();assert.equal(g.state.gold,gold-12);finish('annex');assert.equal(g.state.gold,gold-12+42);
+  g.load(survey);g.state.gold=0;render();advance();reveal();state('warehouse');
+  for(const id of ['annex','inn']){assert.ok(button(labels[id]).disabled);const before=g.save();assert.equal(g.dispatch({type:'choose',id}),false);assert.equal(g.save(),before);}
+  assert.equal(button(labels.work).disabled,false);click(labels.work);state('warehouse','annex');cast(['od_stock']);
+  click('空き別棟へ掃除道具を運ぶ');state('transit','annex');checkpoint(g);arrive('annex');state('annex','annex');cast([]);assert.equal(g.state.stories.q299.scene,'clean');assert.equal(g.unlocked(data.quests.q300),false);
+  {const before=g.save();assert.equal(g.dispatch({type:'choose',id:'guide'}),false);assert.equal(g.save(),before);}
+  click('倉庫へ寝具を取りに戻る');state('transit','annex');checkpoint(g);arrive('warehouse');state('warehouse','annex');cast(['od_stock']);
+  click('寝具を空き別棟へ運ぶ');state('transit','annex');checkpoint(g);arrive('annex');state('annex','annex');cast([]);assert.equal(g.state.stories.q299.scene,'ready');
+  escort();assert.equal(g.state.gold,0);finish('annex');assert.equal(g.state.gold,42);
+  g.load(survey);g.state.gold=12;render();advance();reveal();assert.ok(button(labels.inn).disabled);assert.equal(button(labels.annex).disabled,false);assert.equal(button(labels.work).disabled,false);
+  click(labels.annex);state('warehouse','annex');assert.equal(g.state.gold,0);checkpoint(g);
+  g.load(survey);g.state.gold=18;render();advance();reveal();assert.equal(button(labels.inn).disabled,false);click(labels.inn);state('warehouse','inn');cast(['od_stock']);assert.equal(g.state.gold,0);
+  click('旅籠の相部屋へ戻る');state('transit','inn');assert.deepEqual(q.story.actions.inn_paid_go.journey.companions,[]);checkpoint(g);arrive('inn');state('inn','inn');cast(['od_maya','od_worker']);assert.equal(g.state.gold,0);finish('inn');assert.equal(g.state.gold,48);
  }finally{view?.destroy();dom.restore();}
 });
