@@ -192,6 +192,40 @@ export async function kagaribiArtFixtures(){
     }
     q209.load(escortBattle);fight(q209);escortState('hall',true,true);checkpoint(q209,'q209','witness',escortPair);
     endEscort('sign','battle');escortState('hall',true,true,false,'battle');
+    const q210=prepare('q210'),sui=['q210_widow'],repairPair=['q210_widow','q210_maker'],ember=q210.state.inventory.kagaribi_ember??0;
+    const homeState=(place,decision='none',consent=false,box='maker',letter='widow',returned=false,home=false)=>{
+      const v=q210.state.stories.q210.values;
+      assert.deepEqual([v.partyAt,v.widowAt,v.makerAt],[place,place,'rest']);
+      assert.deepEqual([v.decision,v.consent,v.boxAt,v.letterAt,v.boxReturned,v.home],[decision,consent,box,letter,returned,home]);
+      assert.equal(q210.state.inventory.kagaribi_ember??0,ember);
+    };
+    const altar=checkpoint(q210,'q210','entry',sui);homeState('altar');
+    for(const decision of ['letter','ritual','hope']){
+      q210.load(altar);choose(q210,decision);
+      if(decision==='ritual'){
+        homeState('altar');checkpoint(q210,'q210','ritual',sui);q210.state.inventory.torch=0;
+        const noTorch=checkpoint(q210,'q210','ritual',sui,{variant:'no-torch',blockedChoice:'light'});
+        assert.equal(q210.dispatch({type:'choose',id:'light'}),false);assert.equal(q210.save(),noTorch);
+        q210.state.inventory.torch=1;
+        const fires=structuredClone({run:q210.state.dungeons.active.systems,persistent:q210.state.dungeons.persistent.kagaribi.systems});
+        choose(q210,'light');assert.equal(q210.state.inventory.torch,0);
+        assert.deepEqual({run:q210.state.dungeons.active.systems,persistent:q210.state.dungeons.persistent.kagaribi.systems},fires,'ordinary ritual torch preserves dungeon fires');
+      }
+      homeState('altar',decision,true);if(decision==='letter')checkpoint(q210,'q210','ready',sui);
+      choose(q210,'walk');homeState('transit',decision,true);arrive(q210);homeState('rest',decision,true);
+      if(decision==='letter')checkpoint(q210,'q210','box',repairPair);
+      choose(q210,'take');homeState('rest',decision,true,'widow','widow',true);
+      const action=decision==='letter'?'letter':'return',blocked=decision==='letter'?'return':'letter';
+      const packed=checkpoint(q210,'q210','packed',sui,{variant:decision,blockedChoice:blocked,availableChoice:action});
+      assert.equal(q210.dispatch({type:'choose',id:blocked}),false);assert.equal(q210.save(),packed);
+      const holder=decision==='letter'?'box':'widow';choose(q210,action);homeState('transit',decision,true,'widow',holder,true);arrive(q210);
+      homeState('entry',decision,true,'widow',holder,true);
+      const wrongEnding=decision==='letter'?'hope':'letter',home=checkpoint(q210,'q210','home',sui,{variant:decision,blockedChoice:wrongEnding,availableChoice:decision});
+      assert.equal(q210.dispatch({type:'choose',id:wrongEnding}),false);assert.equal(q210.save(),home);
+      choose(q210,decision);homeState('entry',decision,true,'widow',holder,true,true);
+      assert.equal(q210.state.quests.q210.outcome,decision);outcomes.push(`${edition}/q210/${decision}`);
+      const done=q210.save();q210.load(done);assert.equal(q210.save(),done);
+    }
   }
   return {fixtures,outcomes};
 }

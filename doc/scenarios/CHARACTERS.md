@@ -8,7 +8,7 @@
 
 ## 会話用の透過立ち絵
 
-現在はNPC56定義中、54人の会話用画像を参照できます。人物のsprite指定を優先し、省略時はsprite_<ID>、それもなければ肖像へフォールバックします。以下にカード画像と会話画像を分けて示します。
+現在はNPC56定義中、56人の会話用画像を参照できます。人物のsprite指定を優先し、省略時はsprite_<ID>、それもなければ肖像へフォールバックします。以下にカード画像と会話画像を分けて示します。
 
 2026-09-24の追加対象は人物30点とくらがり1点で、全31点の適用を完了しました。[回収・適用記録](../../assets/source/characters/recovery-2026-09-24.json)に対応とハッシュを保持します。各場面の配置演出や公開画面の通し確認まで完了したという意味ではありません。
 
@@ -27,6 +27,8 @@
 2026-10-28にq208のメア・フユ2人を追加し、篝火の専用人物画は16人になりました。名札・覆い・小灯を人物画へ固定せず、追悼台のメアと納骨所のフユを既存castで切り替えます。[q208の原本・英日プロンプト・ハッシュ](../../assets/source/characters/kagaribi-q208-2026-10-28.json)。
 
 同日にq209のゼド・エル2人を追加し、篝火の専用人物画は18人になりました。借りた盾や報告書を人物画へ固定せず、盾掛けでの教習と巡灯路への同行帰着を既存castで示します。[q209の原本・英日プロンプト・ハッシュ](../../assets/source/characters/kagaribi-q209-2026-10-28.json)。
+
+同日にq210のスイ・リト2人を追加し、篝火の追加10編・全20人の専用人物画が揃いました。箱・手紙・炎を人物画へ固定せず、スイの同行と道具台でのリトの同席を既存castで切り替えます。[q210の原本・英日プロンプト・ハッシュ](../../assets/source/characters/kagaribi-q210-2026-10-28.json)。
 
 q001では老人とルーキーを左、リネを右へ配置し、発話者を手前へ出します。[人物演出仕様](../ui/CHARACTER_STAGING.md)、[初期の立ち絵・ハッシュ](../../assets/source/characters/dialogue-sprites-manifest.json)、[使用プロンプト](../../assets/source/characters/dialogue-sprites-prompts.json)を参照してください。
 
@@ -686,7 +688,11 @@ q001とq010は同一人物。依頼受付・救助名簿・報告を担当する
 
 深火の蘇生伝承を聞いて来たが、蘇生が起きたところは見ていない。遺体はこの場に持ち込んでいない。
 
-専用画像は未制作。本文と人物名で登場し、既存人物の画像は流用しません。
+![スイのカード肖像](../../assets/images/characters/kagaribi/q210_widow.webp)
+
+[会話用立ち絵](../../assets/images/characters/kagaribi/q210_widow.webp)
+
+[生成PNG原本](../../assets/source/characters/kagaribi-q210-2026-10-28/q210_widow.png) ／ [生成・変換記録](../../assets/source/characters/kagaribi-q210-2026-10-28.json)
 
 ### リト (q210_maker)
 
@@ -694,7 +700,11 @@ q001とq010は同一人物。依頼受付・救助名簿・報告を担当する
 
 スイの思い出の箱を預かり、蝶番だけを修理した。深火を移す容器ではない。
 
-専用画像は未制作。本文と人物名で登場し、既存人物の画像は流用しません。
+![リトのカード肖像](../../assets/images/characters/kagaribi/q210_maker.webp)
+
+[会話用立ち絵](../../assets/images/characters/kagaribi/q210_maker.webp)
+
+[生成PNG原本](../../assets/source/characters/kagaribi-q210-2026-10-28/q210_maker.png) ／ [生成・変換記録](../../assets/source/characters/kagaribi-q210-2026-10-28.json)
 
 ## 歴史上・物語内で言及される人物
 
