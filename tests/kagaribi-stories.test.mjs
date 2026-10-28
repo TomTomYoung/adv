@@ -133,9 +133,15 @@ test('new people display dedicated art when available without exposing author-on
         assert.ok(person);assert.ok(person.textContent.includes(name));assert.equal(person.querySelector('img').src,data.assets.images[`npc_${id}`]);
       }
     }
-    view.render(projectGame(prepareQuest('q210')));
-    const pending=dom.root.querySelector('[data-character="q210_widow"]');
-    assert.ok(pending);assert.match(pending.textContent,/スイ/);assert.equal(pending.querySelector('img'),null);
+    const returnHome=prepareQuest('q210');
+    for(const [action,ids] of [[null,['q210_widow']],['letter',['q210_widow']],['walk',['q210_widow','q210_maker']],['take',['q210_widow']],['letter',['q210_widow']]]){
+      if(action){choose(returnHome,action);if(returnHome.state.journey)finishJourney(returnHome);}
+      view.render(projectGame(returnHome));assert.equal(dom.root.querySelectorAll('[data-character]').length,ids.length);
+      for(const id of ids){
+        const person=dom.root.querySelector(`[data-character="${id}"]`);
+        assert.ok(person);assert.ok(person.textContent.includes(data.characters[id].name));assert.equal(person.querySelector('img').src,data.assets.images[`npc_${id}`]);
+      }
+    }
   }}finally{view?.destroy();dom.restore();}
 });
 
