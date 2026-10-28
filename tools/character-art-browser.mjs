@@ -49,11 +49,17 @@ try{
         assert.equal(info.src,`assets/images/characters/${folder}/${id}.${extension}`);assert.deepEqual([info.width,info.height],[1024,1536]);assert.equal(info.cornerAlpha,0);assert.ok(info.bodyAlpha>240);
         assert.ok((await figure.textContent()).includes(await page.evaluate(id=>h.g.data.characters[id].name,id)));images.push({id,...info});
       }
+      await page.evaluate(async()=>{await document.fonts.ready;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));});
+      // A conditional sentence can span pages; inspect every rendered page before choices.
+      const dialoguePages=f.expectedText?[await page.locator('.story-text').textContent()]:undefined;
       const blockedChoices=f.blockedChoices??(f.blockedChoice?[f.blockedChoice]:[]);
       if(blockedChoices.length||f.availableChoice){
         const target=blockedChoices[0]??f.availableChoice;
         const choice=page.locator(`[data-focus="choice:${target}"]`);
-        for(let n=0;await choice.count()===0&&n<32;n++)await page.locator('[data-focus="message:next"]').click();
+        for(let n=0;await choice.count()===0&&n<32;n++){
+          await page.locator('[data-focus="message:next"]').click();
+          if(dialoguePages)dialoguePages.push(await page.locator('.story-text').textContent());
+        }
         assert.equal(await choice.count(),1);
         for(const id of blockedChoices){
           const blocked=page.locator(`[data-focus="choice:${id}"]`);
@@ -67,7 +73,7 @@ try{
         }
       }
       if(f.expectedText){
-        const text=await page.locator('.story-text').textContent();
+        const text=dialoguePages.join('');
         assert.ok(text.includes(f.expectedText),`missing conditional dialogue: ${f.expectedText}`);
         if(f.absentText)assert.ok(!text.includes(f.absentText),`unexpected conditional dialogue: ${f.absentText}`);
       }
@@ -103,7 +109,7 @@ try{
       const measure=await page.evaluate(()=>({viewport:innerWidth,document:document.documentElement.scrollWidth,height:innerHeight,pageHeight:document.documentElement.scrollHeight}));
       assert.ok(measure.document<=measure.viewport+1,'horizontal overflow');if(layout==='scene')assert.ok(measure.pageHeight<=measure.height+1,'Scene height');
       await page.screenshot({path:path.join(output,`${f.edition}-${layout}-${width}-${f.quest}-${f.scene}${f.variant?`-${f.variant}`:''}.png`),fullPage:true});
-      checks.push({edition:f.edition,quest:f.quest,scene:f.scene,variant:f.variant,blockedChoice:f.blockedChoice,blockedChoices:f.blockedChoices,availableChoice:f.availableChoice,expectedText:f.expectedText,absentText:f.absentText,layout,width,images,faces,...measure});
+      checks.push({edition:f.edition,quest:f.quest,scene:f.scene,variant:f.variant,blockedChoice:f.blockedChoice,blockedChoices:f.blockedChoices,availableChoice:f.availableChoice,expectedText:f.expectedText,absentText:f.absentText,dialoguePages,layout,width,images,faces,...measure});
     }
   }
   assert.deepEqual(errors,[]);console.log(JSON.stringify({checks:checks.length,outcomes:outcomes.length,errors,output}));
