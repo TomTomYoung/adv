@@ -1,4 +1,5 @@
 import {story,O,set,see,eq,ref,and,or,give} from '../../../story-kit.mjs';
+import {oddlandCharacterArt,ODDLAND_SCENE_BLOCKING} from '../../../oddland-character-art.mjs';
 import {connectWorld} from '../../../world-story-kit.mjs';
 export {set,see,eq,ref,and,or,give};
 export const completed=n=>eq(ref(`quests.q${n}.stage`),'completed');
@@ -21,7 +22,7 @@ const specs=[
 ];
 export const locations=Object.fromEntries(specs.map(([id,name,parent,description,background])=>['oddland_'+id,{id:'oddland_'+id,name,parent,description,background,links:[]} ]));
 export const characters={};
-export const person=(key,name,place,goal)=>{characters['od_'+key]={id:'od_'+key,name,goal,role:'国境宿場の住民',detail:'オッドランド第一群の人物。外見・肖像は未制作。'};return {key,name,place,goal};};
+export const person=(key,name,place,goal)=>{characters['od_'+key]={id:'od_'+key,name,goal,role:'国境宿場の住民',detail:'オッドランド第一群の人物。外見・肖像は未制作。',...oddlandCharacterArt('od_'+key)};return {key,name,place,goal};};
 export const A=(id,label,to,extra={})=>({id,label,to,...extra});
 export const N=(id,place,text,options,extra={})=>({id,place,text,options,...extra});
 const render=text=>typeof text==='string'?[{op:'narrate',text}]:text;
@@ -33,6 +34,7 @@ export function compileQuest(x){
  for(const [key,value] of Object.entries(x.flags??{}))s.bool(key,value,key);
  for(const [key,text] of Object.entries(x.facts??{}))s.fact(key,text);
  for(const n of x.nodes)s.node(n.id,n.place,n.cast??[],n.text,n.options.map(a=>O(a.id,a.label,a.to,[...(a.resolution?[set('resolution',a.resolution)]:[]),...(a.effects??[]),...(a.to.startsWith('@')?[set('finished')]:[])],{...(a.when?{when:a.when}:{}),...(a.cost?{cost:a.cost}:{})})),n.requires??true);
+ for(const [scene,positions] of Object.entries(ODDLAND_SCENE_BLOCKING[id]??{}))for(const c of s.story.scenes[scene].cast)c.display=positions[c.entity];
  const route=connectWorld(s,Object.fromEntries(keys.map(k=>[k,places[k].world])),1);
  for(const n of x.nodes)for(const a of n.options){const target=x.nodes.find(t=>t.id===a.to);if(target&&target.place!==n.place){
   const action=s.story.actions[`${n.id}_${a.id}`],effects=action.effects;

@@ -76148,7 +76148,11 @@ export const referenceData={
       "npc_q209_guard": "assets/images/characters/kagaribi/q209_guard.webp",
       "npc_q209_pupil": "assets/images/characters/kagaribi/q209_pupil.webp",
       "npc_q210_widow": "assets/images/characters/kagaribi/q210_widow.webp",
-      "npc_q210_maker": "assets/images/characters/kagaribi/q210_maker.webp"
+      "npc_q210_maker": "assets/images/characters/kagaribi/q210_maker.webp",
+      "npc_od_marta": "assets/images/characters/oddland/od_marta.webp",
+      "npc_od_teo": "assets/images/characters/oddland/od_teo.webp",
+      "npc_od_rad": "assets/images/characters/oddland/od_rad.webp",
+      "npc_od_nurse": "assets/images/characters/oddland/od_nurse.webp"
     },
     "audio": {
       "exploration": "assets/audio/exploration-v2.ogg",

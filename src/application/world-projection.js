@@ -12,7 +12,11 @@ export function projectWorld(engine,dialog){
   const cast=(location.cast??[]).map(c=>({id:c.character,name:d.characters[c.character].name,sprite:d.assets.images[c.sprite],portrait:d.assets.images[d.characters[c.character].portrait],x:c.x}));
   for(const q of Object.values(d.quests)){
     const story=s.stories[q.id];if(!q.story?.worldPlaces||!story||s.quests[q.id].stage!=='active')continue;
+    const scene=q.story.scenes[story.scene],sceneHere=scene&&atWorldPlace(s,resolveStoryWorldPlace(q.story,story,scene.place));
     for(const [id,e] of Object.entries(q.story.entities))if(e.character){
+      // A person can be physically present but still hidden by the current scene.
+      // Apply the authored reveal conditions to the town backdrop as well.
+      if(sceneHere&&!scene.cast.some(c=>c.entity===id&&c.mode!=='remote'&&(c.when===undefined||engine.value(c.when))))continue;
       const place=resolveStoryWorldPlace(q.story,story,storyPlace(q.story,story,id)),image=d.assets.images[d.characters[e.character].sprite??`sprite_${e.character}`],display=q.story.scenes[story.scene]?.cast.find(c=>c.entity===id)?.display;
       if(place?.kind==='town'&&place.location===location.id&&image&&!cast.some(c=>c.id===e.character))cast.push({id:e.character,name:d.characters[e.character].name,sprite:image,portrait:d.assets.images[d.characters[e.character].portrait],display:clone(display??{})});
     }
