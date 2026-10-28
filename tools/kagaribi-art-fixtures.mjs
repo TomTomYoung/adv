@@ -167,6 +167,31 @@ export async function kagaribiArtFixtures(){
     q208.load(noMemorialRope);choose(q208,'private');memorial('transit','party','party',true,false,true);arrive(q208);
     memorial('shelf','party','party',true,false,true);checkpoint(q208,'q208','return',['q208_daughter']);
     endMemorial('hand');memorial('shelf','daughter','daughter',true,false,true,false,'private');assert.equal(q208.state.inventory.rope,0);
+    const q209=prepare('q209'),escortPair=['q209_guard','q209_pupil'];
+    const escortState=(place,admitted=false,witnessed=false,returned=false,account='none',party=place)=>{
+      const v=q209.state.stories.q209.values;
+      assert.deepEqual([v.partyAt,v.guardAt,v.pupilAt],[party,place,place]);
+      assert.deepEqual([v.shieldAt,v.reportAt,v.admitted,v.witnessed,v.returned,v.account],['guard','pupil',admitted,witnessed,returned,account]);
+    };
+    const endEscort=(action,outcome)=>{
+      choose(q209,action);assert.equal(q209.state.quests.q209.outcome,outcome);outcomes.push(`${edition}/q209/${outcome}`);
+      const done=q209.save();q209.load(done);assert.equal(q209.save(),done);
+    };
+    const escortEntry=checkpoint(q209,'q209','entry',escortPair);escortState('hall');
+    endEscort('limited','limited');escortState('hall',true,false,false,'limited');assert.equal(q209.state.battle,null);
+    q209.load(escortEntry);choose(q209,'escort');escortState('transit',true);arrive(q209);
+    escortState('entry',true);checkpoint(q209,'q209','home',escortPair);
+    endEscort('record','escort');escortState('entry',true,false,true,'escort');
+    q209.load(escortEntry);choose(q209,'battle');escortState('hall',true);checkpoint(q209,'q209','challenge',escortPair);
+    choose(q209,'fight');assert.equal(q209.state.battle.encounter,'kagaribi_wax');escortState('hall',true);
+    const escortBattle=q209.save();q209.load(escortBattle);assert.equal(q209.save(),escortBattle);
+    // Exercise non-victory continuations directly; this is not a difficulty test.
+    for(const result of ['escape','lose']){
+      q209.load(escortBattle);q209.finishBattle(result);drain(q209);escortState('hall',true,false,false,'none',result==='lose'?'transit':'hall');
+      assert.notEqual(q209.state.quests.q209.stage,'completed');const save=q209.save();q209.load(save);assert.equal(q209.save(),save);
+    }
+    q209.load(escortBattle);fight(q209);escortState('hall',true,true);checkpoint(q209,'q209','witness',escortPair);
+    endEscort('sign','battle');escortState('hall',true,true,false,'battle');
   }
   return {fixtures,outcomes};
 }
