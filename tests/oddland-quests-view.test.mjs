@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {installDOM} from './view-dom.mjs';
 import {replaceView} from '../src/view/view-layout.js';
 import {projectGame} from '../src/application/projection.js';
-import {border,go,start,data,checkpoint} from './oddland-helpers.mjs';
+import {border,go,start,data,checkpoint,prepare} from './oddland-helpers.mjs';
 for(const layout of ['classic','scene'])test(`${layout}: accept a local job, speak at the yard, escort or protect on foot with the correct dedicated cast`,()=>{
  const g=border(),dom=installDOM();let view;
  const render=()=>view.render(projectGame(g)),dispatch=intent=>{const ok=g.dispatch(intent);render();return ok;};
@@ -25,8 +25,8 @@ for(const layout of ['classic','scene'])test(`${layout}: accept a local job, spe
  click('退避所へ父を迎えに行く');go(g,data.quests.q291.story.worldPlaces.refuge);render();advance();cast(['od_rad']);assert.equal(g.state.stories.q291.values.teoAt,'clinic');checkpoint(g);
  click('ラドを支え、施療所へ戻る');go(g,data.quests.q291.story.worldPlaces.clinic);render();advance();cast(['od_nurse','od_rad','od_teo']);checkpoint(g);
  click('親子の休む場所をユナに引き継ぐ');advance();assert.equal(g.state.quests.q291.outcome,'protect');checkpoint(g);
- start(g,297);render();advance();const pending=dom.root.querySelector('[data-character="od_rugo"]');
- assert.ok(pending);assert.ok(pending.textContent.includes(data.characters.od_rugo.name));assert.equal(pending.querySelector('img'),null);
+ prepare(g,298);start(g,298);render();advance();const pending=dom.root.querySelector('[data-character="od_eme"]');
+ assert.ok(pending);assert.ok(pending.textContent.includes(data.characters.od_eme.name));assert.equal(pending.querySelector('img'),null);
 
  }finally{view?.destroy();dom.restore();}
 });
@@ -157,5 +157,28 @@ for(const layout of ['classic','scene'])test(layout+': q296 keeps residents at w
   click('検査見本をタルへ渡す');state('warehouse','stock','recover');cast('od_stock');checkpoint(g);
   click('旅籠で回収先をベクに知らせる');state('transit','stock','recover');checkpoint(g);arrive('inn');state('inn','stock','recover');cast('od_bek');
   click('回収品を灯へ戻さないことを確認する');state('inn','stock','recover',true);assert.equal(g.state.quests.q296.outcome,'recover');assert.equal(g.state.gold,gold+31);checkpoint(g);
+ }finally{view?.destroy();dom.restore();}
+});
+
+for(const layout of ['classic','scene'])test(layout+': q297 leaves both cargo workers at the refuge while borrowing boards and preserves both resolutions',()=>{
+ const g=border(),q=start(g,297),dom=installDOM();let view;
+ const render=()=>view.render(projectGame(g));
+ const advance=()=>{let n=100;while(g.state.waiting?.type==='text'){assert.ok(--n);view.advanceText();}};
+ const click=label=>{let n=100;while(view.canChoose?.()===false){assert.ok(--n);view.advanceText();}const b=[...dom.root.querySelectorAll('button')].find(b=>b.textContent===label);assert.ok(b,'missing: '+label);assert.ok(!b.disabled);b.click();advance();};
+ const v=()=>g.state.stories.q297.values,inventory=structuredClone(g.state.inventory);
+ const state=(party,resolution='pending',finished=false)=>{assert.deepEqual([v().partyAt,v().rugoAt,v().pellaAt,v().resolution,v().finished],[party,'signals','signals',resolution,finished]);assert.deepEqual(g.state.inventory,inventory);};
+ const cast=(ids=['od_rugo','od_pella'])=>{assert.equal(dom.root.querySelectorAll('[data-character]').length,ids.length);for(const id of ids){const person=dom.root.querySelector('[data-character="'+id+'"]');assert.ok(person);assert.ok(person.textContent.includes(data.characters[id].name));assert.equal(person.querySelector('img').src,'assets/images/characters/oddland/'+id+'.webp');}if(projectGame(g).town)assert.deepEqual(projectGame(g).town.cast.map(c=>c.id).sort(),[...ids].sort());};
+ const arrive=place=>{go(g,q.story.worldPlaces[place]);render();advance();assert.equal(g.state.journey,null);checkpoint(g);};
+ try{
+  view=replaceView(null,layout,dom.root,intent=>{const ok=g.dispatch(intent);render();return ok;},{status(){},menu(){},help(){},soundEnabled:()=>false,effectsMode:()=> 'off'});render();advance();
+  state('signals');cast();assert.ok(!(g.state.stories.q297.knowledge.party??[]).includes('word'));const gold=g.state.gold;
+  click('呼び声に合わせて何をするのか、順に見せてもらう');state('signals');cast();assert.ok(g.state.stories.q297.knowledge.party.includes('word'));checkpoint(g);const meaning=g.save();
+  click('二人で同じ側から作業を実演する');state('signals','demo');cast();checkpoint(g);
+  click('新人にも二つの動作を実演してもらう');state('signals','demo',true);assert.equal(g.state.quests.q297.outcome,'demo');assert.equal(g.state.gold,gold+20);checkpoint(g);
+  g.load(meaning);render();advance();click('荷車溜まりで合図板の材料を借りる');state('transit');assert.deepEqual(q.story.actions.meaning_signals.journey.companions,[]);checkpoint(g);
+  arrive('yard');state('yard','signals');cast([]);assert.equal(g.state.gold,gold);
+  click('合図板を持って退避所へ戻る');state('transit','signals');assert.deepEqual(q.story.actions.materials_return.journey.companions,[]);checkpoint(g);
+  arrive('signals');state('signals','signals');cast();
+  click('共通の手信号を荷役の交代に残す');state('signals','signals',true);assert.equal(g.state.quests.q297.outcome,'signals');assert.equal(g.state.gold,gold+27);checkpoint(g);
  }finally{view?.destroy();dom.restore();}
 });

@@ -76163,7 +76163,9 @@ export const referenceData={
       "npc_od_passenger": "assets/images/characters/oddland/od_passenger.webp",
       "npc_od_bek": "assets/images/characters/oddland/od_bek.png",
       "npc_od_oil_seller": "assets/images/characters/oddland/od_oil_seller.png",
-      "npc_od_stock": "assets/images/characters/oddland/od_stock.png"
+      "npc_od_stock": "assets/images/characters/oddland/od_stock.png",
+      "npc_od_rugo": "assets/images/characters/oddland/od_rugo.webp",
+      "npc_od_pella": "assets/images/characters/oddland/od_pella.webp"
     },
     "audio": {
       "exploration": "assets/audio/exploration-v2.ogg",
