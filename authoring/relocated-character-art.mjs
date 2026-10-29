@@ -1,11 +1,13 @@
 // Edition-two regional bundle: relocated-quest roles, separate from border NPCs.
 export const RELOCATED_CHARACTER_ART=Object.fromEntries([
- ['q032_prisoner','chapel-q032-2026-10-29'],['q032_craftsperson','chapel-q032-2026-10-29'],['q033_pilgrim','chapel-q033-2026-10-29'],['q034_merchant','chapel-q034-2026-10-29'],['q035_server','chapel-q035-2026-10-29'],['q035_patient','chapel-q035-2026-10-29'],['q036_conductor','chapel-q036-2026-10-30'],...['first','second','third'].map(key=>['q037_owner_'+key,'chapel-q037-2026-10-30'])
+ ['q032_prisoner','chapel-q032-2026-10-29'],['q032_craftsperson','chapel-q032-2026-10-29'],['q033_pilgrim','chapel-q033-2026-10-29'],['q034_merchant','chapel-q034-2026-10-29'],['q035_server','chapel-q035-2026-10-29'],['q035_patient','chapel-q035-2026-10-29'],['q036_conductor','chapel-q036-2026-10-30'],...['first','second','third'].map(key=>['q037_owner_'+key,'chapel-q037-2026-10-30']),
+ ['q038_inspector','chapel-q038-2026-10-30']
 ].map(([id,batch])=>[id,{
  asset:'npc_'+id,file:`assets/images/characters/relocated/${id}.webp`,source:`assets/source/characters/${batch}/${id}.png`,manifest:`assets/source/characters/${batch}.json`
 }]));
 export const relocatedCharacterImages=()=>Object.fromEntries(Object.values(RELOCATED_CHARACTER_ART).map(a=>[a.asset,a.file]));
 export const relocatedCharacters=Object.fromEntries([
+ ['q038_inspector','水質と設備の検査人','水質検査台で検査結果を記し、水瓶へ探索隊と同行して設備を確かめる匿名の検査人。','2026-10-30の美術設定。短い栗色の髪、青い作業上衣、灰色の前掛けと空の手は美術上の選択。氏名・性別・年齢・経歴は本文へ追加せず、施療人ネイとは同定しない。瓶・炭・検査票・検査結果を人物画へ固定しない。'],
  ['q032_prisoner','地下牢の囚人','礼拝堂の聖像の下の地下牢にいる匿名の人物。'],
  ['q032_craftsperson','石工台の職人','礼拝堂の石工台で修復方法を説明する匿名の人物。修復師サイとの同一性は未確定。'],
  ['q033_pilgrim','鏡に映らない巡礼者','以前は鏡磨きの作業をしていた匿名の巡礼者。外套の粉で鏡が曇る。依頼人の宿坊のウラとは別の役。','2026-10-29の美術設定。具体的な外見・年齢感・服装は今回の美術設定。固有名・他人物との同一性・宗派は追加しない。粉・濡れ・鏡像・椅子・水盤を人物画へ固定しない。'],

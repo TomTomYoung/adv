@@ -363,7 +363,7 @@
     },
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -371,7 +371,657 @@
       "settlement": "oddland_plateau",
       "saveRevision": 2,
       "scope": "礼拝堂20件のうち前半10件の実地接続。後半10件はchapel-second.mjsで接続。"
-    }
+    },
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "聖水の沈殿の現場",
+            "lab": "礼拝堂の水質検査台",
+            "supply": "巡礼台地の水の受取所",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "lab"
+            ],
+            [
+              "transit",
+              "supply"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "lab",
+                "supply",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "informed",
+                "contract",
+                "compromise"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "filterChanged": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "filterChanged"
+            },
+            "waterTested": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "waterTested"
+            },
+            "sampleAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "lab",
+                "supply",
+                "transit",
+                "party",
+                "afterSample"
+              ],
+              "meaning": "sample の所在または保持者"
+            },
+            "afterSampleAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "lab",
+                "supply",
+                "transit",
+                "party",
+                "sample"
+              ],
+              "meaning": "afterSample の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "sample": {
+              "holder": "sampleAt",
+              "kind": "item"
+            },
+            "afterSample": {
+              "holder": "afterSampleAt",
+              "kind": "item"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "沈殿は浄化材の炭で、水は清いが瓶の交換を怠った印でもある。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "聖水の沈殿の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "water": {
+              "title": "礼拝堂の水質検査台",
+              "place": "lab",
+              "cast": [],
+              "requires": true
+            },
+            "filter": {
+              "title": "聖水の沈殿の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "filter_check": {
+              "title": "聖水の沈殿の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "after_test": {
+              "title": "礼拝堂の水質検査台",
+              "place": "lab",
+              "cast": [],
+              "requires": true
+            },
+            "posted": {
+              "title": "聖水の沈殿の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "supply": {
+              "title": "巡礼台地の水の受取所",
+              "place": "supply",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_sample": {
+              "from": [
+                "entry"
+              ],
+              "to": "water",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "lab"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "sample",
+                  "from": "party",
+                  "to": "lab"
+                },
+                {
+                  "op": "set",
+                  "key": "waterTested",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "lab",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "sample",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "entry_replace": {
+              "from": [
+                "entry"
+              ],
+              "to": "filter",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "filterChanged",
+                  "value": true
+                },
+                {
+                  "op": "observe",
+                  "observer": "party",
+                  "proposition": "truth",
+                  "source": "entry",
+                  "requires": true
+                }
+              ],
+              "once": false
+            },
+            "entry_purge": {
+              "from": [
+                "entry"
+              ],
+              "ending": "contract",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "contract"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "entry_buy": {
+              "from": [
+                "entry"
+              ],
+              "to": "supply",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "supply"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "supply",
+                "companions": []
+              },
+              "depart": []
+            },
+            "water_filter": {
+              "from": [
+                "water"
+              ],
+              "to": "filter_check",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "water_separate": {
+              "from": [
+                "water"
+              ],
+              "to": "supply",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "supply"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "supply",
+                "companions": []
+              },
+              "depart": []
+            },
+            "filter_test": {
+              "from": [
+                "filter"
+              ],
+              "to": "after_test",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "lab"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "afterSample",
+                  "from": "party",
+                  "to": "lab"
+                },
+                {
+                  "op": "set",
+                  "key": "waterTested",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "lab",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "afterSample",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "filter_suspend": {
+              "from": [
+                "filter"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "filter_check_finish": {
+              "from": [
+                "filter_check"
+              ],
+              "ending": "informed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "filterChanged",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "informed"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "after_test_post": {
+              "from": [
+                "after_test"
+              ],
+              "to": "posted",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "posted_finish": {
+              "from": [
+                "posted"
+              ],
+              "ending": "informed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "informed"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "supply_finish": {
+              "from": [
+                "supply"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "informed": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q038.values.resolution"
+                  },
+                  "right": "informed"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q038.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q038.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "contract": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q038.values.resolution"
+                  },
+                  "right": "contract"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q038.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q038.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compromise": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q038.values.resolution"
+                  },
+                  "right": "compromise"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q038.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q038.values.partyAt"
+                      },
+                      "right": "entry"
+                    },
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q038.values.partyAt"
+                      },
+                      "right": "supply"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_4",
+              "map": "region_4_f2",
+              "x": 13,
+              "y": 7
+            },
+            "lab": {
+              "kind": "dungeon",
+              "dungeon": "region_4",
+              "map": "region_4_f2",
+              "x": 1,
+              "y": 8
+            },
+            "supply": {
+              "kind": "town",
+              "location": "oddland_plateau_supply"
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "inspectorAt",
+            "value": "lab"
+          },
+          {
+            "key": "inspectorAt",
+            "value": "entry",
+            "when": {
+              "op": "in",
+              "left": "water_filter",
+              "right": {
+                "ref": "stories.q038.events"
+              }
+            }
+          },
+          {
+            "key": "inspectorAt",
+            "value": "transit",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "journey.quest"
+                  },
+                  "right": "q038"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "journey.action"
+                  },
+                  "right": "water_filter"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q038.pilgrimage.entry": {
@@ -983,7 +1633,8 @@
           "supply",
           "transit",
           "party",
-          "afterSample"
+          "afterSample",
+          "inspector"
         ],
         "meaning": "sample の所在または保持者"
       },
@@ -996,9 +1647,21 @@
           "supply",
           "transit",
           "party",
-          "sample"
+          "sample",
+          "inspector"
         ],
         "meaning": "afterSample の所在または保持者"
+      },
+      "inspectorAt": {
+        "type": "enum",
+        "initial": "lab",
+        "values": [
+          "entry",
+          "lab",
+          "supply",
+          "transit"
+        ],
+        "meaning": "inspector の所在または保持者"
       }
     },
     "entities": {
@@ -1013,6 +1676,11 @@
       "afterSample": {
         "holder": "afterSampleAt",
         "kind": "item"
+      },
+      "inspector": {
+        "holder": "inspectorAt",
+        "kind": "person",
+        "character": "q038_inspector"
       }
     },
     "propositions": {
@@ -1032,7 +1700,11 @@
       "water": {
         "title": "礼拝堂の水質検査台",
         "place": "lab",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "inspector"
+          }
+        ],
         "requires": true
       },
       "filter": {
@@ -1044,7 +1716,11 @@
       "filter_check": {
         "title": "聖水の沈殿の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "inspector"
+          }
+        ],
         "requires": true
       },
       "after_test": {
@@ -1191,7 +1867,8 @@
           {
             "op": "move",
             "entities": [
-              "party"
+              "party",
+              "inspector"
             ],
             "path": [
               "transit",
@@ -1204,7 +1881,9 @@
         "once": false,
         "journey": {
           "to": "entry",
-          "companions": []
+          "companions": [
+            "inspector"
+          ]
         },
         "depart": []
       },
@@ -1515,7 +2194,7 @@
         "location": "oddland_plateau_supply"
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "oddland_plateau",
   "receptionLocations": [
