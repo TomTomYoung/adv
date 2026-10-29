@@ -33,18 +33,24 @@ try{
   for(const layout of ['scene','classic'])for(const width of [1440,390]){
     await page.setViewportSize({width,height:width===390?844:1000});
     for(const [index,f] of fixtures.entries()){
-      const extension=f.imageExtension??'webp';
+      const extension=f.imageExtension??'webp',textOnlyCast=f.textOnlyCast??[];
+      assert.ok(textOnlyCast.every(id=>f.cast.includes(id)),'text-only roles must be in the scene cast');
       await page.evaluate(({index,layout})=>h.start(index,layout),{index,layout});
       const before=await page.evaluate(()=>h.g.save());await page.evaluate(()=>h.resume());assert.equal(await page.evaluate(()=>h.g.save()),before);
       assert.deepEqual(await page.evaluate(()=>h.view.model.dialog.scene.cast.map(c=>c.id)),f.cast);
       assert.equal(await page.locator('[data-character]').count(),f.cast.length,'only the scene cast is displayed');
       if((group==='oddland'||group==='chapel')&&layout==='classic'&&await page.locator('.town-scene').count()){
         const shown=await page.locator('.town-character').evaluateAll(images=>images.map(i=>i.getAttribute('src')).sort());
-        assert.deepEqual(shown,f.cast.map(id=>`assets/images/characters/${folder}/${id}.${extension}`).sort(),'town backdrop must not reveal an offstage character');
+        assert.deepEqual(shown,f.cast.filter(id=>!textOnlyCast.includes(id)).map(id=>`assets/images/characters/${folder}/${id}.${extension}`).sort(),'town backdrop must not reveal an offstage character');
       }
       const images=[];
       for(const id of f.cast){
-        const figure=page.locator(`[data-character="${id}"]`),img=figure.locator('img');assert.equal(await img.count(),1);
+        const figure=page.locator(`[data-character="${id}"]`),img=figure.locator('img');
+        if(textOnlyCast.includes(id)){
+          assert.equal(await img.count(),0);assert.ok((await figure.getAttribute('class')).includes('name-only'));
+          assert.equal(await figure.locator('figcaption').textContent(),await page.evaluate(id=>h.g.data.characters[id].name,id));continue;
+        }
+        assert.equal(await img.count(),1);
         const info=await img.evaluate(async i=>{await i.decode();const c=document.createElement('canvas');c.width=i.naturalWidth;c.height=i.naturalHeight;const ctx=c.getContext('2d');ctx.drawImage(i,0,0);return {src:i.getAttribute('src'),width:i.naturalWidth,height:i.naturalHeight,cornerAlpha:ctx.getImageData(0,0,1,1).data[3],bodyAlpha:ctx.getImageData(512,700,1,1).data[3]};});
         assert.equal(info.src,`assets/images/characters/${folder}/${id}.${extension}`);assert.deepEqual([info.width,info.height],[1024,1536]);assert.equal(info.cornerAlpha,0);assert.ok(info.bodyAlpha>240);
         assert.ok((await figure.textContent()).includes(await page.evaluate(id=>h.g.data.characters[id].name,id)));images.push({id,...info});
@@ -83,7 +89,7 @@ try{
       let faces;
       if(f.faces&&layout==='scene'){
         faces=await page.evaluate(regions=>{
-          const cast=[...document.querySelectorAll('[data-character]')].map(figure=>{
+          const cast=[...document.querySelectorAll('[data-character]')].filter(figure=>figure.querySelector('img')).map(figure=>{
             const img=figure.querySelector('img'),r=img.getBoundingClientRect(),style=getComputedStyle(img);
             const scale=Math.min(r.width/img.naturalWidth,r.height/img.naturalHeight),position=style.objectPosition.split(' ').map(v=>parseFloat(v)/100);
             const x=r.x+(r.width-img.naturalWidth*scale)*position[0],y=r.y+(r.height-img.naturalHeight*scale)*position[1];
@@ -106,10 +112,19 @@ try{
         },f.faces);
         assert.ok(faces.every(face=>face.points.every(p=>p.visible)),`occluded face: ${JSON.stringify(faces)}`);
       }
+      const labels=[];
+      for(const id of textOnlyCast){
+        const label=page.locator(`[data-character="${id}"] figcaption`);
+        assert.ok(await label.isVisible());
+        const info=await label.evaluate(e=>{const r=e.getBoundingClientRect(),s=getComputedStyle(e),hud=document.querySelector('.scene-hud')?.getBoundingClientRect(),dock=document.querySelector('.scene-dock')?.getBoundingClientRect();return {text:e.textContent,left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height,clip:s.clipPath,hudBottom:hud?.bottom,dockTop:dock?.top,viewport:innerWidth};});
+        assert.ok(info.width>0&&info.height>0&&info.left>=0&&info.right<=info.viewport,'group label must fit the viewport');
+        if(layout==='scene')assert.ok(info.clip==='none'&&info.top>=info.hudBottom&&info.bottom<=info.dockTop,'group label must remain between HUD and dialogue');
+        labels.push({id,...info});
+      }
       const measure=await page.evaluate(()=>({viewport:innerWidth,document:document.documentElement.scrollWidth,height:innerHeight,pageHeight:document.documentElement.scrollHeight}));
       assert.ok(measure.document<=measure.viewport+1,'horizontal overflow');if(layout==='scene')assert.ok(measure.pageHeight<=measure.height+1,'Scene height');
       await page.screenshot({path:path.join(output,`${f.edition}-${layout}-${width}-${f.quest}-${f.scene}${f.variant?`-${f.variant}`:''}.png`),fullPage:true});
-      checks.push({edition:f.edition,quest:f.quest,scene:f.scene,variant:f.variant,blockedChoice:f.blockedChoice,blockedChoices:f.blockedChoices,availableChoice:f.availableChoice,expectedText:f.expectedText,absentText:f.absentText,dialoguePages,layout,width,images,faces,...measure});
+      checks.push({edition:f.edition,quest:f.quest,scene:f.scene,variant:f.variant,blockedChoice:f.blockedChoice,blockedChoices:f.blockedChoices,availableChoice:f.availableChoice,expectedText:f.expectedText,absentText:f.absentText,dialoguePages,layout,width,images,faces,...(labels.length?{labels}:{}),...measure});
     }
   }
   assert.deepEqual(errors,[]);console.log(JSON.stringify({checks:checks.length,outcomes:outcomes.length,errors,output}));
