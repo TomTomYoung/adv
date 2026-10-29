@@ -272,7 +272,7 @@
     ],
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -280,7 +280,336 @@
       "settlement": "oddland_plateau",
       "saveRevision": 2,
       "scope": "礼拝堂20件のうち前半10件の実地接続。後半10件はchapel-second.mjsで接続。"
-    }
+    },
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "七番目の歌声の現場",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "informed",
+                "contract",
+                "compromise"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "livePaused": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "livePaused"
+            },
+            "rehearsed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "rehearsed"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "七番目は退団した歌手の録音で、声を失った本人が合唱を整えている。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "七番目の歌声の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "recording": {
+              "title": "七番目の歌声の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "credit": {
+              "title": "七番目の歌声の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_solo": {
+              "from": [
+                "entry"
+              ],
+              "to": "recording",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "livePaused",
+                  "value": true
+                },
+                {
+                  "op": "observe",
+                  "observer": "party",
+                  "proposition": "truth",
+                  "source": "entry",
+                  "requires": true
+                }
+              ],
+              "once": false
+            },
+            "entry_cut": {
+              "from": [
+                "entry"
+              ],
+              "ending": "contract",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "contract"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "recording_rehearse": {
+              "from": [
+                "recording"
+              ],
+              "to": "credit",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "livePaused",
+                  "value": false
+                },
+                {
+                  "op": "set",
+                  "key": "rehearsed",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "recording_memorial": {
+              "from": [
+                "recording"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "credit_program": {
+              "from": [
+                "credit"
+              ],
+              "ending": "informed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "informed"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "credit_separate": {
+              "from": [
+                "credit"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "informed": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q036.values.resolution"
+                  },
+                  "right": "informed"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q036.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q036.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "contract": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q036.values.resolution"
+                  },
+                  "right": "contract"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q036.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q036.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compromise": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q036.values.resolution"
+                  },
+                  "right": "compromise"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q036.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q036.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_4",
+              "map": "region_4_f2",
+              "x": 15,
+              "y": 5
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "conductorAt",
+            "value": "entry"
+          },
+          {
+            "key": "choirAt",
+            "value": "entry"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q036.pilgrimage.entry": {
@@ -662,12 +991,40 @@
         "type": "boolean",
         "initial": false,
         "meaning": "rehearsed"
+      },
+      "conductorAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "transit"
+        ],
+        "meaning": "conductor の所在または保持者"
+      },
+      "choirAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "transit"
+        ],
+        "meaning": "choir の所在または保持者"
       }
     },
     "entities": {
       "party": {
         "holder": "partyAt",
         "kind": "group"
+      },
+      "conductor": {
+        "holder": "conductorAt",
+        "kind": "person",
+        "character": "q036_conductor"
+      },
+      "choir": {
+        "holder": "choirAt",
+        "kind": "group",
+        "character": "q036_choir"
       }
     },
     "propositions": {
@@ -681,19 +1038,40 @@
       "entry": {
         "title": "七番目の歌声の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "conductor"
+          },
+          {
+            "entity": "choir"
+          }
+        ],
         "requires": true
       },
       "recording": {
         "title": "七番目の歌声の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "conductor"
+          },
+          {
+            "entity": "choir"
+          }
+        ],
         "requires": true
       },
       "credit": {
         "title": "七番目の歌声の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "conductor"
+          },
+          {
+            "entity": "choir"
+          }
+        ],
         "requires": true
       }
     },
@@ -925,7 +1303,7 @@
         "y": 5
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "oddland_plateau",
   "receptionLocations": [

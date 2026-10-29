@@ -1,0 +1,934 @@
+{
+  "schemaVersion": 1,
+  "id": "q036",
+  "number": 36,
+  "title": "七番目の歌声",
+  "client": "聖歌隊のキリ",
+  "brief": "六人の合唱に七人目が混じる。悪霊なら祓ってください。",
+  "region": 4,
+  "type": "authored_progression",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。 巡礼台地の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q036_pilgrim_entry",
+      "title": "七番目の歌声の現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q036.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q036.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      },
+      "script": "q036.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "region_4",
+          "map": "region_4_f2",
+          "x": 15,
+          "y": 5
+        }
+      ]
+    }
+  ],
+  "locations": [],
+  "outcomes": {
+    "informed": {
+      "label": "録音・生歌・編曲の役を明示して公演する",
+      "text": "歌手は声の代わりに指揮を執った。七人の名が揃って礼拝録に残る。",
+      "gold": 93,
+      "xp": 92
+    },
+    "contract": {
+      "label": "録音を止め、六人だけで歌う",
+      "text": "合唱は純粋な生声になった。キリは失われた低音を一人で探す。",
+      "gold": 113,
+      "xp": 68
+    },
+    "compromise": {
+      "label": "録音を別の追悼曲として流す",
+      "text": "本番は六人、終わりは七人になった。拍手は調律室にも届く。",
+      "gold": 60,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/chapel.mjs",
+    "world": {
+      "truth": "七番目は退団した歌手の録音で、声を失った本人が合唱を整えている。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "七番目は退団した歌手の録音で、声を失った本人が合唱を整えている。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "六人の合唱に七人目が混じる。悪霊なら祓ってください。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "聖歌隊のキリ",
+        "observation": "六人の合唱に七人目が混じる。悪霊なら祓ってください。",
+        "belief": "六人の合唱に七人目が混じる。悪霊なら祓ってください。",
+        "goal": "六人の合唱に七人目が混じる。悪霊なら祓ってください。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "六人の合唱に七人目が混じる。悪霊なら祓ってください。",
+      "progression": "合唱を止めたり再開したりするリハーサルで録音の役割を聞き分け、公演の編成を作る。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q036.pilgrimage.entry"
+        },
+        {
+          "id": "recording",
+          "script": "q036.pilgrimage.recording"
+        },
+        {
+          "id": "credit",
+          "script": "q036.pilgrimage.credit"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "六人の合唱に七人目が混じる。悪霊なら祓ってください。",
+      "openQuestion": "七番目の歌声の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "pathHide",
+      "newInformation": "七番目は退団した歌手の録音で、声を失った本人が合唱を整えている。",
+      "retroactiveTargets": [
+        "recording"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q036.flow.entry"
+      },
+      {
+        "id": "recording",
+        "script": "q036.flow.recording"
+      },
+      {
+        "id": "credit",
+        "script": "q036.flow.credit"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q036.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "合唱を止めたり再開したりするリハーサルで録音の役割を聞き分け、公演の編成を作る。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "合唱を止めたり再開したりするリハーサルで録音の役割を聞き分け、公演の編成を作る。",
+    "flowVersion": 2,
+    "entryScript": "q036.pilgrimage.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "六人の口が動き、七つの声が聞こえる。指揮台には声を失った元団員がいる。",
+        "options": [
+          {
+            "id": "solo",
+            "text": "生歌だけ一度止めてもらう",
+            "to": "recording",
+            "action": "entry_solo"
+          },
+          {
+            "id": "cut",
+            "text": "録音を止め、六人だけで歌う",
+            "to": "@contract",
+            "action": "entry_cut"
+          }
+        ]
+      },
+      {
+        "id": "recording",
+        "place": "entry",
+        "text": "残った一声へ、指揮者が拍を送った。七番目は退団した歌手の録音で、声を失った本人が合唱を整えている。",
+        "options": [
+          {
+            "id": "rehearse",
+            "text": "録音と生歌の入りを合わせて練習する",
+            "to": "credit",
+            "action": "recording_rehearse"
+          },
+          {
+            "id": "memorial",
+            "text": "録音を別の追悼曲として流す",
+            "to": "@compromise",
+            "action": "recording_memorial"
+          }
+        ]
+      },
+      {
+        "id": "credit",
+        "place": "entry",
+        "text": "共演は形になった。指揮者は録音を自分の今の声とは紹介せず、録音時期と現在の役目を並べたいと言う。",
+        "options": [
+          {
+            "id": "program",
+            "text": "録音・生歌・編曲の役を明示して公演する",
+            "to": "@informed",
+            "action": "credit_program"
+          },
+          {
+            "id": "separate",
+            "text": "共演をやめ、録音を別枠へ移す",
+            "to": "@compromise",
+            "action": "credit_separate"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q036.decision",
+        "action": "informed",
+        "option": "informed_supplies",
+        "shortage": "q036.decision.informed.shortage",
+        "resume": "q036.decision.informed.resume",
+        "cost": {
+          "rope": 1
+        }
+      },
+      {
+        "from": "q036.review",
+        "action": "informed",
+        "option": "informed_supplies",
+        "shortage": "q036.review.informed.shortage",
+        "resume": "q036.review.informed.resume",
+        "cost": {
+          "rope": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q036.visit",
+      "q036.flow.visit"
+    ],
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "first-ten",
+      "settlement": "oddland_plateau",
+      "saveRevision": 2,
+      "scope": "礼拝堂20件のうち前半10件の実地接続。後半10件はchapel-second.mjsで接続。"
+    }
+  },
+  "scripts": {
+    "q036.pilgrimage.entry": {
+      "storyQuest": "q036",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q036",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "六人の口が動き、七つの声が聞こえる。指揮台には声を失った元団員がいる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "solo",
+              "text": "生歌だけ一度止めてもらう",
+              "storyAction": {
+                "quest": "q036",
+                "action": "entry_solo"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q036",
+                  "action": "entry_solo"
+                },
+                {
+                  "op": "jump",
+                  "script": "q036.pilgrimage.recording"
+                }
+              ]
+            },
+            {
+              "id": "cut",
+              "text": "録音を止め、六人だけで歌う",
+              "storyAction": {
+                "quest": "q036",
+                "action": "entry_cut"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q036",
+                  "action": "entry_cut"
+                },
+                {
+                  "op": "jump",
+                  "script": "q036.pilgrimage.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q036.pilgrimage.recording": {
+      "storyQuest": "q036",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q036",
+          "scene": "recording"
+        },
+        {
+          "op": "narrate",
+          "text": "残った一声へ、指揮者が拍を送った。七番目は退団した歌手の録音で、声を失った本人が合唱を整えている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "rehearse",
+              "text": "録音と生歌の入りを合わせて練習する",
+              "storyAction": {
+                "quest": "q036",
+                "action": "recording_rehearse"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q036",
+                  "action": "recording_rehearse"
+                },
+                {
+                  "op": "jump",
+                  "script": "q036.pilgrimage.credit"
+                }
+              ]
+            },
+            {
+              "id": "memorial",
+              "text": "録音を別の追悼曲として流す",
+              "storyAction": {
+                "quest": "q036",
+                "action": "recording_memorial"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q036",
+                  "action": "recording_memorial"
+                },
+                {
+                  "op": "jump",
+                  "script": "q036.pilgrimage.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q036.pilgrimage.credit": {
+      "storyQuest": "q036",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q036",
+          "scene": "credit"
+        },
+        {
+          "op": "narrate",
+          "text": "共演は形になった。指揮者は録音を自分の今の声とは紹介せず、録音時期と現在の役目を並べたいと言う。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "program",
+              "text": "録音・生歌・編曲の役を明示して公演する",
+              "storyAction": {
+                "quest": "q036",
+                "action": "credit_program"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q036",
+                  "action": "credit_program"
+                },
+                {
+                  "op": "jump",
+                  "script": "q036.pilgrimage.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "separate",
+              "text": "共演をやめ、録音を別枠へ移す",
+              "storyAction": {
+                "quest": "q036",
+                "action": "credit_separate"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q036",
+                  "action": "credit_separate"
+                },
+                {
+                  "op": "jump",
+                  "script": "q036.pilgrimage.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q036.pilgrimage.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "歌手は声の代わりに指揮を執った。七人の名が揃って礼拝録に残る。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q036",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q036.pilgrimage.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "合唱は純粋な生声になった。キリは失われた低音を一人で探す。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q036",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q036.pilgrimage.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "本番は六人、終わりは七人になった。拍手は調律室にも届く。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q036",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q036.pilgrimage.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q036.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q036.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "歌手は声の代わりに指揮を執った。七人の名が揃って礼拝録に残る。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "合唱は純粋な生声になった。キリは失われた低音を一人で探す。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "本番は六人、終わりは七人になった。拍手は調律室にも届く。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "story.init",
+              "quest": "q036"
+            },
+            {
+              "op": "switch",
+              "value": {
+                "ref": "stories.q036.scene"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q036.pilgrimage.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "recording",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q036.pilgrimage.recording"
+                    }
+                  ]
+                },
+                {
+                  "equals": "credit",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q036.pilgrimage.credit"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q036.pilgrimage.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "七番目の歌声の現場",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "livePaused": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "livePaused"
+      },
+      "rehearsed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "rehearsed"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "七番目は退団した歌手の録音で、声を失った本人が合唱を整えている。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "七番目の歌声の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "recording": {
+        "title": "七番目の歌声の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "credit": {
+        "title": "七番目の歌声の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_solo": {
+        "from": [
+          "entry"
+        ],
+        "to": "recording",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "livePaused",
+            "value": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "entry",
+            "requires": true
+          }
+        ],
+        "once": false
+      },
+      "entry_cut": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "recording_rehearse": {
+        "from": [
+          "recording"
+        ],
+        "to": "credit",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "livePaused",
+            "value": false
+          },
+          {
+            "op": "set",
+            "key": "rehearsed",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "recording_memorial": {
+        "from": [
+          "recording"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "credit_program": {
+        "from": [
+          "credit"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "credit_separate": {
+        "from": [
+          "credit"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q036.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q036.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q036.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q036.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q036.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q036.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q036.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q036.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q036.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_4",
+        "map": "region_4_f2",
+        "x": 15,
+        "y": 5
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_plateau",
+  "receptionLocations": [
+    "pilgrim_board"
+  ]
+}

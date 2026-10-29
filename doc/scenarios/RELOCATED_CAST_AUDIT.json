@@ -1,18 +1,18 @@
 {
-  "reviewedAt": "2026-10-29",
+  "reviewedAt": "2026-10-30",
   "scope": "relocated-e2-100",
   "summary": {
     "quests": 100,
     "scenes": 753,
-    "emptyCastScenes": 740,
-    "personEntities": 100,
-    "characterLinkedEntities": 7,
+    "emptyCastScenes": 737,
+    "personEntities": 101,
+    "characterLinkedEntities": 8,
     "reviewedQuests": 7,
     "reviewedScenes": 27,
     "noPersonEvidenceScenes": 8,
     "personEvidenceScenes": 19,
-    "candidateRoles": 5,
-    "connectedRoles": 7,
+    "candidateRoles": 3,
+    "connectedRoles": 9,
     "unreviewedScenes": 726
   },
   "regions": [
@@ -21,15 +21,15 @@
       "name": "礼拝堂",
       "quests": 20,
       "scenes": 122,
-      "emptyCastScenes": 109,
-      "personEntities": 22,
-      "characterLinkedEntities": 7,
+      "emptyCastScenes": 106,
+      "personEntities": 23,
+      "characterLinkedEntities": 8,
       "reviewedQuests": 7,
       "reviewedScenes": 27,
       "noPersonEvidenceScenes": 8,
       "personEvidenceScenes": 19,
-      "candidateRoles": 5,
-      "connectedRoles": 7
+      "candidateRoles": 3,
+      "connectedRoles": 9
     },
     {
       "id": 7,
@@ -733,7 +733,7 @@
       "region": 4,
       "client": "聖歌隊のキリ",
       "source": "authoring/editions/e2/oddland/chapel.mjs",
-      "sourceSha256": "4aa8147a470c68df1032312fa067f85d299756fd76f28377eb36327c86bee9db",
+      "sourceSha256": "7db85bfe25c4b88cf6996cf02c7eca1e7dcbfcb35e34472e239fc585bcfc3ede",
       "scenes": [
         {
           "id": "entry",
@@ -745,7 +745,14 @@
             "x": 15,
             "y": 5
           },
-          "cast": [],
+          "cast": [
+            {
+              "entity": "conductor"
+            },
+            {
+              "entity": "choir"
+            }
+          ],
           "review": {
             "decision": "person-evidence",
             "people": [
@@ -767,7 +774,14 @@
             "x": 15,
             "y": 5
           },
-          "cast": [],
+          "cast": [
+            {
+              "entity": "conductor"
+            },
+            {
+              "entity": "choir"
+            }
+          ],
           "review": {
             "decision": "person-evidence",
             "people": [
@@ -789,7 +803,14 @@
             "x": 15,
             "y": 5
           },
-          "cast": [],
+          "cast": [
+            {
+              "entity": "conductor"
+            },
+            {
+              "entity": "choir"
+            }
+          ],
           "review": {
             "decision": "person-evidence",
             "people": [
@@ -802,13 +823,18 @@
           }
         }
       ],
-      "personEntities": [],
+      "personEntities": [
+        {
+          "id": "conductor",
+          "character": "q036_conductor"
+        }
+      ],
       "review": {
         "identityNotes": [
           "依頼人は聖歌隊のキリで、q031と同じ役職・名。指揮台の元団員や六人の歌い手の誰かをキリ本人と同定する記述はない。依頼人欄からcastへ自動追加しない。",
           "声を失った元団員・退団した歌手・指揮者は本文で同じ本人を指す。七番目の声は本人の過去の録音で、別人や幽霊の出演として増やさない。具体的な病名・性別・氏名や伝達手段を追加しない。",
           "六人の生歌の歌い手は集団として明示される。録音だけを聞く間も退出の記述はなく、同じ現場に留まる。人数は六人だが個々の名・顔・代表者は未確定で、集団の役と人物画の制作枚数を区別する。",
-          "全3場面はregion_4_f2 (15,5)。livePausedとrehearsedで、生歌の停止・録音への指揮・共演の練習を区別する。公演や追悼枠への移行は選択後であり、録音の再生を生歌の復活としない。現行は人物entity・所在・castが未定義なので、接続時には保存方針の検討が必要。"
+          "全3場面はregion_4_f2 (15,5)。livePausedとrehearsedで、生歌の停止・録音への指揮・共演の練習を区別する。指揮者personと聖歌隊groupの所在・castを接続した。個別物語改訂1→2では旧保存を検証した後にconductorAt・choirAtだけをentryで補う。公演・追悼は選択後で、録音を生歌の復活としない。"
         ],
         "relatedClients": {
           "q031": "聖歌隊のキリ"
@@ -816,16 +842,18 @@
         "people": {
           "q036_conductor": {
             "label": "声を失った元団員の指揮者（匿名）",
-            "status": "candidate",
-            "need": "3場面で同じ本人を表示する。新しい人物entity・所在とcast、専用画が必要。録音の歌手と別の人物を増やさず、声の回復や発声を共通画へ固定しない。"
+            "status": "connected",
+            "entity": "conductor",
+            "need": "全3場面に専用透過画を接続済み。録音の歌手と同じ本人で、口を閉じ空の手で拍を送る。キリとの同一性・声を失った原因は追加しない。"
           },
           "q036_choir": {
-            "label": "六人の生歌の歌い手（集団）",
-            "status": "candidate",
-            "need": "3場面の同席根拠がある。人数六人を維持し、集団表示・所在と保存方針を整理する。名・代表者は未確定で、役1件を画像1枚や新規個人1人へ変換しない。"
+            "label": "六人の歌い手（集団名のみ）",
+            "status": "connected",
+            "entity": "choir",
+            "need": "全3場面に六人の歌い手という集団名を接続済み。kind: groupを使い、個々の顔・氏名・代表者を創作せず、人物画は意図的に割り当てない。歌を止めても同じ場所に留まる。"
           }
         },
-        "next": "指揮者1役と六人の歌い手の集団表示を、旧保存の検証・移行方針とともに接続する。人物監査はq038から続ける。"
+        "next": "指揮者1役の専用画と六人の集団名を接続済み。指揮台・録音の再生元・生歌の停止と練習・役目の案内は局所差分候補。次の人物実装はq037、人物監査はq038。"
       }
     },
     {
@@ -971,7 +999,7 @@
             "need": "既存owner_thirdの所在を使い、thirdの1場面へcharacter・castを接続する候補。専用画の要否と外見は未確定。他の二人や依頼人オルへ統合せず、番号と封を閉じた受渡しを保つ。"
           }
         },
-        "next": "三人の返却先の人物接続と、書記鳥・籠・封書・番号札・控室・各家の局所差分を候補にする。人物実装の次は引き続きq036、人物監査の次はq038。"
+        "next": "三人の返却先の人物接続と、書記鳥・籠・封書・番号札・控室・各家の局所差分を候補にする。人物実装の次はq037、人物監査の次はq038。"
       }
     },
     {

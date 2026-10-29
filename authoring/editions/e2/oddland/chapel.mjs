@@ -63,6 +63,11 @@ export function chapelSource(q,{cast=true}={}){
  if(q.number===36){
   at('entry','recording','credit');x.flags.livePaused=false;x.flags.rehearsed=false;
   option('entry','solo').effects=[set('livePaused')];option('recording','rehearse').effects=[set('livePaused',false),set('rehearsed')];
+  if(cast){
+   x.entities.conductor={holder:'entry',kind:'person',character:'q036_conductor'};
+   x.entities.choir={holder:'entry',kind:'group',character:'q036_choir'};
+   for(const n of x.nodes)n.cast=['conductor','choir'];
+  }
  }
  if(q.number===37){
   cell('quiet','告解の声が届かない控室','clue_a');scene('return').place='quiet';entity('cage','entry');
