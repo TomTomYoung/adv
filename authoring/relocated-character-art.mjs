@@ -1,12 +1,13 @@
 // Edition-two regional bundle: relocated-quest roles, separate from border NPCs.
 export const RELOCATED_CHARACTER_ART=Object.fromEntries([
  ['q032_prisoner','chapel-q032-2026-10-29'],['q032_craftsperson','chapel-q032-2026-10-29'],['q033_pilgrim','chapel-q033-2026-10-29'],['q034_merchant','chapel-q034-2026-10-29'],['q035_server','chapel-q035-2026-10-29'],['q035_patient','chapel-q035-2026-10-29'],['q036_conductor','chapel-q036-2026-10-30'],...['first','second','third'].map(key=>['q037_owner_'+key,'chapel-q037-2026-10-30']),
- ['q038_inspector','chapel-q038-2026-10-30']
+ ['q038_inspector','chapel-q038-2026-10-30'],['q039_repairer','chapel-q039-2026-10-30']
 ].map(([id,batch])=>[id,{
  asset:'npc_'+id,file:`assets/images/characters/relocated/${id}.webp`,source:`assets/source/characters/${batch}/${id}.png`,manifest:`assets/source/characters/${batch}.json`
 }]));
 export const relocatedCharacterImages=()=>Object.fromEntries(Object.values(RELOCATED_CHARACTER_ART).map(a=>[a.asset,a.file]));
 export const relocatedCharacters=Object.fromEntries([
+ ['q039_repairer','仮面の修理人','同じ修理台で署名を求め、三人の共有目的と修理印について相談する匿名の修理人。','2026-10-30の美術設定。銀の混じる茶髪を低くまとめた姿、梅色の作業上衣、黄土茶色の前掛けと空の手は美術上の選択。具体的な年齢感・性別の描画・衣装を本文の設定に加えず、依頼人チセとは同定しない。仮面・道具・署名・修理印・帳面を共通人物画へ固定しない。'],
  ['q038_inspector','水質と設備の検査人','水質検査台で検査結果を記し、水瓶へ探索隊と同行して設備を確かめる匿名の検査人。','2026-10-30の美術設定。短い栗色の髪、青い作業上衣、灰色の前掛けと空の手は美術上の選択。氏名・性別・年齢・経歴は本文へ追加せず、施療人ネイとは同定しない。瓶・炭・検査票・検査結果を人物画へ固定しない。'],
  ['q032_prisoner','地下牢の囚人','礼拝堂の聖像の下の地下牢にいる匿名の人物。'],
  ['q032_craftsperson','石工台の職人','礼拝堂の石工台で修復方法を説明する匿名の人物。修復師サイとの同一性は未確定。'],
@@ -22,6 +23,7 @@ relocatedCharacters.q034_victims={id:'q034_victims',name:'被害者たち',role:
 
 // Six live singers remain present even while their singing is paused.
 relocatedCharacters.q036_choir={id:'q036_choir',name:'六人の歌い手',role:'礼拝堂の聖歌隊',detail:'指揮者と同じ現場に留まり、本人の録音と生歌を合わせる六人の集団。',provenance:'2026-10-30の表示方針。人数六人を保ち、個々の氏名・顔・代表者を創作しない。集団名だけを表示し、肖像・立ち絵は意図的に割り当てない。録音を生身の七人目として増やさず、歌を止めた時も退場させない。'};
+relocatedCharacters.q039_claimants={id:'q039_claimants',name:'仮面の所有を主張する三人',role:'礼拝堂の修理相談の相手',detail:'最初の買い手buyerを含む三人。実名を公表せずに仮面を共有するため、修理人と相談する。',provenance:'2026-10-30の表示方針。三人を集団名で表示し、個々の氏名・顔・代表者・印の対応は創作しない。buyerは仮面の保持者を記録する既存personとして残すが、集団に加わる四人目のcastや画像は付けない。肖像・立ち絵は意図的に割り当てない。'};
 
 // Each recipient stays at their own house; the sealed contents remain private.
 for(const [key,label] of [['first','一番'],['second','二番'],['third','三番']]){

@@ -104,6 +104,13 @@ export function chapelSource(q,{cast=true}={}){
  if(q.number===39){
   at('entry','owners','account');entity('mask','entry');entity('buyer','entry','person');x.flags.jointMarks=false;
   option('entry','buyer').effects=[give('mask','entry','buyer')];option('owners','marks').effects=[set('jointMarks')];
+  if(cast){
+   // The first buyer belongs to the three claimants. Keep its item-holder
+   // identity, but render only the collective so it is not a fourth customer.
+   x.entities.repairer={holder:'entry',kind:'person',character:'q039_repairer'};
+   x.entities.claimants={holder:'entry',kind:'group',character:'q039_claimants'};
+   for(const n of x.nodes)n.cast=['repairer','claimants'];
+  }
  }
  if(q.number===40){
   cell('record','大鏡の外の記録机','clue_b');cell('isolation','鏡を保管する閉鎖区画','clue_a');scene('shadow').place='record';

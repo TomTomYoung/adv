@@ -1,0 +1,1032 @@
+{
+  "schemaVersion": 1,
+  "id": "q039",
+  "number": 39,
+  "title": "顔を売る仮面",
+  "client": "仮面師のチセ",
+  "brief": "礼拝用の仮面が持ち主を替えて出回っている。原型を回収してください。",
+  "region": 4,
+  "type": "authored_progression",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。 巡礼台地の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "region_4",
+      "title": "仮面を運ぶ鏡路",
+      "dungeon": "region_4",
+      "points": [
+        {
+          "map": "region_4_f1",
+          "x": 1,
+          "y": 2,
+          "dungeon": "region_4"
+        },
+        {
+          "map": "region_4_f2",
+          "x": 13,
+          "y": 5,
+          "dungeon": "region_4"
+        }
+      ],
+      "trigger": "action",
+      "script": "dungeon.scene.region_4.v1",
+      "condition": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q039.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      },
+      "requirement": "関連する依頼を受けると調査できる。",
+      "note": {
+        "text": "鏡を経由する転移を確認した。仮面の移動を調べる際は、歩行経路と鏡の接続先を照合する。所有者や運搬者の特定は証言から行う。",
+        "when": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.dungeonNotes.region_4"
+          },
+          "right": true
+        }
+      }
+    },
+    {
+      "id": "q039_pilgrim_entry",
+      "title": "顔を売る仮面の現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q039.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q039.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      },
+      "script": "q039.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "region_4",
+          "map": "region_4_f2",
+          "x": 17,
+          "y": 3
+        }
+      ]
+    }
+  ],
+  "locations": [],
+  "outcomes": {
+    "informed": {
+      "label": "共同修理帳へ三つの印を残す",
+      "text": "仮面は巡回用具として戻った。チセは誰の顔でもない顔を彫り直す。",
+      "gold": 93,
+      "xp": 92
+    },
+    "contract": {
+      "label": "最初の買い手を所有者として仮面を返す",
+      "text": "仮面は飾られた。告解室には聞き手の顔が見えるようになる。",
+      "gold": 113,
+      "xp": 68
+    },
+    "compromise": {
+      "label": "原型を保存し、人数分の複製を作る",
+      "text": "使う顔は増えた。互いを区別するため、裏側だけに小さな印が付く。",
+      "gold": 60,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/chapel.mjs",
+    "world": {
+      "truth": "仮面は名を隠して互いに告解を聞くための共通顔で、所有者は一人ではない。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "仮面は名を隠して互いに告解を聞くための共通顔で、所有者は一人ではない。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "礼拝用の仮面が持ち主を替えて出回っている。原型を回収してください。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "仮面師のチセ",
+        "observation": "礼拝用の仮面が持ち主を替えて出回っている。原型を回収してください。",
+        "belief": "礼拝用の仮面が持ち主を替えて出回っている。原型を回収してください。",
+        "goal": "礼拝用の仮面が持ち主を替えて出回っている。原型を回収してください。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "礼拝用の仮面が持ち主を替えて出回っている。原型を回収してください。",
+      "progression": "仮面の所有権を一人に戻す依頼から、共同利用者が代表を選ぶ相談へ変わる。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q039.pilgrimage.entry"
+        },
+        {
+          "id": "owners",
+          "script": "q039.pilgrimage.owners"
+        },
+        {
+          "id": "account",
+          "script": "q039.pilgrimage.account"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "礼拝用の仮面が持ち主を替えて出回っている。原型を回収してください。",
+      "openQuestion": "顔を売る仮面の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "observerSwap",
+      "newInformation": "仮面は名を隠して互いに告解を聞くための共通顔で、所有者は一人ではない。",
+      "retroactiveTargets": [
+        "owners"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q039.flow.entry"
+      },
+      {
+        "id": "owners",
+        "script": "q039.flow.owners"
+      },
+      {
+        "id": "account",
+        "script": "q039.flow.account"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q039.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "仮面の所有権を一人に戻す依頼から、共同利用者が代表を選ぶ相談へ変わる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "仮面の所有権を一人に戻す依頼から、共同利用者が代表を選ぶ相談へ変わる。",
+    "flowVersion": 2,
+    "entryScript": "q039.pilgrimage.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "同じ仮面を自分の物だという客が三人いる。修理人は一人の署名だけを求めている。",
+        "options": [
+          {
+            "id": "gather",
+            "text": "三人を同じ修理台へ呼ぶ",
+            "to": "owners",
+            "action": "entry_gather"
+          },
+          {
+            "id": "buyer",
+            "text": "最初の買い手を所有者として仮面を返す",
+            "to": "@contract",
+            "action": "entry_buyer"
+          }
+        ]
+      },
+      {
+        "id": "owners",
+        "place": "entry",
+        "text": "仮面は名を隠して互いに告解を聞くための共通顔で、所有者は一人ではない。 三人は顔を共有しているが、実名の公開を約束したことはない。",
+        "options": [
+          {
+            "id": "marks",
+            "text": "実名を出さず、各自の修理印を決める",
+            "to": "account",
+            "action": "owners_marks"
+          },
+          {
+            "id": "copies",
+            "text": "原型を保存し、人数分の複製を作る",
+            "to": "@compromise",
+            "action": "owners_copies"
+          }
+        ]
+      },
+      {
+        "id": "account",
+        "place": "entry",
+        "text": "三人は共同名義と輪番の受取役に同意した。印の対応は本人と修理人だけが保管する。",
+        "options": [
+          {
+            "id": "register",
+            "text": "共同修理帳へ三つの印を残す",
+            "to": "@informed",
+            "action": "account_register"
+          },
+          {
+            "id": "replicas",
+            "text": "共同管理を取りやめ、複製へ分ける",
+            "to": "@compromise",
+            "action": "account_replicas"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "first-ten",
+      "settlement": "oddland_plateau",
+      "saveRevision": 2,
+      "scope": "礼拝堂20件のうち前半10件の実地接続。後半10件はchapel-second.mjsで接続。"
+    }
+  },
+  "scripts": {
+    "dungeon.scene.region_4.v1": {
+      "dungeonScene": "region_4",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "礼拝に使われる物がどの道を通るのか、入口の鏡とその接続先を地図に照合する。鏡に映る見た目だけでは、持ち主の名は分からない。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "gte",
+            "left": {
+              "ref": "dungeons.active.systems.mirrors.uses"
+            },
+            "right": 1
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "今回の探索で鏡を通り、離れた地点へ転移した。歩行経路だけを追っても、仮面の移動を追い切れないことが分かった。誰が運んだかは証言と照合する必要がある。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.region_4"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.region_4",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "今回の探索では、まだ鏡の転移を確かめていない。鏡を通り、到着した鏡のセルで調査を再開できる。"
+            }
+          ]
+        }
+      ]
+    },
+    "q039.pilgrimage.entry": {
+      "storyQuest": "q039",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q039",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "同じ仮面を自分の物だという客が三人いる。修理人は一人の署名だけを求めている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "gather",
+              "text": "三人を同じ修理台へ呼ぶ",
+              "storyAction": {
+                "quest": "q039",
+                "action": "entry_gather"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q039",
+                  "action": "entry_gather"
+                },
+                {
+                  "op": "jump",
+                  "script": "q039.pilgrimage.owners"
+                }
+              ]
+            },
+            {
+              "id": "buyer",
+              "text": "最初の買い手を所有者として仮面を返す",
+              "storyAction": {
+                "quest": "q039",
+                "action": "entry_buyer"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q039",
+                  "action": "entry_buyer"
+                },
+                {
+                  "op": "jump",
+                  "script": "q039.pilgrimage.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q039.pilgrimage.owners": {
+      "storyQuest": "q039",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q039",
+          "scene": "owners"
+        },
+        {
+          "op": "narrate",
+          "text": "仮面は名を隠して互いに告解を聞くための共通顔で、所有者は一人ではない。 三人は顔を共有しているが、実名の公開を約束したことはない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "marks",
+              "text": "実名を出さず、各自の修理印を決める",
+              "storyAction": {
+                "quest": "q039",
+                "action": "owners_marks"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q039",
+                  "action": "owners_marks"
+                },
+                {
+                  "op": "jump",
+                  "script": "q039.pilgrimage.account"
+                }
+              ]
+            },
+            {
+              "id": "copies",
+              "text": "原型を保存し、人数分の複製を作る",
+              "storyAction": {
+                "quest": "q039",
+                "action": "owners_copies"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q039",
+                  "action": "owners_copies"
+                },
+                {
+                  "op": "jump",
+                  "script": "q039.pilgrimage.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q039.pilgrimage.account": {
+      "storyQuest": "q039",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q039",
+          "scene": "account"
+        },
+        {
+          "op": "narrate",
+          "text": "三人は共同名義と輪番の受取役に同意した。印の対応は本人と修理人だけが保管する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "register",
+              "text": "共同修理帳へ三つの印を残す",
+              "storyAction": {
+                "quest": "q039",
+                "action": "account_register"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q039",
+                  "action": "account_register"
+                },
+                {
+                  "op": "jump",
+                  "script": "q039.pilgrimage.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "replicas",
+              "text": "共同管理を取りやめ、複製へ分ける",
+              "storyAction": {
+                "quest": "q039",
+                "action": "account_replicas"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q039",
+                  "action": "account_replicas"
+                },
+                {
+                  "op": "jump",
+                  "script": "q039.pilgrimage.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q039.pilgrimage.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "仮面は巡回用具として戻った。チセは誰の顔でもない顔を彫り直す。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q039",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q039.pilgrimage.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "仮面は飾られた。告解室には聞き手の顔が見えるようになる。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q039",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q039.pilgrimage.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "使う顔は増えた。互いを区別するため、裏側だけに小さな印が付く。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q039",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q039.pilgrimage.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q039.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q039.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "仮面は巡回用具として戻った。チセは誰の顔でもない顔を彫り直す。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "仮面は飾られた。告解室には聞き手の顔が見えるようになる。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "使う顔は増えた。互いを区別するため、裏側だけに小さな印が付く。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "story.init",
+              "quest": "q039"
+            },
+            {
+              "op": "switch",
+              "value": {
+                "ref": "stories.q039.scene"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q039.pilgrimage.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "owners",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q039.pilgrimage.owners"
+                    }
+                  ]
+                },
+                {
+                  "equals": "account",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q039.pilgrimage.account"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q039.pilgrimage.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "顔を売る仮面の現場",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "jointMarks": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "jointMarks"
+      },
+      "maskAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "transit",
+          "party",
+          "buyer"
+        ],
+        "meaning": "mask の所在または保持者"
+      },
+      "buyerAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "transit"
+        ],
+        "meaning": "buyer の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "mask": {
+        "holder": "maskAt",
+        "kind": "item"
+      },
+      "buyer": {
+        "holder": "buyerAt",
+        "kind": "person"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "仮面は名を隠して互いに告解を聞くための共通顔で、所有者は一人ではない。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "顔を売る仮面の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "owners": {
+        "title": "顔を売る仮面の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "account": {
+        "title": "顔を売る仮面の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_gather": {
+        "from": [
+          "entry"
+        ],
+        "to": "owners",
+        "requires": true,
+        "effects": [
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "entry",
+            "requires": true
+          }
+        ],
+        "once": false
+      },
+      "entry_buyer": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "mask",
+            "from": "entry",
+            "to": "buyer"
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "owners_marks": {
+        "from": [
+          "owners"
+        ],
+        "to": "account",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "jointMarks",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "owners_copies": {
+        "from": [
+          "owners"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "account_register": {
+        "from": [
+          "account"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "account_replicas": {
+        "from": [
+          "account"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q039.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q039.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q039.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q039.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q039.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q039.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q039.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q039.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q039.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_4",
+        "map": "region_4_f2",
+        "x": 17,
+        "y": 3
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_plateau",
+  "receptionLocations": [
+    "pilgrim_board"
+  ]
+}
