@@ -1,0 +1,1089 @@
+{
+  "schemaVersion": 1,
+  "id": "q034",
+  "number": 34,
+  "title": "赦しの領収書",
+  "client": "商人のロア",
+  "brief": "罪を赦す証書を取り戻してください。日付が明日になっている。",
+  "region": 4,
+  "type": "authored_progression",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。 巡礼台地の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q034_pilgrim_entry",
+      "title": "赦しの領収書の現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q034.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q034.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      },
+      "script": "q034.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "region_4",
+          "map": "region_4_f1",
+          "x": 15,
+          "y": 5
+        }
+      ]
+    }
+  ],
+  "locations": [],
+  "outcomes": {
+    "informed": {
+      "label": "予約票と書き足しを区別して返す",
+      "text": "商人は支払いと償いを別に求められた。礼拝堂は書式を変える。",
+      "gold": 93,
+      "xp": 92
+    },
+    "contract": {
+      "label": "原本の記載を検めず商人へ渡す",
+      "text": "商人は赦されたと触れ回った。祈祷師には未収の帳簿だけが残る。",
+      "gold": 113,
+      "xp": 68
+    },
+    "compromise": {
+      "label": "原本を保全して面会を取り持つ",
+      "text": "赦しの紙より先に、返す品物が決まった。",
+      "gold": 60,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/chapel.mjs",
+    "world": {
+      "truth": "証書は寄進の予約票で、商人は未来の支払いを過去の免罪に使っている。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "証書は寄進の予約票で、商人は未来の支払いを過去の免罪に使っている。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "罪を赦す証書を取り戻してください。日付が明日になっている。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "商人のロア",
+        "observation": "罪を赦す証書を取り戻してください。日付が明日になっている。",
+        "belief": "罪を赦す証書を取り戻してください。日付が明日になっている。",
+        "goal": "罪を赦す証書を取り戻してください。日付が明日になっている。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "罪を赦す証書を取り戻してください。日付が明日になっている。",
+      "progression": "証書を取り戻した後、依頼人が免罪へ使う場で異議を出すか、被害者との面会へ転じる。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q034.pilgrimage.entry"
+        },
+        {
+          "id": "reserved",
+          "script": "q034.pilgrimage.reserved"
+        },
+        {
+          "id": "consent",
+          "script": "q034.pilgrimage.consent"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "罪を赦す証書を取り戻してください。日付が明日になっている。",
+      "openQuestion": "赦しの領収書の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "referenceSwap",
+      "newInformation": "証書は寄進の予約票で、商人は未来の支払いを過去の免罪に使っている。",
+      "retroactiveTargets": [
+        "reserved"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q034.flow.entry"
+      },
+      {
+        "id": "reserved",
+        "script": "q034.flow.reserved"
+      },
+      {
+        "id": "consent",
+        "script": "q034.flow.consent"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q034.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "証書を取り戻した後、依頼人が免罪へ使う場で異議を出すか、被害者との面会へ転じる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "証書を取り戻した後、依頼人が免罪へ使う場で異議を出すか、被害者との面会へ転じる。",
+    "flowVersion": 2,
+    "entryScript": "q034.pilgrimage.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "証書が祭壇へ置かれている。商人はそれを今夜の謝罪の代わりに掲げたいと言う。",
+        "options": [
+          {
+            "id": "read",
+            "text": "原本の支払欄を読む",
+            "to": "reserved",
+            "action": "entry_read"
+          },
+          {
+            "id": "recover",
+            "text": "原本の記載を検めず商人へ渡す",
+            "to": "@contract",
+            "action": "entry_recover"
+          },
+          {
+            "id": "meeting",
+            "text": "原本を一時預かり、被害者との面会を提案する",
+            "to": "consent",
+            "action": "entry_meeting"
+          }
+        ]
+      },
+      {
+        "id": "reserved",
+        "place": "entry",
+        "text": "証書は寄進の予約票で、商人は未来の支払いを過去の免罪に使っている。 「支払済」は別の墨で書き足されていた。",
+        "options": [
+          {
+            "id": "separate",
+            "text": "予約票と書き足しを区別して返す",
+            "to": "@informed",
+            "action": "reserved_separate"
+          },
+          {
+            "id": "face",
+            "text": "書類の返却より先に、本人同士の面会を組む",
+            "to": "consent",
+            "action": "reserved_face"
+          }
+        ]
+      },
+      {
+        "id": "consent",
+        "place": "meeting",
+        "text": "被害者は証書を見せる会ではなく、自分たちの話を聞く会なら出ると答えた。商人も了承した。",
+        "options": [
+          {
+            "id": "arrange",
+            "text": "原本を保全して面会を取り持つ",
+            "to": "@compromise",
+            "action": "consent_arrange"
+          },
+          {
+            "id": "document",
+            "text": "面会は延期し、証書の性質を明記して返す",
+            "to": "reserved",
+            "action": "consent_document"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "first-ten",
+      "settlement": "oddland_plateau",
+      "saveRevision": 2,
+      "scope": "礼拝堂20件のうち前半10件の実地接続。後半10件はchapel-second.mjsで接続。"
+    }
+  },
+  "scripts": {
+    "q034.pilgrimage.entry": {
+      "storyQuest": "q034",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q034",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "証書が祭壇へ置かれている。商人はそれを今夜の謝罪の代わりに掲げたいと言う。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "read",
+              "text": "原本の支払欄を読む",
+              "storyAction": {
+                "quest": "q034",
+                "action": "entry_read"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q034",
+                  "action": "entry_read"
+                },
+                {
+                  "op": "jump",
+                  "script": "q034.pilgrimage.reserved"
+                }
+              ]
+            },
+            {
+              "id": "recover",
+              "text": "原本の記載を検めず商人へ渡す",
+              "storyAction": {
+                "quest": "q034",
+                "action": "entry_recover"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q034",
+                  "action": "entry_recover"
+                },
+                {
+                  "op": "jump",
+                  "script": "q034.pilgrimage.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "meeting",
+              "text": "原本を一時預かり、被害者との面会を提案する",
+              "storyAction": {
+                "quest": "q034",
+                "action": "entry_meeting"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q034",
+                  "action": "entry_meeting"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q034.pilgrimage.reserved": {
+      "storyQuest": "q034",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q034",
+          "scene": "reserved"
+        },
+        {
+          "op": "narrate",
+          "text": "証書は寄進の予約票で、商人は未来の支払いを過去の免罪に使っている。 「支払済」は別の墨で書き足されていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "separate",
+              "text": "予約票と書き足しを区別して返す",
+              "storyAction": {
+                "quest": "q034",
+                "action": "reserved_separate"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q034",
+                  "action": "reserved_separate"
+                },
+                {
+                  "op": "jump",
+                  "script": "q034.pilgrimage.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "face",
+              "text": "書類の返却より先に、本人同士の面会を組む",
+              "storyAction": {
+                "quest": "q034",
+                "action": "reserved_face"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q034",
+                  "action": "reserved_face"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q034.pilgrimage.consent": {
+      "storyQuest": "q034",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q034",
+          "scene": "consent"
+        },
+        {
+          "op": "narrate",
+          "text": "被害者は証書を見せる会ではなく、自分たちの話を聞く会なら出ると答えた。商人も了承した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "arrange",
+              "text": "原本を保全して面会を取り持つ",
+              "storyAction": {
+                "quest": "q034",
+                "action": "consent_arrange"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q034",
+                  "action": "consent_arrange"
+                },
+                {
+                  "op": "jump",
+                  "script": "q034.pilgrimage.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "document",
+              "text": "面会は延期し、証書の性質を明記して返す",
+              "storyAction": {
+                "quest": "q034",
+                "action": "consent_document"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q034",
+                  "action": "consent_document"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q034.pilgrimage.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "商人は支払いと償いを別に求められた。礼拝堂は書式を変える。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q034",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q034.pilgrimage.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "商人は赦されたと触れ回った。祈祷師には未収の帳簿だけが残る。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q034",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q034.pilgrimage.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "赦しの紙より先に、返す品物が決まった。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q034",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q034.pilgrimage.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q034.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q034.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "商人は支払いと償いを別に求められた。礼拝堂は書式を変える。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "商人は赦されたと触れ回った。祈祷師には未収の帳簿だけが残る。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "赦しの紙より先に、返す品物が決まった。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "story.init",
+              "quest": "q034"
+            },
+            {
+              "op": "switch",
+              "value": {
+                "ref": "stories.q034.scene"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q034.pilgrimage.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "reserved",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q034.pilgrimage.reserved"
+                    }
+                  ]
+                },
+                {
+                  "equals": "consent",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q034.pilgrimage.consent"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q034.pilgrimage.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "赦しの領収書の現場",
+      "meeting": "被害者との面会室",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "meeting"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "meeting",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "consent": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "consent"
+      },
+      "merchantAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "meeting",
+          "transit"
+        ],
+        "meaning": "merchant の所在または保持者"
+      },
+      "victimsAt": {
+        "type": "enum",
+        "initial": "meeting",
+        "values": [
+          "entry",
+          "meeting",
+          "transit"
+        ],
+        "meaning": "victims の所在または保持者"
+      },
+      "documentAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "meeting",
+          "transit",
+          "party",
+          "merchant",
+          "victims"
+        ],
+        "meaning": "document の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "merchant": {
+        "holder": "merchantAt",
+        "kind": "person"
+      },
+      "victims": {
+        "holder": "victimsAt",
+        "kind": "person"
+      },
+      "document": {
+        "holder": "documentAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "証書は寄進の予約票で、商人は未来の支払いを過去の免罪に使っている。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "赦しの領収書の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "reserved": {
+        "title": "赦しの領収書の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "consent": {
+        "title": "被害者との面会室",
+        "place": "meeting",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_read": {
+        "from": [
+          "entry"
+        ],
+        "to": "reserved",
+        "requires": true,
+        "effects": [
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "entry",
+            "requires": true
+          }
+        ],
+        "once": false
+      },
+      "entry_recover": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "document",
+            "from": "entry",
+            "to": "merchant"
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "entry_meeting": {
+        "from": [
+          "entry"
+        ],
+        "to": "consent",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "merchant"
+            ],
+            "path": [
+              "transit",
+              "meeting"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "meeting",
+          "companions": [
+            "merchant"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "document",
+            "from": "entry",
+            "to": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q034.values.documentAt"
+              },
+              "right": "entry"
+            }
+          }
+        ]
+      },
+      "reserved_separate": {
+        "from": [
+          "reserved"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "document",
+            "from": "entry",
+            "to": "merchant",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q034.values.documentAt"
+              },
+              "right": "entry"
+            }
+          },
+          {
+            "op": "transfer",
+            "entity": "document",
+            "from": "party",
+            "to": "merchant",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q034.values.documentAt"
+              },
+              "right": "party"
+            }
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "reserved_face": {
+        "from": [
+          "reserved"
+        ],
+        "to": "consent",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "merchant"
+            ],
+            "path": [
+              "transit",
+              "meeting"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "meeting",
+          "companions": [
+            "merchant"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "document",
+            "from": "entry",
+            "to": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q034.values.documentAt"
+              },
+              "right": "entry"
+            }
+          }
+        ]
+      },
+      "consent_arrange": {
+        "from": [
+          "consent"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "consent",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "consent_document": {
+        "from": [
+          "consent"
+        ],
+        "to": "reserved",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "merchant"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "entry",
+            "requires": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "merchant"
+          ]
+        },
+        "depart": []
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q034.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q034.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q034.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q034.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q034.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q034.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q034.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q034.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q034.values.partyAt"
+                },
+                "right": "meeting"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_4",
+        "map": "region_4_f1",
+        "x": 15,
+        "y": 5
+      },
+      "meeting": {
+        "kind": "town",
+        "location": "pilgrim_meeting"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_plateau",
+  "receptionLocations": [
+    "pilgrim_board"
+  ]
+}

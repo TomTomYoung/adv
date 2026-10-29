@@ -15,7 +15,7 @@ export const RELOCATED_CAST_REVIEW={
     entry:{decision:'no-person-evidence',people:[],evidence:'水晶の横には録音用の小さな窪みがある。',reason:'録音水晶を調べる場面。探索隊以外の特定人物が同席する記述はない。',visual:'録音水晶・吹込み用の窪み・日付の機構。人物画の追加は不要。'},
     night:{decision:'no-person-evidence',people:[],evidence:'自分の言った日付が流れた。',reason:'声は再生された録音。キリや別の話者が現場へ来たと解釈しない。',visual:'同じ足元で夜の礼拝と録音再生を示す差分。場面内の時間経過として扱う。'}
    },
-   next:'人物を追加せず、録音水晶と日付表示の局所差分を制作候補にする。人物監査の次はq035。'
+   next:'人物を追加せず、録音水晶と日付表示の局所差分を制作候補にする。人物監査の次はq036。'
   },
   q032:{
    sourceSha256:'8ea3083df1503f6511263214481d9045c5c9565b430c97fedb00018cc25d95f1',
@@ -59,24 +59,44 @@ export const RELOCATED_CAST_REVIEW={
    next:'巡礼者1役・5場面の接続を完了。鏡前・水盤・鏡のない客室と、粉・洗浄の局所差分は残る。'
   },
   q034:{
-   sourceSha256:'4587331ea12a32834549fb3b723814e74490f9d4b9e14126184953753612541f',
+   sourceSha256:'0d18641cef9315b3354470f0d5254c9a46382da6870ddd5448cf53959d8b5059',
    identityNotes:[
     '依頼人は商人のロア。現場本文では商人とだけ呼ばれる。既存merchantの同じ役を3場面で追い、同名だけで他の依頼の人物へ統合しない。',
-    '被害者は自分たちと語る集団だが、人数・氏名・外見・代表者は記されていない。既存personエンティティvictimsを制作1人分とは数えない。群像と発言者の表示方針を確定してから画を制作する。',
+    '被害者は自分たちと語る集団だが、人数・氏名・外見・代表者は記されていない。既存personエンティティvictimsを制作1人分とは数えない。集団名「被害者たち」だけを表示し、群像・代表者の画像は意図的に割り当てない。',
     '商人はentryと面会室を探索隊と同行して往復する。被害者はmeetingに留まる。証書は祭壇から探索隊へ預け、返却時だけ商人へ移る。面会を取り持つ結末ではdocumentAt: partyを維持し、返したことにしない。',
-    'consentは面会の内容への同意を得る場面。本文の返答と商人の了承を根拠に両者の表示を検討し、公開の謝罪会や和解の成立を絵だけで先取りしない。結末の祈祷師は場面castへ追加しない。'
+    'consentは面会の内容への同意を得る場面。本文の返答と商人の了承を根拠に両者を表示する。公開の謝罪会や和解の成立を絵だけで先取りしない。結末の祈祷師は場面castへ追加しない。本文・行動・状態項目・物語改訂1は変更せず、旧保存の内容もそのまま再開する。'
    ],
    relatedClients:{},
    people:{
-    q034_merchant:{label:'証書を求める商人',status:'candidate',need:'既存merchantの所在・同行と3場面のcastを接続する。依頼人ロアとの呼称を原稿と照合し、他の商人の画を自動流用しない。'},
-    q034_victims:{label:'被害者たち（人数・発言者未確定）',status:'candidate',need:'meetingの集団役。人数と表示方法を整理する。代表者1人や具体的な被害内容を創作して置換しない。'}
+    q034_merchant:{label:'証書を求める商人',status:'connected',entity:'merchant',need:'既存merchantの所在・同行を使い、専用画と3場面のcastを接続済み。現場の呼称を使い、他の商人の画を流用しない。'},
+    q034_victims:{label:'被害者たち（集団名のみ）',status:'connected',entity:'victims',need:'meetingの1場面に集団名を表示。肖像・立ち絵は意図的に割り当てず、人数・代表者・具体的な被害内容を創作しない。'}
    },
    scenes:{
     entry:{decision:'person-evidence',people:['q034_merchant'],evidence:'商人はそれを今夜の謝罪の代わりに掲げたいと言う。',reason:'商人の発言があり、merchantAtはentry。被害者は面会室に留まる。',visual:'祭壇の証書。日付・支払欄はUIの文章で確認し、完了済みの謝罪を描かない。'},
     reserved:{decision:'person-evidence',people:['q034_merchant'],evidence:'「支払済」は別の墨で書き足されていた。',reason:'商人と同じ現場で原本を調べる。面会室から戻る経路も本人が同行し、被害者は同行しない。',visual:'寄進予約票と異なる墨の書き足し。保持者はentryまたはpartyで、未返却の紙を商人へ固定しない。'},
     consent:{decision:'person-evidence',people:['q034_merchant','q034_victims'],evidence:'商人も了承した。',reason:'被害者の返答と商人の了承があり、meetingに両者がいる。集団の人数は本文から確定しない。',visual:'被害者との面会室。書類を見せる会と話を聞く会を区別し、無断の公開や和解の演出を足さない。'}
    },
-   next:'商人の人物接続と、被害者たちの人数・発言者・群像の表示方針を整理する。人物監査はq035から続ける。'
+   next:'商人の専用画と集団名の出演接続を完了。祭壇の原本・異なる墨と面会室の局所差分は残る。'
+  },
+  q035:{
+   sourceSha256:'2ce302db4f5c0ecc763ea8bb30cd5c29d4148c877173703889d8bb2589015bad',
+   identityNotes:[
+    '依頼人は施療人のネイ。現場の配膳係・患者をネイ本人と同定する記述はない。匿名の2役として整理し、氏名・性別・病名を追加しない。',
+    '配膳係serverは鏡前から患者側へ探索隊と同行し、patient・consentでも同じ場所に留まる。患者patientは患者側だけにいる。修理人は入室への同意に言及されるが、現場へ到着したcastとして追加しない。',
+    '患者は顔を隠したまま礼を言い、見学者に病室を見せる案は断る。人物画を制作する場合も顔を覆う姿を保ち、許可のない公開や病室の見学として演出しない。',
+    '皿はserver→party→patientと実到着で受け渡す。追加の糧食1つはmeal結末だけの費用で、通常の皿と混同しない。repairConsentと公開範囲の違いを維持する。'
+   ],
+   relatedClients:{},
+   people:{
+    q035_server:{label:'配膳係（匿名）',status:'candidate',need:'既存serverの所在・同行と全3場面のcastを接続する。皿を渡した後も同じ人物を使うため、共通人物画へ皿を固定しない。'},
+    q035_patient:{label:'顔を隠す患者（匿名）',status:'candidate',need:'patient側の2場面。顔を隠す姿を保ち、病名・外見・代表者を本文の確定事項として追加しない。'}
+   },
+   scenes:{
+    entry:{decision:'person-evidence',people:['q035_server'],evidence:'配膳係は次の皿を運ぶところだ。',reason:'配膳係の所在と動作が明示される。患者は壁の奥の別座標にいる。',visual:'鏡前の皿と配膳表。鏡の破壊・数量公開を選択前に描かない。'},
+    patient:{decision:'person-evidence',people:['q035_server','q035_patient'],evidence:'患者は顔を隠したまま礼を言う。',reason:'患者の発言があり、配膳係は実際に探索隊と患者側へ到着する。',visual:'壁内の配膳口、届いた皿、顔を隠す患者。患者の顔や病室を見世物にしない。'},
+    consent:{decision:'person-evidence',people:['q035_server','q035_patient'],evidence:'患者は修理人の入室に同意し、見学者へ病室を見せる案は断った。',reason:'同じ患者と配膳係が患者側に留まる。修理人の到着や見学者の同席は書かれていない。',visual:'修理の範囲を示す配膳口と案内の境界。修理や公開が完了した状態を先取りしない。'}
+   },
+   next:'配膳係・顔を隠す患者の人物接続と、皿・配膳口・数量表・公開範囲の局所差分を整理する。人物監査はq036から続ける。'
   }
  }
 };

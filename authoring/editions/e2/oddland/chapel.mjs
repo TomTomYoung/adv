@@ -51,6 +51,7 @@ export function chapelSource(q,{cast=true}={}){
   option('entry','recover').effects=[give('document','entry','merchant')];
   option('reserved','separate').effects=[transfer('document','entry','merchant'),transfer('document','party','merchant')];
   x.flags.consent=false;option('consent','arrange').effects=[set('consent')];
+  if(cast){x.entities.merchant.character='q034_merchant';x.entities.victims.character='q034_victims';for(const n of x.nodes)n.cast=n.id==='consent'?['merchant','victims']:['merchant'];}
  }
  if(q.number===35){
   cell('patient','配膳口の患者側','clue_a');scene('patient').place=scene('consent').place='patient';

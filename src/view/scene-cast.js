@@ -14,7 +14,7 @@ function portrait(c,cards){
 }
 function speaking(entry,c,scene,index){
   const active=c.id===scene.speakerId,cards=scene.mode==='cards';
-  entry.figure.className=(cards?'story-person':'scene-actor')+(c.remote?' remote':'')+(active?' speaking':'');
+  entry.figure.className=(cards?'story-person':'scene-actor')+(!c.portrait&&!c.sprite?' name-only':'')+(c.remote?' remote':'')+(active?' speaking':'');
   entry.figure.style.zIndex=String((c.display?.layer??index)+(active?100:0));
   entry.caption.textContent=c.name+(c.remote?'（声）':'')+(active?'・発話中':'');
 }

@@ -76173,7 +76173,8 @@ export const referenceData={
       "npc_od_worker": "assets/images/characters/oddland/od_worker.webp",
       "npc_q032_prisoner": "assets/images/characters/relocated/q032_prisoner.webp",
       "npc_q032_craftsperson": "assets/images/characters/relocated/q032_craftsperson.webp",
-      "npc_q033_pilgrim": "assets/images/characters/relocated/q033_pilgrim.webp"
+      "npc_q033_pilgrim": "assets/images/characters/relocated/q033_pilgrim.webp",
+      "npc_q034_merchant": "assets/images/characters/relocated/q034_merchant.webp"
     },
     "audio": {
       "exploration": "assets/audio/exploration-v2.ogg",
