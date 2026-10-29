@@ -6,9 +6,9 @@ import {auditRelocatedCast,loadRelocatedCastQuests,relocatedCastFingerprint} fro
 const quests=await loadRelocatedCastQuests();
 test('cast audit distinguishes measured empty casts, reviewed scenes and candidate roles',()=>{
  const report=auditRelocatedCast(quests);
- assert.deepEqual(report.summary,{quests:100,scenes:753,emptyCastScenes:740,personEntities:100,characterLinkedEntities:7,reviewedQuests:6,reviewedScenes:22,noPersonEvidenceScenes:6,personEvidenceScenes:16,candidateRoles:2,connectedRoles:7,unreviewedScenes:731});
+ assert.deepEqual(report.summary,{quests:100,scenes:753,emptyCastScenes:740,personEntities:100,characterLinkedEntities:7,reviewedQuests:7,reviewedScenes:27,noPersonEvidenceScenes:8,personEvidenceScenes:19,candidateRoles:5,connectedRoles:7,unreviewedScenes:726});
  assert.ok(report.regions.every(r=>r.quests===20));
- assert.equal(report.quests.find(q=>q.id==='q037').scenes[0].review,null);
+ assert.equal(report.quests.find(q=>q.id==='q039').scenes[0].review,null);
  assert.deepEqual(report.quests.find(q=>q.id==='q032').scenes.filter(s=>s.review.people.length).map(s=>s.id),['cell','workshop']);
 });
 
@@ -42,13 +42,13 @@ test('reviews reject unknown, contradictory and orphan candidate roles',()=>{
 });
 
 test('future character and cast hookups change measured counts without marking unrelated scenes reviewed',()=>{
- const changed=structuredClone(quests),q=changed.find(q=>q.id==='q037'),entity=Object.values(q.story.entities).find(e=>e.kind==='person');
- entity.character='future_owner';Object.values(q.story.scenes)[0].cast=[{entity:'owner_first'}];
+ const changed=structuredClone(quests),q=changed.find(q=>q.id==='q039'),entity=Object.values(q.story.entities).find(e=>e.kind==='person');
+ entity.character='future_owner';Object.values(q.story.scenes)[0].cast=[{entity:'buyer'}];
  const report=auditRelocatedCast(changed);
  assert.equal(report.summary.emptyCastScenes,739);
  assert.equal(report.summary.characterLinkedEntities,8);
- assert.equal(report.summary.reviewedScenes,22);
- assert.equal(report.quests.find(q=>q.id==='q037').review,null);
+ assert.equal(report.summary.reviewedScenes,27);
+ assert.equal(report.quests.find(q=>q.id==='q039').review,null);
 });
 
 test('a missing reviewed quest fails instead of reducing the denominator',()=>{
