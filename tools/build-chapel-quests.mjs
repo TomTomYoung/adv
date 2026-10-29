@@ -31,6 +31,7 @@ function document(quests,{second=false}={}){
  '国境宿場→石橋の交易市→巡礼台地／旧王領の村を実際に歩く。巡礼台地の依頼所で受注し、礼拝堂へ出発する。通常出口・帰還印・敗北救助は巡礼台地へ戻る。街道は固定照明のある安全経路で、油0・資金0でも往復できる。礼拝堂内の遭遇・鏡・階段は従来どおりで、街道の安全性を迷宮全体の無消耗とは扱わない。','',
  second?'砂の回廊、沈んだ宿、燃え残る図書館、崩落坑道、整備別棟の5マップと6施設を追加した。水底の宿では歩行で空気を消費し、潜水口で補給する。同行NPCは戦闘隊へ加えず、受渡しと救出は到着時に確定する。費用と戦闘は出発前に確定し、その後に移動を開始する。':'一室の会話・録音の試験・合唱・修理台の話合いは同じ座標に置く。地下牢、石工台、病室側、客室、面会室、三軒の返却先、検査台、閉鎖区画は実到着が必要。本文中の昼夜は場面の経過であり、現実のタイマー待ちは設けない。',''];
  if(!second)lines.push('2026-10-29追記：q032の囚人・職人を各現場のcastと専用画へ接続した。宝玉が棚に残る本文へ整理し、個別物語改訂を1→2へ進めた。保存改訂2・地理版2は維持し、検証済みの旧物語に2人の所在だけを補う。読込時の待機本文は保持する。[人物画・互換性・検証](../../RELOCATED_CHARACTER_ART.md)。','');
+ if(!second)lines.push('2026-10-29追記：q033の匿名巡礼者を5場面へ接続した。外套は本人が持ったまま話す客室の本文へ整理した。既存の同行・保持者・行動を使い、物語改訂1と保存内容を維持する。初版は変更しない。[人物画・保存再開・検証](../../RELOCATED_CHARACTER_ART.md)。','');
  for(const q of quests){lines.push(`## ${q.id} ${q.title}`,'',q.brief,'');for(const n of q.model.graph){const p=q.story.worldPlaces[n.place];lines.push(`### ${n.id} — ${q.story.places[n.place]}`,'',p.kind==='town'?`現場：\`${p.location}\``:`現場：\`${p.map} (${p.x},${p.y})\``,'',...(typeof n.text==='string'?[n.text]:n.text.map(p=>typeof p==='string'?p:`条件に応じて：${p.yes} ／ ${p.no}`)),'');for(const a of n.options)lines.push(`1. ${a.id}：${a.text} → ${a.to}`);lines.push('');}for(const [key,o] of Object.entries(q.outcomes))lines.push(`### 結末 ${key}`,'',o.text,'',`報酬：${o.gold}G、${o.xp}EXP。`,'');}
  return lines.join('\n').trimEnd()+'\n';
 }

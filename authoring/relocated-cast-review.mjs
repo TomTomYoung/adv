@@ -15,7 +15,7 @@ export const RELOCATED_CAST_REVIEW={
     entry:{decision:'no-person-evidence',people:[],evidence:'水晶の横には録音用の小さな窪みがある。',reason:'録音水晶を調べる場面。探索隊以外の特定人物が同席する記述はない。',visual:'録音水晶・吹込み用の窪み・日付の機構。人物画の追加は不要。'},
     night:{decision:'no-person-evidence',people:[],evidence:'自分の言った日付が流れた。',reason:'声は再生された録音。キリや別の話者が現場へ来たと解釈しない。',visual:'同じ足元で夜の礼拝と録音再生を示す差分。場面内の時間経過として扱う。'}
    },
-   next:'人物を追加せず、録音水晶と日付表示の局所差分を制作候補にする。人物監査の次はq034。'
+   next:'人物を追加せず、録音水晶と日付表示の局所差分を制作候補にする。人物監査の次はq035。'
   },
   q032:{
    sourceSha256:'8ea3083df1503f6511263214481d9045c5c9565b430c97fedb00018cc25d95f1',
@@ -41,22 +41,42 @@ export const RELOCATED_CAST_REVIEW={
    next:'匿名2役の接続を完了。聖像・地下牢・石工台の背景と道具の状態差分は残る。'
   },
   q033:{
-   sourceSha256:'7195dd4184536aaf1ec3636b797b16bb8ac735b2c671edd848003cce9572d1ba',
+   sourceSha256:'b378b07d2e8854238223484b790da20e08e6da9ba830ababc2fc6a8120919e4a',
    identityNotes:[
     '依頼人は宿坊のウラ。現場で話し、客室・水盤・鏡へ同行する巡礼者とは別の役。ウラの同席を本文からは確認できない。',
-    '巡礼者は既存personエンティティpilgrimとして所在を持つが、characterとcastは未接続。5場面とも同じ巡礼者の出演候補。固有名・性別・年齢・宗派・狂火との関係を本文へ付与しない。',
-    '外套は衣服として人物と持物を分ける。guestで椅子に掛ける描写がある一方、cloakAtはpilgrimのまま。未洗浄・洗濯中・濡れた袖・客室での脱衣を一枚に焼き込まず、道具表示の前に着用と保持の扱いを整理する。'
+    '巡礼者は既存personエンティティpilgrimとして所在を持ち、character・5場面のcast・専用透過画を接続済み。固有名・性別・年齢・宗派・狂火との関係を本文へ付与しない。',
+    '外套は全経路でcloakAt: pilgrimを維持する。guestは外套を握ったまま話し始める本文へ整理し、椅子への移動・脱衣を追加しない。粉・洗浄・濡れを共通の人物画へ固定しない。旧保存の待機本文は保持する。'
    ],
    relatedClients:{},
-   people:{q033_pilgrim:{label:'鏡に映らない巡礼者（匿名）',status:'candidate',need:'既存pilgrimの所在と同行を保持し、character・5場面のcast・人物画を接続する候補。依頼人ウラの画を流用しない。'}},
+   people:{q033_pilgrim:{label:'鏡に映らない巡礼者（匿名）',status:'connected',entity:'pilgrim',need:'既存pilgrimの所在と同行を保持し、character・5場面のcast・専用透過画を接続済み。依頼人ウラの画を流用しない。'}},
    scenes:{
     entry:{decision:'person-evidence',people:['q033_pilgrim'],evidence:'巡礼者が鏡へ触れると白く曇った。',reason:'巡礼者の動作と発言がある。ウラは同席の根拠なし。',visual:'曇る鏡と外套。鏡像を別の人物として表示しない。'},
     powder:{decision:'person-evidence',people:['q033_pilgrim'],evidence:'巡礼者は以前、鏡磨きの作業をしていた。',reason:'直前の調査を同じ場所で続ける。pilgrimAtはentryにあり、退場・移動はない。',visual:'拭いた布と銀磨き粉、曇りを拭いた鏡。'},
-    guest:{decision:'person-evidence',people:['q033_pilgrim'],evidence:'巡礼者と鏡のない客室まで来た。',reason:'同行して到着した本人から話を聞く。ウラは加えない。',visual:'鏡のない客室と椅子の外套。cloakAtの保持と着用状態は別途整理する。'},
+    guest:{decision:'person-evidence',people:['q033_pilgrim'],evidence:'巡礼者と鏡のない客室まで来た。',reason:'同行して到着した本人から話を聞く。ウラは加えない。',visual:'鏡のない客室。外套は巡礼者の手元に残す。室内の会話と本人の同意を保つ。'},
     wash:{decision:'person-evidence',people:['q033_pilgrim'],evidence:'巡礼者は濡れた袖を絞り、鏡へ戻ろうと言う。',reason:'水盤へ実際に同行した本人の動作と発言がある。',visual:'水盤、洗い落ちた粉、濡れた外套。'},
     clean:{decision:'person-evidence',people:['q033_pilgrim'],evidence:'巡礼者と残る曇りを拭き取った。',reason:'水盤から一緒に戻り、同じ巡礼者と作業する。',visual:'拭いた鏡と映る手。新しい人物を増やさない。'}
    },
-   next:'巡礼者1役の画と5場面のcastを接続する。人物監査はq034から続ける。'
+   next:'巡礼者1役・5場面の接続を完了。鏡前・水盤・鏡のない客室と、粉・洗浄の局所差分は残る。'
+  },
+  q034:{
+   sourceSha256:'4587331ea12a32834549fb3b723814e74490f9d4b9e14126184953753612541f',
+   identityNotes:[
+    '依頼人は商人のロア。現場本文では商人とだけ呼ばれる。既存merchantの同じ役を3場面で追い、同名だけで他の依頼の人物へ統合しない。',
+    '被害者は自分たちと語る集団だが、人数・氏名・外見・代表者は記されていない。既存personエンティティvictimsを制作1人分とは数えない。群像と発言者の表示方針を確定してから画を制作する。',
+    '商人はentryと面会室を探索隊と同行して往復する。被害者はmeetingに留まる。証書は祭壇から探索隊へ預け、返却時だけ商人へ移る。面会を取り持つ結末ではdocumentAt: partyを維持し、返したことにしない。',
+    'consentは面会の内容への同意を得る場面。本文の返答と商人の了承を根拠に両者の表示を検討し、公開の謝罪会や和解の成立を絵だけで先取りしない。結末の祈祷師は場面castへ追加しない。'
+   ],
+   relatedClients:{},
+   people:{
+    q034_merchant:{label:'証書を求める商人',status:'candidate',need:'既存merchantの所在・同行と3場面のcastを接続する。依頼人ロアとの呼称を原稿と照合し、他の商人の画を自動流用しない。'},
+    q034_victims:{label:'被害者たち（人数・発言者未確定）',status:'candidate',need:'meetingの集団役。人数と表示方法を整理する。代表者1人や具体的な被害内容を創作して置換しない。'}
+   },
+   scenes:{
+    entry:{decision:'person-evidence',people:['q034_merchant'],evidence:'商人はそれを今夜の謝罪の代わりに掲げたいと言う。',reason:'商人の発言があり、merchantAtはentry。被害者は面会室に留まる。',visual:'祭壇の証書。日付・支払欄はUIの文章で確認し、完了済みの謝罪を描かない。'},
+    reserved:{decision:'person-evidence',people:['q034_merchant'],evidence:'「支払済」は別の墨で書き足されていた。',reason:'商人と同じ現場で原本を調べる。面会室から戻る経路も本人が同行し、被害者は同行しない。',visual:'寄進予約票と異なる墨の書き足し。保持者はentryまたはpartyで、未返却の紙を商人へ固定しない。'},
+    consent:{decision:'person-evidence',people:['q034_merchant','q034_victims'],evidence:'商人も了承した。',reason:'被害者の返答と商人の了承があり、meetingに両者がいる。集団の人数は本文から確定しない。',visual:'被害者との面会室。書類を見せる会と話を聞く会を区別し、無断の公開や和解の演出を足さない。'}
+   },
+   next:'商人の人物接続と、被害者たちの人数・発言者・群像の表示方針を整理する。人物監査はq035から続ける。'
   }
  }
 };
