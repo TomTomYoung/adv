@@ -1,3 +1,5 @@
 import {chapelArtFixtures} from './chapel-art-fixtures.mjs';
+import {pilgrimArtFixtures} from './pilgrim-art-fixtures.mjs';
 import {runCharacterArtSmoke} from './character-art-browser.mjs';
-await runCharacterArtSmoke({...await chapelArtFixtures(),group:'chapel',folder:'relocated'});
+const parts=await Promise.all([chapelArtFixtures(),pilgrimArtFixtures()]);
+await runCharacterArtSmoke({fixtures:parts.flatMap(p=>p.fixtures),outcomes:parts.flatMap(p=>p.outcomes),group:'chapel',folder:'relocated'});

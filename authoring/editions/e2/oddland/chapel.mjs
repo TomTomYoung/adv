@@ -37,10 +37,12 @@ export function chapelSource(q,{cast=true}={}){
  if(q.number===33){
   cell('wash','外套を洗う水盤','clue_b');town('guest','鏡のない客室','pilgrim_guesthouse');entity('pilgrim','entry','person');entity('cloak','pilgrim');
   route('entry','guest','guest',{companions:['pilgrim']});route('powder','room','guest',{companions:['pilgrim']});
-  end('guest','guest','巡礼者と鏡のない客室まで来た。外套を椅子へ掛け、戸を閉じてから話を聞く。','compromise');
+  // Keep the cloak with its existing holder; the portrait does not imply a transfer.
+  end('guest','guest','巡礼者と鏡のない客室まで来た。戸を閉じると、巡礼者は外套を握ったまま話し始めた。','compromise');
   route('powder','wash','wash',{companions:['pilgrim']});
   add('wash','wash','水盤で外套を洗うと、磨き粉が水に落ちた。巡礼者は濡れた袖を絞り、鏡へ戻ろうと言う。',[{id:'return',text:'巡礼者と鏡へ戻り、曇りを磨き直す',to:'clean',companions:['pilgrim']}]);
   end('clean','entry','戻った鏡に二人の手が映る。巡礼者と残る曇りを拭き取った。','informed');
+  if(cast){x.entities.pilgrim.character='q033_pilgrim';for(const n of x.nodes)n.cast=['pilgrim'];}
  }
  if(q.number===34){
   town('meeting','被害者との面会室','pilgrim_meeting');scene('consent').place='meeting';entity('merchant','entry','person');entity('victims','meeting','person');entity('document','entry');

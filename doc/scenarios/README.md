@@ -28,9 +28,9 @@
 
 [ODDLAND_CHARACTER_ART.md](ODDLAND_CHARACTER_ART.md)：国境全22人の専用画。q300の既存画共用も含む10件の全88場面と条件差分、計101状態・21結末・第2版だけへの接続・原本と制作記録。招待状と料理の手渡し、同行、費用、q292の完了に応じた台詞も検査する。
 
-[RELOCATED_CAST_AUDIT.md](RELOCATED_CAST_AUDIT.md)：旧100件753場面の出演集計とq031〜q033の13場面の精読。q032の接続済み2役、q033の巡礼者候補、声のみ・道具のみの場面を分け、原稿変更で再確認する。
+[RELOCATED_CAST_AUDIT.md](RELOCATED_CAST_AUDIT.md)：旧100件753場面の出演集計とq031〜q034の16場面の精読。q032・q033の接続済み3役、q034の商人・被害者の候補、声のみ・道具のみの場面を分け、原稿変更で再確認する。
 
-[RELOCATED_CHARACTER_ART.md](RELOCATED_CHARACTER_ART.md)：礼拝堂q032の匿名2役の専用画・所在・出演、宝玉の本文整理、個別物語改訂と旧セーブ対応、6場面の表示検証。
+[RELOCATED_CHARACTER_ART.md](RELOCATED_CHARACTER_ART.md)：礼拝堂q032・q033の匿名3役の専用画・所在・出演、宝玉と外套の本文整理、旧セーブ対応、11場面と客室の知識差分の表示検証。
 
 ## 設計と実行
 
