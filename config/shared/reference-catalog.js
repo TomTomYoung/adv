@@ -76180,7 +76180,8 @@ export const referenceData={
       "npc_q036_conductor": "assets/images/characters/relocated/q036_conductor.webp",
       "npc_q037_owner_first": "assets/images/characters/relocated/q037_owner_first.webp",
       "npc_q037_owner_second": "assets/images/characters/relocated/q037_owner_second.webp",
-      "npc_q037_owner_third": "assets/images/characters/relocated/q037_owner_third.webp"
+      "npc_q037_owner_third": "assets/images/characters/relocated/q037_owner_third.webp",
+      "npc_q038_inspector": "assets/images/characters/relocated/q038_inspector.webp"
     },
     "audio": {
       "exploration": "assets/audio/exploration-v2.ogg",

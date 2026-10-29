@@ -95,6 +95,11 @@ export function chapelSource(q,{cast=true}={}){
   end('posted','entry','水瓶の交換札の横に、設備と水質の検査票を並べた。','informed');
   for(const [from,key] of [['entry','buy'],['water','separate']])route(from,key,'supply');
   end('supply','supply','依頼人の買付票を受取所へ届けた。飲用水の便を手配し、検査中の瓶は生活用だけに分ける。','compromise');
+  if(cast){
+   x.entities.inspector={holder:'lab',kind:'person',character:'q038_inspector'};
+   scene('water').cast=['inspector'];scene('filter_check').cast=['inspector'];
+   option('water','filter').companions=['inspector'];
+  }
  }
  if(q.number===39){
   at('entry','owners','account');entity('mask','entry');entity('buyer','entry','person');x.flags.jointMarks=false;

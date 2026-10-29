@@ -1,0 +1,1524 @@
+{
+  "schemaVersion": 1,
+  "id": "q038",
+  "number": 38,
+  "title": "聖水の沈殿",
+  "client": "施療人のネイ",
+  "brief": "聖水瓶の底に黒い沈殿がある。飲ませてよいか確かめてください。",
+  "region": 4,
+  "type": "authored_progression",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。 巡礼台地の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q038_pilgrim_entry",
+      "title": "聖水の沈殿の現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q038.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q038.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      },
+      "script": "q038.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "region_4",
+          "map": "region_4_f2",
+          "x": 13,
+          "y": 7
+        }
+      ]
+    },
+    {
+      "id": "q038_pilgrim_lab",
+      "title": "礼拝堂の水質検査台",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "lab",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q038.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q038.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      },
+      "script": "q038.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "region_4",
+          "map": "region_4_f2",
+          "x": 1,
+          "y": 8
+        }
+      ]
+    }
+  ],
+  "locations": [],
+  "outcomes": {
+    "informed": {
+      "label": "古い炭を交換し、設備の検査を受ける",
+      "text": "聖水は使えた。ネイは奇跡の由来とは別に清掃当番を決める。",
+      "gold": 93,
+      "xp": 92
+    },
+    "contract": {
+      "label": "全ての瓶を回収して廃棄する",
+      "text": "不安は一度収まった。次の給水まで患者は水を少しずつ分ける。",
+      "gold": 113,
+      "xp": 68
+    },
+    "compromise": {
+      "label": "上澄みを生活用へ回し、飲用水を買い付ける",
+      "text": "治療は続いた。費用を負担した人々が交換札を見に来る。",
+      "gold": 60,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/chapel.mjs",
+    "world": {
+      "truth": "沈殿は浄化材の炭で、水は清いが瓶の交換を怠った印でもある。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "沈殿は浄化材の炭で、水は清いが瓶の交換を怠った印でもある。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "聖水瓶の底に黒い沈殿がある。飲ませてよいか確かめてください。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "施療人のネイ",
+        "observation": "聖水瓶の底に黒い沈殿がある。飲ませてよいか確かめてください。",
+        "belief": "聖水瓶の底に黒い沈殿がある。飲ませてよいか確かめてください。",
+        "goal": "聖水瓶の底に黒い沈殿がある。飲ませてよいか確かめてください。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "聖水瓶の底に黒い沈殿がある。飲ませてよいか確かめてください。",
+      "progression": "水の検査と設備交換を別の検査票で扱い、清い水を廃棄せず運用を改められる。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q038.pilgrimage.entry"
+        },
+        {
+          "id": "water",
+          "script": "q038.pilgrimage.water"
+        },
+        {
+          "id": "filter",
+          "script": "q038.pilgrimage.filter"
+        },
+        {
+          "id": "filter_check",
+          "script": "q038.pilgrimage.filter_check"
+        },
+        {
+          "id": "after_test",
+          "script": "q038.pilgrimage.after_test"
+        },
+        {
+          "id": "posted",
+          "script": "q038.pilgrimage.posted"
+        },
+        {
+          "id": "supply",
+          "script": "q038.pilgrimage.supply"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "聖水瓶の底に黒い沈殿がある。飲ませてよいか確かめてください。",
+      "openQuestion": "聖水の沈殿の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "valueInvert",
+      "newInformation": "沈殿は浄化材の炭で、水は清いが瓶の交換を怠った印でもある。",
+      "retroactiveTargets": [
+        "filter"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q038.flow.entry"
+      },
+      {
+        "id": "water",
+        "script": "q038.flow.water"
+      },
+      {
+        "id": "filter",
+        "script": "q038.flow.filter"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q038.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "水の検査と設備交換を別の検査票で扱い、清い水を廃棄せず運用を改められる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "水の検査と設備交換を別の検査票で扱い、清い水を廃棄せず運用を改められる。",
+    "flowVersion": 2,
+    "entryScript": "q038.pilgrimage.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "瓶の底に黒い粉がある。交換札は期限を過ぎているが、水は澄んでいる。",
+        "options": [
+          {
+            "id": "sample",
+            "text": "水だけ別瓶へ取り、検査する",
+            "to": "water",
+            "action": "entry_sample"
+          },
+          {
+            "id": "replace",
+            "text": "浄化材の炭を交換する",
+            "to": "filter",
+            "action": "entry_replace"
+          },
+          {
+            "id": "purge",
+            "text": "全ての瓶を回収して廃棄する",
+            "to": "@contract",
+            "action": "entry_purge"
+          },
+          {
+            "id": "buy",
+            "text": "上澄みを生活用へ回し、飲用水を買い付ける",
+            "to": "supply",
+            "action": "entry_buy"
+          }
+        ]
+      },
+      {
+        "id": "water",
+        "place": "lab",
+        "text": "水質は飲用範囲だった。清いことと、瓶を交換しなくてよいことは別だと検査人が記す。",
+        "options": [
+          {
+            "id": "filter",
+            "text": "古い炭を交換し、設備の検査を受ける",
+            "to": "filter_check",
+            "action": "water_filter"
+          },
+          {
+            "id": "separate",
+            "text": "設備検査を待つ間、飲用水を買い付ける",
+            "to": "supply",
+            "action": "water_separate"
+          }
+        ]
+      },
+      {
+        "id": "filter",
+        "place": "entry",
+        "text": "沈殿は浄化材の炭で、水は清いが瓶の交換を怠った印でもある。 新しい炭を入れたが、飲用可否の検査票はまだない。",
+        "options": [
+          {
+            "id": "test",
+            "text": "交換後の水も検査し、二枚の票を掲げる",
+            "to": "after_test",
+            "action": "filter_test"
+          },
+          {
+            "id": "suspend",
+            "text": "飲用を止め、生活用の配水だけ続ける",
+            "to": "@compromise",
+            "action": "filter_suspend"
+          }
+        ]
+      },
+      {
+        "id": "filter_check",
+        "place": "entry",
+        "text": "検査票を持って水瓶へ戻った。古い炭を交換し、検査人と設備の継ぎ目まで確かめる。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@informed",
+            "action": "filter_check_finish"
+          }
+        ]
+      },
+      {
+        "id": "after_test",
+        "place": "lab",
+        "text": "交換後の水にも飲用可の判定が出た。二枚の検査票を受け取り、水瓶のある場所へ戻る。",
+        "options": [
+          {
+            "id": "post",
+            "text": "水瓶へ戻り、設備と水質の検査票を掲げる",
+            "to": "posted",
+            "action": "after_test_post"
+          }
+        ]
+      },
+      {
+        "id": "posted",
+        "place": "entry",
+        "text": "水瓶の交換札の横に、設備と水質の検査票を並べた。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@informed",
+            "action": "posted_finish"
+          }
+        ]
+      },
+      {
+        "id": "supply",
+        "place": "supply",
+        "text": "依頼人の買付票を受取所へ届けた。飲用水の便を手配し、検査中の瓶は生活用だけに分ける。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@compromise",
+            "action": "supply_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "first-ten",
+      "settlement": "oddland_plateau",
+      "saveRevision": 2,
+      "scope": "礼拝堂20件のうち前半10件の実地接続。後半10件はchapel-second.mjsで接続。"
+    }
+  },
+  "scripts": {
+    "q038.pilgrimage.entry": {
+      "storyQuest": "q038",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q038",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "瓶の底に黒い粉がある。交換札は期限を過ぎているが、水は澄んでいる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sample",
+              "text": "水だけ別瓶へ取り、検査する",
+              "storyAction": {
+                "quest": "q038",
+                "action": "entry_sample"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q038",
+                  "action": "entry_sample"
+                }
+              ]
+            },
+            {
+              "id": "replace",
+              "text": "浄化材の炭を交換する",
+              "storyAction": {
+                "quest": "q038",
+                "action": "entry_replace"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q038",
+                  "action": "entry_replace"
+                },
+                {
+                  "op": "jump",
+                  "script": "q038.pilgrimage.filter"
+                }
+              ]
+            },
+            {
+              "id": "purge",
+              "text": "全ての瓶を回収して廃棄する",
+              "storyAction": {
+                "quest": "q038",
+                "action": "entry_purge"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q038",
+                  "action": "entry_purge"
+                },
+                {
+                  "op": "jump",
+                  "script": "q038.pilgrimage.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "buy",
+              "text": "上澄みを生活用へ回し、飲用水を買い付ける",
+              "storyAction": {
+                "quest": "q038",
+                "action": "entry_buy"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q038",
+                  "action": "entry_buy"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q038.pilgrimage.water": {
+      "storyQuest": "q038",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q038",
+          "scene": "water"
+        },
+        {
+          "op": "narrate",
+          "text": "水質は飲用範囲だった。清いことと、瓶を交換しなくてよいことは別だと検査人が記す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "filter",
+              "text": "古い炭を交換し、設備の検査を受ける",
+              "storyAction": {
+                "quest": "q038",
+                "action": "water_filter"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q038",
+                  "action": "water_filter"
+                }
+              ]
+            },
+            {
+              "id": "separate",
+              "text": "設備検査を待つ間、飲用水を買い付ける",
+              "storyAction": {
+                "quest": "q038",
+                "action": "water_separate"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q038",
+                  "action": "water_separate"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q038.pilgrimage.filter": {
+      "storyQuest": "q038",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q038",
+          "scene": "filter"
+        },
+        {
+          "op": "narrate",
+          "text": "沈殿は浄化材の炭で、水は清いが瓶の交換を怠った印でもある。 新しい炭を入れたが、飲用可否の検査票はまだない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "test",
+              "text": "交換後の水も検査し、二枚の票を掲げる",
+              "storyAction": {
+                "quest": "q038",
+                "action": "filter_test"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q038",
+                  "action": "filter_test"
+                }
+              ]
+            },
+            {
+              "id": "suspend",
+              "text": "飲用を止め、生活用の配水だけ続ける",
+              "storyAction": {
+                "quest": "q038",
+                "action": "filter_suspend"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q038",
+                  "action": "filter_suspend"
+                },
+                {
+                  "op": "jump",
+                  "script": "q038.pilgrimage.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q038.pilgrimage.filter_check": {
+      "storyQuest": "q038",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q038",
+          "scene": "filter_check"
+        },
+        {
+          "op": "narrate",
+          "text": "検査票を持って水瓶へ戻った。古い炭を交換し、検査人と設備の継ぎ目まで確かめる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q038",
+                "action": "filter_check_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q038",
+                  "action": "filter_check_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q038.pilgrimage.end.informed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q038.pilgrimage.after_test": {
+      "storyQuest": "q038",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q038",
+          "scene": "after_test"
+        },
+        {
+          "op": "narrate",
+          "text": "交換後の水にも飲用可の判定が出た。二枚の検査票を受け取り、水瓶のある場所へ戻る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "post",
+              "text": "水瓶へ戻り、設備と水質の検査票を掲げる",
+              "storyAction": {
+                "quest": "q038",
+                "action": "after_test_post"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q038",
+                  "action": "after_test_post"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q038.pilgrimage.posted": {
+      "storyQuest": "q038",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q038",
+          "scene": "posted"
+        },
+        {
+          "op": "narrate",
+          "text": "水瓶の交換札の横に、設備と水質の検査票を並べた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q038",
+                "action": "posted_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q038",
+                  "action": "posted_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q038.pilgrimage.end.informed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q038.pilgrimage.supply": {
+      "storyQuest": "q038",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q038",
+          "scene": "supply"
+        },
+        {
+          "op": "narrate",
+          "text": "依頼人の買付票を受取所へ届けた。飲用水の便を手配し、検査中の瓶は生活用だけに分ける。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q038",
+                "action": "supply_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q038",
+                  "action": "supply_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q038.pilgrimage.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q038.pilgrimage.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "聖水は使えた。ネイは奇跡の由来とは別に清掃当番を決める。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q038",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q038.pilgrimage.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "不安は一度収まった。次の給水まで患者は水を少しずつ分ける。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q038",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q038.pilgrimage.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "治療は続いた。費用を負担した人々が交換札を見に来る。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q038",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q038.pilgrimage.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q038.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q038.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "聖水は使えた。ネイは奇跡の由来とは別に清掃当番を決める。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "不安は一度収まった。次の給水まで患者は水を少しずつ分ける。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "治療は続いた。費用を負担した人々が交換札を見に来る。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "story.init",
+              "quest": "q038"
+            },
+            {
+              "op": "switch",
+              "value": {
+                "ref": "stories.q038.scene"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q038.pilgrimage.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "water",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q038.pilgrimage.water"
+                    }
+                  ]
+                },
+                {
+                  "equals": "filter",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q038.pilgrimage.filter"
+                    }
+                  ]
+                },
+                {
+                  "equals": "filter_check",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q038.pilgrimage.filter_check"
+                    }
+                  ]
+                },
+                {
+                  "equals": "after_test",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q038.pilgrimage.after_test"
+                    }
+                  ]
+                },
+                {
+                  "equals": "posted",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q038.pilgrimage.posted"
+                    }
+                  ]
+                },
+                {
+                  "equals": "supply",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q038.pilgrimage.supply"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q038.pilgrimage.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "聖水の沈殿の現場",
+      "lab": "礼拝堂の水質検査台",
+      "supply": "巡礼台地の水の受取所",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "lab"
+      ],
+      [
+        "transit",
+        "supply"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "lab",
+          "supply",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "filterChanged": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "filterChanged"
+      },
+      "waterTested": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "waterTested"
+      },
+      "sampleAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "lab",
+          "supply",
+          "transit",
+          "party",
+          "afterSample"
+        ],
+        "meaning": "sample の所在または保持者"
+      },
+      "afterSampleAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "lab",
+          "supply",
+          "transit",
+          "party",
+          "sample"
+        ],
+        "meaning": "afterSample の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "sample": {
+        "holder": "sampleAt",
+        "kind": "item"
+      },
+      "afterSample": {
+        "holder": "afterSampleAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "沈殿は浄化材の炭で、水は清いが瓶の交換を怠った印でもある。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "聖水の沈殿の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "water": {
+        "title": "礼拝堂の水質検査台",
+        "place": "lab",
+        "cast": [],
+        "requires": true
+      },
+      "filter": {
+        "title": "聖水の沈殿の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "filter_check": {
+        "title": "聖水の沈殿の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "after_test": {
+        "title": "礼拝堂の水質検査台",
+        "place": "lab",
+        "cast": [],
+        "requires": true
+      },
+      "posted": {
+        "title": "聖水の沈殿の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "supply": {
+        "title": "巡礼台地の水の受取所",
+        "place": "supply",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_sample": {
+        "from": [
+          "entry"
+        ],
+        "to": "water",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "lab"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "sample",
+            "from": "party",
+            "to": "lab"
+          },
+          {
+            "op": "set",
+            "key": "waterTested",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "lab",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "sample",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      },
+      "entry_replace": {
+        "from": [
+          "entry"
+        ],
+        "to": "filter",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "filterChanged",
+            "value": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "entry",
+            "requires": true
+          }
+        ],
+        "once": false
+      },
+      "entry_purge": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "entry_buy": {
+        "from": [
+          "entry"
+        ],
+        "to": "supply",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "supply"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "supply",
+          "companions": []
+        },
+        "depart": []
+      },
+      "water_filter": {
+        "from": [
+          "water"
+        ],
+        "to": "filter_check",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "water_separate": {
+        "from": [
+          "water"
+        ],
+        "to": "supply",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "supply"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "supply",
+          "companions": []
+        },
+        "depart": []
+      },
+      "filter_test": {
+        "from": [
+          "filter"
+        ],
+        "to": "after_test",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "lab"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "afterSample",
+            "from": "party",
+            "to": "lab"
+          },
+          {
+            "op": "set",
+            "key": "waterTested",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "lab",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "afterSample",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      },
+      "filter_suspend": {
+        "from": [
+          "filter"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "filter_check_finish": {
+        "from": [
+          "filter_check"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "filterChanged",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "after_test_post": {
+        "from": [
+          "after_test"
+        ],
+        "to": "posted",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "posted_finish": {
+        "from": [
+          "posted"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "supply_finish": {
+        "from": [
+          "supply"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q038.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q038.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q038.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q038.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q038.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q038.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q038.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q038.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q038.values.partyAt"
+                },
+                "right": "entry"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q038.values.partyAt"
+                },
+                "right": "supply"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_4",
+        "map": "region_4_f2",
+        "x": 13,
+        "y": 7
+      },
+      "lab": {
+        "kind": "dungeon",
+        "dungeon": "region_4",
+        "map": "region_4_f2",
+        "x": 1,
+        "y": 8
+      },
+      "supply": {
+        "kind": "town",
+        "location": "oddland_plateau_supply"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_plateau",
+  "receptionLocations": [
+    "pilgrim_board"
+  ]
+}
