@@ -1,0 +1,1750 @@
+{
+  "schemaVersion": 1,
+  "id": "q037",
+  "number": 37,
+  "title": "夜だけの告解",
+  "client": "告解係のオル",
+  "brief": "誰もいない夜に告解が書き込まれる。犯人を見つけてください。",
+  "region": 4,
+  "type": "authored_progression",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。 巡礼台地の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q037_pilgrim_entry",
+      "title": "夜だけの告解の現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q037.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q037.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      },
+      "script": "q037.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "region_4",
+          "map": "region_4_f2",
+          "x": 16,
+          "y": 4
+        }
+      ]
+    },
+    {
+      "id": "q037_pilgrim_quiet",
+      "title": "告解の声が届かない控室",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "quiet",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q037.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q037.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      },
+      "script": "q037.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "region_4",
+          "map": "region_4_f2",
+          "x": 5,
+          "y": 3
+        }
+      ]
+    }
+  ],
+  "locations": [],
+  "outcomes": {
+    "informed": {
+      "label": "三人の受領を確認し、移設先を固定する",
+      "text": "告解の秘密は守られた。鳥は昼の献立を覚える仕事へ移る。",
+      "gold": 93,
+      "xp": 92
+    },
+    "contract": {
+      "label": "籠を壊して書記鳥を放す",
+      "text": "夜の告解は止まった。鳥は屋根へ逃げ、覚えた名前を町で鳴く。",
+      "gold": 113,
+      "xp": 68
+    },
+    "compromise": {
+      "label": "写本を封じ、閲覧者を限定する",
+      "text": "告解は証拠にも噂にもされず、封じた日付だけが帳簿へ残る。",
+      "gold": 60,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/chapel.mjs",
+    "world": {
+      "truth": "昼の告解を覚えた書記鳥が、夜に聞いた順で書き写している。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "昼の告解を覚えた書記鳥が、夜に聞いた順で書き写している。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "誰もいない夜に告解が書き込まれる。犯人を見つけてください。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "告解係のオル",
+        "observation": "誰もいない夜に告解が書き込まれる。犯人を見つけてください。",
+        "belief": "誰もいない夜に告解が書き込まれる。犯人を見つけてください。",
+        "goal": "誰もいない夜に告解が書き込まれる。犯人を見つけてください。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "誰もいない夜に告解が書き込まれる。犯人を見つけてください。",
+      "progression": "告解の内容を開かずに三通を返却する作業と、追加の漏出を止める移設を分ける。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q037.pilgrimage.entry"
+        },
+        {
+          "id": "return",
+          "script": "q037.pilgrimage.return"
+        },
+        {
+          "id": "first",
+          "script": "q037.pilgrimage.first"
+        },
+        {
+          "id": "second",
+          "script": "q037.pilgrimage.second"
+        },
+        {
+          "id": "third",
+          "script": "q037.pilgrimage.third"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "誰もいない夜に告解が書き込まれる。犯人を見つけてください。",
+      "openQuestion": "夜だけの告解の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "identitySplit",
+      "newInformation": "昼の告解を覚えた書記鳥が、夜に聞いた順で書き写している。",
+      "retroactiveTargets": [
+        "return"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q037.flow.entry"
+      },
+      {
+        "id": "return",
+        "script": "q037.flow.return"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q037.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q037.first",
+        "meaning": "各場面に明記した first の行為・合意の記録",
+        "writer": [
+          "return"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q037.second",
+        "meaning": "各場面に明記した second の行為・合意の記録",
+        "writer": [
+          "return"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q037.third",
+        "meaning": "各場面に明記した third の行為・合意の記録",
+        "writer": [
+          "return"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "告解の内容を開かずに三通を返却する作業と、追加の漏出を止める移設を分ける。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "告解の内容を開かずに三通を返却する作業と、追加の漏出を止める移設を分ける。",
+    "flowVersion": 2,
+    "entryScript": "q037.pilgrimage.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "夜の机へ写本が三通落ちる。籠の鳥が昼の言葉を聞いた順に繰り返している。",
+        "options": [
+          {
+            "id": "move",
+            "text": "鳥を告解の届かない部屋へ移す",
+            "to": "return",
+            "action": "entry_move"
+          },
+          {
+            "id": "destroy",
+            "text": "籠を壊して書記鳥を放す",
+            "to": "@contract",
+            "action": "entry_destroy"
+          },
+          {
+            "id": "seal",
+            "text": "写本を封じ、閲覧者を限定する",
+            "to": "@compromise",
+            "action": "entry_seal"
+          }
+        ]
+      },
+      {
+        "id": "return",
+        "place": "quiet",
+        "text": "昼の告解を覚えた書記鳥が、夜に聞いた順で書き写している。 表紙の受付番号で本人へ返せる。内容を読む必要はない。",
+        "options": [
+          {
+            "id": "first",
+            "text": "一番の封を閉じたまま本人へ返す",
+            "to": "first",
+            "action": "return_first"
+          },
+          {
+            "id": "second",
+            "text": "二番の封を閉じたまま本人へ返す",
+            "to": "second",
+            "action": "return_second"
+          },
+          {
+            "id": "third",
+            "text": "三番の封を閉じたまま本人へ返す",
+            "to": "third",
+            "action": "return_third"
+          },
+          {
+            "id": "finish",
+            "text": "三人の受領を確認し、移設先を固定する",
+            "to": "@informed",
+            "action": "return_finish"
+          },
+          {
+            "id": "deposit",
+            "text": "未返却の分を封印庫へ預ける",
+            "to": "@compromise",
+            "action": "return_deposit"
+          }
+        ]
+      },
+      {
+        "id": "first",
+        "place": "first",
+        "text": "受付札を本人と照合し、封を開けずに写本を渡した。受領の返事を聞いてから控室へ戻る。",
+        "options": [
+          {
+            "id": "back",
+            "text": "控室へ戻る",
+            "to": "return",
+            "action": "first_back"
+          }
+        ]
+      },
+      {
+        "id": "second",
+        "place": "second",
+        "text": "受付札を本人と照合し、封を開けずに写本を渡した。受領の返事を聞いてから控室へ戻る。",
+        "options": [
+          {
+            "id": "back",
+            "text": "控室へ戻る",
+            "to": "return",
+            "action": "second_back"
+          }
+        ]
+      },
+      {
+        "id": "third",
+        "place": "third",
+        "text": "受付札を本人と照合し、封を開けずに写本を渡した。受領の返事を聞いてから控室へ戻る。",
+        "options": [
+          {
+            "id": "back",
+            "text": "控室へ戻る",
+            "to": "return",
+            "action": "third_back"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "first-ten",
+      "settlement": "oddland_plateau",
+      "saveRevision": 2,
+      "scope": "礼拝堂20件のうち前半10件の実地接続。後半10件はchapel-second.mjsで接続。"
+    }
+  },
+  "scripts": {
+    "q037.pilgrimage.entry": {
+      "storyQuest": "q037",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q037",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "夜の机へ写本が三通落ちる。籠の鳥が昼の言葉を聞いた順に繰り返している。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "move",
+              "text": "鳥を告解の届かない部屋へ移す",
+              "storyAction": {
+                "quest": "q037",
+                "action": "entry_move"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q037",
+                  "action": "entry_move"
+                }
+              ]
+            },
+            {
+              "id": "destroy",
+              "text": "籠を壊して書記鳥を放す",
+              "storyAction": {
+                "quest": "q037",
+                "action": "entry_destroy"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q037",
+                  "action": "entry_destroy"
+                },
+                {
+                  "op": "jump",
+                  "script": "q037.pilgrimage.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "写本を封じ、閲覧者を限定する",
+              "storyAction": {
+                "quest": "q037",
+                "action": "entry_seal"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q037",
+                  "action": "entry_seal"
+                },
+                {
+                  "op": "jump",
+                  "script": "q037.pilgrimage.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q037.pilgrimage.return": {
+      "storyQuest": "q037",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q037",
+          "scene": "return"
+        },
+        {
+          "op": "narrate",
+          "text": "昼の告解を覚えた書記鳥が、夜に聞いた順で書き写している。 表紙の受付番号で本人へ返せる。内容を読む必要はない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "first",
+              "text": "一番の封を閉じたまま本人へ返す",
+              "storyAction": {
+                "quest": "q037",
+                "action": "return_first"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q037.values.first"
+                  },
+                  "right": true
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q037",
+                  "action": "return_first"
+                }
+              ]
+            },
+            {
+              "id": "second",
+              "text": "二番の封を閉じたまま本人へ返す",
+              "storyAction": {
+                "quest": "q037",
+                "action": "return_second"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q037.values.second"
+                  },
+                  "right": true
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q037",
+                  "action": "return_second"
+                }
+              ]
+            },
+            {
+              "id": "third",
+              "text": "三番の封を閉じたまま本人へ返す",
+              "storyAction": {
+                "quest": "q037",
+                "action": "return_third"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q037.values.third"
+                  },
+                  "right": true
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q037",
+                  "action": "return_third"
+                }
+              ]
+            },
+            {
+              "id": "finish",
+              "text": "三人の受領を確認し、移設先を固定する",
+              "storyAction": {
+                "quest": "q037",
+                "action": "return_finish"
+              },
+              "condition": {
+                "op": "and",
+                "args": [
+                  true,
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q037.values.first"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q037.values.second"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q037.values.third"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q037",
+                  "action": "return_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q037.pilgrimage.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "deposit",
+              "text": "未返却の分を封印庫へ預ける",
+              "storyAction": {
+                "quest": "q037",
+                "action": "return_deposit"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q037",
+                  "action": "return_deposit"
+                },
+                {
+                  "op": "jump",
+                  "script": "q037.pilgrimage.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q037.pilgrimage.first": {
+      "storyQuest": "q037",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q037",
+          "scene": "first"
+        },
+        {
+          "op": "narrate",
+          "text": "受付札を本人と照合し、封を開けずに写本を渡した。受領の返事を聞いてから控室へ戻る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "back",
+              "text": "控室へ戻る",
+              "storyAction": {
+                "quest": "q037",
+                "action": "first_back"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q037",
+                  "action": "first_back"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q037.pilgrimage.second": {
+      "storyQuest": "q037",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q037",
+          "scene": "second"
+        },
+        {
+          "op": "narrate",
+          "text": "受付札を本人と照合し、封を開けずに写本を渡した。受領の返事を聞いてから控室へ戻る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "back",
+              "text": "控室へ戻る",
+              "storyAction": {
+                "quest": "q037",
+                "action": "second_back"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q037",
+                  "action": "second_back"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q037.pilgrimage.third": {
+      "storyQuest": "q037",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q037",
+          "scene": "third"
+        },
+        {
+          "op": "narrate",
+          "text": "受付札を本人と照合し、封を開けずに写本を渡した。受領の返事を聞いてから控室へ戻る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "back",
+              "text": "控室へ戻る",
+              "storyAction": {
+                "quest": "q037",
+                "action": "third_back"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q037",
+                  "action": "third_back"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q037.pilgrimage.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "告解の秘密は守られた。鳥は昼の献立を覚える仕事へ移る。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q037",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q037.pilgrimage.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "夜の告解は止まった。鳥は屋根へ逃げ、覚えた名前を町で鳴く。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q037",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q037.pilgrimage.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "告解は証拠にも噂にもされず、封じた日付だけが帳簿へ残る。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q037",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q037.pilgrimage.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q037.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q037.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "告解の秘密は守られた。鳥は昼の献立を覚える仕事へ移る。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "夜の告解は止まった。鳥は屋根へ逃げ、覚えた名前を町で鳴く。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "告解は証拠にも噂にもされず、封じた日付だけが帳簿へ残る。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "story.init",
+              "quest": "q037"
+            },
+            {
+              "op": "switch",
+              "value": {
+                "ref": "stories.q037.scene"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q037.pilgrimage.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "return",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q037.pilgrimage.return"
+                    }
+                  ]
+                },
+                {
+                  "equals": "first",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q037.pilgrimage.first"
+                    }
+                  ]
+                },
+                {
+                  "equals": "second",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q037.pilgrimage.second"
+                    }
+                  ]
+                },
+                {
+                  "equals": "third",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q037.pilgrimage.third"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q037.pilgrimage.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "夜だけの告解の現場",
+      "quiet": "告解の声が届かない控室",
+      "first": "一番の札の家",
+      "second": "二番の札の家",
+      "third": "三番の札の家",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "quiet"
+      ],
+      [
+        "transit",
+        "first"
+      ],
+      [
+        "transit",
+        "second"
+      ],
+      [
+        "transit",
+        "third"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "quiet",
+          "first",
+          "second",
+          "third",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "first": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "first"
+      },
+      "second": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "second"
+      },
+      "third": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "third"
+      },
+      "cageAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "quiet",
+          "first",
+          "second",
+          "third",
+          "transit",
+          "party",
+          "owner_first",
+          "letter_first",
+          "owner_second",
+          "letter_second",
+          "owner_third",
+          "letter_third"
+        ],
+        "meaning": "cage の所在または保持者"
+      },
+      "owner_firstAt": {
+        "type": "enum",
+        "initial": "first",
+        "values": [
+          "entry",
+          "quiet",
+          "first",
+          "second",
+          "third",
+          "transit"
+        ],
+        "meaning": "owner_first の所在または保持者"
+      },
+      "letter_firstAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "quiet",
+          "first",
+          "second",
+          "third",
+          "transit",
+          "party",
+          "cage",
+          "owner_first",
+          "owner_second",
+          "letter_second",
+          "owner_third",
+          "letter_third"
+        ],
+        "meaning": "letter_first の所在または保持者"
+      },
+      "owner_secondAt": {
+        "type": "enum",
+        "initial": "second",
+        "values": [
+          "entry",
+          "quiet",
+          "first",
+          "second",
+          "third",
+          "transit"
+        ],
+        "meaning": "owner_second の所在または保持者"
+      },
+      "letter_secondAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "quiet",
+          "first",
+          "second",
+          "third",
+          "transit",
+          "party",
+          "cage",
+          "owner_first",
+          "letter_first",
+          "owner_second",
+          "owner_third",
+          "letter_third"
+        ],
+        "meaning": "letter_second の所在または保持者"
+      },
+      "owner_thirdAt": {
+        "type": "enum",
+        "initial": "third",
+        "values": [
+          "entry",
+          "quiet",
+          "first",
+          "second",
+          "third",
+          "transit"
+        ],
+        "meaning": "owner_third の所在または保持者"
+      },
+      "letter_thirdAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "quiet",
+          "first",
+          "second",
+          "third",
+          "transit",
+          "party",
+          "cage",
+          "owner_first",
+          "letter_first",
+          "owner_second",
+          "letter_second",
+          "owner_third"
+        ],
+        "meaning": "letter_third の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "cage": {
+        "holder": "cageAt",
+        "kind": "item"
+      },
+      "owner_first": {
+        "holder": "owner_firstAt",
+        "kind": "person"
+      },
+      "letter_first": {
+        "holder": "letter_firstAt",
+        "kind": "item"
+      },
+      "owner_second": {
+        "holder": "owner_secondAt",
+        "kind": "person"
+      },
+      "letter_second": {
+        "holder": "letter_secondAt",
+        "kind": "item"
+      },
+      "owner_third": {
+        "holder": "owner_thirdAt",
+        "kind": "person"
+      },
+      "letter_third": {
+        "holder": "letter_thirdAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "昼の告解を覚えた書記鳥が、夜に聞いた順で書き写している。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "夜だけの告解の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "return": {
+        "title": "告解の声が届かない控室",
+        "place": "quiet",
+        "cast": [],
+        "requires": true
+      },
+      "first": {
+        "title": "一番の札の家",
+        "place": "first",
+        "cast": [],
+        "requires": true
+      },
+      "second": {
+        "title": "二番の札の家",
+        "place": "second",
+        "cast": [],
+        "requires": true
+      },
+      "third": {
+        "title": "三番の札の家",
+        "place": "third",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_move": {
+        "from": [
+          "entry"
+        ],
+        "to": "return",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "quiet"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "cage",
+            "from": "party",
+            "to": "quiet"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "quiet",
+            "requires": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "quiet",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "cage",
+            "from": "entry",
+            "to": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "letter_first",
+            "from": "entry",
+            "to": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "letter_second",
+            "from": "entry",
+            "to": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "letter_third",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      },
+      "entry_destroy": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "entry_seal": {
+        "from": [
+          "entry"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "return_first": {
+        "from": [
+          "return"
+        ],
+        "to": "first",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q037.values.first"
+            },
+            "right": true
+          }
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "first"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "letter_first",
+            "from": "party",
+            "to": "owner_first"
+          },
+          {
+            "op": "set",
+            "key": "first",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "first",
+          "companions": []
+        },
+        "depart": []
+      },
+      "return_second": {
+        "from": [
+          "return"
+        ],
+        "to": "second",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q037.values.second"
+            },
+            "right": true
+          }
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "second"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "letter_second",
+            "from": "party",
+            "to": "owner_second"
+          },
+          {
+            "op": "set",
+            "key": "second",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "second",
+          "companions": []
+        },
+        "depart": []
+      },
+      "return_third": {
+        "from": [
+          "return"
+        ],
+        "to": "third",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q037.values.third"
+            },
+            "right": true
+          }
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "third"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "letter_third",
+            "from": "party",
+            "to": "owner_third"
+          },
+          {
+            "op": "set",
+            "key": "third",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "third",
+          "companions": []
+        },
+        "depart": []
+      },
+      "return_finish": {
+        "from": [
+          "return"
+        ],
+        "ending": "informed",
+        "requires": {
+          "op": "and",
+          "args": [
+            true,
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q037.values.first"
+              },
+              "right": true
+            },
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q037.values.second"
+              },
+              "right": true
+            },
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q037.values.third"
+              },
+              "right": true
+            }
+          ]
+        },
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "return_deposit": {
+        "from": [
+          "return"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "letter_first",
+            "from": "party",
+            "to": "quiet",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q037.values.letter_firstAt"
+              },
+              "right": "party"
+            }
+          },
+          {
+            "op": "transfer",
+            "entity": "letter_second",
+            "from": "party",
+            "to": "quiet",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q037.values.letter_secondAt"
+              },
+              "right": "party"
+            }
+          },
+          {
+            "op": "transfer",
+            "entity": "letter_third",
+            "from": "party",
+            "to": "quiet",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q037.values.letter_thirdAt"
+              },
+              "right": "party"
+            }
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "first_back": {
+        "from": [
+          "first"
+        ],
+        "to": "return",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "quiet"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "quiet",
+            "requires": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "quiet",
+          "companions": []
+        },
+        "depart": []
+      },
+      "second_back": {
+        "from": [
+          "second"
+        ],
+        "to": "return",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "quiet"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "quiet",
+            "requires": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "quiet",
+          "companions": []
+        },
+        "depart": []
+      },
+      "third_back": {
+        "from": [
+          "third"
+        ],
+        "to": "return",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "quiet"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "quiet",
+            "requires": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "quiet",
+          "companions": []
+        },
+        "depart": []
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q037.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q037.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q037.values.partyAt"
+                },
+                "right": "quiet"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q037.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q037.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q037.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q037.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q037.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q037.values.partyAt"
+                },
+                "right": "entry"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q037.values.partyAt"
+                },
+                "right": "quiet"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_4",
+        "map": "region_4_f2",
+        "x": 16,
+        "y": 4
+      },
+      "quiet": {
+        "kind": "dungeon",
+        "dungeon": "region_4",
+        "map": "region_4_f2",
+        "x": 5,
+        "y": 3
+      },
+      "first": {
+        "kind": "town",
+        "location": "pilgrim_first"
+      },
+      "second": {
+        "kind": "town",
+        "location": "pilgrim_second"
+      },
+      "third": {
+        "kind": "town",
+        "location": "pilgrim_third"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_plateau",
+  "receptionLocations": [
+    "pilgrim_board"
+  ]
+}
