@@ -76176,7 +76176,8 @@ export const referenceData={
       "npc_q033_pilgrim": "assets/images/characters/relocated/q033_pilgrim.webp",
       "npc_q034_merchant": "assets/images/characters/relocated/q034_merchant.webp",
       "npc_q035_server": "assets/images/characters/relocated/q035_server.webp",
-      "npc_q035_patient": "assets/images/characters/relocated/q035_patient.webp"
+      "npc_q035_patient": "assets/images/characters/relocated/q035_patient.webp",
+      "npc_q036_conductor": "assets/images/characters/relocated/q036_conductor.webp"
     },
     "audio": {
       "exploration": "assets/audio/exploration-v2.ogg",

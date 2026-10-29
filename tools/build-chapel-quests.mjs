@@ -13,13 +13,13 @@ export function compileChapelQuest(first){
   scope:second?'後半10件の実地接続。既に受注済みの改訂2は旧経路を保持。':'礼拝堂20件のうち前半10件の実地接続。後半10件はchapel-second.mjsで接続。'
  };
  const quest=compileRelocatedQuest(first,second?chapelSecondSource(first):chapelSource(first),options);
- if(first.number===32){
-  // Validate shipped revision-one saves before adding only the two stationary roles.
+ if([32,36].includes(first.number)){
+  // Validate shipped revision-one saves before adding only stationary roles.
   const previous=compileRelocatedQuest(first,chapelSource(first,{cast:false}),options).story;
   quest.story.revision=2;quest.model.edition.revision=2;
-  quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[
+  quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:first.number===32?[
    {key:'prisonerAt',value:'cell'},{key:'craftspersonAt',value:'workshop'}
-  ]}];
+  ]:[{key:'conductorAt',value:'entry'},{key:'choirAt',value:'entry'}]}];
  }
  return quest;
 }
@@ -34,6 +34,7 @@ function document(quests,{second=false}={}){
  if(!second)lines.push('2026-10-29追記：q033の匿名巡礼者を5場面へ接続した。外套は本人が持ったまま話す客室の本文へ整理した。既存の同行・保持者・行動を使い、物語改訂1と保存内容を維持する。初版は変更しない。[人物画・保存再開・検証](../../RELOCATED_CHARACTER_ART.md)。','');
  if(!second)lines.push('2026-10-29追記：q034の商人を専用画で全3場面へ、被害者たちを集団名で面会室の1場面へ接続した。人数・代表者は追加しない。本文・同行・保持者・面会への同意・物語改訂1と保存内容は不変。[人物表示と検証](../../RELOCATED_CHARACTER_ART.md)。','');
  if(!second)lines.push('2026-10-29追記：q035の配膳係を全3場面へ、顔を隠す患者を配膳口側の2場面へ専用画で接続した。皿の実到着での受渡し、追加糧食だけの消費、修理への同意と見学拒否を維持する。本文・行動・物語改訂1・旧保存は不変。[人物表示と検証](../../RELOCATED_CHARACTER_ART.md)。','');
+ if(!second)lines.push('2026-10-30追記：q036の指揮者を専用画、六人の歌い手を集団名で全3場面へ接続した。本文・生歌停止・練習・結末は不変。物語改訂1→2で検証済みの旧保存に2役の所在だけを追加し、複数の旧改訂も一括検証して移行する。[人物表示と検証](../../RELOCATED_CHARACTER_ART.md)。','');
  for(const q of quests){lines.push(`## ${q.id} ${q.title}`,'',q.brief,'');for(const n of q.model.graph){const p=q.story.worldPlaces[n.place];lines.push(`### ${n.id} — ${q.story.places[n.place]}`,'',p.kind==='town'?`現場：\`${p.location}\``:`現場：\`${p.map} (${p.x},${p.y})\``,'',...(typeof n.text==='string'?[n.text]:n.text.map(p=>typeof p==='string'?p:`条件に応じて：${p.yes} ／ ${p.no}`)),'');for(const a of n.options)lines.push(`1. ${a.id}：${a.text} → ${a.to}`);lines.push('');}for(const [key,o] of Object.entries(q.outcomes))lines.push(`### 結末 ${key}`,'',o.text,'',`報酬：${o.gold}G、${o.xp}EXP。`,'');}
  return lines.join('\n').trimEnd()+'\n';
 }
