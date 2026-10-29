@@ -1,0 +1,1213 @@
+{
+  "schemaVersion": 1,
+  "id": "q035",
+  "number": 35,
+  "title": "鏡の向こうの施し",
+  "client": "施療人のネイ",
+  "brief": "鏡の前に置いた食糧が消える。誰が受け取っているか調べてください。",
+  "region": 4,
+  "type": "authored_progression",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。 巡礼台地の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q035_pilgrim_entry",
+      "title": "鏡の向こうの施しの現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q035.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q035.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      },
+      "script": "q035.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "region_4",
+          "map": "region_4_f1",
+          "x": 17,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "id": "q035_pilgrim_patient",
+      "title": "配膳口の患者側",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "patient",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "or",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q035.stage"
+            },
+            "right": "active"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q035.stage"
+            },
+            "right": "completed"
+          }
+        ]
+      },
+      "script": "q035.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "region_4",
+          "map": "region_4_f1",
+          "x": 5,
+          "y": 4
+        }
+      ]
+    }
+  ],
+  "locations": [],
+  "outcomes": {
+    "informed": {
+      "label": "同意の範囲で配膳口を直し、案内の境界を掲げる",
+      "text": "施しの行先は明らかになった。患者には見られずに食事を受ける権利も残る。",
+      "gold": 93,
+      "xp": 92
+    },
+    "contract": {
+      "label": "鏡の裏壁を壊す",
+      "text": "食事の行先は分かった。患者は見世物を避けて別の地下室へ移る。",
+      "gold": 113,
+      "xp": 68
+    },
+    "compromise": {
+      "label": "配膳表の数量だけ公開し、鏡は残す",
+      "text": "人々は必要な分を届けるようになった。誰が食べるかは尋ねない。",
+      "gold": 60,
+      "xp": 69
+    },
+    "meal": {
+      "gold": 93,
+      "xp": 69,
+      "label": "糧食1つを追加で届け、訪問を終える",
+      "text": "糧食は患者へ届いた。配膳口の修理も公開の相談も後へ残ったが、次の食事を運ぶ手は一つ増えた。"
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/chapel.mjs",
+    "world": {
+      "truth": "鏡の裏は壁内の配膳口で、姿を見せられない患者へ食事を届けている。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "鏡の裏は壁内の配膳口で、姿を見せられない患者へ食事を届けている。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "鏡の前に置いた食糧が消える。誰が受け取っているか調べてください。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "施療人のネイ",
+        "observation": "鏡の前に置いた食糧が消える。誰が受け取っているか調べてください。",
+        "belief": "鏡の前に置いた食糧が消える。誰が受け取っているか調べてください。",
+        "goal": "鏡の前に置いた食糧が消える。誰が受け取っているか調べてください。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "鏡の前に置いた食糧が消える。誰が受け取っているか調べてください。",
+      "progression": "食事の配達を一度手伝うと受取人の事情が分かり、公開範囲は本人への問いで決まる。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q035.pilgrimage.entry"
+        },
+        {
+          "id": "patient",
+          "script": "q035.pilgrimage.patient"
+        },
+        {
+          "id": "consent",
+          "script": "q035.pilgrimage.consent"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "鏡の前に置いた食糧が消える。誰が受け取っているか調べてください。",
+      "openQuestion": "鏡の向こうの施しの問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "frameShift",
+      "newInformation": "鏡の裏は壁内の配膳口で、姿を見せられない患者へ食事を届けている。",
+      "retroactiveTargets": [
+        "patient"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q035.flow.entry"
+      },
+      {
+        "id": "patient",
+        "script": "q035.flow.patient"
+      },
+      {
+        "id": "consent",
+        "script": "q035.flow.consent"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q035.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "食事の配達を一度手伝うと受取人の事情が分かり、公開範囲は本人への問いで決まる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "食事の配達を一度手伝うと受取人の事情が分かり、公開範囲は本人への問いで決まる。",
+    "flowVersion": 2,
+    "entryScript": "q035.pilgrimage.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "鏡の前から食事が消える。配膳係は次の皿を運ぶところだ。",
+        "options": [
+          {
+            "id": "deliver",
+            "text": "次の皿を配膳係と運ぶ",
+            "to": "patient",
+            "action": "entry_deliver"
+          },
+          {
+            "id": "break",
+            "text": "鏡の裏壁を壊す",
+            "to": "@contract",
+            "action": "entry_break"
+          },
+          {
+            "id": "table",
+            "text": "配膳表の数量だけ公開し、鏡は残す",
+            "to": "@compromise",
+            "action": "entry_table"
+          }
+        ]
+      },
+      {
+        "id": "patient",
+        "place": "patient",
+        "text": "皿は壁の奥へ受け渡された。患者は顔を隠したまま礼を言う。鏡の裏は壁内の配膳口で、姿を見せられない患者へ食事を届けている。",
+        "options": [
+          {
+            "id": "ask",
+            "text": "修理人へ配膳口を見せてもよいか尋ねる",
+            "to": "consent",
+            "action": "patient_ask"
+          },
+          {
+            "id": "food",
+            "text": "糧食1つを追加で届け、訪問を終える",
+            "to": "@meal",
+            "action": "patient_food"
+          },
+          {
+            "id": "record",
+            "text": "人数を明かさず配膳表だけ整える",
+            "to": "@compromise",
+            "action": "patient_record"
+          }
+        ]
+      },
+      {
+        "id": "consent",
+        "place": "patient",
+        "text": "患者は修理人の入室に同意し、見学者へ病室を見せる案は断った。",
+        "options": [
+          {
+            "id": "repair",
+            "text": "同意の範囲で配膳口を直し、案内の境界を掲げる",
+            "to": "@informed",
+            "action": "consent_repair"
+          },
+          {
+            "id": "table",
+            "text": "改修をやめ、配膳表だけ公開する",
+            "to": "@compromise",
+            "action": "consent_table"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q035.flow.patient",
+        "action": "food",
+        "option": "food_supplies",
+        "shortage": "q035.flow.patient.food.shortage",
+        "resume": "q035.flow.patient.food.resume",
+        "cost": {
+          "ration": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q035.visit",
+      "q035.flow.visit"
+    ],
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "first-ten",
+      "settlement": "oddland_plateau",
+      "saveRevision": 2,
+      "scope": "礼拝堂20件のうち前半10件の実地接続。後半10件はchapel-second.mjsで接続。"
+    }
+  },
+  "scripts": {
+    "q035.pilgrimage.entry": {
+      "storyQuest": "q035",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q035",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "鏡の前から食事が消える。配膳係は次の皿を運ぶところだ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "deliver",
+              "text": "次の皿を配膳係と運ぶ",
+              "storyAction": {
+                "quest": "q035",
+                "action": "entry_deliver"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q035",
+                  "action": "entry_deliver"
+                }
+              ]
+            },
+            {
+              "id": "break",
+              "text": "鏡の裏壁を壊す",
+              "storyAction": {
+                "quest": "q035",
+                "action": "entry_break"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q035",
+                  "action": "entry_break"
+                },
+                {
+                  "op": "jump",
+                  "script": "q035.pilgrimage.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "table",
+              "text": "配膳表の数量だけ公開し、鏡は残す",
+              "storyAction": {
+                "quest": "q035",
+                "action": "entry_table"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q035",
+                  "action": "entry_table"
+                },
+                {
+                  "op": "jump",
+                  "script": "q035.pilgrimage.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q035.pilgrimage.patient": {
+      "storyQuest": "q035",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q035",
+          "scene": "patient"
+        },
+        {
+          "op": "narrate",
+          "text": "皿は壁の奥へ受け渡された。患者は顔を隠したまま礼を言う。鏡の裏は壁内の配膳口で、姿を見せられない患者へ食事を届けている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "ask",
+              "text": "修理人へ配膳口を見せてもよいか尋ねる",
+              "storyAction": {
+                "quest": "q035",
+                "action": "patient_ask"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q035",
+                  "action": "patient_ask"
+                },
+                {
+                  "op": "jump",
+                  "script": "q035.pilgrimage.consent"
+                }
+              ]
+            },
+            {
+              "id": "food",
+              "text": "糧食1つを追加で届け、訪問を終える",
+              "storyAction": {
+                "quest": "q035",
+                "action": "patient_food"
+              },
+              "requirement": "ration 1消費",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q035",
+                  "action": "patient_food"
+                },
+                {
+                  "op": "jump",
+                  "script": "q035.pilgrimage.end.meal"
+                }
+              ]
+            },
+            {
+              "id": "record",
+              "text": "人数を明かさず配膳表だけ整える",
+              "storyAction": {
+                "quest": "q035",
+                "action": "patient_record"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q035",
+                  "action": "patient_record"
+                },
+                {
+                  "op": "jump",
+                  "script": "q035.pilgrimage.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q035.pilgrimage.consent": {
+      "storyQuest": "q035",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q035",
+          "scene": "consent"
+        },
+        {
+          "op": "narrate",
+          "text": "患者は修理人の入室に同意し、見学者へ病室を見せる案は断った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "repair",
+              "text": "同意の範囲で配膳口を直し、案内の境界を掲げる",
+              "storyAction": {
+                "quest": "q035",
+                "action": "consent_repair"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q035.values.repairConsent"
+                },
+                "right": true
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q035",
+                  "action": "consent_repair"
+                },
+                {
+                  "op": "jump",
+                  "script": "q035.pilgrimage.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "table",
+              "text": "改修をやめ、配膳表だけ公開する",
+              "storyAction": {
+                "quest": "q035",
+                "action": "consent_table"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q035",
+                  "action": "consent_table"
+                },
+                {
+                  "op": "jump",
+                  "script": "q035.pilgrimage.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q035.pilgrimage.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "施しの行先は明らかになった。患者には見られずに食事を受ける権利も残る。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q035",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q035.pilgrimage.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "食事の行先は分かった。患者は見世物を避けて別の地下室へ移る。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q035",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q035.pilgrimage.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "人々は必要な分を届けるようになった。誰が食べるかは尋ねない。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q035",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q035.pilgrimage.end.meal": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "糧食は患者へ届いた。配膳口の修理も公開の相談も後へ残ったが、次の食事を運ぶ手は一つ増えた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.meal",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q035",
+          "outcome": "meal"
+        }
+      ]
+    },
+    "q035.pilgrimage.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q035.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q035.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "施しの行先は明らかになった。患者には見られずに食事を受ける権利も残る。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "食事の行先は分かった。患者は見世物を避けて別の地下室へ移る。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "人々は必要な分を届けるようになった。誰が食べるかは尋ねない。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "meal",
+                  "commands": [
+                    {
+                      "op": "narrate",
+                      "text": "糧食は患者へ届いた。配膳口の修理も公開の相談も後へ残ったが、次の食事を運ぶ手は一つ増えた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "story.init",
+              "quest": "q035"
+            },
+            {
+              "op": "switch",
+              "value": {
+                "ref": "stories.q035.scene"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q035.pilgrimage.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "patient",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q035.pilgrimage.patient"
+                    }
+                  ]
+                },
+                {
+                  "equals": "consent",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q035.pilgrimage.consent"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q035.pilgrimage.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "鏡の向こうの施しの現場",
+      "patient": "配膳口の患者側",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "patient"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "patient",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise",
+          "meal"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "repairConsent": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "repairConsent"
+      },
+      "serverAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "patient",
+          "transit"
+        ],
+        "meaning": "server の所在または保持者"
+      },
+      "patientAt": {
+        "type": "enum",
+        "initial": "patient",
+        "values": [
+          "entry",
+          "patient",
+          "transit"
+        ],
+        "meaning": "patient の所在または保持者"
+      },
+      "mealAt": {
+        "type": "enum",
+        "initial": "server",
+        "values": [
+          "entry",
+          "patient",
+          "transit",
+          "party",
+          "server",
+          "patient"
+        ],
+        "meaning": "meal の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "server": {
+        "holder": "serverAt",
+        "kind": "person"
+      },
+      "patient": {
+        "holder": "patientAt",
+        "kind": "person"
+      },
+      "meal": {
+        "holder": "mealAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "鏡の裏は壁内の配膳口で、姿を見せられない患者へ食事を届けている。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "鏡の向こうの施しの現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "patient": {
+        "title": "配膳口の患者側",
+        "place": "patient",
+        "cast": [],
+        "requires": true
+      },
+      "consent": {
+        "title": "配膳口の患者側",
+        "place": "patient",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_deliver": {
+        "from": [
+          "entry"
+        ],
+        "to": "patient",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "server"
+            ],
+            "path": [
+              "transit",
+              "patient"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "meal",
+            "from": "party",
+            "to": "patient"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "patient",
+            "requires": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "patient",
+          "companions": [
+            "server"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "meal",
+            "from": "server",
+            "to": "party"
+          }
+        ]
+      },
+      "entry_break": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "entry_table": {
+        "from": [
+          "entry"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "patient_ask": {
+        "from": [
+          "patient"
+        ],
+        "to": "consent",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "repairConsent",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "patient_food": {
+        "from": [
+          "patient"
+        ],
+        "ending": "meal",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "meal"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "cost": {
+          "ration": 1
+        },
+        "once": false
+      },
+      "patient_record": {
+        "from": [
+          "patient"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "consent_repair": {
+        "from": [
+          "consent"
+        ],
+        "ending": "informed",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q035.values.repairConsent"
+          },
+          "right": true
+        },
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "consent_table": {
+        "from": [
+          "consent"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q035.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q035.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q035.values.partyAt"
+                },
+                "right": "patient"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q035.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q035.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q035.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q035.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q035.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q035.values.partyAt"
+                },
+                "right": "entry"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q035.values.partyAt"
+                },
+                "right": "patient"
+              }
+            ]
+          }
+        ]
+      },
+      "meal": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q035.values.resolution"
+            },
+            "right": "meal"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q035.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q035.values.partyAt"
+                },
+                "right": "patient"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_4",
+        "map": "region_4_f1",
+        "x": 17,
+        "y": 3
+      },
+      "patient": {
+        "kind": "dungeon",
+        "dungeon": "region_4",
+        "map": "region_4_f1",
+        "x": 5,
+        "y": 4
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_plateau",
+  "receptionLocations": [
+    "pilgrim_board"
+  ]
+}
