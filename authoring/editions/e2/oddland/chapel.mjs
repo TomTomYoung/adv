@@ -58,6 +58,7 @@ export function chapelSource(q,{cast=true}={}){
   entity('server','entry','person');entity('patient','patient','person');entity('meal','server');
   Object.assign(option('entry','deliver'),{companions:['server'],depart:[give('meal','server','party')],effects:[give('meal','party','patient')]});
   x.flags.repairConsent=false;option('patient','ask').effects=[set('repairConsent')];option('consent','repair').when=is('repairConsent');
+  if(cast){x.entities.server.character='q035_server';x.entities.patient.character='q035_patient';for(const n of x.nodes)n.cast=n.id==='entry'?['server']:['server','patient'];}
  }
  if(q.number===36){
   at('entry','recording','credit');x.flags.livePaused=false;x.flags.rehearsed=false;

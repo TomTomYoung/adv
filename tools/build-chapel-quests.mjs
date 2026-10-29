@@ -33,6 +33,7 @@ function document(quests,{second=false}={}){
  if(!second)lines.push('2026-10-29追記：q032の囚人・職人を各現場のcastと専用画へ接続した。宝玉が棚に残る本文へ整理し、個別物語改訂を1→2へ進めた。保存改訂2・地理版2は維持し、検証済みの旧物語に2人の所在だけを補う。読込時の待機本文は保持する。[人物画・互換性・検証](../../RELOCATED_CHARACTER_ART.md)。','');
  if(!second)lines.push('2026-10-29追記：q033の匿名巡礼者を5場面へ接続した。外套は本人が持ったまま話す客室の本文へ整理した。既存の同行・保持者・行動を使い、物語改訂1と保存内容を維持する。初版は変更しない。[人物画・保存再開・検証](../../RELOCATED_CHARACTER_ART.md)。','');
  if(!second)lines.push('2026-10-29追記：q034の商人を専用画で全3場面へ、被害者たちを集団名で面会室の1場面へ接続した。人数・代表者は追加しない。本文・同行・保持者・面会への同意・物語改訂1と保存内容は不変。[人物表示と検証](../../RELOCATED_CHARACTER_ART.md)。','');
+ if(!second)lines.push('2026-10-29追記：q035の配膳係を全3場面へ、顔を隠す患者を配膳口側の2場面へ専用画で接続した。皿の実到着での受渡し、追加糧食だけの消費、修理への同意と見学拒否を維持する。本文・行動・物語改訂1・旧保存は不変。[人物表示と検証](../../RELOCATED_CHARACTER_ART.md)。','');
  for(const q of quests){lines.push(`## ${q.id} ${q.title}`,'',q.brief,'');for(const n of q.model.graph){const p=q.story.worldPlaces[n.place];lines.push(`### ${n.id} — ${q.story.places[n.place]}`,'',p.kind==='town'?`現場：\`${p.location}\``:`現場：\`${p.map} (${p.x},${p.y})\``,'',...(typeof n.text==='string'?[n.text]:n.text.map(p=>typeof p==='string'?p:`条件に応じて：${p.yes} ／ ${p.no}`)),'');for(const a of n.options)lines.push(`1. ${a.id}：${a.text} → ${a.to}`);lines.push('');}for(const [key,o] of Object.entries(q.outcomes))lines.push(`### 結末 ${key}`,'',o.text,'',`報酬：${o.gold}G、${o.xp}EXP。`,'');}
  return lines.join('\n').trimEnd()+'\n';
 }
