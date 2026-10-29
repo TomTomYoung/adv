@@ -2,7 +2,7 @@
 
 現行説明の照合日: 2026-10-29。作品版1.34.0。[現在の状態](CURRENT_STATUS.md)、[現行仕様](SPEC.md)、[採用仕様と次工程](HANDOFF.md)、[浅層工房と封蝋](dungeons/SHALLOW_WORKSHOP.md)から確認してください。実施時点の履歴は[検証記録](development/PROGRESS.md)、整理前の本文は[保存原文](legacy/2026-10-20/README.md)に分けます。
 
-[旧100件の人物・出演監査](scenarios/RELOCATED_CAST_AUDIT.md)：753場面の自動集計とq031〜q036の22場面の精読。q032〜q035の個人6役・集団1役を接続済みで、q036の指揮者と六人の歌い手が次の候補です。[人物画と旧セーブ対応](scenarios/RELOCATED_CHARACTER_ART.md)。
+[旧100件の人物・出演監査](scenarios/RELOCATED_CAST_AUDIT.md)：753場面の自動集計とq031〜q037の27場面の精読。q032〜q035の個人6役・集団1役を接続済みで、q036の指揮者と六人の歌い手が次の実装候補です。q037の三人の返却先と書記鳥・封書・家の差分も整理しました。[人物画と旧セーブ対応](scenarios/RELOCATED_CHARACTER_ART.md)。
 
 ## 現在の実装と続く設計
 
