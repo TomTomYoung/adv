@@ -1,6 +1,6 @@
 // Edition-two regional bundle: relocated-quest roles, separate from border NPCs.
 export const RELOCATED_CHARACTER_ART=Object.fromEntries([
- ['q032_prisoner','chapel-q032-2026-10-29'],['q032_craftsperson','chapel-q032-2026-10-29'],['q033_pilgrim','chapel-q033-2026-10-29'],['q034_merchant','chapel-q034-2026-10-29'],['q035_server','chapel-q035-2026-10-29'],['q035_patient','chapel-q035-2026-10-29'],['q036_conductor','chapel-q036-2026-10-30']
+ ['q032_prisoner','chapel-q032-2026-10-29'],['q032_craftsperson','chapel-q032-2026-10-29'],['q033_pilgrim','chapel-q033-2026-10-29'],['q034_merchant','chapel-q034-2026-10-29'],['q035_server','chapel-q035-2026-10-29'],['q035_patient','chapel-q035-2026-10-29'],['q036_conductor','chapel-q036-2026-10-30'],...['first','second','third'].map(key=>['q037_owner_'+key,'chapel-q037-2026-10-30'])
 ].map(([id,batch])=>[id,{
  asset:'npc_'+id,file:`assets/images/characters/relocated/${id}.webp`,source:`assets/source/characters/${batch}/${id}.png`,manifest:`assets/source/characters/${batch}.json`
 }]));
@@ -20,3 +20,9 @@ relocatedCharacters.q034_victims={id:'q034_victims',name:'被害者たち',role:
 
 // Six live singers remain present even while their singing is paused.
 relocatedCharacters.q036_choir={id:'q036_choir',name:'六人の歌い手',role:'礼拝堂の聖歌隊',detail:'指揮者と同じ現場に留まり、本人の録音と生歌を合わせる六人の集団。',provenance:'2026-10-30の表示方針。人数六人を保ち、個々の氏名・顔・代表者を創作しない。集団名だけを表示し、肖像・立ち絵は意図的に割り当てない。録音を生身の七人目として増やさず、歌を止めた時も退場させない。'};
+
+// Each recipient stays at their own house; the sealed contents remain private.
+for(const [key,label] of [['first','一番'],['second','二番'],['third','三番']]){
+ const id='q037_owner_'+key;
+ relocatedCharacters[id]={id,name:label+'の写本を受け取る本人',role:'巡礼台地の返却先',detail:label+'の札の家で、受付札を照合して封を開けずに写本を受け取る匿名の人物。',portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,provenance:'2026-10-30の美術設定。三人は別人として描き分ける。年齢感・性別の描画・髪・服装は美術上の選択で、氏名・職業・経歴・告解の内容を本文へ追加しない。告解係オルや他の返却先に統合しない。封書・番号・家を人物画へ固定せず、各家だけに表示する。'};
+}

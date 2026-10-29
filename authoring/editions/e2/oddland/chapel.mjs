@@ -75,9 +75,11 @@ export function chapelSource(q,{cast=true}={}){
   for(const key of ['first','second','third']){
    town(key,{first:'一番の札の家',second:'二番の札の家',third:'三番の札の家'}[key],'pilgrim_'+key);
    entity('owner_'+key,key,'person');entity('letter_'+key,'entry');
+   if(cast)x.entities['owner_'+key].character='q037_owner_'+key;
    option('entry','move').depart.push(give('letter_'+key,'entry','party'));
    route('return',key,key,{effects:[give('letter_'+key,'party','owner_'+key)]});
    add(key,key,'受付札を本人と照合し、封を開けずに写本を渡した。受領の返事を聞いてから控室へ戻る。',[{id:'back',text:'控室へ戻る',to:'return'}]);
+   if(cast)scene(key).cast=['owner_'+key];
   }
   option('return','deposit').effects=['first','second','third'].map(key=>transfer('letter_'+key,'party','quiet'));
  }
