@@ -58,6 +58,13 @@ export function chapelSecondSource(q,{cast=true}={}){
   route('return','parcel','delivered',{depart:[give('parcel','keeper','party')],effects:[give('parcel','party','owner'),give('receipt','owner','party')]});
   add('delivered','owner','持主が品を受け取り、受領証を渡した。これを庫番へ持ち帰る。',[opt('back','受領証を庫番へ届ける','receipt',{effects:[give('receipt','party','keeper')]})]);
   add('receipt','keeper','庫番は受領証と名簿を照合し、庫の内側を指した。',[opt('enter','正式な受領者として庫へ入る','parcel_end')]);end('parcel_end','vault','庫番と持主のない品を確かめて受け取った。','parcel');
+  if(cast){
+   for(const role of ['zag','master','owner'])x.entities[role].character='q134_'+role;
+   x.entities.custodian={holder:'keeper',kind:'person',character:'q134_keeper'};
+   choice('receipt','enter').companions=['custodian'];
+   const roles={entry:['zag'],return:['zag','custodian'],sword_home:['zag','master'],delivered:['owner'],receipt:['zag','custodian'],parcel_end:['custodian']};
+   for(const [id,people] of Object.entries(roles))node(id).cast=people.map((entity,index)=>({entity,display:{x:people.length===1?50:[30,70][index],scale:.86}}));
+  }
  }
  if(q.number===135){
   cell('entry','沈んだ宿の食堂','e2_sunken_inn',11,5);cell('shore','宿へ潜る地上の足場','e2_sunken_inn',1,1);town('workshop','地上の人形工房','pilgrim_workshop');town('union','魔石の受取窓口','pilgrim_union');

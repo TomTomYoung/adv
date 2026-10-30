@@ -10,6 +10,7 @@ import {mirrorArtFixtures} from './mirror-art-fixtures.mjs';
 import {sandArtFixtures} from './sand-art-fixtures.mjs';
 import {treasuryArtFixtures} from './treasury-art-fixtures.mjs';
 import {stairArtFixtures} from './stair-art-fixtures.mjs';
+import {vaultArtFixtures} from './vault-art-fixtures.mjs';
 import {runCharacterArtSmoke} from './character-art-browser.mjs';
-const parts=await Promise.all([chapelArtFixtures(),pilgrimArtFixtures(),receiptArtFixtures(),almsArtFixtures(),choirArtFixtures(),confessionArtFixtures(),waterArtFixtures(),maskArtFixtures(),mirrorArtFixtures(),sandArtFixtures(),treasuryArtFixtures(),stairArtFixtures()]);
+const parts=await Promise.all([chapelArtFixtures(),pilgrimArtFixtures(),receiptArtFixtures(),almsArtFixtures(),choirArtFixtures(),confessionArtFixtures(),waterArtFixtures(),maskArtFixtures(),mirrorArtFixtures(),sandArtFixtures(),treasuryArtFixtures(),stairArtFixtures(),vaultArtFixtures()]);
 await runCharacterArtSmoke({fixtures:parts.flatMap(p=>p.fixtures),outcomes:parts.flatMap(p=>p.outcomes),group:'chapel',folder:'relocated'});
