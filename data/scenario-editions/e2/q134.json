@@ -489,7 +489,7 @@
     "entryScript": "q134.pilgrimage.visit",
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -498,7 +498,810 @@
       "saveRevision": 2,
       "scope": "後半10件の実地接続。既に受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "敗者の宝物庫の現場",
+            "keeper": "庫番の返却受付",
+            "vault": "宝物庫の内側",
+            "master": "剣の持主の家",
+            "owner": "預かり物の持主宅",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "keeper"
+            ],
+            [
+              "transit",
+              "vault"
+            ],
+            [
+              "transit",
+              "master"
+            ],
+            [
+              "transit",
+              "owner"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "keeper",
+                "vault",
+                "master",
+                "owner",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "sword",
+                "parcel",
+                "break",
+                "decline"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "zagAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "keeper",
+                "vault",
+                "master",
+                "owner",
+                "transit"
+              ],
+              "meaning": "zag の所在または保持者"
+            },
+            "masterAt": {
+              "type": "enum",
+              "initial": "master",
+              "values": [
+                "entry",
+                "keeper",
+                "vault",
+                "master",
+                "owner",
+                "transit"
+              ],
+              "meaning": "master の所在または保持者"
+            },
+            "ownerAt": {
+              "type": "enum",
+              "initial": "owner",
+              "values": [
+                "entry",
+                "keeper",
+                "vault",
+                "master",
+                "owner",
+                "transit"
+              ],
+              "meaning": "owner の所在または保持者"
+            },
+            "swordAt": {
+              "type": "enum",
+              "initial": "zag",
+              "values": [
+                "entry",
+                "keeper",
+                "vault",
+                "master",
+                "owner",
+                "transit",
+                "party",
+                "zag",
+                "master",
+                "owner",
+                "practice",
+                "parcel",
+                "receipt"
+              ],
+              "meaning": "sword の所在または保持者"
+            },
+            "practiceAt": {
+              "type": "enum",
+              "initial": "master",
+              "values": [
+                "entry",
+                "keeper",
+                "vault",
+                "master",
+                "owner",
+                "transit",
+                "party",
+                "zag",
+                "master",
+                "owner",
+                "sword",
+                "parcel",
+                "receipt"
+              ],
+              "meaning": "practice の所在または保持者"
+            },
+            "parcelAt": {
+              "type": "enum",
+              "initial": "keeper",
+              "values": [
+                "entry",
+                "keeper",
+                "vault",
+                "master",
+                "owner",
+                "transit",
+                "party",
+                "zag",
+                "master",
+                "owner",
+                "sword",
+                "practice",
+                "receipt"
+              ],
+              "meaning": "parcel の所在または保持者"
+            },
+            "receiptAt": {
+              "type": "enum",
+              "initial": "owner",
+              "values": [
+                "entry",
+                "keeper",
+                "vault",
+                "master",
+                "owner",
+                "transit",
+                "party",
+                "zag",
+                "master",
+                "owner",
+                "sword",
+                "practice",
+                "parcel"
+              ],
+              "meaning": "receipt の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "zag": {
+              "holder": "zagAt",
+              "kind": "person"
+            },
+            "master": {
+              "holder": "masterAt",
+              "kind": "person"
+            },
+            "owner": {
+              "holder": "ownerAt",
+              "kind": "person"
+            },
+            "sword": {
+              "holder": "swordAt",
+              "kind": "item"
+            },
+            "practice": {
+              "holder": "practiceAt",
+              "kind": "item"
+            },
+            "parcel": {
+              "holder": "parcelAt",
+              "kind": "item"
+            },
+            "receipt": {
+              "holder": "receiptAt",
+              "kind": "item"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "扉が求めるのは戦闘結果ではなく、所有権の主張を一つ手放す宣言だ。入口に並ぶ名札は倒した相手ではなく返却先だ。ザグはかつて拾った師の剣を自分の継承の証にしており、返す相手はまだ生きている。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "敗者の宝物庫の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "return": {
+              "title": "庫番の返却受付",
+              "place": "keeper",
+              "cast": [],
+              "requires": true
+            },
+            "broken": {
+              "title": "宝物庫の内側",
+              "place": "vault",
+              "cast": [],
+              "requires": true
+            },
+            "sword_home": {
+              "title": "剣の持主の家",
+              "place": "master",
+              "cast": [],
+              "requires": true
+            },
+            "delivered": {
+              "title": "預かり物の持主宅",
+              "place": "owner",
+              "cast": [],
+              "requires": true
+            },
+            "receipt": {
+              "title": "庫番の返却受付",
+              "place": "keeper",
+              "cast": [],
+              "requires": true
+            },
+            "parcel_end": {
+              "title": "宝物庫の内側",
+              "place": "vault",
+              "cast": [],
+              "requires": true
+            },
+            "entry_break_ready": {
+              "title": "敗者の宝物庫の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_rule": {
+              "from": [
+                "entry"
+              ],
+              "to": "return",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "zag"
+                  ],
+                  "path": [
+                    "transit",
+                    "keeper"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "keeper",
+                "companions": [
+                  "zag"
+                ]
+              },
+              "depart": []
+            },
+            "entry_break": {
+              "from": [
+                "entry"
+              ],
+              "to": "entry_break_ready",
+              "requires": true,
+              "effects": [],
+              "once": false
+            },
+            "entry_decline": {
+              "from": [
+                "entry"
+              ],
+              "ending": "decline",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "decline"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "return_sword": {
+              "from": [
+                "return"
+              ],
+              "to": "sword_home",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "zag"
+                  ],
+                  "path": [
+                    "transit",
+                    "master"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "sword",
+                  "from": "zag",
+                  "to": "master"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "practice",
+                  "from": "master",
+                  "to": "zag"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "master",
+                "companions": [
+                  "zag"
+                ]
+              },
+              "depart": []
+            },
+            "return_parcel": {
+              "from": [
+                "return"
+              ],
+              "to": "delivered",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "owner"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "parcel",
+                  "from": "party",
+                  "to": "owner"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "receipt",
+                  "from": "owner",
+                  "to": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "owner",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "parcel",
+                  "from": "keeper",
+                  "to": "party"
+                }
+              ]
+            },
+            "return_decline": {
+              "from": [
+                "return"
+              ],
+              "ending": "decline",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "decline"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "broken_finish": {
+              "from": [
+                "broken"
+              ],
+              "ending": "break",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "break"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "sword_home_finish": {
+              "from": [
+                "sword_home"
+              ],
+              "ending": "sword",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "sword"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "delivered_back": {
+              "from": [
+                "delivered"
+              ],
+              "to": "receipt",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "keeper"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "receipt",
+                  "from": "party",
+                  "to": "keeper"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "keeper",
+                "companions": []
+              },
+              "depart": []
+            },
+            "receipt_enter": {
+              "from": [
+                "receipt"
+              ],
+              "to": "parcel_end",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "vault"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "vault",
+                "companions": []
+              },
+              "depart": []
+            },
+            "parcel_end_finish": {
+              "from": [
+                "parcel_end"
+              ],
+              "ending": "parcel",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "parcel"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "entry_break_ready_continue": {
+              "from": [
+                "entry_break_ready"
+              ],
+              "to": "broken",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "vault"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "vault",
+                "companions": []
+              },
+              "depart": []
+            }
+          },
+          "endings": {
+            "sword": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q134.values.resolution"
+                  },
+                  "right": "sword"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q134.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q134.values.partyAt"
+                      },
+                      "right": "master"
+                    }
+                  ]
+                }
+              ]
+            },
+            "parcel": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q134.values.resolution"
+                  },
+                  "right": "parcel"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q134.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q134.values.partyAt"
+                      },
+                      "right": "vault"
+                    }
+                  ]
+                }
+              ]
+            },
+            "break": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q134.values.resolution"
+                  },
+                  "right": "break"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q134.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q134.values.partyAt"
+                      },
+                      "right": "vault"
+                    }
+                  ]
+                }
+              ]
+            },
+            "decline": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q134.values.resolution"
+                  },
+                  "right": "decline"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q134.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q134.values.partyAt"
+                      },
+                      "right": "entry"
+                    },
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q134.values.partyAt"
+                      },
+                      "right": "keeper"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_4",
+              "map": "region_4_f1",
+              "x": 8,
+              "y": 1
+            },
+            "keeper": {
+              "kind": "dungeon",
+              "dungeon": "region_4",
+              "map": "region_4_f1",
+              "x": 9,
+              "y": 5
+            },
+            "vault": {
+              "kind": "dungeon",
+              "dungeon": "region_4",
+              "map": "region_4_f1",
+              "x": 11,
+              "y": 5
+            },
+            "master": {
+              "kind": "town",
+              "location": "pilgrim_master"
+            },
+            "owner": {
+              "kind": "town",
+              "location": "pilgrim_parcel_owner"
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "custodianAt",
+            "value": "keeper"
+          },
+          {
+            "key": "custodianAt",
+            "value": "vault",
+            "when": {
+              "op": "in",
+              "left": "receipt_enter",
+              "right": {
+                "ref": "stories.q134.events"
+              }
+            }
+          },
+          {
+            "key": "custodianAt",
+            "value": "transit",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "journey.quest"
+                  },
+                  "right": "q134"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "journey.action"
+                  },
+                  "right": "receipt_enter"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q134.scene.entry": {
@@ -1577,7 +2380,8 @@
           "owner",
           "practice",
           "parcel",
-          "receipt"
+          "receipt",
+          "custodian"
         ],
         "meaning": "sword の所在または保持者"
       },
@@ -1597,7 +2401,8 @@
           "owner",
           "sword",
           "parcel",
-          "receipt"
+          "receipt",
+          "custodian"
         ],
         "meaning": "practice の所在または保持者"
       },
@@ -1617,7 +2422,8 @@
           "owner",
           "sword",
           "practice",
-          "receipt"
+          "receipt",
+          "custodian"
         ],
         "meaning": "parcel の所在または保持者"
       },
@@ -1637,9 +2443,23 @@
           "owner",
           "sword",
           "practice",
-          "parcel"
+          "parcel",
+          "custodian"
         ],
         "meaning": "receipt の所在または保持者"
+      },
+      "custodianAt": {
+        "type": "enum",
+        "initial": "keeper",
+        "values": [
+          "entry",
+          "keeper",
+          "vault",
+          "master",
+          "owner",
+          "transit"
+        ],
+        "meaning": "custodian の所在または保持者"
       }
     },
     "entities": {
@@ -1649,15 +2469,18 @@
       },
       "zag": {
         "holder": "zagAt",
-        "kind": "person"
+        "kind": "person",
+        "character": "q134_zag"
       },
       "master": {
         "holder": "masterAt",
-        "kind": "person"
+        "kind": "person",
+        "character": "q134_master"
       },
       "owner": {
         "holder": "ownerAt",
-        "kind": "person"
+        "kind": "person",
+        "character": "q134_owner"
       },
       "sword": {
         "holder": "swordAt",
@@ -1674,6 +2497,11 @@
       "receipt": {
         "holder": "receiptAt",
         "kind": "item"
+      },
+      "custodian": {
+        "holder": "custodianAt",
+        "kind": "person",
+        "character": "q134_keeper"
       }
     },
     "propositions": {
@@ -1687,13 +2515,36 @@
       "entry": {
         "title": "敗者の宝物庫の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "zag",
+            "display": {
+              "x": 50,
+              "scale": 0.86
+            }
+          }
+        ],
         "requires": true
       },
       "return": {
         "title": "庫番の返却受付",
         "place": "keeper",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "zag",
+            "display": {
+              "x": 30,
+              "scale": 0.86
+            }
+          },
+          {
+            "entity": "custodian",
+            "display": {
+              "x": 70,
+              "scale": 0.86
+            }
+          }
+        ],
         "requires": true
       },
       "broken": {
@@ -1705,31 +2556,85 @@
       "sword_home": {
         "title": "剣の持主の家",
         "place": "master",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "zag",
+            "display": {
+              "x": 30,
+              "scale": 0.86
+            }
+          },
+          {
+            "entity": "master",
+            "display": {
+              "x": 70,
+              "scale": 0.86
+            }
+          }
+        ],
         "requires": true
       },
       "delivered": {
         "title": "預かり物の持主宅",
         "place": "owner",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "owner",
+            "display": {
+              "x": 50,
+              "scale": 0.86
+            }
+          }
+        ],
         "requires": true
       },
       "receipt": {
         "title": "庫番の返却受付",
         "place": "keeper",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "zag",
+            "display": {
+              "x": 30,
+              "scale": 0.86
+            }
+          },
+          {
+            "entity": "custodian",
+            "display": {
+              "x": 70,
+              "scale": 0.86
+            }
+          }
+        ],
         "requires": true
       },
       "parcel_end": {
         "title": "宝物庫の内側",
         "place": "vault",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "custodian",
+            "display": {
+              "x": 50,
+              "scale": 0.86
+            }
+          }
+        ],
         "requires": true
       },
       "entry_break_ready": {
         "title": "敗者の宝物庫の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "zag",
+            "display": {
+              "x": 50,
+              "scale": 0.86
+            }
+          }
+        ],
         "requires": true
       }
     },
@@ -1984,7 +2889,8 @@
           {
             "op": "move",
             "entities": [
-              "party"
+              "party",
+              "custodian"
             ],
             "path": [
               "transit",
@@ -1997,7 +2903,9 @@
         "once": false,
         "journey": {
           "to": "vault",
-          "companions": []
+          "companions": [
+            "custodian"
+          ]
         },
         "depart": []
       },
@@ -2213,7 +3121,7 @@
         "location": "pilgrim_parcel_owner"
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "oddland_plateau",
   "receptionLocations": [
