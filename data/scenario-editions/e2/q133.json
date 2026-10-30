@@ -372,7 +372,7 @@
     "entryScript": "q133.pilgrimage.visit",
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -381,7 +381,387 @@
       "saveRevision": 2,
       "scope": "後半10件の実地接続。既に受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "一段足りない階段の現場",
+            "platform": "棺を載せる荷台",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "platform"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "platform",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "save",
+                "stairs"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "weightChecked": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "weightChecked"
+            },
+            "fixed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "fixed"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "足りない一段は、重い石棺を運ぶ時だけ沈んで現れる荷台だ。図面は人が歩く時でなく葬列の状態を描いている。擦れた肩の高さの溝と、靴跡のない段を先に見せる。師匠は正しかったが、説明を省いたため後世に伝わらなかったという結論だ。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "一段足りない階段の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "warning": {
+              "title": "一段足りない階段の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "platform": {
+              "title": "棺を載せる荷台",
+              "place": "platform",
+              "cast": [],
+              "requires": true
+            },
+            "drawing": {
+              "title": "一段足りない階段の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "stairs": {
+              "title": "一段足りない階段の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_weight": {
+              "from": [
+                "entry"
+              ],
+              "to": "platform",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "platform"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "weightChecked",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "platform",
+                "companions": []
+              },
+              "depart": []
+            },
+            "entry_fix": {
+              "from": [
+                "entry"
+              ],
+              "to": "platform",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "platform"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "fixed",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "platform",
+                "companions": []
+              },
+              "depart": []
+            },
+            "entry_step": {
+              "from": [
+                "entry"
+              ],
+              "to": "warning",
+              "requires": true,
+              "effects": [],
+              "once": false
+            },
+            "warning_back": {
+              "from": [
+                "warning"
+              ],
+              "to": "entry",
+              "requires": true,
+              "effects": [],
+              "once": false
+            },
+            "platform_save": {
+              "from": [
+                "platform"
+              ],
+              "to": "drawing",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "platform_stairs": {
+              "from": [
+                "platform"
+              ],
+              "to": "stairs",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "drawing_finish": {
+              "from": [
+                "drawing"
+              ],
+              "ending": "save",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "save"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "stairs_finish": {
+              "from": [
+                "stairs"
+              ],
+              "ending": "stairs",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "stairs"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "save": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q133.values.resolution"
+                  },
+                  "right": "save"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q133.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q133.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "stairs": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q133.values.resolution"
+                  },
+                  "right": "stairs"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q133.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q133.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_4",
+              "map": "region_4_f1",
+              "x": 6,
+              "y": 1
+            },
+            "platform": {
+              "kind": "dungeon",
+              "dungeon": "region_4",
+              "map": "region_4_f1",
+              "x": 7,
+              "y": 3
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "domaAt",
+            "value": {
+              "ref": "stories.q133.values.partyAt"
+            }
+          },
+          {
+            "key": "masonAt",
+            "value": {
+              "ref": "stories.q133.values.partyAt"
+            }
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q133.scene.entry": {
@@ -1097,12 +1477,42 @@
         "type": "boolean",
         "initial": false,
         "meaning": "fixed"
+      },
+      "domaAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "platform",
+          "transit"
+        ],
+        "meaning": "doma の所在または保持者"
+      },
+      "masonAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "platform",
+          "transit"
+        ],
+        "meaning": "mason の所在または保持者"
       }
     },
     "entities": {
       "party": {
         "holder": "partyAt",
         "kind": "group"
+      },
+      "doma": {
+        "holder": "domaAt",
+        "kind": "person",
+        "character": "q133_doma"
+      },
+      "mason": {
+        "holder": "masonAt",
+        "kind": "person",
+        "character": "q133_mason"
       }
     },
     "propositions": {
@@ -1116,31 +1526,106 @@
       "entry": {
         "title": "一段足りない階段の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "doma",
+            "display": {
+              "x": 30,
+              "scale": 0.86
+            }
+          },
+          {
+            "entity": "mason",
+            "display": {
+              "x": 70,
+              "scale": 0.86
+            }
+          }
+        ],
         "requires": true
       },
       "warning": {
         "title": "一段足りない階段の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "doma",
+            "display": {
+              "x": 30,
+              "scale": 0.86
+            }
+          },
+          {
+            "entity": "mason",
+            "display": {
+              "x": 70,
+              "scale": 0.86
+            }
+          }
+        ],
         "requires": true
       },
       "platform": {
         "title": "棺を載せる荷台",
         "place": "platform",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "doma",
+            "display": {
+              "x": 30,
+              "scale": 0.86
+            }
+          },
+          {
+            "entity": "mason",
+            "display": {
+              "x": 70,
+              "scale": 0.86
+            }
+          }
+        ],
         "requires": true
       },
       "drawing": {
         "title": "一段足りない階段の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "doma",
+            "display": {
+              "x": 30,
+              "scale": 0.86
+            }
+          },
+          {
+            "entity": "mason",
+            "display": {
+              "x": 70,
+              "scale": 0.86
+            }
+          }
+        ],
         "requires": true
       },
       "stairs": {
         "title": "一段足りない階段の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "doma",
+            "display": {
+              "x": 30,
+              "scale": 0.86
+            }
+          },
+          {
+            "entity": "mason",
+            "display": {
+              "x": 70,
+              "scale": 0.86
+            }
+          }
+        ],
         "requires": true
       }
     },
@@ -1155,7 +1640,9 @@
           {
             "op": "move",
             "entities": [
-              "party"
+              "party",
+              "doma",
+              "mason"
             ],
             "path": [
               "transit",
@@ -1173,7 +1660,10 @@
         "once": false,
         "journey": {
           "to": "platform",
-          "companions": []
+          "companions": [
+            "doma",
+            "mason"
+          ]
         },
         "depart": []
       },
@@ -1187,7 +1677,9 @@
           {
             "op": "move",
             "entities": [
-              "party"
+              "party",
+              "doma",
+              "mason"
             ],
             "path": [
               "transit",
@@ -1205,7 +1697,10 @@
         "once": false,
         "journey": {
           "to": "platform",
-          "companions": []
+          "companions": [
+            "doma",
+            "mason"
+          ]
         },
         "depart": []
       },
@@ -1237,7 +1732,9 @@
           {
             "op": "move",
             "entities": [
-              "party"
+              "party",
+              "doma",
+              "mason"
             ],
             "path": [
               "transit",
@@ -1250,7 +1747,10 @@
         "once": false,
         "journey": {
           "to": "entry",
-          "companions": []
+          "companions": [
+            "doma",
+            "mason"
+          ]
         },
         "depart": []
       },
@@ -1264,7 +1764,9 @@
           {
             "op": "move",
             "entities": [
-              "party"
+              "party",
+              "doma",
+              "mason"
             ],
             "path": [
               "transit",
@@ -1277,7 +1779,10 @@
         "once": false,
         "journey": {
           "to": "entry",
-          "companions": []
+          "companions": [
+            "doma",
+            "mason"
+          ]
         },
         "depart": []
       },
@@ -1402,7 +1907,7 @@
         "y": 3
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "oddland_plateau",
   "receptionLocations": [

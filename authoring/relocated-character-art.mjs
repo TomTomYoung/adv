@@ -1,12 +1,14 @@
 // Edition-two regional bundle: relocated-quest roles, separate from border NPCs.
 export const RELOCATED_CHARACTER_ART=Object.fromEntries([
  ['q032_prisoner','chapel-q032-2026-10-29'],['q032_craftsperson','chapel-q032-2026-10-29'],['q033_pilgrim','chapel-q033-2026-10-29'],['q034_merchant','chapel-q034-2026-10-29'],['q035_server','chapel-q035-2026-10-29'],['q035_patient','chapel-q035-2026-10-29'],['q036_conductor','chapel-q036-2026-10-30'],...['first','second','third'].map(key=>['q037_owner_'+key,'chapel-q037-2026-10-30']),
- ['q038_inspector','chapel-q038-2026-10-30'],['q039_repairer','chapel-q039-2026-10-30'],['q040_witness','chapel-q040-2026-10-30'],...['sher','teacher','porter'].map(key=>['q131_'+key,'chapel-q131-2026-10-30']),['q132_manager','chapel-q132-2026-10-30']
+ ['q038_inspector','chapel-q038-2026-10-30'],['q039_repairer','chapel-q039-2026-10-30'],['q040_witness','chapel-q040-2026-10-30'],...['sher','teacher','porter'].map(key=>['q131_'+key,'chapel-q131-2026-10-30']),['q132_manager','chapel-q132-2026-10-30'],...['doma','mason'].map(key=>['q133_'+key,'chapel-q133-2026-10-30'])
 ].map(([id,batch])=>[id,{
  asset:'npc_'+id,file:`assets/images/characters/relocated/${id}.webp`,source:`assets/source/characters/${batch}/${id}.png`,manifest:`assets/source/characters/${batch}.json`
 }]));
 export const relocatedCharacterImages=()=>Object.fromEntries(Object.values(RELOCATED_CHARACTER_ART).map(a=>[a.asset,a.file]));
 export const relocatedCharacters=Object.fromEntries([
+ ['q133_doma','建築師ドマ','師の図面を守りたい建築師。探索隊と同行の石工とともに階段上と荷台を往復して機構を調べる。','2026-10-30の美術設定。成人男性としての描画、銀の混じる暗い髪、深緑の長上着、赤茶色のベストと空の手は美術上の選択。性別・年齢・経歴を本文へ追加せず、図面を残した師匠とは別人として扱う。図面・錘・固定具・改修状態を人物画へ固定しない。'],
+ ['q133_mason','同行の石工','ドマに同行して図面の誤りを疑い、落下前の退避や荷台の手動固定、通常階段への改修に協力する匿名の石工。','2026-10-30の美術設定。成人女性としての描画、短い赤茶色の髪、青灰色の作業シャツ、墨色の前掛けと空の手は美術上の選択。氏名・性別・年齢・経歴を本文へ追加せず、q032の職人や修復師サイとは同定しない。工具・錘・図面・負傷・改修状態を人物画へ固定しない。'],
  ['q132_manager','財宝庫の管理人','古い詰所で父の座り方と合図を教え、外側の封鎖地点まで同行して見張りの費用を引き受ける匿名の管理人。','2026-10-30の美術設定。中年男性としての描画、短い暗色の髪、藍色の長上着、黄土色のベストと空の手は美術上の選択。氏名・性別・年齢・新しい経歴を本文へ追加せず、過去の警備員である父や退避する詰所の人々とは同定しない。椅子・茶器・囮・縄・帳面を共通人物画へ固定しない。'],
  ['q131_sher','考古学者シェル','砂の回廊で行方不明の師を探す考古学者。荷担ぎと探索隊に同行し、帰還後の発見報告をまとめる。','2026-10-30の美術設定。本文で彼女と呼ばれる本人。暗い茶髪の低いお団子、黄土色の上着、青緑のズボンは美術上の選択。年齢感・容貌・衣装を新しい経歴へ結び付けない。縄・標本・報告書を人物画へ固定しない。'],
  ['q131_teacher','シェルの師','砂の回廊の避難室で生存している匿名の師。人を運ぶ経路だけで探索隊と組合へ帰還する。','2026-10-30の美術設定。年配女性としての描画、短い銀灰色の髪、梅色の上着と空の手は美術上の選択。氏名・性別・年齢・病気・負傷・新しい経歴を本文へ追加せず、他依頼の師とは同定しない。標本だけの帰還で救出済みとしない。'],
