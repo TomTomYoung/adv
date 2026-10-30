@@ -37,7 +37,8 @@ try{
       assert.ok(textOnlyCast.every(id=>f.cast.includes(id)),'text-only roles must be in the scene cast');
       await page.evaluate(({index,layout})=>h.start(index,layout),{index,layout});
       const before=await page.evaluate(()=>h.g.save());await page.evaluate(()=>h.resume());assert.equal(await page.evaluate(()=>h.g.save()),before);
-      assert.deepEqual(await page.evaluate(()=>h.view.model.dialog.scene.cast.map(c=>c.id)),f.cast);
+      if(f.absentStoryScene){assert.deepEqual(f.cast,[]);assert.equal(await page.evaluate(()=>h.view.model.dialog.scene??null),null);}
+      else assert.deepEqual(await page.evaluate(()=>h.view.model.dialog.scene.cast.map(c=>c.id)),f.cast);
       assert.equal(await page.locator('[data-character]').count(),f.cast.length,'only the scene cast is displayed');
       if((group==='oddland'||group==='chapel')&&layout==='classic'&&await page.locator('.town-scene').count()){
         const shown=await page.locator('.town-character').evaluateAll(images=>images.map(i=>i.getAttribute('src')).sort());
@@ -124,7 +125,7 @@ try{
       const measure=await page.evaluate(()=>({viewport:innerWidth,document:document.documentElement.scrollWidth,height:innerHeight,pageHeight:document.documentElement.scrollHeight}));
       assert.ok(measure.document<=measure.viewport+1,'horizontal overflow');if(layout==='scene')assert.ok(measure.pageHeight<=measure.height+1,'Scene height');
       await page.screenshot({path:path.join(output,`${f.edition}-${layout}-${width}-${f.quest}-${f.scene}${f.variant?`-${f.variant}`:''}.png`),fullPage:true});
-      checks.push({edition:f.edition,quest:f.quest,scene:f.scene,variant:f.variant,blockedChoice:f.blockedChoice,blockedChoices:f.blockedChoices,availableChoice:f.availableChoice,expectedText:f.expectedText,absentText:f.absentText,dialoguePages,layout,width,images,faces,...(labels.length?{labels}:{}),...measure});
+      checks.push({edition:f.edition,quest:f.quest,scene:f.scene,variant:f.variant,absentStoryScene:f.absentStoryScene,blockedChoice:f.blockedChoice,blockedChoices:f.blockedChoices,availableChoice:f.availableChoice,expectedText:f.expectedText,absentText:f.absentText,dialoguePages,layout,width,images,faces,...(labels.length?{labels}:{}),...measure});
     }
   }
   assert.deepEqual(errors,[]);console.log(JSON.stringify({checks:checks.length,outcomes:outcomes.length,errors,output}));
