@@ -73,6 +73,15 @@ export function chapelSecondSource(q,{cast=true}={}){
   add('surfaced','shore','人形とアネが地上の足場へ上がった。空気を補充し、工房へ運ぶ準備を整える。',[opt('workshop','アネと人形を工房へ運ぶ','retrained',{companions:['ane'],effects:[give('doll','party','workshop')]})]);end('retrained','workshop','職人の前へ人形を据え、新しい宿の仕事を一つずつ教えた。','lift');
   route('entry','break','stone_report',{depart:[give('stone','entry','party')]});end('stone_report','union','組合の受取窓口へ魔石を納めた。人形を移設した報告にはしない。','break',[give('stone','party','union')]);
   route('reply','back','refill',{companions:['ane']});add('refill','shore','地上の足場で息を整えた。宿の食堂へ戻るかどうかを確かめる。',[opt('dive','アネと食堂へ潜り直す','entry',{companions:['ane']})]);
+  if(cast){
+   for(const role of ['ane','doll'])x.entities[role].character='q135_'+role;
+   node('retrained').text='工房へ人形を据え、新しい宿の仕事を一つずつ教えた。';
+   node('stone_report').text='組合の受取窓口まで魔石を持ち帰った。人形を移設した報告にはしない。';
+   for(const id of ['entry','reply','surfaced','retrained','refill']){
+    const roles=id==='refill'?['ane']:['ane','doll'];
+    node(id).cast=roles.map((entity,index)=>({entity,display:{x:roles.length===1?50:[30,70][index],scale:.86}}));
+   }
+  }
  }
  if(q.number===136){
   cell('record','辞書と録音石の台','region_4_f2',5,3);cell('study','扉の奥の記録室','region_4_f2',5,5);cell('shelter','扉の奥の宿直室','region_4_f2',7,5);cell('breach','破られた別の入口','region_4_f2',3,5);node('record').place='record';

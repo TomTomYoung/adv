@@ -1,0 +1,2097 @@
+{
+  "schemaVersion": 1,
+  "id": "q135",
+  "number": 135,
+  "title": "水底の朝食",
+  "client": "潜水具職人アネ",
+  "brief": "沈んだ祖母の宿で、朝食が続く理由を調べてください。",
+  "region": 4,
+  "type": "scene_graph",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 巡礼台地の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q135_scene",
+      "title": "水底の朝食：潜水具職人アネ",
+      "points": [
+        {
+          "map": "region_4_f1",
+          "x": 9,
+          "y": 1,
+          "dungeon": "region_4"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q135.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q135.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q135.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q135"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_4"
+    },
+    {
+      "id": "q135_pilgrim_entry",
+      "title": "沈んだ宿の食堂",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q135.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q135.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q135"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q135.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "pilgrim_sunken_inn",
+          "map": "e2_sunken_inn",
+          "x": 11,
+          "y": 5
+        }
+      ]
+    },
+    {
+      "id": "q135_pilgrim_shore",
+      "title": "宿へ潜る地上の足場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "shore",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q135.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q135.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q135"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q135.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "pilgrim_sunken_inn",
+          "map": "e2_sunken_inn",
+          "x": 1,
+          "y": 1
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_4_f1",
+      "x": 9,
+      "y": 1,
+      "object": "q135_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "stop": {
+      "label": "終わった朝食",
+      "text": "人形は食器を片付けて止まった。沈んだ宿から初めて、作業の音がなくなった。",
+      "gold": 93,
+      "xp": 69
+    },
+    "lift": {
+      "label": "新しい宿の給仕",
+      "text": "地上で次の仕事を教えた。「おかわり」と言われ、人形は三つの作業の後に一つ動きを加えた。",
+      "gold": 93,
+      "xp": 69
+    },
+    "break": {
+      "label": "回収された魔石",
+      "text": "魔石は組合へ納めた。アネは受取を断り、祖母の宿の椅子を一つだけ持ち帰った。",
+      "gold": 93,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/chapel-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38158877be064f30e374c",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "鍋を動かすのは祖母の幽霊でなく、同じ三つの作業だけを繰り返す給仕人形だ。パンを出し、湯を注ぎ、客の返事を待つ。洪水前に最後の客が返事をしないまま避難したため、区切りを失っている。食器は毎日同じ位置で、食材は乾いた幻だ。",
+      "fixedPast": "沈んだ宿の食堂に、毎朝湯気が立つという。潜水具職人アネは調査を頼む。祖母の宿が怪談になって客を呼ぶことを嫌う一方、誰かが今も火を守っているなら会いたいと思っている。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "潜水具職人アネ",
+        "beliefsAndGoals": "沈んだ宿の食堂に、毎朝湯気が立つという。潜水具職人アネは調査を頼む。祖母の宿が怪談になって客を呼ぶことを嫌う一方、誰かが今も火を守っているなら会いたいと思っている。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "沈んだ祖母の宿で、朝食が続く理由を調べてください。"
+      }
+    ],
+    "conflict": {
+      "design": "潜水→食堂→人形を壊す／返事を探す／運び上げる。停止は正しい呼びかけへの応答、移設は職人の準備と浮力具が条件だ。空気不足なら撤退して道具を補充でき、人形は待機を続ける。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q135.pilgrimage.entry"
+        },
+        {
+          "id": "reply",
+          "script": "q135.pilgrimage.reply"
+        },
+        {
+          "id": "surfaced",
+          "script": "q135.pilgrimage.surfaced"
+        },
+        {
+          "id": "retrained",
+          "script": "q135.pilgrimage.retrained"
+        },
+        {
+          "id": "stone_report",
+          "script": "q135.pilgrimage.stone_report"
+        },
+        {
+          "id": "refill",
+          "script": "q135.pilgrimage.refill"
+        },
+        {
+          "id": "entry_lift_ready",
+          "script": "q135.pilgrimage.entry_lift_ready"
+        },
+        {
+          "id": "reply_lift_ready",
+          "script": "q135.pilgrimage.reply_lift_ready"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "沈んだ祖母の宿で、朝食が続く理由を調べてください。"
+    },
+    "reveal": {
+      "newInformation": "鍋を動かすのは祖母の幽霊でなく、同じ三つの作業だけを繰り返す給仕人形だ。パンを出し、湯を注ぎ、客の返事を待つ。洪水前に最後の客が返事をしないまま避難したため、区切りを失っている。食器は毎日同じ位置で、食材は乾いた幻だ。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q135.scene.entry"
+      },
+      {
+        "id": "reply",
+        "script": "q135.scene.reply"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q135.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "食堂の鍋から湯気が立つ。給仕人形はパンを出し、湯を注ぎ、返事を待つ。同じ皿の位置が何年も変わっていない。",
+        "options": [
+          {
+            "id": "listen",
+            "text": "最後の呼びかけを聞く",
+            "to": "reply",
+            "action": "entry_listen"
+          },
+          {
+            "id": "lift",
+            "text": "アネと浮力具を準備し、地上へ運ぶ（縄一つ）",
+            "to": "entry_lift_ready",
+            "action": "entry_lift"
+          },
+          {
+            "id": "break",
+            "text": "人形を壊し、魔石だけ回収する",
+            "to": "stone_report",
+            "action": "entry_break"
+          }
+        ]
+      },
+      {
+        "id": "reply",
+        "place": "entry",
+        "text": "「朝食はこれで、よろしいですか」最後の客は洪水で避難し、返事を残さなかった。食材は乾いた幻で、祖母の幽霊ではない。",
+        "options": [
+          {
+            "id": "answer",
+            "text": "朝食を終える返事をする",
+            "to": "@stop",
+            "action": "reply_answer"
+          },
+          {
+            "id": "lift",
+            "text": "返事を急がず、浮力具で移設する（縄一つ）",
+            "to": "reply_lift_ready",
+            "action": "reply_lift"
+          },
+          {
+            "id": "back",
+            "text": "空気を補充して考え直す",
+            "to": "refill",
+            "action": "reply_back"
+          }
+        ]
+      },
+      {
+        "id": "surfaced",
+        "place": "shore",
+        "text": "人形とアネが地上の足場へ上がった。空気を補充し、工房へ運ぶ準備を整える。",
+        "options": [
+          {
+            "id": "workshop",
+            "text": "アネと人形を工房へ運ぶ",
+            "to": "retrained",
+            "action": "surfaced_workshop"
+          }
+        ]
+      },
+      {
+        "id": "retrained",
+        "place": "workshop",
+        "text": "職人の前へ人形を据え、新しい宿の仕事を一つずつ教えた。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@lift",
+            "action": "retrained_finish"
+          }
+        ]
+      },
+      {
+        "id": "stone_report",
+        "place": "union",
+        "text": "組合の受取窓口へ魔石を納めた。人形を移設した報告にはしない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@break",
+            "action": "stone_report_finish"
+          }
+        ]
+      },
+      {
+        "id": "refill",
+        "place": "shore",
+        "text": "地上の足場で息を整えた。宿の食堂へ戻るかどうかを確かめる。",
+        "options": [
+          {
+            "id": "dive",
+            "text": "アネと食堂へ潜り直す",
+            "to": "entry",
+            "action": "refill_dive"
+          }
+        ]
+      },
+      {
+        "id": "entry_lift_ready",
+        "place": "entry",
+        "text": "必要な道具を使って準備を整えた。ここから目的地まで運ぶ。",
+        "options": [
+          {
+            "id": "continue",
+            "text": "準備した相手・品物と目的地へ向かう",
+            "to": "surfaced",
+            "action": "entry_lift_ready_continue"
+          }
+        ]
+      },
+      {
+        "id": "reply_lift_ready",
+        "place": "entry",
+        "text": "必要な道具を使って準備を整えた。ここから目的地まで運ぶ。",
+        "options": [
+          {
+            "id": "continue",
+            "text": "準備した相手・品物と目的地へ向かう",
+            "to": "surfaced",
+            "action": "reply_lift_ready_continue"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q135.scene.entry",
+        "action": "lift",
+        "option": "lift_supplies",
+        "shortage": "q135.scene.entry.lift.shortage",
+        "resume": "q135.scene.entry.lift.resume",
+        "cost": {
+          "rope": 1
+        }
+      },
+      {
+        "from": "q135.scene.reply",
+        "action": "lift",
+        "option": "lift_supplies",
+        "shortage": "q135.scene.reply.lift.shortage",
+        "resume": "q135.scene.reply.lift.resume",
+        "cost": {
+          "rope": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q135.visit"
+    ],
+    "entryScript": "q135.pilgrimage.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "second-ten",
+      "settlement": "oddland_plateau",
+      "saveRevision": 2,
+      "scope": "後半10件の実地接続。既に受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q135.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q135.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "食堂の鍋から湯気が立つ。給仕人形はパンを出し、湯を注ぎ、返事を待つ。同じ皿の位置が何年も変わっていない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "listen",
+              "text": "最後の呼びかけを聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q135.scene.reply"
+                }
+              ]
+            },
+            {
+              "id": "lift",
+              "text": "アネと浮力具を準備し、地上へ運ぶ（縄一つ）",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "rope",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "縄 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "jump",
+                  "script": "q135.end.lift"
+                }
+              ]
+            },
+            {
+              "id": "break",
+              "text": "人形を壊し、魔石だけ回収する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q135.end.break"
+                }
+              ]
+            },
+            {
+              "id": "lift_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q135.scene.entry.lift.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q135.scene.reply": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q135.node",
+          "value": "reply"
+        },
+        {
+          "op": "say",
+          "text": "「朝食はこれで、よろしいですか」最後の客は洪水で避難し、返事を残さなかった。食材は乾いた幻で、祖母の幽霊ではない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "answer",
+              "text": "朝食を終える返事をする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q135.end.stop"
+                }
+              ]
+            },
+            {
+              "id": "lift",
+              "text": "返事を急がず、浮力具で移設する（縄一つ）",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "rope",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "縄 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "jump",
+                  "script": "q135.end.lift"
+                }
+              ]
+            },
+            {
+              "id": "back",
+              "text": "空気を補充して考え直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q135.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "lift_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q135.scene.reply.lift.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q135.end.stop": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q135.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "人形は食器を片付けて止まった。沈んだ宿から初めて、作業の音がなくなった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q135",
+              "outcome": "stop"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q135.end.lift": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q135.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "地上で次の仕事を教えた。「おかわり」と言われ、人形は三つの作業の後に一つ動きを加えた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q135",
+              "outcome": "lift"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q135.end.break": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q135.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "魔石は組合へ納めた。アネは受取を断り、祖母の宿の椅子を一つだけ持ち帰った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q135",
+              "outcome": "break"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q135.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q135"
+          },
+          "cases": [
+            {
+              "equals": "q135.scene.entry.lift.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q135.scene.entry.lift.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q135.scene.reply.lift.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q135.scene.reply.lift.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q135.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q135.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "stop",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "人形は食器を片付けて止まった。沈んだ宿から初めて、作業の音がなくなった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "lift",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "地上で次の仕事を教えた。「おかわり」と言われ、人形は三つの作業の後に一つ動きを加えた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "break",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "魔石は組合へ納めた。アネは受取を断り、祖母の宿の椅子を一つだけ持ち帰った。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q135.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q135.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "reply",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q135.scene.reply"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q135.scene.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q135.scene.entry.lift.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q135",
+          "value": "q135.scene.entry.lift.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q135.scene.entry.lift.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q135",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q135.scene.entry"
+        }
+      ]
+    },
+    "q135.scene.reply.lift.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q135",
+          "value": "q135.scene.reply.lift.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q135.scene.reply.lift.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q135",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q135.scene.reply"
+        }
+      ]
+    },
+    "q135.pilgrimage.entry": {
+      "storyQuest": "q135",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q135",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "食堂の鍋から湯気が立つ。給仕人形はパンを出し、湯を注ぎ、返事を待つ。同じ皿の位置が何年も変わっていない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "listen",
+              "text": "最後の呼びかけを聞く",
+              "storyAction": {
+                "quest": "q135",
+                "action": "entry_listen"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q135",
+                  "action": "entry_listen"
+                },
+                {
+                  "op": "jump",
+                  "script": "q135.pilgrimage.reply"
+                }
+              ]
+            },
+            {
+              "id": "lift",
+              "text": "アネと浮力具を準備し、地上へ運ぶ（縄一つ）",
+              "storyAction": {
+                "quest": "q135",
+                "action": "entry_lift"
+              },
+              "requirement": "rope 1消費",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q135",
+                  "action": "entry_lift"
+                },
+                {
+                  "op": "jump",
+                  "script": "q135.pilgrimage.entry_lift_ready"
+                }
+              ]
+            },
+            {
+              "id": "break",
+              "text": "人形を壊し、魔石だけ回収する",
+              "storyAction": {
+                "quest": "q135",
+                "action": "entry_break"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q135",
+                  "action": "entry_break"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q135.pilgrimage.reply": {
+      "storyQuest": "q135",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q135",
+          "scene": "reply"
+        },
+        {
+          "op": "narrate",
+          "text": "「朝食はこれで、よろしいですか」最後の客は洪水で避難し、返事を残さなかった。食材は乾いた幻で、祖母の幽霊ではない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "answer",
+              "text": "朝食を終える返事をする",
+              "storyAction": {
+                "quest": "q135",
+                "action": "reply_answer"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q135",
+                  "action": "reply_answer"
+                },
+                {
+                  "op": "jump",
+                  "script": "q135.pilgrimage.end.stop"
+                }
+              ]
+            },
+            {
+              "id": "lift",
+              "text": "返事を急がず、浮力具で移設する（縄一つ）",
+              "storyAction": {
+                "quest": "q135",
+                "action": "reply_lift"
+              },
+              "requirement": "rope 1消費",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q135",
+                  "action": "reply_lift"
+                },
+                {
+                  "op": "jump",
+                  "script": "q135.pilgrimage.reply_lift_ready"
+                }
+              ]
+            },
+            {
+              "id": "back",
+              "text": "空気を補充して考え直す",
+              "storyAction": {
+                "quest": "q135",
+                "action": "reply_back"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q135",
+                  "action": "reply_back"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q135.pilgrimage.surfaced": {
+      "storyQuest": "q135",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q135",
+          "scene": "surfaced"
+        },
+        {
+          "op": "narrate",
+          "text": "人形とアネが地上の足場へ上がった。空気を補充し、工房へ運ぶ準備を整える。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "workshop",
+              "text": "アネと人形を工房へ運ぶ",
+              "storyAction": {
+                "quest": "q135",
+                "action": "surfaced_workshop"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q135",
+                  "action": "surfaced_workshop"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q135.pilgrimage.retrained": {
+      "storyQuest": "q135",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q135",
+          "scene": "retrained"
+        },
+        {
+          "op": "narrate",
+          "text": "職人の前へ人形を据え、新しい宿の仕事を一つずつ教えた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q135",
+                "action": "retrained_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q135",
+                  "action": "retrained_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q135.pilgrimage.end.lift"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q135.pilgrimage.stone_report": {
+      "storyQuest": "q135",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q135",
+          "scene": "stone_report"
+        },
+        {
+          "op": "narrate",
+          "text": "組合の受取窓口へ魔石を納めた。人形を移設した報告にはしない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q135",
+                "action": "stone_report_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q135",
+                  "action": "stone_report_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q135.pilgrimage.end.break"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q135.pilgrimage.refill": {
+      "storyQuest": "q135",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q135",
+          "scene": "refill"
+        },
+        {
+          "op": "narrate",
+          "text": "地上の足場で息を整えた。宿の食堂へ戻るかどうかを確かめる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "dive",
+              "text": "アネと食堂へ潜り直す",
+              "storyAction": {
+                "quest": "q135",
+                "action": "refill_dive"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q135",
+                  "action": "refill_dive"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q135.pilgrimage.entry_lift_ready": {
+      "storyQuest": "q135",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q135",
+          "scene": "entry_lift_ready"
+        },
+        {
+          "op": "narrate",
+          "text": "必要な道具を使って準備を整えた。ここから目的地まで運ぶ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "continue",
+              "text": "準備した相手・品物と目的地へ向かう",
+              "storyAction": {
+                "quest": "q135",
+                "action": "entry_lift_ready_continue"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q135",
+                  "action": "entry_lift_ready_continue"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q135.pilgrimage.reply_lift_ready": {
+      "storyQuest": "q135",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q135",
+          "scene": "reply_lift_ready"
+        },
+        {
+          "op": "narrate",
+          "text": "必要な道具を使って準備を整えた。ここから目的地まで運ぶ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "continue",
+              "text": "準備した相手・品物と目的地へ向かう",
+              "storyAction": {
+                "quest": "q135",
+                "action": "reply_lift_ready_continue"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q135",
+                  "action": "reply_lift_ready_continue"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q135.pilgrimage.end.stop": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "人形は食器を片付けて止まった。沈んだ宿から初めて、作業の音がなくなった。"
+        },
+        {
+          "op": "add",
+          "target": "vars.stop",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q135",
+          "outcome": "stop"
+        }
+      ]
+    },
+    "q135.pilgrimage.end.lift": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "地上で次の仕事を教えた。「おかわり」と言われ、人形は三つの作業の後に一つ動きを加えた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.lift",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q135",
+          "outcome": "lift"
+        }
+      ]
+    },
+    "q135.pilgrimage.end.break": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "魔石は組合へ納めた。アネは受取を断り、祖母の宿の椅子を一つだけ持ち帰った。"
+        },
+        {
+          "op": "add",
+          "target": "vars.break",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q135",
+          "outcome": "break"
+        }
+      ]
+    },
+    "q135.pilgrimage.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q135"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q135.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q135.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q135.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "stop",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "人形は食器を片付けて止まった。沈んだ宿から初めて、作業の音がなくなった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "lift",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "地上で次の仕事を教えた。「おかわり」と言われ、人形は三つの作業の後に一つ動きを加えた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "break",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "魔石は組合へ納めた。アネは受取を断り、祖母の宿の椅子を一つだけ持ち帰った。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q135"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q135.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q135.pilgrimage.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "reply",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q135.pilgrimage.reply"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "surfaced",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q135.pilgrimage.surfaced"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "retrained",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q135.pilgrimage.retrained"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "stone_report",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q135.pilgrimage.stone_report"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "refill",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q135.pilgrimage.refill"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "entry_lift_ready",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q135.pilgrimage.entry_lift_ready"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "reply_lift_ready",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q135.pilgrimage.reply_lift_ready"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q135.pilgrimage.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "沈んだ宿の食堂",
+      "shore": "宿へ潜る地上の足場",
+      "workshop": "地上の人形工房",
+      "union": "魔石の受取窓口",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "shore"
+      ],
+      [
+        "transit",
+        "workshop"
+      ],
+      [
+        "transit",
+        "union"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "shore",
+          "workshop",
+          "union",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "stop",
+          "lift",
+          "break"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "dollAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "shore",
+          "workshop",
+          "union",
+          "transit",
+          "party",
+          "stone",
+          "ane"
+        ],
+        "meaning": "doll の所在または保持者"
+      },
+      "stoneAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "shore",
+          "workshop",
+          "union",
+          "transit",
+          "party",
+          "doll",
+          "ane"
+        ],
+        "meaning": "stone の所在または保持者"
+      },
+      "aneAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "shore",
+          "workshop",
+          "union",
+          "transit"
+        ],
+        "meaning": "ane の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "doll": {
+        "holder": "dollAt",
+        "kind": "item"
+      },
+      "stone": {
+        "holder": "stoneAt",
+        "kind": "item"
+      },
+      "ane": {
+        "holder": "aneAt",
+        "kind": "person"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "鍋を動かすのは祖母の幽霊でなく、同じ三つの作業だけを繰り返す給仕人形だ。パンを出し、湯を注ぎ、客の返事を待つ。洪水前に最後の客が返事をしないまま避難したため、区切りを失っている。食器は毎日同じ位置で、食材は乾いた幻だ。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "沈んだ宿の食堂",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "reply": {
+        "title": "沈んだ宿の食堂",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "surfaced": {
+        "title": "宿へ潜る地上の足場",
+        "place": "shore",
+        "cast": [],
+        "requires": true
+      },
+      "retrained": {
+        "title": "地上の人形工房",
+        "place": "workshop",
+        "cast": [],
+        "requires": true
+      },
+      "stone_report": {
+        "title": "魔石の受取窓口",
+        "place": "union",
+        "cast": [],
+        "requires": true
+      },
+      "refill": {
+        "title": "宿へ潜る地上の足場",
+        "place": "shore",
+        "cast": [],
+        "requires": true
+      },
+      "entry_lift_ready": {
+        "title": "沈んだ宿の食堂",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "reply_lift_ready": {
+        "title": "沈んだ宿の食堂",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_listen": {
+        "from": [
+          "entry"
+        ],
+        "to": "reply",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "entry_lift": {
+        "from": [
+          "entry"
+        ],
+        "to": "entry_lift_ready",
+        "requires": true,
+        "effects": [],
+        "cost": {
+          "rope": 1
+        },
+        "once": false
+      },
+      "entry_break": {
+        "from": [
+          "entry"
+        ],
+        "to": "stone_report",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "union"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "union",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "stone",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      },
+      "reply_answer": {
+        "from": [
+          "reply"
+        ],
+        "ending": "stop",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "stop"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "reply_lift": {
+        "from": [
+          "reply"
+        ],
+        "to": "reply_lift_ready",
+        "requires": true,
+        "effects": [],
+        "cost": {
+          "rope": 1
+        },
+        "once": false
+      },
+      "reply_back": {
+        "from": [
+          "reply"
+        ],
+        "to": "refill",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "ane"
+            ],
+            "path": [
+              "transit",
+              "shore"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "shore",
+          "companions": [
+            "ane"
+          ]
+        },
+        "depart": []
+      },
+      "surfaced_workshop": {
+        "from": [
+          "surfaced"
+        ],
+        "to": "retrained",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "ane"
+            ],
+            "path": [
+              "transit",
+              "workshop"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "doll",
+            "from": "party",
+            "to": "workshop"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "workshop",
+          "companions": [
+            "ane"
+          ]
+        },
+        "depart": []
+      },
+      "retrained_finish": {
+        "from": [
+          "retrained"
+        ],
+        "ending": "lift",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "lift"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "stone_report_finish": {
+        "from": [
+          "stone_report"
+        ],
+        "ending": "break",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "stone",
+            "from": "party",
+            "to": "union"
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "break"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "refill_dive": {
+        "from": [
+          "refill"
+        ],
+        "to": "entry",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "ane"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "ane"
+          ]
+        },
+        "depart": []
+      },
+      "entry_lift_ready_continue": {
+        "from": [
+          "entry_lift_ready"
+        ],
+        "to": "surfaced",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "ane"
+            ],
+            "path": [
+              "transit",
+              "shore"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "shore",
+          "companions": [
+            "ane"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "doll",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      },
+      "reply_lift_ready_continue": {
+        "from": [
+          "reply_lift_ready"
+        ],
+        "to": "surfaced",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "ane"
+            ],
+            "path": [
+              "transit",
+              "shore"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "shore",
+          "companions": [
+            "ane"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "doll",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      }
+    },
+    "endings": {
+      "stop": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q135.values.resolution"
+            },
+            "right": "stop"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q135.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q135.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "lift": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q135.values.resolution"
+            },
+            "right": "lift"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q135.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q135.values.partyAt"
+                },
+                "right": "workshop"
+              }
+            ]
+          }
+        ]
+      },
+      "break": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q135.values.resolution"
+            },
+            "right": "break"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q135.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q135.values.partyAt"
+                },
+                "right": "union"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "pilgrim_sunken_inn",
+        "map": "e2_sunken_inn",
+        "x": 11,
+        "y": 5
+      },
+      "shore": {
+        "kind": "dungeon",
+        "dungeon": "pilgrim_sunken_inn",
+        "map": "e2_sunken_inn",
+        "x": 1,
+        "y": 1
+      },
+      "workshop": {
+        "kind": "town",
+        "location": "pilgrim_workshop"
+      },
+      "union": {
+        "kind": "town",
+        "location": "pilgrim_union"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_plateau",
+  "receptionLocations": [
+    "pilgrim_board"
+  ]
+}
