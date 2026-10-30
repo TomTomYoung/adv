@@ -1,12 +1,13 @@
 // Edition-two regional bundle: relocated-quest roles, separate from border NPCs.
 export const RELOCATED_CHARACTER_ART=Object.fromEntries([
  ['q032_prisoner','chapel-q032-2026-10-29'],['q032_craftsperson','chapel-q032-2026-10-29'],['q033_pilgrim','chapel-q033-2026-10-29'],['q034_merchant','chapel-q034-2026-10-29'],['q035_server','chapel-q035-2026-10-29'],['q035_patient','chapel-q035-2026-10-29'],['q036_conductor','chapel-q036-2026-10-30'],...['first','second','third'].map(key=>['q037_owner_'+key,'chapel-q037-2026-10-30']),
- ['q038_inspector','chapel-q038-2026-10-30'],['q039_repairer','chapel-q039-2026-10-30']
+ ['q038_inspector','chapel-q038-2026-10-30'],['q039_repairer','chapel-q039-2026-10-30'],['q040_witness','chapel-q040-2026-10-30']
 ].map(([id,batch])=>[id,{
  asset:'npc_'+id,file:`assets/images/characters/relocated/${id}.webp`,source:`assets/source/characters/${batch}/${id}.png`,manifest:`assets/source/characters/${batch}.json`
 }]));
 export const relocatedCharacterImages=()=>Object.fromEntries(Object.values(RELOCATED_CHARACTER_ART).map(a=>[a.asset,a.file]));
 export const relocatedCharacters=Object.fromEntries([
+ ['q040_witness','鏡の外の証人','大鏡の外の記録机で、探索隊から証言の写しを預かる匿名の証人。','2026-10-30の美術設定。短い暗色の巻き毛、褐色の肌、苔色の上着、砂岩色のシャツと空の手は美術上の選択。年齢感・性別の描画・衣装を本文の設定へ加えず、依頼人の修復師サイや鏡の中の話者とは同定しない。写し・筆記具・机・鏡・影を共通人物画へ固定しない。'],
  ['q039_repairer','仮面の修理人','同じ修理台で署名を求め、三人の共有目的と修理印について相談する匿名の修理人。','2026-10-30の美術設定。銀の混じる茶髪を低くまとめた姿、梅色の作業上衣、黄土茶色の前掛けと空の手は美術上の選択。具体的な年齢感・性別の描画・衣装を本文の設定に加えず、依頼人チセとは同定しない。仮面・道具・署名・修理印・帳面を共通人物画へ固定しない。'],
  ['q038_inspector','水質と設備の検査人','水質検査台で検査結果を記し、水瓶へ探索隊と同行して設備を確かめる匿名の検査人。','2026-10-30の美術設定。短い栗色の髪、青い作業上衣、灰色の前掛けと空の手は美術上の選択。氏名・性別・年齢・経歴は本文へ追加せず、施療人ネイとは同定しない。瓶・炭・検査票・検査結果を人物画へ固定しない。'],
  ['q032_prisoner','地下牢の囚人','礼拝堂の聖像の下の地下牢にいる匿名の人物。'],

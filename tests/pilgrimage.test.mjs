@@ -10,7 +10,12 @@ import {data,border,drain,walk,inspect,roadGo,go,start,choose,checkpoint,ready,a
 const reports={};
 for(let n=31;n<=40;n++){const id='q'+String(n).padStart(3,'0');test(`${id}: every ending walks to its physical scenes, resumes saves and pays once`,()=>{reports[id]=audit(id);});}
 test('relocation preserves all original quest IDs, prerequisites and reward amounts',async()=>{
- for(const n of [...Array.from({length:10},(_,i)=>31+i),...Array.from({length:10},(_,i)=>131+i)]){const id='q'+String(n).padStart(3,'0'),old=await read('data/quests/'+id+'.json'),q=data.quests[id];assert.deepEqual(q.outcomes,old.outcomes);assert.deepEqual(q.requires,old.requires);assert.equal(q.region,old.region);}
+ for(const n of [...Array.from({length:10},(_,i)=>31+i),...Array.from({length:10},(_,i)=>131+i)]){
+  const id='q'+String(n).padStart(3,'0'),old=await read('data/quests/'+id+'.json'),q=data.quests[id],expected=structuredClone(old.outcomes);
+  // q040 corrects only the fragment prose: the date is remembered and the mirror stays at entry.
+  if(id==='q040')Object.assign(expected.fragment,{label:'覚えている日付を記録し、鏡はその場に残す',text:'門が閉じた日付だけを残した。名と言葉の続きは失われたまま、記録係は伝聞と明記し、別の証人を探すことにした。'});
+  assert.deepEqual(q.outcomes,expected);assert.deepEqual(q.requires,old.requires);assert.equal(q.region,old.region);
+ }
  assert.equal(Object.keys(data.quests).length,300);assert.equal(data.scenarioEditions.editions.e2.saveRevision,2);assert.equal(data.worldTravelLegacy,undefined);assert.equal(data.regionalLegacy,undefined);
 });
 
