@@ -23,6 +23,7 @@ export function compileChapelQuest(first){
  // All three people remain there until the separate departure action.
  if(first.number===131)quest.story.scenes.room_both_ready.cast=structuredClone(quest.story.scenes.room.cast);
  if(first.number===134)quest.story.scenes.entry_break_ready.cast=structuredClone(quest.story.scenes.entry.cast);
+ if(first.number===135)for(const scene of ['entry','reply'])quest.story.scenes[scene+'_lift_ready'].cast=structuredClone(quest.story.scenes[scene].cast);
  if([132,133,134].includes(first.number)){
   const previous=compileRelocatedQuest(first,chapelSecondSource(first,{cast:false}),options).story;
   quest.story.revision=2;quest.model.edition.revision=2;
@@ -73,6 +74,7 @@ function document(quests,{second=false}={}){
  if(second)lines.push('2026-10-30追記：q132の管理人へ専用画・所在・詰所から封鎖地点への実同行を接続した。表示はtest・isolateだけで、討伐へは同行しない。物語改訂1→2で到着履歴と旅程からmanagerAtだけを旧保存へ補い、本文・囮の到着時受渡し・縄の消費・戦闘・報酬を保持する。現場接続前の旧受注経路には所在もcastも追加しない。[人物表示と保存互換の検証](../../RELOCATED_CHARACTER_ART.md)。','');
  if(second)lines.push('2026-10-30追記：q133のドマと同行の石工を全5場面へ専用画で接続し、階段上と荷台の往復に実際に同行させた。物語改訂1→2で検証済みの旧保存のpartyAtから二人の所在だけを補う。本文・錘試験と手動固定の到着時確定・準備なしの退避と再試行・両結末・報酬を保ち、現場接続前に受注した旧経路には人物状態とcastを追加しない。[人物表示と保存互換の検証](../../RELOCATED_CHARACTER_ART.md)。','');
  if(second)lines.push('2026-10-30追記：q134のザグ・師・預かり物の持主・庫番へ専用画を接続し、庫番custodianは受付keeperから庫内へ実同行する。7場面に人物を表示し、brokenには置かない。物語改訂1→2で旧保存へ庫番の所在だけを補い、本文・剣と受領証の到着時受渡し・戦闘・4結末・旧受注経路を保持する。[人物表示と保存互換の検証](../../RELOCATED_CHARACTER_ART.md)。','');
+ if(second)lines.push('2026-10-30追記：q135のアネと給仕人形を専用画で7場面へ接続した。人形はitemのまま食堂・運搬中の隊・工房の保持者に従い、補給だけの浮上では食堂に残る。工房の本文は場所と作業の描写へ整理し、別の職人との同一性を確定しない。魔石は窓口まで持ち帰った本文へ直し、finishでの受渡しを維持する。物語改訂1・旧保存の待機本文・旧受注経路を保持する。[人物表示と保存互換の検証](../../RELOCATED_CHARACTER_ART.md)。','');
  for(const q of quests){lines.push(`## ${q.id} ${q.title}`,'',q.brief,'');for(const n of q.model.graph){const p=q.story.worldPlaces[n.place];lines.push(`### ${n.id} — ${q.story.places[n.place]}`,'',p.kind==='town'?`現場：\`${p.location}\``:`現場：\`${p.map} (${p.x},${p.y})\``,'',...(typeof n.text==='string'?[n.text]:n.text.map(p=>typeof p==='string'?p:`条件に応じて：${p.yes} ／ ${p.no}`)),'');for(const a of n.options)lines.push(`1. ${a.id}：${a.text} → ${a.to}`);lines.push('');}for(const [key,o] of Object.entries(q.outcomes))lines.push(`### 結末 ${key}`,'',o.text,'',`報酬：${o.gold}G、${o.xp}EXP。`,'');}
  return lines.join('\n').trimEnd()+'\n';
 }

@@ -29,7 +29,8 @@ export function auditRelocatedCast(quests,review=RELOCATED_CAST_REVIEW){
   const used=new Set();
   for(const [sceneId,s] of Object.entries(r.scenes)){
    const node=q.model.graph.find(n=>n.id===sceneId);
-   assert.ok(node&&typeof node.text==='string'&&s.evidence?.length&&node.text.includes(s.evidence),`${id}/${sceneId}: evidence missing`);
+   const fragments=typeof node?.text==='string'?[node.text]:Array.isArray(node?.text)?node.text.flatMap(part=>typeof part==='string'?[part]:[part.yes,part.no].filter(v=>typeof v==='string')):[];
+   assert.ok(node&&s.evidence?.length&&fragments.some(text=>text.includes(s.evidence)),`${id}/${sceneId}: evidence missing`);
    assert.ok(['no-person-evidence','person-evidence'].includes(s.decision),`${id}/${sceneId}: invalid review decision`);
    assert.ok(Array.isArray(s.people),`${id}/${sceneId}: people missing`);
    assert.equal(s.people.length>0,s.decision==='person-evidence',`${id}/${sceneId}: decision and people disagree`);
@@ -90,7 +91,7 @@ export function relocatedCastMarkdown(report){
  }
  lines.push('## 更新と検査','',
   '`node tools/audit-relocated-cast.mjs` で本書とJSONを再生成し、`node tools/audit-relocated-cast.mjs --check` で照合する。通常の `npm run check:docs` とCIでも照合する。精読済み依頼は配布JSON全体のSHA-256を固定し、本文・状態・場所・出演・結末等が変われば精読し直すまで検査を失敗させる。再生成だけで精読印を更新しない。関連依頼人の表記変更、根拠の引用消失、場面の追加・欠落、未定義の候補役も拒否する。','',
-  '候補IDは監査内だけの識別子。接続済みの役は実際のcharacterとentity・castも照合する。q032の匿名2役・q033の巡礼者・q034の商人・q035の配膳係と顔を隠す患者・q036の指揮者・q037の三人の返却先・q038の検査人・q039の修理人・q040の外の証人は専用画を第2版へ接続済み。q034の被害者たち・q036の六人の歌い手・q039の三人は集団名だけを表示し、人物画を意図的に割り当てない。初版は保持し、全体の保存改訂2・地理版2も維持する。q032・q036は物語改訂2へ移し、正当な旧保存に各2役の所在だけを補う。複数の旧改訂はまとめて検証してから適用する。q036の聖歌隊はgroupであり、上記personエンティティの集計に含まれないが接続済み役数には含まれる。q033〜q035・q037・q040は物語改訂1のまま保存内容を変更しない。q038は物語改訂2へ移し、旧保存の到着履歴・旅程に応じて検査人の所在だけを補う。q039は物語改訂2で修理人と三人の集団の所在だけを補い、buyerへの保持者参照と三人に含まれる人数を保つ。q039のclaimantsもgroupでperson集計には含めない。q040の断片経路は日付だけを記録し、鏡を元の場所に残す本文へ整理した。q131の三人も既存の同行・所在に合わせて専用画とcastを接続した。物語改訂1と現場接続済み旧保存を維持し、現場接続前に受注した旧経路へは人物表示を追加しない。q132の管理人はtest・isolateの2場面へ専用画と実同行を接続済み。物語改訂2では到着履歴と旅程からmanagerAtだけを旧保存へ補い、現場接続前の旧受注経路は保持する。q133の二人を全5場面と往復同行へ接続済み。物語改訂2では隊の所在からdomaAt・masonAtだけを旧保存へ補い、旧受注経路を保持する。q134の4役を7場面へ専用画で接続し、庫番custodianの実同行と旧保存の所在移行を追加した。q135の全8場面も精読し、アネ・給仕人形・同一性未確定の工房職人を候補とした。人形はitemであり、候補3役は人物3人や画像3枚の確定ではない。魔石納品本文と受渡しの時点整合は次工程。q031〜q040・q131〜q135の局所背景と道具差分は制作候補の段階である。','');
+  '候補IDは監査内だけの識別子。接続済みの役は実際のcharacterとentity・castも照合する。q032の匿名2役・q033の巡礼者・q034の商人・q035の配膳係と顔を隠す患者・q036の指揮者・q037の三人の返却先・q038の検査人・q039の修理人・q040の外の証人は専用画を第2版へ接続済み。q034の被害者たち・q036の六人の歌い手・q039の三人は集団名だけを表示し、人物画を意図的に割り当てない。初版は保持し、全体の保存改訂2・地理版2も維持する。q032・q036は物語改訂2へ移し、正当な旧保存に各2役の所在だけを補う。複数の旧改訂はまとめて検証してから適用する。q036の聖歌隊はgroupであり、上記personエンティティの集計に含まれないが接続済み役数には含まれる。q033〜q035・q037・q040は物語改訂1のまま保存内容を変更しない。q038は物語改訂2へ移し、旧保存の到着履歴・旅程に応じて検査人の所在だけを補う。q039は物語改訂2で修理人と三人の集団の所在だけを補い、buyerへの保持者参照と三人に含まれる人数を保つ。q039のclaimantsもgroupでperson集計には含めない。q040の断片経路は日付だけを記録し、鏡を元の場所に残す本文へ整理した。q131の三人も既存の同行・所在に合わせて専用画とcastを接続した。物語改訂1と現場接続済み旧保存を維持し、現場接続前に受注した旧経路へは人物表示を追加しない。q132の管理人はtest・isolateの2場面へ専用画と実同行を接続済み。物語改訂2では到着履歴と旅程からmanagerAtだけを旧保存へ補い、現場接続前の旧受注経路は保持する。q133の二人を全5場面と往復同行へ接続済み。物語改訂2では隊の所在からdomaAt・masonAtだけを旧保存へ補い、旧受注経路を保持する。q134の4役を7場面へ専用画で接続し、庫番custodianの実同行と旧保存の所在移行を追加した。q135のアネと給仕人形を7場面へ接続し、人形のitemと保持者・物語改訂1・旧保存を保持した。工房の本文は場所と作業へ整理し、別人の職人を確定しない。魔石は窓口まで持ち帰った本文へ直し、finishでの受渡しを保持した。人形はperson集計へ含めず、接続済み役数へ含める。q136の全8場面を精読し、トゥリと入口の傭兵を候補とした。傭兵の人数・表示形式は未確定で、録音の番人・扉・戦う守護者は区別する。q031〜q040・q131〜q136の局所背景と道具差分は制作候補の段階である。','');
  return lines.join('\n');
 }
 

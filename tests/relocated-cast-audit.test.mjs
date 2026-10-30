@@ -6,9 +6,9 @@ import {auditRelocatedCast,loadRelocatedCastQuests,relocatedCastFingerprint} fro
 const quests=await loadRelocatedCastQuests();
 test('cast audit distinguishes measured empty casts, reviewed scenes and candidate roles',()=>{
  const report=auditRelocatedCast(quests);
- assert.deepEqual(report.summary,{quests:100,scenes:753,emptyCastScenes:707,personEntities:107,characterLinkedEntities:24,reviewedQuests:15,reviewedScenes:76,noPersonEvidenceScenes:23,personEvidenceScenes:53,candidateRoles:3,connectedRoles:26,unreviewedScenes:677});
+ assert.deepEqual(report.summary,{quests:100,scenes:753,emptyCastScenes:700,personEntities:107,characterLinkedEntities:25,reviewedQuests:16,reviewedScenes:84,noPersonEvidenceScenes:23,personEvidenceScenes:61,candidateRoles:2,connectedRoles:28,unreviewedScenes:669});
  assert.ok(report.regions.every(r=>r.quests===20));
- assert.equal(report.quests.find(q=>q.id==='q136').scenes[0].review,null);
+ assert.equal(report.quests.find(q=>q.id==='q137').scenes[0].review,null);
  assert.deepEqual(report.quests.find(q=>q.id==='q032').scenes.filter(s=>s.review.people.length).map(s=>s.id),['cell','workshop']);
 });
 
@@ -45,12 +45,20 @@ test('future character and cast hookups change measured counts without marking u
  const changed=structuredClone(quests),q=changed.find(q=>q.id==='q138'),entity=Object.values(q.story.entities).find(e=>e.kind==='person');
  entity.character='future_owner';Object.values(q.story.scenes)[0].cast=[{entity:'ira'}];
  const report=auditRelocatedCast(changed);
- assert.equal(report.summary.emptyCastScenes,706);
- assert.equal(report.summary.characterLinkedEntities,25);
- assert.equal(report.summary.reviewedScenes,76);
+ assert.equal(report.summary.emptyCastScenes,699);
+ assert.equal(report.summary.characterLinkedEntities,26);
+ assert.equal(report.summary.reviewedScenes,84);
  assert.equal(report.quests.find(q=>q.id==='q138').review,null);
 });
 
 test('a missing reviewed quest fails instead of reducing the denominator',()=>{
  assert.throws(()=>auditRelocatedCast(quests.filter(q=>q.id!=='q032')),/q032: reviewed quest missing/);
+});
+
+// Evidence may be a single conditional prose branch, but cannot be invented by concatenation.
+test('conditional scene evidence is checked against individual prose fragments',()=>{
+ const review=structuredClone(RELOCATED_CAST_REVIEW);review.quests.q136.scenes.purpose.evidence='旅の仮名が来訪帳へ刻まれた。';
+ assert.doesNotThrow(()=>auditRelocatedCast(quests,review));
+ const changed=structuredClone(quests),q=changed.find(q=>q.id==='q136');q.model.graph.find(n=>n.id==='purpose').text[0].yes='別の記録になった。';review.quests.q136.sourceSha256=relocatedCastFingerprint(q);
+ assert.throws(()=>auditRelocatedCast(changed,review),/q136\/purpose: evidence missing/);
 });
