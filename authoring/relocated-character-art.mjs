@@ -1,12 +1,13 @@
 // Edition-two regional bundle: relocated-quest roles, separate from border NPCs.
 export const RELOCATED_CHARACTER_ART=Object.fromEntries([
  ['q032_prisoner','chapel-q032-2026-10-29'],['q032_craftsperson','chapel-q032-2026-10-29'],['q033_pilgrim','chapel-q033-2026-10-29'],['q034_merchant','chapel-q034-2026-10-29'],['q035_server','chapel-q035-2026-10-29'],['q035_patient','chapel-q035-2026-10-29'],['q036_conductor','chapel-q036-2026-10-30'],...['first','second','third'].map(key=>['q037_owner_'+key,'chapel-q037-2026-10-30']),
- ['q038_inspector','chapel-q038-2026-10-30'],['q039_repairer','chapel-q039-2026-10-30'],['q040_witness','chapel-q040-2026-10-30'],...['sher','teacher','porter'].map(key=>['q131_'+key,'chapel-q131-2026-10-30'])
+ ['q038_inspector','chapel-q038-2026-10-30'],['q039_repairer','chapel-q039-2026-10-30'],['q040_witness','chapel-q040-2026-10-30'],...['sher','teacher','porter'].map(key=>['q131_'+key,'chapel-q131-2026-10-30']),['q132_manager','chapel-q132-2026-10-30']
 ].map(([id,batch])=>[id,{
  asset:'npc_'+id,file:`assets/images/characters/relocated/${id}.webp`,source:`assets/source/characters/${batch}/${id}.png`,manifest:`assets/source/characters/${batch}.json`
 }]));
 export const relocatedCharacterImages=()=>Object.fromEntries(Object.values(RELOCATED_CHARACTER_ART).map(a=>[a.asset,a.file]));
 export const relocatedCharacters=Object.fromEntries([
+ ['q132_manager','財宝庫の管理人','古い詰所で父の座り方と合図を教え、外側の封鎖地点まで同行して見張りの費用を引き受ける匿名の管理人。','2026-10-30の美術設定。中年男性としての描画、短い暗色の髪、藍色の長上着、黄土色のベストと空の手は美術上の選択。氏名・性別・年齢・新しい経歴を本文へ追加せず、過去の警備員である父や退避する詰所の人々とは同定しない。椅子・茶器・囮・縄・帳面を共通人物画へ固定しない。'],
  ['q131_sher','考古学者シェル','砂の回廊で行方不明の師を探す考古学者。荷担ぎと探索隊に同行し、帰還後の発見報告をまとめる。','2026-10-30の美術設定。本文で彼女と呼ばれる本人。暗い茶髪の低いお団子、黄土色の上着、青緑のズボンは美術上の選択。年齢感・容貌・衣装を新しい経歴へ結び付けない。縄・標本・報告書を人物画へ固定しない。'],
  ['q131_teacher','シェルの師','砂の回廊の避難室で生存している匿名の師。人を運ぶ経路だけで探索隊と組合へ帰還する。','2026-10-30の美術設定。年配女性としての描画、短い銀灰色の髪、梅色の上着と空の手は美術上の選択。氏名・性別・年齢・病気・負傷・新しい経歴を本文へ追加せず、他依頼の師とは同定しない。標本だけの帰還で救出済みとしない。'],
  ['q131_porter','同行する荷担ぎ','シェルと砂の回廊へ同行し、生還を優先する匿名の荷担ぎ。帰還報告で共同発見者に含めるかどうかを選ぶ相手。','2026-10-30の美術設定。結末で彼と呼ばれる本人。短い黒い巻き毛、ひげ、褐色の肌、煉瓦色の作業ベストは美術上の選択。氏名・年齢・経歴を追加せず、国境の荷役人とは同定しない。縄・荷物・標本・共同発見者の署名を人物画へ固定しない。'],

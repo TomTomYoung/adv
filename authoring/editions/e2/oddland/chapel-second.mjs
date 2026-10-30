@@ -1,6 +1,6 @@
 import {set,give,move,ref,eq,and,not} from '../../../story-kit.mjs';
 
-export function chapelSecondSource(q){
+export function chapelSecondSource(q,{cast=true}={}){
  const x={nodes:structuredClone(q.model.graph),places:{},flags:{},registry:{},entities:{}};
  const node=id=>x.nodes.find(n=>n.id===id),choice=(id,key)=>node(id).options.find(a=>a.id===key);
  const cell=(key,name,map,xp,yp)=>x.places[key]={name,world:{kind:'dungeon',dungeon:map.startsWith('region_4')?'region_4':map==='e2_sunken_inn'?'pilgrim_sunken_inn':'pilgrim_sites',map,x:xp,y:yp}};
@@ -33,6 +33,11 @@ export function chapelSecondSource(q){
   for(const from of ['test','isolate']){route(from,'destroy','fight');delete choice(from,'destroy').combat;}
   add('fight','entry','宝箱の前へ戻った。詰所の人を安全な側へ退かせてから討伐する。',[opt('destroy','宝箱と戦う','@destroy',{combat:'story_132',escape:'entry'})]);
   x.flags.signal=false;x.flags.sealed=false;choice('isolate','seal').effects=[set('sealed')];
+  if(cast){
+   x.entities.manager={holder:'station',kind:'person',character:'q132_manager'};
+   choice('test','decoy').companions=['manager'];
+   for(const id of ['test','isolate'])node(id).cast=[{entity:'manager',display:{x:50,scale:.9}}];
+  }
  }
  if(q.number===133){
   cell('platform','棺を載せる荷台','region_4_f1',7,3);node('platform').place='platform';x.flags.weightChecked=false;x.flags.fixed=false;
