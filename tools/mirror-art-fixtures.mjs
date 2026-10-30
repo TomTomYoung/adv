@@ -40,6 +40,8 @@ export async function mirrorArtFixtures(){
     assert.equal(s.values.mirrorAt,scene==='isolated'?'isolation':'entry');
     assert.equal(s.values.copyAt,scene==='shadow'?'witness':copied?'isolation':'party');
     const cast=q040Cast(scene);assert.deepEqual(projectGame(current).dialog.scene.cast.map(c=>c.id),cast);
+    // Waiting prose is saved verbatim; option labels resolve from the current script even on legacy saves.
+    if(scene==='after')assert.equal(projectGame(current).dialog.options.find(o=>o.id==='fragment').text,'覚えている日付を記録し、鏡はその場に残す');
     fixtures.push({edition:'e2',quest:'q040',scene,variant:(legacy?'legacy':'current')+(copied?'-copied':''),cast,save:raw,
      ...(cast.length?{faces:{q040_witness:[.49,.075,.57,.11]},clearOfHud:true}:{}),
      availableChoice:choices[scene],expectedText:g.data.quests.q040.model.graph.find(n=>n.id===scene).text});

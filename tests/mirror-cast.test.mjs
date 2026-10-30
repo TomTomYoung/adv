@@ -35,11 +35,21 @@ test('q040 fixtures cover all scenes and distinguish isolated mirrors with and w
  for(const f of states){const g=new GameEngine(data);g.load(f.save);assert.equal(g.save(),f.save);assert.deepEqual(projectGame(g).dialog.scene.cast.map(c=>c.id),q040Cast(f.scene));}
 });
 
-test('q040 old narration, choices, journeys, battles and completions load byte-for-byte on all seven routes',()=>{
- const phases=new Set(),scenes=new Set();let checks=0;
+test('q040 old saves stay byte-for-byte while the fragment choice label uses the corrected current definition',()=>{
+ const phases=new Set(),scenes=new Set();let checks=0,correctedChoice=false;
  const check=g=>{
   const raw=g.save();assert.deepEqual(validateSave(JSON.parse(raw),g.data),[]);
   const current=new GameEngine(data);current.load(raw);assert.equal(current.save(),raw);checkpoint(current);checks++;
+  const oldDialog=projectGame(g).dialog,currentDialog=projectGame(current).dialog;
+  if(oldDialog?.type==='choice'){
+   assert.equal(currentDialog.text,oldDialog.text);
+   const expected=structuredClone(oldDialog.options);
+   if(g.state.stories.q040.scene==='after'){
+    const fragment=expected.find(o=>o.id==='fragment');assert.equal(fragment.text,'聞き取れた断片だけ記録して鏡を保管する');
+    fragment.text='覚えている日付を記録し、鏡はその場に残す';correctedChoice=true;
+   }
+   assert.deepEqual(currentDialog.options,expected);
+  }
   phases.add(g.state.battle?'battle':g.state.journey?'journey':g.state.quests.q040.stage==='completed'?'completed':g.state.waiting?.type);
   if(g.state.stories.q040.scene)scenes.add(g.state.stories.q040.scene);
  };
@@ -53,7 +63,7 @@ test('q040 old narration, choices, journeys, battles and completions load byte-f
   assert.equal(g.state.quests.q040.outcome,route.outcome);check(g);
  }
  for(const phase of ['text','choice','journey','battle','completed'])assert.ok(phases.has(phase),phase);
- assert.deepEqual([...scenes].sort(),Object.keys(data.quests.q040.story.scenes).sort());assert.ok(checks>=70);
+ assert.deepEqual([...scenes].sort(),Object.keys(data.quests.q040.story.scenes).sort());assert.ok(checks>=70);assert.ok(correctedChoice);
 });
 
 test('q040 current and resumed old routes keep the witness stationary and transfer only on the existing arrivals',()=>{

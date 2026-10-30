@@ -51,7 +51,7 @@ function document(quests,{second=false}={}){
  if(!second)lines.push('2026-10-30追記：q037の三人の返却先を各家の1場面だけへ専用画で接続した。机・控室には人物を置かず、本人は家に留まる。本文・返却順・封書の実到着での受渡し・物語改訂1・旧保存は不変。[人物表示と検証](../../RELOCATED_CHARACTER_ART.md)。','');
  if(!second)lines.push('2026-10-30追記：q038の匿名の検査人を検査台と設備確認の2場面へ専用画で接続した。検査台から水瓶へ実際に同行し、別経路の交換後検査・掲示・受取所には表示しない。物語改訂1→2で検証済みの旧保存に、到着履歴と同行中の記録に応じた所在だけを補う。本文・採水・交換・結末・全体の保存改訂2と地理版2は維持する。[人物表示と検証](../../RELOCATED_CHARACTER_ART.md)。','');
  if(!second)lines.push('2026-10-30追記：q039の匿名の修理人を専用画、仮面の所有を主張する三人を集団名で同じ修理台の全3場面へ接続した。最初の買い手は三人に含め、四人目として表示しない。物語改訂1→2で検証済みの旧保存に2役の所在だけを補う。本文・仮面の受渡し・修理印の履歴・結末は保持する。[人物表示と検証](../../RELOCATED_CHARACTER_ART.md)。','');
- if(!second)lines.push('2026-10-30追記：q040の外の証人を写しの受取場面shadowだけへ専用画で接続した。断片経路は日付だけを記録して鏡を元の場所に残す本文・選択・結末へ整理し、既存の所在・移動・戦闘・報酬と物語改訂1を維持する。旧保存の待機本文と選択文はそのまま再開する。[人物表示と保存互換の検証](../../RELOCATED_CHARACTER_ART.md)。','');
+ if(!second)lines.push('2026-10-30追記：q040の外の証人を写しの受取場面shadowだけへ専用画で接続した。断片経路は日付だけを記録して鏡を元の場所に残す本文・選択・結末へ整理し、既存の所在・移動・戦闘・報酬と物語改訂1を維持する。旧保存の待機本文と選択待ち位置はそのまま再開し、選択肢のラベルは訂正後の現行定義から表示する。[人物表示と保存互換の検証](../../RELOCATED_CHARACTER_ART.md)。','');
  for(const q of quests){lines.push(`## ${q.id} ${q.title}`,'',q.brief,'');for(const n of q.model.graph){const p=q.story.worldPlaces[n.place];lines.push(`### ${n.id} — ${q.story.places[n.place]}`,'',p.kind==='town'?`現場：\`${p.location}\``:`現場：\`${p.map} (${p.x},${p.y})\``,'',...(typeof n.text==='string'?[n.text]:n.text.map(p=>typeof p==='string'?p:`条件に応じて：${p.yes} ／ ${p.no}`)),'');for(const a of n.options)lines.push(`1. ${a.id}：${a.text} → ${a.to}`);lines.push('');}for(const [key,o] of Object.entries(q.outcomes))lines.push(`### 結末 ${key}`,'',o.text,'',`報酬：${o.gold}G、${o.xp}EXP。`,'');}
  return lines.join('\n').trimEnd()+'\n';
 }
