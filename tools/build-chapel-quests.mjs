@@ -22,10 +22,10 @@ export function compileChapelQuest(first){
  // Paying for the rope creates a preparation scene in the same refuge room.
  // All three people remain there until the separate departure action.
  if(first.number===131)quest.story.scenes.room_both_ready.cast=structuredClone(quest.story.scenes.room.cast);
- if(first.number===132){
+ if([132,133].includes(first.number)){
   const previous=compileRelocatedQuest(first,chapelSecondSource(first,{cast:false}),options).story;
   quest.story.revision=2;quest.model.edition.revision=2;
-  quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[
+  quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:first.number===133?['doma','mason'].map(role=>({key:role+'At',value:ref('stories.q133.values.partyAt')})):[
    {key:'managerAt',value:'station'},
    {key:'managerAt',value:'seal',when:{op:'in',left:'test_decoy',right:ref('stories.q132.events')}},
    {key:'managerAt',value:'transit',when:and(eq(ref('journey.quest'),'q132'),eq(ref('journey.action'),'test_decoy'))}
@@ -66,6 +66,7 @@ function document(quests,{second=false}={}){
  if(!second)lines.push('2026-10-30追記：q040の外の証人を写しの受取場面shadowだけへ専用画で接続した。断片経路は日付だけを記録して鏡を元の場所に残す本文・選択・結末へ整理し、既存の所在・移動・戦闘・報酬と物語改訂1を維持する。旧保存の待機本文と選択待ち位置はそのまま再開し、選択肢のラベルは訂正後の現行定義から表示する。[人物表示と保存互換の検証](../../RELOCATED_CHARACTER_ART.md)。','');
  if(second)lines.push('2026-10-30追記：q131のシェル・師・荷担ぎへ専用画とcastを接続した。シェルと荷担ぎは全7場面、師は避難室・縄の準備後・師を救出した帰還の4場面に表示する。標本だけの帰還には師を表示しない。既存の同行・標本の到着時受渡し・縄の一回消費・本文・結末・物語改訂1を維持し、現場接続前から受注済みの旧経路とその表示も保持する。[人物表示と保存互換の検証](../../RELOCATED_CHARACTER_ART.md)。','');
  if(second)lines.push('2026-10-30追記：q132の管理人へ専用画・所在・詰所から封鎖地点への実同行を接続した。表示はtest・isolateだけで、討伐へは同行しない。物語改訂1→2で到着履歴と旅程からmanagerAtだけを旧保存へ補い、本文・囮の到着時受渡し・縄の消費・戦闘・報酬を保持する。現場接続前の旧受注経路には所在もcastも追加しない。[人物表示と保存互換の検証](../../RELOCATED_CHARACTER_ART.md)。','');
+ if(second)lines.push('2026-10-30追記：q133のドマと同行の石工を全5場面へ専用画で接続し、階段上と荷台の往復に実際に同行させた。物語改訂1→2で検証済みの旧保存のpartyAtから二人の所在だけを補う。本文・錘試験と手動固定の到着時確定・準備なしの退避と再試行・両結末・報酬を保ち、現場接続前に受注した旧経路には人物状態とcastを追加しない。[人物表示と保存互換の検証](../../RELOCATED_CHARACTER_ART.md)。','');
  for(const q of quests){lines.push(`## ${q.id} ${q.title}`,'',q.brief,'');for(const n of q.model.graph){const p=q.story.worldPlaces[n.place];lines.push(`### ${n.id} — ${q.story.places[n.place]}`,'',p.kind==='town'?`現場：\`${p.location}\``:`現場：\`${p.map} (${p.x},${p.y})\``,'',...(typeof n.text==='string'?[n.text]:n.text.map(p=>typeof p==='string'?p:`条件に応じて：${p.yes} ／ ${p.no}`)),'');for(const a of n.options)lines.push(`1. ${a.id}：${a.text} → ${a.to}`);lines.push('');}for(const [key,o] of Object.entries(q.outcomes))lines.push(`### 結末 ${key}`,'',o.text,'',`報酬：${o.gold}G、${o.xp}EXP。`,'');}
  return lines.join('\n').trimEnd()+'\n';
 }

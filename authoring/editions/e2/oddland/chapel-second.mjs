@@ -44,6 +44,11 @@ export function chapelSecondSource(q,{cast=true}={}){
   choice('entry','weight').effects=[set('weightChecked')];choice('entry','fix').effects=[set('fixed')];
   route('platform','save','drawing');end('drawing','entry','階段の上へ戻り、図面へ実測した重量条件を記した。参拝者にも読める位置へ掲げる。','save');
   route('platform','stairs','stairs');end('stairs','entry','荷台の構造を記録し、石工と通常の参拝階段への改修を終えた。','stairs');
+  if(cast){
+   for(const role of ['doma','mason'])x.entities[role]={holder:'entry',kind:'person',character:'q133_'+role};
+   for(const [from,key] of [['entry','weight'],['entry','fix'],['platform','save'],['platform','stairs']])choice(from,key).companions=['doma','mason'];
+   for(const n of x.nodes)n.cast=['doma','mason'].map((entity,index)=>({entity,display:{x:[30,70][index],scale:.86}}));
+  }
  }
  if(q.number===134){
   cell('keeper','庫番の返却受付','region_4_f1',9,5);cell('vault','宝物庫の内側','region_4_f1',11,5);town('master','剣の持主の家','pilgrim_master');town('owner','預かり物の持主宅','pilgrim_parcel_owner');
