@@ -1,12 +1,15 @@
 // Edition-two regional bundle: relocated-quest roles, separate from border NPCs.
 export const RELOCATED_CHARACTER_ART=Object.fromEntries([
  ['q032_prisoner','chapel-q032-2026-10-29'],['q032_craftsperson','chapel-q032-2026-10-29'],['q033_pilgrim','chapel-q033-2026-10-29'],['q034_merchant','chapel-q034-2026-10-29'],['q035_server','chapel-q035-2026-10-29'],['q035_patient','chapel-q035-2026-10-29'],['q036_conductor','chapel-q036-2026-10-30'],...['first','second','third'].map(key=>['q037_owner_'+key,'chapel-q037-2026-10-30']),
- ['q038_inspector','chapel-q038-2026-10-30'],['q039_repairer','chapel-q039-2026-10-30'],['q040_witness','chapel-q040-2026-10-30']
+ ['q038_inspector','chapel-q038-2026-10-30'],['q039_repairer','chapel-q039-2026-10-30'],['q040_witness','chapel-q040-2026-10-30'],...['sher','teacher','porter'].map(key=>['q131_'+key,'chapel-q131-2026-10-30'])
 ].map(([id,batch])=>[id,{
  asset:'npc_'+id,file:`assets/images/characters/relocated/${id}.webp`,source:`assets/source/characters/${batch}/${id}.png`,manifest:`assets/source/characters/${batch}.json`
 }]));
 export const relocatedCharacterImages=()=>Object.fromEntries(Object.values(RELOCATED_CHARACTER_ART).map(a=>[a.asset,a.file]));
 export const relocatedCharacters=Object.fromEntries([
+ ['q131_sher','考古学者シェル','砂の回廊で行方不明の師を探す考古学者。荷担ぎと探索隊に同行し、帰還後の発見報告をまとめる。','2026-10-30の美術設定。本文で彼女と呼ばれる本人。暗い茶髪の低いお団子、黄土色の上着、青緑のズボンは美術上の選択。年齢感・容貌・衣装を新しい経歴へ結び付けない。縄・標本・報告書を人物画へ固定しない。'],
+ ['q131_teacher','シェルの師','砂の回廊の避難室で生存している匿名の師。人を運ぶ経路だけで探索隊と組合へ帰還する。','2026-10-30の美術設定。年配女性としての描画、短い銀灰色の髪、梅色の上着と空の手は美術上の選択。氏名・性別・年齢・病気・負傷・新しい経歴を本文へ追加せず、他依頼の師とは同定しない。標本だけの帰還で救出済みとしない。'],
+ ['q131_porter','同行する荷担ぎ','シェルと砂の回廊へ同行し、生還を優先する匿名の荷担ぎ。帰還報告で共同発見者に含めるかどうかを選ぶ相手。','2026-10-30の美術設定。結末で彼と呼ばれる本人。短い黒い巻き毛、ひげ、褐色の肌、煉瓦色の作業ベストは美術上の選択。氏名・年齢・経歴を追加せず、国境の荷役人とは同定しない。縄・荷物・標本・共同発見者の署名を人物画へ固定しない。'],
  ['q040_witness','鏡の外の証人','大鏡の外の記録机で、探索隊から証言の写しを預かる匿名の証人。','2026-10-30の美術設定。短い暗色の巻き毛、褐色の肌、苔色の上着、砂岩色のシャツと空の手は美術上の選択。年齢感・性別の描画・衣装を本文の設定へ加えず、依頼人の修復師サイや鏡の中の話者とは同定しない。写し・筆記具・机・鏡・影を共通人物画へ固定しない。'],
  ['q039_repairer','仮面の修理人','同じ修理台で署名を求め、三人の共有目的と修理印について相談する匿名の修理人。','2026-10-30の美術設定。銀の混じる茶髪を低くまとめた姿、梅色の作業上衣、黄土茶色の前掛けと空の手は美術上の選択。具体的な年齢感・性別の描画・衣装を本文の設定に加えず、依頼人チセとは同定しない。仮面・道具・署名・修理印・帳面を共通人物画へ固定しない。'],
  ['q038_inspector','水質と設備の検査人','水質検査台で検査結果を記し、水瓶へ探索隊と同行して設備を確かめる匿名の検査人。','2026-10-30の美術設定。短い栗色の髪、青い作業上衣、灰色の前掛けと空の手は美術上の選択。氏名・性別・年齢・経歴は本文へ追加せず、施療人ネイとは同定しない。瓶・炭・検査票・検査結果を人物画へ固定しない。'],

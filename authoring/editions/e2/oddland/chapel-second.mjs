@@ -21,6 +21,11 @@ export function chapelSecondSource(q){
   route('room','person','person_home',{companions:['teacher','sher','porter']});end('person_home','report','師を組合の帰還受付へ引き渡した。標本は避難室に残り、その位置を記録する。','person');
   route('room','sample','sample_home',{companions:['sher','porter'],depart:[give('sample','room','party')],effects:[give('sample','party','report')]});end('sample_home','report','標本を受付へ置き、師の避難室と通った道を救助班へ伝えた。師を救出済みにはしない。','sample');
   Object.assign(choice('room','both'),{companions:['teacher','sher','porter'],depart:[give('sample','room','party')],effects:[give('sample','party','report')]});
+  for(const role of ['sher','teacher','porter'])x.entities[role].character='q131_'+role;
+  for(const n of x.nodes){
+   const roles=['room','credit','person_home'].includes(n.id)?['teacher','sher','porter']:['sher','porter'];
+   n.cast=roles.map((entity,index)=>({entity,display:{x:(roles.length===3?[18,49,80]:[30,70])[index],scale:.86}}));
+  }
  }
  if(q.number===132){
   cell('station','宝箱の外の詰所記録','region_4_f1',7,3);cell('seal','宝箱から隔てた囮と封鎖口','region_4_f1',7,1);node('test').place='station';node('isolate').place='seal';entity('box','entry');entity('decoy','station');

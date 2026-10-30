@@ -1,0 +1,2225 @@
+{
+  "schemaVersion": 1,
+  "id": "q131",
+  "number": 131,
+  "title": "逆向きの足跡",
+  "client": "考古学者シェル",
+  "brief": "砂の回廊に入った師を捜してください。",
+  "region": 4,
+  "type": "scene_graph",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 巡礼台地の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q131_scene",
+      "title": "逆向きの足跡：考古学者シェル",
+      "points": [
+        {
+          "map": "region_4_f1",
+          "x": 3,
+          "y": 1,
+          "dungeon": "region_4"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q131.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q131.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q131.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q131"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_4"
+    },
+    {
+      "id": "q131_pilgrim_entry",
+      "title": "砂の回廊の釘の目印",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q131.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q131.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q131"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q131.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "pilgrim_sites",
+          "map": "e2_sand_gallery",
+          "x": 3,
+          "y": 1
+        }
+      ]
+    },
+    {
+      "id": "q131_pilgrim_room",
+      "title": "砂の回廊の避難室",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "room",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q131.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q131.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q131"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q131.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "pilgrim_sites",
+          "map": "e2_sand_gallery",
+          "x": 11,
+          "y": 7
+        }
+      ]
+    },
+    {
+      "id": "q131_pilgrim_lost",
+      "title": "回廊の入口へ戻る足跡",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "lost",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q131.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q131.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q131"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q131.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "pilgrim_sites",
+          "map": "e2_sand_gallery",
+          "x": 1,
+          "y": 1
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_4_f1",
+      "x": 3,
+      "y": 1,
+      "object": "q131_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "person": {
+      "label": "救出を先に",
+      "text": "師は生還した。標本の回収は次の隊へ残り、発表は延期された。",
+      "gold": 93,
+      "xp": 69
+    },
+    "sample": {
+      "label": "標本と救援の分担",
+      "text": "標本を運び、救助班へ正確な避難室の位置を渡した。師の引上げは後続の仕事として残した。",
+      "gold": 93,
+      "xp": 69
+    },
+    "all": {
+      "label": "綱を引いた名",
+      "text": "人も標本も帰った。報告には綱を引いた荷担ぎの名が加わり、師はその一行を消さなかった。",
+      "gold": 93,
+      "xp": 69
+    },
+    "school": {
+      "label": "師弟の発表",
+      "text": "回収は成功した。発表に荷担ぎの名はなく、彼は次の依頼で共同発見の条件を先に確かめた。",
+      "gold": 93,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/chapel-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38158877be064f30e374c",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "回廊は一定の区画を越えると床の砂だけを裏返し、足跡の凹凸が逆転する。靴の形から進行方向を読んだ推論が間違っている。荷物を引きずった線だけが途切れず、師が奥の避難室へ向かったと分かる。床の反転前に荷担ぎが釘を落とす小さな実演を置く。",
+      "fixedPast": "考古学者シェルは、行方不明の師を探して砂の回廊へ入る。足跡はすべて入口へ向き、戻った者がいないことと矛盾する。彼女は師の発見を証明したい。同行する荷担ぎは、生還を優先して新発見を後回しにしたがる。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "考古学者シェル",
+        "beliefsAndGoals": "考古学者シェルは、行方不明の師を探して砂の回廊へ入る。足跡はすべて入口へ向き、戻った者がいないことと矛盾する。彼女は師の発見を証明したい。同行する荷担ぎは、生還を優先して新発見を後回しにしたがる。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "砂の回廊に入った師を捜してください。"
+      }
+    ],
+    "conflict": {
+      "design": "入口→足跡の追跡／釘の試験→避難室→師の救出／標本の回収。師は生存しており、自分の誤読を認めたくない。綱があれば標本も運べ、なければ人か重量標本を優先する。迷えば釘の試験へ戻れる退路を残す。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q131.pilgrimage.entry"
+        },
+        {
+          "id": "lost",
+          "script": "q131.pilgrimage.lost"
+        },
+        {
+          "id": "room",
+          "script": "q131.pilgrimage.room"
+        },
+        {
+          "id": "credit",
+          "script": "q131.pilgrimage.credit"
+        },
+        {
+          "id": "person_home",
+          "script": "q131.pilgrimage.person_home"
+        },
+        {
+          "id": "sample_home",
+          "script": "q131.pilgrimage.sample_home"
+        },
+        {
+          "id": "room_both_ready",
+          "script": "q131.pilgrimage.room_both_ready"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "砂の回廊に入った師を捜してください。"
+    },
+    "reveal": {
+      "newInformation": "回廊は一定の区画を越えると床の砂だけを裏返し、足跡の凹凸が逆転する。靴の形から進行方向を読んだ推論が間違っている。荷物を引きずった線だけが途切れず、師が奥の避難室へ向かったと分かる。床の反転前に荷担ぎが釘を落とす小さな実演を置く。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q131.scene.entry"
+      },
+      {
+        "id": "lost",
+        "script": "q131.scene.lost"
+      },
+      {
+        "id": "room",
+        "script": "q131.scene.room"
+      },
+      {
+        "id": "credit",
+        "script": "q131.scene.credit"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q131.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q131.test",
+        "meaning": "作者原稿の test に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "足跡はすべて入口へ向く。荷担ぎが落とした釘は、一区画を越えると砂の下から上へ現れた。",
+        "options": [
+          {
+            "id": "test",
+            "text": "釘と引きずった線を使って床の反転を確かめる",
+            "to": "room",
+            "action": "entry_test"
+          },
+          {
+            "id": "tracks",
+            "text": "足跡の形だけを頼りに進む",
+            "to": "lost",
+            "action": "entry_tracks"
+          }
+        ]
+      },
+      {
+        "id": "lost",
+        "place": "lost",
+        "text": "入口へ戻ってしまった。釘を落とした場所だけは目印が残る。靴型の向きと人の進行方向は同じとは限らない。",
+        "options": [
+          {
+            "id": "test",
+            "text": "釘の試験へ戻る",
+            "to": "entry",
+            "action": "lost_test"
+          }
+        ]
+      },
+      {
+        "id": "room",
+        "place": "room",
+        "text": "砂が裏返るだけで、荷物を引いた線は続いていた。避難室の師は生きているが、自分の誤読を認めたがらない。人と標本を同時に運ぶには縄が必要だ。",
+        "options": [
+          {
+            "id": "person",
+            "text": "師を先に連れて帰る",
+            "to": "person_home",
+            "action": "room_person"
+          },
+          {
+            "id": "sample",
+            "text": "師の承諾で標本を先に運び、救助班へ引き継ぐ",
+            "to": "sample_home",
+            "action": "room_sample"
+          },
+          {
+            "id": "both",
+            "text": "縄一つで人と標本を運ぶ",
+            "to": "room_both_ready",
+            "action": "room_both"
+          }
+        ]
+      },
+      {
+        "id": "credit",
+        "place": "report",
+        "text": "帰路、師は弟子の足跡でなく荷担ぎの綱をたどった。発見報告に誰の名を載せるか、シェルが原稿を広げる。",
+        "options": [
+          {
+            "id": "all",
+            "text": "荷担ぎを共同発見者として記す",
+            "to": "@all",
+            "action": "credit_all"
+          },
+          {
+            "id": "school",
+            "text": "報告を師弟の名だけで提出する",
+            "to": "@school",
+            "action": "credit_school"
+          }
+        ]
+      },
+      {
+        "id": "person_home",
+        "place": "report",
+        "text": "師を組合の帰還受付へ引き渡した。標本は避難室に残り、その位置を記録する。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@person",
+            "action": "person_home_finish"
+          }
+        ]
+      },
+      {
+        "id": "sample_home",
+        "place": "report",
+        "text": "標本を受付へ置き、師の避難室と通った道を救助班へ伝えた。師を救出済みにはしない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@sample",
+            "action": "sample_home_finish"
+          }
+        ]
+      },
+      {
+        "id": "room_both_ready",
+        "place": "room",
+        "text": "必要な道具を使って準備を整えた。ここから目的地まで運ぶ。",
+        "options": [
+          {
+            "id": "continue",
+            "text": "準備した相手・品物と目的地へ向かう",
+            "to": "credit",
+            "action": "room_both_ready_continue"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q131.scene.room",
+        "action": "both",
+        "option": "both_supplies",
+        "shortage": "q131.scene.room.both.shortage",
+        "resume": "q131.scene.room.both.resume",
+        "cost": {
+          "rope": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q131.visit"
+    ],
+    "entryScript": "q131.pilgrimage.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "second-ten",
+      "settlement": "oddland_plateau",
+      "saveRevision": 2,
+      "scope": "後半10件の実地接続。既に受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q131.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q131.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "足跡はすべて入口へ向く。荷担ぎが落とした釘は、一区画を越えると砂の下から上へ現れた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "test",
+              "text": "釘と引きずった線を使って床の反転を確かめる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q131.test",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q131.scene.room"
+                }
+              ]
+            },
+            {
+              "id": "tracks",
+              "text": "足跡の形だけを頼りに進む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q131.scene.lost"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q131.scene.lost": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q131.node",
+          "value": "lost"
+        },
+        {
+          "op": "say",
+          "text": "入口へ戻ってしまった。釘を落とした場所だけは目印が残る。靴型の向きと人の進行方向は同じとは限らない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "test",
+              "text": "釘の試験へ戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q131.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q131.scene.room": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q131.node",
+          "value": "room"
+        },
+        {
+          "op": "say",
+          "text": "砂が裏返るだけで、荷物を引いた線は続いていた。避難室の師は生きているが、自分の誤読を認めたがらない。人と標本を同時に運ぶには縄が必要だ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "person",
+              "text": "師を先に連れて帰る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q131.end.person"
+                }
+              ]
+            },
+            {
+              "id": "sample",
+              "text": "師の承諾で標本を先に運び、救助班へ引き継ぐ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q131.end.sample"
+                }
+              ]
+            },
+            {
+              "id": "both",
+              "text": "縄一つで人と標本を運ぶ",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "rope",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "縄 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "jump",
+                  "script": "q131.scene.credit"
+                }
+              ]
+            },
+            {
+              "id": "both_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q131.scene.room.both.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q131.scene.credit": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q131.node",
+          "value": "credit"
+        },
+        {
+          "op": "say",
+          "text": "帰路、師は弟子の足跡でなく荷担ぎの綱をたどった。発見報告に誰の名を載せるか、シェルが原稿を広げる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "all",
+              "text": "荷担ぎを共同発見者として記す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q131.end.all"
+                }
+              ]
+            },
+            {
+              "id": "school",
+              "text": "報告を師弟の名だけで提出する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q131.end.school"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q131.end.person": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q131.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "師は生還した。標本の回収は次の隊へ残り、発表は延期された。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q131",
+              "outcome": "person"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q131.end.sample": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q131.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "標本を運び、救助班へ正確な避難室の位置を渡した。師の引上げは後続の仕事として残した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q131",
+              "outcome": "sample"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q131.end.all": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q131.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "人も標本も帰った。報告には綱を引いた荷担ぎの名が加わり、師はその一行を消さなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q131",
+              "outcome": "all"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q131.end.school": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q131.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "回収は成功した。発表に荷担ぎの名はなく、彼は次の依頼で共同発見の条件を先に確かめた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q131",
+              "outcome": "school"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q131.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q131"
+          },
+          "cases": [
+            {
+              "equals": "q131.scene.room.both.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q131.scene.room.both.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q131.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q131.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "person",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "師は生還した。標本の回収は次の隊へ残り、発表は延期された。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "sample",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "標本を運び、救助班へ正確な避難室の位置を渡した。師の引上げは後続の仕事として残した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "all",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "人も標本も帰った。報告には綱を引いた荷担ぎの名が加わり、師はその一行を消さなかった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "school",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "回収は成功した。発表に荷担ぎの名はなく、彼は次の依頼で共同発見の条件を先に確かめた。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q131.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q131.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "lost",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q131.scene.lost"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "room",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q131.scene.room"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "credit",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q131.scene.credit"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q131.scene.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q131.scene.room.both.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q131",
+          "value": "q131.scene.room.both.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q131.scene.room.both.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q131",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q131.scene.room"
+        }
+      ]
+    },
+    "q131.pilgrimage.entry": {
+      "storyQuest": "q131",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q131",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "足跡はすべて入口へ向く。荷担ぎが落とした釘は、一区画を越えると砂の下から上へ現れた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "test",
+              "text": "釘と引きずった線を使って床の反転を確かめる",
+              "storyAction": {
+                "quest": "q131",
+                "action": "entry_test"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q131",
+                  "action": "entry_test"
+                }
+              ]
+            },
+            {
+              "id": "tracks",
+              "text": "足跡の形だけを頼りに進む",
+              "storyAction": {
+                "quest": "q131",
+                "action": "entry_tracks"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q131",
+                  "action": "entry_tracks"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q131.pilgrimage.lost": {
+      "storyQuest": "q131",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q131",
+          "scene": "lost"
+        },
+        {
+          "op": "narrate",
+          "text": "入口へ戻ってしまった。釘を落とした場所だけは目印が残る。靴型の向きと人の進行方向は同じとは限らない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "test",
+              "text": "釘の試験へ戻る",
+              "storyAction": {
+                "quest": "q131",
+                "action": "lost_test"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q131",
+                  "action": "lost_test"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q131.pilgrimage.room": {
+      "storyQuest": "q131",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q131",
+          "scene": "room"
+        },
+        {
+          "op": "narrate",
+          "text": "砂が裏返るだけで、荷物を引いた線は続いていた。避難室の師は生きているが、自分の誤読を認めたがらない。人と標本を同時に運ぶには縄が必要だ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "person",
+              "text": "師を先に連れて帰る",
+              "storyAction": {
+                "quest": "q131",
+                "action": "room_person"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q131",
+                  "action": "room_person"
+                }
+              ]
+            },
+            {
+              "id": "sample",
+              "text": "師の承諾で標本を先に運び、救助班へ引き継ぐ",
+              "storyAction": {
+                "quest": "q131",
+                "action": "room_sample"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q131",
+                  "action": "room_sample"
+                }
+              ]
+            },
+            {
+              "id": "both",
+              "text": "縄一つで人と標本を運ぶ",
+              "storyAction": {
+                "quest": "q131",
+                "action": "room_both"
+              },
+              "requirement": "rope 1消費",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q131",
+                  "action": "room_both"
+                },
+                {
+                  "op": "jump",
+                  "script": "q131.pilgrimage.room_both_ready"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q131.pilgrimage.credit": {
+      "storyQuest": "q131",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q131",
+          "scene": "credit"
+        },
+        {
+          "op": "narrate",
+          "text": "帰路、師は弟子の足跡でなく荷担ぎの綱をたどった。発見報告に誰の名を載せるか、シェルが原稿を広げる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "all",
+              "text": "荷担ぎを共同発見者として記す",
+              "storyAction": {
+                "quest": "q131",
+                "action": "credit_all"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q131",
+                  "action": "credit_all"
+                },
+                {
+                  "op": "jump",
+                  "script": "q131.pilgrimage.end.all"
+                }
+              ]
+            },
+            {
+              "id": "school",
+              "text": "報告を師弟の名だけで提出する",
+              "storyAction": {
+                "quest": "q131",
+                "action": "credit_school"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q131",
+                  "action": "credit_school"
+                },
+                {
+                  "op": "jump",
+                  "script": "q131.pilgrimage.end.school"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q131.pilgrimage.person_home": {
+      "storyQuest": "q131",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q131",
+          "scene": "person_home"
+        },
+        {
+          "op": "narrate",
+          "text": "師を組合の帰還受付へ引き渡した。標本は避難室に残り、その位置を記録する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q131",
+                "action": "person_home_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q131",
+                  "action": "person_home_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q131.pilgrimage.end.person"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q131.pilgrimage.sample_home": {
+      "storyQuest": "q131",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q131",
+          "scene": "sample_home"
+        },
+        {
+          "op": "narrate",
+          "text": "標本を受付へ置き、師の避難室と通った道を救助班へ伝えた。師を救出済みにはしない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q131",
+                "action": "sample_home_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q131",
+                  "action": "sample_home_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q131.pilgrimage.end.sample"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q131.pilgrimage.room_both_ready": {
+      "storyQuest": "q131",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q131",
+          "scene": "room_both_ready"
+        },
+        {
+          "op": "narrate",
+          "text": "必要な道具を使って準備を整えた。ここから目的地まで運ぶ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "continue",
+              "text": "準備した相手・品物と目的地へ向かう",
+              "storyAction": {
+                "quest": "q131",
+                "action": "room_both_ready_continue"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q131",
+                  "action": "room_both_ready_continue"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q131.pilgrimage.end.person": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "師は生還した。標本の回収は次の隊へ残り、発表は延期された。"
+        },
+        {
+          "op": "add",
+          "target": "vars.person",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q131",
+          "outcome": "person"
+        }
+      ]
+    },
+    "q131.pilgrimage.end.sample": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "標本を運び、救助班へ正確な避難室の位置を渡した。師の引上げは後続の仕事として残した。"
+        },
+        {
+          "op": "add",
+          "target": "vars.sample",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q131",
+          "outcome": "sample"
+        }
+      ]
+    },
+    "q131.pilgrimage.end.all": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "人も標本も帰った。報告には綱を引いた荷担ぎの名が加わり、師はその一行を消さなかった。"
+        },
+        {
+          "op": "add",
+          "target": "vars.all",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q131",
+          "outcome": "all"
+        }
+      ]
+    },
+    "q131.pilgrimage.end.school": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "回収は成功した。発表に荷担ぎの名はなく、彼は次の依頼で共同発見の条件を先に確かめた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.school",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q131",
+          "outcome": "school"
+        }
+      ]
+    },
+    "q131.pilgrimage.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q131"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q131.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q131.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q131.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "person",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "師は生還した。標本の回収は次の隊へ残り、発表は延期された。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "sample",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "標本を運び、救助班へ正確な避難室の位置を渡した。師の引上げは後続の仕事として残した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "all",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "人も標本も帰った。報告には綱を引いた荷担ぎの名が加わり、師はその一行を消さなかった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "school",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "回収は成功した。発表に荷担ぎの名はなく、彼は次の依頼で共同発見の条件を先に確かめた。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q131"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q131.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q131.pilgrimage.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "lost",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q131.pilgrimage.lost"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "room",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q131.pilgrimage.room"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "credit",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q131.pilgrimage.credit"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "person_home",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q131.pilgrimage.person_home"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "sample_home",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q131.pilgrimage.sample_home"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "room_both_ready",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q131.pilgrimage.room_both_ready"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q131.pilgrimage.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "砂の回廊の釘の目印",
+      "room": "砂の回廊の避難室",
+      "lost": "回廊の入口へ戻る足跡",
+      "report": "シェルの帰還報告",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "room"
+      ],
+      [
+        "transit",
+        "lost"
+      ],
+      [
+        "transit",
+        "report"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "room",
+          "lost",
+          "report",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "person",
+          "sample",
+          "all",
+          "school"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "test": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "test"
+      },
+      "teacherAt": {
+        "type": "enum",
+        "initial": "room",
+        "values": [
+          "entry",
+          "room",
+          "lost",
+          "report",
+          "transit"
+        ],
+        "meaning": "teacher の所在または保持者"
+      },
+      "sampleAt": {
+        "type": "enum",
+        "initial": "room",
+        "values": [
+          "entry",
+          "room",
+          "lost",
+          "report",
+          "transit",
+          "party",
+          "teacher",
+          "sher",
+          "porter"
+        ],
+        "meaning": "sample の所在または保持者"
+      },
+      "sherAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "room",
+          "lost",
+          "report",
+          "transit"
+        ],
+        "meaning": "sher の所在または保持者"
+      },
+      "porterAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "room",
+          "lost",
+          "report",
+          "transit"
+        ],
+        "meaning": "porter の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "teacher": {
+        "holder": "teacherAt",
+        "kind": "person"
+      },
+      "sample": {
+        "holder": "sampleAt",
+        "kind": "item"
+      },
+      "sher": {
+        "holder": "sherAt",
+        "kind": "person"
+      },
+      "porter": {
+        "holder": "porterAt",
+        "kind": "person"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "回廊は一定の区画を越えると床の砂だけを裏返し、足跡の凹凸が逆転する。靴の形から進行方向を読んだ推論が間違っている。荷物を引きずった線だけが途切れず、師が奥の避難室へ向かったと分かる。床の反転前に荷担ぎが釘を落とす小さな実演を置く。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "砂の回廊の釘の目印",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "lost": {
+        "title": "回廊の入口へ戻る足跡",
+        "place": "lost",
+        "cast": [],
+        "requires": true
+      },
+      "room": {
+        "title": "砂の回廊の避難室",
+        "place": "room",
+        "cast": [],
+        "requires": true
+      },
+      "credit": {
+        "title": "シェルの帰還報告",
+        "place": "report",
+        "cast": [],
+        "requires": true
+      },
+      "person_home": {
+        "title": "シェルの帰還報告",
+        "place": "report",
+        "cast": [],
+        "requires": true
+      },
+      "sample_home": {
+        "title": "シェルの帰還報告",
+        "place": "report",
+        "cast": [],
+        "requires": true
+      },
+      "room_both_ready": {
+        "title": "砂の回廊の避難室",
+        "place": "room",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_test": {
+        "from": [
+          "entry"
+        ],
+        "to": "room",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "sher",
+              "porter"
+            ],
+            "path": [
+              "transit",
+              "room"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "test",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "room",
+          "companions": [
+            "sher",
+            "porter"
+          ]
+        },
+        "depart": []
+      },
+      "entry_tracks": {
+        "from": [
+          "entry"
+        ],
+        "to": "lost",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "sher",
+              "porter"
+            ],
+            "path": [
+              "transit",
+              "lost"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "lost",
+          "companions": [
+            "sher",
+            "porter"
+          ]
+        },
+        "depart": []
+      },
+      "lost_test": {
+        "from": [
+          "lost"
+        ],
+        "to": "entry",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "sher",
+              "porter"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "sher",
+            "porter"
+          ]
+        },
+        "depart": []
+      },
+      "room_person": {
+        "from": [
+          "room"
+        ],
+        "to": "person_home",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "teacher",
+              "sher",
+              "porter"
+            ],
+            "path": [
+              "transit",
+              "report"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "report",
+          "companions": [
+            "teacher",
+            "sher",
+            "porter"
+          ]
+        },
+        "depart": []
+      },
+      "room_sample": {
+        "from": [
+          "room"
+        ],
+        "to": "sample_home",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "sher",
+              "porter"
+            ],
+            "path": [
+              "transit",
+              "report"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "sample",
+            "from": "party",
+            "to": "report"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "report",
+          "companions": [
+            "sher",
+            "porter"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "sample",
+            "from": "room",
+            "to": "party"
+          }
+        ]
+      },
+      "room_both": {
+        "from": [
+          "room"
+        ],
+        "to": "room_both_ready",
+        "requires": true,
+        "effects": [],
+        "cost": {
+          "rope": 1
+        },
+        "once": false
+      },
+      "credit_all": {
+        "from": [
+          "credit"
+        ],
+        "ending": "all",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "all"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "credit_school": {
+        "from": [
+          "credit"
+        ],
+        "ending": "school",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "school"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "person_home_finish": {
+        "from": [
+          "person_home"
+        ],
+        "ending": "person",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "person"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "sample_home_finish": {
+        "from": [
+          "sample_home"
+        ],
+        "ending": "sample",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "sample"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "room_both_ready_continue": {
+        "from": [
+          "room_both_ready"
+        ],
+        "to": "credit",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "teacher",
+              "sher",
+              "porter"
+            ],
+            "path": [
+              "transit",
+              "report"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "sample",
+            "from": "party",
+            "to": "report"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "report",
+          "companions": [
+            "teacher",
+            "sher",
+            "porter"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "sample",
+            "from": "room",
+            "to": "party"
+          }
+        ]
+      }
+    },
+    "endings": {
+      "person": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q131.values.resolution"
+            },
+            "right": "person"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q131.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q131.values.partyAt"
+                },
+                "right": "report"
+              }
+            ]
+          }
+        ]
+      },
+      "sample": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q131.values.resolution"
+            },
+            "right": "sample"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q131.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q131.values.partyAt"
+                },
+                "right": "report"
+              }
+            ]
+          }
+        ]
+      },
+      "all": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q131.values.resolution"
+            },
+            "right": "all"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q131.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q131.values.partyAt"
+                },
+                "right": "report"
+              }
+            ]
+          }
+        ]
+      },
+      "school": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q131.values.resolution"
+            },
+            "right": "school"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q131.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q131.values.partyAt"
+                },
+                "right": "report"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "pilgrim_sites",
+        "map": "e2_sand_gallery",
+        "x": 3,
+        "y": 1
+      },
+      "room": {
+        "kind": "dungeon",
+        "dungeon": "pilgrim_sites",
+        "map": "e2_sand_gallery",
+        "x": 11,
+        "y": 7
+      },
+      "lost": {
+        "kind": "dungeon",
+        "dungeon": "pilgrim_sites",
+        "map": "e2_sand_gallery",
+        "x": 1,
+        "y": 1
+      },
+      "report": {
+        "kind": "town",
+        "location": "pilgrim_union"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_plateau",
+  "receptionLocations": [
+    "pilgrim_board"
+  ]
+}

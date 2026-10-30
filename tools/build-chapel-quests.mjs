@@ -19,6 +19,9 @@ export function compileChapelQuest(first){
   current.outcomes.fragment.text='門が閉じた日付だけを残した。名と言葉の続きは失われたまま、記録係は伝聞と明記し、別の証人を探すことにした。';
  }
  const quest=compileRelocatedQuest(current,second?chapelSecondSource(current):chapelSource(current),options);
+ // Paying for the rope creates a preparation scene in the same refuge room.
+ // All three people remain there until the separate departure action.
+ if(first.number===131)quest.story.scenes.room_both_ready.cast=structuredClone(quest.story.scenes.room.cast);
  if([32,36,38,39].includes(first.number)){
   // Validate shipped revision-one saves before adding role locations. For q038,
   // the arrival event and pending journey distinguish the inspector's route.
@@ -52,6 +55,7 @@ function document(quests,{second=false}={}){
  if(!second)lines.push('2026-10-30追記：q038の匿名の検査人を検査台と設備確認の2場面へ専用画で接続した。検査台から水瓶へ実際に同行し、別経路の交換後検査・掲示・受取所には表示しない。物語改訂1→2で検証済みの旧保存に、到着履歴と同行中の記録に応じた所在だけを補う。本文・採水・交換・結末・全体の保存改訂2と地理版2は維持する。[人物表示と検証](../../RELOCATED_CHARACTER_ART.md)。','');
  if(!second)lines.push('2026-10-30追記：q039の匿名の修理人を専用画、仮面の所有を主張する三人を集団名で同じ修理台の全3場面へ接続した。最初の買い手は三人に含め、四人目として表示しない。物語改訂1→2で検証済みの旧保存に2役の所在だけを補う。本文・仮面の受渡し・修理印の履歴・結末は保持する。[人物表示と検証](../../RELOCATED_CHARACTER_ART.md)。','');
  if(!second)lines.push('2026-10-30追記：q040の外の証人を写しの受取場面shadowだけへ専用画で接続した。断片経路は日付だけを記録して鏡を元の場所に残す本文・選択・結末へ整理し、既存の所在・移動・戦闘・報酬と物語改訂1を維持する。旧保存の待機本文と選択待ち位置はそのまま再開し、選択肢のラベルは訂正後の現行定義から表示する。[人物表示と保存互換の検証](../../RELOCATED_CHARACTER_ART.md)。','');
+ if(second)lines.push('2026-10-30追記：q131のシェル・師・荷担ぎへ専用画とcastを接続した。シェルと荷担ぎは全7場面、師は避難室・縄の準備後・師を救出した帰還の4場面に表示する。標本だけの帰還には師を表示しない。既存の同行・標本の到着時受渡し・縄の一回消費・本文・結末・物語改訂1を維持し、現場接続前から受注済みの旧経路とその表示も保持する。[人物表示と保存互換の検証](../../RELOCATED_CHARACTER_ART.md)。','');
  for(const q of quests){lines.push(`## ${q.id} ${q.title}`,'',q.brief,'');for(const n of q.model.graph){const p=q.story.worldPlaces[n.place];lines.push(`### ${n.id} — ${q.story.places[n.place]}`,'',p.kind==='town'?`現場：\`${p.location}\``:`現場：\`${p.map} (${p.x},${p.y})\``,'',...(typeof n.text==='string'?[n.text]:n.text.map(p=>typeof p==='string'?p:`条件に応じて：${p.yes} ／ ${p.no}`)),'');for(const a of n.options)lines.push(`1. ${a.id}：${a.text} → ${a.to}`);lines.push('');}for(const [key,o] of Object.entries(q.outcomes))lines.push(`### 結末 ${key}`,'',o.text,'',`報酬：${o.gold}G、${o.xp}EXP。`,'');}
  return lines.join('\n').trimEnd()+'\n';
 }
