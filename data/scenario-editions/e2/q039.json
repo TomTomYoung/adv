@@ -288,7 +288,7 @@
     },
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -296,7 +296,355 @@
       "settlement": "oddland_plateau",
       "saveRevision": 2,
       "scope": "礼拝堂20件のうち前半10件の実地接続。後半10件はchapel-second.mjsで接続。"
-    }
+    },
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "顔を売る仮面の現場",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "informed",
+                "contract",
+                "compromise"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "jointMarks": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "jointMarks"
+            },
+            "maskAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "transit",
+                "party",
+                "buyer"
+              ],
+              "meaning": "mask の所在または保持者"
+            },
+            "buyerAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "transit"
+              ],
+              "meaning": "buyer の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "mask": {
+              "holder": "maskAt",
+              "kind": "item"
+            },
+            "buyer": {
+              "holder": "buyerAt",
+              "kind": "person"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "仮面は名を隠して互いに告解を聞くための共通顔で、所有者は一人ではない。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "顔を売る仮面の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "owners": {
+              "title": "顔を売る仮面の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "account": {
+              "title": "顔を売る仮面の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_gather": {
+              "from": [
+                "entry"
+              ],
+              "to": "owners",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "observe",
+                  "observer": "party",
+                  "proposition": "truth",
+                  "source": "entry",
+                  "requires": true
+                }
+              ],
+              "once": false
+            },
+            "entry_buyer": {
+              "from": [
+                "entry"
+              ],
+              "ending": "contract",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "mask",
+                  "from": "entry",
+                  "to": "buyer"
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "contract"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "owners_marks": {
+              "from": [
+                "owners"
+              ],
+              "to": "account",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "jointMarks",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "owners_copies": {
+              "from": [
+                "owners"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "account_register": {
+              "from": [
+                "account"
+              ],
+              "ending": "informed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "informed"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "account_replicas": {
+              "from": [
+                "account"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "informed": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q039.values.resolution"
+                  },
+                  "right": "informed"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q039.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q039.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "contract": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q039.values.resolution"
+                  },
+                  "right": "contract"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q039.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q039.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compromise": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q039.values.resolution"
+                  },
+                  "right": "compromise"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q039.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q039.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_4",
+              "map": "region_4_f2",
+              "x": 17,
+              "y": 3
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "repairerAt",
+            "value": "entry"
+          },
+          {
+            "key": "claimantsAt",
+            "value": "entry"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "dungeon.scene.region_4.v1": {
@@ -744,7 +1092,9 @@
           "entry",
           "transit",
           "party",
-          "buyer"
+          "buyer",
+          "repairer",
+          "claimants"
         ],
         "meaning": "mask の所在または保持者"
       },
@@ -756,6 +1106,24 @@
           "transit"
         ],
         "meaning": "buyer の所在または保持者"
+      },
+      "repairerAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "transit"
+        ],
+        "meaning": "repairer の所在または保持者"
+      },
+      "claimantsAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "transit"
+        ],
+        "meaning": "claimants の所在または保持者"
       }
     },
     "entities": {
@@ -770,6 +1138,16 @@
       "buyer": {
         "holder": "buyerAt",
         "kind": "person"
+      },
+      "repairer": {
+        "holder": "repairerAt",
+        "kind": "person",
+        "character": "q039_repairer"
+      },
+      "claimants": {
+        "holder": "claimantsAt",
+        "kind": "group",
+        "character": "q039_claimants"
       }
     },
     "propositions": {
@@ -783,19 +1161,40 @@
       "entry": {
         "title": "顔を売る仮面の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "repairer"
+          },
+          {
+            "entity": "claimants"
+          }
+        ],
         "requires": true
       },
       "owners": {
         "title": "顔を売る仮面の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "repairer"
+          },
+          {
+            "entity": "claimants"
+          }
+        ],
         "requires": true
       },
       "account": {
         "title": "顔を売る仮面の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "repairer"
+          },
+          {
+            "entity": "claimants"
+          }
+        ],
         "requires": true
       }
     },
@@ -1023,7 +1422,7 @@
         "y": 3
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "oddland_plateau",
   "receptionLocations": [
