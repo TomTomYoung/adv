@@ -115,12 +115,16 @@ export function chapelSource(q,{cast=true}={}){
  if(q.number===40){
   cell('record','大鏡の外の記録机','clue_b');cell('isolation','鏡を保管する閉鎖区画','clue_a');scene('shadow').place='record';
   entity('mirror','entry');entity('copy','party');entity('witness','record','person');
+  if(cast){x.entities.witness.character='q040_witness';scene('shadow').cast=[{entity:'witness',display:{scale:.9}}];}
   option('witness','copy').effects=[give('copy','party','witness')];
   for(const [from,key] of [['entry','isolate'],['witness','move']])route(from,key,'isolated',{depart:[give('mirror','entry','party')],effects:[give('mirror','party','isolation')]});
   route('shadow','remove','collect_mirror',{depart:[give('copy','witness','party')]});
   add('collect_mirror','entry','証言の写しを受け取り、大鏡の前へ戻った。鏡と写しを別々に包み、閉鎖区画へ運ぶ。',[{id:'carry',text:'鏡と写しを閉鎖区画へ運ぶ',to:'isolated',depart:[give('mirror','entry','party')],effects:[give('mirror','party','isolation'),give('copy','party','isolation')]}]);
   end('isolated','isolation','鏡を閉鎖区画へ据え、入口に調査中の札を掛けた。調べられた範囲と、まだ聞き取れていない声を区別して残す。','compromise');
-  route('after','fragment','fragment');end('fragment','record','記録机で日付と聞き取れた言葉だけを書いた。分からない箇所は空白のまま残す。','fragment');
+  // This route records only the remembered date. The mirror stays at entry;
+  // moving it to isolation belongs to the separate transport routes above.
+  option('after','fragment').text='覚えている日付を記録し、鏡はその場に残す';
+  route('after','fragment','fragment');end('fragment','record','記録机で覚えている日付を書き留めた。名前と言葉の続きは空白のまま残す。','fragment');
  }
  // The legacy conditions now refer to typed, persisted story state.
  const rewrite=value=>{if(Array.isArray(value))return value.map(rewrite);if(value&&typeof value==='object')return Object.fromEntries(Object.entries(value).map(([k,v])=>[k,k==='ref'&&v.startsWith(`flags.flow.${q.id}.`)?v.replace(`flags.flow.${q.id}.`,`stories.${q.id}.values.`):rewrite(v)]));return value;};
