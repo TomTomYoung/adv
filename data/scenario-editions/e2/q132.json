@@ -432,7 +432,7 @@
     "entryScript": "q132.pilgrimage.visit",
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -441,7 +441,472 @@
       "saveRevision": 2,
       "scope": "後半10件の実地接続。既に受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "宝箱の底の椅子の現場",
+            "station": "宝箱の外の詰所記録",
+            "seal": "宝箱から隔てた囮と封鎖口",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "station"
+            ],
+            [
+              "transit",
+              "seal"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "station",
+                "seal",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "destroy",
+                "isolate"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "signal": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "signal"
+            },
+            "sealed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "sealed"
+            },
+            "boxAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "station",
+                "seal",
+                "transit",
+                "party",
+                "decoy"
+              ],
+              "meaning": "box の所在または保持者"
+            },
+            "decoyAt": {
+              "type": "enum",
+              "initial": "station",
+              "values": [
+                "entry",
+                "station",
+                "seal",
+                "transit",
+                "party",
+                "box"
+              ],
+              "meaning": "decoy の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "box": {
+              "holder": "boxAt",
+              "kind": "item"
+            },
+            "decoy": {
+              "holder": "decoyAt",
+              "kind": "item"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "最初は犠牲者の生活跡に見せ、壁の覗き穴と食べ残しの年代差で監視詰所と分かる。ただし現在の擬態生物は人を襲った事実があり、懐かしい設備だから安全とはしない。管理人は父の仕事を怪物と同じにされたくない。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "宝箱の底の椅子の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "test": {
+              "title": "宝箱の外の詰所記録",
+              "place": "station",
+              "cast": [],
+              "requires": true
+            },
+            "isolate": {
+              "title": "宝箱から隔てた囮と封鎖口",
+              "place": "seal",
+              "cast": [],
+              "requires": true
+            },
+            "fight": {
+              "title": "宝箱の底の椅子の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_destroy": {
+              "from": [
+                "entry"
+              ],
+              "ending": "destroy",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "destroy"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "entry_room": {
+              "from": [
+                "entry"
+              ],
+              "to": "test",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "station"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "station",
+                "companions": []
+              },
+              "depart": []
+            },
+            "test_decoy": {
+              "from": [
+                "test"
+              ],
+              "to": "isolate",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "seal"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "decoy",
+                  "from": "party",
+                  "to": "seal"
+                },
+                {
+                  "op": "set",
+                  "key": "signal",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "seal",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "decoy",
+                  "from": "station",
+                  "to": "party"
+                }
+              ]
+            },
+            "test_destroy": {
+              "from": [
+                "test"
+              ],
+              "to": "fight",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "isolate_seal": {
+              "from": [
+                "isolate"
+              ],
+              "ending": "isolate",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "sealed",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "isolate"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "cost": {
+                "rope": 1
+              },
+              "once": false
+            },
+            "isolate_destroy": {
+              "from": [
+                "isolate"
+              ],
+              "to": "fight",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "fight_destroy": {
+              "from": [
+                "fight"
+              ],
+              "ending": "destroy",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "destroy"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "destroy": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q132.values.resolution"
+                  },
+                  "right": "destroy"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q132.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q132.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "isolate": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q132.values.resolution"
+                  },
+                  "right": "isolate"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q132.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q132.values.partyAt"
+                      },
+                      "right": "seal"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_4",
+              "map": "region_4_f1",
+              "x": 5,
+              "y": 1
+            },
+            "station": {
+              "kind": "dungeon",
+              "dungeon": "region_4",
+              "map": "region_4_f1",
+              "x": 7,
+              "y": 3
+            },
+            "seal": {
+              "kind": "dungeon",
+              "dungeon": "region_4",
+              "map": "region_4_f1",
+              "x": 7,
+              "y": 1
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "managerAt",
+            "value": "station"
+          },
+          {
+            "key": "managerAt",
+            "value": "seal",
+            "when": {
+              "op": "in",
+              "left": "test_decoy",
+              "right": {
+                "ref": "stories.q132.events"
+              }
+            }
+          },
+          {
+            "key": "managerAt",
+            "value": "transit",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "journey.quest"
+                  },
+                  "right": "q132"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "journey.action"
+                  },
+                  "right": "test_decoy"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q132.scene.entry": {
@@ -1330,7 +1795,8 @@
           "seal",
           "transit",
           "party",
-          "decoy"
+          "decoy",
+          "manager"
         ],
         "meaning": "box の所在または保持者"
       },
@@ -1343,9 +1809,21 @@
           "seal",
           "transit",
           "party",
-          "box"
+          "box",
+          "manager"
         ],
         "meaning": "decoy の所在または保持者"
+      },
+      "managerAt": {
+        "type": "enum",
+        "initial": "station",
+        "values": [
+          "entry",
+          "station",
+          "seal",
+          "transit"
+        ],
+        "meaning": "manager の所在または保持者"
       }
     },
     "entities": {
@@ -1360,6 +1838,11 @@
       "decoy": {
         "holder": "decoyAt",
         "kind": "item"
+      },
+      "manager": {
+        "holder": "managerAt",
+        "kind": "person",
+        "character": "q132_manager"
       }
     },
     "propositions": {
@@ -1379,13 +1862,29 @@
       "test": {
         "title": "宝箱の外の詰所記録",
         "place": "station",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "manager",
+            "display": {
+              "x": 50,
+              "scale": 0.9
+            }
+          }
+        ],
         "requires": true
       },
       "isolate": {
         "title": "宝箱から隔てた囮と封鎖口",
         "place": "seal",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "manager",
+            "display": {
+              "x": 50,
+              "scale": 0.9
+            }
+          }
+        ],
         "requires": true
       },
       "fight": {
@@ -1453,7 +1952,8 @@
           {
             "op": "move",
             "entities": [
-              "party"
+              "party",
+              "manager"
             ],
             "path": [
               "transit",
@@ -1477,7 +1977,9 @@
         "once": false,
         "journey": {
           "to": "seal",
-          "companions": []
+          "companions": [
+            "manager"
+          ]
         },
         "depart": [
           {
@@ -1678,7 +2180,7 @@
         "y": 1
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "oddland_plateau",
   "receptionLocations": [

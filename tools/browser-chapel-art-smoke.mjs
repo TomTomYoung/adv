@@ -8,6 +8,7 @@ import {waterArtFixtures} from './water-art-fixtures.mjs';
 import {maskArtFixtures} from './mask-art-fixtures.mjs';
 import {mirrorArtFixtures} from './mirror-art-fixtures.mjs';
 import {sandArtFixtures} from './sand-art-fixtures.mjs';
+import {treasuryArtFixtures} from './treasury-art-fixtures.mjs';
 import {runCharacterArtSmoke} from './character-art-browser.mjs';
-const parts=await Promise.all([chapelArtFixtures(),pilgrimArtFixtures(),receiptArtFixtures(),almsArtFixtures(),choirArtFixtures(),confessionArtFixtures(),waterArtFixtures(),maskArtFixtures(),mirrorArtFixtures(),sandArtFixtures()]);
+const parts=await Promise.all([chapelArtFixtures(),pilgrimArtFixtures(),receiptArtFixtures(),almsArtFixtures(),choirArtFixtures(),confessionArtFixtures(),waterArtFixtures(),maskArtFixtures(),mirrorArtFixtures(),sandArtFixtures(),treasuryArtFixtures()]);
 await runCharacterArtSmoke({fixtures:parts.flatMap(p=>p.fixtures),outcomes:parts.flatMap(p=>p.outcomes),group:'chapel',folder:'relocated'});
