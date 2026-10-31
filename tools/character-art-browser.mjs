@@ -40,7 +40,7 @@ try{
       if(f.absentStoryScene){assert.deepEqual(f.cast,[]);assert.equal(await page.evaluate(()=>h.view.model.dialog.scene??null),null);}
       else assert.deepEqual(await page.evaluate(()=>h.view.model.dialog.scene.cast.map(c=>c.id)),f.cast);
       assert.equal(await page.locator('[data-character]').count(),f.cast.length,'only the scene cast is displayed');
-      if((group==='oddland'||group==='chapel')&&layout==='classic'&&await page.locator('.town-scene').count()){
+      if(['oddland','chapel','sunken'].includes(group)&&layout==='classic'&&await page.locator('.town-scene').count()){
         const shown=await page.locator('.town-character').evaluateAll(images=>images.map(i=>i.getAttribute('src')).sort());
         assert.deepEqual(shown,f.cast.filter(id=>!textOnlyCast.includes(id)).map(id=>`assets/images/characters/${folder}/${id}.${extension}`).sort(),'town backdrop must not reveal an offstage character');
       }
