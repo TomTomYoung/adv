@@ -64,7 +64,7 @@ try{
         const target=blockedChoices[0]??f.availableChoice;
         const choice=page.locator(`[data-focus="choice:${target}"]`);
         for(let n=0;await choice.count()===0&&n<32;n++){
-          await page.locator('[data-focus="message:next"]').click();
+          await page.locator(layout==='scene'?'[data-focus="message:next"]':'.message-window .continue').click();
           if(dialoguePages)dialoguePages.push(await page.locator('.story-text').textContent());
         }
         assert.equal(await choice.count(),1);
