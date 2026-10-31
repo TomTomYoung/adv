@@ -124,9 +124,16 @@ export function chapelSecondSource(q,{cast=true}={}){
  if(q.number===138){
   cell('entry','訂正する地図と足跡','e2_sand_gallery',5,1);cell('pupil','イラの休息所','e2_sand_gallery',3,7);cell('beyond','休息所の先の調査地点','e2_sand_gallery',13,7);town('union','ナルのいる探索組合','pilgrim_union');node('pupil').place='pupil';entity('ira','pupil','person');entity('narl','union','person');entity('map','party');
   route('pupil','together','explored',{companions:['ira']});end('explored','beyond','共同の発見として記す範囲を合意してから、イラと休息所の先を調べた。','together');
-  route('pupil','talk','call');add('call','union','組合でナルへイラの居場所と意向を伝えた。本人の返答を聞くため、休息所まで同行する。',[opt('escort','ナルとイラの休息所へ戻る','mediated',{companions:['narl']})]);end('mediated','pupil','二人が同じ休息所で話した。礼と抗議を別々に聞き、訂正図をイラへ渡した。','talk',[give('map','party','ira')]);
+  route('pupil','talk','call');add('call','union','組合でナルへイラの居場所と意向を伝えた。本人の返答を聞くため、休息所まで同行する。',[opt('escort','ナルとイラの休息所へ戻る','mediated',{companions:['narl']})]);end('mediated','pupil','二人が同じ休息所で話した。礼と抗議を別々に聞き、イラへ渡す訂正図を確かめた。','talk',[give('map','party','ira')]);
   choice('pupil','solo').effects=[give('map','party','ira'),move('ira','pupil','transit','beyond')];
   route('pupil','correct','reported');end('reported','union','訂正した地図を組合へ持ち帰り、確認できた範囲だけを報告した。','correct',[give('map','party','union')]);
+  if(cast){
+   x.entities.ira.character='q138_ira';x.entities.narl.character='q138_narl';
+   node('pupil').cast=[{entity:'ira',when:eq(ref('stories.q138.values.iraAt'),'pupil'),display:{x:50,scale:.86}}];
+   node('explored').cast=[{entity:'ira',display:{x:50,scale:.86}}];
+   node('call').cast=[{entity:'narl',display:{x:50,scale:.86}}];
+   node('mediated').cast=[{entity:'ira',display:{x:30,scale:.86}},{entity:'narl',display:{x:70,scale:.86}}];
+  }
  }
  if(q.number===139){
   cell('entry','救助坑道の分岐','e2_rescue_tunnel',1,1);cell('crowded','声の多い側の室','e2_rescue_tunnel',11,3);cell('wounded','声を出せない負傷者の室','e2_rescue_tunnel',11,7);cell('pump','低い側の排水口','e2_rescue_tunnel',3,5);cell('air','両室へ通じる送気口','e2_rescue_tunnel',7,5);town('rescue','地上の救助詰所','pilgrim_rescue');node('rooms').place='wounded';node('air').place='air';

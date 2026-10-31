@@ -1,5 +1,6 @@
 // Edition-two regional bundle: relocated-quest roles, separate from border NPCs.
 export const RELOCATED_CHARACTER_ART=Object.fromEntries([
+ ...['ira','narl'].map(key=>['q138_'+key,'chapel-q138-2026-10-31']),
  ...['el','librarian'].map(key=>['q137_'+key,'chapel-q137-2026-10-31']),
  ['q136_turi','chapel-q136-2026-10-31'],
  ['q032_prisoner','chapel-q032-2026-10-29'],['q032_craftsperson','chapel-q032-2026-10-29'],['q033_pilgrim','chapel-q033-2026-10-29'],['q034_merchant','chapel-q034-2026-10-29'],['q035_server','chapel-q035-2026-10-29'],['q035_patient','chapel-q035-2026-10-29'],['q036_conductor','chapel-q036-2026-10-30'],...['first','second','third'].map(key=>['q037_owner_'+key,'chapel-q037-2026-10-30']),
@@ -9,6 +10,8 @@ export const RELOCATED_CHARACTER_ART=Object.fromEntries([
 }]));
 export const relocatedCharacterImages=()=>Object.fromEntries(Object.values(RELOCATED_CHARACTER_ART).map(a=>[a.asset,a.file]));
 export const relocatedCharacters=Object.fromEntries([
+ ['q138_ira','弟子イラ','行き止まりの探検家に登場する弟子。功績の分担に合意して同行し、同行を断って一人で進む選択も持つ。','2026-10-31の美術設定。短い焦げ茶の髪、苔緑の旅用上着と赤錆色の首巻きは美術上の選択。年齢・性別・経歴を本文へ追加せず、受渡し前後の地図を人物画へ固定しない。'],
+ ['q138_narl','探検家ナル','イラの師である探検家。組合で話を聞き、仲介経路では本人の返答を聞くため休息所へ同行する。','2026-10-31の美術設定。灰色の混じる短髪、短いひげ、黄土色の野外用外套は美術上の選択。具体的な年齢や経歴を追加せず、地図・道具・負傷を人物画へ固定しない。'],
  ['q137_el','写本師エル','燃え残る図書館で薬学書の救出を望む写本師。選書棚だけに表示し、封鎖時に外へ退避する。','2026-10-31の美術設定。赤銅色の三つ編み、藍色のベスト、灰色の作業服と袖口のインクは美術上の選択。年齢・性別・経歴を本文へ追加せず、q082の商人のエルとは別の役として扱う。選書・読了・回収した本を共通人物画へ固定しない。'],
  ['q137_librarian','燃え残る図書館の館長','蔵書を残すことで過去の避難順の誤りを償おうとする館長。選書棚と封鎖口だけに表示する。','2026-10-31の美術設定。銀灰色の髪とひげ、梅色の上着と黄土色の襟巻きは美術上の選択。氏名・年齢・性別・過去の被害人数を追加しない。本・火・負傷・罪や救済の決着を共通人物画へ固定しない。'],
  ['q136_turi','言語学者トゥリ','読めるのに開かない扉を調べる言語学者。録音台との往復と記録室・宿直室・破壊穴への調査に同行する。','2026-10-31の美術設定。成人女性としての描画、銀の筋がある黒い波打つ髪、丸眼鏡、青緑の長上着と黄土色のベストは美術上の選択。性別・年齢・経歴を本文へ追加しない。両手は空にし、辞書・録音石・論文・保存食や許可状態を共通立ち絵へ固定しない。'],
