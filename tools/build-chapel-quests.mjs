@@ -25,11 +25,12 @@ export function compileChapelQuest(first){
  if(first.number===134)quest.story.scenes.entry_break_ready.cast=structuredClone(quest.story.scenes.entry.cast);
  if(first.number===135)for(const scene of ['entry','reply'])quest.story.scenes[scene+'_lift_ready'].cast=structuredClone(quest.story.scenes[scene].cast);
  if(first.number===136)quest.story.scenes.entry_break_ready.cast=structuredClone(quest.story.scenes.entry.cast.filter(c=>c.entity==='turi'));
- if([132,133,134,136,137,139].includes(first.number)){
+ if([132,133,134,136,137,139,140].includes(first.number)){
   const previous=compileRelocatedQuest(first,chapelSecondSource(first,{cast:false}),options).story;
+  if(first.number===140)quest.story.registry.goodsAt.values=structuredClone(previous.registry.goodsAt.values);
   if(first.number===137)for(const key of ['medicine','family','language'])quest.story.registry[key+'At'].values=structuredClone(previous.registry[key+'At'].values);
   quest.story.revision=2;quest.model.edition.revision=2;
-  quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:first.number===139?['sena','geologist'].map(role=>({key:role+'At',value:'entry'})):first.number===137?['el','librarian','firefighter'].flatMap(role=>[
+  quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:first.number===140?[{key:'boroAt',value:'maintenance'}]:first.number===139?['sena','geologist'].map(role=>({key:role+'At',value:'entry'})):first.number===137?['el','librarian','firefighter'].flatMap(role=>[
    {key:role+'At',value:'entry'},
    {key:role+'At',value:'exit',when:or(...['entry_close','replace_book_seal'].map(action=>({op:'in',left:action,right:ref('stories.q137.events')})))},
    {key:role+'At',value:'transit',when:and(eq(ref('journey.quest'),'q137'),or(eq(ref('journey.action'),'entry_close'),eq(ref('journey.action'),'replace_book_seal')))}
@@ -88,6 +89,7 @@ function document(quests,{second=false}={}){
  if(second)lines.push('2026-10-31追記：q136のトゥリを全8場面と5旅程の実同行へ接続し、入口の傭兵は人数未確定の呼称だけをentryへ接続した。物語改訂1→2で到着履歴と旅程から所在だけを旧保存へ補い、敗北救助や寄り道の隊へ人物を転送しない。本文・名乗り・拒否と再申告・戦闘・4結末・旧受注経路を保持する。[人物表示と保存互換の検証](../../RELOCATED_CHARACTER_ART.md)。','');
  if(second)lines.push('2026-10-31追記：q137の写本師エル・館長を専用画、消防係を人数未確定の呼称でentryへ接続し、closedは館長だけを表示する。封鎖する2旅程では三役とも封鎖口へ退避する。物語改訂1→2で旧保存へ三役の所在だけを補い、三冊の読解・保持者・11旅程・5結末・旧受注経路を保持する。[人物表示と保存互換の検証](../../RELOCATED_CHARACTER_ART.md)。','');
  if(second)lines.push('2026-10-31追記：q138のイラを休息所・共同探索・仲介、ナルを組合で呼ぶ場面・仲介へ専用画で接続した。既存の所在・同行・単独移動・地図の受渡しを保持し、仲介の本文はfinish前に渡す地図を確かめる描写へ整理した。物語改訂1・旧保存の待機本文・旧受注経路を維持する。[人物表示と保存互換の検証](../../RELOCATED_CHARACTER_ART.md)。','');
+ if(second)lines.push('2026-11-01追記：q140のボロはtalk、整備員はaccidentと救助到着後だけのtalkへ専用画を接続した。takeの本文を持出前の確認に訂正し、take_leaveの出発時の保持者変更と一致させた。物語改訂1→2では旧保存へボロの所在だけを補い、既存8旅程・4結末・救助状況・持出品・旧待機本文・旧受注経路を保持する。[人物表示と保存互換の検証](../../RELOCATED_CHARACTER_ART.md)。','');
  for(const q of quests){lines.push(`## ${q.id} ${q.title}`,'',q.brief,'');for(const n of q.model.graph){const p=q.story.worldPlaces[n.place];lines.push(`### ${n.id} — ${q.story.places[n.place]}`,'',p.kind==='town'?`現場：\`${p.location}\``:`現場：\`${p.map} (${p.x},${p.y})\``,'',...(typeof n.text==='string'?[n.text]:n.text.map(p=>typeof p==='string'?p:`条件に応じて：${p.yes} ／ ${p.no}`)),'');for(const a of n.options)lines.push(`1. ${a.id}：${a.text} → ${a.to}`);lines.push('');}for(const [key,o] of Object.entries(q.outcomes))lines.push(`### 結末 ${key}`,'',o.text,'',`報酬：${o.gold}G、${o.xp}EXP。`,'');}
  return lines.join('\n').trimEnd()+'\n';
 }

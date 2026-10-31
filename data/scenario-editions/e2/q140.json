@@ -455,7 +455,7 @@
       {
         "id": "take",
         "place": "treasure",
-        "text": "止まった罠の先の庫へ着いた。回収した品を携え、地上へ退く。",
+        "text": "止まった罠の先の庫へ着いた。持ち出す品を確かめ、地上への帰路を選ぶ。",
         "options": [
           {
             "id": "leave",
@@ -541,7 +541,7 @@
     "entryScript": "q140.pilgrimage.visit",
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -550,7 +550,673 @@
       "saveRevision": 2,
       "scope": "後半10件の実地接続。既に受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "整備別棟の休業札",
+            "treasure": "別棟の財宝庫",
+            "accident": "整備員の事故現場",
+            "maintenance": "隊長ボロの整備区画",
+            "union": "探索組合の申告受付",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "treasure"
+            ],
+            [
+              "transit",
+              "accident"
+            ],
+            [
+              "transit",
+              "maintenance"
+            ],
+            [
+              "transit",
+              "union"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "treasure",
+                "accident",
+                "maintenance",
+                "union",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "loot",
+                "treaty",
+                "close",
+                "leave"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "helped": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "helped"
+            },
+            "declared": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "declared"
+            },
+            "goodsAt": {
+              "type": "enum",
+              "initial": "treasure",
+              "values": [
+                "entry",
+                "treasure",
+                "accident",
+                "maintenance",
+                "union",
+                "transit",
+                "party",
+                "worker"
+              ],
+              "meaning": "goods の所在または保持者"
+            },
+            "workerAt": {
+              "type": "enum",
+              "initial": "accident",
+              "values": [
+                "entry",
+                "treasure",
+                "accident",
+                "maintenance",
+                "union",
+                "transit"
+              ],
+              "meaning": "worker の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "goods": {
+              "holder": "goodsAt",
+              "kind": "item"
+            },
+            "worker": {
+              "holder": "workerAt",
+              "kind": "person"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "入口に並ぶ札を呪文と思わせ、実際は当番表だと分かる。ただし整備隊は侵入者を歓迎しておらず、罠の危険は本物だ。人間側の組合も、迷宮を無制限に採掘する権利を持っているわけではない。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "整備別棟の休業札",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "talk": {
+              "title": "隊長ボロの整備区画",
+              "place": "maintenance",
+              "cast": [],
+              "requires": true
+            },
+            "take": {
+              "title": "別棟の財宝庫",
+              "place": "treasure",
+              "cast": [],
+              "requires": true
+            },
+            "looted": {
+              "title": "探索組合の申告受付",
+              "place": "union",
+              "cast": [],
+              "requires": true
+            },
+            "accident": {
+              "title": "整備員の事故現場",
+              "place": "accident",
+              "cast": [],
+              "requires": true
+            },
+            "declared": {
+              "title": "探索組合の申告受付",
+              "place": "union",
+              "cast": [],
+              "requires": true
+            },
+            "closed": {
+              "title": "探索組合の申告受付",
+              "place": "union",
+              "cast": [],
+              "requires": true
+            },
+            "left": {
+              "title": "探索組合の申告受付",
+              "place": "union",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_loot": {
+              "from": [
+                "entry"
+              ],
+              "to": "take",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "treasure"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "treasure",
+                "companions": []
+              },
+              "depart": []
+            },
+            "entry_rescue": {
+              "from": [
+                "entry"
+              ],
+              "to": "accident",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "accident"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "accident",
+                "companions": []
+              },
+              "depart": []
+            },
+            "entry_talk": {
+              "from": [
+                "entry"
+              ],
+              "to": "talk",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "maintenance"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "maintenance",
+                "companions": []
+              },
+              "depart": []
+            },
+            "talk_declare": {
+              "from": [
+                "talk"
+              ],
+              "to": "declared",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "union"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "declared",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "union",
+                "companions": []
+              },
+              "depart": []
+            },
+            "talk_close": {
+              "from": [
+                "talk"
+              ],
+              "to": "closed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "union"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "union",
+                "companions": []
+              },
+              "depart": []
+            },
+            "talk_leave": {
+              "from": [
+                "talk"
+              ],
+              "to": "left",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "union"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "union",
+                "companions": []
+              },
+              "depart": []
+            },
+            "take_leave": {
+              "from": [
+                "take"
+              ],
+              "to": "looted",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "union"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "union",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "goods",
+                  "from": "treasure",
+                  "to": "party"
+                }
+              ]
+            },
+            "looted_finish": {
+              "from": [
+                "looted"
+              ],
+              "ending": "loot",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "loot"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "accident_carry": {
+              "from": [
+                "accident"
+              ],
+              "to": "talk",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "worker"
+                  ],
+                  "path": [
+                    "transit",
+                    "maintenance"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "helped",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "maintenance",
+                "companions": [
+                  "worker"
+                ]
+              },
+              "depart": []
+            },
+            "declared_finish": {
+              "from": [
+                "declared"
+              ],
+              "ending": "treaty",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "treaty"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "closed_finish": {
+              "from": [
+                "closed"
+              ],
+              "ending": "close",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "close"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "left_finish": {
+              "from": [
+                "left"
+              ],
+              "ending": "leave",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "leave"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "loot": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q140.values.resolution"
+                  },
+                  "right": "loot"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q140.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q140.values.partyAt"
+                      },
+                      "right": "union"
+                    }
+                  ]
+                }
+              ]
+            },
+            "treaty": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q140.values.resolution"
+                  },
+                  "right": "treaty"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q140.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q140.values.partyAt"
+                      },
+                      "right": "union"
+                    }
+                  ]
+                }
+              ]
+            },
+            "close": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q140.values.resolution"
+                  },
+                  "right": "close"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q140.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q140.values.partyAt"
+                      },
+                      "right": "union"
+                    }
+                  ]
+                }
+              ]
+            },
+            "leave": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q140.values.resolution"
+                  },
+                  "right": "leave"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q140.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q140.values.partyAt"
+                      },
+                      "right": "union"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "pilgrim_sites",
+              "map": "e2_chapel_works",
+              "x": 1,
+              "y": 1
+            },
+            "treasure": {
+              "kind": "dungeon",
+              "dungeon": "pilgrim_sites",
+              "map": "e2_chapel_works",
+              "x": 11,
+              "y": 3
+            },
+            "accident": {
+              "kind": "dungeon",
+              "dungeon": "pilgrim_sites",
+              "map": "e2_chapel_works",
+              "x": 3,
+              "y": 7
+            },
+            "maintenance": {
+              "kind": "dungeon",
+              "dungeon": "pilgrim_sites",
+              "map": "e2_chapel_works",
+              "x": 11,
+              "y": 7
+            },
+            "union": {
+              "kind": "town",
+              "location": "pilgrim_union"
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "boroAt",
+            "value": "maintenance"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q140.scene.entry": {
@@ -998,7 +1664,7 @@
         },
         {
           "op": "narrate",
-          "text": "止まった罠の先の庫へ着いた。回収した品を携え、地上へ退く。"
+          "text": "止まった罠の先の庫へ着いた。持ち出す品を確かめ、地上への帰路を選ぶ。"
         },
         {
           "op": "choice",
@@ -1559,6 +2225,19 @@
           "transit"
         ],
         "meaning": "worker の所在または保持者"
+      },
+      "boroAt": {
+        "type": "enum",
+        "initial": "maintenance",
+        "values": [
+          "entry",
+          "treasure",
+          "accident",
+          "maintenance",
+          "union",
+          "transit"
+        ],
+        "meaning": "boro の所在または保持者"
       }
     },
     "entities": {
@@ -1572,7 +2251,13 @@
       },
       "worker": {
         "holder": "workerAt",
-        "kind": "person"
+        "kind": "person",
+        "character": "q140_worker"
+      },
+      "boro": {
+        "holder": "boroAt",
+        "kind": "person",
+        "character": "q140_boro"
       }
     },
     "propositions": {
@@ -1592,7 +2277,41 @@
       "talk": {
         "title": "隊長ボロの整備区画",
         "place": "maintenance",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "boro",
+            "display": {
+              "x": 30,
+              "scale": 0.86
+            }
+          },
+          {
+            "entity": "worker",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q140.values.workerAt"
+                  },
+                  "right": "maintenance"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q140.values.helped"
+                  },
+                  "right": true
+                }
+              ]
+            },
+            "display": {
+              "x": 70,
+              "scale": 0.86
+            }
+          }
+        ],
         "requires": true
       },
       "take": {
@@ -1610,7 +2329,15 @@
       "accident": {
         "title": "整備員の事故現場",
         "place": "accident",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "worker",
+            "display": {
+              "x": 50,
+              "scale": 0.86
+            }
+          }
+        ],
         "requires": true
       },
       "declared": {
@@ -2110,7 +2837,7 @@
         "location": "pilgrim_union"
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "oddland_plateau",
   "receptionLocations": [

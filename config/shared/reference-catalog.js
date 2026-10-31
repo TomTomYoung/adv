@@ -76202,7 +76202,9 @@ export const referenceData={
       "npc_q138_ira": "assets/images/characters/relocated/q138_ira.webp",
       "npc_q138_narl": "assets/images/characters/relocated/q138_narl.webp",
       "npc_q139_sena": "assets/images/characters/relocated/q139_sena.webp",
-      "npc_q139_geologist": "assets/images/characters/relocated/q139_geologist.webp"
+      "npc_q139_geologist": "assets/images/characters/relocated/q139_geologist.webp",
+      "npc_q140_boro": "assets/images/characters/relocated/q140_boro.webp",
+      "npc_q140_worker": "assets/images/characters/relocated/q140_worker.webp"
     },
     "audio": {
       "exploration": "assets/audio/exploration-v2.ogg",
