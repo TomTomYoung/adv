@@ -1,6 +1,6 @@
 import {set,give,move,ref,eq,and} from '../../../story-kit.mjs';
 
-export function sunkenFirstSource(q){
+export function sunkenFirstSource(q,{cast=true}={}){
  const x={nodes:structuredClone(q.model.graph),places:{},flags:{},registry:{},entities:{}};
  const node=id=>x.nodes.find(n=>n.id===id),choice=(id,key)=>node(id).options.find(a=>a.id===key);
  const cell=(key,name,map,xp,yp)=>x.places[key]={name,world:{kind:'dungeon',dungeon:'region_7',map,x:xp,y:yp}};
@@ -26,6 +26,10 @@ export function sunkenFirstSource(q){
   route('air','rescue','rescue_report',{effects:[give('chart','party','rescue')]});end('rescue_report','rescue','救難隊へ実際に歩いた二室の図を渡した。外洋の航海図には用いないと欄外へ記す。','informed');
   route('entry','sea','sea_report',{depart:[give('chart','entry','party')],effects:[give('chart','party','harbor')]});end('sea_report','harbor','港で海面の航路として図を渡した。城内の空気室を試した記録は添えていない。','contract');
   choice('entry','local').effects=[give('chart','entry','party')];
+  if(cast){
+   entity('rescuers','rescue','group');x.entities.rescuers.character='q061_rescuers';
+   node('rescue_report').cast=[{entity:'rescuers',x:50}];
+  }
  }
  if(q.number===62){
   town('exhibit','外布と名簿の展示室','royal_exhibit');town('witness','遺族の証言室','royal_witness');entity('cloth','entry');entity('manifest','entry');entity('heirs','entry','group');

@@ -46,6 +46,7 @@ export const relocatedCharacters=Object.fromEntries([
 ].map(([id,name,detail,provenance])=>[id,{id,name,role:'礼拝堂の現地の相手',detail,portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,
  provenance:provenance??'2026-10-29の美術設定。固有名・他人物との同一性は追加しない。具体的な外見・年齢感・服装は今回の美術設定。牢・格子・聖像・宝玉・石を人物画へ固定しない。'}]));
 // A collective label is intentional: the prose specifies neither a headcount nor a spokesperson.
+relocatedCharacters.q061_rescuers={id:'q061_rescuers',name:'救難図を受け取る救難隊',role:'旧王領の村の救難図の受取先',detail:'実際に歩いた二室の図を救難隊の施設で受け取る集団。',provenance:'2026-11-01の表示方針。rescue_reportだけに集団名を表示し、人数・氏名・代表者・個人画・城内への同行は追加しない。依頼人のナギとは同定しない。肖像・立ち絵は意図的に割り当てない。'};
 for(const [key,name,detail] of [
  ['crowd','声の多い側の生存者','掘り出した後から地上到着まで表示する生存者。壁越しの測定には表示しない。'],
  ['injured','声を出せない負傷者','静かな室で発見され、支えられて移動する負傷者。地上への実到着で救出を確定する。'],

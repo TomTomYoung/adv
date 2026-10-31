@@ -608,7 +608,7 @@
     },
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -617,7 +617,598 @@
       "saveRevision": 2,
       "scope": "沈没城前半10件の現場接続。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "濡れない海図の現場",
+            "air_one": "海図の最初の空気室",
+            "air_two": "海図の次の空気室",
+            "rescue": "城内救難図の受取先",
+            "harbor": "海面の航路を相談する港",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "air_one"
+            ],
+            [
+              "transit",
+              "air_two"
+            ],
+            [
+              "transit",
+              "rescue"
+            ],
+            [
+              "transit",
+              "harbor"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "air_one",
+                "air_two",
+                "rescue",
+                "harbor",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "informed",
+                "contract",
+                "compromise"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "tested": {
+              "type": "integer",
+              "initial": 0,
+              "min": 0,
+              "max": 1,
+              "meaning": "tested"
+            },
+            "chartAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "air_one",
+                "air_two",
+                "rescue",
+                "harbor",
+                "transit",
+                "party"
+              ],
+              "meaning": "chart の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "chart": {
+              "holder": "chartAt",
+              "kind": "item"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "海図は海面でなく、空気の残る城内上層を航路として描いている。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "濡れない海図の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "air": {
+              "title": "海図の最初の空気室",
+              "place": "air_one",
+              "cast": [],
+              "requires": true
+            },
+            "second_air": {
+              "title": "海図の次の空気室",
+              "place": "air_two",
+              "cast": [],
+              "requires": true
+            },
+            "rescue_report": {
+              "title": "城内救難図の受取先",
+              "place": "rescue",
+              "cast": [],
+              "requires": true
+            },
+            "sea_report": {
+              "title": "海面の航路を相談する港",
+              "place": "harbor",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_trial": {
+              "from": [
+                "entry"
+              ],
+              "to": "air",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "air_one"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "tested",
+                  "value": 0
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "air_one",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "chart",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "entry_sea": {
+              "from": [
+                "entry"
+              ],
+              "to": "sea_report",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "harbor"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "chart",
+                  "from": "party",
+                  "to": "harbor"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "harbor",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "chart",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "entry_local": {
+              "from": [
+                "entry"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "chart",
+                  "from": "entry",
+                  "to": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "air_next": {
+              "from": [
+                "air"
+              ],
+              "to": "second_air",
+              "requires": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q061.values.tested"
+                },
+                "right": 0
+              },
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "air_two"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "tested",
+                  "value": 1
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "air_two",
+                "companions": []
+              },
+              "depart": []
+            },
+            "air_rescue": {
+              "from": [
+                "air"
+              ],
+              "to": "rescue_report",
+              "requires": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q061.values.tested"
+                },
+                "right": 1
+              },
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "rescue"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "chart",
+                  "from": "party",
+                  "to": "rescue"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "rescue",
+                "companions": []
+              },
+              "depart": []
+            },
+            "air_keep": {
+              "from": [
+                "air"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "second_air_rescue": {
+              "from": [
+                "second_air"
+              ],
+              "to": "rescue_report",
+              "requires": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q061.values.tested"
+                },
+                "right": 1
+              },
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "rescue"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "chart",
+                  "from": "party",
+                  "to": "rescue"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "rescue",
+                "companions": []
+              },
+              "depart": []
+            },
+            "second_air_keep": {
+              "from": [
+                "second_air"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "rescue_report_finish": {
+              "from": [
+                "rescue_report"
+              ],
+              "ending": "informed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "informed"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "sea_report_finish": {
+              "from": [
+                "sea_report"
+              ],
+              "ending": "contract",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "contract"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "informed": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q061.values.resolution"
+                  },
+                  "right": "informed"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q061.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q061.values.partyAt"
+                      },
+                      "right": "rescue"
+                    }
+                  ]
+                }
+              ]
+            },
+            "contract": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q061.values.resolution"
+                  },
+                  "right": "contract"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q061.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q061.values.partyAt"
+                      },
+                      "right": "harbor"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compromise": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q061.values.resolution"
+                  },
+                  "right": "compromise"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q061.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q061.values.partyAt"
+                      },
+                      "right": "entry"
+                    },
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q061.values.partyAt"
+                      },
+                      "right": "air_one"
+                    },
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q061.values.partyAt"
+                      },
+                      "right": "air_two"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_7",
+              "map": "region_7_f1",
+              "x": 9,
+              "y": 11
+            },
+            "air_one": {
+              "kind": "dungeon",
+              "dungeon": "region_7",
+              "map": "region_7_f1",
+              "x": 9,
+              "y": 5
+            },
+            "air_two": {
+              "kind": "dungeon",
+              "dungeon": "region_7",
+              "map": "region_7_f1",
+              "x": 15,
+              "y": 3
+            },
+            "rescue": {
+              "kind": "town",
+              "location": "royal_rescue"
+            },
+            "harbor": {
+              "kind": "town",
+              "location": "royal_harbor"
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "rescuersAt",
+            "value": "rescue"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q061.clue_a": {
@@ -2020,6 +2611,19 @@
           "party"
         ],
         "meaning": "chart の所在または保持者"
+      },
+      "rescuersAt": {
+        "type": "enum",
+        "initial": "rescue",
+        "values": [
+          "entry",
+          "air_one",
+          "air_two",
+          "rescue",
+          "harbor",
+          "transit"
+        ],
+        "meaning": "rescuers の所在または保持者"
       }
     },
     "entities": {
@@ -2030,6 +2634,11 @@
       "chart": {
         "holder": "chartAt",
         "kind": "item"
+      },
+      "rescuers": {
+        "holder": "rescuersAt",
+        "kind": "group",
+        "character": "q061_rescuers"
       }
     },
     "propositions": {
@@ -2061,7 +2670,12 @@
       "rescue_report": {
         "title": "城内救難図の受取先",
         "place": "rescue",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "rescuers",
+            "x": 50
+          }
+        ],
         "requires": true
       },
       "sea_report": {
@@ -2514,7 +3128,7 @@
         "location": "royal_harbor"
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "oddland_village",
   "receptionLocations": [

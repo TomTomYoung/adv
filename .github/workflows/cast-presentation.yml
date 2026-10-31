@@ -51,6 +51,12 @@ on:
       - 'tools/rescue-art-fixtures.mjs'
       - 'tools/maintenance-art-fixtures.mjs'
       - 'tools/browser-chapel-art-smoke.mjs'
+      - 'authoring/editions/e2/oddland/sunken-first.mjs'
+      - 'data/scenario-editions/e2/q061.json'
+      - 'tools/build-sunken-quests.mjs'
+      - 'tools/sunken-art-fixtures.mjs'
+      - 'tools/browser-sunken-art-smoke.mjs'
+      - 'tests/fixtures/e2-q061-before-cast.json'
       - 'data/scenario-editions/e2/oddland-first-ten.json'
       - 'tools/character-art-browser.mjs'
       - 'tools/oddland-art-fixtures.mjs'
@@ -85,6 +91,8 @@ jobs:
         run: node tools/browser-oddland-art-smoke.mjs
       - name: Verify chapel cast and migrated saves in both layouts and widths
         run: node tools/browser-chapel-art-smoke.mjs
+      - name: Verify sunken castle cast and migrated saves in both layouts and widths
+        run: node tools/browser-sunken-art-smoke.mjs
       - name: Keep animation checkpoints
         if: always()
         uses: actions/upload-artifact@v4
@@ -112,4 +120,11 @@ jobs:
         with:
           name: chapel-classic-checkpoints
           path: /tmp/adv-chapel-art-browser/*-classic-*.png
+          if-no-files-found: ignore
+      - name: Keep sunken castle checkpoints and results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sunken-cast-checkpoints
+          path: /tmp/adv-sunken-art-browser
           if-no-files-found: ignore
