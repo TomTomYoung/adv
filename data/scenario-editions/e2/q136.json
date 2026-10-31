@@ -637,7 +637,7 @@
     "entryScript": "q136.pilgrimage.visit",
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -646,7 +646,671 @@
       "saveRevision": 2,
       "scope": "後半10件の実地接続。既に受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "翻訳しない扉の現場",
+            "record": "辞書と録音石の台",
+            "study": "扉の奥の記録室",
+            "shelter": "扉の奥の宿直室",
+            "breach": "破られた別の入口",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "record"
+            ],
+            [
+              "transit",
+              "study"
+            ],
+            [
+              "transit",
+              "shelter"
+            ],
+            [
+              "transit",
+              "breach"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "record",
+                "study",
+                "shelter",
+                "breach",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "study",
+                "shelter",
+                "break",
+                "leave"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "name": {
+              "type": "enum",
+              "initial": "unspoken",
+              "values": [
+                "unspoken",
+                "real",
+                "alias"
+              ],
+              "meaning": "来訪帳へ実際に名乗った名前"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "古い録音石では、番人が名前を聞き返している。辞書通りの単語だけを唱えても会話にならない。扉は正確な発音より、聞き返しへの応答を待っている。ただし誰でも無条件で入れるのではなく、訪問理由を申告する規則がある。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "翻訳しない扉の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "record": {
+              "title": "辞書と録音石の台",
+              "place": "record",
+              "cast": [],
+              "requires": true
+            },
+            "purpose": {
+              "title": "翻訳しない扉の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "refused": {
+              "title": "翻訳しない扉の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "study": {
+              "title": "扉の奥の記録室",
+              "place": "study",
+              "cast": [],
+              "requires": true
+            },
+            "shelter": {
+              "title": "扉の奥の宿直室",
+              "place": "shelter",
+              "cast": [],
+              "requires": true
+            },
+            "breached": {
+              "title": "破られた別の入口",
+              "place": "breach",
+              "cast": [],
+              "requires": true
+            },
+            "entry_break_ready": {
+              "title": "翻訳しない扉の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_reply": {
+              "from": [
+                "entry"
+              ],
+              "to": "purpose",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "name",
+                  "value": "real"
+                }
+              ],
+              "once": false
+            },
+            "entry_record": {
+              "from": [
+                "entry"
+              ],
+              "to": "record",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "record"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "record",
+                "companions": []
+              },
+              "depart": []
+            },
+            "entry_alias": {
+              "from": [
+                "entry"
+              ],
+              "to": "purpose",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "name",
+                  "value": "alias"
+                }
+              ],
+              "once": false
+            },
+            "entry_break": {
+              "from": [
+                "entry"
+              ],
+              "to": "entry_break_ready",
+              "requires": true,
+              "effects": [],
+              "once": false
+            },
+            "record_reply": {
+              "from": [
+                "record"
+              ],
+              "to": "purpose",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "name",
+                  "value": "real"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "purpose_study": {
+              "from": [
+                "purpose"
+              ],
+              "to": "study",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "study"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "study",
+                "companions": []
+              },
+              "depart": []
+            },
+            "purpose_shelter": {
+              "from": [
+                "purpose"
+              ],
+              "to": "shelter",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "shelter"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "shelter",
+                "companions": []
+              },
+              "depart": []
+            },
+            "purpose_loot": {
+              "from": [
+                "purpose"
+              ],
+              "to": "refused",
+              "requires": true,
+              "effects": [],
+              "once": false
+            },
+            "refused_again": {
+              "from": [
+                "refused"
+              ],
+              "to": "purpose",
+              "requires": true,
+              "effects": [],
+              "once": false
+            },
+            "refused_leave": {
+              "from": [
+                "refused"
+              ],
+              "ending": "leave",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "leave"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "study_finish": {
+              "from": [
+                "study"
+              ],
+              "ending": "study",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "study"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "shelter_finish": {
+              "from": [
+                "shelter"
+              ],
+              "ending": "shelter",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "shelter"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "breached_finish": {
+              "from": [
+                "breached"
+              ],
+              "ending": "break",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "break"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "entry_break_ready_continue": {
+              "from": [
+                "entry_break_ready"
+              ],
+              "to": "breached",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "breach"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "breach",
+                "companions": []
+              },
+              "depart": []
+            }
+          },
+          "endings": {
+            "study": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q136.values.resolution"
+                  },
+                  "right": "study"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q136.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q136.values.partyAt"
+                      },
+                      "right": "study"
+                    }
+                  ]
+                }
+              ]
+            },
+            "shelter": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q136.values.resolution"
+                  },
+                  "right": "shelter"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q136.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q136.values.partyAt"
+                      },
+                      "right": "shelter"
+                    }
+                  ]
+                }
+              ]
+            },
+            "break": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q136.values.resolution"
+                  },
+                  "right": "break"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q136.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q136.values.partyAt"
+                      },
+                      "right": "breach"
+                    }
+                  ]
+                }
+              ]
+            },
+            "leave": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q136.values.resolution"
+                  },
+                  "right": "leave"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q136.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q136.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_4",
+              "map": "region_4_f2",
+              "x": 3,
+              "y": 1
+            },
+            "record": {
+              "kind": "dungeon",
+              "dungeon": "region_4",
+              "map": "region_4_f2",
+              "x": 5,
+              "y": 3
+            },
+            "study": {
+              "kind": "dungeon",
+              "dungeon": "region_4",
+              "map": "region_4_f2",
+              "x": 5,
+              "y": 5
+            },
+            "shelter": {
+              "kind": "dungeon",
+              "dungeon": "region_4",
+              "map": "region_4_f2",
+              "x": 7,
+              "y": 5
+            },
+            "breach": {
+              "kind": "dungeon",
+              "dungeon": "region_4",
+              "map": "region_4_f2",
+              "x": 3,
+              "y": 5
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "turiAt",
+            "value": "entry"
+          },
+          {
+            "key": "turiAt",
+            "value": "record",
+            "when": {
+              "op": "in",
+              "left": "entry_record",
+              "right": {
+                "ref": "stories.q136.events"
+              }
+            }
+          },
+          {
+            "key": "turiAt",
+            "value": "entry",
+            "when": {
+              "op": "in",
+              "left": "record_reply",
+              "right": {
+                "ref": "stories.q136.events"
+              }
+            }
+          },
+          {
+            "key": "turiAt",
+            "value": "study",
+            "when": {
+              "op": "in",
+              "left": "purpose_study",
+              "right": {
+                "ref": "stories.q136.events"
+              }
+            }
+          },
+          {
+            "key": "turiAt",
+            "value": "shelter",
+            "when": {
+              "op": "in",
+              "left": "purpose_shelter",
+              "right": {
+                "ref": "stories.q136.events"
+              }
+            }
+          },
+          {
+            "key": "turiAt",
+            "value": "breach",
+            "when": {
+              "op": "in",
+              "left": "entry_break_ready_continue",
+              "right": {
+                "ref": "stories.q136.events"
+              }
+            }
+          },
+          {
+            "key": "turiAt",
+            "value": "transit",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "journey.quest"
+              },
+              "right": "q136"
+            }
+          },
+          {
+            "key": "mercenariesAt",
+            "value": "entry"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q136.scene.entry": {
@@ -1880,12 +2544,48 @@
           "alias"
         ],
         "meaning": "来訪帳へ実際に名乗った名前"
+      },
+      "turiAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "record",
+          "study",
+          "shelter",
+          "breach",
+          "transit"
+        ],
+        "meaning": "turi の所在または保持者"
+      },
+      "mercenariesAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "record",
+          "study",
+          "shelter",
+          "breach",
+          "transit"
+        ],
+        "meaning": "mercenaries の所在または保持者"
       }
     },
     "entities": {
       "party": {
         "holder": "partyAt",
         "kind": "group"
+      },
+      "turi": {
+        "holder": "turiAt",
+        "kind": "person",
+        "character": "q136_turi"
+      },
+      "mercenaries": {
+        "holder": "mercenariesAt",
+        "kind": "group",
+        "character": "q136_mercenary"
       }
     },
     "propositions": {
@@ -1899,49 +2599,116 @@
       "entry": {
         "title": "翻訳しない扉の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "turi",
+            "display": {
+              "x": 50,
+              "scale": 0.86
+            }
+          },
+          {
+            "entity": "mercenaries"
+          }
+        ],
         "requires": true
       },
       "record": {
         "title": "辞書と録音石の台",
         "place": "record",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "turi",
+            "display": {
+              "x": 50,
+              "scale": 0.86
+            }
+          }
+        ],
         "requires": true
       },
       "purpose": {
         "title": "翻訳しない扉の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "turi",
+            "display": {
+              "x": 50,
+              "scale": 0.86
+            }
+          }
+        ],
         "requires": true
       },
       "refused": {
         "title": "翻訳しない扉の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "turi",
+            "display": {
+              "x": 50,
+              "scale": 0.86
+            }
+          }
+        ],
         "requires": true
       },
       "study": {
         "title": "扉の奥の記録室",
         "place": "study",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "turi",
+            "display": {
+              "x": 50,
+              "scale": 0.86
+            }
+          }
+        ],
         "requires": true
       },
       "shelter": {
         "title": "扉の奥の宿直室",
         "place": "shelter",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "turi",
+            "display": {
+              "x": 50,
+              "scale": 0.86
+            }
+          }
+        ],
         "requires": true
       },
       "breached": {
         "title": "破られた別の入口",
         "place": "breach",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "turi",
+            "display": {
+              "x": 50,
+              "scale": 0.86
+            }
+          }
+        ],
         "requires": true
       },
       "entry_break_ready": {
         "title": "翻訳しない扉の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "turi",
+            "display": {
+              "x": 50,
+              "scale": 0.86
+            }
+          }
+        ],
         "requires": true
       }
     },
@@ -1971,7 +2738,8 @@
           {
             "op": "move",
             "entities": [
-              "party"
+              "party",
+              "turi"
             ],
             "path": [
               "transit",
@@ -1984,7 +2752,9 @@
         "once": false,
         "journey": {
           "to": "record",
-          "companions": []
+          "companions": [
+            "turi"
+          ]
         },
         "depart": []
       },
@@ -2022,7 +2792,8 @@
           {
             "op": "move",
             "entities": [
-              "party"
+              "party",
+              "turi"
             ],
             "path": [
               "transit",
@@ -2040,7 +2811,9 @@
         "once": false,
         "journey": {
           "to": "entry",
-          "companions": []
+          "companions": [
+            "turi"
+          ]
         },
         "depart": []
       },
@@ -2054,7 +2827,8 @@
           {
             "op": "move",
             "entities": [
-              "party"
+              "party",
+              "turi"
             ],
             "path": [
               "transit",
@@ -2067,7 +2841,9 @@
         "once": false,
         "journey": {
           "to": "study",
-          "companions": []
+          "companions": [
+            "turi"
+          ]
         },
         "depart": []
       },
@@ -2081,7 +2857,8 @@
           {
             "op": "move",
             "entities": [
-              "party"
+              "party",
+              "turi"
             ],
             "path": [
               "transit",
@@ -2094,7 +2871,9 @@
         "once": false,
         "journey": {
           "to": "shelter",
-          "companions": []
+          "companions": [
+            "turi"
+          ]
         },
         "depart": []
       },
@@ -2206,7 +2985,8 @@
           {
             "op": "move",
             "entities": [
-              "party"
+              "party",
+              "turi"
             ],
             "path": [
               "transit",
@@ -2219,7 +2999,9 @@
         "once": false,
         "journey": {
           "to": "breach",
-          "companions": []
+          "companions": [
+            "turi"
+          ]
         },
         "depart": []
       }
@@ -2387,7 +3169,7 @@
         "y": 5
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "oddland_plateau",
   "receptionLocations": [

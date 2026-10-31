@@ -89,6 +89,13 @@ export function chapelSecondSource(q,{cast=true}={}){
   route('purpose','study','study');end('study','study','扉の案内どおり記録室まで来た。研究に使う机へ記録を置く。','study');
   route('purpose','shelter','shelter');end('shelter','shelter','案内された宿直室へ着き、保存食を受け取った。','shelter');
   route('entry','break','breached');end('breached','breach','守護者を退けた穴を通った。来訪帳の許可欄は空白のままにし、損傷を記録する。','break');
+  if(cast){
+   x.entities.turi={holder:'entry',kind:'person',character:'q136_turi'};
+   // A role label preserves the unspecified headcount; it does not invent a spokesperson.
+   x.entities.mercenaries={holder:'entry',kind:'group',character:'q136_mercenary'};
+   for(const [from,key] of [['entry','record'],['record','reply'],['purpose','study'],['purpose','shelter'],['entry','break']])choice(from,key).companions=['turi'];
+   for(const n of x.nodes)n.cast=[{entity:'turi',display:{x:50,scale:.86}},...(n.id==='entry'?[{entity:'mercenaries'}]:[])];
+  }
  }
  if(q.number===137){
   cell('entry','図書館の選書棚','e2_burnt_library',3,1);cell('read','他の本を開かず読む机','e2_burnt_library',7,3);cell('exit','図書館の封鎖口','e2_burnt_library',1,1);town('archive','本の受入室','pilgrim_archive');town('union','追加の救出の相談先','pilgrim_union');node('read').place='read';
