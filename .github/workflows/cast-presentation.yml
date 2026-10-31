@@ -95,10 +95,21 @@ jobs:
             /tmp/adv-kagaribi-art-browser
             /tmp/adv-oddland-art-browser
           if-no-files-found: ignore
-      - name: Keep chapel cast checkpoints
+      # Keep each archive below the 512 MiB download limit as reviewed quests grow.
+      - name: Keep chapel Scene checkpoints and results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: chapel-cast-checkpoints
-          path: /tmp/adv-chapel-art-browser
+          name: chapel-scene-checkpoints
+          path: |
+            /tmp/adv-chapel-art-browser/*-scene-*.png
+            /tmp/adv-chapel-art-browser/*.json
+            /tmp/adv-chapel-art-browser/overlapping-group-labels.png
+          if-no-files-found: ignore
+      - name: Keep chapel Classic checkpoints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: chapel-classic-checkpoints
+          path: /tmp/adv-chapel-art-browser/*-classic-*.png
           if-no-files-found: ignore
