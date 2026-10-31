@@ -1,5 +1,6 @@
 // Edition-two regional bundle: relocated-quest roles, separate from border NPCs.
 export const RELOCATED_CHARACTER_ART=Object.fromEntries([
+ ['q136_turi','chapel-q136-2026-10-31'],
  ['q032_prisoner','chapel-q032-2026-10-29'],['q032_craftsperson','chapel-q032-2026-10-29'],['q033_pilgrim','chapel-q033-2026-10-29'],['q034_merchant','chapel-q034-2026-10-29'],['q035_server','chapel-q035-2026-10-29'],['q035_patient','chapel-q035-2026-10-29'],['q036_conductor','chapel-q036-2026-10-30'],...['first','second','third'].map(key=>['q037_owner_'+key,'chapel-q037-2026-10-30']),
  ['q038_inspector','chapel-q038-2026-10-30'],['q039_repairer','chapel-q039-2026-10-30'],['q040_witness','chapel-q040-2026-10-30'],...['sher','teacher','porter'].map(key=>['q131_'+key,'chapel-q131-2026-10-30']),['q132_manager','chapel-q132-2026-10-30'],...['doma','mason'].map(key=>['q133_'+key,'chapel-q133-2026-10-30']),...['zag','master','owner','keeper'].map(key=>['q134_'+key,'chapel-q134-2026-10-30']),...['ane','doll'].map(key=>['q135_'+key,'chapel-q135-2026-10-30'])
 ].map(([id,batch])=>[id,{
@@ -7,6 +8,7 @@ export const RELOCATED_CHARACTER_ART=Object.fromEntries([
 }]));
 export const relocatedCharacterImages=()=>Object.fromEntries(Object.values(RELOCATED_CHARACTER_ART).map(a=>[a.asset,a.file]));
 export const relocatedCharacters=Object.fromEntries([
+ ['q136_turi','言語学者トゥリ','読めるのに開かない扉を調べる言語学者。録音台との往復と記録室・宿直室・破壊穴への調査に同行する。','2026-10-31の美術設定。成人女性としての描画、銀の筋がある黒い波打つ髪、丸眼鏡、青緑の長上着と黄土色のベストは美術上の選択。性別・年齢・経歴を本文へ追加しない。両手は空にし、辞書・録音石・論文・保存食や許可状態を共通立ち絵へ固定しない。'],
  ['q135_ane','潜水具職人アネ','祖母の沈んだ宿を調査する依頼人。浮力具の準備と人形の運搬、空気補充の往復に同行する。','2026-10-30の美術設定。成人女性としての描画、短い栗色の髪、藍色の作業上着と赤茶色の腰帯は美術上の選択。年齢・性別・経歴を本文へ追加せず、工房の職人との同一性を断定しない。浮力具・縄・椅子・魔石・潜水装備を共通人物画へ固定しない。'],
  ['q135_doll','給仕人形','祖母の宿でパンを出す・湯を注ぐ・返事を待つ三作業を繰り返す人形。運搬対象として既存itemと保持者を維持する。','2026-10-30の美術設定。木製の体と真鍮の関節、灰色の服と生成りの前掛けは美術上の選択。製法・由来・人間の人格を本文へ追加しない。食器・パン・湯・浮力具・縄・破損・停止後の差分を共通立ち絵へ固定しない。'],
  ['q134_zag','剣士ザグ','模擬決闘で敗者の条件を試し、本人の同意で師の剣を返す剣士。届け物の経路では庫番の受付に留まる。','2026-10-30の美術設定。成人男性としての描画、短い暗褐色の髪、黄土茶色の上着と墨青色のチュニックは美術上の選択。新しい経歴を追加せず、師の剣・練習剣を共通人物画へ固定しない。'],
@@ -32,6 +34,7 @@ export const relocatedCharacters=Object.fromEntries([
 ].map(([id,name,detail,provenance])=>[id,{id,name,role:'礼拝堂の現地の相手',detail,portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,
  provenance:provenance??'2026-10-29の美術設定。固有名・他人物との同一性は追加しない。具体的な外見・年齢感・服装は今回の美術設定。牢・格子・聖像・宝玉・石を人物画へ固定しない。'}]));
 // A collective label is intentional: the prose specifies neither a headcount nor a spokesperson.
+relocatedCharacters.q136_mercenary={id:'q136_mercenary',name:'供物を積む傭兵',role:'礼拝堂の入口にいる相手',detail:'扉を通行料の暗号と思って供物を積む傭兵。人数・氏名は本文で確定していない。',provenance:'2026-10-31の表示方針。人数未確定の役をgroupとして記録し、entryだけに呼称を表示する。一人とも複数人とも確定せず、代表者・顔・同行・戦闘参加は追加しない。肖像・立ち絵は意図的に割り当てない。録音の番人・会話する扉・封印守護者とは別の役。'};
 relocatedCharacters.q034_victims={id:'q034_victims',name:'被害者たち',role:'礼拝堂の面会相手',detail:'証書を見せる会ではなく、自分たちの話を聞く会への参加を了承する集団。',provenance:'2026-10-29の表示方針。既存victimsの所在を使い、面会室だけに集団名を表示する。人数・氏名・代表者・外見を創作せず、肖像・立ち絵を意図的に割り当てない。人物画の欠落を示す仮画像ではない。'};
 
 // Six live singers remain present even while their singing is paused.
