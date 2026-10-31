@@ -76196,7 +76196,9 @@ export const referenceData={
       "npc_q134_keeper": "assets/images/characters/relocated/q134_keeper.webp",
       "npc_q135_ane": "assets/images/characters/relocated/q135_ane.webp",
       "npc_q135_doll": "assets/images/characters/relocated/q135_doll.webp",
-      "npc_q136_turi": "assets/images/characters/relocated/q136_turi.webp"
+      "npc_q136_turi": "assets/images/characters/relocated/q136_turi.webp",
+      "npc_q137_el": "assets/images/characters/relocated/q137_el.webp",
+      "npc_q137_librarian": "assets/images/characters/relocated/q137_librarian.webp"
     },
     "audio": {
       "exploration": "assets/audio/exploration-v2.ogg",

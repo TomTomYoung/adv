@@ -110,6 +110,16 @@ export function chapelSecondSource(q,{cast=true}={}){
   add('prepare_book','archive','読了した一冊を受入室へ預けた。追加の人員と道具を組合へ求める。',[opt('request','組合へ救出の準備を申請する','requested')]);end('requested','union','次の救出に必要な人員と道具を申請した。残る本は図書館にある。','prepare');
   route('entry','close','closed');route('read','close','replace_book',{depart:['medicine','family','language'].map(k=>transfer(k,'read','party')),effects:['medicine','family','language'].map(k=>transfer(k,'party','entry'))});
   add('replace_book','entry','読んでいた本を閉じて棚へ戻した。入口へ退き、危険区画を封鎖する。',[opt('seal','封鎖口へ戻る','closed')]);end('closed','exit','全員が外へ出たことを確かめ、火の区画を閉じた。','close');
+  if(cast){
+   x.entities.el={holder:'entry',kind:'person',character:'q137_el'};
+   x.entities.librarian={holder:'entry',kind:'person',character:'q137_librarian'};
+   x.entities.firefighter={holder:'entry',kind:'group',character:'q137_firefighter'};
+   node('entry').cast=[{entity:'el',display:{x:30,scale:.86}},{entity:'librarian',display:{x:70,scale:.86}},{entity:'firefighter',display:{x:50}}];
+   node('closed').cast=[{entity:'librarian',display:{x:50,scale:.86}}];
+   // Everyone leaves the fire compartment before it is sealed; only the librarian is shown here.
+   for(const [from,key] of [['entry','close'],['replace_book','seal']])choice(from,key).companions=['el','librarian','firefighter'];
+  }
+
  }
  if(q.number===138){
   cell('entry','訂正する地図と足跡','e2_sand_gallery',5,1);cell('pupil','イラの休息所','e2_sand_gallery',3,7);cell('beyond','休息所の先の調査地点','e2_sand_gallery',13,7);town('union','ナルのいる探索組合','pilgrim_union');node('pupil').place='pupil';entity('ira','pupil','person');entity('narl','union','person');entity('map','party');

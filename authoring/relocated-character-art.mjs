@@ -1,5 +1,6 @@
 // Edition-two regional bundle: relocated-quest roles, separate from border NPCs.
 export const RELOCATED_CHARACTER_ART=Object.fromEntries([
+ ...['el','librarian'].map(key=>['q137_'+key,'chapel-q137-2026-10-31']),
  ['q136_turi','chapel-q136-2026-10-31'],
  ['q032_prisoner','chapel-q032-2026-10-29'],['q032_craftsperson','chapel-q032-2026-10-29'],['q033_pilgrim','chapel-q033-2026-10-29'],['q034_merchant','chapel-q034-2026-10-29'],['q035_server','chapel-q035-2026-10-29'],['q035_patient','chapel-q035-2026-10-29'],['q036_conductor','chapel-q036-2026-10-30'],...['first','second','third'].map(key=>['q037_owner_'+key,'chapel-q037-2026-10-30']),
  ['q038_inspector','chapel-q038-2026-10-30'],['q039_repairer','chapel-q039-2026-10-30'],['q040_witness','chapel-q040-2026-10-30'],...['sher','teacher','porter'].map(key=>['q131_'+key,'chapel-q131-2026-10-30']),['q132_manager','chapel-q132-2026-10-30'],...['doma','mason'].map(key=>['q133_'+key,'chapel-q133-2026-10-30']),...['zag','master','owner','keeper'].map(key=>['q134_'+key,'chapel-q134-2026-10-30']),...['ane','doll'].map(key=>['q135_'+key,'chapel-q135-2026-10-30'])
@@ -8,6 +9,8 @@ export const RELOCATED_CHARACTER_ART=Object.fromEntries([
 }]));
 export const relocatedCharacterImages=()=>Object.fromEntries(Object.values(RELOCATED_CHARACTER_ART).map(a=>[a.asset,a.file]));
 export const relocatedCharacters=Object.fromEntries([
+ ['q137_el','写本師エル','燃え残る図書館で薬学書の救出を望む写本師。選書棚だけに表示し、封鎖時に外へ退避する。','2026-10-31の美術設定。赤銅色の三つ編み、藍色のベスト、灰色の作業服と袖口のインクは美術上の選択。年齢・性別・経歴を本文へ追加せず、q082の商人のエルとは別の役として扱う。選書・読了・回収した本を共通人物画へ固定しない。'],
+ ['q137_librarian','燃え残る図書館の館長','蔵書を残すことで過去の避難順の誤りを償おうとする館長。選書棚と封鎖口だけに表示する。','2026-10-31の美術設定。銀灰色の髪とひげ、梅色の上着と黄土色の襟巻きは美術上の選択。氏名・年齢・性別・過去の被害人数を追加しない。本・火・負傷・罪や救済の決着を共通人物画へ固定しない。'],
  ['q136_turi','言語学者トゥリ','読めるのに開かない扉を調べる言語学者。録音台との往復と記録室・宿直室・破壊穴への調査に同行する。','2026-10-31の美術設定。成人女性としての描画、銀の筋がある黒い波打つ髪、丸眼鏡、青緑の長上着と黄土色のベストは美術上の選択。性別・年齢・経歴を本文へ追加しない。両手は空にし、辞書・録音石・論文・保存食や許可状態を共通立ち絵へ固定しない。'],
  ['q135_ane','潜水具職人アネ','祖母の沈んだ宿を調査する依頼人。浮力具の準備と人形の運搬、空気補充の往復に同行する。','2026-10-30の美術設定。成人女性としての描画、短い栗色の髪、藍色の作業上着と赤茶色の腰帯は美術上の選択。年齢・性別・経歴を本文へ追加せず、工房の職人との同一性を断定しない。浮力具・縄・椅子・魔石・潜水装備を共通人物画へ固定しない。'],
  ['q135_doll','給仕人形','祖母の宿でパンを出す・湯を注ぐ・返事を待つ三作業を繰り返す人形。運搬対象として既存itemと保持者を維持する。','2026-10-30の美術設定。木製の体と真鍮の関節、灰色の服と生成りの前掛けは美術上の選択。製法・由来・人間の人格を本文へ追加しない。食器・パン・湯・浮力具・縄・破損・停止後の差分を共通立ち絵へ固定しない。'],
@@ -46,3 +49,5 @@ for(const [key,label] of [['first','一番'],['second','二番'],['third','三�
  const id='q037_owner_'+key;
  relocatedCharacters[id]={id,name:label+'の写本を受け取る本人',role:'巡礼台地の返却先',detail:label+'の札の家で、受付札を照合して封を開けずに写本を受け取る匿名の人物。',portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,provenance:'2026-10-30の美術設定。三人は別人として描き分ける。年齢感・性別の描画・髪・服装は美術上の選択で、氏名・職業・経歴・告解の内容を本文へ追加しない。告解係オルや他の返却先に統合しない。封書・番号・家を人物画へ固定せず、各家だけに表示する。'};
 }
+
+relocatedCharacters.q137_firefighter={id:'q137_firefighter',name:'封鎖を望む消防係',role:'図書館の封鎖を求める相手',detail:'全焼を防ぐため封鎖を望む消防係。選書棚で呼称を表示し、封鎖前に外へ退避する。',provenance:'2026-10-31の表示方針。人数未確定の役をgroupとして記録し、一人とも複数人とも断定しない。氏名・代表者・個人画を追加せず、肖像・立ち絵は意図的に割り当てない。読書机・受入室・組合へは同行しない。'};
