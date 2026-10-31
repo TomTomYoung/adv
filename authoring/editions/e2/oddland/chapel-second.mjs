@@ -149,6 +149,13 @@ export function chapelSecondSource(q,{cast=true}={}){
    add('collect_crowd'+suffix,'crowded','二室の生存者が揃った。地上までの救出は、詰所に着いてから確定する。',[opt('escort','二室の生存者を地上へ連れて行く','both_home',{companions:['injured','crowd',...(suffix?['helpers']:[])],effects:[set('injuredRescued'),set('crowdRescued')]})]);
   }
   end('both_home','rescue','二室の生存者が地上の詰所へ着いた。各人を救助班へ引き継いだ。','both');
+  if(cast){
+   for(const role of ['sena','geologist'])x.entities[role]={holder:'entry',kind:'person',character:'q139_'+role};
+   for(const role of ['crowd','injured','helpers'])x.entities[role].character='q139_'+role;
+   node('entry').cast=['sena','geologist'].map((entity,index)=>({entity,display:{x:[30,70][index],scale:.86}}));
+   const groups={rooms:['injured'],many_ready:['crowd'],many_home:['crowd'],wounded_home:['injured'],request_help:['helpers'],collect_injured:['injured'],collect_crowd:['injured','crowd'],collect_injured_help:['injured','helpers'],collect_crowd_help:['injured','crowd','helpers'],both_home:['injured','crowd','helpers']};
+   for(const [id,roles] of Object.entries(groups))node(id).cast=roles.map((entity,index)=>({entity,display:{x:roles.length===1?50:(roles.length===2?[30,70]:[18,50,82])[index]},...(id==='both_home'&&entity==='helpers'?{when:{op:'in',left:'collect_crowd_help_escort',right:ref('stories.q139.events')}}:{})}));
+  }
  }
  if(q.number===140){
   cell('entry','整備別棟の休業札','e2_chapel_works',1,1);cell('treasure','別棟の財宝庫','e2_chapel_works',11,3);cell('accident','整備員の事故現場','e2_chapel_works',3,7);cell('maintenance','隊長ボロの整備区画','e2_chapel_works',11,7);town('union','探索組合の申告受付','pilgrim_union');node('talk').place='maintenance';entity('goods','treasure');entity('worker','accident','person');x.flags.helped=false;x.flags.declared=false;

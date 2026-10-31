@@ -735,7 +735,7 @@
     "entryScript": "q139.pilgrimage.visit",
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -744,7 +744,968 @@
       "saveRevision": 2,
       "scope": "後半10件の実地接続。既に受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "救助坑道の分岐",
+            "crowded": "声の多い側の室",
+            "wounded": "声を出せない負傷者の室",
+            "pump": "低い側の排水口",
+            "air": "両室へ通じる送気口",
+            "rescue": "地上の救助詰所",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "crowded"
+            ],
+            [
+              "transit",
+              "wounded"
+            ],
+            [
+              "transit",
+              "pump"
+            ],
+            [
+              "transit",
+              "air"
+            ],
+            [
+              "transit",
+              "rescue"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "crowded",
+                "wounded",
+                "pump",
+                "air",
+                "rescue",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "many",
+                "wounded",
+                "both"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "drained": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "drained"
+            },
+            "ventilated": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "ventilated"
+            },
+            "crowdRescued": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "crowdRescued"
+            },
+            "injuredRescued": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "injuredRescued"
+            },
+            "measured": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "measured"
+            },
+            "crowdAt": {
+              "type": "enum",
+              "initial": "crowded",
+              "values": [
+                "entry",
+                "crowded",
+                "wounded",
+                "pump",
+                "air",
+                "rescue",
+                "transit"
+              ],
+              "meaning": "crowd の所在または保持者"
+            },
+            "injuredAt": {
+              "type": "enum",
+              "initial": "wounded",
+              "values": [
+                "entry",
+                "crowded",
+                "wounded",
+                "pump",
+                "air",
+                "rescue",
+                "transit"
+              ],
+              "meaning": "injured の所在または保持者"
+            },
+            "helpersAt": {
+              "type": "enum",
+              "initial": "rescue",
+              "values": [
+                "entry",
+                "crowded",
+                "wounded",
+                "pump",
+                "air",
+                "rescue",
+                "transit"
+              ],
+              "meaning": "helpers の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "crowd": {
+              "holder": "crowdAt",
+              "kind": "group"
+            },
+            "injured": {
+              "holder": "injuredAt",
+              "kind": "group"
+            },
+            "helpers": {
+              "holder": "helpersAt",
+              "kind": "group"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "声の数から人数を誤認させ、壁へ当てた器の振動で発生源を分ける。片側には声を出せない負傷者がいる。単なる偽の声を見抜けば解決という謎にせず、情報の少ない人をどう探すかへ続ける。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "救助坑道の分岐",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "rooms": {
+              "title": "声を出せない負傷者の室",
+              "place": "wounded",
+              "cast": [],
+              "requires": true
+            },
+            "air": {
+              "title": "両室へ通じる送気口",
+              "place": "air",
+              "cast": [],
+              "requires": true
+            },
+            "listen": {
+              "title": "声の多い側の室",
+              "place": "crowded",
+              "cast": [],
+              "requires": true
+            },
+            "many_ready": {
+              "title": "声の多い側の室",
+              "place": "crowded",
+              "cast": [],
+              "requires": true
+            },
+            "many_home": {
+              "title": "地上の救助詰所",
+              "place": "rescue",
+              "cast": [],
+              "requires": true
+            },
+            "wounded_home": {
+              "title": "地上の救助詰所",
+              "place": "rescue",
+              "cast": [],
+              "requires": true
+            },
+            "drain": {
+              "title": "低い側の排水口",
+              "place": "pump",
+              "cast": [],
+              "requires": true
+            },
+            "request_help": {
+              "title": "地上の救助詰所",
+              "place": "rescue",
+              "cast": [],
+              "requires": true
+            },
+            "collect_injured": {
+              "title": "声を出せない負傷者の室",
+              "place": "wounded",
+              "cast": [],
+              "requires": true
+            },
+            "collect_crowd": {
+              "title": "声の多い側の室",
+              "place": "crowded",
+              "cast": [],
+              "requires": true
+            },
+            "collect_injured_help": {
+              "title": "声を出せない負傷者の室",
+              "place": "wounded",
+              "cast": [],
+              "requires": true
+            },
+            "collect_crowd_help": {
+              "title": "声の多い側の室",
+              "place": "crowded",
+              "cast": [],
+              "requires": true
+            },
+            "both_home": {
+              "title": "地上の救助詰所",
+              "place": "rescue",
+              "cast": [],
+              "requires": true
+            },
+            "air_tools_ready": {
+              "title": "両室へ通じる送気口",
+              "place": "air",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_measure": {
+              "from": [
+                "entry"
+              ],
+              "to": "listen",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "crowded"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "measured",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "crowded",
+                "companions": []
+              },
+              "depart": []
+            },
+            "entry_many": {
+              "from": [
+                "entry"
+              ],
+              "to": "many_ready",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "crowded"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "crowded",
+                "companions": []
+              },
+              "depart": []
+            },
+            "rooms_wounded": {
+              "from": [
+                "rooms"
+              ],
+              "to": "wounded_home",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "injured"
+                  ],
+                  "path": [
+                    "transit",
+                    "rescue"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "injuredRescued",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "rescue",
+                "companions": [
+                  "injured"
+                ]
+              },
+              "depart": []
+            },
+            "rooms_air": {
+              "from": [
+                "rooms"
+              ],
+              "to": "drain",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "pump"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "drained",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "pump",
+                "companions": []
+              },
+              "depart": []
+            },
+            "rooms_many": {
+              "from": [
+                "rooms"
+              ],
+              "to": "many_ready",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "crowded"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "crowded",
+                "companions": []
+              },
+              "depart": []
+            },
+            "air_tools": {
+              "from": [
+                "air"
+              ],
+              "to": "air_tools_ready",
+              "requires": true,
+              "effects": [],
+              "cost": {
+                "rope": 2
+              },
+              "once": false
+            },
+            "air_help": {
+              "from": [
+                "air"
+              ],
+              "to": "request_help",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "rescue"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "rescue",
+                "companions": []
+              },
+              "depart": []
+            },
+            "listen_other": {
+              "from": [
+                "listen"
+              ],
+              "to": "rooms",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "wounded"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "wounded",
+                "companions": []
+              },
+              "depart": []
+            },
+            "many_ready_escort": {
+              "from": [
+                "many_ready"
+              ],
+              "to": "many_home",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "crowd"
+                  ],
+                  "path": [
+                    "transit",
+                    "rescue"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "crowdRescued",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "rescue",
+                "companions": [
+                  "crowd"
+                ]
+              },
+              "depart": []
+            },
+            "many_home_finish": {
+              "from": [
+                "many_home"
+              ],
+              "ending": "many",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "many"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "wounded_home_finish": {
+              "from": [
+                "wounded_home"
+              ],
+              "ending": "wounded",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "wounded"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "drain_ventilate": {
+              "from": [
+                "drain"
+              ],
+              "to": "air",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "air"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "ventilated",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "air",
+                "companions": []
+              },
+              "depart": []
+            },
+            "request_help_return": {
+              "from": [
+                "request_help"
+              ],
+              "to": "collect_injured_help",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "helpers"
+                  ],
+                  "path": [
+                    "transit",
+                    "wounded"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "wounded",
+                "companions": [
+                  "helpers"
+                ]
+              },
+              "depart": []
+            },
+            "collect_injured_next": {
+              "from": [
+                "collect_injured"
+              ],
+              "to": "collect_crowd",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "injured"
+                  ],
+                  "path": [
+                    "transit",
+                    "crowded"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "crowded",
+                "companions": [
+                  "injured"
+                ]
+              },
+              "depart": []
+            },
+            "collect_crowd_escort": {
+              "from": [
+                "collect_crowd"
+              ],
+              "to": "both_home",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "injured",
+                    "crowd"
+                  ],
+                  "path": [
+                    "transit",
+                    "rescue"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "injuredRescued",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "crowdRescued",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "rescue",
+                "companions": [
+                  "injured",
+                  "crowd"
+                ]
+              },
+              "depart": []
+            },
+            "collect_injured_help_next": {
+              "from": [
+                "collect_injured_help"
+              ],
+              "to": "collect_crowd_help",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "injured",
+                    "helpers"
+                  ],
+                  "path": [
+                    "transit",
+                    "crowded"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "crowded",
+                "companions": [
+                  "injured",
+                  "helpers"
+                ]
+              },
+              "depart": []
+            },
+            "collect_crowd_help_escort": {
+              "from": [
+                "collect_crowd_help"
+              ],
+              "to": "both_home",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "injured",
+                    "crowd",
+                    "helpers"
+                  ],
+                  "path": [
+                    "transit",
+                    "rescue"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "injuredRescued",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "crowdRescued",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "rescue",
+                "companions": [
+                  "injured",
+                  "crowd",
+                  "helpers"
+                ]
+              },
+              "depart": []
+            },
+            "both_home_finish": {
+              "from": [
+                "both_home"
+              ],
+              "ending": "both",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "both"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "air_tools_ready_continue": {
+              "from": [
+                "air_tools_ready"
+              ],
+              "to": "collect_injured",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "wounded"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "wounded",
+                "companions": []
+              },
+              "depart": []
+            }
+          },
+          "endings": {
+            "many": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q139.values.resolution"
+                  },
+                  "right": "many"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q139.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q139.values.partyAt"
+                      },
+                      "right": "rescue"
+                    }
+                  ]
+                }
+              ]
+            },
+            "wounded": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q139.values.resolution"
+                  },
+                  "right": "wounded"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q139.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q139.values.partyAt"
+                      },
+                      "right": "rescue"
+                    }
+                  ]
+                }
+              ]
+            },
+            "both": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q139.values.resolution"
+                  },
+                  "right": "both"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q139.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q139.values.partyAt"
+                      },
+                      "right": "rescue"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "pilgrim_sites",
+              "map": "e2_rescue_tunnel",
+              "x": 1,
+              "y": 1
+            },
+            "crowded": {
+              "kind": "dungeon",
+              "dungeon": "pilgrim_sites",
+              "map": "e2_rescue_tunnel",
+              "x": 11,
+              "y": 3
+            },
+            "wounded": {
+              "kind": "dungeon",
+              "dungeon": "pilgrim_sites",
+              "map": "e2_rescue_tunnel",
+              "x": 11,
+              "y": 7
+            },
+            "pump": {
+              "kind": "dungeon",
+              "dungeon": "pilgrim_sites",
+              "map": "e2_rescue_tunnel",
+              "x": 3,
+              "y": 5
+            },
+            "air": {
+              "kind": "dungeon",
+              "dungeon": "pilgrim_sites",
+              "map": "e2_rescue_tunnel",
+              "x": 7,
+              "y": 5
+            },
+            "rescue": {
+              "kind": "town",
+              "location": "pilgrim_rescue"
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "senaAt",
+            "value": "entry"
+          },
+          {
+            "key": "geologistAt",
+            "value": "entry"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q139.scene.entry": {
@@ -2166,6 +3127,34 @@
           "transit"
         ],
         "meaning": "helpers の所在または保持者"
+      },
+      "senaAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "crowded",
+          "wounded",
+          "pump",
+          "air",
+          "rescue",
+          "transit"
+        ],
+        "meaning": "sena の所在または保持者"
+      },
+      "geologistAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "crowded",
+          "wounded",
+          "pump",
+          "air",
+          "rescue",
+          "transit"
+        ],
+        "meaning": "geologist の所在または保持者"
       }
     },
     "entities": {
@@ -2175,15 +3164,28 @@
       },
       "crowd": {
         "holder": "crowdAt",
-        "kind": "group"
+        "kind": "group",
+        "character": "q139_crowd"
       },
       "injured": {
         "holder": "injuredAt",
-        "kind": "group"
+        "kind": "group",
+        "character": "q139_injured"
       },
       "helpers": {
         "holder": "helpersAt",
-        "kind": "group"
+        "kind": "group",
+        "character": "q139_helpers"
+      },
+      "sena": {
+        "holder": "senaAt",
+        "kind": "person",
+        "character": "q139_sena"
+      },
+      "geologist": {
+        "holder": "geologistAt",
+        "kind": "person",
+        "character": "q139_geologist"
       }
     },
     "propositions": {
@@ -2197,13 +3199,35 @@
       "entry": {
         "title": "救助坑道の分岐",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "sena",
+            "display": {
+              "x": 30,
+              "scale": 0.86
+            }
+          },
+          {
+            "entity": "geologist",
+            "display": {
+              "x": 70,
+              "scale": 0.86
+            }
+          }
+        ],
         "requires": true
       },
       "rooms": {
         "title": "声を出せない負傷者の室",
         "place": "wounded",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "injured",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "air": {
@@ -2221,19 +3245,40 @@
       "many_ready": {
         "title": "声の多い側の室",
         "place": "crowded",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "crowd",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "many_home": {
         "title": "地上の救助詰所",
         "place": "rescue",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "crowd",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "wounded_home": {
         "title": "地上の救助詰所",
         "place": "rescue",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "injured",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "drain": {
@@ -2245,37 +3290,122 @@
       "request_help": {
         "title": "地上の救助詰所",
         "place": "rescue",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "helpers",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "collect_injured": {
         "title": "声を出せない負傷者の室",
         "place": "wounded",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "injured",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "collect_crowd": {
         "title": "声の多い側の室",
         "place": "crowded",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "injured",
+            "display": {
+              "x": 30
+            }
+          },
+          {
+            "entity": "crowd",
+            "display": {
+              "x": 70
+            }
+          }
+        ],
         "requires": true
       },
       "collect_injured_help": {
         "title": "声を出せない負傷者の室",
         "place": "wounded",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "injured",
+            "display": {
+              "x": 30
+            }
+          },
+          {
+            "entity": "helpers",
+            "display": {
+              "x": 70
+            }
+          }
+        ],
         "requires": true
       },
       "collect_crowd_help": {
         "title": "声の多い側の室",
         "place": "crowded",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "injured",
+            "display": {
+              "x": 18
+            }
+          },
+          {
+            "entity": "crowd",
+            "display": {
+              "x": 50
+            }
+          },
+          {
+            "entity": "helpers",
+            "display": {
+              "x": 82
+            }
+          }
+        ],
         "requires": true
       },
       "both_home": {
         "title": "地上の救助詰所",
         "place": "rescue",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "injured",
+            "display": {
+              "x": 18
+            }
+          },
+          {
+            "entity": "crowd",
+            "display": {
+              "x": 50
+            }
+          },
+          {
+            "entity": "helpers",
+            "display": {
+              "x": 82
+            },
+            "when": {
+              "op": "in",
+              "left": "collect_crowd_help_escort",
+              "right": {
+                "ref": "stories.q139.events"
+              }
+            }
+          }
+        ],
         "requires": true
       },
       "air_tools_ready": {
@@ -2974,7 +4104,7 @@
         "location": "pilgrim_rescue"
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "oddland_plateau",
   "receptionLocations": [

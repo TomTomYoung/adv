@@ -1,5 +1,6 @@
 // Edition-two regional bundle: relocated-quest roles, separate from border NPCs.
 export const RELOCATED_CHARACTER_ART=Object.fromEntries([
+ ...['sena','geologist'].map(key=>['q139_'+key,'chapel-q139-2026-11-01']),
  ...['ira','narl'].map(key=>['q138_'+key,'chapel-q138-2026-10-31']),
  ...['el','librarian'].map(key=>['q137_'+key,'chapel-q137-2026-10-31']),
  ['q136_turi','chapel-q136-2026-10-31'],
@@ -10,6 +11,8 @@ export const RELOCATED_CHARACTER_ART=Object.fromEntries([
 }]));
 export const relocatedCharacterImages=()=>Object.fromEntries(Object.values(RELOCATED_CHARACTER_ART).map(a=>[a.asset,a.file]));
 export const relocatedCharacters=Object.fromEntries([
+ ['q139_sena','救助責任者セナ','救助坑道の分岐で声の多い側からの救助を提案する責任者。分岐だけに表示する。','2026-11-01の美術設定。短い赤茶の髪、煉瓦色の作業上着は美術上の選択。性別・年齢・経歴を本文へ追加せず、q202のセナとは同定しない。全経路への同行や結末後の道具渡しを到着前へ追加しない。'],
+ ['q139_geologist','坑道の地質師','救助坑道の分岐で反対側の水位が低いと指摘する匿名の地質師。分岐だけに表示する。','2026-11-01の美術設定。銀の混じる暗い髪、丸眼鏡、青灰色の上着と黄土色のベストは美術上の選択。氏名・性別・年齢・経歴や全経路の同行を追加しない。器・縄・排水や送気の道具を共通画へ固定しない。'],
  ['q138_ira','弟子イラ','行き止まりの探検家に登場する弟子。功績の分担に合意して同行し、同行を断って一人で進む選択も持つ。','2026-10-31の美術設定。短い焦げ茶の髪、苔緑の旅用上着と赤錆色の首巻きは美術上の選択。年齢・性別・経歴を本文へ追加せず、受渡し前後の地図を人物画へ固定しない。'],
  ['q138_narl','探検家ナル','イラの師である探検家。組合で話を聞き、仲介経路では本人の返答を聞くため休息所へ同行する。','2026-10-31の美術設定。灰色の混じる短髪、短いひげ、黄土色の野外用外套は美術上の選択。具体的な年齢や経歴を追加せず、地図・道具・負傷を人物画へ固定しない。'],
  ['q137_el','写本師エル','燃え残る図書館で薬学書の救出を望む写本師。選書棚だけに表示し、封鎖時に外へ退避する。','2026-10-31の美術設定。赤銅色の三つ編み、藍色のベスト、灰色の作業服と袖口のインクは美術上の選択。年齢・性別・経歴を本文へ追加せず、q082の商人のエルとは別の役として扱う。選書・読了・回収した本を共通人物画へ固定しない。'],
@@ -40,6 +43,11 @@ export const relocatedCharacters=Object.fromEntries([
 ].map(([id,name,detail,provenance])=>[id,{id,name,role:'礼拝堂の現地の相手',detail,portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,
  provenance:provenance??'2026-10-29の美術設定。固有名・他人物との同一性は追加しない。具体的な外見・年齢感・服装は今回の美術設定。牢・格子・聖像・宝玉・石を人物画へ固定しない。'}]));
 // A collective label is intentional: the prose specifies neither a headcount nor a spokesperson.
+for(const [key,name,detail] of [
+ ['crowd','声の多い側の生存者','掘り出した後から地上到着まで表示する生存者。壁越しの測定には表示しない。'],
+ ['injured','声を出せない負傷者','静かな室で発見され、支えられて移動する負傷者。地上への実到着で救出を確定する。'],
+ ['helpers','同行する応援班','詰所で応援要請に応じ、二室へ実同行する班。地上帰還では応援経路の到着履歴がある場合だけ表示する。']
+]){const id='q139_'+key;relocatedCharacters[id]={id,name,role:'救助坑道の集団',detail,provenance:'2026-11-01の表示方針。既存groupの所在・同行を保ち、集団名だけを表示する。人数・氏名・顔・代表者・負傷の程度を新設せず、肖像・立ち絵は意図的に割り当てない。'};}
 relocatedCharacters.q136_mercenary={id:'q136_mercenary',name:'供物を積む傭兵',role:'礼拝堂の入口にいる相手',detail:'扉を通行料の暗号と思って供物を積む傭兵。人数・氏名は本文で確定していない。',provenance:'2026-10-31の表示方針。人数未確定の役をgroupとして記録し、entryだけに呼称を表示する。一人とも複数人とも確定せず、代表者・顔・同行・戦闘参加は追加しない。肖像・立ち絵は意図的に割り当てない。録音の番人・会話する扉・封印守護者とは別の役。'};
 relocatedCharacters.q034_victims={id:'q034_victims',name:'被害者たち',role:'礼拝堂の面会相手',detail:'証書を見せる会ではなく、自分たちの話を聞く会への参加を了承する集団。',provenance:'2026-10-29の表示方針。既存victimsの所在を使い、面会室だけに集団名を表示する。人数・氏名・代表者・外見を創作せず、肖像・立ち絵を意図的に割り当てない。人物画の欠落を示す仮画像ではない。'};
 

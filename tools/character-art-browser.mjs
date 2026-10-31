@@ -122,6 +122,11 @@ try{
         if(layout==='scene')assert.ok(info.clip==='none'&&info.top>=info.hudBottom&&info.bottom<=info.dockTop,'group label must remain between HUD and dialogue');
         labels.push({id,...info});
       }
+      for(let i=0;i<labels.length;i++)for(let j=i+1;j<labels.length;j++){
+        const a=labels[i],b=labels[j],apart=a.right<=b.left||b.right<=a.left||a.bottom<=b.top||b.bottom<=a.top;
+        if(!apart)await page.screenshot({path:path.join(output,'overlapping-group-labels.png'),fullPage:true});
+        assert.ok(apart,`group labels must not overlap: ${JSON.stringify({quest:f.quest,scene:f.scene,variant:f.variant,layout,width,a,b})}`);
+      }
       const measure=await page.evaluate(()=>({viewport:innerWidth,document:document.documentElement.scrollWidth,height:innerHeight,pageHeight:document.documentElement.scrollHeight}));
       assert.ok(measure.document<=measure.viewport+1,'horizontal overflow');if(layout==='scene')assert.ok(measure.pageHeight<=measure.height+1,'Scene height');
       await page.screenshot({path:path.join(output,`${f.edition}-${layout}-${width}-${f.quest}-${f.scene}${f.variant?`-${f.variant}`:''}.png`),fullPage:true});
