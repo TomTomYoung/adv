@@ -1,7 +1,7 @@
 // Editorial audit: candidate IDs are local; connected roles cite their game entity.
 // Update a fingerprint only after rereading the changed quest and its evidence.
 export const RELOCATED_CAST_REVIEW={
- reviewedAt:'2026-10-31',
+ reviewedAt:'2026-11-01',
  quests:{
   q031:{
    sourceSha256:'ab2cb40f75d0a430e00077b936b338b23736b74b01034aeaeb9333cda16cecf7',
@@ -1205,7 +1205,7 @@ export const RELOCATED_CAST_REVIEW={
   "next": "イラ・ナルの人物画と既存の所在・同行への接続、単独出発後の表示条件、本文の受渡し時点は整理済み。地図・足跡・退路・休息所・共同と単独の探索・組合報告の差分は未制作。次はq139の5役の表示・条件付き同行、人物監査はq140。"
 },
   q139:{
-  "sourceSha256": "0388b0f4ff4d585ed9762929b77445faaaad5495da963d8b8886d55358327518",
+  "sourceSha256": "a20a4f64fec03314b3ca9462b51baaf43406540b79610838ae24a89394bcf1d5",
   "identityNotes": [
     "救助責任者セナと匿名の地質師はentryで直接発言する二役。篝火q202の訓練を担当するセナとは名前だけで同一人物へ統合しない。具体的な年齢・性別・人数・負傷の程度は新設しない。",
     "既存crowd・injured・helpersは三つのgroup。声の多い側の生存者、声を出せない負傷者、詰所から同行する応援班を区別し、群衆を一人の代表画へ置換しない。三群の人数や構成は未設定で、呼称表示を第一候補とする。",
@@ -1219,28 +1219,33 @@ export const RELOCATED_CAST_REVIEW={
   "people": {
     "q139_sena": {
       "label": "救助責任者セナ",
-      "status": "candidate",
-      "need": "分岐entryの専用画候補。wounded結末の道具を回す描写はfinish後で、到着直後の固定出演や全経路同行を追加しない。"
+      "status": "connected",
+      "need": "entryだけへ専用画と所在を接続済み。全経路同行を追加せず、旧保存にはentryの所在だけを補う。",
+      "entity": "sena"
     },
     "q139_geologist": {
       "label": "坑道の地質師",
-      "status": "candidate",
-      "need": "entryで低い側の水位を指摘する匿名の専用画候補。名前・他の地質師との同一性・全経路同行は未確定。"
+      "status": "connected",
+      "need": "entryだけへ専用画と所在を接続済み。全経路同行を追加せず、旧保存にはentryの所在だけを補う。",
+      "entity": "geologist"
     },
     "q139_crowd": {
       "label": "声の多い側の生存者",
-      "status": "candidate",
-      "need": "既存crowdへ呼称表示する候補。人数と顔は創作せず、掘り出し後・同行・地上到着を分ける。"
+      "status": "connected",
+      "need": "既存groupの所在と同行を保ち、発見・掘り出し後・地上到着の該当場面へ呼称を接続済み。",
+      "entity": "crowd"
     },
     "q139_injured": {
       "label": "声を出せない負傷者",
-      "status": "candidate",
-      "need": "既存injuredへ呼称表示する候補。負傷の程度・人数を固定せず、支えた移動と実到着での救出を保持する。"
+      "status": "connected",
+      "need": "既存groupの所在と同行を保ち、発見・掘り出し後・地上到着の該当場面へ呼称を接続済み。",
+      "entity": "injured"
     },
     "q139_helpers": {
       "label": "同行する応援班",
-      "status": "candidate",
-      "need": "既存helpersへ呼称表示する候補。応援経路だけで実同行し、共用both_homeは到着履歴による表示条件が必要。"
+      "status": "connected",
+      "need": "既存helpersへ呼称を接続済み。応援経路だけで実同行し、both_homeではcollect_crowd_help_escortの到着履歴を条件にする。",
+      "entity": "helpers"
     }
   },
   "scenes": {
@@ -1379,7 +1384,93 @@ export const RELOCATED_CAST_REVIEW={
       "visual": "消費済みの縄二つ、準備完了と出発待ち、繰返し課金しない状態。"
     }
   },
-  "next": "セナ・地質師の専用画と三群の呼称、所在・同行・both_homeの応援経路だけの表示条件を整理する。器・反響・崩落・水位・排水・送気・縄・笛・二室と詰所の差分は未制作。次の人物監査はq140。"
+  "next": "二人の専用画・三群の呼称・応援帰還だけの条件・旧保存移行は接続済み。器・反響・崩落・水位・排水・送気・縄・笛・二室と詰所の差分は未制作。次はq140の人物表示と所在、人物監査は沈没城q061。"
+},
+  q140:{
+  "sourceSha256": "a5cb94ee095d1275932f789b8622c24700b4ec6363b629aa87eafc577e1603ac",
+  "identityNotes": [
+    "隊長ボロはtalkで入域条件を直接述べる人物。entryの当番表と状況説明だけから同席を決めず、maintenanceの専用役として候補化する。探索組合の依頼人欄から受付係を増やさない。",
+    "倒れた整備員は既存personのworker。accidentで支えて運び、accident_carryの実到着でmaintenanceへ移る。talkには直接交渉と救助後の二経路があるため、workerAtとhelpedによる表示条件が必要。直接交渉では現場に残る。",
+    "事故の整備員と整備隊全員を同一視せず、人数・氏名・負傷の程度・年齢・性別を追加しない。協定結末で部下へ帰れと告げる描写はfinish後で、組合の到着場面へボロや部下を自動配置しない。",
+    "既存5地点はe2_chapel_worksの入口(1,1)、庫(11,3)、事故現場(3,7)、整備区画(11,7)、pilgrim_union。入口の当番表・休業札と止まった罠、事故前後、直接交渉と救助後、持出品・申告・閉鎖提案を差分として分ける。新しい町は不要。",
+    "goodsはtake_leaveの出発時にpartyへ移る。takeの回収した品を携えという本文と出発時点の対応は、人物接続時に再点検する。略取の帰着を入域許可とせず、協定経路で持出品を創作しない。helped・declaredと四結末の93G・69EXPを保持する。"
+  ],
+  "people": {
+    "q140_boro": {
+      "label": "整備隊長ボロ",
+      "status": "candidate",
+      "need": "talkの専用画・person・maintenanceの所在候補。entryや組合へ自動出演しない。"
+    },
+    "q140_worker": {
+      "label": "事故に遭った整備員",
+      "status": "candidate",
+      "need": "既存workerへ専用画を接続する候補。accidentと救助到着後だけのtalkで表示し、直接交渉経路と区別する。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "罠の横の札は呪文でなく当番表だった。",
+      "reason": "当番表と背景事情の説明。ボロの同席は確定しない。",
+      "visual": "入口の当番表、休業札、稼働を止めた罠。"
+    },
+    "talk": {
+      "decision": "person-evidence",
+      "people": [
+        "q140_boro",
+        "q140_worker"
+      ],
+      "evidence": "持出品を申告し、入域日を限る協定なら検討すると言った。",
+      "reason": "ボロが直接述べる。workerは救助して運んだ経路のみ同席候補で、所在・helpedで区別する。",
+      "visual": "入域条件、直接交渉と事故救助後、整備区画。"
+    },
+    "take": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "止まった罠の先の庫へ着いた。",
+      "reason": "庫の品と帰路の場面。守衛や整備員の同席は追加しない。",
+      "visual": "庫、持出前後、品の保持者と出発時の対応。"
+    },
+    "looted": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "入域の許可を得たことにはしない。",
+      "reason": "持出品の帰着。特定の受付係を創作しない。",
+      "visual": "持出品と調査記録、無許可のままの帰着。"
+    },
+    "accident": {
+      "decision": "person-evidence",
+      "people": [
+        "q140_worker"
+      ],
+      "evidence": "倒れた整備員を作業場所から引き出した。",
+      "reason": "本人を支え、隊長の区画へ運ぶ直前。ボロはここにいるとは書かれていない。",
+      "visual": "作業場の事故、救助と運搬の準備。"
+    },
+    "declared": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "持出品がない今回の記録も記した。",
+      "reason": "協定の提出で、ボロや整備員が組合へ同行する根拠はない。",
+      "visual": "協定、持出申告、入域日と休業日。"
+    },
+    "closed": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "修理期間の閉鎖を組合へ提案し、受理されたことを確かめた。",
+      "reason": "提案受理の記録。窓口の担当者は未指定。",
+      "visual": "閉鎖提案と受理の記録、修理期間。"
+    },
+    "left": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "調査した範囲だけを引き継いだ。",
+      "reason": "交渉を残した帰着。特定の人物を自動配置しない。",
+      "visual": "調査報告、未成立の入域権、交渉への引継ぎ。"
+    }
+  },
+  "next": "ボロの所在と専用画、workerの既存同行と救助後だけのtalk表示を整理する。持出品の本文・出発時点も再点検する。次の人物監査は沈没城q061。"
 }
  }
 };

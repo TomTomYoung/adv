@@ -1,0 +1,2983 @@
+{
+  "schemaVersion": 1,
+  "id": "q139",
+  "number": 139,
+  "title": "ふたつの出口",
+  "client": "救助責任者セナ",
+  "brief": "崩落坑道の二方向から声がする。救助手順を決めてください。",
+  "region": 4,
+  "type": "scene_graph",
+  "recommendedLevel": 4,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 巡礼台地の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q139_scene",
+      "title": "ふたつの出口：救助責任者セナ",
+      "points": [
+        {
+          "map": "region_4_f2",
+          "x": 6,
+          "y": 1,
+          "dungeon": "region_4"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q139.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q139.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q139.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q139"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_4"
+    },
+    {
+      "id": "q139_pilgrim_entry",
+      "title": "救助坑道の分岐",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q139.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q139.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q139"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q139.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "pilgrim_sites",
+          "map": "e2_rescue_tunnel",
+          "x": 1,
+          "y": 1
+        }
+      ]
+    },
+    {
+      "id": "q139_pilgrim_crowded",
+      "title": "声の多い側の室",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "crowded",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q139.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q139.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q139"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q139.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "pilgrim_sites",
+          "map": "e2_rescue_tunnel",
+          "x": 11,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "id": "q139_pilgrim_wounded",
+      "title": "声を出せない負傷者の室",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "wounded",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q139.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q139.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q139"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q139.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "pilgrim_sites",
+          "map": "e2_rescue_tunnel",
+          "x": 11,
+          "y": 7
+        }
+      ]
+    },
+    {
+      "id": "q139_pilgrim_pump",
+      "title": "低い側の排水口",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "pump",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q139.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q139.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q139"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q139.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "pilgrim_sites",
+          "map": "e2_rescue_tunnel",
+          "x": 3,
+          "y": 5
+        }
+      ]
+    },
+    {
+      "id": "q139_pilgrim_air",
+      "title": "両室へ通じる送気口",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "air",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q139.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q139.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q139"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q139.pilgrimage.visit",
+      "points": [
+        {
+          "dungeon": "pilgrim_sites",
+          "map": "e2_rescue_tunnel",
+          "x": 7,
+          "y": 5
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_4_f2",
+      "x": 6,
+      "y": 1,
+      "object": "q139_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "many": {
+      "label": "人数を優先",
+      "text": "多い側の組は上がった。残る室の救援は継続され、声が少ないから誰もいないとは報告しなかった。",
+      "gold": 93,
+      "xp": 69
+    },
+    "wounded": {
+      "label": "静かな室を先に",
+      "text": "負傷者は上がった。救難笛を返す時だけ小さく鳴らし、セナは次の組へ道具を回した。",
+      "gold": 93,
+      "xp": 69
+    },
+    "both": {
+      "label": "二つの帰還口",
+      "text": "二室とも救出した。声を出せなかった人の笛が、地上で初めて小さく鳴った。",
+      "gold": 93,
+      "xp": 69
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/chapel-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38158877be064f30e374c",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "声の数から人数を誤認させ、壁へ当てた器の振動で発生源を分ける。片側には声を出せない負傷者がいる。単なる偽の声を見抜けば解決という謎にせず、情報の少ない人をどう探すかへ続ける。",
+      "fixedPast": "崩落した坑道の二方向で救難の声がする。救助責任者セナは人数の多い側を優先し、地質師は水位の低い側を急ぐべきだと言う。声の片方は反響だが、二組の生存者は本当に別の場所にいる。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "救助責任者セナ",
+        "beliefsAndGoals": "崩落した坑道の二方向で救難の声がする。救助責任者セナは人数の多い側を優先し、地質師は水位の低い側を急ぐべきだと言う。声の片方は反響だが、二組の生存者は本当に別の場所にいる。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "崩落坑道の二方向から声がする。救助手順を決めてください。"
+      }
+    ],
+    "conflict": {
+      "design": "分岐点→声の測定／掘削開始→片室の救出→残室への対応。先に排水し空気を通せば、道具二組を使って両方を救える。道具不足なら応援を呼ぶ間、空気を通す維持作業が必要だ。片側だけ救う場合は残室の救援継続を明示する。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q139.pilgrimage.entry"
+        },
+        {
+          "id": "rooms",
+          "script": "q139.pilgrimage.rooms"
+        },
+        {
+          "id": "air",
+          "script": "q139.pilgrimage.air"
+        },
+        {
+          "id": "listen",
+          "script": "q139.pilgrimage.listen"
+        },
+        {
+          "id": "many_ready",
+          "script": "q139.pilgrimage.many_ready"
+        },
+        {
+          "id": "many_home",
+          "script": "q139.pilgrimage.many_home"
+        },
+        {
+          "id": "wounded_home",
+          "script": "q139.pilgrimage.wounded_home"
+        },
+        {
+          "id": "drain",
+          "script": "q139.pilgrimage.drain"
+        },
+        {
+          "id": "request_help",
+          "script": "q139.pilgrimage.request_help"
+        },
+        {
+          "id": "collect_injured",
+          "script": "q139.pilgrimage.collect_injured"
+        },
+        {
+          "id": "collect_crowd",
+          "script": "q139.pilgrimage.collect_crowd"
+        },
+        {
+          "id": "collect_injured_help",
+          "script": "q139.pilgrimage.collect_injured_help"
+        },
+        {
+          "id": "collect_crowd_help",
+          "script": "q139.pilgrimage.collect_crowd_help"
+        },
+        {
+          "id": "both_home",
+          "script": "q139.pilgrimage.both_home"
+        },
+        {
+          "id": "air_tools_ready",
+          "script": "q139.pilgrimage.air_tools_ready"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "崩落坑道の二方向から声がする。救助手順を決めてください。"
+    },
+    "reveal": {
+      "newInformation": "声の数から人数を誤認させ、壁へ当てた器の振動で発生源を分ける。片側には声を出せない負傷者がいる。単なる偽の声を見抜けば解決という謎にせず、情報の少ない人をどう探すかへ続ける。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q139.scene.entry"
+      },
+      {
+        "id": "rooms",
+        "script": "q139.scene.rooms"
+      },
+      {
+        "id": "air",
+        "script": "q139.scene.air"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q139.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q139.measured",
+        "meaning": "作者原稿の measured に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "声の多い側をセナは指す。地質師は反対側の水位が低いと言う。反響だけで人数を決めるのは危うい。",
+        "options": [
+          {
+            "id": "measure",
+            "text": "壁へ器を当て、声と振動を測る",
+            "to": "listen",
+            "action": "entry_measure"
+          },
+          {
+            "id": "many",
+            "text": "声の多い側から掘り始める",
+            "to": "many_ready",
+            "action": "entry_many"
+          }
+        ]
+      },
+      {
+        "id": "rooms",
+        "place": "wounded",
+        "text": "声の一部は反響だったが、生存者は二室にいる。静かな側には声を出せない負傷者がいた。先に排水と送気を行えば応援を待てる。",
+        "options": [
+          {
+            "id": "wounded",
+            "text": "負傷者側を先に救い、残室は応援へ引き継ぐ",
+            "to": "wounded_home",
+            "action": "rooms_wounded"
+          },
+          {
+            "id": "air",
+            "text": "排水と送気を行い、両側の救助を準備する",
+            "to": "drain",
+            "action": "rooms_air"
+          },
+          {
+            "id": "many",
+            "text": "人数の多い側を先に救う",
+            "to": "many_ready",
+            "action": "rooms_many"
+          }
+        ]
+      },
+      {
+        "id": "air",
+        "place": "air",
+        "text": "空気は通った。縄二つで両室の作業を同時に始めるか、一方の送気を保ちながら応援班を呼べる。",
+        "options": [
+          {
+            "id": "tools",
+            "text": "縄二つを使って両室を救出する",
+            "to": "air_tools_ready",
+            "action": "air_tools"
+          },
+          {
+            "id": "help",
+            "text": "送気を維持し、応援班と交代して両室を救う",
+            "to": "request_help",
+            "action": "air_help"
+          }
+        ]
+      },
+      {
+        "id": "listen",
+        "place": "crowded",
+        "text": "声の多い側の振動を測った。反響だけでは人数を決めず、低い側の室も確かめる。",
+        "options": [
+          {
+            "id": "other",
+            "text": "低い側の室を確かめる",
+            "to": "rooms",
+            "action": "listen_other"
+          }
+        ]
+      },
+      {
+        "id": "many_ready",
+        "place": "crowded",
+        "text": "多い側の組を掘り出した。残る室へ連絡を保ったまま、地上の詰所へ連れて行く。",
+        "options": [
+          {
+            "id": "escort",
+            "text": "多い側の組を詰所へ連れて行く",
+            "to": "many_home",
+            "action": "many_ready_escort"
+          }
+        ]
+      },
+      {
+        "id": "many_home",
+        "place": "rescue",
+        "text": "多い側の組が詰所へ着いた。負傷者の室は救援の継続として引き継ぐ。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@many",
+            "action": "many_home_finish"
+          }
+        ]
+      },
+      {
+        "id": "wounded_home",
+        "place": "rescue",
+        "text": "負傷者を詰所の班へ引き渡した。もう一室の救援を続けるよう伝える。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@wounded",
+            "action": "wounded_home_finish"
+          }
+        ]
+      },
+      {
+        "id": "drain",
+        "place": "pump",
+        "text": "排水口へ着き、水の流れを外へ逃がした。送気口は別の作業地点だ。",
+        "options": [
+          {
+            "id": "ventilate",
+            "text": "送気口へ行って両室へ空気を送る",
+            "to": "air",
+            "action": "drain_ventilate"
+          }
+        ]
+      },
+      {
+        "id": "request_help",
+        "place": "rescue",
+        "text": "送気を保ったまま詰所へ応援を求めた。まだ二室を救出済みとは報告しない。",
+        "options": [
+          {
+            "id": "return",
+            "text": "応援班と負傷者の室へ戻る",
+            "to": "collect_injured_help",
+            "action": "request_help_return"
+          }
+        ]
+      },
+      {
+        "id": "collect_injured",
+        "place": "wounded",
+        "text": "負傷者を支えられる状態にし、もう一室へ向かう。",
+        "options": [
+          {
+            "id": "next",
+            "text": "負傷者を伴って声の多い室へ向かう",
+            "to": "collect_crowd",
+            "action": "collect_injured_next"
+          }
+        ]
+      },
+      {
+        "id": "collect_crowd",
+        "place": "crowded",
+        "text": "二室の生存者が揃った。地上までの救出は、詰所に着いてから確定する。",
+        "options": [
+          {
+            "id": "escort",
+            "text": "二室の生存者を地上へ連れて行く",
+            "to": "both_home",
+            "action": "collect_crowd_escort"
+          }
+        ]
+      },
+      {
+        "id": "collect_injured_help",
+        "place": "wounded",
+        "text": "負傷者を支えられる状態にし、もう一室へ向かう。",
+        "options": [
+          {
+            "id": "next",
+            "text": "負傷者を伴って声の多い室へ向かう",
+            "to": "collect_crowd_help",
+            "action": "collect_injured_help_next"
+          }
+        ]
+      },
+      {
+        "id": "collect_crowd_help",
+        "place": "crowded",
+        "text": "二室の生存者が揃った。地上までの救出は、詰所に着いてから確定する。",
+        "options": [
+          {
+            "id": "escort",
+            "text": "二室の生存者を地上へ連れて行く",
+            "to": "both_home",
+            "action": "collect_crowd_help_escort"
+          }
+        ]
+      },
+      {
+        "id": "both_home",
+        "place": "rescue",
+        "text": "二室の生存者が地上の詰所へ着いた。各人を救助班へ引き継いだ。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@both",
+            "action": "both_home_finish"
+          }
+        ]
+      },
+      {
+        "id": "air_tools_ready",
+        "place": "air",
+        "text": "必要な道具を使って準備を整えた。ここから目的地まで運ぶ。",
+        "options": [
+          {
+            "id": "continue",
+            "text": "準備した相手・品物と目的地へ向かう",
+            "to": "collect_injured",
+            "action": "air_tools_ready_continue"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q139.scene.air",
+        "action": "tools",
+        "option": "tools_supplies",
+        "shortage": "q139.scene.air.tools.shortage",
+        "resume": "q139.scene.air.tools.resume",
+        "cost": {
+          "rope": 2
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q139.visit"
+    ],
+    "entryScript": "q139.pilgrimage.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "second-ten",
+      "settlement": "oddland_plateau",
+      "saveRevision": 2,
+      "scope": "後半10件の実地接続。既に受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q139.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q139.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "声の多い側をセナは指す。地質師は反対側の水位が低いと言う。反響だけで人数を決めるのは危うい。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "measure",
+              "text": "壁へ器を当て、声と振動を測る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q139.measured",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q139.scene.rooms"
+                }
+              ]
+            },
+            {
+              "id": "many",
+              "text": "声の多い側から掘り始める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q139.end.many"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q139.scene.rooms": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q139.node",
+          "value": "rooms"
+        },
+        {
+          "op": "say",
+          "text": "声の一部は反響だったが、生存者は二室にいる。静かな側には声を出せない負傷者がいた。先に排水と送気を行えば応援を待てる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wounded",
+              "text": "負傷者側を先に救い、残室は応援へ引き継ぐ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q139.end.wounded"
+                }
+              ]
+            },
+            {
+              "id": "air",
+              "text": "排水と送気を行い、両側の救助を準備する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q139.scene.air"
+                }
+              ]
+            },
+            {
+              "id": "many",
+              "text": "人数の多い側を先に救う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q139.end.many"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q139.scene.air": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q139.node",
+          "value": "air"
+        },
+        {
+          "op": "say",
+          "text": "空気は通った。縄二つで両室の作業を同時に始めるか、一方の送気を保ちながら応援班を呼べる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "tools",
+              "text": "縄二つを使って両室を救出する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "rope",
+                    "count": 2
+                  }
+                ]
+              },
+              "requirement": "縄 2消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 2
+                },
+                {
+                  "op": "jump",
+                  "script": "q139.end.both"
+                }
+              ]
+            },
+            {
+              "id": "help",
+              "text": "送気を維持し、応援班と交代して両室を救う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q139.end.both"
+                }
+              ]
+            },
+            {
+              "id": "tools_supplies",
+              "text": "補修用の縄2個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 2
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 2
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q139.scene.air.tools.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q139.end.many": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q139.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "多い側の組は上がった。残る室の救援は継続され、声が少ないから誰もいないとは報告しなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q139",
+              "outcome": "many"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q139.end.wounded": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q139.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "負傷者は上がった。救難笛を返す時だけ小さく鳴らし、セナは次の組へ道具を回した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q139",
+              "outcome": "wounded"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q139.end.both": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q139.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "二室とも救出した。声を出せなかった人の笛が、地上で初めて小さく鳴った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q139",
+              "outcome": "both"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q139.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q139"
+          },
+          "cases": [
+            {
+              "equals": "q139.scene.air.tools.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q139.scene.air.tools.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q139.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q139.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "many",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "多い側の組は上がった。残る室の救援は継続され、声が少ないから誰もいないとは報告しなかった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "wounded",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "負傷者は上がった。救難笛を返す時だけ小さく鳴らし、セナは次の組へ道具を回した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "both",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "二室とも救出した。声を出せなかった人の笛が、地上で初めて小さく鳴った。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q139.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q139.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "rooms",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q139.scene.rooms"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "air",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q139.scene.air"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q139.scene.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q139.scene.air.tools.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q139",
+          "value": "q139.scene.air.tools.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄2個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q139.scene.air.tools.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q139",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄2個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q139.scene.air"
+        }
+      ]
+    },
+    "q139.pilgrimage.entry": {
+      "storyQuest": "q139",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q139",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "声の多い側をセナは指す。地質師は反対側の水位が低いと言う。反響だけで人数を決めるのは危うい。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "measure",
+              "text": "壁へ器を当て、声と振動を測る",
+              "storyAction": {
+                "quest": "q139",
+                "action": "entry_measure"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q139",
+                  "action": "entry_measure"
+                }
+              ]
+            },
+            {
+              "id": "many",
+              "text": "声の多い側から掘り始める",
+              "storyAction": {
+                "quest": "q139",
+                "action": "entry_many"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q139",
+                  "action": "entry_many"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q139.pilgrimage.rooms": {
+      "storyQuest": "q139",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q139",
+          "scene": "rooms"
+        },
+        {
+          "op": "narrate",
+          "text": "声の一部は反響だったが、生存者は二室にいる。静かな側には声を出せない負傷者がいた。先に排水と送気を行えば応援を待てる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wounded",
+              "text": "負傷者側を先に救い、残室は応援へ引き継ぐ",
+              "storyAction": {
+                "quest": "q139",
+                "action": "rooms_wounded"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q139",
+                  "action": "rooms_wounded"
+                }
+              ]
+            },
+            {
+              "id": "air",
+              "text": "排水と送気を行い、両側の救助を準備する",
+              "storyAction": {
+                "quest": "q139",
+                "action": "rooms_air"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q139",
+                  "action": "rooms_air"
+                }
+              ]
+            },
+            {
+              "id": "many",
+              "text": "人数の多い側を先に救う",
+              "storyAction": {
+                "quest": "q139",
+                "action": "rooms_many"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q139",
+                  "action": "rooms_many"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q139.pilgrimage.air": {
+      "storyQuest": "q139",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q139",
+          "scene": "air"
+        },
+        {
+          "op": "narrate",
+          "text": "空気は通った。縄二つで両室の作業を同時に始めるか、一方の送気を保ちながら応援班を呼べる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "tools",
+              "text": "縄二つを使って両室を救出する",
+              "storyAction": {
+                "quest": "q139",
+                "action": "air_tools"
+              },
+              "requirement": "rope 2消費",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q139",
+                  "action": "air_tools"
+                },
+                {
+                  "op": "jump",
+                  "script": "q139.pilgrimage.air_tools_ready"
+                }
+              ]
+            },
+            {
+              "id": "help",
+              "text": "送気を維持し、応援班と交代して両室を救う",
+              "storyAction": {
+                "quest": "q139",
+                "action": "air_help"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q139",
+                  "action": "air_help"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q139.pilgrimage.listen": {
+      "storyQuest": "q139",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q139",
+          "scene": "listen"
+        },
+        {
+          "op": "narrate",
+          "text": "声の多い側の振動を測った。反響だけでは人数を決めず、低い側の室も確かめる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "other",
+              "text": "低い側の室を確かめる",
+              "storyAction": {
+                "quest": "q139",
+                "action": "listen_other"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q139",
+                  "action": "listen_other"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q139.pilgrimage.many_ready": {
+      "storyQuest": "q139",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q139",
+          "scene": "many_ready"
+        },
+        {
+          "op": "narrate",
+          "text": "多い側の組を掘り出した。残る室へ連絡を保ったまま、地上の詰所へ連れて行く。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "escort",
+              "text": "多い側の組を詰所へ連れて行く",
+              "storyAction": {
+                "quest": "q139",
+                "action": "many_ready_escort"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q139",
+                  "action": "many_ready_escort"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q139.pilgrimage.many_home": {
+      "storyQuest": "q139",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q139",
+          "scene": "many_home"
+        },
+        {
+          "op": "narrate",
+          "text": "多い側の組が詰所へ着いた。負傷者の室は救援の継続として引き継ぐ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q139",
+                "action": "many_home_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q139",
+                  "action": "many_home_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q139.pilgrimage.end.many"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q139.pilgrimage.wounded_home": {
+      "storyQuest": "q139",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q139",
+          "scene": "wounded_home"
+        },
+        {
+          "op": "narrate",
+          "text": "負傷者を詰所の班へ引き渡した。もう一室の救援を続けるよう伝える。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q139",
+                "action": "wounded_home_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q139",
+                  "action": "wounded_home_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q139.pilgrimage.end.wounded"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q139.pilgrimage.drain": {
+      "storyQuest": "q139",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q139",
+          "scene": "drain"
+        },
+        {
+          "op": "narrate",
+          "text": "排水口へ着き、水の流れを外へ逃がした。送気口は別の作業地点だ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "ventilate",
+              "text": "送気口へ行って両室へ空気を送る",
+              "storyAction": {
+                "quest": "q139",
+                "action": "drain_ventilate"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q139",
+                  "action": "drain_ventilate"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q139.pilgrimage.request_help": {
+      "storyQuest": "q139",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q139",
+          "scene": "request_help"
+        },
+        {
+          "op": "narrate",
+          "text": "送気を保ったまま詰所へ応援を求めた。まだ二室を救出済みとは報告しない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "応援班と負傷者の室へ戻る",
+              "storyAction": {
+                "quest": "q139",
+                "action": "request_help_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q139",
+                  "action": "request_help_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q139.pilgrimage.collect_injured": {
+      "storyQuest": "q139",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q139",
+          "scene": "collect_injured"
+        },
+        {
+          "op": "narrate",
+          "text": "負傷者を支えられる状態にし、もう一室へ向かう。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "next",
+              "text": "負傷者を伴って声の多い室へ向かう",
+              "storyAction": {
+                "quest": "q139",
+                "action": "collect_injured_next"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q139",
+                  "action": "collect_injured_next"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q139.pilgrimage.collect_crowd": {
+      "storyQuest": "q139",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q139",
+          "scene": "collect_crowd"
+        },
+        {
+          "op": "narrate",
+          "text": "二室の生存者が揃った。地上までの救出は、詰所に着いてから確定する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "escort",
+              "text": "二室の生存者を地上へ連れて行く",
+              "storyAction": {
+                "quest": "q139",
+                "action": "collect_crowd_escort"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q139",
+                  "action": "collect_crowd_escort"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q139.pilgrimage.collect_injured_help": {
+      "storyQuest": "q139",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q139",
+          "scene": "collect_injured_help"
+        },
+        {
+          "op": "narrate",
+          "text": "負傷者を支えられる状態にし、もう一室へ向かう。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "next",
+              "text": "負傷者を伴って声の多い室へ向かう",
+              "storyAction": {
+                "quest": "q139",
+                "action": "collect_injured_help_next"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q139",
+                  "action": "collect_injured_help_next"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q139.pilgrimage.collect_crowd_help": {
+      "storyQuest": "q139",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q139",
+          "scene": "collect_crowd_help"
+        },
+        {
+          "op": "narrate",
+          "text": "二室の生存者が揃った。地上までの救出は、詰所に着いてから確定する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "escort",
+              "text": "二室の生存者を地上へ連れて行く",
+              "storyAction": {
+                "quest": "q139",
+                "action": "collect_crowd_help_escort"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q139",
+                  "action": "collect_crowd_help_escort"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q139.pilgrimage.both_home": {
+      "storyQuest": "q139",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q139",
+          "scene": "both_home"
+        },
+        {
+          "op": "narrate",
+          "text": "二室の生存者が地上の詰所へ着いた。各人を救助班へ引き継いだ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q139",
+                "action": "both_home_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q139",
+                  "action": "both_home_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q139.pilgrimage.end.both"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q139.pilgrimage.air_tools_ready": {
+      "storyQuest": "q139",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q139",
+          "scene": "air_tools_ready"
+        },
+        {
+          "op": "narrate",
+          "text": "必要な道具を使って準備を整えた。ここから目的地まで運ぶ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "continue",
+              "text": "準備した相手・品物と目的地へ向かう",
+              "storyAction": {
+                "quest": "q139",
+                "action": "air_tools_ready_continue"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q139",
+                  "action": "air_tools_ready_continue"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q139.pilgrimage.end.many": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "多い側の組は上がった。残る室の救援は継続され、声が少ないから誰もいないとは報告しなかった。"
+        },
+        {
+          "op": "add",
+          "target": "vars.many",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q139",
+          "outcome": "many"
+        }
+      ]
+    },
+    "q139.pilgrimage.end.wounded": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "負傷者は上がった。救難笛を返す時だけ小さく鳴らし、セナは次の組へ道具を回した。"
+        },
+        {
+          "op": "add",
+          "target": "vars.wounded",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q139",
+          "outcome": "wounded"
+        }
+      ]
+    },
+    "q139.pilgrimage.end.both": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "二室とも救出した。声を出せなかった人の笛が、地上で初めて小さく鳴った。"
+        },
+        {
+          "op": "add",
+          "target": "vars.both",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q139",
+          "outcome": "both"
+        }
+      ]
+    },
+    "q139.pilgrimage.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q139"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q139.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q139.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q139.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "many",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "多い側の組は上がった。残る室の救援は継続され、声が少ないから誰もいないとは報告しなかった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "wounded",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "負傷者は上がった。救難笛を返す時だけ小さく鳴らし、セナは次の組へ道具を回した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "both",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "二室とも救出した。声を出せなかった人の笛が、地上で初めて小さく鳴った。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q139"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q139.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q139.pilgrimage.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "rooms",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q139.pilgrimage.rooms"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "air",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q139.pilgrimage.air"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "listen",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q139.pilgrimage.listen"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "many_ready",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q139.pilgrimage.many_ready"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "many_home",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q139.pilgrimage.many_home"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "wounded_home",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q139.pilgrimage.wounded_home"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "drain",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q139.pilgrimage.drain"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "request_help",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q139.pilgrimage.request_help"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "collect_injured",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q139.pilgrimage.collect_injured"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "collect_crowd",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q139.pilgrimage.collect_crowd"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "collect_injured_help",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q139.pilgrimage.collect_injured_help"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "collect_crowd_help",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q139.pilgrimage.collect_crowd_help"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "both_home",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q139.pilgrimage.both_home"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "air_tools_ready",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q139.pilgrimage.air_tools_ready"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q139.pilgrimage.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "救助坑道の分岐",
+      "crowded": "声の多い側の室",
+      "wounded": "声を出せない負傷者の室",
+      "pump": "低い側の排水口",
+      "air": "両室へ通じる送気口",
+      "rescue": "地上の救助詰所",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "crowded"
+      ],
+      [
+        "transit",
+        "wounded"
+      ],
+      [
+        "transit",
+        "pump"
+      ],
+      [
+        "transit",
+        "air"
+      ],
+      [
+        "transit",
+        "rescue"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "crowded",
+          "wounded",
+          "pump",
+          "air",
+          "rescue",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "many",
+          "wounded",
+          "both"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "drained": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "drained"
+      },
+      "ventilated": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "ventilated"
+      },
+      "crowdRescued": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "crowdRescued"
+      },
+      "injuredRescued": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "injuredRescued"
+      },
+      "measured": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "measured"
+      },
+      "crowdAt": {
+        "type": "enum",
+        "initial": "crowded",
+        "values": [
+          "entry",
+          "crowded",
+          "wounded",
+          "pump",
+          "air",
+          "rescue",
+          "transit"
+        ],
+        "meaning": "crowd の所在または保持者"
+      },
+      "injuredAt": {
+        "type": "enum",
+        "initial": "wounded",
+        "values": [
+          "entry",
+          "crowded",
+          "wounded",
+          "pump",
+          "air",
+          "rescue",
+          "transit"
+        ],
+        "meaning": "injured の所在または保持者"
+      },
+      "helpersAt": {
+        "type": "enum",
+        "initial": "rescue",
+        "values": [
+          "entry",
+          "crowded",
+          "wounded",
+          "pump",
+          "air",
+          "rescue",
+          "transit"
+        ],
+        "meaning": "helpers の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "crowd": {
+        "holder": "crowdAt",
+        "kind": "group"
+      },
+      "injured": {
+        "holder": "injuredAt",
+        "kind": "group"
+      },
+      "helpers": {
+        "holder": "helpersAt",
+        "kind": "group"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "声の数から人数を誤認させ、壁へ当てた器の振動で発生源を分ける。片側には声を出せない負傷者がいる。単なる偽の声を見抜けば解決という謎にせず、情報の少ない人をどう探すかへ続ける。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "救助坑道の分岐",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "rooms": {
+        "title": "声を出せない負傷者の室",
+        "place": "wounded",
+        "cast": [],
+        "requires": true
+      },
+      "air": {
+        "title": "両室へ通じる送気口",
+        "place": "air",
+        "cast": [],
+        "requires": true
+      },
+      "listen": {
+        "title": "声の多い側の室",
+        "place": "crowded",
+        "cast": [],
+        "requires": true
+      },
+      "many_ready": {
+        "title": "声の多い側の室",
+        "place": "crowded",
+        "cast": [],
+        "requires": true
+      },
+      "many_home": {
+        "title": "地上の救助詰所",
+        "place": "rescue",
+        "cast": [],
+        "requires": true
+      },
+      "wounded_home": {
+        "title": "地上の救助詰所",
+        "place": "rescue",
+        "cast": [],
+        "requires": true
+      },
+      "drain": {
+        "title": "低い側の排水口",
+        "place": "pump",
+        "cast": [],
+        "requires": true
+      },
+      "request_help": {
+        "title": "地上の救助詰所",
+        "place": "rescue",
+        "cast": [],
+        "requires": true
+      },
+      "collect_injured": {
+        "title": "声を出せない負傷者の室",
+        "place": "wounded",
+        "cast": [],
+        "requires": true
+      },
+      "collect_crowd": {
+        "title": "声の多い側の室",
+        "place": "crowded",
+        "cast": [],
+        "requires": true
+      },
+      "collect_injured_help": {
+        "title": "声を出せない負傷者の室",
+        "place": "wounded",
+        "cast": [],
+        "requires": true
+      },
+      "collect_crowd_help": {
+        "title": "声の多い側の室",
+        "place": "crowded",
+        "cast": [],
+        "requires": true
+      },
+      "both_home": {
+        "title": "地上の救助詰所",
+        "place": "rescue",
+        "cast": [],
+        "requires": true
+      },
+      "air_tools_ready": {
+        "title": "両室へ通じる送気口",
+        "place": "air",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_measure": {
+        "from": [
+          "entry"
+        ],
+        "to": "listen",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "crowded"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "measured",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "crowded",
+          "companions": []
+        },
+        "depart": []
+      },
+      "entry_many": {
+        "from": [
+          "entry"
+        ],
+        "to": "many_ready",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "crowded"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "crowded",
+          "companions": []
+        },
+        "depart": []
+      },
+      "rooms_wounded": {
+        "from": [
+          "rooms"
+        ],
+        "to": "wounded_home",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "injured"
+            ],
+            "path": [
+              "transit",
+              "rescue"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "injuredRescued",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "rescue",
+          "companions": [
+            "injured"
+          ]
+        },
+        "depart": []
+      },
+      "rooms_air": {
+        "from": [
+          "rooms"
+        ],
+        "to": "drain",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "pump"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "drained",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "pump",
+          "companions": []
+        },
+        "depart": []
+      },
+      "rooms_many": {
+        "from": [
+          "rooms"
+        ],
+        "to": "many_ready",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "crowded"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "crowded",
+          "companions": []
+        },
+        "depart": []
+      },
+      "air_tools": {
+        "from": [
+          "air"
+        ],
+        "to": "air_tools_ready",
+        "requires": true,
+        "effects": [],
+        "cost": {
+          "rope": 2
+        },
+        "once": false
+      },
+      "air_help": {
+        "from": [
+          "air"
+        ],
+        "to": "request_help",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "rescue"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "rescue",
+          "companions": []
+        },
+        "depart": []
+      },
+      "listen_other": {
+        "from": [
+          "listen"
+        ],
+        "to": "rooms",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "wounded"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "wounded",
+          "companions": []
+        },
+        "depart": []
+      },
+      "many_ready_escort": {
+        "from": [
+          "many_ready"
+        ],
+        "to": "many_home",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "crowd"
+            ],
+            "path": [
+              "transit",
+              "rescue"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "crowdRescued",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "rescue",
+          "companions": [
+            "crowd"
+          ]
+        },
+        "depart": []
+      },
+      "many_home_finish": {
+        "from": [
+          "many_home"
+        ],
+        "ending": "many",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "many"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "wounded_home_finish": {
+        "from": [
+          "wounded_home"
+        ],
+        "ending": "wounded",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "wounded"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "drain_ventilate": {
+        "from": [
+          "drain"
+        ],
+        "to": "air",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "air"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "ventilated",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "air",
+          "companions": []
+        },
+        "depart": []
+      },
+      "request_help_return": {
+        "from": [
+          "request_help"
+        ],
+        "to": "collect_injured_help",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "helpers"
+            ],
+            "path": [
+              "transit",
+              "wounded"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "wounded",
+          "companions": [
+            "helpers"
+          ]
+        },
+        "depart": []
+      },
+      "collect_injured_next": {
+        "from": [
+          "collect_injured"
+        ],
+        "to": "collect_crowd",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "injured"
+            ],
+            "path": [
+              "transit",
+              "crowded"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "crowded",
+          "companions": [
+            "injured"
+          ]
+        },
+        "depart": []
+      },
+      "collect_crowd_escort": {
+        "from": [
+          "collect_crowd"
+        ],
+        "to": "both_home",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "injured",
+              "crowd"
+            ],
+            "path": [
+              "transit",
+              "rescue"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "injuredRescued",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "crowdRescued",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "rescue",
+          "companions": [
+            "injured",
+            "crowd"
+          ]
+        },
+        "depart": []
+      },
+      "collect_injured_help_next": {
+        "from": [
+          "collect_injured_help"
+        ],
+        "to": "collect_crowd_help",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "injured",
+              "helpers"
+            ],
+            "path": [
+              "transit",
+              "crowded"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "crowded",
+          "companions": [
+            "injured",
+            "helpers"
+          ]
+        },
+        "depart": []
+      },
+      "collect_crowd_help_escort": {
+        "from": [
+          "collect_crowd_help"
+        ],
+        "to": "both_home",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "injured",
+              "crowd",
+              "helpers"
+            ],
+            "path": [
+              "transit",
+              "rescue"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "injuredRescued",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "crowdRescued",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "rescue",
+          "companions": [
+            "injured",
+            "crowd",
+            "helpers"
+          ]
+        },
+        "depart": []
+      },
+      "both_home_finish": {
+        "from": [
+          "both_home"
+        ],
+        "ending": "both",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "both"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "air_tools_ready_continue": {
+        "from": [
+          "air_tools_ready"
+        ],
+        "to": "collect_injured",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "wounded"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "wounded",
+          "companions": []
+        },
+        "depart": []
+      }
+    },
+    "endings": {
+      "many": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q139.values.resolution"
+            },
+            "right": "many"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q139.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q139.values.partyAt"
+                },
+                "right": "rescue"
+              }
+            ]
+          }
+        ]
+      },
+      "wounded": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q139.values.resolution"
+            },
+            "right": "wounded"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q139.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q139.values.partyAt"
+                },
+                "right": "rescue"
+              }
+            ]
+          }
+        ]
+      },
+      "both": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q139.values.resolution"
+            },
+            "right": "both"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q139.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q139.values.partyAt"
+                },
+                "right": "rescue"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "pilgrim_sites",
+        "map": "e2_rescue_tunnel",
+        "x": 1,
+        "y": 1
+      },
+      "crowded": {
+        "kind": "dungeon",
+        "dungeon": "pilgrim_sites",
+        "map": "e2_rescue_tunnel",
+        "x": 11,
+        "y": 3
+      },
+      "wounded": {
+        "kind": "dungeon",
+        "dungeon": "pilgrim_sites",
+        "map": "e2_rescue_tunnel",
+        "x": 11,
+        "y": 7
+      },
+      "pump": {
+        "kind": "dungeon",
+        "dungeon": "pilgrim_sites",
+        "map": "e2_rescue_tunnel",
+        "x": 3,
+        "y": 5
+      },
+      "air": {
+        "kind": "dungeon",
+        "dungeon": "pilgrim_sites",
+        "map": "e2_rescue_tunnel",
+        "x": 7,
+        "y": 5
+      },
+      "rescue": {
+        "kind": "town",
+        "location": "pilgrim_rescue"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_plateau",
+  "receptionLocations": [
+    "pilgrim_board"
+  ]
+}

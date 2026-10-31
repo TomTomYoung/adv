@@ -25,11 +25,11 @@ export function compileChapelQuest(first){
  if(first.number===134)quest.story.scenes.entry_break_ready.cast=structuredClone(quest.story.scenes.entry.cast);
  if(first.number===135)for(const scene of ['entry','reply'])quest.story.scenes[scene+'_lift_ready'].cast=structuredClone(quest.story.scenes[scene].cast);
  if(first.number===136)quest.story.scenes.entry_break_ready.cast=structuredClone(quest.story.scenes.entry.cast.filter(c=>c.entity==='turi'));
- if([132,133,134,136,137].includes(first.number)){
+ if([132,133,134,136,137,139].includes(first.number)){
   const previous=compileRelocatedQuest(first,chapelSecondSource(first,{cast:false}),options).story;
   if(first.number===137)for(const key of ['medicine','family','language'])quest.story.registry[key+'At'].values=structuredClone(previous.registry[key+'At'].values);
   quest.story.revision=2;quest.model.edition.revision=2;
-  quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:first.number===137?['el','librarian','firefighter'].flatMap(role=>[
+  quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:first.number===139?['sena','geologist'].map(role=>({key:role+'At',value:'entry'})):first.number===137?['el','librarian','firefighter'].flatMap(role=>[
    {key:role+'At',value:'entry'},
    {key:role+'At',value:'exit',when:or(...['entry_close','replace_book_seal'].map(action=>({op:'in',left:action,right:ref('stories.q137.events')})))},
    {key:role+'At',value:'transit',when:and(eq(ref('journey.quest'),'q137'),or(eq(ref('journey.action'),'entry_close'),eq(ref('journey.action'),'replace_book_seal')))}
