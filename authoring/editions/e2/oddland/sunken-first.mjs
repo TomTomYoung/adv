@@ -36,6 +36,10 @@ export function sunkenFirstSource(q,{cast=true}={}){
   route('entry','names','names_shown',{depart:[give('cloth','entry','party'),give('manifest','entry','party')],effects:[give('cloth','party','exhibit'),give('manifest','party','exhibit')]});end('names_shown','exhibit','外布と救助名簿を同じ展示台へ置いた。切り分けた浮きの用途を確かめられる。','informed');
   route('entry','heirs','testimony',{companions:['heirs'],depart:[give('cloth','entry','party')],effects:[give('cloth','party','heirs')]});end('testimony','witness','証言室で遺族へ外布を引き渡し、公開の範囲を相談した。名簿を公開済みにはしない。','compromise');
   route('entry','treasure','treasure_shown',{depart:[give('cloth','entry','party')],effects:[give('cloth','party','exhibit')]});end('treasure_shown','exhibit','豪華な外布だけを展示室へ納めた。救助名簿はこの展示へ持ち込んでいない。','contract');
+  if(cast){
+   x.entities.heirs.character='q062_heirs';
+   for(const id of ['entry','testimony'])node(id).cast=[{entity:'heirs',x:50}];
+  }
  }
  if(q.number===63){
   cell('weights','避難梯子の重りの操作足場','region_7_f1',13,9);cell('vent','別の通気孔の足場','region_7_f1',15,7);node('balance').place='weights';int('load',3);x.flags.aligned=false;
