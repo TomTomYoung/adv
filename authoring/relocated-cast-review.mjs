@@ -1387,24 +1387,26 @@ export const RELOCATED_CAST_REVIEW={
   "next": "二人の専用画・三群の呼称・応援帰還だけの条件・旧保存移行は接続済み。器・反響・崩落・水位・排水・送気・縄・笛・二室と詰所の差分は未制作。次はq140の人物表示と所在、人物監査は沈没城q061。"
 },
   q140:{
-  "sourceSha256": "a5cb94ee095d1275932f789b8622c24700b4ec6363b629aa87eafc577e1603ac",
+  "sourceSha256": "d10f6ed51a862e84ffd5f051c79d717f630c690a31140899fa58aaf630765259",
   "identityNotes": [
-    "隊長ボロはtalkで入域条件を直接述べる人物。entryの当番表と状況説明だけから同席を決めず、maintenanceの専用役として候補化する。探索組合の依頼人欄から受付係を増やさない。",
-    "倒れた整備員は既存personのworker。accidentで支えて運び、accident_carryの実到着でmaintenanceへ移る。talkには直接交渉と救助後の二経路があるため、workerAtとhelpedによる表示条件が必要。直接交渉では現場に残る。",
+    "隊長ボロはtalkで入域条件を直接述べる人物。maintenanceに専用personと所在・専用画を接続した。entryの状況説明だけから同席を決めず、組合へ同行させない。",
+    "倒れた整備員は既存personのworker。accidentで支えて運び、accident_carryの実到着でmaintenanceへ移る。talkの表示はworkerAtとhelpedの両方で制限し、直接交渉では現場に残る。",
     "事故の整備員と整備隊全員を同一視せず、人数・氏名・負傷の程度・年齢・性別を追加しない。協定結末で部下へ帰れと告げる描写はfinish後で、組合の到着場面へボロや部下を自動配置しない。",
     "既存5地点はe2_chapel_worksの入口(1,1)、庫(11,3)、事故現場(3,7)、整備区画(11,7)、pilgrim_union。入口の当番表・休業札と止まった罠、事故前後、直接交渉と救助後、持出品・申告・閉鎖提案を差分として分ける。新しい町は不要。",
-    "goodsはtake_leaveの出発時にpartyへ移る。takeの回収した品を携えという本文と出発時点の対応は、人物接続時に再点検する。略取の帰着を入域許可とせず、協定経路で持出品を創作しない。helped・declaredと四結末の93G・69EXPを保持する。"
+    "goodsはtake_leaveの出発時にpartyへ移る。takeの本文を持ち出す品を確かめる描写へ訂正した。旧保存の待機本文は保持する。略取の帰着を入域許可とせず、協定経路で持出品を創作しない。helped・declaredと四結末の93G・69EXPを保持する。"
   ],
   "people": {
     "q140_boro": {
       "label": "整備隊長ボロ",
-      "status": "candidate",
-      "need": "talkの専用画・person・maintenanceの所在候補。entryや組合へ自動出演しない。"
+      "status": "connected",
+      "entity": "boro",
+      "need": "maintenanceに専用画・所在を接続し、talkだけに表示する。"
     },
     "q140_worker": {
       "label": "事故に遭った整備員",
-      "status": "candidate",
-      "need": "既存workerへ専用画を接続する候補。accidentと救助到着後だけのtalkで表示し、直接交渉経路と区別する。"
+      "status": "connected",
+      "entity": "worker",
+      "need": "既存workerへ専用画を接続。accidentと救助到着後だけのtalkへ表示する。"
     }
   },
   "scenes": {
@@ -1422,7 +1424,7 @@ export const RELOCATED_CAST_REVIEW={
         "q140_worker"
       ],
       "evidence": "持出品を申告し、入域日を限る協定なら検討すると言った。",
-      "reason": "ボロが直接述べる。workerは救助して運んだ経路のみ同席候補で、所在・helpedで区別する。",
+      "reason": "ボロが直接述べる。workerはhelpedかつworkerAtがmaintenanceの時だけ表示し、直接交渉と区別する。",
       "visual": "入域条件、直接交渉と事故救助後、整備区画。"
     },
     "take": {
@@ -1470,7 +1472,64 @@ export const RELOCATED_CAST_REVIEW={
       "visual": "調査報告、未成立の入域権、交渉への引継ぎ。"
     }
   },
-  "next": "ボロの所在と専用画、workerの既存同行と救助後だけのtalk表示を整理する。持出品の本文・出発時点も再点検する。次の人物監査は沈没城q061。"
+  "next": "二役の専用画・所在に従う表示と旧保存移行、持出品の本文と出発時点の整合は接続済み。既存5地点の札・当番表・事故・持出品・協定・申告の局所差分は未制作。次はq061の救難図の受取先表示、人物監査はq062。"
+},
+  q061:{
+  "sourceSha256": "b170bdcd1973b15a93e5276cc18e31ad0486ae3d19c7b50db75ed5e8510eebaf",
+  "identityNotes": [
+    "依頼人は航海士のナギだが、現場の本文には同席がなく、名が出るのは結末。篝火q206のナギとは同定せず、依頼人欄だけで現場へ追加しない。",
+    "entryの救難隊の問いは依頼の経緯としても読める。沈没城での同席や探索への同行は確定せず、二つの空気室にも人物を補わない。",
+    "rescue_reportはroyal_rescueで救難隊へ図を渡した場面。受取側を集団名だけで表示する候補とし、人数・代表者・個人画やナギとの同一性を追加しない。港の受取人は本文で特定されていない。",
+    "既存5地点はregion_7_f1の発見地点(9,11)、第一空気室(9,5)、第二空気室(15,3)、royal_rescue、royal_harbor。新しい町を作らず、乾いた線・空気溜まり・二室の確認前後・救難用と海上用の記載を局所差分にする。",
+    "図はentry出発時に隊が持ち、救難隊・港への実到着で渡す。tested=1の二室確認が救難図の引継ぎ条件で、第一室のみでは不可。手元に残す経路と異なる三結末の報酬を維持する。"
+  ],
+  "people": {
+    "q061_rescuers": {
+      "label": "救難図を受け取る救難隊",
+      "status": "candidate",
+      "need": "rescue_reportの受取先に集団名だけの表示を接続する候補。個人の顔・人数・代表者・城内同行は追加しない。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "救難隊はこの図を外洋でも使えるか尋ねた。",
+      "reason": "依頼の経緯としての質問で、発見地点での同席や同行は確定しない。",
+      "visual": "濡れない線と沈没城の上部、図を得る前後。"
+    },
+    "air": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "最初の線の終点には空気が残り、息継ぎができた。",
+      "reason": "隊が空気室を確かめる描写。ナギや救難隊の同行を追加しない。",
+      "visual": "第一空気室、息継ぎと未検証の次の線。"
+    },
+    "second_air": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "次の線は水面と逆向きに上がり、別の空気室へ着いた。",
+      "reason": "第二室の検証で、現場の相手の発言や動作はない。",
+      "visual": "第二空気室、海面の方角との不一致と二室の検証記録。"
+    },
+    "rescue_report": {
+      "decision": "person-evidence",
+      "people": [
+        "q061_rescuers"
+      ],
+      "evidence": "救難隊へ実際に歩いた二室の図を渡した。",
+      "reason": "royal_rescueで図を受け取る救難隊の根拠。個人や人数は確定しない。",
+      "visual": "引き渡した図、城内専用の欄外注記、二室の記録。"
+    },
+    "sea_report": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "港で海面の航路として図を渡した。",
+      "reason": "受取人の呼称・同一性が未指定。ナギや救難隊を自動配置しない。",
+      "visual": "港へ渡した図、空気室の未検証と海上航路としての誤用。"
+    }
+  },
+  "next": "救難図の受取先を集団名で接続し、二室確認・到着時の受渡し・旧保存を検証する。人物監査はq062。"
 }
  }
 };

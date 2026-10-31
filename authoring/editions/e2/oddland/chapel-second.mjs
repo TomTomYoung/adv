@@ -164,6 +164,13 @@ export function chapelSecondSource(q,{cast=true}={}){
   route('talk','declare','declared',{effects:[set('declared')]});end('declared','union','入域制限と持出申告の協定を組合へ届けた。持出品がない今回の記録も記した。','treaty');
   route('talk','close','closed');end('closed','union','修理期間の閉鎖を組合へ提案し、受理されたことを確かめた。','close');
   route('talk','leave','left');end('left','union','別棟を出て組合へ帰り、調査した範囲だけを引き継いだ。','leave');
+  if(cast){
+   x.entities.boro={holder:'maintenance',kind:'person',character:'q140_boro'};
+   x.entities.worker.character='q140_worker';
+   node('accident').cast=[{entity:'worker',display:{x:50,scale:.86}}];
+   node('talk').cast=[{entity:'boro',display:{x:30,scale:.86}},{entity:'worker',when:and(held('worker','maintenance'),eq(ref('stories.q140.values.helped'),true)),display:{x:70,scale:.86}}];
+   node('take').text='止まった罠の先の庫へ着いた。持ち出す品を確かめ、地上への帰路を選ぶ。';
+  }
  }
  const rewrite=value=>{if(Array.isArray(value))return value.map(rewrite);if(value&&typeof value==='object')return Object.fromEntries(Object.entries(value).map(([k,v])=>[k,k==='ref'&&v.startsWith(`flags.quest.${q.id}.`)?v.replace(`flags.quest.${q.id}.`,`stories.${q.id}.values.`):rewrite(v)]));return value;};
  for(const n of x.nodes){n.text=rewrite(n.text);for(const a of n.options){for(const [key,value] of Object.entries(a.set??{})){if(!x.registry[key])x.flags[key]??=false;(a.effects??=[]).push(set(key,rewrite(value)));}delete a.set;a.when=rewrite(a.when);a.visible=rewrite(a.visible);}}
