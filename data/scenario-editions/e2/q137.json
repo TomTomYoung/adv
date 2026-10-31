@@ -571,7 +571,7 @@
     "entryScript": "q137.pilgrimage.visit",
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -580,7 +580,1439 @@
       "saveRevision": 2,
       "scope": "後半10件の実地接続。既に受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "図書館の選書棚",
+            "read": "他の本を開かず読む机",
+            "exit": "図書館の封鎖口",
+            "archive": "本の受入室",
+            "union": "追加の救出の相談先",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "read"
+            ],
+            [
+              "transit",
+              "exit"
+            ],
+            [
+              "transit",
+              "archive"
+            ],
+            [
+              "transit",
+              "union"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "read",
+                "exit",
+                "archive",
+                "union",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "medicine",
+                "family",
+                "language",
+                "prepare",
+                "close"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "book": {
+              "type": "enum",
+              "initial": "none",
+              "values": [
+                "none",
+                "medicine",
+                "family",
+                "language"
+              ],
+              "meaning": "今回選んだ一冊"
+            },
+            "pages": {
+              "type": "integer",
+              "initial": 0,
+              "min": 0,
+              "max": 3,
+              "meaning": "選んだ本の読解段階"
+            },
+            "medicinePages": {
+              "type": "integer",
+              "initial": 0,
+              "min": 0,
+              "max": 3,
+              "meaning": "medicineの読解履歴"
+            },
+            "familyPages": {
+              "type": "integer",
+              "initial": 0,
+              "min": 0,
+              "max": 3,
+              "meaning": "familyの読解履歴"
+            },
+            "languagePages": {
+              "type": "integer",
+              "initial": 0,
+              "min": 0,
+              "max": 3,
+              "meaning": "languageの読解履歴"
+            },
+            "medicineAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "read",
+                "exit",
+                "archive",
+                "union",
+                "transit",
+                "party",
+                "family",
+                "language"
+              ],
+              "meaning": "medicine の所在または保持者"
+            },
+            "familyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "read",
+                "exit",
+                "archive",
+                "union",
+                "transit",
+                "party",
+                "medicine",
+                "language"
+              ],
+              "meaning": "family の所在または保持者"
+            },
+            "languageAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "read",
+                "exit",
+                "archive",
+                "union",
+                "transit",
+                "party",
+                "medicine",
+                "family"
+              ],
+              "meaning": "language の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "medicine": {
+              "holder": "medicineAt",
+              "kind": "item"
+            },
+            "family": {
+              "holder": "familyAt",
+              "kind": "item"
+            },
+            "language": {
+              "holder": "languageAt",
+              "kind": "item"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "火は内容でなく、未完の読書に応じて再現される記憶魔法だ。読み終えた児童書だけが冷たいことを先に示す。一冊を最後まで読む間、他の本へ手を出さなければその本を安全に持ち出せる。館長が何冊も同時に開いたことが火勢を保っている。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "図書館の選書棚",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "read": {
+              "title": "他の本を開かず読む机",
+              "place": "read",
+              "cast": [],
+              "requires": true
+            },
+            "carry_medicine": {
+              "title": "本の受入室",
+              "place": "archive",
+              "cast": [],
+              "requires": true
+            },
+            "carry_family": {
+              "title": "本の受入室",
+              "place": "archive",
+              "cast": [],
+              "requires": true
+            },
+            "carry_language": {
+              "title": "本の受入室",
+              "place": "archive",
+              "cast": [],
+              "requires": true
+            },
+            "prepare_book": {
+              "title": "本の受入室",
+              "place": "archive",
+              "cast": [],
+              "requires": true
+            },
+            "requested": {
+              "title": "追加の救出の相談先",
+              "place": "union",
+              "cast": [],
+              "requires": true
+            },
+            "replace_book": {
+              "title": "図書館の選書棚",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "closed": {
+              "title": "図書館の封鎖口",
+              "place": "exit",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_medicine": {
+              "from": [
+                "entry"
+              ],
+              "to": "read",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "read"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "medicine",
+                  "from": "party",
+                  "to": "read"
+                },
+                {
+                  "op": "set",
+                  "key": "book",
+                  "value": "medicine"
+                },
+                {
+                  "op": "set",
+                  "key": "pages",
+                  "value": 0
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "read",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "medicine",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "entry_family": {
+              "from": [
+                "entry"
+              ],
+              "to": "read",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "read"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "family",
+                  "from": "party",
+                  "to": "read"
+                },
+                {
+                  "op": "set",
+                  "key": "book",
+                  "value": "family"
+                },
+                {
+                  "op": "set",
+                  "key": "pages",
+                  "value": 0
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "read",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "family",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "entry_language": {
+              "from": [
+                "entry"
+              ],
+              "to": "read",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "read"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "language",
+                  "from": "party",
+                  "to": "read"
+                },
+                {
+                  "op": "set",
+                  "key": "book",
+                  "value": "language"
+                },
+                {
+                  "op": "set",
+                  "key": "pages",
+                  "value": 0
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "read",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "language",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "entry_close": {
+              "from": [
+                "entry"
+              ],
+              "to": "closed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "exit"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "exit",
+                "companions": []
+              },
+              "depart": []
+            },
+            "read_page": {
+              "from": [
+                "read"
+              ],
+              "to": "read",
+              "requires": {
+                "op": "lt",
+                "left": {
+                  "ref": "stories.q137.values.pages"
+                },
+                "right": 3
+              },
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "medicinePages",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "stories.q137.values.medicinePages"
+                      },
+                      1
+                    ]
+                  },
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q137.values.book"
+                    },
+                    "right": "medicine"
+                  }
+                },
+                {
+                  "op": "set",
+                  "key": "familyPages",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "stories.q137.values.familyPages"
+                      },
+                      1
+                    ]
+                  },
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q137.values.book"
+                    },
+                    "right": "family"
+                  }
+                },
+                {
+                  "op": "set",
+                  "key": "languagePages",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "stories.q137.values.languagePages"
+                      },
+                      1
+                    ]
+                  },
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q137.values.book"
+                    },
+                    "right": "language"
+                  }
+                },
+                {
+                  "op": "set",
+                  "key": "pages",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "stories.q137.values.pages"
+                      },
+                      1
+                    ]
+                  }
+                }
+              ],
+              "once": false
+            },
+            "read_carry_medicine": {
+              "from": [
+                "read"
+              ],
+              "to": "carry_medicine",
+              "requires": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "stories.q137.values.pages"
+                    },
+                    "right": 3
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q137.values.book"
+                    },
+                    "right": "medicine"
+                  }
+                ]
+              },
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "archive"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "archive",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "medicine",
+                  "from": "read",
+                  "to": "party"
+                }
+              ]
+            },
+            "read_carry_family": {
+              "from": [
+                "read"
+              ],
+              "to": "carry_family",
+              "requires": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "stories.q137.values.pages"
+                    },
+                    "right": 3
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q137.values.book"
+                    },
+                    "right": "family"
+                  }
+                ]
+              },
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "archive"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "archive",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "family",
+                  "from": "read",
+                  "to": "party"
+                }
+              ]
+            },
+            "read_carry_language": {
+              "from": [
+                "read"
+              ],
+              "to": "carry_language",
+              "requires": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "stories.q137.values.pages"
+                    },
+                    "right": 3
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q137.values.book"
+                    },
+                    "right": "language"
+                  }
+                ]
+              },
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "archive"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "archive",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "language",
+                  "from": "read",
+                  "to": "party"
+                }
+              ]
+            },
+            "read_prepare": {
+              "from": [
+                "read"
+              ],
+              "to": "prepare_book",
+              "requires": {
+                "op": "gte",
+                "left": {
+                  "ref": "stories.q137.values.pages"
+                },
+                "right": 3
+              },
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "archive"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "medicine",
+                  "from": "party",
+                  "to": "archive",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q137.values.medicineAt"
+                    },
+                    "right": "party"
+                  }
+                },
+                {
+                  "op": "transfer",
+                  "entity": "family",
+                  "from": "party",
+                  "to": "archive",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q137.values.familyAt"
+                    },
+                    "right": "party"
+                  }
+                },
+                {
+                  "op": "transfer",
+                  "entity": "language",
+                  "from": "party",
+                  "to": "archive",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q137.values.languageAt"
+                    },
+                    "right": "party"
+                  }
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "archive",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "medicine",
+                  "from": "read",
+                  "to": "party",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q137.values.medicineAt"
+                    },
+                    "right": "read"
+                  }
+                },
+                {
+                  "op": "transfer",
+                  "entity": "family",
+                  "from": "read",
+                  "to": "party",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q137.values.familyAt"
+                    },
+                    "right": "read"
+                  }
+                },
+                {
+                  "op": "transfer",
+                  "entity": "language",
+                  "from": "read",
+                  "to": "party",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q137.values.languageAt"
+                    },
+                    "right": "read"
+                  }
+                }
+              ]
+            },
+            "read_close": {
+              "from": [
+                "read"
+              ],
+              "to": "replace_book",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "medicine",
+                  "from": "party",
+                  "to": "entry",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q137.values.medicineAt"
+                    },
+                    "right": "party"
+                  }
+                },
+                {
+                  "op": "transfer",
+                  "entity": "family",
+                  "from": "party",
+                  "to": "entry",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q137.values.familyAt"
+                    },
+                    "right": "party"
+                  }
+                },
+                {
+                  "op": "transfer",
+                  "entity": "language",
+                  "from": "party",
+                  "to": "entry",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q137.values.languageAt"
+                    },
+                    "right": "party"
+                  }
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "medicine",
+                  "from": "read",
+                  "to": "party",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q137.values.medicineAt"
+                    },
+                    "right": "read"
+                  }
+                },
+                {
+                  "op": "transfer",
+                  "entity": "family",
+                  "from": "read",
+                  "to": "party",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q137.values.familyAt"
+                    },
+                    "right": "read"
+                  }
+                },
+                {
+                  "op": "transfer",
+                  "entity": "language",
+                  "from": "read",
+                  "to": "party",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q137.values.languageAt"
+                    },
+                    "right": "read"
+                  }
+                }
+              ]
+            },
+            "carry_medicine_finish": {
+              "from": [
+                "carry_medicine"
+              ],
+              "ending": "medicine",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "medicine",
+                  "from": "party",
+                  "to": "archive"
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "medicine"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "carry_family_finish": {
+              "from": [
+                "carry_family"
+              ],
+              "ending": "family",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "family",
+                  "from": "party",
+                  "to": "archive"
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "family"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "carry_language_finish": {
+              "from": [
+                "carry_language"
+              ],
+              "ending": "language",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "language",
+                  "from": "party",
+                  "to": "archive"
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "language"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "prepare_book_request": {
+              "from": [
+                "prepare_book"
+              ],
+              "to": "requested",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "union"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "union",
+                "companions": []
+              },
+              "depart": []
+            },
+            "requested_finish": {
+              "from": [
+                "requested"
+              ],
+              "ending": "prepare",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "prepare"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "replace_book_seal": {
+              "from": [
+                "replace_book"
+              ],
+              "to": "closed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "exit"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "exit",
+                "companions": []
+              },
+              "depart": []
+            },
+            "closed_finish": {
+              "from": [
+                "closed"
+              ],
+              "ending": "close",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "close"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "medicine": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q137.values.resolution"
+                  },
+                  "right": "medicine"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q137.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q137.values.partyAt"
+                      },
+                      "right": "archive"
+                    }
+                  ]
+                }
+              ]
+            },
+            "family": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q137.values.resolution"
+                  },
+                  "right": "family"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q137.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q137.values.partyAt"
+                      },
+                      "right": "archive"
+                    }
+                  ]
+                }
+              ]
+            },
+            "language": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q137.values.resolution"
+                  },
+                  "right": "language"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q137.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q137.values.partyAt"
+                      },
+                      "right": "archive"
+                    }
+                  ]
+                }
+              ]
+            },
+            "prepare": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q137.values.resolution"
+                  },
+                  "right": "prepare"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q137.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q137.values.partyAt"
+                      },
+                      "right": "union"
+                    }
+                  ]
+                }
+              ]
+            },
+            "close": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q137.values.resolution"
+                  },
+                  "right": "close"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q137.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q137.values.partyAt"
+                      },
+                      "right": "exit"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "pilgrim_sites",
+              "map": "e2_burnt_library",
+              "x": 3,
+              "y": 1
+            },
+            "read": {
+              "kind": "dungeon",
+              "dungeon": "pilgrim_sites",
+              "map": "e2_burnt_library",
+              "x": 7,
+              "y": 3
+            },
+            "exit": {
+              "kind": "dungeon",
+              "dungeon": "pilgrim_sites",
+              "map": "e2_burnt_library",
+              "x": 1,
+              "y": 1
+            },
+            "archive": {
+              "kind": "town",
+              "location": "pilgrim_archive"
+            },
+            "union": {
+              "kind": "town",
+              "location": "pilgrim_union"
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "elAt",
+            "value": "entry"
+          },
+          {
+            "key": "elAt",
+            "value": "exit",
+            "when": {
+              "op": "or",
+              "args": [
+                {
+                  "op": "in",
+                  "left": "entry_close",
+                  "right": {
+                    "ref": "stories.q137.events"
+                  }
+                },
+                {
+                  "op": "in",
+                  "left": "replace_book_seal",
+                  "right": {
+                    "ref": "stories.q137.events"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "key": "elAt",
+            "value": "transit",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "journey.quest"
+                  },
+                  "right": "q137"
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "journey.action"
+                      },
+                      "right": "entry_close"
+                    },
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "journey.action"
+                      },
+                      "right": "replace_book_seal"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "key": "librarianAt",
+            "value": "entry"
+          },
+          {
+            "key": "librarianAt",
+            "value": "exit",
+            "when": {
+              "op": "or",
+              "args": [
+                {
+                  "op": "in",
+                  "left": "entry_close",
+                  "right": {
+                    "ref": "stories.q137.events"
+                  }
+                },
+                {
+                  "op": "in",
+                  "left": "replace_book_seal",
+                  "right": {
+                    "ref": "stories.q137.events"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "key": "librarianAt",
+            "value": "transit",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "journey.quest"
+                  },
+                  "right": "q137"
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "journey.action"
+                      },
+                      "right": "entry_close"
+                    },
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "journey.action"
+                      },
+                      "right": "replace_book_seal"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "key": "firefighterAt",
+            "value": "entry"
+          },
+          {
+            "key": "firefighterAt",
+            "value": "exit",
+            "when": {
+              "op": "or",
+              "args": [
+                {
+                  "op": "in",
+                  "left": "entry_close",
+                  "right": {
+                    "ref": "stories.q137.events"
+                  }
+                },
+                {
+                  "op": "in",
+                  "left": "replace_book_seal",
+                  "right": {
+                    "ref": "stories.q137.events"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "key": "firefighterAt",
+            "value": "transit",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "journey.quest"
+                  },
+                  "right": "q137"
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "journey.action"
+                      },
+                      "right": "entry_close"
+                    },
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "journey.action"
+                      },
+                      "right": "replace_book_seal"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q137.scene.entry": {
@@ -2149,6 +3581,45 @@
           "family"
         ],
         "meaning": "language の所在または保持者"
+      },
+      "elAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "read",
+          "exit",
+          "archive",
+          "union",
+          "transit"
+        ],
+        "meaning": "el の所在または保持者"
+      },
+      "librarianAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "read",
+          "exit",
+          "archive",
+          "union",
+          "transit"
+        ],
+        "meaning": "librarian の所在または保持者"
+      },
+      "firefighterAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "read",
+          "exit",
+          "archive",
+          "union",
+          "transit"
+        ],
+        "meaning": "firefighter の所在または保持者"
       }
     },
     "entities": {
@@ -2167,6 +3638,21 @@
       "language": {
         "holder": "languageAt",
         "kind": "item"
+      },
+      "el": {
+        "holder": "elAt",
+        "kind": "person",
+        "character": "q137_el"
+      },
+      "librarian": {
+        "holder": "librarianAt",
+        "kind": "person",
+        "character": "q137_librarian"
+      },
+      "firefighter": {
+        "holder": "firefighterAt",
+        "kind": "group",
+        "character": "q137_firefighter"
       }
     },
     "propositions": {
@@ -2180,7 +3666,28 @@
       "entry": {
         "title": "図書館の選書棚",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "el",
+            "display": {
+              "x": 30,
+              "scale": 0.86
+            }
+          },
+          {
+            "entity": "librarian",
+            "display": {
+              "x": 70,
+              "scale": 0.86
+            }
+          },
+          {
+            "entity": "firefighter",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "read": {
@@ -2228,7 +3735,15 @@
       "closed": {
         "title": "図書館の封鎖口",
         "place": "exit",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "librarian",
+            "display": {
+              "x": 50,
+              "scale": 0.86
+            }
+          }
+        ],
         "requires": true
       }
     },
@@ -2393,7 +3908,10 @@
           {
             "op": "move",
             "entities": [
-              "party"
+              "party",
+              "el",
+              "librarian",
+              "firefighter"
             ],
             "path": [
               "transit",
@@ -2406,7 +3924,11 @@
         "once": false,
         "journey": {
           "to": "exit",
-          "companions": []
+          "companions": [
+            "el",
+            "librarian",
+            "firefighter"
+          ]
         },
         "depart": []
       },
@@ -3008,7 +4530,10 @@
           {
             "op": "move",
             "entities": [
-              "party"
+              "party",
+              "el",
+              "librarian",
+              "firefighter"
             ],
             "path": [
               "transit",
@@ -3021,7 +4546,11 @@
         "once": false,
         "journey": {
           "to": "exit",
-          "companions": []
+          "companions": [
+            "el",
+            "librarian",
+            "firefighter"
+          ]
         },
         "depart": []
       },
@@ -3234,7 +4763,7 @@
         "location": "pilgrim_union"
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "oddland_plateau",
   "receptionLocations": [
