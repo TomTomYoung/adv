@@ -4,16 +4,16 @@
   "summary": {
     "quests": 100,
     "scenes": 753,
-    "emptyCastScenes": 690,
+    "emptyCastScenes": 686,
     "personEntities": 110,
-    "characterLinkedEntities": 28,
-    "reviewedQuests": 18,
-    "reviewedScenes": 99,
-    "noPersonEvidenceScenes": 32,
-    "personEvidenceScenes": 67,
-    "candidateRoles": 2,
-    "connectedRoles": 33,
-    "unreviewedScenes": 654
+    "characterLinkedEntities": 30,
+    "reviewedQuests": 19,
+    "reviewedScenes": 114,
+    "noPersonEvidenceScenes": 36,
+    "personEvidenceScenes": 78,
+    "candidateRoles": 5,
+    "connectedRoles": 35,
+    "unreviewedScenes": 639
   },
   "regions": [
     {
@@ -21,15 +21,15 @@
       "name": "礼拝堂",
       "quests": 20,
       "scenes": 122,
-      "emptyCastScenes": 59,
+      "emptyCastScenes": 55,
       "personEntities": 32,
-      "characterLinkedEntities": 28,
-      "reviewedQuests": 18,
-      "reviewedScenes": 99,
-      "noPersonEvidenceScenes": 32,
-      "personEvidenceScenes": 67,
-      "candidateRoles": 2,
-      "connectedRoles": 33
+      "characterLinkedEntities": 30,
+      "reviewedQuests": 19,
+      "reviewedScenes": 114,
+      "noPersonEvidenceScenes": 36,
+      "personEvidenceScenes": 78,
+      "candidateRoles": 5,
+      "connectedRoles": 35
     },
     {
       "id": 7,
@@ -7084,7 +7084,7 @@
       "region": 4,
       "client": "探索組合",
       "source": "authoring/editions/e2/oddland/chapel-second.mjs",
-      "sourceSha256": "142baac200c4ae6b69620b02d8963ce14d4e946216a29baa0552c0f317d76cdd",
+      "sourceSha256": "f6e9aee98c2e167bb7eb57d3b393a3eab78984869a4fce9be11f1b3fd668f840",
       "scenes": [
         {
           "id": "entry",
@@ -7115,14 +7115,29 @@
             "x": 3,
             "y": 7
           },
-          "cast": [],
+          "cast": [
+            {
+              "entity": "ira",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q138.values.iraAt"
+                },
+                "right": "pupil"
+              },
+              "display": {
+                "x": 50,
+                "scale": 0.86
+              }
+            }
+          ],
           "review": {
             "decision": "person-evidence",
             "people": [
               "q138_ira"
             ],
             "evidence": "イラは休息所で見つかった。",
-            "reason": "イラ本人を発見する。師が過去に準備した退路の説明から、ナルの同席を追加しない。",
+            "reason": "イラ本人を発見する。師が過去に準備した退路の説明からナルの同席を追加しない。単独出発後の完了状態ではイラも表示しない。",
             "visual": "休息所、退路情報、功績の分担への合意と同行拒否の選択。"
           }
         },
@@ -7136,7 +7151,15 @@
             "x": 13,
             "y": 7
           },
-          "cast": [],
+          "cast": [
+            {
+              "entity": "ira",
+              "display": {
+                "x": 50,
+                "scale": 0.86
+              }
+            }
+          ],
           "review": {
             "decision": "person-evidence",
             "people": [
@@ -7154,7 +7177,15 @@
             "kind": "town",
             "location": "pilgrim_union"
           },
-          "cast": [],
+          "cast": [
+            {
+              "entity": "narl",
+              "display": {
+                "x": 50,
+                "scale": 0.86
+              }
+            }
+          ],
           "review": {
             "decision": "person-evidence",
             "people": [
@@ -7175,7 +7206,22 @@
             "x": 3,
             "y": 7
           },
-          "cast": [],
+          "cast": [
+            {
+              "entity": "ira",
+              "display": {
+                "x": 30,
+                "scale": 0.86
+              }
+            },
+            {
+              "entity": "narl",
+              "display": {
+                "x": 70,
+                "scale": 0.86
+              }
+            }
+          ],
           "review": {
             "decision": "person-evidence",
             "people": [
@@ -7184,7 +7230,7 @@
             ],
             "evidence": "二人が同じ休息所で話した。",
             "reason": "実際の帰着後に二人が会う。礼と抗議を別々に扱い、強制和解や新しい関係を断定しない。",
-            "visual": "二人の対話、訂正図とfinishでの手渡し。"
+            "visual": "二人の対話、渡す訂正図の確認とfinishでの手渡し。"
           }
         },
         {
@@ -7207,35 +7253,38 @@
       "personEntities": [
         {
           "id": "ira",
-          "character": null
+          "character": "q138_ira"
         },
         {
           "id": "narl",
-          "character": null
+          "character": "q138_narl"
         }
       ],
       "review": {
         "identityNotes": [
           "探検家ナルと弟子イラは別の二人。依頼人の探索組合を窓口係へ変換しない。本文の名と役職で識別し、他の人物へ名前だけで統合しない。",
-          "イラはpupil・explored・mediated、ナルはcall・mediatedで表示候補。entryの地図と足跡は本人の同席根拠ではなく、reportedも特定の受取人を明記しない。共同探索の結末にあるナルの危険表示を、exploredへの同席に拡張しない。",
+          "イラはpupil・explored・mediated、ナルはcall・mediatedへ専用画で接続した。pupilのイラは実際に休息所にいる間だけ表示し、単独出発後に残さない。entryの地図と足跡は本人の同席根拠ではなく、reportedも特定の受取人を明記しない。共同探索の結末にあるナルの危険表示をexploredへの同席に拡張しない。",
           "現行ira・narlはperson、mapはitem。同行経路はイラと先へ進むpupil_together、ナルと戻るcall_escortだけ。ナルを呼ぶ往路ではイラは休息所に残る。同行拒否のsoloではイラへ地図を渡し、イラだけが先へ進む。隊の強制同行や和解を追加しない。",
           "地図を追うentry_mapだけが到着時にmapの履歴を記録し、足跡経路とは区別する。仲介後のfinishでイラへ、訂正報告後のfinishで組合へ地図を渡す。先へ同行する場合は功績の分担への合意を先に行う。",
           "保護の意図は探索権を奪った事実を取り消さない。礼と抗議を別々に聞き、訂正だけの帰還を救出・和解・未踏区画すべての確認へ読み替えない。4結末の93G・69EXP、戦闘なしを保持する。",
-          "既存4地点はe2_sand_galleryの地図と足跡(5,1)、休息所(3,7)、先の調査地点(13,7)、pilgrim_union。新しい町は不要で、地図の虚偽・危険度・退路、共同探索と単独探索、手渡しの前後を局所差分へ分ける。"
+          "既存4地点はe2_sand_galleryの地図と足跡(5,1)、休息所(3,7)、先の調査地点(13,7)、pilgrim_union。新しい町は不要で、地図の虚偽・危険度・退路、共同探索と単独探索、手渡しの前後を局所差分へ分ける。",
+          "mediatedの本文はイラへ渡す訂正図を確かめる描写へ整理し、finishでpartyからiraへ渡す既存の時点に合わせた。物語改訂1と保存内容は維持し、旧保存の待機本文は旧文のまま再開する。現場接続前の旧受注経路には人物状態やcastを追加しない。"
         ],
         "people": {
           "q138_ira": {
             "label": "弟子イラ",
-            "status": "candidate",
-            "need": "休息所・共同探索・仲介の3場面。本人の同行同意と拒否、単独の移動を保持する専用画候補。"
+            "status": "connected",
+            "need": "専用画をpupil・explored・mediatedへ接続。pupilはiraAtがpupilの間だけ表示し、単独出発後の完了保存に姿を残さない。",
+            "entity": "ira"
           },
           "q138_narl": {
             "label": "探検家ナル",
-            "status": "candidate",
-            "need": "探索組合で呼びに行く場面と休息所の仲介の2場面。組合からの実同行へ接続する専用画候補。"
+            "status": "connected",
+            "need": "専用画をcall・mediatedへ接続。組合から休息所へ戻る既存の実同行を使う。",
+            "entity": "narl"
           }
         },
-        "next": "イラ・ナルの専用画と既存の所在・同行を整理する。地図・足跡・退路・休息所・共同と単独の探索・組合報告の差分は未制作。次の人物監査はq139。"
+        "next": "イラ・ナルの人物画と既存の所在・同行への接続、単独出発後の表示条件、本文の受渡し時点は整理済み。地図・足跡・退路・休息所・共同と単独の探索・組合報告の差分は未制作。次はq139の5役の表示・条件付き同行、人物監査はq140。"
       }
     },
     {
@@ -7257,7 +7306,16 @@
             "y": 1
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q139_sena",
+              "q139_geologist"
+            ],
+            "evidence": "声の多い側をセナは指す。地質師は反対側の水位が低いと言う。",
+            "reason": "セナと地質師がその場で判断を述べる。地下の生存者はまだ見えていない。",
+            "visual": "分岐、崩落、二方向の声、水位の違い、壁へ当てる器。"
+          }
         },
         {
           "id": "rooms",
@@ -7270,7 +7328,15 @@
             "y": 7
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q139_injured"
+            ],
+            "evidence": "静かな側には声を出せない負傷者がいた。",
+            "reason": "負傷者の室で本人たちを発見する。別室の群やセナ・地質師の同席は追加しない。",
+            "visual": "負傷者の支援、二室の位置と音の違い、排水と送気の準備判断。"
+          }
         },
         {
           "id": "air",
@@ -7283,7 +7349,13 @@
             "y": 5
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "no-person-evidence",
+            "people": [],
+            "evidence": "空気は通った。",
+            "reason": "送気の状態と救助方法の判断。応援班はまだ呼んでおらず、生存者も別室にいる。",
+            "visual": "送気口、両室への通気、縄二つと無料応援の選択。"
+          }
         },
         {
           "id": "listen",
@@ -7296,7 +7368,13 @@
             "y": 3
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "no-person-evidence",
+            "people": [],
+            "evidence": "声の多い側の振動を測った。",
+            "reason": "壁越しの測定であり、まだ掘り出していない生存者の顔や身体を見せる根拠にはしない。",
+            "visual": "器と壁の接触、声と振動、反響と発生源の区別。"
+          }
         },
         {
           "id": "many_ready",
@@ -7309,7 +7387,15 @@
             "y": 3
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q139_crowd"
+            ],
+            "evidence": "多い側の組を掘り出した。",
+            "reason": "掘り出した群はこの室にいる。まだ地上への到着・救出完了ではない。",
+            "visual": "開いた崩落部、連絡を保つ退路、地上への出発準備。"
+          }
         },
         {
           "id": "many_home",
@@ -7319,7 +7405,15 @@
             "location": "pilgrim_rescue"
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q139_crowd"
+            ],
+            "evidence": "多い側の組が詰所へ着いた。",
+            "reason": "到着した群を示す。残る室の負傷者・呼んでいない応援班は加えない。",
+            "visual": "多い側の帰還、残室への救援継続の記録。"
+          }
         },
         {
           "id": "wounded_home",
@@ -7329,7 +7423,15 @@
             "location": "pilgrim_rescue"
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q139_injured"
+            ],
+            "evidence": "負傷者を詰所の班へ引き渡した。",
+            "reason": "帰還した負傷者を表示候補とする。受入班の構成やfinish後のセナの所在を到着直後へ固定しない。",
+            "visual": "支援と引継ぎ、救難笛、もう一室へ回す道具。"
+          }
         },
         {
           "id": "drain",
@@ -7342,7 +7444,13 @@
             "y": 5
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "no-person-evidence",
+            "people": [],
+            "evidence": "排水口へ着き、水の流れを外へ逃がした。",
+            "reason": "排水作業のみ。地質師の自動同行や別室の生存者を加えない。",
+            "visual": "排水口と水流、排水前後、別地点にある送気口。"
+          }
         },
         {
           "id": "request_help",
@@ -7352,7 +7460,15 @@
             "location": "pilgrim_rescue"
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q139_helpers"
+            ],
+            "evidence": "詰所へ応援を求めた。",
+            "reason": "次のreturnが応援班との同行を明記するため、出発前に応じる班の呼称を候補とする編集判断を含む。受入班全員との同一性は確定しない。",
+            "visual": "応援要請、送気を維持する引継ぎ、未救出の二室。"
+          }
         },
         {
           "id": "collect_injured",
@@ -7365,7 +7481,15 @@
             "y": 7
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q139_injured"
+            ],
+            "evidence": "負傷者を支えられる状態にし、もう一室へ向かう。",
+            "reason": "自力の縄経路で負傷者を支える。まだ応援班は同行していない。",
+            "visual": "縄と支持、もう一室へ運ぶ準備、救出未確定。"
+          }
         },
         {
           "id": "collect_crowd",
@@ -7378,7 +7502,16 @@
             "y": 3
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q139_injured",
+              "q139_crowd"
+            ],
+            "evidence": "二室の生存者が揃った。",
+            "reason": "負傷者を連れて多い側へ実到着し、二群が揃う。地上への救出完了はまだ。",
+            "visual": "二群の合流、出口への動線、地上到着待ち。"
+          }
         },
         {
           "id": "collect_injured_help",
@@ -7391,7 +7524,16 @@
             "y": 7
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q139_injured",
+              "q139_helpers"
+            ],
+            "evidence": "負傷者を支えられる状態にし、もう一室へ向かう。",
+            "reason": "returnで同行してきた応援班が負傷者の室にいる。班をその場へ瞬間移動させず、実旅程で合わせる。",
+            "visual": "応援班による支持と役割の引継ぎ、次室への出発。"
+          }
         },
         {
           "id": "collect_crowd_help",
@@ -7404,7 +7546,17 @@
             "y": 3
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q139_injured",
+              "q139_crowd",
+              "q139_helpers"
+            ],
+            "evidence": "二室の生存者が揃った。",
+            "reason": "負傷者と応援班の同行で二群が合流する。三群を個別の呼称で区別する。",
+            "visual": "二室の生存者と応援班、地上へ運ぶ隊列。"
+          }
         },
         {
           "id": "both_home",
@@ -7414,7 +7566,17 @@
             "location": "pilgrim_rescue"
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q139_injured",
+              "q139_crowd",
+              "q139_helpers"
+            ],
+            "evidence": "二室の生存者が地上の詰所へ着いた。",
+            "reason": "二群は両経路で到着する。helpersは応援経路の到着履歴がある場合だけ表示候補。自力経路では同じ詰所という理由だけで表示しない。",
+            "visual": "二室の帰還、支援の引継ぎ、応援同行の有無による差分、救難笛。"
+          }
         },
         {
           "id": "air_tools_ready",
@@ -7427,11 +7589,56 @@
             "y": 5
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "no-person-evidence",
+            "people": [],
+            "evidence": "必要な道具を使って準備を整えた。",
+            "reason": "縄二つを支払った送気口での準備。二群はまだ別室、応援班も呼んでいない。",
+            "visual": "消費済みの縄二つ、準備完了と出発待ち、繰返し課金しない状態。"
+          }
         }
       ],
       "personEntities": [],
-      "review": null
+      "review": {
+        "identityNotes": [
+          "救助責任者セナと匿名の地質師はentryで直接発言する二役。篝火q202の訓練を担当するセナとは名前だけで同一人物へ統合しない。具体的な年齢・性別・人数・負傷の程度は新設しない。",
+          "既存crowd・injured・helpersは三つのgroup。声の多い側の生存者、声を出せない負傷者、詰所から同行する応援班を区別し、群衆を一人の代表画へ置換しない。三群の人数や構成は未設定で、呼称表示を第一候補とする。",
+          "listenは壁を通した声と振動の観察で、声の発生源を個人の立ち絵として見せない。反響があることと二組の生存者が実在することを同時に保つ。少ない声を無人、反響を偽の救難と断定しない。",
+          "セナと地質師の全経路同行は明記されない。wounded結末ではセナが道具を回すが、それはfinish後の描写であり、wounded_homeの到着直後へ自動配置しない。詰所の受入班と同行するhelpersを同一の構成員だと決めず、新しい窓口係も増やさない。",
+          "helpersはrequest_helpで呼び、returnから同行する。collect_injured_help・collect_crowd_helpへ接続し、共用both_homeでは応援経路の到着履歴を表示条件にする。初期所在がrescueというだけで自力の縄経路のboth_homeへ表示しない。単なる所在判定では区別できない。",
+          "排水と送気はpump・airの別地点への実到着で確定する。縄二つの経路は準備場面で一回消費し、無料の応援経路も保持する。掘り出した段階と詰所へ到着した救出確定を分け、injuredRescued・crowdRescuedを早めない。",
+          "既存6地点はe2_rescue_tunnelの分岐(1,1)、声の多い室(11,3)、負傷者の室(11,7)、排水口(3,5)、送気口(7,5)、pilgrim_rescueの救助詰所。新しい町は不要。二室・排水・送気・資材準備・応援到着・引継ぎを個別の状態差分にする。",
+          "結末many・wounded・bothは各93G・69EXP。片側だけの救出は残室の救援を継続する結末として保ち、放棄や死亡を追加しない。救難笛の描写は小物候補で、所持品や消費アイテムへ自動変換しない。"
+        ],
+        "people": {
+          "q139_sena": {
+            "label": "救助責任者セナ",
+            "status": "candidate",
+            "need": "分岐entryの専用画候補。wounded結末の道具を回す描写はfinish後で、到着直後の固定出演や全経路同行を追加しない。"
+          },
+          "q139_geologist": {
+            "label": "坑道の地質師",
+            "status": "candidate",
+            "need": "entryで低い側の水位を指摘する匿名の専用画候補。名前・他の地質師との同一性・全経路同行は未確定。"
+          },
+          "q139_crowd": {
+            "label": "声の多い側の生存者",
+            "status": "candidate",
+            "need": "既存crowdへ呼称表示する候補。人数と顔は創作せず、掘り出し後・同行・地上到着を分ける。"
+          },
+          "q139_injured": {
+            "label": "声を出せない負傷者",
+            "status": "candidate",
+            "need": "既存injuredへ呼称表示する候補。負傷の程度・人数を固定せず、支えた移動と実到着での救出を保持する。"
+          },
+          "q139_helpers": {
+            "label": "同行する応援班",
+            "status": "candidate",
+            "need": "既存helpersへ呼称表示する候補。応援経路だけで実同行し、共用both_homeは到着履歴による表示条件が必要。"
+          }
+        },
+        "next": "セナ・地質師の専用画と三群の呼称、所在・同行・both_homeの応援経路だけの表示条件を整理する。器・反響・崩落・水位・排水・送気・縄・笛・二室と詰所の差分は未制作。次の人物監査はq140。"
+      }
     },
     {
       "id": "q140",
