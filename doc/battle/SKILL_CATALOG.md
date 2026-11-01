@@ -1,6 +1,6 @@
 # スキル一覧
 
-更新日: 2026-10-31。作品版1.34.0。戦闘スキル84件、探索スキル15件。
+更新日: 2026-11-01。作品版1.34.0。戦闘スキル84件、探索スキル15件。
 
 正本は [data/skills.json](../../data/skills.json) と [data/field-abilities.json](../../data/field-abilities.json)。魔法との表示分類は [character-profile.js](../../src/application/character-profile.js) の明示分類に従います。魔法に分類される能力は [MAGIC_CATALOG.md](MAGIC_CATALOG.md) に分けます。
 

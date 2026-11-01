@@ -51,6 +51,11 @@ export function sunkenFirstSource(q,{cast=true}={}){
   choice('entry','before').effects=[set('observed')];choice('bay','mechanism').effects=[set('observed')];
   route('pressure','bell','bell_ready',{effects:[set('bell')]});end('bell_ready','entry','砲の前へ戻って圧力管を鐘へつなぎ、作動を確かめた。','informed');
   for(const [from,key] of [['pressure','schedule'],['bay','fish']])route(from,key,'schedule');end('schedule','fishers','観測した砲声と魚の移動を漁師へ伝え、網を引く時刻を相談した。','compromise');
+  if(cast){
+   entity('fisher','fishers','group');
+   x.entities.fisher.character='q064_fisher';
+   node('schedule').cast=[{entity:'fisher',x:50}];
+  }
  }
  if(q.number===65){
   cell('supply','油膜をつなぐ供油路','region_7_f1',15,3);town('shore','岸の葬送の場','royal_harbor');node('tide').place='supply';int('phase',2);x.flags.connected=false;entity('lamp','entry');entity('ritualOil','supply');

@@ -1625,6 +1625,126 @@ export const RELOCATED_CAST_REVIEW={
     }
   },
   "next": "全4場面は同席人物の根拠なし。人物画・人物定義・castの追加は不要。既存3地点の階段・重り・固定方法・通気孔の局所差分は未制作。次はq064の本文・所在・出演根拠を監査する。"
+},
+  q064:{
+  "sourceSha256": "0bc44322a2785e79fc6dd8d58f74ba99e349fc11c8f87362f4d9f69404dc36af",
+  "identityNotes": [
+    "依頼人は漁師のハル。砲声を待つというentryの叙述だけでは、城内の砲の前にいるとは確定できない。",
+    "scheduleの相談相手は本文の呼称「漁師」で表示する。compromise結末にハルの名が出るが、相談相手の氏名や人数は特定されない。小屋への二つの往路で同じ役を使う。",
+    "砲の前(8,12)・圧力管(7,9)はregion_7_f1、湾はroyal_bay、小屋はroyal_fishers。観測・魚群の避難・鐘への改造・時刻表の相談を既存4地点で描き分ける。",
+    "圧力管へ到着した経路だけがobservedを得る。湾から小屋へ直接向かう場合も相談できる。鐘は砲の前への帰着で作動し、三つの結末は異なる報酬を持つ。"
+  ],
+  "people": {
+    "q064_fisher": {
+      "label": "漁師",
+      "status": "connected",
+      "entity": "fisher",
+      "need": "漁師小屋のscheduleへ呼称を接続した。物語改訂1から2への移行ではfisherAtに小屋の所在だけを補う。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "漁師は次の砲声を待っている。",
+      "reason": "砲声を待つ漁師への言及。砲の前で隊と同席する場所の記述はない。",
+      "visual": "砲と魚群の動き、発砲前後の海面。"
+    },
+    "pressure": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "海獣が遠くを通ると圧力管が動き、砲が鳴った。",
+      "reason": "遠くの海獣と警報機構の観測。漁師の同行は描かれない。",
+      "visual": "海獣の影、作動する圧力管と砲。"
+    },
+    "bay": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "この湾には海獣が入れない。",
+      "reason": "魚群の退避先を確かめる。湾で漁師と会う描写はない。",
+      "visual": "海獣が入れない湾口、集まる魚群。"
+    },
+    "bell_ready": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "砲の前へ戻って圧力管を鐘へつなぎ、作動を確かめた。",
+      "reason": "隊が戻って改造の結果を確かめる。",
+      "visual": "砲と鐘、圧力管の接続前後。"
+    },
+    "schedule": {
+      "decision": "person-evidence",
+      "people": [
+        "q064_fisher"
+      ],
+      "evidence": "観測した砲声と魚の移動を漁師へ伝え、網を引く時刻を相談した。",
+      "reason": "村の漁師小屋で直接話す相手。湾からの経路では圧力管を未観測でも表示する。",
+      "visual": "砲声と魚群を対照する時刻表、網を引く支度。"
+    }
+  },
+  "next": "漁師小屋の呼称を接続済み。砲・圧力管・魚群・鐘・時刻表の局所素材が残る。"
+},
+  q065:{
+  "sourceSha256": "4386118e565acb2105a28c0b1635ca4832f9c8f38fe7dcef1d0338cca88021e8",
+  "identityNotes": [
+    "依頼人は葬送師のアオ。供油路の呼び名から本人の在席を確定せず、岸にいる遺族とは区別する。翌日油を回収する漁師はcontract結末の後日談。",
+    "ashoreでは「遺族の前へ置いた」と明記される。岸へ運んだ灯に立ち会う呼称の候補であり、q062の救命胴衣の遺族とは同定しない。",
+    "既存3地点はregion_7_f1の灯の場(15,5)・供油路(15,3)とroyal_harbor。灯・遺灰・分断された油膜・潮の三段階・岸の弔いを局所差分にする。",
+    "潮は選択で進み、phase=1で接続を選び、灯の場への帰着でconnectedを得る。儀礼用の油はsupply出発時に隊へ、現場到着時にlampへ移る。岸へ向かう二経路とも灯の到着後に遺族を表示する候補。"
+  ],
+  "people": {
+    "q065_mourners": {
+      "label": "岸で灯を迎える遺族",
+      "status": "candidate",
+      "need": "ashoreの岸で呼称を表示する候補。直接の帰岸と潮待ちからの帰岸を扱う。人数・氏名は未指定。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "水上の灯が潮目で消えた。",
+      "reason": "灯と油膜を観察する。アオの同席の記述はない。",
+      "visual": "消えた灯、切れた二つの油膜。"
+    },
+    "tide": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "流れはまだ外へ向く。",
+      "reason": "外向き・停止・内向きの三段階とも潮と油膜の描写。",
+      "visual": "流れの方向、近づく油膜の端と接続可能な位置。"
+    },
+    "sent": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "供油路をつないだ灯を儀礼の場へ戻し、止まった潮へ送った。",
+      "reason": "隊が戻り、灯を送る。結末で語られる葬送師の行動とは時点が異なる。",
+      "visual": "止まった潮、つながった油膜、遺灰を送る灯。"
+    },
+    "oil_supply": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "葬送師の供油路から儀礼用の油を受け取る。",
+      "reason": "油を得る場所は指定されるが、渡し手の氏名や動作は特定されない。",
+      "visual": "儀礼用の油の置き場と運搬準備。本文の受取りと出発時の保持者変更の時点を次工程で照合する。"
+    },
+    "oiled": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "灯の場へ儀礼用の油を運び、火が通るのを確かめた。",
+      "reason": "隊が油を運んで火を確認する。翌日の漁師を先行表示しない。",
+      "visual": "灯に届いた油、火と水面に残る油膜。"
+    },
+    "ashore": {
+      "decision": "person-evidence",
+      "people": [
+        "q065_mourners"
+      ],
+      "evidence": "岸へ灯を持ち帰り、遺族の前へ置いた。",
+      "reason": "直接の帰岸・潮待ち後の帰岸とも、岸に置かれた灯に立ち会う遺族の同席が明記されている。",
+      "visual": "岸へ運び終えた灯と遺灰、火を囲む弔い。"
+    }
+  },
+  "next": "ashoreの遺族の呼称を接続し、灯と油の保持者、潮の三段階、二つの帰岸経路、旧保存を確認する。次の人物監査はq066。"
 }
  }
 };

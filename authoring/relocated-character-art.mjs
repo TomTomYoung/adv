@@ -46,6 +46,11 @@ export const relocatedCharacters=Object.fromEntries([
 ].map(([id,name,detail,provenance])=>[id,{id,name,role:'礼拝堂の現地の相手',detail,portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,
  provenance:provenance??'2026-10-29の美術設定。固有名・他人物との同一性は追加しない。具体的な外見・年齢感・服装は今回の美術設定。牢・格子・聖像・宝玉・石を人物画へ固定しない。'}]));
 // A collective label is intentional: the prose specifies neither a headcount nor a spokesperson.
+relocatedCharacters.q064_fisher={
+ id:'q064_fisher',name:'漁師',role:'網を引く時刻を相談する相手',
+ detail:'村の漁師小屋で砲声と魚の移動を聞き、網を引く時刻を相談する。',
+ provenance:'2026-11-01。scheduleの本文に従い、人数と氏名を限定しない呼称を表示する。'
+};
 relocatedCharacters.q062_heirs={id:'q062_heirs',name:'外布を広げて証言する遺族',role:'王の救命具の用途を語る遺族',detail:'発見地点で外布を広げて浮きの用途を語り、証言室で外布を受け取って公開の範囲を相談する集団。',provenance:'2026-11-01の表示方針。既存group heirsの所在と証言室への実同行を保ち、entry・testimonyだけに集団名を表示する。人数・氏名・代表者・個人画を新設しない。展示室へ同行させず、依頼人ナオや結末の救われた老人とは同定しない。肖像・立ち絵は意図的に割り当てない。'};
 relocatedCharacters.q061_rescuers={id:'q061_rescuers',name:'救難図を受け取る救難隊',role:'旧王領の村の救難図の受取先',detail:'実際に歩いた二室の図を救難隊の施設で受け取る集団。',provenance:'2026-11-01の表示方針。rescue_reportだけに集団名を表示し、人数・氏名・代表者・個人画・城内への同行は追加しない。依頼人のナギとは同定しない。肖像・立ち絵は意図的に割り当てない。'};
 for(const [key,name,detail] of [
