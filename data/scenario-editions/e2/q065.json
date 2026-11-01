@@ -525,7 +525,7 @@
       {
         "id": "oil_supply",
         "place": "supply",
-        "text": "葬送師の供油路から儀礼用の油を受け取る。携行灯の燃料とは別に運ぶ。",
+        "text": "葬送師の供油路に儀礼用の油が用意されている。灯まで運ぶ分を確かめた。",
         "options": [
           {
             "id": "pour",
@@ -571,7 +571,7 @@
     },
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -580,7 +580,641 @@
       "saveRevision": 2,
       "scope": "沈没城前半10件の現場接続。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "水中の火葬の現場",
+            "supply": "油膜をつなぐ供油路",
+            "shore": "岸の葬送の場",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "supply"
+            ],
+            [
+              "transit",
+              "shore"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "supply",
+                "shore",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "informed",
+                "contract",
+                "compromise"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "connected": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "connected"
+            },
+            "phase": {
+              "type": "integer",
+              "initial": 0,
+              "min": 0,
+              "max": 2,
+              "meaning": "phase"
+            },
+            "lampAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "supply",
+                "shore",
+                "transit",
+                "party",
+                "ritualOil"
+              ],
+              "meaning": "lamp の所在または保持者"
+            },
+            "ritualOilAt": {
+              "type": "enum",
+              "initial": "supply",
+              "values": [
+                "entry",
+                "supply",
+                "shore",
+                "transit",
+                "party",
+                "lamp"
+              ],
+              "meaning": "ritualOil の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "lamp": {
+              "holder": "lampAt",
+              "kind": "item"
+            },
+            "ritualOil": {
+              "holder": "ritualOilAt",
+              "kind": "item"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "灯は油の膜を辿り、潮の切替で流れが途切れると消える。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "水中の火葬の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "tide": {
+              "title": "油膜をつなぐ供油路",
+              "place": "supply",
+              "cast": [],
+              "requires": true
+            },
+            "sent": {
+              "title": "水中の火葬の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "oil_supply": {
+              "title": "油膜をつなぐ供油路",
+              "place": "supply",
+              "cast": [],
+              "requires": true
+            },
+            "oiled": {
+              "title": "水中の火葬の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "ashore": {
+              "title": "岸の葬送の場",
+              "place": "shore",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_wait": {
+              "from": [
+                "entry"
+              ],
+              "to": "tide",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "supply"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "phase",
+                  "value": 0
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "supply",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "lamp",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "entry_oil": {
+              "from": [
+                "entry"
+              ],
+              "to": "oil_supply",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "supply"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "supply",
+                "companions": []
+              },
+              "depart": []
+            },
+            "entry_shore": {
+              "from": [
+                "entry"
+              ],
+              "to": "ashore",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "shore"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "lamp",
+                  "from": "party",
+                  "to": "shore"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "shore",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "lamp",
+                  "from": "entry",
+                  "to": "party",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q065.values.lampAt"
+                    },
+                    "right": "entry"
+                  }
+                }
+              ]
+            },
+            "tide_wait": {
+              "from": [
+                "tide"
+              ],
+              "to": "tide",
+              "requires": {
+                "op": "lt",
+                "left": {
+                  "ref": "stories.q065.values.phase"
+                },
+                "right": 2
+              },
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "phase",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "stories.q065.values.phase"
+                      },
+                      1
+                    ]
+                  }
+                }
+              ],
+              "once": false
+            },
+            "tide_cycle": {
+              "from": [
+                "tide"
+              ],
+              "to": "tide",
+              "requires": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q065.values.phase"
+                },
+                "right": 2
+              },
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "phase",
+                  "value": 0
+                }
+              ],
+              "once": false
+            },
+            "tide_join": {
+              "from": [
+                "tide"
+              ],
+              "to": "sent",
+              "requires": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q065.values.phase"
+                },
+                "right": 1
+              },
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "connected",
+                  "value": true
+                },
+                {
+                  "op": "transfer",
+                  "entity": "lamp",
+                  "from": "party",
+                  "to": "entry"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "tide_return": {
+              "from": [
+                "tide"
+              ],
+              "to": "ashore",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "shore"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "lamp",
+                  "from": "party",
+                  "to": "shore"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "shore",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "lamp",
+                  "from": "entry",
+                  "to": "party",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q065.values.lampAt"
+                    },
+                    "right": "entry"
+                  }
+                }
+              ]
+            },
+            "sent_finish": {
+              "from": [
+                "sent"
+              ],
+              "ending": "informed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "informed"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "oil_supply_pour": {
+              "from": [
+                "oil_supply"
+              ],
+              "to": "oiled",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "ritualOil",
+                  "from": "party",
+                  "to": "lamp"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "ritualOil",
+                  "from": "supply",
+                  "to": "party"
+                }
+              ]
+            },
+            "oiled_finish": {
+              "from": [
+                "oiled"
+              ],
+              "ending": "contract",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "contract"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "ashore_finish": {
+              "from": [
+                "ashore"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "informed": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q065.values.resolution"
+                  },
+                  "right": "informed"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q065.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q065.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "contract": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q065.values.resolution"
+                  },
+                  "right": "contract"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q065.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q065.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compromise": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q065.values.resolution"
+                  },
+                  "right": "compromise"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q065.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q065.values.partyAt"
+                      },
+                      "right": "shore"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_7",
+              "map": "region_7_f1",
+              "x": 15,
+              "y": 5
+            },
+            "supply": {
+              "kind": "dungeon",
+              "dungeon": "region_7",
+              "map": "region_7_f1",
+              "x": 15,
+              "y": 3
+            },
+            "shore": {
+              "kind": "town",
+              "location": "royal_harbor"
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "mournersAt",
+            "value": "shore"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q065.clue_a": {
@@ -1696,7 +2330,7 @@
         },
         {
           "op": "narrate",
-          "text": "葬送師の供油路から儀礼用の油を受け取る。携行灯の燃料とは別に運ぶ。"
+          "text": "葬送師の供油路に儀礼用の油が用意されている。灯まで運ぶ分を確かめた。"
         },
         {
           "op": "choice",
@@ -2086,6 +2720,14 @@
           "lamp"
         ],
         "meaning": "ritualOil の所在または保持者"
+      },
+      "mournersAt": {
+        "type": "enum",
+        "initial": "shore",
+        "values": [
+          "shore"
+        ],
+        "meaning": "mourners の所在または保持者"
       }
     },
     "entities": {
@@ -2100,6 +2742,11 @@
       "ritualOil": {
         "holder": "ritualOilAt",
         "kind": "item"
+      },
+      "mourners": {
+        "holder": "mournersAt",
+        "kind": "group",
+        "character": "q065_mourners"
       }
     },
     "propositions": {
@@ -2143,7 +2790,12 @@
       "ashore": {
         "title": "岸の葬送の場",
         "place": "shore",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "mourners",
+            "x": 50
+          }
+        ],
         "requires": true
       }
     },
@@ -2618,7 +3270,7 @@
         "location": "royal_harbor"
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "oddland_village",
   "receptionLocations": [

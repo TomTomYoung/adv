@@ -46,6 +46,11 @@ export const relocatedCharacters=Object.fromEntries([
 ].map(([id,name,detail,provenance])=>[id,{id,name,role:'礼拝堂の現地の相手',detail,portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,
  provenance:provenance??'2026-10-29の美術設定。固有名・他人物との同一性は追加しない。具体的な外見・年齢感・服装は今回の美術設定。牢・格子・聖像・宝玉・石を人物画へ固定しない。'}]));
 // A collective label is intentional: the prose specifies neither a headcount nor a spokesperson.
+relocatedCharacters.q065_mourners={
+ id:'q065_mourners',name:'遺族',role:'岸で灯を迎える遺族',
+ detail:'岸へ運ばれた灯を前に、火を見ながら別れを告げる。',
+ provenance:'2026-11-02。ashoreの本文に基づく呼称。人数と氏名は未指定。'
+};
 relocatedCharacters.q064_fisher={
  id:'q064_fisher',name:'漁師',role:'網を引く時刻を相談する相手',
  detail:'村の漁師小屋で砲声と魚の移動を聞き、網を引く時刻を相談する。',

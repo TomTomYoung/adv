@@ -1,7 +1,7 @@
 // Editorial audit: candidate IDs are local; connected roles cite their game entity.
 // Update a fingerprint only after rereading the changed quest and its evidence.
 export const RELOCATED_CAST_REVIEW={
- reviewedAt:'2026-11-01',
+ reviewedAt:'2026-11-02',
  quests:{
   q031:{
    sourceSha256:'ab2cb40f75d0a430e00077b936b338b23736b74b01034aeaeb9333cda16cecf7',
@@ -1684,18 +1684,19 @@ export const RELOCATED_CAST_REVIEW={
   "next": "漁師小屋の呼称を接続済み。砲・圧力管・魚群・鐘・時刻表の局所素材が残る。"
 },
   q065:{
-  "sourceSha256": "4386118e565acb2105a28c0b1635ca4832f9c8f38fe7dcef1d0338cca88021e8",
+  "sourceSha256": "0ed31ddd6e9050cd4ccf6b1b155addfce072325c1d5f956a97f2ffad23b2262c",
   "identityNotes": [
     "依頼人は葬送師のアオ。供油路の呼び名から本人の在席を確定せず、岸にいる遺族とは区別する。翌日油を回収する漁師はcontract結末の後日談。",
-    "ashoreでは「遺族の前へ置いた」と明記される。岸へ運んだ灯に立ち会う呼称の候補であり、q062の救命胴衣の遺族とは同定しない。",
+    "ashoreで灯を迎える遺族を集団名で表示する。q062で外布を広げる遺族とは別の役として扱う。",
     "既存3地点はregion_7_f1の灯の場(15,5)・供油路(15,3)とroyal_harbor。灯・遺灰・分断された油膜・潮の三段階・岸の弔いを局所差分にする。",
-    "潮は選択で進み、phase=1で接続を選び、灯の場への帰着でconnectedを得る。儀礼用の油はsupply出発時に隊へ、現場到着時にlampへ移る。岸へ向かう二経路とも灯の到着後に遺族を表示する候補。"
+    "潮は選択で進み、phase=1で接続を選び、灯の場への帰着でconnectedを得る。儀礼用の油はsupply出発時に隊へ、現場到着時にlampへ移る。岸へ向かう二経路とも灯の到着後に遺族を表示する。"
   ],
   "people": {
     "q065_mourners": {
       "label": "岸で灯を迎える遺族",
-      "status": "candidate",
-      "need": "ashoreの岸で呼称を表示する候補。直接の帰岸と潮待ちからの帰岸を扱う。人数・氏名は未指定。"
+      "status": "connected",
+      "need": "直接帰岸・三つの潮位からの帰岸とも、灯が岸に届いたashoreに「遺族」と表示する。旧保存には岸の所在だけを補う。",
+      "entity": "mourners"
     }
   },
   "scenes": {
@@ -1723,9 +1724,9 @@ export const RELOCATED_CAST_REVIEW={
     "oil_supply": {
       "decision": "no-person-evidence",
       "people": [],
-      "evidence": "葬送師の供油路から儀礼用の油を受け取る。",
-      "reason": "油を得る場所は指定されるが、渡し手の氏名や動作は特定されない。",
-      "visual": "儀礼用の油の置き場と運搬準備。本文の受取りと出発時の保持者変更の時点を次工程で照合する。"
+      "evidence": "葬送師の供油路に儀礼用の油が用意されている。",
+      "reason": "隊が運ぶ分を確認する。油を渡す人物の描写はない。",
+      "visual": "供油路にある油、出発後に隊が運ぶ油、灯に注いだ後を分ける。"
     },
     "oiled": {
       "decision": "no-person-evidence",
@@ -1744,7 +1745,79 @@ export const RELOCATED_CAST_REVIEW={
       "visual": "岸へ運び終えた灯と遺灰、火を囲む弔い。"
     }
   },
-  "next": "ashoreの遺族の呼称を接続し、灯と油の保持者、潮の三段階、二つの帰岸経路、旧保存を確認する。次の人物監査はq066。"
+  "next": "岸の遺族は接続済み。灯・遺灰・油膜と岸の弔いの局所素材が残る。"
+},
+  q066:{
+  "sourceSha256": "54c2ff8f6961842d789bdcf4cd38a98dc2bd4ab7fedd35bdb7ba8cbd371564d8",
+  "relatedClients": {
+    "q047": "歴史家のオミ"
+  },
+  "identityNotes": [
+    "q047「一頁の戦争」と依頼人名が一致する。q047の記録の受取人とオミとの関係は未確認。",
+    "展示札を準備した依頼人の意向は入口で語られる。本人がその場で札を伏せるのは記録室のevacuated。椅子の鎧に体はなく、生還者・家族の登場は結末で語られる。",
+    "鎧は城の椅子から展示室へ運ぶ。乗船札を記録室で照合する経路では避難の事実を確認し、展示室へ運ぶ品も増える。"
+  ],
+  "people": {
+    "q066_omi": {
+      "label": "歴史家のオミ",
+      "status": "candidate",
+      "need": "避難記録を照合して依頼人が展示札を伏せる場面の専用画と出演。q047でも同名の依頼人を扱うため役の共用を検討する。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "珊瑚の椅子に鎧が座る。依頼人は「最後の軍議」と題した展示札を用意している。",
+      "reason": "札を用意した依頼人に触れるが、城内にいるとは書かれていない。",
+      "visual": "珊瑚の椅子、軍議を思わせる鎧。"
+    },
+    "empty": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "鎧には体がない。椅子の下から避難便の乗船札が出た。",
+      "reason": "隊が空の鎧を持ち上げ、椅子の下に札を見つける。",
+      "visual": "体のない鎧と現場に残る乗船札。"
+    },
+    "evacuated": {
+      "decision": "person-evidence",
+      "people": [
+        "q066_omi"
+      ],
+      "evidence": "依頼人が自分の展示札を伏せた。",
+      "reason": "記録室で照合結果を受け、依頼人自身がそれまでの展示札を伏せる。",
+      "visual": "全員分の受領番号と伏せられた展示札。"
+    },
+    "entry_honor": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "鎧を展示室へ運び、ここまでに確認した内容を展示札へ記した。",
+      "reason": "鎧を開けずに納める。展示室の立会人の動作は描かれない。",
+      "visual": "戦死者の遺品として納める鎧。乗船札は城に残る。"
+    },
+    "empty_facts": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "鎧を展示室へ運び、ここまでに確認した内容を展示札へ記した。",
+      "reason": "空の鎧だけを展示する。札の番号を照合する経路は通らない。",
+      "visual": "空の鎧の展示。発見した乗船札は城に残る。"
+    },
+    "evacuated_rewrite": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "鎧を展示室へ運び、ここまでに確認した内容を展示札へ記した。",
+      "reason": "照合後に避難の記録へ書き直す。展示室には特定の人物が描かれない。",
+      "visual": "展示室に届いた鎧と乗船札、訂正した説明。"
+    },
+    "evacuated_limited": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "鎧を展示室へ運び、ここまでに確認した内容を展示札へ記した。",
+      "reason": "照合後、避難先の断定を控えて展示する。見学者の言及は結末。",
+      "visual": "展示室に届いた鎧と乗船札、空の鎧に限った説明。"
+    }
+  },
+  "next": "記録室のevacuatedにオミを接続し、旧保存・乗船札の所在・展示室への四経路を検証する。次の人物監査はq067。"
 }
  }
 };
