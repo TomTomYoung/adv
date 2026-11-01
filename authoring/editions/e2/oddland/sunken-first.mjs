@@ -63,6 +63,12 @@ export function sunkenFirstSource(q,{cast=true}={}){
   route('tide','join','sent',{effects:[set('connected'),give('lamp','party','entry')]});end('sent','entry','供油路をつないだ灯を儀礼の場へ戻し、止まった潮へ送った。','informed');
   route('entry','oil','oil_supply');add('oil_supply','supply','葬送師の供油路から儀礼用の油を受け取る。携行灯の燃料とは別に運ぶ。',[opt('pour','儀礼用の油を灯へ運ぶ','oiled',{depart:[give('ritualOil','supply','party')],effects:[give('ritualOil','party','lamp')]})]);end('oiled','entry','灯の場へ儀礼用の油を運び、火が通るのを確かめた。','contract');
   for(const [from,key] of [['entry','shore'],['tide','return']])route(from,key,'ashore',{depart:[transfer('lamp','entry','party')],effects:[give('lamp','party','shore')]});end('ashore','shore','岸へ灯を持ち帰り、遺族の前へ置いた。','compromise');
+  if(cast){
+   entity('mourners','shore','group');
+   x.entities.mourners.character='q065_mourners';
+   node('ashore').cast=[{entity:'mourners',x:50}];
+   node('oil_supply').text='葬送師の供油路に儀礼用の油が用意されている。灯まで運ぶ分を確かめた。';
+  }
  }
  if(q.number===66){
   town('records','避難便の乗船記録室','royal_archive');town('exhibit','鎧と記録の展示室','royal_exhibit');node('evacuated').place='records';entity('armor','entry');entity('boarding','entry');x.flags.empty=false;

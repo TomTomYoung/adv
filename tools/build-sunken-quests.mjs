@@ -23,6 +23,15 @@ export function compileSunkenQuest(first){
   quest.model.edition.revision=2;
   quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[{key:'fisherAt',value:'fishers'}]}];
  }
+ if(first.number===65){
+  const previous=compileRelocatedQuest(first,sunkenFirstSource(first,{cast:false}),options).story;
+  quest.story.registry.mournersAt.values=['shore'];
+  // The lamp is set down on the shore. The new cast cannot hold either item.
+  for(const key of ['lampAt','ritualOilAt'])quest.story.registry[key].values=previous.registry[key].values.slice();
+  quest.story.revision=2;
+  quest.model.edition.revision=2;
+  quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[{key:'mournersAt',value:'shore'}]}];
+ }
  return quest;
 }
 export async function buildSunkenQuests({check=false}={}){
@@ -33,6 +42,7 @@ export async function buildSunkenQuests({check=false}={}){
  }
  const lines=['# 黒潮の沈没城・前半10件の第2版経路','','2026-10-26。q061〜070の既存本文・真相・結末・報酬を保って、現地の操作、実移動、同行、受渡しを接続した。全文改稿ではない。後半10件は別の原稿・生成器で現場接続済み。観測所20件も別の原稿・生成器で現場接続済み。','',
  '[引き継ぎ](../../../HANDOFF.md) ／ [作業票](../../../dungeons/REGIONAL_RELOCATION_WORK.md) ／ [原稿](../../../../authoring/editions/e2/oddland/sunken-first.mjs) ／ [生成器](../../../../tools/build-sunken-quests.mjs)','','## 保存・往復・環境','','保存改訂2を維持する。受注済み・完了済みのq061〜070は旧イベントと命令列を保持し、未受注分から新経路を使う。更新前から沈没城・観測所を探索中なら、保存された出発拠点と固有状態を保ち、通常出口・帰還印・敗北は灯帰りへ戻る。村へ来たことや入国登録を捏造しない。新しく村から出発した探索は村へ戻る。','','沈没城の空気消費・空気溜まり・浮上装置と、観測所の天球儀は従来どおり。q070の三浮上区画は物語内の作業状態であり、通常探索の空気設備と別に記録する。q067の小弁・大門も局所の操作で、古代の大水門とは結び付けない。潮の待機は選択ごとの進行で、現実時間の待機は設けない。儀礼用の油は携行灯の燃料から独立する。',''];
+ lines.push('2026-11-02追記：q065は灯が岸に到着したashoreに「遺族」を表示する。儀礼用の油は供油路で運ぶ分を確認し、出発時に隊が持ち、灯の場への到着時に注ぐ。改訂1の保存へは遺族の所在だけを補う。[人物表示と保存互換の検証](../../RELOCATED_CHARACTER_ART.md)。','');
  lines.push('2026-11-01追記：q064の漁師は小屋で網を引く時刻を相談するscheduleへ呼称で表示する。圧力管と湾のどちらからも実到着で相談する。物語改訂1から2では漁師の所在だけを旧保存へ補う。[人物表示と保存互換の検証](../../RELOCATED_CHARACTER_ART.md)。','');
  lines.push('2026-11-01追記：q062は既存heirsのentry・testimonyに集団名を接続する。物語改訂1と旧保存を維持し、証言室だけへの同行、外布と名簿の別保持、実到着時の受渡し、三結末と旧受注経路を保つ。個人画・人数・代表者は追加しない。[人物表示と保存互換の検証](../../RELOCATED_CHARACTER_ART.md)。','');
  lines.push('2026-11-01追記：q061は救難隊へ図を渡すrescue_reportだけに集団名を表示する。人物画・人数・代表者・ナギの同席・城内同行は追加しない。物語改訂1→2では検証済みの旧保存へ受取先の所在だけを補い、二室の実確認・到着時の受渡し・三結末の異なる報酬・待機本文・旧受注経路を保持する。[人物表示と保存互換の検証](../../RELOCATED_CHARACTER_ART.md)。','');
