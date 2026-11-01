@@ -522,7 +522,7 @@
     },
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -531,7 +531,506 @@
       "saveRevision": 2,
       "scope": "沈没城前半10件の現場接続。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "届く砲声の現場",
+            "pressure": "圧力管と砲声の観測点",
+            "bay": "魚群が逃げ込む入り江",
+            "fishers": "時刻表を相談する漁師小屋",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "pressure"
+            ],
+            [
+              "transit",
+              "bay"
+            ],
+            [
+              "transit",
+              "fishers"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "pressure",
+                "bay",
+                "fishers",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "informed",
+                "contract",
+                "compromise"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "observed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "observed"
+            },
+            "bell": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "bell"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "砲は海獣の接近を知らせる圧力式警報で、魚が逃げる先は安全な湾だ。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "届く砲声の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "pressure": {
+              "title": "圧力管と砲声の観測点",
+              "place": "pressure",
+              "cast": [],
+              "requires": true
+            },
+            "bay": {
+              "title": "魚群が逃げ込む入り江",
+              "place": "bay",
+              "cast": [],
+              "requires": true
+            },
+            "bell_ready": {
+              "title": "届く砲声の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "schedule": {
+              "title": "時刻表を相談する漁師小屋",
+              "place": "fishers",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_before": {
+              "from": [
+                "entry"
+              ],
+              "to": "pressure",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "pressure"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "observed",
+                  "value": true
+                },
+                {
+                  "op": "observe",
+                  "observer": "party",
+                  "proposition": "truth",
+                  "source": "pressure",
+                  "requires": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "pressure",
+                "companions": []
+              },
+              "depart": []
+            },
+            "entry_after": {
+              "from": [
+                "entry"
+              ],
+              "to": "bay",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "bay"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "bay",
+                "companions": []
+              },
+              "depart": []
+            },
+            "entry_break": {
+              "from": [
+                "entry"
+              ],
+              "ending": "contract",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "contract"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "pressure_bell": {
+              "from": [
+                "pressure"
+              ],
+              "to": "bell_ready",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "bell",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "pressure_schedule": {
+              "from": [
+                "pressure"
+              ],
+              "to": "schedule",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "fishers"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "fishers",
+                "companions": []
+              },
+              "depart": []
+            },
+            "bay_fish": {
+              "from": [
+                "bay"
+              ],
+              "to": "schedule",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "fishers"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "fishers",
+                "companions": []
+              },
+              "depart": []
+            },
+            "bay_mechanism": {
+              "from": [
+                "bay"
+              ],
+              "to": "pressure",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "pressure"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "observed",
+                  "value": true
+                },
+                {
+                  "op": "observe",
+                  "observer": "party",
+                  "proposition": "truth",
+                  "source": "pressure",
+                  "requires": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "pressure",
+                "companions": []
+              },
+              "depart": []
+            },
+            "bell_ready_finish": {
+              "from": [
+                "bell_ready"
+              ],
+              "ending": "informed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "informed"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "schedule_finish": {
+              "from": [
+                "schedule"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "informed": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q064.values.resolution"
+                  },
+                  "right": "informed"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q064.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q064.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "contract": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q064.values.resolution"
+                  },
+                  "right": "contract"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q064.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q064.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compromise": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q064.values.resolution"
+                  },
+                  "right": "compromise"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q064.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q064.values.partyAt"
+                      },
+                      "right": "fishers"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_7",
+              "map": "region_7_f1",
+              "x": 8,
+              "y": 12
+            },
+            "pressure": {
+              "kind": "dungeon",
+              "dungeon": "region_7",
+              "map": "region_7_f1",
+              "x": 7,
+              "y": 9
+            },
+            "bay": {
+              "kind": "town",
+              "location": "royal_bay"
+            },
+            "fishers": {
+              "kind": "town",
+              "location": "royal_fishers"
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "fisherAt",
+            "value": "fishers"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q064.clue_a": {
@@ -1822,12 +2321,25 @@
         "type": "boolean",
         "initial": false,
         "meaning": "bell"
+      },
+      "fisherAt": {
+        "type": "enum",
+        "initial": "fishers",
+        "values": [
+          "fishers"
+        ],
+        "meaning": "fisher の所在または保持者"
       }
     },
     "entities": {
       "party": {
         "holder": "partyAt",
         "kind": "group"
+      },
+      "fisher": {
+        "holder": "fisherAt",
+        "kind": "group",
+        "character": "q064_fisher"
       }
     },
     "propositions": {
@@ -1865,7 +2377,12 @@
       "schedule": {
         "title": "時刻表を相談する漁師小屋",
         "place": "fishers",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "fisher",
+            "x": 50
+          }
+        ],
         "requires": true
       }
     },
@@ -2241,7 +2758,7 @@
         "location": "royal_fishers"
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "oddland_village",
   "receptionLocations": [

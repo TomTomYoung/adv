@@ -67,6 +67,15 @@ test('dungeon window toggle hides the lower dock without game state changes and 
   }finally{c.cleanup();}
 });
 
+test('closing punctuation stays with a preceding grapheme across measured page breaks',()=>{
+  const fits=text=>[...new Intl.Segmenter('ja').segment(text)].length<=4;
+  assert.deepEqual(messagePages('あいうえ。',fits),['あいう','え。']);
+  assert.deepEqual(messagePages('砲が鳴る。湾へ戻る。',9),['砲が鳴る。','湾へ戻る。']);
+  assert.deepEqual(messagePages('あいう🕯️。」',fits),['あいう','🕯️。」']);
+  assert.deepEqual(messagePages('あ。',1),['あ','。']);
+  assert.deepEqual(messagePages('。。。。。',4),['。。。。','。']);
+});
+
 test('message paging preserves all Unicode text and sends advance only after the final page',()=>{
   const d=structuredClone(data),text='台帳には帰還した者の名が並ぶ。\n'.repeat(25)+'灯🕯️';
   assert.equal(messagePages(text).join(''),text);
