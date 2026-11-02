@@ -673,7 +673,7 @@
     },
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -682,7 +682,646 @@
       "saveRevision": 2,
       "scope": "沈没城前半10件の現場接続。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "人魚の筆談の現場",
+            "valve": "小さな調圧弁の操作足場",
+            "gate": "大門の操作足場",
+            "refuge": "人魚の退避できる水域",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "valve"
+            ],
+            [
+              "transit",
+              "gate"
+            ],
+            [
+              "transit",
+              "refuge"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "valve",
+                "gate",
+                "refuge",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "informed",
+                "contract",
+                "compromise"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "balanced": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "balanced"
+            },
+            "retried": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "retried"
+            },
+            "opened": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "opened"
+            },
+            "stopped": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "stopped"
+            },
+            "mermaidAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "valve",
+                "gate",
+                "refuge",
+                "transit"
+              ],
+              "meaning": "mermaid の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "mermaid": {
+              "holder": "mermaidAt",
+              "kind": "person"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "人魚の記号は文字でなく水門の開閉図で、急な水圧変化を止めてほしいのだ。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "人魚の筆談の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "surge": {
+              "title": "大門の操作足場",
+              "place": "gate",
+              "cast": [],
+              "requires": true
+            },
+            "balanced": {
+              "title": "小さな調圧弁の操作足場",
+              "place": "valve",
+              "cast": [],
+              "requires": true
+            },
+            "opened": {
+              "title": "大門の操作足場",
+              "place": "gate",
+              "cast": [],
+              "requires": true
+            },
+            "forced": {
+              "title": "大門の操作足場",
+              "place": "gate",
+              "cast": [],
+              "requires": true
+            },
+            "stopped": {
+              "title": "小さな調圧弁の操作足場",
+              "place": "valve",
+              "cast": [],
+              "requires": true
+            },
+            "evacuated": {
+              "title": "人魚の退避できる水域",
+              "place": "refuge",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_small": {
+              "from": [
+                "entry"
+              ],
+              "to": "balanced",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "mermaid"
+                  ],
+                  "path": [
+                    "transit",
+                    "valve"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "balanced",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "valve",
+                "companions": [
+                  "mermaid"
+                ]
+              },
+              "depart": []
+            },
+            "entry_large": {
+              "from": [
+                "entry"
+              ],
+              "to": "surge",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "mermaid"
+                  ],
+                  "path": [
+                    "transit",
+                    "gate"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "gate",
+                "companions": [
+                  "mermaid"
+                ]
+              },
+              "depart": []
+            },
+            "entry_force": {
+              "from": [
+                "entry"
+              ],
+              "to": "forced",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "gate"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "gate",
+                "companions": []
+              },
+              "depart": []
+            },
+            "entry_stop": {
+              "from": [
+                "entry"
+              ],
+              "to": "stopped",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "mermaid"
+                  ],
+                  "path": [
+                    "transit",
+                    "valve"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "stopped",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "valve",
+                "companions": [
+                  "mermaid"
+                ]
+              },
+              "depart": []
+            },
+            "surge_reset": {
+              "from": [
+                "surge"
+              ],
+              "to": "balanced",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "mermaid"
+                  ],
+                  "path": [
+                    "transit",
+                    "valve"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "balanced",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "retried",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "valve",
+                "companions": [
+                  "mermaid"
+                ]
+              },
+              "depart": []
+            },
+            "surge_evacuate": {
+              "from": [
+                "surge"
+              ],
+              "to": "stopped",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "mermaid"
+                  ],
+                  "path": [
+                    "transit",
+                    "valve"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "stopped",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "valve",
+                "companions": [
+                  "mermaid"
+                ]
+              },
+              "depart": []
+            },
+            "balanced_gate": {
+              "from": [
+                "balanced"
+              ],
+              "to": "opened",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "mermaid"
+                  ],
+                  "path": [
+                    "transit",
+                    "gate"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "opened",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "gate",
+                "companions": [
+                  "mermaid"
+                ]
+              },
+              "depart": []
+            },
+            "balanced_close": {
+              "from": [
+                "balanced"
+              ],
+              "to": "stopped",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "stopped",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "opened_finish": {
+              "from": [
+                "opened"
+              ],
+              "ending": "informed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "informed"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "forced_finish": {
+              "from": [
+                "forced"
+              ],
+              "ending": "contract",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "opened",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "contract"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "stopped_escort": {
+              "from": [
+                "stopped"
+              ],
+              "to": "evacuated",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "mermaid"
+                  ],
+                  "path": [
+                    "transit",
+                    "refuge"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "refuge",
+                "companions": [
+                  "mermaid"
+                ]
+              },
+              "depart": []
+            },
+            "evacuated_finish": {
+              "from": [
+                "evacuated"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "informed": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q067.values.resolution"
+                  },
+                  "right": "informed"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q067.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q067.values.partyAt"
+                      },
+                      "right": "gate"
+                    }
+                  ]
+                }
+              ]
+            },
+            "contract": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q067.values.resolution"
+                  },
+                  "right": "contract"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q067.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q067.values.partyAt"
+                      },
+                      "right": "gate"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compromise": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q067.values.resolution"
+                  },
+                  "right": "compromise"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q067.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q067.values.partyAt"
+                      },
+                      "right": "refuge"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_7",
+              "map": "region_7_f2",
+              "x": 17,
+              "y": 3
+            },
+            "valve": {
+              "kind": "dungeon",
+              "dungeon": "region_7",
+              "map": "region_7_f2",
+              "x": 17,
+              "y": 5
+            },
+            "gate": {
+              "kind": "dungeon",
+              "dungeon": "region_7",
+              "map": "region_7_f2",
+              "x": 13,
+              "y": 3
+            },
+            "refuge": {
+              "kind": "dungeon",
+              "dungeon": "region_7",
+              "map": "region_7_f2",
+              "x": 17,
+              "y": 9
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "passersAt",
+            "value": "entry"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q067.clue_a": {
@@ -2119,6 +2758,14 @@
           "transit"
         ],
         "meaning": "mermaid の所在または保持者"
+      },
+      "passersAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry"
+        ],
+        "meaning": "passers の所在または保持者"
       }
     },
     "entities": {
@@ -2128,7 +2775,13 @@
       },
       "mermaid": {
         "holder": "mermaidAt",
-        "kind": "person"
+        "kind": "person",
+        "character": "q067_mermaid"
+      },
+      "passers": {
+        "holder": "passersAt",
+        "kind": "group",
+        "character": "q067_passers"
       }
     },
     "propositions": {
@@ -2142,25 +2795,63 @@
       "entry": {
         "title": "人魚の筆談の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "mermaid",
+            "display": {
+              "x": 59,
+              "scale": 0.84
+            }
+          },
+          {
+            "entity": "passers",
+            "display": {
+              "x": 23
+            }
+          }
+        ],
         "requires": true
       },
       "surge": {
         "title": "大門の操作足場",
         "place": "gate",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "mermaid",
+            "display": {
+              "x": 50,
+              "scale": 0.84
+            }
+          }
+        ],
         "requires": true
       },
       "balanced": {
         "title": "小さな調圧弁の操作足場",
         "place": "valve",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "mermaid",
+            "display": {
+              "x": 50,
+              "scale": 0.84
+            }
+          }
+        ],
         "requires": true
       },
       "opened": {
         "title": "大門の操作足場",
         "place": "gate",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "mermaid",
+            "display": {
+              "x": 50,
+              "scale": 0.84
+            }
+          }
+        ],
         "requires": true
       },
       "forced": {
@@ -2172,13 +2863,29 @@
       "stopped": {
         "title": "小さな調圧弁の操作足場",
         "place": "valve",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "mermaid",
+            "display": {
+              "x": 50,
+              "scale": 0.84
+            }
+          }
+        ],
         "requires": true
       },
       "evacuated": {
         "title": "人魚の退避できる水域",
         "place": "refuge",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "mermaid",
+            "display": {
+              "x": 50,
+              "scale": 0.84
+            }
+          }
+        ],
         "requires": true
       }
     },
@@ -2656,7 +3363,7 @@
         "y": 9
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "oddland_village",
   "receptionLocations": [
