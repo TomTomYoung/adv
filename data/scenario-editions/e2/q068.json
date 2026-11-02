@@ -715,7 +715,7 @@
     ],
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -724,7 +724,719 @@
       "saveRevision": 2,
       "scope": "沈没城前半10件の現場接続。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "二つの錨の現場",
+            "raft_site": "軽い綱の先の避難筏",
+            "boat": "別船の乗移り足場",
+            "drift": "切り離され流れた筏",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "raft_site"
+            ],
+            [
+              "transit",
+              "boat"
+            ],
+            [
+              "transit",
+              "drift"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "raft_site",
+                "boat",
+                "drift",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "informed",
+                "contract",
+                "compromise",
+                "cargo"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "raft": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "raft"
+            },
+            "raftVesselAt": {
+              "type": "enum",
+              "initial": "raft_site",
+              "values": [
+                "entry",
+                "raft_site",
+                "boat",
+                "drift",
+                "transit"
+              ],
+              "meaning": "raftVessel の所在または保持者"
+            },
+            "cargoAt": {
+              "type": "enum",
+              "initial": "raftVessel",
+              "values": [
+                "entry",
+                "raft_site",
+                "boat",
+                "drift",
+                "transit",
+                "party",
+                "raftVessel",
+                "survivors"
+              ],
+              "meaning": "cargo の所在または保持者"
+            },
+            "survivorsAt": {
+              "type": "enum",
+              "initial": "raft_site",
+              "values": [
+                "entry",
+                "raft_site",
+                "boat",
+                "drift",
+                "transit"
+              ],
+              "meaning": "survivors の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "raftVessel": {
+              "holder": "raftVesselAt",
+              "kind": "group"
+            },
+            "cargo": {
+              "holder": "cargoAt",
+              "kind": "item"
+            },
+            "survivors": {
+              "holder": "survivorsAt",
+              "kind": "group"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "二つの錨は城と避難筏を別々に支え、軽い方にも人が乗っている。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "二つの錨の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "raft": {
+              "title": "軽い綱の先の避難筏",
+              "place": "raft_site",
+              "cast": [],
+              "requires": true
+            },
+            "secured": {
+              "title": "別船の乗移り足場",
+              "place": "boat",
+              "cast": [],
+              "requires": true
+            },
+            "hoist_cut": {
+              "title": "二つの錨の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "hoist_abandon": {
+              "title": "二つの錨の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "hoist_fix": {
+              "title": "二つの錨の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "raft_rope_ready": {
+              "title": "軽い綱の先の避難筏",
+              "place": "raft_site",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_light": {
+              "from": [
+                "entry"
+              ],
+              "to": "raft",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "raft_site"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "observe",
+                  "observer": "party",
+                  "proposition": "truth",
+                  "source": "raft_site",
+                  "requires": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "raft_site",
+                "companions": []
+              },
+              "depart": []
+            },
+            "entry_cut": {
+              "from": [
+                "entry"
+              ],
+              "ending": "contract",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "raftVessel",
+                    "survivors"
+                  ],
+                  "path": [
+                    "raft_site",
+                    "transit",
+                    "drift"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "contract"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "entry_fix": {
+              "from": [
+                "entry"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "raft_rope": {
+              "from": [
+                "raft"
+              ],
+              "to": "raft_rope_ready",
+              "requires": true,
+              "effects": [],
+              "cost": {
+                "rope": 1
+              },
+              "once": false
+            },
+            "raft_people": {
+              "from": [
+                "raft"
+              ],
+              "to": "secured",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "survivors"
+                  ],
+                  "path": [
+                    "transit",
+                    "boat"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "raft",
+                  "value": false
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "boat",
+                "companions": [
+                  "survivors"
+                ]
+              },
+              "depart": []
+            },
+            "raft_stay": {
+              "from": [
+                "raft"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "secured_cut": {
+              "from": [
+                "secured"
+              ],
+              "to": "hoist_cut",
+              "requires": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q068.values.raft"
+                },
+                "right": true
+              },
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "secured_abandon": {
+              "from": [
+                "secured"
+              ],
+              "to": "hoist_abandon",
+              "requires": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q068.values.raft"
+                  },
+                  "right": true
+                }
+              },
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "secured_fix": {
+              "from": [
+                "secured"
+              ],
+              "to": "hoist_fix",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "hoist_cut_finish": {
+              "from": [
+                "hoist_cut"
+              ],
+              "ending": "informed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "informed"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "hoist_abandon_finish": {
+              "from": [
+                "hoist_abandon"
+              ],
+              "ending": "cargo",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "raftVessel"
+                  ],
+                  "path": [
+                    "raft_site",
+                    "transit",
+                    "drift"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "cargo"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "hoist_fix_finish": {
+              "from": [
+                "hoist_fix"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "raft_rope_ready_continue": {
+              "from": [
+                "raft_rope_ready"
+              ],
+              "to": "secured",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "survivors",
+                    "raftVessel"
+                  ],
+                  "path": [
+                    "transit",
+                    "boat"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "raft",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "boat",
+                "companions": [
+                  "survivors",
+                  "raftVessel"
+                ]
+              },
+              "depart": []
+            }
+          },
+          "endings": {
+            "informed": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q068.values.resolution"
+                  },
+                  "right": "informed"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q068.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q068.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "contract": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q068.values.resolution"
+                  },
+                  "right": "contract"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q068.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q068.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compromise": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q068.values.resolution"
+                  },
+                  "right": "compromise"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q068.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q068.values.partyAt"
+                      },
+                      "right": "entry"
+                    },
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q068.values.partyAt"
+                      },
+                      "right": "raft_site"
+                    }
+                  ]
+                }
+              ]
+            },
+            "cargo": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q068.values.resolution"
+                  },
+                  "right": "cargo"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q068.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q068.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_7",
+              "map": "region_7_f2",
+              "x": 8,
+              "y": 13
+            },
+            "raft_site": {
+              "kind": "dungeon",
+              "dungeon": "region_7",
+              "map": "region_7_f2",
+              "x": 7,
+              "y": 11
+            },
+            "boat": {
+              "kind": "dungeon",
+              "dungeon": "region_7",
+              "map": "region_7_f2",
+              "x": 3,
+              "y": 11
+            },
+            "drift": {
+              "kind": "dungeon",
+              "dungeon": "region_7",
+              "map": "region_7_f2",
+              "x": 1,
+              "y": 11
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "hoistWorkersAt",
+            "value": "entry"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q068.clue_a": {
@@ -2469,6 +3181,14 @@
           "transit"
         ],
         "meaning": "survivors の所在または保持者"
+      },
+      "hoistWorkersAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry"
+        ],
+        "meaning": "hoistWorkers の所在または保持者"
       }
     },
     "entities": {
@@ -2486,7 +3206,13 @@
       },
       "survivors": {
         "holder": "survivorsAt",
-        "kind": "group"
+        "kind": "group",
+        "character": "q068_survivors"
+      },
+      "hoistWorkers": {
+        "holder": "hoistWorkersAt",
+        "kind": "group",
+        "character": "q068_hoist_workers"
       }
     },
     "propositions": {
@@ -2500,19 +3226,34 @@
       "entry": {
         "title": "二つの錨の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "hoistWorkers",
+            "x": 50
+          }
+        ],
         "requires": true
       },
       "raft": {
         "title": "軽い綱の先の避難筏",
         "place": "raft_site",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "survivors",
+            "x": 50
+          }
+        ],
         "requires": true
       },
       "secured": {
         "title": "別船の乗移り足場",
         "place": "boat",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "survivors",
+            "x": 50
+          }
+        ],
         "requires": true
       },
       "hoist_cut": {
@@ -2536,7 +3277,12 @@
       "raft_rope_ready": {
         "title": "軽い綱の先の避難筏",
         "place": "raft_site",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "survivors",
+            "x": 50
+          }
+        ],
         "requires": true
       }
     },
@@ -3066,7 +3812,7 @@
         "y": 11
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "oddland_village",
   "receptionLocations": [

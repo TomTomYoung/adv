@@ -47,6 +47,16 @@ export function compileSunkenQuest(first){
   quest.model.edition.revision=2;
   quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[{key:'passersAt',value:'entry'}]}];
  }
+ if(first.number===68){
+  const previous=compileRelocatedQuest(first,sunkenFirstSource(first,{cast:false}),options).story;
+  // The rope is prepared at the raft before either the people or the vessel moves.
+  quest.story.scenes.raft_rope_ready.cast=structuredClone(quest.story.scenes.raft.cast);
+  quest.story.registry.hoistWorkersAt.values=['entry'];
+  quest.story.registry.cargoAt.values=previous.registry.cargoAt.values.slice();
+  quest.story.revision=2;
+  quest.model.edition.revision=2;
+  quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[{key:'hoistWorkersAt',value:'entry'}]}];
+ }
  return quest;
 }
 export async function buildSunkenQuests({check=false}={}){
@@ -58,6 +68,7 @@ export async function buildSunkenQuests({check=false}={}){
  const lines=['# 黒潮の沈没城・前半10件の第2版経路','','2026-10-26。q061〜070の既存本文・真相・結末・報酬を保って、現地の操作、実移動、同行、受渡しを接続した。全文改稿ではない。後半10件は別の原稿・生成器で現場接続済み。観測所20件も別の原稿・生成器で現場接続済み。','',
  '[引き継ぎ](../../../HANDOFF.md) ／ [作業票](../../../dungeons/REGIONAL_RELOCATION_WORK.md) ／ [原稿](../../../../authoring/editions/e2/oddland/sunken-first.mjs) ／ [生成器](../../../../tools/build-sunken-quests.mjs)','','## 保存・往復・環境','','保存改訂2を維持する。受注済み・完了済みのq061〜070は旧イベントと命令列を保持し、未受注分から新経路を使う。更新前から沈没城・観測所を探索中なら、保存された出発拠点と固有状態を保ち、通常出口・帰還印・敗北は灯帰りへ戻る。村へ来たことや入国登録を捏造しない。新しく村から出発した探索は村へ戻る。','','沈没城の空気消費・空気溜まり・浮上装置と、観測所の天球儀は従来どおり。q070の三浮上区画は物語内の作業状態であり、通常探索の空気設備と別に記録する。q067の小弁・大門も局所の操作で、古代の大水門とは結び付けない。潮の待機は選択ごとの進行で、現実時間の待機は設けない。儀礼用の油は携行灯の燃料から独立する。',''];
  lines.push('q067は絵を指す人魚の立ち絵を実同行先まで表示する。開門を求める通行人は入口だけに表示する。大門を直接強制開放する経路では人魚は入口に留まる。物語改訂1の保存には通行人の所在だけを補う。[表示と保存の検証](../../RELOCATED_CHARACTER_ART.md)。','');
+ lines.push('q068は入口の吊上げ人と、筏・縄の準備中・移乗先にいる避難筏の人たちの呼称を表示する。吊上げ地点に戻るのは隊だけ。物語改訂1の保存には吊上げ人の所在だけを補う。[表示と保存の検証](../../RELOCATED_CHARACTER_ART.md)。','');
  lines.push('q066では記録室で乗船札を照合し、依頼人が展示札を伏せる場面に歴史家のオミを表示する。物語改訂1から2では記録室にいるオミの所在だけを補う。[表示と保存の検証](../../RELOCATED_CHARACTER_ART.md)。','');
  lines.push('2026-11-02追記：q065は灯が岸に到着したashoreに「遺族」を表示する。儀礼用の油は供油路で運ぶ分を確認し、出発時に隊が持ち、灯の場への到着時に注ぐ。改訂1の保存へは遺族の所在だけを補う。[人物表示と保存互換の検証](../../RELOCATED_CHARACTER_ART.md)。','');
  lines.push('2026-11-01追記：q064の漁師は小屋で網を引く時刻を相談するscheduleへ呼称で表示する。圧力管と湾のどちらからも実到着で相談する。物語改訂1から2では漁師の所在だけを旧保存へ補う。[人物表示と保存互換の検証](../../RELOCATED_CHARACTER_ART.md)。','');

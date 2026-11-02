@@ -47,6 +47,14 @@ export const relocatedCharacters=Object.fromEntries([
  ['q035_patient','顔を隠す患者','配膳口の患者側で顔を隠したまま礼を言い、修理人の入室と見学者への公開を区別する匿名の患者。','2026-10-29の美術設定。顔全体を不透明な布で覆う姿を保ち、性別・病名・氏名・具体的な病状を追加しない。服装と布の色は美術上の選択。施療人ネイとは同定しない。皿・病室・修理人・見学者を人物画へ固定しない。']
 ].map(([id,name,detail,provenance])=>[id,{id,name,role:'礼拝堂の現地の相手',detail,portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,
  provenance:provenance??'2026-10-29の美術設定。固有名・他人物との同一性は追加しない。具体的な外見・年齢感・服装は今回の美術設定。牢・格子・聖像・宝玉・石を人物画へ固定しない。'}]));
+relocatedCharacters.q068_hoist_workers={
+ id:'q068_hoist_workers',name:'吊上げ人',role:'城を吊り上げる現場の作業者',
+ detail:'城へ続く太い綱を残して、水面の陰へ続く軽い綱を切ろうとしている。'
+};
+relocatedCharacters.q068_survivors={
+ id:'q068_survivors',name:'避難筏の人たち',role:'軽い綱の先にいる避難者',
+ detail:'生活の荷を積んだ筏に乗っている。筏を曳航するか、人だけを別船へ移すかを選べる。'
+};
 relocatedCharacters.q067_mermaid={
  id:'q067_mermaid',name:'人魚',role:'城門で絵を指す人魚',
  detail:'波、細い管、大きな門の絵を順に指して調圧を求める。小弁や大門へ同行し、止水した経路では退避水域へ移る。',

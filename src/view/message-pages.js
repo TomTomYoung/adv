@@ -11,9 +11,14 @@ export function messagePages(text,limit=150){
     best=Math.max(1,best);
     if(start+best<parts.length){
       // A slightly shorter page is preferable when it leaves a whole sentence to read.
-      const minimum=closingPunctuation.test(parts[start+best]) ? 1 : Math.ceil(best*.75);
+      const shortTail=parts.length-start-best<=3;
+      const normalMinimum=Math.ceil(best*.75);
+      const leadingMark=closingPunctuation.test(parts[start+best]);
+      const minimum=leadingMark||shortTail ? 1 : normalMinimum;
       for(let count=best;count>=minimum;count--){
         if(/[。！？\n]$/u.test(parts[start+count-1]) && !closingPunctuation.test(parts[start+count])){
+          // Only use an earlier sentence break for a short tail if the remainder fits.
+          if(shortTail && !leadingMark && count<normalMinimum && !fits(parts.slice(start+count).join('')))break;
           best=count;
           break;
         }

@@ -62,6 +62,7 @@ export async function mermaidArtFixtures() {
           fixtures.push({
             edition:'e2',quest:'q067',scene,variant,cast:mermaid ? ['q067_mermaid',...passers] : [],
             textOnlyCast:passers,...(mermaid ? {faces:{q067_mermaid:[.38,.091,.44,.121]},clearOfHud:true} : {}),
+            keepSentencesTogether:!legacy && ['balanced','forced'].includes(scene),
             absentStoryScene:legacy,save:game.save(),availableChoice:action,expectedText:projectGame(game).dialog.text,
           });
         }
