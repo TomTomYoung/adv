@@ -76204,7 +76204,8 @@ export const referenceData={
       "npc_q139_sena": "assets/images/characters/relocated/q139_sena.webp",
       "npc_q139_geologist": "assets/images/characters/relocated/q139_geologist.webp",
       "npc_q140_boro": "assets/images/characters/relocated/q140_boro.webp",
-      "npc_q140_worker": "assets/images/characters/relocated/q140_worker.webp"
+      "npc_q140_worker": "assets/images/characters/relocated/q140_worker.webp",
+      "npc_q066_omi": "assets/images/characters/relocated/q066_omi.webp"
     },
     "audio": {
       "exploration": "assets/audio/exploration-v2.ogg",

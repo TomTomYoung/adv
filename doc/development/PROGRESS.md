@@ -2,6 +2,10 @@
 
 この文書は実施日・対象コミットごとの検証履歴です。過去の件数・環境制約は当時の記録として保持します。現在の実装範囲は[CURRENT_STATUS](../CURRENT_STATUS.md)、未実装の順序は[HANDOFF](../HANDOFF.md)を参照してください。
 
+## 2026-11-02：q066の記録室とq067の出演監査
+
+[PR #192](https://github.com/TomTomYoung/adv/pull/192)を引き継いだ。q066は乗船札を照合した記録室にオミの専用画を接続。四つの展示経路で鎧・札の持ち主、避難の確認と三結末を検証する。旧保存へはオミの所在だけを補い、現場接続前の旧受注は従来の分岐で完了する。出演監査はq067まで160場面、接続済み47役、候補は人魚と通行人の2役。[検証結果と画面](https://github.com/TomTomYoung/adv/pulls?q=is%3Apr+head%3Afeature%2Fsunken-q066-omi)。
+
 ## 2026-11-02：q065の帰岸とq066の出演監査
 
 [PR #191](https://github.com/TomTomYoung/adv/pull/191)を引き継いだ。直接帰岸・潮待ち後の帰岸で灯の到着後に遺族を表示し、供油路の本文を油の持出時点に合わせた。変更前の配布データと照合し、旧保存の潮位・運搬途中・待機中の本文と、現場接続前の受注経路を検証する。q066は記録室で展示札を伏せる歴史家オミを出演候補とした。旧100件の精読は153場面、接続済み46役、候補1役。[検証結果と画面](https://github.com/TomTomYoung/adv/pulls?q=is%3Apr+head%3Afeature%2Fsunken-q065-shore)。

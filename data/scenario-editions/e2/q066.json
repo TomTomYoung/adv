@@ -524,7 +524,7 @@
     ],
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -533,7 +533,665 @@
       "saveRevision": 2,
       "scope": "沈没城前半10件の現場接続。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "珊瑚の軍議の現場",
+            "records": "避難便の乗船記録室",
+            "exhibit": "鎧と記録の展示室",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "records"
+            ],
+            [
+              "transit",
+              "exhibit"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "records",
+                "exhibit",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "informed",
+                "contract",
+                "compromise"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "empty": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "empty"
+            },
+            "armorAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "records",
+                "exhibit",
+                "transit",
+                "party",
+                "boarding"
+              ],
+              "meaning": "armor の所在または保持者"
+            },
+            "boardingAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "records",
+                "exhibit",
+                "transit",
+                "party",
+                "armor"
+              ],
+              "meaning": "boarding の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "armor": {
+              "holder": "armorAt",
+              "kind": "item"
+            },
+            "boarding": {
+              "holder": "boardingAt",
+              "kind": "item"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "人影は遺体でなく椅子へ掛けた鎧で、会議は避難後に終了したように偽装された。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "珊瑚の軍議の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "empty": {
+              "title": "珊瑚の軍議の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "evacuated": {
+              "title": "避難便の乗船記録室",
+              "place": "records",
+              "cast": [],
+              "requires": true
+            },
+            "entry_honor": {
+              "title": "鎧と記録の展示室",
+              "place": "exhibit",
+              "cast": [],
+              "requires": true
+            },
+            "empty_facts": {
+              "title": "鎧と記録の展示室",
+              "place": "exhibit",
+              "cast": [],
+              "requires": true
+            },
+            "evacuated_rewrite": {
+              "title": "鎧と記録の展示室",
+              "place": "exhibit",
+              "cast": [],
+              "requires": true
+            },
+            "evacuated_limited": {
+              "title": "鎧と記録の展示室",
+              "place": "exhibit",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_carry": {
+              "from": [
+                "entry"
+              ],
+              "to": "empty",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "empty",
+                  "value": true
+                },
+                {
+                  "op": "transfer",
+                  "entity": "armor",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ],
+              "once": false
+            },
+            "entry_honor": {
+              "from": [
+                "entry"
+              ],
+              "to": "entry_honor",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "exhibit"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "armor",
+                  "from": "party",
+                  "to": "exhibit"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "boarding",
+                  "from": "party",
+                  "to": "exhibit",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q066.values.boardingAt"
+                    },
+                    "right": "party"
+                  }
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "exhibit",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "armor",
+                  "from": "entry",
+                  "to": "party",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q066.values.armorAt"
+                    },
+                    "right": "entry"
+                  }
+                }
+              ]
+            },
+            "empty_manifest": {
+              "from": [
+                "empty"
+              ],
+              "to": "evacuated",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "records"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "observe",
+                  "observer": "party",
+                  "proposition": "truth",
+                  "source": "records",
+                  "requires": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "records",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "boarding",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "empty_facts": {
+              "from": [
+                "empty"
+              ],
+              "to": "empty_facts",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "exhibit"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "armor",
+                  "from": "party",
+                  "to": "exhibit"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "boarding",
+                  "from": "party",
+                  "to": "exhibit",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q066.values.boardingAt"
+                    },
+                    "right": "party"
+                  }
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "exhibit",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "armor",
+                  "from": "entry",
+                  "to": "party",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q066.values.armorAt"
+                    },
+                    "right": "entry"
+                  }
+                }
+              ]
+            },
+            "evacuated_rewrite": {
+              "from": [
+                "evacuated"
+              ],
+              "to": "evacuated_rewrite",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "exhibit"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "armor",
+                  "from": "party",
+                  "to": "exhibit"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "boarding",
+                  "from": "party",
+                  "to": "exhibit",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q066.values.boardingAt"
+                    },
+                    "right": "party"
+                  }
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "exhibit",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "armor",
+                  "from": "entry",
+                  "to": "party",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q066.values.armorAt"
+                    },
+                    "right": "entry"
+                  }
+                }
+              ]
+            },
+            "evacuated_limited": {
+              "from": [
+                "evacuated"
+              ],
+              "to": "evacuated_limited",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "exhibit"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "armor",
+                  "from": "party",
+                  "to": "exhibit"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "boarding",
+                  "from": "party",
+                  "to": "exhibit",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q066.values.boardingAt"
+                    },
+                    "right": "party"
+                  }
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "exhibit",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "armor",
+                  "from": "entry",
+                  "to": "party",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q066.values.armorAt"
+                    },
+                    "right": "entry"
+                  }
+                }
+              ]
+            },
+            "entry_honor_finish": {
+              "from": [
+                "entry_honor"
+              ],
+              "ending": "contract",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "contract"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "empty_facts_finish": {
+              "from": [
+                "empty_facts"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "evacuated_rewrite_finish": {
+              "from": [
+                "evacuated_rewrite"
+              ],
+              "ending": "informed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "informed"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "evacuated_limited_finish": {
+              "from": [
+                "evacuated_limited"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "informed": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q066.values.resolution"
+                  },
+                  "right": "informed"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q066.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q066.values.partyAt"
+                      },
+                      "right": "exhibit"
+                    }
+                  ]
+                }
+              ]
+            },
+            "contract": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q066.values.resolution"
+                  },
+                  "right": "contract"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q066.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q066.values.partyAt"
+                      },
+                      "right": "exhibit"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compromise": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q066.values.resolution"
+                  },
+                  "right": "compromise"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q066.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q066.values.partyAt"
+                      },
+                      "right": "exhibit"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_7",
+              "map": "region_7_f2",
+              "x": 15,
+              "y": 5
+            },
+            "records": {
+              "kind": "town",
+              "location": "royal_archive"
+            },
+            "exhibit": {
+              "kind": "town",
+              "location": "royal_exhibit"
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "omiAt",
+            "value": "records"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q066.clue_a": {
@@ -2230,6 +2888,14 @@
           "armor"
         ],
         "meaning": "boarding の所在または保持者"
+      },
+      "omiAt": {
+        "type": "enum",
+        "initial": "records",
+        "values": [
+          "records"
+        ],
+        "meaning": "omi の所在または保持者"
       }
     },
     "entities": {
@@ -2244,6 +2910,11 @@
       "boarding": {
         "holder": "boardingAt",
         "kind": "item"
+      },
+      "omi": {
+        "holder": "omiAt",
+        "kind": "person",
+        "character": "q066_omi"
       }
     },
     "propositions": {
@@ -2269,7 +2940,12 @@
       "evacuated": {
         "title": "避難便の乗船記録室",
         "place": "records",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "omi",
+            "x": 50
+          }
+        ],
         "requires": true
       },
       "entry_honor": {
@@ -2793,7 +3469,7 @@
         "location": "royal_exhibit"
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "oddland_village",
   "receptionLocations": [
