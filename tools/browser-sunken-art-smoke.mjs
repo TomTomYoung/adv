@@ -2,6 +2,7 @@ import {sunkenArtFixtures} from './sunken-art-fixtures.mjs';
 import {heirsArtFixtures} from './heirs-art-fixtures.mjs';
 import {fisherArtFixtures} from './fisher-art-fixtures.mjs';
 import {mournerArtFixtures} from './mourner-art-fixtures.mjs';
+import {omiArtFixtures} from './omi-art-fixtures.mjs';
 import {runCharacterArtSmoke} from './character-art-browser.mjs';
-const parts=await Promise.all([sunkenArtFixtures(),heirsArtFixtures(),fisherArtFixtures(),mournerArtFixtures()]);
+const parts=await Promise.all([sunkenArtFixtures(),heirsArtFixtures(),fisherArtFixtures(),mournerArtFixtures(),omiArtFixtures()]);
 await runCharacterArtSmoke({fixtures:parts.flatMap(p=>p.fixtures),outcomes:parts.flatMap(p=>p.outcomes),group:'sunken',folder:'relocated'});

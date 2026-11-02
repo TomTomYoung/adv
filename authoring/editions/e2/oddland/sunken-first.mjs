@@ -76,6 +76,11 @@ export function sunkenFirstSource(q,{cast=true}={}){
   for(const [from,key,outcome] of [['entry','honor','contract'],['empty','facts','compromise'],['evacuated','rewrite','informed'],['evacuated','limited','compromise']]){
    const target=from+'_'+key;route(from,key,target,{depart:[transfer('armor','entry','party')],effects:[give('armor','party','exhibit'),transfer('boarding','party','exhibit')]});end(target,'exhibit','鎧を展示室へ運び、ここまでに確認した内容を展示札へ記した。',''+outcome);
   }
+  if(cast){
+   entity('omi','records','person');
+   x.entities.omi.character='q066_omi';
+   node('evacuated').cast=[{entity:'omi',x:50}];
+  }
  }
  if(q.number===67){
   cell('valve','小さな調圧弁の操作足場','region_7_f2',17,5);cell('gate','大門の操作足場','region_7_f2',13,3);cell('refuge','人魚の退避できる水域','region_7_f2',17,9);node('balanced').place='valve';node('surge').place='gate';entity('mermaid','entry','person');x.flags.balanced=false;x.flags.retried=false;x.flags.opened=false;x.flags.stopped=false;

@@ -1748,7 +1748,7 @@ export const RELOCATED_CAST_REVIEW={
   "next": "岸の遺族は接続済み。灯・遺灰・油膜と岸の弔いの局所素材が残る。"
 },
   q066:{
-  "sourceSha256": "54c2ff8f6961842d789bdcf4cd38a98dc2bd4ab7fedd35bdb7ba8cbd371564d8",
+  "sourceSha256": "fb5139e5c0f2c05014c022820f8760b40bdcfdb1de0028ff3cd5a2609caf0b21",
   "relatedClients": {
     "q047": "歴史家のオミ"
   },
@@ -1760,8 +1760,9 @@ export const RELOCATED_CAST_REVIEW={
   "people": {
     "q066_omi": {
       "label": "歴史家のオミ",
-      "status": "candidate",
-      "need": "避難記録を照合して依頼人が展示札を伏せる場面の専用画と出演。q047でも同名の依頼人を扱うため役の共用を検討する。"
+      "status": "connected",
+      "need": "記録室のevacuatedだけに専用画を接続。旧保存にはomiAt=recordsを補い、鎧と乗船札は従来の保持者に残す。",
+      "entity": "omi"
     }
   },
   "scenes": {
@@ -1817,7 +1818,92 @@ export const RELOCATED_CAST_REVIEW={
       "visual": "展示室に届いた鎧と乗船札、空の鎧に限った説明。"
     }
   },
-  "next": "記録室のevacuatedにオミを接続し、旧保存・乗船札の所在・展示室への四経路を検証する。次の人物監査はq067。"
+  "next": "記録室のオミを接続済み。椅子の鎧、乗船札、照合後の展示内容の局所素材が残る。"
+},
+  q067:{
+  "sourceSha256": "fd3189143a95bdcca057da1f97994f090ef6423c3d7a6078c741443b2c9132db",
+  "identityNotes": [
+    "人魚は既存personのmermaid。絵を指す城門から実同行し、水位を揃えて開門する経路と小弁を閉めて退避する経路がある。直接の強制開放では入口に残る。",
+    "入口で大門の即時開放を求める通行人は人魚と別の役。人数・氏名は未指定。通訳のスイが同席する記述はなく、通訳帳はinformedの後日談。",
+    "region_7_f2の城門入口(17,3)・小弁(17,5)・大門(13,3)・退避水域(17,9)。圧力で押し戻された大門と、調圧後の開放、調圧前の強制開放を区別する。"
+  ],
+  "people": {
+    "q067_mermaid": {
+      "label": "絵で手順を示す人魚",
+      "status": "candidate",
+      "need": "既存mermaidに専用画を接続する。絵を指す三場面と同行が確定した開門・止水・退避の場面で所在を検証する。"
+    },
+    "q067_passers": {
+      "label": "大門をすぐ開けたい通行人",
+      "status": "candidate",
+      "need": "入口の発言に呼称を接続する。人数は未指定。同行の根拠は入口以後にない。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "person-evidence",
+      "people": [
+        "q067_mermaid",
+        "q067_passers"
+      ],
+      "evidence": "人魚は波、細い管、大きな門の絵を順に指した。通行人は大門をすぐ開けたいという。",
+      "reason": "絵を指す人魚と、門を開けたいと発言する通行人がいる。",
+      "visual": "波・細管・大門の三つの絵と指先。"
+    },
+    "surge": {
+      "decision": "person-evidence",
+      "people": [
+        "q067_mermaid"
+      ],
+      "evidence": "大門が圧力で押し戻された。人魚が細い管の絵をもう一度示した。",
+      "reason": "人魚が隊と大門へ移り、もう一度小管の絵を示す。",
+      "visual": "圧力で押し戻された門と小管の絵。"
+    },
+    "balanced": {
+      "decision": "person-evidence",
+      "people": [
+        "q067_mermaid"
+      ],
+      "evidence": "小管から水が流れ、内外の水位が揃った。人魚が大門の絵へ指を移す。",
+      "reason": "最初に小管を選ぶ経路と大門からやり直す経路の双方で、人魚が弁に到着して大門の絵を指す。",
+      "visual": "水位が揃った小弁と移る指先。"
+    },
+    "opened": {
+      "decision": "person-evidence",
+      "people": [
+        "q067_mermaid"
+      ],
+      "evidence": "水位が揃ったことを操作足場で確かめ、大門を開いた。",
+      "reason": "本文は隊の開門を描く。balanced_gateの同行者mermaidも、同じ操作足場に実到着する。",
+      "visual": "水位の揃った大門と穏やかな流れ。"
+    },
+    "forced": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "大門の操作足場まで来て強制開放した。調圧を済ませた記録は付けない。",
+      "reason": "直接の強制開放に同行者はおらず、人魚は入口に残る。",
+      "visual": "調圧を経ず開いた門と荒い流れ。"
+    },
+    "stopped": {
+      "decision": "person-evidence",
+      "people": [
+        "q067_mermaid"
+      ],
+      "evidence": "小弁を閉じて入水を止めた。人魚が移れる水域まで同行する。",
+      "reason": "人魚は直接止水するときも押し戻された門から退くときも小弁へ同行する。調圧後の止水では既に同じ足場にいる。",
+      "visual": "閉じた小弁、退避水域へ向かう人魚。"
+    },
+    "evacuated": {
+      "decision": "person-evidence",
+      "people": [
+        "q067_mermaid"
+      ],
+      "evidence": "人魚が退避水域へ移ったのを確認した。",
+      "reason": "stopped_escortで人魚と隊が退避水域へ実到着し、本文でも移動を確認する。",
+      "visual": "入水が止まっている間に届いた退避水域。"
+    }
+  },
+  "next": "人魚の専用画と入口の通行人の呼称を接続する。大門での二種類の開放、止水からの退避、実同行と旧保存を検証し、次にq068を監査する。"
 }
  }
 };
