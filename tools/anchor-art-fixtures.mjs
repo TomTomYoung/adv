@@ -54,7 +54,7 @@ export function anchorArtFixtures() {
           seen.add(key);
           const cast = legacy || scene.startsWith('hoist_') ? [] : [scene === 'entry' ? 'q068_hoist_workers' : 'q068_survivors'];
           fixtures.push({edition:'e2',quest:'q068',scene,variant,cast,textOnlyCast:cast,absentStoryScene:legacy,
-            save:game.save(),expectedText:projectGame(game).dialog.text,availableChoice:action,
+            keepClausesTogether:!legacy,save:game.save(),expectedText:projectGame(game).dialog.text,availableChoice:action,
             ...(scene === 'secured' ? {blockedChoice:towed ? 'abandon' : 'cut'} : {})});
         }
         if (legacy) {

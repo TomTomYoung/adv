@@ -84,6 +84,14 @@ test('short Japanese endings move with their sentence when the full sentence fit
     const text=opening+ending;
     assert.deepEqual(messagePages(text,text.length-tail.length),[opening,ending]);
   }
+  for(const [opening,ending,tail] of [
+    ['重い綱は城、軽い綱は水面の陰へ続く。','吊上げ人は軽い方を切ろうとしている。','としている。'],
+    ['人は別船へ移ったが、','生活の荷が載る筏はまだ城へつながっている。','る。'],
+    ['吊上げ地点へ戻り、','船へ移した人と筏の所在を確かめて作業を終える。','る。'],
+  ]){
+    const text=opening+ending;
+    assert.deepEqual(messagePages(text,text.length-tail.length),[opening,ending]);
+  }
   assert.deepEqual(messagePages('舟。あいうえおかきくけこ',9),['舟。あいうえおかき','くけこ']);
 });
 

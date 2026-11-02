@@ -83,6 +83,7 @@ try{
         const text=dialoguePages.join('');
         assert.ok(text.includes(f.expectedText),`missing conditional dialogue: ${f.expectedText}`);
         if(f.keepSentencesTogether)assert.ok(dialoguePages.every(line=>line.endsWith('。')),'keep each sentence on one page');
+        if(f.keepClausesTogether)assert.ok(dialoguePages.slice(0,-1).every(line=>/[。、]$/u.test(line)),'break between the anchor dialogue clauses');
         if(f.absentText)assert.ok(!text.includes(f.absentText),`unexpected conditional dialogue: ${f.absentText}`);
       }
       await page.evaluate(async()=>{await document.fonts.ready;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));});
