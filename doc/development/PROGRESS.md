@@ -2,6 +2,10 @@
 
 この文書は実施日・対象コミットごとの検証履歴です。過去の件数・環境制約は当時の記録として保持します。現在の実装範囲は[CURRENT_STATUS](../CURRENT_STATUS.md)、未実装の順序は[HANDOFF](../HANDOFF.md)を参照してください。
 
+## 2026-11-02：q067の人魚の同行とq068の出演監査
+
+[PR #193](https://github.com/TomTomYoung/adv/pull/193)を引き継いだ。人魚を城門・小弁・大門・退避水域の6場面に、通行人は入口に接続した。調圧後の開門と直接強制開放、止水後の退避、全8旅程の途中保存からの再開を検証する。q068では入口の吊上げ人、筏と別船の避難者を候補にした。旧100件の精読は167場面、接続済み49役、未接続候補2役。[検証結果と画面](https://github.com/TomTomYoung/adv/pulls?q=is%3Apr+head%3Afeature%2Fsunken-q067-mermaid)。
+
 ## 2026-11-02：q066の記録室とq067の出演監査
 
 [PR #192](https://github.com/TomTomYoung/adv/pull/192)を引き継いだ。q066は乗船札を照合した記録室にオミの専用画を接続。四つの展示経路で鎧・札の持ち主、避難の確認と三結末を検証する。旧保存へはオミの所在だけを補い、現場接続前の旧受注は従来の分岐で完了する。出演監査はq067まで160場面、接続済み47役、候補は人魚と通行人の2役。[検証結果と画面](https://github.com/TomTomYoung/adv/pulls?q=is%3Apr+head%3Afeature%2Fsunken-q066-omi)。

@@ -90,6 +90,13 @@ export function sunkenFirstSource(q,{cast=true}={}){
   for(const [from,key] of [['entry','stop'],['surge','evacuate']])route(from,key,'stopped',{companions:['mermaid'],effects:[set('stopped')]});
   add('stopped','valve','小弁を閉じて入水を止めた。人魚が移れる水域まで同行する。',[opt('escort','人魚と退避水域へ移る','evacuated',{companions:['mermaid']})]);
   route('balanced','close','stopped',{effects:[set('stopped')]});end('evacuated','refuge','人魚が退避水域へ移ったのを確認した。','compromise');
+  if(cast){
+   x.entities.mermaid.character='q067_mermaid';
+   entity('passers','entry','group');
+   x.entities.passers.character='q067_passers';
+   node('entry').cast=[{entity:'mermaid',display:{x:59,scale:.84}},{entity:'passers',display:{x:23}}];
+   for(const id of ['surge','balanced','opened','stopped','evacuated'])node(id).cast=[{entity:'mermaid',display:{x:50,scale:.84}}];
+  }
  }
  if(q.number===68){
   cell('raft_site','軽い綱の先の避難筏','region_7_f2',7,11);cell('boat','別船の乗移り足場','region_7_f2',3,11);cell('drift','切り離され流れた筏','region_7_f2',1,11);node('raft').place='raft_site';node('secured').place='boat';

@@ -1,5 +1,6 @@
 // Edition-two regional bundle: relocated-quest roles, separate from border NPCs.
 export const RELOCATED_CHARACTER_ART=Object.fromEntries([
+ ['q067_mermaid','sunken-q067-2026-11-02'],
  ['q066_omi','sunken-q066-2026-11-02'],
  ...['boro','worker'].map(key=>['q140_'+key,'chapel-q140-2026-11-01']),
  ...['sena','geologist'].map(key=>['q139_'+key,'chapel-q139-2026-11-01']),
@@ -46,6 +47,16 @@ export const relocatedCharacters=Object.fromEntries([
  ['q035_patient','顔を隠す患者','配膳口の患者側で顔を隠したまま礼を言い、修理人の入室と見学者への公開を区別する匿名の患者。','2026-10-29の美術設定。顔全体を不透明な布で覆う姿を保ち、性別・病名・氏名・具体的な病状を追加しない。服装と布の色は美術上の選択。施療人ネイとは同定しない。皿・病室・修理人・見学者を人物画へ固定しない。']
 ].map(([id,name,detail,provenance])=>[id,{id,name,role:'礼拝堂の現地の相手',detail,portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,
  provenance:provenance??'2026-10-29の美術設定。固有名・他人物との同一性は追加しない。具体的な外見・年齢感・服装は今回の美術設定。牢・格子・聖像・宝玉・石を人物画へ固定しない。'}]));
+relocatedCharacters.q067_mermaid={
+ id:'q067_mermaid',name:'人魚',role:'城門で絵を指す人魚',
+ detail:'波、細い管、大きな門の絵を順に指して調圧を求める。小弁や大門へ同行し、止水した経路では退避水域へ移る。',
+ portrait:RELOCATED_CHARACTER_ART.q067_mermaid.asset,sprite:RELOCATED_CHARACTER_ART.q067_mermaid.asset,
+ provenance:'2026-11-02の美術設定。青緑の尾、麻の上衣、指差しの姿勢を各場面で共用する。'
+};
+relocatedCharacters.q067_passers={
+ id:'q067_passers',name:'通行人',role:'城門で開門を求める相手',detail:'城門の入口で、大門をすぐに開けたいと話す。',
+ provenance:'2026-11-02。本文にある呼称。人数と氏名は未指定。'
+};
 relocatedCharacters.q066_omi={
  id:'q066_omi',name:'歴史家のオミ',role:'珊瑚の軍議の依頼人',
  detail:'避難便の番号が全員分受領されていたと知り、自分で用意した展示札を伏せる。',
