@@ -4,7 +4,7 @@
 
 [PROGRESS.md](PROGRESS.md)：今回実行した検査、過去の実ブラウザ確認、残作業。
 
-[CHROMIUM_DEFERRED_2026-11-04.md](CHROMIUM_DEFERRED_2026-11-04.md)：ユーザー指示により保留したq161のブラウザー検証180条件、再開手順、導入失敗の経緯。
+[CHROMIUM_DEFERRED_2026-11-04.md](CHROMIUM_DEFERRED_2026-11-04.md)：2026-11-05に再開・完了したq161のChromium検証180条件と目視結果、再実行手順、以前の保留・導入失敗の経緯。
 
 [EXECUTION_RECOVERY.md](EXECUTION_RECOVERY.md)：作業前後のログ、途中停止の検出、実Gitオブジェクトと既存ブランチを用いた安全な再開、2026-11-04〜05の実行環境エラーへの対応。
 

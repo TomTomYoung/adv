@@ -104,7 +104,7 @@ node tools/prepare-worktree.mjs \
 node --test tests/work-session.test.mjs tests/prepare-worktree.test.mjs
 ```
 
-既存CIの `node --test tests/*.test.mjs` にも含まれます。これらは作業支援用の試験で、ゲームのブラウザー表示試験ではありません。[Chromium検証180条件の保留](CHROMIUM_DEFERRED_2026-11-04.md)は継続します。
+既存CIの `node --test tests/*.test.mjs` にも含まれます。これらは作業支援用の試験で、ゲームのブラウザー表示試験ではありません。q161のChromium検証は2026-11-05のユーザー指示で再開し、180条件と代表画面の目視を完了しました。[実行結果と過去の保留記録](CHROMIUM_DEFERRED_2026-11-04.md)を参照してください。
 
 ## 証拠
 
