@@ -1,7 +1,7 @@
 // Editorial audit: candidate IDs are local; connected roles cite their game entity.
 // Update a fingerprint only after rereading the changed quest and its evidence.
 export const RELOCATED_CAST_REVIEW={
- reviewedAt:'2026-11-02',
+ reviewedAt:'2026-11-04',
  quests:{
   q031:{
    sourceSha256:'ab2cb40f75d0a430e00077b936b338b23736b74b01034aeaeb9333cda16cecf7',
@@ -1991,7 +1991,7 @@ export const RELOCATED_CAST_REVIEW={
   "next": "両役の表示を接続済み。城側と筏側の綱、人だけを移した別船、荷と筏の漂流の局所素材が残る。"
 },
   q069:{
-  "sourceSha256": "5abd90e3d107c7412f0fc5038f6b1f42cb67ee8e9f763ffc09f79199a2fda881",
+  "sourceSha256": "db2645383e5c31b256d493febfc881ea7b34d7e37313b3690de1181ed1cb88e1",
   "identityNotes": [
     "海王は入口で鉄片を門へ打ち込み、作業場で補修と通行条件を相談する。呼称は海王。種族・容姿は本文では決まらない。",
     "支払準備の2場面では隊はまだ同じ現場にいる。通過先では隊が振り返って遠くの海王を見る。同行者として配置しない。",
@@ -2001,8 +2001,9 @@ export const RELOCATED_CAST_REVIEW={
   "people": {
     "q069_sea_king": {
       "label": "海王",
-      "status": "candidate",
-      "need": "門前の徴税と補修場での作業・交渉、各地点の支払準備へ接続する。通過先から振り返る描写は距離が分かる演出にする。"
+      "status": "connected",
+      "entity": "seaKing",
+      "need": "門前・補修場と各支払直後の4場面へ専用画を接続済み。旧保存は補修場の到着履歴から所在を補う。通過先の遠景と補修材の局所背景は残る。"
     }
   },
   "scenes": {
@@ -2057,7 +2058,94 @@ export const RELOCATED_CAST_REVIEW={
       "visual": "支払った補修税と持ち帰る図。"
     }
   },
-  "next": "海王を門前と補修場の実際の対面に接続する。遠景、支払・再訪、護衛戦、図の持ち帰りと旧保存を確認し、q070を監査する。"
+  "next": "海王の対面表示は接続済み。次はq070の港の人の呼称表示とq161の出演監査。城門・補修場・通過先からの遠景・港の補修図の局所背景が残る。"
+},
+  q070:{
+  "sourceSha256": "8cf971818580bfaa0725ec8ff436d30ec8a8aae7726c50aa14a35e17ef67a6f9",
+  "identityNotes": [
+    "港の人は既存group portPeople。港で避難を知らせるharbor_waitと高台到着後のsafeに同席根拠がある。人数・氏名・代表者は未指定で、集団名の表示候補とする。",
+    "港から高台へは実同行し、到着するまでevacuatedはfalse。隊が制御台へ戻った後も港の人は高台へ留まる。",
+    "依頼人は航海士のナギだが、現場で本人が同行する記述はない。全体浮上の戦闘相手と結末の被災者も会話の常設出演役にしない。",
+    "搬出のみの経路では港の人が港に残り、避難後の中止経路では高台に残る。salvagedの受取人をその集団に固定しない。",
+    "外郭→倉→中枢と避難の成立順、遺物の実運搬、通常探索の空気設備と物語の浮上状態の独立を保持する。"
+  ],
+  "people": {
+    "q070_port_people": {
+      "label": "港の人",
+      "status": "candidate",
+      "need": "harbor_wait・safeの2場面に既存portPeopleの所在と同行を用いた呼称表示を接続する。人数・顔・代表者は追加しない。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "全体浮上の柄が一本、区画別の弁が三つ。",
+      "reason": "制御機構と係留索を調べる場面。依頼人ナギや港の人が制御台へ来た記述はない。",
+      "visual": "全体浮上の柄と三つの弁、港へ伸びる係留索。"
+    },
+    "districts": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "港の人が離れてから外郭、次に倉、最後に中枢を浮かせれば波を抑えられる。",
+      "reason": "港の人の避難は離れた場所の作業。制御台へ戻るのは隊だけで、港の人は高台に留まる。",
+      "visual": "避難完了・外郭・倉の作業段階が分かる制御台。"
+    },
+    "harbor_wait": {
+      "decision": "person-evidence",
+      "people": [
+        "q070_port_people"
+      ],
+      "evidence": "港の人へ浮上作業を知らせた。",
+      "reason": "隊が港に実到着して避難を知らせる相手。人数・代表者・氏名は未指定。",
+      "visual": "係留索のそばで避難開始を待つ港の人の呼称。"
+    },
+    "safe": {
+      "decision": "person-evidence",
+      "people": [
+        "q070_port_people"
+      ],
+      "evidence": "港の人が高台へ揃った。",
+      "reason": "隊と高台まで実同行した港の人が揃っている。制御台への帰路には同行しない。",
+      "visual": "高台の避難場所と係留索から離れた集団の呼称。"
+    },
+    "outer_raised": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "外郭の弁で浮上を確認した。",
+      "reason": "外郭弁は隊が操作し、港の人は高台にいる。係員を補わない。",
+      "visual": "外郭だけが浮上した状態と倉の弁へ向かう手順。"
+    },
+    "store_raised": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "倉の弁で浮上を確認した。",
+      "reason": "倉の浮上確認に他人物の動作はなく、避難者は高台に留まる。",
+      "visual": "外郭と倉が浮上し、中枢が残った状態。"
+    },
+    "core_raised": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "港の避難を含む作業記録を確かめる。",
+      "reason": "隊が作業記録を確認する。結末のナギの図や新しい桟橋をここで先行表示しない。",
+      "visual": "中枢までの浮上と避難記録。結末前の作業確認。"
+    },
+    "salvage": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "搬出庫の重要な遺物を回収する。",
+      "reason": "隊の回収作業。港の人や学芸員が搬出庫にいる根拠はない。",
+      "visual": "搬出庫の遺物。出発前はstore、出発後はpartyが保持する。"
+    },
+    "salvaged": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "港へ遺物を引き渡した。",
+      "reason": "受取先は港という場所。避難をせず戻る場合と、避難後に戻る場合があり、港の人を共通の受取人にできない。",
+      "visual": "実到着して引き渡した遺物。段階的浮上の中止時点と全体浮上未完了を保つ。"
+    }
+  },
+  "next": "港の人の呼称表示を接続し、避難前後の搬出、三つの浮上弁、旧保存・旧受注経路を検証する。続いて沈没城後半q161を監査する。"
 }
  }
 };
