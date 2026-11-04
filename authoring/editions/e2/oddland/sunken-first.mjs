@@ -106,6 +106,13 @@ export function sunkenFirstSource(q,{cast=true}={}){
   choice('raft','rope').companions=['survivors','raftVessel'];choice('raft','people').companions=['survivors'];
   choice('entry','cut').effects=[move('raftVessel survivors','raft_site','transit','drift')];
   for(const [key,outcome] of [['cut','informed'],['abandon','cargo'],['fix','compromise']]){route('secured',key,'hoist_'+key);end('hoist_'+key,'entry','吊上げ地点へ戻り、船へ移した人と筏の所在を確かめて作業を終える。',outcome,key==='abandon'?[move('raftVessel','raft_site','transit','drift')]:[]);}
+  if(cast){
+   entity('hoistWorkers','entry','group');
+   x.entities.hoistWorkers.character='q068_hoist_workers';
+   x.entities.survivors.character='q068_survivors';
+   node('entry').cast=[{entity:'hoistWorkers',x:50}];
+   for(const id of ['raft','secured'])node(id).cast=[{entity:'survivors',x:50}];
+  }
  }
  if(q.number===69){
   cell('passed','料金所を通った先の足場','region_7_f2',7,11);cell('work','城門の補修作業場と交渉席','region_7_f2',9,6);town('report','補修図の引継ぎ先','royal_harbor');node('passed').place='passed';node('work').place='work';entity('diagram','entry');x.flags.paid=false;

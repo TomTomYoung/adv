@@ -76,6 +76,25 @@ test('closing punctuation stays with a preceding grapheme across measured page b
   assert.deepEqual(messagePages('。。。。。',4),['。。。。','。']);
 });
 
+test('short Japanese endings move with their sentence when the full sentence fits the next page',()=>{
+  for(const [opening,ending,tail] of [
+    ['小管から水が流れ、内外の水位が揃った。','人魚が大門の絵へ指を移す。','す。'],
+    ['大門の操作足場まで来て強制開放した。','調圧を済ませた記録は付けない。','ない。'],
+  ]){
+    const text=opening+ending;
+    assert.deepEqual(messagePages(text,text.length-tail.length),[opening,ending]);
+  }
+  for(const [opening,ending,tail] of [
+    ['重い綱は城、軽い綱は水面の陰へ続く。','吊上げ人は軽い方を切ろうとしている。','としている。'],
+    ['人は別船へ移ったが、','生活の荷が載る筏はまだ城へつながっている。','る。'],
+    ['吊上げ地点へ戻り、','船へ移した人と筏の所在を確かめて作業を終える。','る。'],
+  ]){
+    const text=opening+ending;
+    assert.deepEqual(messagePages(text,text.length-tail.length),[opening,ending]);
+  }
+  assert.deepEqual(messagePages('舟。あいうえおかきくけこ',9),['舟。あいうえおかき','くけこ']);
+});
+
 test('message paging preserves all Unicode text and sends advance only after the final page',()=>{
   const d=structuredClone(data),text='台帳には帰還した者の名が並ぶ。\n'.repeat(25)+'灯🕯️';
   assert.equal(messagePages(text).join(''),text);

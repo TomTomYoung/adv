@@ -4,16 +4,16 @@
   "summary": {
     "quests": 100,
     "scenes": 753,
-    "emptyCastScenes": 661,
+    "emptyCastScenes": 657,
     "personEntities": 114,
     "characterLinkedEntities": 36,
-    "reviewedQuests": 28,
-    "reviewedScenes": 167,
-    "noPersonEvidenceScenes": 71,
-    "personEvidenceScenes": 96,
-    "candidateRoles": 2,
-    "connectedRoles": 49,
-    "unreviewedScenes": 586
+    "reviewedQuests": 29,
+    "reviewedScenes": 173,
+    "noPersonEvidenceScenes": 73,
+    "personEvidenceScenes": 100,
+    "candidateRoles": 1,
+    "connectedRoles": 51,
+    "unreviewedScenes": 580
   },
   "regions": [
     {
@@ -36,15 +36,15 @@
       "name": "沈没城",
       "quests": 20,
       "scenes": 141,
-      "emptyCastScenes": 129,
+      "emptyCastScenes": 125,
       "personEntities": 16,
       "characterLinkedEntities": 2,
-      "reviewedQuests": 8,
-      "reviewedScenes": 45,
-      "noPersonEvidenceScenes": 29,
-      "personEvidenceScenes": 16,
-      "candidateRoles": 2,
-      "connectedRoles": 7
+      "reviewedQuests": 9,
+      "reviewedScenes": 51,
+      "noPersonEvidenceScenes": 31,
+      "personEvidenceScenes": 20,
+      "candidateRoles": 1,
+      "connectedRoles": 9
     },
     {
       "id": 9,
@@ -3486,7 +3486,7 @@
       "region": 7,
       "client": "救難船長のトウ",
       "source": "authoring/editions/e2/oddland/sunken-first.mjs",
-      "sourceSha256": "b85e73f885ccb69ccbbd2f6e9166283770ea8cd73281cd2ffcc6cc363d84dd8f",
+      "sourceSha256": "86dd7c171c0a762f99c3161ea65261c6d532fee76a4b67656afbc4ac70df3939",
       "scenes": [
         {
           "id": "entry",
@@ -3498,7 +3498,12 @@
             "x": 8,
             "y": 13
           },
-          "cast": [],
+          "cast": [
+            {
+              "entity": "hoistWorkers",
+              "x": 50
+            }
+          ],
           "review": {
             "decision": "person-evidence",
             "people": [
@@ -3519,7 +3524,12 @@
             "x": 7,
             "y": 11
           },
-          "cast": [],
+          "cast": [
+            {
+              "entity": "survivors",
+              "x": 50
+            }
+          ],
           "review": {
             "decision": "person-evidence",
             "people": [
@@ -3540,7 +3550,12 @@
             "x": 3,
             "y": 11
           },
-          "cast": [],
+          "cast": [
+            {
+              "entity": "survivors",
+              "x": 50
+            }
+          ],
           "review": {
             "decision": "person-evidence",
             "people": [
@@ -3618,7 +3633,12 @@
             "x": 7,
             "y": 11
           },
-          "cast": [],
+          "cast": [
+            {
+              "entity": "survivors",
+              "x": 50
+            }
+          ],
           "review": {
             "decision": "person-evidence",
             "people": [
@@ -3641,16 +3661,18 @@
         "people": {
           "q068_hoist_workers": {
             "label": "軽い綱を切ろうとする吊上げ人",
-            "status": "candidate",
-            "need": "入口の動作に本文の呼称を接続する。帰路で待っていたか、船長本人かは不明。"
+            "status": "connected",
+            "need": "軽い綱を切ろうとする入口だけで呼称を表示する。",
+            "entity": "hoistWorkers"
           },
           "q068_survivors": {
             "label": "避難筏の人たち",
-            "status": "candidate",
-            "need": "既存survivorsに集団名を接続する。筏と準備中、移乗を終えた別船で、綱の有無と実際の所在を照合する。"
+            "status": "connected",
+            "need": "筏、縄の準備中、移乗した別船で既存の所在に対応する呼称を表示する。",
+            "entity": "survivors"
           }
         },
-        "next": "吊上げ人の入口と避難筏の人たちの所在に呼称を接続する。縄の準備、曳航・人だけの移乗・直接切断、帰路と漂流時の人・筏・荷、旧保存を検証し、q069を監査する。"
+        "next": "両役の表示を接続済み。城側と筏側の綱、人だけを移した別船、荷と筏の漂流の局所素材が残る。"
       }
     },
     {
@@ -3672,7 +3694,15 @@
             "y": 12
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q069_sea_king"
+            ],
+            "evidence": "海王は鉄片を求め、その場で城門の穴へ打ち込んでいる。",
+            "reason": "鉄片を求めて穴へ打ち込む海王に隊が対面する。",
+            "visual": "鉄片を求める手と、崩れた城門の穴。"
+          }
         },
         {
           "id": "passed",
@@ -3685,7 +3715,13 @@
             "y": 11
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "no-person-evidence",
+            "people": [],
+            "evidence": "通行は済んだ。振り返ると海王は一人で次の穴を塞いでいる。",
+            "reason": "隊は別の足場で振り返り、門を塞ぎ続ける海王を見る。隊の足場に海王は同席しない。",
+            "visual": "通過した足場から見える、門に残る海王の遠景。"
+          }
         },
         {
           "id": "work",
@@ -3698,7 +3734,15 @@
             "y": 6
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q069_sea_king"
+            ],
+            "evidence": "通行税の鉄片は城門の補修材で、海王は崩壊した故郷を自分で塞いでいる。 運搬を分担すれば、各人が門前で止められずに済む。",
+            "reason": "隊が実際に補修場に着き、海王の仕事を知って材料の当番や通行を相談できる。",
+            "visual": "穴を塞ぐ作業場と補修材の寸法。"
+          }
         },
         {
           "id": "reported",
@@ -3708,7 +3752,13 @@
             "location": "royal_harbor"
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "no-person-evidence",
+            "people": [],
+            "evidence": "港へ補修図を持ち帰り、次の船へ必要な材料を伝えた。",
+            "reason": "隊が港へ図を届ける。次の船への伝言先をハル本人と同定する根拠はない。",
+            "visual": "港で引き渡す補修図と次便の鉄板。"
+          }
         },
         {
           "id": "entry_pay_ready",
@@ -3721,7 +3771,15 @@
             "y": 12
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q069_sea_king"
+            ],
+            "evidence": "必要な道具を使って準備を整えた。ここから目的地まで運ぶ。",
+            "reason": "入口で支払済み。次の選択までは隊も海王も門前におり、図の運搬は始まっていない。",
+            "visual": "支払後の城門と通過先の足場。"
+          }
         },
         {
           "id": "work_single_ready",
@@ -3734,11 +3792,34 @@
             "y": 6
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q069_sea_king"
+            ],
+            "evidence": "必要な道具を使って準備を整えた。ここから目的地まで運ぶ。",
+            "reason": "補修場で今回は通行税を払うと決めた直後で、隊はまだ港へ出発していない。",
+            "visual": "支払った補修税と持ち帰る図。"
+          }
         }
       ],
       "personEntities": [],
-      "review": null
+      "review": {
+        "identityNotes": [
+          "海王は入口で鉄片を門へ打ち込み、作業場で補修と通行条件を相談する。呼称は海王。種族・容姿は本文では決まらない。",
+          "支払準備の2場面では隊はまだ同じ現場にいる。通過先では隊が振り返って遠くの海王を見る。同行者として配置しない。",
+          "護衛は強行突破を選んだ戦闘の相手。入口の常設役とはしない。依頼人の漁師ハルが鉄板を積むのは結末で、港の報告場面に本人が立ち会う記述はない。",
+          "補修税は入口か補修場で一度20Gを払う。支払済みで戻ると二重徴収せず、補修図は隊が実際に港へ運ぶ。"
+        ],
+        "people": {
+          "q069_sea_king": {
+            "label": "海王",
+            "status": "candidate",
+            "need": "門前の徴税と補修場での作業・交渉、各地点の支払準備へ接続する。通過先から振り返る描写は距離が分かる演出にする。"
+          }
+        },
+        "next": "海王を門前と補修場の実際の対面に接続する。遠景、支払・再訪、護衛戦、図の持ち帰りと旧保存を確認し、q070を監査する。"
+      }
     },
     {
       "id": "q070",
