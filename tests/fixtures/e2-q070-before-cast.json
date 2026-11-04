@@ -1,0 +1,3344 @@
+{
+  "schemaVersion": 1,
+  "id": "q070",
+  "number": 70,
+  "title": "沈没城の浮上",
+  "client": "航海士のナギ",
+  "brief": "城を浮かせれば遺物が救えるが、地下港が潰れる。最終操作を選んでください。",
+  "region": 7,
+  "type": "authored_progression",
+  "recommendedLevel": 7,
+  "requires": {
+    "op": "gte",
+    "left": {
+      "ref": "vars.region_7"
+    },
+    "right": 3
+  },
+  "unlockHint": "この地域の依頼を3件完了すると受注できる。 旧王領の村の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q070_clue_a",
+      "title": "沈没城の浮上：現場の痕跡",
+      "points": [
+        {
+          "map": "region_7_f2",
+          "x": 4,
+          "y": 5,
+          "dungeon": "region_7"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q070.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q070.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q070"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q070"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_7"
+    },
+    {
+      "id": "q070_clue_b",
+      "title": "沈没城の浮上：記録と証言",
+      "points": [
+        {
+          "map": "region_7_f2",
+          "x": 3,
+          "y": 13,
+          "dungeon": "region_7"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q070.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q070.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q070"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q070"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_7"
+    },
+    {
+      "id": "q070_decision",
+      "title": "沈没城の浮上：決着の場",
+      "points": [
+        {
+          "map": "region_7_f2",
+          "x": 13,
+          "y": 7,
+          "dungeon": "region_7"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q070.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q070.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q070.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q070"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_7"
+    },
+    {
+      "id": "region_7",
+      "title": "一つだけ浮かぶ区画",
+      "dungeon": "region_7",
+      "points": [
+        {
+          "map": "region_7_f1",
+          "x": 1,
+          "y": 2,
+          "dungeon": "region_7"
+        }
+      ],
+      "trigger": "action",
+      "script": "dungeon.scene.region_7.v1",
+      "condition": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q070.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      },
+      "requirement": "関連する依頼を受けると調査できる。",
+      "note": {
+        "text": "第1層の浮上装置1で小区画を浮かせ、空気溜まりと横道ができることを確認した。城の浮上方針を相談するための現地記録として残す。",
+        "when": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.dungeonNotes.region_7"
+          },
+          "right": true
+        }
+      },
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          null,
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q070"
+              },
+              "right": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "q070_sunken_entry",
+      "title": "沈没城の浮上の現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q070.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q070.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q070"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q070.sunken.visit",
+      "points": [
+        {
+          "dungeon": "region_7",
+          "map": "region_7_f2",
+          "x": 13,
+          "y": 7
+        }
+      ]
+    },
+    {
+      "id": "q070_sunken_outer",
+      "title": "外郭の浮上弁",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "outer",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q070.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q070.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q070"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q070.sunken.visit",
+      "points": [
+        {
+          "dungeon": "region_7",
+          "map": "region_7_f2",
+          "x": 3,
+          "y": 7
+        }
+      ]
+    },
+    {
+      "id": "q070_sunken_store",
+      "title": "倉の浮上弁と搬出庫",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "store",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q070.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q070.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q070"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q070.sunken.visit",
+      "points": [
+        {
+          "dungeon": "region_7",
+          "map": "region_7_f2",
+          "x": 7,
+          "y": 11
+        }
+      ]
+    },
+    {
+      "id": "q070_sunken_core",
+      "title": "中枢の浮上弁",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "core",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q070.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q070.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q070"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q070.sunken.visit",
+      "points": [
+        {
+          "dungeon": "region_7",
+          "map": "region_7_f2",
+          "x": 13,
+          "y": 5
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_7_f2",
+      "x": 4,
+      "y": 5,
+      "object": "q070_clue_a",
+      "role": "clue_a"
+    },
+    {
+      "map": "region_7_f2",
+      "x": 3,
+      "y": 13,
+      "object": "q070_clue_b",
+      "role": "clue_b"
+    },
+    {
+      "map": "region_7_f2",
+      "x": 13,
+      "y": 7,
+      "object": "q070_decision",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "中枢を最後に浮かせる",
+      "text": "城は小さな島々として戻った。港は新しい桟橋へ移り、ナギの図も増える。",
+      "gold": 129,
+      "xp": 116
+    },
+    "contract": {
+      "label": "浮上機の主を倒し、全体を一度に起動する",
+      "text": "城は空を見た。地下港の人々は、失った家の瓦を海岸で拾う。",
+      "gold": 149,
+      "xp": 89
+    },
+    "compromise": {
+      "label": "浮上を止め、遺物の搬出へ切り替える",
+      "text": "城は海の下に残った。地上には小さくても確かな展示室ができる。",
+      "gold": 83,
+      "xp": 87
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/sunken-first.mjs",
+    "world": {
+      "truth": "城は区画ごとに浮上でき、全体を一度に上げる旧手順だけが危険だ。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "城は区画ごとに浮上でき、全体を一度に上げる旧手順だけが危険だ。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "城を浮かせれば遺物が救えるが、地下港が潰れる。最終操作を選んでください。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "航海士のナギ",
+        "observation": "城を浮かせれば遺物が救えるが、地下港が潰れる。最終操作を選んでください。",
+        "belief": "城を浮かせれば遺物が救えるが、地下港が潰れる。最終操作を選んでください。",
+        "goal": "城を浮かせれば遺物が救えるが、地下港が潰れる。最終操作を選んでください。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "城を浮かせれば遺物が救えるが、地下港が潰れる。最終操作を選んでください。",
+      "progression": "港の避難と三つの区画浮上を組み合わせ、浮上の途中でも遺物搬出へ切り替えられる。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q070.sunken.entry"
+        },
+        {
+          "id": "districts",
+          "script": "q070.sunken.districts"
+        },
+        {
+          "id": "harbor_wait",
+          "script": "q070.sunken.harbor_wait"
+        },
+        {
+          "id": "safe",
+          "script": "q070.sunken.safe"
+        },
+        {
+          "id": "outer_raised",
+          "script": "q070.sunken.outer_raised"
+        },
+        {
+          "id": "store_raised",
+          "script": "q070.sunken.store_raised"
+        },
+        {
+          "id": "core_raised",
+          "script": "q070.sunken.core_raised"
+        },
+        {
+          "id": "salvage",
+          "script": "q070.sunken.salvage"
+        },
+        {
+          "id": "salvaged",
+          "script": "q070.sunken.salvaged"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "城を浮かせれば遺物が救えるが、地下港が潰れる。最終操作を選んでください。",
+      "openQuestion": "沈没城の浮上の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "frameShift",
+      "newInformation": "城は区画ごとに浮上でき、全体を一度に上げる旧手順だけが危険だ。",
+      "retroactiveTargets": [
+        "districts"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q070.flow.entry"
+      },
+      {
+        "id": "districts",
+        "script": "q070.flow.districts"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q070.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q070.evacuated",
+        "meaning": "各場面に明記した evacuated の行為・合意の記録",
+        "writer": [
+          "districts"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q070.outer",
+        "meaning": "各場面に明記した outer の行為・合意の記録",
+        "writer": [
+          "districts"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q070.store",
+        "meaning": "各場面に明記した store の行為・合意の記録",
+        "writer": [
+          "districts"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "港の避難と三つの区画浮上を組み合わせ、浮上の途中でも遺物搬出へ切り替えられる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "港の避難と三つの区画浮上を組み合わせ、浮上の途中でも遺物搬出へ切り替えられる。",
+    "flowVersion": 2,
+    "entryScript": "q070.sunken.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "全体浮上の柄が一本、区画別の弁が三つ。港の係留索が城の上へ伸びている。",
+        "options": [
+          {
+            "id": "divide",
+            "text": "区画別の弁を使って浮上を進める",
+            "to": "districts",
+            "action": "entry_divide"
+          },
+          {
+            "id": "all",
+            "text": "浮上機の主を倒し、全体を一度に起動する",
+            "to": "@contract",
+            "action": "entry_all"
+          },
+          {
+            "id": "salvage",
+            "text": "浮上を止め、遺物の搬出へ切り替える",
+            "to": "salvage",
+            "action": "entry_salvage"
+          }
+        ]
+      },
+      {
+        "id": "districts",
+        "place": "entry",
+        "text": "城は区画ごとに浮上でき、全体を一度に上げる旧手順だけが危険だ。 港の人が離れてから外郭、次に倉、最後に中枢を浮かせれば波を抑えられる。",
+        "options": [
+          {
+            "id": "evacuate",
+            "text": "港の人を高台へ移す",
+            "to": "harbor_wait",
+            "action": "districts_evacuate"
+          },
+          {
+            "id": "outer",
+            "text": "外郭を浮かせる",
+            "to": "outer_raised",
+            "action": "districts_outer"
+          },
+          {
+            "id": "store",
+            "text": "倉を浮かせる",
+            "to": "store_raised",
+            "action": "districts_store"
+          },
+          {
+            "id": "core",
+            "text": "中枢を最後に浮かせる",
+            "to": "core_raised",
+            "action": "districts_core"
+          },
+          {
+            "id": "stop",
+            "text": "これ以上は浮かせず、重要な遺物を運び出す",
+            "to": "salvage",
+            "action": "districts_stop"
+          }
+        ]
+      },
+      {
+        "id": "harbor_wait",
+        "place": "harbor",
+        "text": "港の人へ浮上作業を知らせた。係留索のそばから高台へ案内する。",
+        "options": [
+          {
+            "id": "escort",
+            "text": "港の人と高台へ上がる",
+            "to": "safe",
+            "action": "harbor_wait_escort"
+          }
+        ]
+      },
+      {
+        "id": "safe",
+        "place": "refuge",
+        "text": "港の人が高台へ揃った。ここから制御台へ戻る。",
+        "options": [
+          {
+            "id": "back",
+            "text": "城の制御台へ戻る",
+            "to": "districts",
+            "action": "safe_back"
+          }
+        ]
+      },
+      {
+        "id": "outer_raised",
+        "place": "outer",
+        "text": "外郭の弁で浮上を確認した。次は倉の弁を扱う。",
+        "options": [
+          {
+            "id": "back",
+            "text": "制御台へ戻る",
+            "to": "districts",
+            "action": "outer_raised_back"
+          }
+        ]
+      },
+      {
+        "id": "store_raised",
+        "place": "store",
+        "text": "倉の弁で浮上を確認した。中枢は最後に扱う。",
+        "options": [
+          {
+            "id": "back",
+            "text": "制御台へ戻る",
+            "to": "districts",
+            "action": "store_raised_back"
+          }
+        ]
+      },
+      {
+        "id": "core_raised",
+        "place": "core",
+        "text": "外郭、倉に続いて中枢を浮かせた。港の避難を含む作業記録を確かめる。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@informed",
+            "action": "core_raised_finish"
+          }
+        ]
+      },
+      {
+        "id": "salvage",
+        "place": "store",
+        "text": "浮上を止め、搬出庫の重要な遺物を回収する。",
+        "options": [
+          {
+            "id": "carry",
+            "text": "遺物を港へ運び出す",
+            "to": "salvaged",
+            "action": "salvage_carry"
+          }
+        ]
+      },
+      {
+        "id": "salvaged",
+        "place": "harbor",
+        "text": "港へ遺物を引き渡した。城全体の浮上を完了した記録にはしない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "現場の結果を確かめ、依頼を終える",
+            "to": "@compromise",
+            "action": "salvaged_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "sunken-first-ten",
+      "settlement": "oddland_village",
+      "saveRevision": 2,
+      "scope": "沈没城前半10件の現場接続。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q070.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "隔壁の弁には独立した番号があり、中央機は連動を後付けされている。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q070",
+          "key": "clue_a",
+          "text": "隔壁の弁には独立した番号があり、中央機は連動を後付けされている。"
+        }
+      ]
+    },
+    "q070.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "航海士のナギ",
+          "text": "地下港の図面に、空荷区画を先に上げる試験記録があります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q070",
+          "key": "clue_b",
+          "text": "地下港の図面に、空荷区画を先に上げる試験記録がある。"
+        }
+      ]
+    },
+    "q070.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "沈没城の浮上\n\n城を浮かせれば遺物が救えるが、地下港が潰れる。最終操作を選んでください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "区画を順に浮かせ港の人を移す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q070.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q070.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "城は区画ごとに浮上でき、全体を一度に上げる旧手順だけが危険だ。"
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_7",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "城は小さな島々として戻った。港は新しい桟橋へ移り、ナギの図も増える。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q070",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "浮上機の主を倒し全体を起動する",
+              "requirement": "戦闘あり・逃走不可",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_7",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "城は空を見た。地下港の人々は、失った家の瓦を海岸で拾う。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q070",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "浮上を止め重要な遺物だけ運び出す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "城は海の下に残った。地上には小さくても確かな展示室ができる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q070",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q070.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "沈没城の浮上\n\n城を浮かせれば遺物が救えるが、地下港が潰れる。最終操作を選んでください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q070.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q070.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "城は区画ごとに浮上でき、全体を一度に上げる旧手順だけが危険だ。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q070.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "区画を順に浮かせ港の人を移す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q070.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q070.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合・戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_7",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "城は小さな島々として戻った。港は新しい桟橋へ移り、ナギの図も増える。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q070",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q070.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q070.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "contract",
+              "text": "浮上機の主を倒し全体を起動する",
+              "requirement": "戦闘あり・逃走不可",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_7",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "城は空を見た。地下港の人々は、失った家の瓦を海岸で拾う。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q070",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "浮上を止め重要な遺物だけ運び出す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "城は海の下に残った。地上には小さくても確かな展示室ができる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q070",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」航海士のナギは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられる。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q070.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q070.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q070.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "城は小さな島々として戻った。港は新しい桟橋へ移り、ナギの図も増える。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q070.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "城は空を見た。地下港の人々は、失った家の瓦を海岸で拾う。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q070.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "城は海の下に残った。地上には小さくても確かな展示室ができる。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q070.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q070.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q070.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q070.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q070.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q070.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q070.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "全体浮上の柄が一本、区画別の弁が三つ。港の係留索が城の上へ伸びている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "divide",
+              "text": "区画別の弁を使って浮上を進める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q070.flow.districts"
+                }
+              ]
+            },
+            {
+              "id": "all",
+              "text": "浮上機の主を倒し、全体を一度に起動する",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_7",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q070.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "salvage",
+              "text": "浮上を止め、遺物の搬出へ切り替える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q070.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q070.flow.districts": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q070.node",
+          "value": "districts"
+        },
+        {
+          "op": "say",
+          "text": "城は区画ごとに浮上でき、全体を一度に上げる旧手順だけが危険だ。 港の人が離れてから外郭、次に倉、最後に中枢を浮かせれば波を抑えられる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "evacuate",
+              "text": "港の人を高台へ移す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q070.evacuated"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q070.evacuated",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q070.flow.districts"
+                }
+              ]
+            },
+            {
+              "id": "outer",
+              "text": "外郭を浮かせる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "eq",
+                        "left": {
+                          "ref": "flags.flow.q070.evacuated"
+                        },
+                        "right": true
+                      },
+                      {
+                        "op": "not",
+                        "arg": {
+                          "op": "eq",
+                          "left": {
+                            "ref": "flags.flow.q070.outer"
+                          },
+                          "right": true
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q070.outer",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q070.flow.districts"
+                }
+              ]
+            },
+            {
+              "id": "store",
+              "text": "倉を浮かせる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "eq",
+                        "left": {
+                          "ref": "flags.flow.q070.outer"
+                        },
+                        "right": true
+                      },
+                      {
+                        "op": "not",
+                        "arg": {
+                          "op": "eq",
+                          "left": {
+                            "ref": "flags.flow.q070.store"
+                          },
+                          "right": true
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q070.store",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q070.flow.districts"
+                }
+              ]
+            },
+            {
+              "id": "core",
+              "text": "中枢を最後に浮かせる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q070.store"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に「倉を浮かせる」",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q070.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "これ以上は浮かせず、重要な遺物を運び出す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q070.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q070.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q070.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "城は小さな島々として戻った。港は新しい桟橋へ移り、ナギの図も増える。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q070",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q070.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q070.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "城は空を見た。地下港の人々は、失った家の瓦を海岸で拾う。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q070",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q070.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q070.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "城は海の下に残った。地上には小さくても確かな展示室ができる。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q070",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q070.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q070.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q070.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "城は小さな島々として戻った。港は新しい桟橋へ移り、ナギの図も増える。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "城は空を見た。地下港の人々は、失った家の瓦を海岸で拾う。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "城は海の下に残った。地上には小さくても確かな展示室ができる。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q070"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q070.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q070.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q070.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "districts",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q070.flow.districts"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q070.flow.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "dungeon.scene.region_7.v1": {
+      "dungeonScene": "region_7",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "第1層の浮上装置には、一つの区画へ伸びる配管がある。城全体を動かす前に、小区画の変化を観察する。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "contains",
+            "left": {
+              "ref": "dungeons.persistent.region_7.systems.air.raised"
+            },
+            "right": "float_1_0"
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "対象区画が浮上し、息継ぎできる空気溜まりと横道が生まれた。他の装置は個別に操作できる。全体浮上の旧手順を、そのまま選ぶ必要はない。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.region_7"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.region_7",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "この装置の区画はまだ浮上していない。装置で区画を浮かせた後、空気溜まりと通路を確かめよう。"
+            }
+          ]
+        }
+      ]
+    },
+    "q070.sunken.entry": {
+      "storyQuest": "q070",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q070",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "全体浮上の柄が一本、区画別の弁が三つ。港の係留索が城の上へ伸びている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "divide",
+              "text": "区画別の弁を使って浮上を進める",
+              "storyAction": {
+                "quest": "q070",
+                "action": "entry_divide"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q070",
+                  "action": "entry_divide"
+                },
+                {
+                  "op": "jump",
+                  "script": "q070.sunken.districts"
+                }
+              ]
+            },
+            {
+              "id": "all",
+              "text": "浮上機の主を倒し、全体を一度に起動する",
+              "storyAction": {
+                "quest": "q070",
+                "action": "entry_all"
+              },
+              "requirement": "戦闘。作業・報酬は勝利後に確定する。",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_7",
+                  "on_win": [
+                    {
+                      "op": "story.action",
+                      "quest": "q070",
+                      "action": "entry_all"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q070.sunken.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "narrate",
+                      "text": "戦いを切り上げた。作業は確定していない。現場で再開できる。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q070.sunken.entry"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "narrate",
+                      "text": "救助班に旧王領の村へ運び出された。現場へ戻れば直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "salvage",
+              "text": "浮上を止め、遺物の搬出へ切り替える",
+              "storyAction": {
+                "quest": "q070",
+                "action": "entry_salvage"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q070",
+                  "action": "entry_salvage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q070.sunken.districts": {
+      "storyQuest": "q070",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q070",
+          "scene": "districts"
+        },
+        {
+          "op": "narrate",
+          "text": "城は区画ごとに浮上でき、全体を一度に上げる旧手順だけが危険だ。 港の人が離れてから外郭、次に倉、最後に中枢を浮かせれば波を抑えられる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "evacuate",
+              "text": "港の人を高台へ移す",
+              "storyAction": {
+                "quest": "q070",
+                "action": "districts_evacuate"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q070.values.evacuated"
+                  },
+                  "right": true
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q070",
+                  "action": "districts_evacuate"
+                }
+              ]
+            },
+            {
+              "id": "outer",
+              "text": "外郭を浮かせる",
+              "storyAction": {
+                "quest": "q070",
+                "action": "districts_outer"
+              },
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q070.values.evacuated"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q070.values.outer"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q070",
+                  "action": "districts_outer"
+                }
+              ]
+            },
+            {
+              "id": "store",
+              "text": "倉を浮かせる",
+              "storyAction": {
+                "quest": "q070",
+                "action": "districts_store"
+              },
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q070.values.outer"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q070.values.store"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q070",
+                  "action": "districts_store"
+                }
+              ]
+            },
+            {
+              "id": "core",
+              "text": "中枢を最後に浮かせる",
+              "storyAction": {
+                "quest": "q070",
+                "action": "districts_core"
+              },
+              "condition": {
+                "op": "and",
+                "args": [
+                  true,
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q070.values.store"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q070",
+                  "action": "districts_core"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "これ以上は浮かせず、重要な遺物を運び出す",
+              "storyAction": {
+                "quest": "q070",
+                "action": "districts_stop"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q070",
+                  "action": "districts_stop"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q070.sunken.harbor_wait": {
+      "storyQuest": "q070",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q070",
+          "scene": "harbor_wait"
+        },
+        {
+          "op": "narrate",
+          "text": "港の人へ浮上作業を知らせた。係留索のそばから高台へ案内する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "escort",
+              "text": "港の人と高台へ上がる",
+              "storyAction": {
+                "quest": "q070",
+                "action": "harbor_wait_escort"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q070",
+                  "action": "harbor_wait_escort"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q070.sunken.safe": {
+      "storyQuest": "q070",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q070",
+          "scene": "safe"
+        },
+        {
+          "op": "narrate",
+          "text": "港の人が高台へ揃った。ここから制御台へ戻る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "back",
+              "text": "城の制御台へ戻る",
+              "storyAction": {
+                "quest": "q070",
+                "action": "safe_back"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q070",
+                  "action": "safe_back"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q070.sunken.outer_raised": {
+      "storyQuest": "q070",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q070",
+          "scene": "outer_raised"
+        },
+        {
+          "op": "narrate",
+          "text": "外郭の弁で浮上を確認した。次は倉の弁を扱う。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "back",
+              "text": "制御台へ戻る",
+              "storyAction": {
+                "quest": "q070",
+                "action": "outer_raised_back"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q070",
+                  "action": "outer_raised_back"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q070.sunken.store_raised": {
+      "storyQuest": "q070",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q070",
+          "scene": "store_raised"
+        },
+        {
+          "op": "narrate",
+          "text": "倉の弁で浮上を確認した。中枢は最後に扱う。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "back",
+              "text": "制御台へ戻る",
+              "storyAction": {
+                "quest": "q070",
+                "action": "store_raised_back"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q070",
+                  "action": "store_raised_back"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q070.sunken.core_raised": {
+      "storyQuest": "q070",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q070",
+          "scene": "core_raised"
+        },
+        {
+          "op": "narrate",
+          "text": "外郭、倉に続いて中枢を浮かせた。港の避難を含む作業記録を確かめる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q070",
+                "action": "core_raised_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q070",
+                  "action": "core_raised_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q070.sunken.end.informed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q070.sunken.salvage": {
+      "storyQuest": "q070",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q070",
+          "scene": "salvage"
+        },
+        {
+          "op": "narrate",
+          "text": "浮上を止め、搬出庫の重要な遺物を回収する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "carry",
+              "text": "遺物を港へ運び出す",
+              "storyAction": {
+                "quest": "q070",
+                "action": "salvage_carry"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q070",
+                  "action": "salvage_carry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q070.sunken.salvaged": {
+      "storyQuest": "q070",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q070",
+          "scene": "salvaged"
+        },
+        {
+          "op": "narrate",
+          "text": "港へ遺物を引き渡した。城全体の浮上を完了した記録にはしない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "現場の結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q070",
+                "action": "salvaged_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q070",
+                  "action": "salvaged_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q070.sunken.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q070.sunken.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "城は小さな島々として戻った。港は新しい桟橋へ移り、ナギの図も増える。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q070",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q070.sunken.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "城は空を見た。地下港の人々は、失った家の瓦を海岸で拾う。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q070",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q070.sunken.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "城は海の下に残った。地上には小さくても確かな展示室ができる。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q070",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q070.sunken.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q070"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q070.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q070.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q070.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "城は小さな島々として戻った。港は新しい桟橋へ移り、ナギの図も増える。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "城は空を見た。地下港の人々は、失った家の瓦を海岸で拾う。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "城は海の下に残った。地上には小さくても確かな展示室ができる。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q070"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q070.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q070.sunken.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "districts",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q070.sunken.districts"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "harbor_wait",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q070.sunken.harbor_wait"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "safe",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q070.sunken.safe"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "outer_raised",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q070.sunken.outer_raised"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "store_raised",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q070.sunken.store_raised"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "core_raised",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q070.sunken.core_raised"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "salvage",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q070.sunken.salvage"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "salvaged",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q070.sunken.salvaged"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q070.sunken.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "沈没城の浮上の現場",
+      "harbor": "係留索の伸びる港",
+      "refuge": "港の人の避難先",
+      "outer": "外郭の浮上弁",
+      "store": "倉の浮上弁と搬出庫",
+      "core": "中枢の浮上弁",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "harbor"
+      ],
+      [
+        "transit",
+        "refuge"
+      ],
+      [
+        "transit",
+        "outer"
+      ],
+      [
+        "transit",
+        "store"
+      ],
+      [
+        "transit",
+        "core"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "harbor",
+          "refuge",
+          "outer",
+          "store",
+          "core",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "evacuated": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "evacuated"
+      },
+      "outer": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "outer"
+      },
+      "store": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "store"
+      },
+      "core": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "core"
+      },
+      "portPeopleAt": {
+        "type": "enum",
+        "initial": "harbor",
+        "values": [
+          "entry",
+          "harbor",
+          "refuge",
+          "outer",
+          "store",
+          "core",
+          "transit"
+        ],
+        "meaning": "portPeople の所在または保持者"
+      },
+      "relicAt": {
+        "type": "enum",
+        "initial": "store",
+        "values": [
+          "entry",
+          "harbor",
+          "refuge",
+          "outer",
+          "store",
+          "core",
+          "transit",
+          "party",
+          "portPeople"
+        ],
+        "meaning": "relic の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "portPeople": {
+        "holder": "portPeopleAt",
+        "kind": "group"
+      },
+      "relic": {
+        "holder": "relicAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "城は区画ごとに浮上でき、全体を一度に上げる旧手順だけが危険だ。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "沈没城の浮上の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "districts": {
+        "title": "沈没城の浮上の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "harbor_wait": {
+        "title": "係留索の伸びる港",
+        "place": "harbor",
+        "cast": [],
+        "requires": true
+      },
+      "safe": {
+        "title": "港の人の避難先",
+        "place": "refuge",
+        "cast": [],
+        "requires": true
+      },
+      "outer_raised": {
+        "title": "外郭の浮上弁",
+        "place": "outer",
+        "cast": [],
+        "requires": true
+      },
+      "store_raised": {
+        "title": "倉の浮上弁と搬出庫",
+        "place": "store",
+        "cast": [],
+        "requires": true
+      },
+      "core_raised": {
+        "title": "中枢の浮上弁",
+        "place": "core",
+        "cast": [],
+        "requires": true
+      },
+      "salvage": {
+        "title": "倉の浮上弁と搬出庫",
+        "place": "store",
+        "cast": [],
+        "requires": true
+      },
+      "salvaged": {
+        "title": "係留索の伸びる港",
+        "place": "harbor",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_divide": {
+        "from": [
+          "entry"
+        ],
+        "to": "districts",
+        "requires": true,
+        "effects": [
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "entry",
+            "requires": true
+          }
+        ],
+        "once": false
+      },
+      "entry_all": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "entry_salvage": {
+        "from": [
+          "entry"
+        ],
+        "to": "salvage",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "store"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "store",
+          "companions": []
+        },
+        "depart": []
+      },
+      "districts_evacuate": {
+        "from": [
+          "districts"
+        ],
+        "to": "harbor_wait",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q070.values.evacuated"
+            },
+            "right": true
+          }
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "harbor"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "harbor",
+          "companions": []
+        },
+        "depart": []
+      },
+      "districts_outer": {
+        "from": [
+          "districts"
+        ],
+        "to": "outer_raised",
+        "requires": {
+          "op": "and",
+          "args": [
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q070.values.evacuated"
+              },
+              "right": true
+            },
+            {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q070.values.outer"
+                },
+                "right": true
+              }
+            }
+          ]
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "outer"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "outer",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "outer",
+          "companions": []
+        },
+        "depart": []
+      },
+      "districts_store": {
+        "from": [
+          "districts"
+        ],
+        "to": "store_raised",
+        "requires": {
+          "op": "and",
+          "args": [
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q070.values.outer"
+              },
+              "right": true
+            },
+            {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q070.values.store"
+                },
+                "right": true
+              }
+            }
+          ]
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "store"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "store",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "store",
+          "companions": []
+        },
+        "depart": []
+      },
+      "districts_core": {
+        "from": [
+          "districts"
+        ],
+        "to": "core_raised",
+        "requires": {
+          "op": "and",
+          "args": [
+            true,
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q070.values.store"
+              },
+              "right": true
+            }
+          ]
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "core"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "core",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "core",
+          "companions": []
+        },
+        "depart": []
+      },
+      "districts_stop": {
+        "from": [
+          "districts"
+        ],
+        "to": "salvage",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "store"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "store",
+          "companions": []
+        },
+        "depart": []
+      },
+      "harbor_wait_escort": {
+        "from": [
+          "harbor_wait"
+        ],
+        "to": "safe",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "portPeople"
+            ],
+            "path": [
+              "transit",
+              "refuge"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "evacuated",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "refuge",
+          "companions": [
+            "portPeople"
+          ]
+        },
+        "depart": []
+      },
+      "safe_back": {
+        "from": [
+          "safe"
+        ],
+        "to": "districts",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "entry",
+            "requires": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "outer_raised_back": {
+        "from": [
+          "outer_raised"
+        ],
+        "to": "districts",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "entry",
+            "requires": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "store_raised_back": {
+        "from": [
+          "store_raised"
+        ],
+        "to": "districts",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "entry",
+            "requires": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "core_raised_finish": {
+        "from": [
+          "core_raised"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "salvage_carry": {
+        "from": [
+          "salvage"
+        ],
+        "to": "salvaged",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "harbor"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "relic",
+            "from": "party",
+            "to": "harbor"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "harbor",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "relic",
+            "from": "store",
+            "to": "party"
+          }
+        ]
+      },
+      "salvaged_finish": {
+        "from": [
+          "salvaged"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q070.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q070.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q070.values.partyAt"
+                },
+                "right": "core"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q070.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q070.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q070.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q070.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q070.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q070.values.partyAt"
+                },
+                "right": "harbor"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_7",
+        "map": "region_7_f2",
+        "x": 13,
+        "y": 7
+      },
+      "harbor": {
+        "kind": "town",
+        "location": "royal_harbor"
+      },
+      "refuge": {
+        "kind": "town",
+        "location": "royal_refuge"
+      },
+      "outer": {
+        "kind": "dungeon",
+        "dungeon": "region_7",
+        "map": "region_7_f2",
+        "x": 3,
+        "y": 7
+      },
+      "store": {
+        "kind": "dungeon",
+        "dungeon": "region_7",
+        "map": "region_7_f2",
+        "x": 7,
+        "y": 11
+      },
+      "core": {
+        "kind": "dungeon",
+        "dungeon": "region_7",
+        "map": "region_7_f2",
+        "x": 13,
+        "y": 5
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_village",
+  "receptionLocations": [
+    "royal_board"
+  ]
+}

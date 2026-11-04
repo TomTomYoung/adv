@@ -134,6 +134,10 @@ export function sunkenFirstSource(q,{cast=true}={}){
   choice('entry','all').combat='boss_7';route('districts','evacuate','harbor_wait');delete choice('districts','evacuate').set;
   add('harbor_wait','harbor','港の人へ浮上作業を知らせた。係留索のそばから高台へ案内する。',[opt('escort','港の人と高台へ上がる','safe',{companions:['portPeople'],effects:[set('evacuated')]})]);
   add('safe','refuge','港の人が高台へ揃った。ここから制御台へ戻る。',[opt('back','城の制御台へ戻る','districts')]);
+  if(cast){
+   x.entities.portPeople.character='q070_port_people';
+   for(const id of ['harbor_wait','safe'])node(id).cast=[{entity:'portPeople',display:{x:50}}];
+  }
   for(const key of ['outer','store']){route('districts',key,key+'_raised');add(key+'_raised',key,key==='outer'?'外郭の弁で浮上を確認した。次は倉の弁を扱う。':'倉の弁で浮上を確認した。中枢は最後に扱う。',[opt('back','制御台へ戻る','districts')]);}
   route('districts','core','core_raised',{effects:[set('core')]});end('core_raised','core','外郭、倉に続いて中枢を浮かせた。港の避難を含む作業記録を確かめる。','informed');
   for(const [from,key] of [['entry','salvage'],['districts','stop']])route(from,key,'salvage');
