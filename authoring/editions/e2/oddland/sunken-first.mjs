@@ -119,6 +119,14 @@ export function sunkenFirstSource(q,{cast=true}={}){
   choice('entry','pay').preparation=[set('paid')];choice('entry','pay').depart=[give('diagram','entry','party')];choice('entry','help').depart=[give('diagram','entry','party')];choice('entry','force').combat='guard_7';
   for(const [from,key] of [['passed','leave'],['work','single'],['work','leave']])route(from,key,'reported',{effects:[give('diagram','party','report')]});end('reported','report','港へ補修図を持ち帰り、次の船へ必要な材料を伝えた。','compromise');
   choice('work','single').preparation=[set('paid')];
+  if(cast){
+   entity('seaKing','entry','person');x.entities.seaKing.character='q069_sea_king';
+   for(const id of ['entry','work'])node(id).cast=[{entity:'seaKing',display:{x:50,scale:.86}}];
+   // He works at the gate, then meets the party at its repair platform.
+   // He is not a travelling companion and never follows the diagram to port.
+   for(const [from,key] of [['entry','help'],['passed','return']])
+    (choice(from,key).effects??=[]).push(move('seaKing','entry','transit','work'));
+  }
  }
  if(q.number===70){
   town('harbor','係留索の伸びる港','royal_harbor');town('refuge','港の人の避難先','royal_refuge');cell('outer','外郭の浮上弁','region_7_f2',3,7);cell('store','倉の浮上弁と搬出庫','region_7_f2',7,11);cell('core','中枢の浮上弁','region_7_f2',13,5);entity('portPeople','harbor','group');entity('relic','store');

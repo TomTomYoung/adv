@@ -3,6 +3,7 @@ import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {compileRelocatedQuest} from './compile-relocated-quest.mjs';
 import {sunkenFirstSource} from '../authoring/editions/e2/oddland/sunken-first.mjs';
+import {ref,or} from '../authoring/story-kit.mjs';
 const root=path.resolve(import.meta.dirname,'..');
 const prose=text=>typeof text==='string'?text:Array.isArray(text)?text.map(prose).join('\n\n'):`条件に応じて：${prose(text.yes)} ／ ${prose(text.no)}`;
 export function compileSunkenQuest(first){
@@ -57,6 +58,18 @@ export function compileSunkenQuest(first){
   quest.model.edition.revision=2;
   quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[{key:'hoistWorkersAt',value:'entry'}]}];
  }
+ if(first.number===69){
+  const previous=compileRelocatedQuest(first,sunkenFirstSource(first,{cast:false}),options).story;
+  for(const [ready,scene] of [['entry_pay_ready','entry'],['work_single_ready','work']])
+   quest.story.scenes[ready].cast=structuredClone(quest.story.scenes[scene].cast);
+  quest.story.registry.seaKingAt.values=['entry','work'];
+  quest.story.registry.diagramAt.values=previous.registry.diagramAt.values.slice();
+  quest.story.revision=2;quest.model.edition.revision=2;
+  quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[
+   {key:'seaKingAt',value:'entry'},
+   {key:'seaKingAt',value:'work',when:or(...['entry_help','passed_return'].map(action=>({op:'in',left:action,right:ref('stories.q069.events')})))}
+  ]}];
+ }
  return quest;
 }
 export async function buildSunkenQuests({check=false}={}){
@@ -69,6 +82,7 @@ export async function buildSunkenQuests({check=false}={}){
  '[引き継ぎ](../../../HANDOFF.md) ／ [作業票](../../../dungeons/REGIONAL_RELOCATION_WORK.md) ／ [原稿](../../../../authoring/editions/e2/oddland/sunken-first.mjs) ／ [生成器](../../../../tools/build-sunken-quests.mjs)','','## 保存・往復・環境','','保存改訂2を維持する。受注済み・完了済みのq061〜070は旧イベントと命令列を保持し、未受注分から新経路を使う。更新前から沈没城・観測所を探索中なら、保存された出発拠点と固有状態を保ち、通常出口・帰還印・敗北は灯帰りへ戻る。村へ来たことや入国登録を捏造しない。新しく村から出発した探索は村へ戻る。','','沈没城の空気消費・空気溜まり・浮上装置と、観測所の天球儀は従来どおり。q070の三浮上区画は物語内の作業状態であり、通常探索の空気設備と別に記録する。q067の小弁・大門も局所の操作で、古代の大水門とは結び付けない。潮の待機は選択ごとの進行で、現実時間の待機は設けない。儀礼用の油は携行灯の燃料から独立する。',''];
  lines.push('q067は絵を指す人魚の立ち絵を実同行先まで表示する。開門を求める通行人は入口だけに表示する。大門を直接強制開放する経路では人魚は入口に留まる。物語改訂1の保存には通行人の所在だけを補う。[表示と保存の検証](../../RELOCATED_CHARACTER_ART.md)。','');
  lines.push('q068は入口の吊上げ人と、筏・縄の準備中・移乗先にいる避難筏の人たちの呼称を表示する。吊上げ地点に戻るのは隊だけ。物語改訂1の保存には吊上げ人の所在だけを補う。[表示と保存の検証](../../RELOCATED_CHARACTER_ART.md)。','');
+ lines.push('q069は海王を門前・補修場と支払直後の4場面に表示する。通過先と港には同席させない。旧保存は補修場への到着履歴から所在だけを補い、20Gの支払・護衛戦・補修図の実運搬を保持する。[表示と保存の検証](../../RELOCATED_CHARACTER_ART.md)。','');
  lines.push('q066では記録室で乗船札を照合し、依頼人が展示札を伏せる場面に歴史家のオミを表示する。物語改訂1から2では記録室にいるオミの所在だけを補う。[表示と保存の検証](../../RELOCATED_CHARACTER_ART.md)。','');
  lines.push('2026-11-02追記：q065は灯が岸に到着したashoreに「遺族」を表示する。儀礼用の油は供油路で運ぶ分を確認し、出発時に隊が持ち、灯の場への到着時に注ぐ。改訂1の保存へは遺族の所在だけを補う。[人物表示と保存互換の検証](../../RELOCATED_CHARACTER_ART.md)。','');
  lines.push('2026-11-01追記：q064の漁師は小屋で網を引く時刻を相談するscheduleへ呼称で表示する。圧力管と湾のどちらからも実到着で相談する。物語改訂1から2では漁師の所在だけを旧保存へ補う。[人物表示と保存互換の検証](../../RELOCATED_CHARACTER_ART.md)。','');

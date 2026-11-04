@@ -1,5 +1,6 @@
 // Edition-two regional bundle: relocated-quest roles, separate from border NPCs.
 export const RELOCATED_CHARACTER_ART=Object.fromEntries([
+ ['q069_sea_king','sunken-q069-2026-11-04'],
  ['q067_mermaid','sunken-q067-2026-11-02'],
  ['q066_omi','sunken-q066-2026-11-02'],
  ...['boro','worker'].map(key=>['q140_'+key,'chapel-q140-2026-11-01']),
@@ -47,6 +48,12 @@ export const relocatedCharacters=Object.fromEntries([
  ['q035_patient','顔を隠す患者','配膳口の患者側で顔を隠したまま礼を言い、修理人の入室と見学者への公開を区別する匿名の患者。','2026-10-29の美術設定。顔全体を不透明な布で覆う姿を保ち、性別・病名・氏名・具体的な病状を追加しない。服装と布の色は美術上の選択。施療人ネイとは同定しない。皿・病室・修理人・見学者を人物画へ固定しない。']
 ].map(([id,name,detail,provenance])=>[id,{id,name,role:'礼拝堂の現地の相手',detail,portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,
  provenance:provenance??'2026-10-29の美術設定。固有名・他人物との同一性は追加しない。具体的な外見・年齢感・服装は今回の美術設定。牢・格子・聖像・宝玉・石を人物画へ固定しない。'}]));
+relocatedCharacters.q069_sea_king={
+ id:'q069_sea_king',name:'海王',role:'城門を補修する通行税の徴収者',
+ detail:'鉄片を城門の穴へ打ち込み、補修作業場で材料の運搬当番と通行条件を相談する。隊が港へ図を持ち帰る間も補修場に留まる。',
+ portrait:RELOCATED_CHARACTER_ART.q069_sea_king.asset,sprite:RELOCATED_CHARACTER_ART.q069_sea_king.asset,
+ provenance:'2026-11-04の美術設定。人型の年配男性としての描画、銀髪と短いひげ、鉄の額輪、海青色の作業衣と革の前掛けは美術上の選択。本文の種族・年齢・性別・経歴は追加しない。空の手を各支払状態で共用する。'
+};
 relocatedCharacters.q068_hoist_workers={
  id:'q068_hoist_workers',name:'吊上げ人',role:'城を吊り上げる現場の作業者',
  detail:'城へ続く太い綱を残して、水面の陰へ続く軽い綱を切ろうとしている。'
