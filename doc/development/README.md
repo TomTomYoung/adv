@@ -4,6 +4,8 @@
 
 [PROGRESS.md](PROGRESS.md)：今回実行した検査、過去の実ブラウザ確認、残作業。
 
+[CHROMIUM_DEFERRED_2026-11-04.md](CHROMIUM_DEFERRED_2026-11-04.md)：ユーザー指示により保留したq161のブラウザー検証180条件、再開手順、導入失敗の経緯。
+
 [DOCUMENTATION_AUDIT.md](DOCUMENTATION_AUDIT.md)：2026-09-25のフォルダ整理・仕様照合・生成器対応。
 
 [DATA_SNAPSHOT.json](DATA_SNAPSHOT.json)：配布manifestのID数・内容版・指紋の自動集計。
