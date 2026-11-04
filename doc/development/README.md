@@ -6,6 +6,8 @@
 
 [CHROMIUM_DEFERRED_2026-11-04.md](CHROMIUM_DEFERRED_2026-11-04.md)：ユーザー指示により保留したq161のブラウザー検証180条件、再開手順、導入失敗の経緯。
 
+[EXECUTION_RECOVERY.md](EXECUTION_RECOVERY.md)：作業前後のログ、途中停止の検出、実Gitオブジェクトと既存ブランチを用いた安全な再開、2026-11-04〜05の実行環境エラーへの対応。
+
 [DOCUMENTATION_AUDIT.md](DOCUMENTATION_AUDIT.md)：2026-09-25のフォルダ整理・仕様照合・生成器対応。
 
 [DATA_SNAPSHOT.json](DATA_SNAPSHOT.json)：配布manifestのID数・内容版・指紋の自動集計。
