@@ -4,16 +4,16 @@
   "summary": {
     "quests": 100,
     "scenes": 753,
-    "emptyCastScenes": 653,
+    "emptyCastScenes": 651,
     "personEntities": 115,
     "characterLinkedEntities": 37,
-    "reviewedQuests": 30,
-    "reviewedScenes": 182,
-    "noPersonEvidenceScenes": 80,
-    "personEvidenceScenes": 102,
-    "candidateRoles": 1,
-    "connectedRoles": 52,
-    "unreviewedScenes": 571
+    "reviewedQuests": 31,
+    "reviewedScenes": 189,
+    "noPersonEvidenceScenes": 82,
+    "personEvidenceScenes": 107,
+    "candidateRoles": 2,
+    "connectedRoles": 53,
+    "unreviewedScenes": 564
   },
   "regions": [
     {
@@ -36,15 +36,15 @@
       "name": "沈没城",
       "quests": 20,
       "scenes": 141,
-      "emptyCastScenes": 121,
+      "emptyCastScenes": 119,
       "personEntities": 17,
       "characterLinkedEntities": 3,
-      "reviewedQuests": 10,
-      "reviewedScenes": 60,
-      "noPersonEvidenceScenes": 38,
-      "personEvidenceScenes": 22,
-      "candidateRoles": 1,
-      "connectedRoles": 10
+      "reviewedQuests": 11,
+      "reviewedScenes": 67,
+      "noPersonEvidenceScenes": 40,
+      "personEvidenceScenes": 27,
+      "candidateRoles": 2,
+      "connectedRoles": 11
     },
     {
       "id": 9,
@@ -3865,7 +3865,7 @@
       "region": 7,
       "client": "航海士のナギ",
       "source": "authoring/editions/e2/oddland/sunken-first.mjs",
-      "sourceSha256": "8cf971818580bfaa0725ec8ff436d30ec8a8aae7726c50aa14a35e17ef67a6f9",
+      "sourceSha256": "cd0fec054d78e59d0da2142ae37cb56d946ca3bad7fcbf53bf9836b7cf549961",
       "scenes": [
         {
           "id": "entry",
@@ -3912,7 +3912,14 @@
             "kind": "town",
             "location": "royal_harbor"
           },
-          "cast": [],
+          "cast": [
+            {
+              "entity": "portPeople",
+              "display": {
+                "x": 50
+              }
+            }
+          ],
           "review": {
             "decision": "person-evidence",
             "people": [
@@ -3930,7 +3937,14 @@
             "kind": "town",
             "location": "royal_refuge"
           },
-          "cast": [],
+          "cast": [
+            {
+              "entity": "portPeople",
+              "display": {
+                "x": 50
+              }
+            }
+          ],
           "review": {
             "decision": "person-evidence",
             "people": [
@@ -4037,7 +4051,7 @@
       "personEntities": [],
       "review": {
         "identityNotes": [
-          "港の人は既存group portPeople。港で避難を知らせるharbor_waitと高台到着後のsafeに同席根拠がある。人数・氏名・代表者は未指定で、集団名の表示候補とする。",
+          "港の人は既存group portPeople。港で避難を知らせるharbor_waitと高台到着後のsafeへ呼称を接続済み。人数・氏名・代表者・画像は追加しない。",
           "港から高台へは実同行し、到着するまでevacuatedはfalse。隊が制御台へ戻った後も港の人は高台へ留まる。",
           "依頼人は航海士のナギだが、現場で本人が同行する記述はない。全体浮上の戦闘相手と結末の被災者も会話の常設出演役にしない。",
           "搬出のみの経路では港の人が港に残り、避難後の中止経路では高台に残る。salvagedの受取人をその集団に固定しない。",
@@ -4046,11 +4060,12 @@
         "people": {
           "q070_port_people": {
             "label": "港の人",
-            "status": "candidate",
-            "need": "harbor_wait・safeの2場面に既存portPeopleの所在と同行を用いた呼称表示を接続する。人数・顔・代表者は追加しない。"
+            "status": "connected",
+            "entity": "portPeople",
+            "need": "既存の所在と同行を用い、harbor_wait・safeの2場面へ呼称を接続済み。本文・物語改訂1・保存内容を保持する。"
           }
         },
-        "next": "港の人の呼称表示を接続し、避難前後の搬出、三つの浮上弁、旧保存・旧受注経路を検証する。続いて沈没城後半q161を監査する。"
+        "next": "港の人の呼称表示を接続済み。制御台・三つの弁・係留索・高台・遺物の局所差分は残る。次はq161の剣士と祈祷師イネの表示、q162の監査。"
       }
     },
     {
@@ -9782,7 +9797,15 @@
             "location": "royal_witness"
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q161_patient"
+            ],
+            "evidence": "剣士は傷へ耳を寄せる。",
+            "reason": "剣士本人の動作と認識が明記される。傷の声は繰り返される言葉であり、別の同席人物ではない。",
+            "visual": "証言室の剣士。傷の声と本人の返答を分け、治癒や録音を先取りしない。"
+          }
         },
         {
           "id": "consent",
@@ -9792,7 +9815,15 @@
             "location": "royal_witness"
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q161_patient"
+            ],
+            "evidence": "本人は声が失われることを承知し、今は痛みを治したいと答えた。",
+            "reason": "本人の希望を聞く対面場面。録音済みの分岐でも本人が再生の決定権と治療への同意を述べる。",
+            "visual": "同じ剣士との相談。記録済みかどうかと保留できる状態を区別する。"
+          }
         },
         {
           "id": "borrow",
@@ -9802,7 +9833,13 @@
             "location": "royal_archive"
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "no-person-evidence",
+            "people": [],
+            "evidence": "声を写す記録具の貸出は20G。",
+            "reason": "貸出の条件はあるが、担当者の発言・姿は記されていない。剣士は証言室に残る。",
+            "visual": "記録室の貸出道具と20Gの条件。借りずに戻る経路を残す。"
+          }
         },
         {
           "id": "record_ready",
@@ -9812,7 +9849,13 @@
             "location": "royal_archive"
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "no-person-evidence",
+            "people": [],
+            "evidence": "記録具を受け取った。",
+            "reason": "隊が記録具を受け取った段階で、剣士のいる証言室への帰着前。本人や貸出担当者を補わない。",
+            "visual": "隊が持つ記録具。帰着前に録音済みの表示へ変えない。"
+          }
         },
         {
           "id": "treat_sera",
@@ -9822,7 +9865,15 @@
             "location": "oddland_village_clinic"
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q161_patient"
+            ],
+            "evidence": "剣士が施療所へ着き、治療を受ける準備ができた。",
+            "reason": "剣士の実到着が明記される。セラの在隊・生存条件を再判定する選択前なので、治療者を常設NPCとして固定しない。",
+            "visual": "治療前の剣士。セラの条件喪失時もイネへ依頼し直せる待機状態。"
+          }
         },
         {
           "id": "treat_clinic",
@@ -9832,7 +9883,16 @@
             "location": "oddland_village_clinic"
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q161_patient",
+              "q161_ine"
+            ],
+            "evidence": "本人の同意を再確認し、イネの治療に立ち会う。",
+            "reason": "同行した剣士と、本人の名を挙げた治療の立会いが明記される。治療完了はfinish後として分ける。",
+            "visual": "施療所の剣士と祈祷師イネ。共通人物画に治癒済みの傷や記録具を固定しない。"
+          }
         },
         {
           "id": "treat_recorded",
@@ -9842,7 +9902,15 @@
             "location": "oddland_village_clinic"
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q161_patient"
+            ],
+            "evidence": "剣士と施療所へ来た。",
+            "reason": "剣士の同行と記録具の手渡しが明記される。治療者の固有名は本文にないため、イネの同席を共通化しない。",
+            "visual": "施療所の剣士と、finishで隊から本人へ渡す記録具。再生を選ぶ夜は結末の出来事。"
+          }
         }
       ],
       "personEntities": [
@@ -9851,7 +9919,28 @@
           "character": null
         }
       ],
-      "review": null
+      "review": {
+        "identityNotes": [
+          "剣士は既存person patient。証言室のentry・consentと施療所のtreat_sera・treat_clinic・treat_recordedの5場面に同席する。記録具の貸出中は証言室に留まり、施療所へは隊と実同行する。氏名・顔・傷の見え方は未指定。",
+          "依頼人は祈祷師イネ。本文が本人の治療を明記するtreat_clinicだけを出演候補とする。相談室や記録室へ同席・同行させない。treat_recordedの治療者は名指しされていないため、イネを自動表示しない。",
+          "セラは既存の戦闘仲間。在隊・生存の条件を治療依頼と施療所で再確認し、条件を失った場合はイネの治療へ切り替えられる。選択肢から常設の別NPCを追加せず、treat_seraの待機中は治療者を固定しない。",
+          "傷の声は本人の返事を聞けず、同じ言葉を繰り返す。亡き仲間を現在の同席人物や立ち絵へ変換しない。真実を知れば自動で同意するとは扱わず、保留の選択を維持する。",
+          "20Gの記録具は貸出時に隊へ渡り、声を写すのは本人のもとへの実帰着後。録音経路の結末で本人へ渡す。録音と治療、保留は独立し、貸出拒否時の無料帰路、旧受注経路・待機本文を保持する。"
+        ],
+        "people": {
+          "q161_patient": {
+            "label": "傷の治療を相談する剣士",
+            "status": "candidate",
+            "need": "既存patientの所在と施療所への実同行を使い、5場面へ専用人物画を接続する。傷や記録具を全状態で固定せず、亡き仲間の顔を加えない。"
+          },
+          "q161_ine": {
+            "label": "祈祷師イネ",
+            "status": "candidate",
+            "need": "治療が明記されるtreat_clinicへ人物定義・所在・専用画を接続する。条件付きのセラと同一視せず、他の治療経路の待機場面へ自動表示しない。"
+          }
+        },
+        "next": "剣士5場面と祈祷師イネ1場面の表示を接続し、記録具の20G・実運搬・同意と保留・セラの在隊／生存条件・旧保存を検証する。続いてq162を監査する。"
+      }
     },
     {
       "id": "q162",
