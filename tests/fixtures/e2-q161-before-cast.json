@@ -1,0 +1,2103 @@
+{
+  "schemaVersion": 1,
+  "id": "q161",
+  "number": 161,
+  "title": "治さない傷",
+  "client": "祈祷師イネ",
+  "brief": "仲間の声が残る魔法傷を、治すかどうか本人と話してください。",
+  "region": 7,
+  "type": "scene_graph",
+  "recommendedLevel": 7,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 旧王領の村の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q161_scene",
+      "title": "治さない傷：祈祷師イネ",
+      "points": [
+        {
+          "map": "region_7_f1",
+          "x": 3,
+          "y": 1,
+          "dungeon": "region_7"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q161.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q161.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q161.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q161"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_7"
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_7_f1",
+      "x": 3,
+      "y": 1,
+      "object": "q161_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "heal": {
+      "label": "声のない間",
+      "text": "治療は済んだ。剣士は声のない間を自分の言葉で埋めようとして、一度言い直した。",
+      "gold": 129,
+      "xp": 87
+    },
+    "recorded": {
+      "label": "再生を選べる声",
+      "text": "傷は治り、記録具は本人の手に残った。最初の夜、剣士は再生せず枕元へ置いた。",
+      "gold": 129,
+      "xp": 87
+    },
+    "wait": {
+      "label": "次の相談",
+      "text": "痛みは残った。治療を拒んだことを失敗と呼ばず、次に会う日と手当の相談を決めた。",
+      "gold": 129,
+      "xp": 87
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/sunken-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3816fa85bc3dd738a74b8",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "傷に耳を寄せる様子を見せ、呪いを育てているように思わせる。声は本人の返事を聞けず、決まった言葉だけを繰り返す。剣士はそれを知っている。真実を説明すればすぐ治療に同意する人物にはしない。",
+      "fixedPast": "祈祷師イネは、治療を拒む剣士の説得を頼む。剣士の魔法傷には、取り込まれた仲間の最後の言葉が残り、治癒すると声も消える。イネは痛みを消したい。剣士は声を忘れた時、自分だけが生き残ったことになると恐れている。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "祈祷師イネ",
+        "beliefsAndGoals": "祈祷師イネは、治療を拒む剣士の説得を頼む。剣士の魔法傷には、取り込まれた仲間の最後の言葉が残り、治癒すると声も消える。イネは痛みを消したい。剣士は声を忘れた時、自分だけが生き残ったことになると恐れている。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "仲間の声が残る魔法傷を、治すかどうか本人と話してください。"
+      }
+    ],
+    "conflict": {
+      "design": "面会→声を聞く／記録具を探す／本人の希望を聞く→治療・記録後の治療・保留。記録具がなくても保留できる。治療可能な仲間がいる場合は実施手段を変えるが、同意条件を省かない。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q161.royal.entry"
+        },
+        {
+          "id": "consent",
+          "script": "q161.royal.consent"
+        },
+        {
+          "id": "borrow",
+          "script": "q161.royal.borrow"
+        },
+        {
+          "id": "record_ready",
+          "script": "q161.royal.record_ready"
+        },
+        {
+          "id": "treat_sera",
+          "script": "q161.royal.treat_sera"
+        },
+        {
+          "id": "treat_clinic",
+          "script": "q161.royal.treat_clinic"
+        },
+        {
+          "id": "treat_recorded",
+          "script": "q161.royal.treat_recorded"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "仲間の声が残る魔法傷を、治すかどうか本人と話してください。"
+    },
+    "reveal": {
+      "newInformation": "傷に耳を寄せる様子を見せ、呪いを育てているように思わせる。声は本人の返事を聞けず、決まった言葉だけを繰り返す。剣士はそれを知っている。真実を説明すればすぐ治療に同意する人物にはしない。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q161.scene.entry"
+      },
+      {
+        "id": "consent",
+        "script": "q161.scene.consent"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q161.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q161.recorded",
+        "meaning": "作者原稿の recorded に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "剣士は傷へ耳を寄せる。声は返事を聞けず、同じ言葉だけを繰り返す。それを本人も知っている。",
+        "options": [
+          {
+            "id": "wish",
+            "text": "説明より先に本人の希望を聞く",
+            "to": "consent",
+            "action": "entry_wish"
+          },
+          {
+            "id": "record",
+            "text": "記録室へ記録具を借りに行く",
+            "to": "borrow",
+            "action": "entry_record"
+          },
+          {
+            "id": "wait",
+            "text": "治療を急がず、次の相談を約束する",
+            "to": "@wait",
+            "action": "entry_wait"
+          }
+        ]
+      },
+      {
+        "id": "consent",
+        "place": "entry",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q161.values.recorded"
+              },
+              "right": true
+            },
+            "yes": "声を写した。本人は再生するかを自分で決めたいと話し、治療に同意した。",
+            "no": "本人は声が失われることを承知し、今は痛みを治したいと答えた。"
+          }
+        ],
+        "options": [
+          {
+            "id": "sera",
+            "text": "同行して生存中のセラに治療を頼む",
+            "to": "treat_sera",
+            "action": "consent_sera"
+          },
+          {
+            "id": "clinic",
+            "text": "依頼人イネの治療に立ち会う",
+            "to": "treat_clinic",
+            "action": "consent_clinic"
+          },
+          {
+            "id": "recorded",
+            "text": "記録を本人に預けて治療する",
+            "to": "treat_recorded",
+            "action": "consent_recorded"
+          },
+          {
+            "id": "wait",
+            "text": "本人と相談し、今日は保留する",
+            "to": "@wait",
+            "action": "consent_wait"
+          }
+        ]
+      },
+      {
+        "id": "borrow",
+        "place": "archive",
+        "text": "声を写す記録具の貸出は20G。借りずに相談へ戻ることもできる。",
+        "options": [
+          {
+            "id": "rent",
+            "text": "20Gで記録具を借りる",
+            "to": "record_ready",
+            "action": "borrow_rent"
+          },
+          {
+            "id": "back",
+            "text": "借りずに剣士のもとへ戻る",
+            "to": "entry",
+            "action": "borrow_back"
+          }
+        ]
+      },
+      {
+        "id": "record_ready",
+        "place": "archive",
+        "text": "記録具を受け取った。剣士のもとへ運び、同意を確かめて声を写す。",
+        "options": [
+          {
+            "id": "record",
+            "text": "記録具を運び、声を写す",
+            "to": "consent",
+            "action": "record_ready_record"
+          }
+        ]
+      },
+      {
+        "id": "treat_sera",
+        "place": "clinic",
+        "text": "剣士が施療所へ着き、治療を受ける準備ができた。",
+        "options": [
+          {
+            "id": "sera",
+            "text": "セラに治療を頼む",
+            "to": "@heal",
+            "action": "treat_sera_sera"
+          },
+          {
+            "id": "clinic",
+            "text": "イネの治療に立ち会う",
+            "to": "@heal",
+            "action": "treat_sera_clinic"
+          }
+        ]
+      },
+      {
+        "id": "treat_clinic",
+        "place": "clinic",
+        "text": "剣士と施療所へ来た。本人の同意を再確認し、イネの治療に立ち会う。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@heal",
+            "action": "treat_clinic_finish"
+          }
+        ]
+      },
+      {
+        "id": "treat_recorded",
+        "place": "clinic",
+        "text": "剣士と施療所へ来た。記録具を本人へ渡してから、治療に立ち会う。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@recorded",
+            "action": "treat_recorded_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q161.scene.entry",
+        "action": "record",
+        "option": "record_supplies",
+        "shortage": "q161.scene.entry.record.shortage",
+        "resume": "q161.scene.entry.record.resume",
+        "cost": {
+          "gold": 20
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q161.visit"
+    ],
+    "entryScript": "q161.royal.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "sunken-second-ten",
+      "settlement": "oddland_village",
+      "saveRevision": 2,
+      "scope": "沈没城後半10件の村・橋・試験場・砦・湖の現場接続。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q161.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q161.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "剣士は傷へ耳を寄せる。声は返事を聞けず、同じ言葉だけを繰り返す。それを本人も知っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wish",
+              "text": "説明より先に本人の希望を聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q161.scene.consent"
+                }
+              ]
+            },
+            {
+              "id": "record",
+              "text": "記録具を20Gで借り、声を写す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 20
+                  }
+                ]
+              },
+              "requirement": "G 20消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -20
+                },
+                {
+                  "op": "set",
+                  "target": "flags.quest.q161.recorded",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q161.scene.consent"
+                }
+              ]
+            },
+            {
+              "id": "wait",
+              "text": "治療を急がず、次の相談を約束する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q161.end.wait"
+                }
+              ]
+            },
+            {
+              "id": "record_supplies",
+              "text": "20Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 20
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 20
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q161.scene.entry.record.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q161.scene.consent": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q161.node",
+          "value": "consent"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.quest.q161.recorded"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "声を写した。本人は再生するかを自分で決めたいと話し、治療に同意した。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "本人は声が失われることを承知し、今は痛みを治したいと答えた。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sera",
+              "text": "同行して生存中のセラに治療を頼む",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "has_member",
+                        "actor": "sera"
+                      },
+                      {
+                        "op": "gt",
+                        "left": {
+                          "ref": "actors.sera.hp"
+                        },
+                        "right": 0
+                      }
+                    ]
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q161.end.heal"
+                }
+              ]
+            },
+            {
+              "id": "clinic",
+              "text": "依頼人イネの治療に立ち会う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q161.end.heal"
+                }
+              ]
+            },
+            {
+              "id": "recorded",
+              "text": "記録を本人に預けて治療する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q161.recorded"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q161.end.recorded"
+                }
+              ]
+            },
+            {
+              "id": "wait",
+              "text": "本人と相談し、今日は保留する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q161.end.wait"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q161.end.heal": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q161.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "治療は済んだ。剣士は声のない間を自分の言葉で埋めようとして、一度言い直した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q161",
+              "outcome": "heal"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q161.end.recorded": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q161.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "傷は治り、記録具は本人の手に残った。最初の夜、剣士は再生せず枕元へ置いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q161",
+              "outcome": "recorded"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q161.end.wait": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q161.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "痛みは残った。治療を拒んだことを失敗と呼ばず、次に会う日と手当の相談を決めた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q161",
+              "outcome": "wait"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q161.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q161"
+          },
+          "cases": [
+            {
+              "equals": "q161.scene.entry.record.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q161.scene.entry.record.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q161.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q161.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "heal",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "治療は済んだ。剣士は声のない間を自分の言葉で埋めようとして、一度言い直した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "recorded",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "傷は治り、記録具は本人の手に残った。最初の夜、剣士は再生せず枕元へ置いた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "wait",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "痛みは残った。治療を拒んだことを失敗と呼ばず、次に会う日と手当の相談を決めた。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q161.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q161.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "consent",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q161.scene.consent"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q161.scene.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q161.scene.entry.record.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q161",
+          "value": "q161.scene.entry.record.resume"
+        },
+        {
+          "op": "say",
+          "text": "20Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q161.scene.entry.record.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q161",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "20Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q161.scene.entry"
+        }
+      ]
+    },
+    "q161.royal.entry": {
+      "storyQuest": "q161",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q161",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "剣士は傷へ耳を寄せる。声は返事を聞けず、同じ言葉だけを繰り返す。それを本人も知っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wish",
+              "text": "説明より先に本人の希望を聞く",
+              "storyAction": {
+                "quest": "q161",
+                "action": "entry_wish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q161",
+                  "action": "entry_wish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q161.royal.consent"
+                }
+              ]
+            },
+            {
+              "id": "record",
+              "text": "記録室へ記録具を借りに行く",
+              "storyAction": {
+                "quest": "q161",
+                "action": "entry_record"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q161",
+                  "action": "entry_record"
+                }
+              ]
+            },
+            {
+              "id": "wait",
+              "text": "治療を急がず、次の相談を約束する",
+              "storyAction": {
+                "quest": "q161",
+                "action": "entry_wait"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q161",
+                  "action": "entry_wait"
+                },
+                {
+                  "op": "jump",
+                  "script": "q161.royal.end.wait"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q161.royal.consent": {
+      "storyQuest": "q161",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q161",
+          "scene": "consent"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q161.values.recorded"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "声を写した。本人は再生するかを自分で決めたいと話し、治療に同意した。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "本人は声が失われることを承知し、今は痛みを治したいと答えた。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sera",
+              "text": "同行して生存中のセラに治療を頼む",
+              "storyAction": {
+                "quest": "q161",
+                "action": "consent_sera"
+              },
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_member",
+                    "actor": "sera"
+                  },
+                  {
+                    "op": "gt",
+                    "left": {
+                      "ref": "actors.sera.hp"
+                    },
+                    "right": 0
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q161",
+                  "action": "consent_sera"
+                }
+              ]
+            },
+            {
+              "id": "clinic",
+              "text": "依頼人イネの治療に立ち会う",
+              "storyAction": {
+                "quest": "q161",
+                "action": "consent_clinic"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q161",
+                  "action": "consent_clinic"
+                }
+              ]
+            },
+            {
+              "id": "recorded",
+              "text": "記録を本人に預けて治療する",
+              "storyAction": {
+                "quest": "q161",
+                "action": "consent_recorded"
+              },
+              "condition": {
+                "op": "and",
+                "args": [
+                  true,
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q161.values.recorded"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q161",
+                  "action": "consent_recorded"
+                }
+              ]
+            },
+            {
+              "id": "wait",
+              "text": "本人と相談し、今日は保留する",
+              "storyAction": {
+                "quest": "q161",
+                "action": "consent_wait"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q161",
+                  "action": "consent_wait"
+                },
+                {
+                  "op": "jump",
+                  "script": "q161.royal.end.wait"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q161.royal.borrow": {
+      "storyQuest": "q161",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q161",
+          "scene": "borrow"
+        },
+        {
+          "op": "narrate",
+          "text": "声を写す記録具の貸出は20G。借りずに相談へ戻ることもできる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "rent",
+              "text": "20Gで記録具を借りる",
+              "storyAction": {
+                "quest": "q161",
+                "action": "borrow_rent"
+              },
+              "requirement": "gold 20消費",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q161",
+                  "action": "borrow_rent"
+                },
+                {
+                  "op": "jump",
+                  "script": "q161.royal.record_ready"
+                }
+              ]
+            },
+            {
+              "id": "back",
+              "text": "借りずに剣士のもとへ戻る",
+              "storyAction": {
+                "quest": "q161",
+                "action": "borrow_back"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q161",
+                  "action": "borrow_back"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q161.royal.record_ready": {
+      "storyQuest": "q161",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q161",
+          "scene": "record_ready"
+        },
+        {
+          "op": "narrate",
+          "text": "記録具を受け取った。剣士のもとへ運び、同意を確かめて声を写す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "record",
+              "text": "記録具を運び、声を写す",
+              "storyAction": {
+                "quest": "q161",
+                "action": "record_ready_record"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q161",
+                  "action": "record_ready_record"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q161.royal.treat_sera": {
+      "storyQuest": "q161",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q161",
+          "scene": "treat_sera"
+        },
+        {
+          "op": "narrate",
+          "text": "剣士が施療所へ着き、治療を受ける準備ができた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sera",
+              "text": "セラに治療を頼む",
+              "storyAction": {
+                "quest": "q161",
+                "action": "treat_sera_sera"
+              },
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_member",
+                    "actor": "sera"
+                  },
+                  {
+                    "op": "gt",
+                    "left": {
+                      "ref": "actors.sera.hp"
+                    },
+                    "right": 0
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q161",
+                  "action": "treat_sera_sera"
+                },
+                {
+                  "op": "jump",
+                  "script": "q161.royal.end.heal"
+                }
+              ]
+            },
+            {
+              "id": "clinic",
+              "text": "イネの治療に立ち会う",
+              "storyAction": {
+                "quest": "q161",
+                "action": "treat_sera_clinic"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q161",
+                  "action": "treat_sera_clinic"
+                },
+                {
+                  "op": "jump",
+                  "script": "q161.royal.end.heal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q161.royal.treat_clinic": {
+      "storyQuest": "q161",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q161",
+          "scene": "treat_clinic"
+        },
+        {
+          "op": "narrate",
+          "text": "剣士と施療所へ来た。本人の同意を再確認し、イネの治療に立ち会う。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q161",
+                "action": "treat_clinic_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q161",
+                  "action": "treat_clinic_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q161.royal.end.heal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q161.royal.treat_recorded": {
+      "storyQuest": "q161",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q161",
+          "scene": "treat_recorded"
+        },
+        {
+          "op": "narrate",
+          "text": "剣士と施療所へ来た。記録具を本人へ渡してから、治療に立ち会う。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q161",
+                "action": "treat_recorded_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q161",
+                  "action": "treat_recorded_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q161.royal.end.recorded"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q161.royal.end.heal": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "治療は済んだ。剣士は声のない間を自分の言葉で埋めようとして、一度言い直した。"
+        },
+        {
+          "op": "add",
+          "target": "vars.heal",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q161",
+          "outcome": "heal"
+        }
+      ]
+    },
+    "q161.royal.end.recorded": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "傷は治り、記録具は本人の手に残った。最初の夜、剣士は再生せず枕元へ置いた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.recorded",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q161",
+          "outcome": "recorded"
+        }
+      ]
+    },
+    "q161.royal.end.wait": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "痛みは残った。治療を拒んだことを失敗と呼ばず、次に会う日と手当の相談を決めた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.wait",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q161",
+          "outcome": "wait"
+        }
+      ]
+    },
+    "q161.royal.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q161"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q161.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q161.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q161.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "heal",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "治療は済んだ。剣士は声のない間を自分の言葉で埋めようとして、一度言い直した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "recorded",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "傷は治り、記録具は本人の手に残った。最初の夜、剣士は再生せず枕元へ置いた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "wait",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "痛みは残った。治療を拒んだことを失敗と呼ばず、次に会う日と手当の相談を決めた。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q161"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q161.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q161.royal.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "consent",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q161.royal.consent"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "borrow",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q161.royal.borrow"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "record_ready",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q161.royal.record_ready"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "treat_sera",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q161.royal.treat_sera"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "treat_clinic",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q161.royal.treat_clinic"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "treat_recorded",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q161.royal.treat_recorded"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q161.royal.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "傷の治療を相談する証言室",
+      "archive": "記録具を貸す記録室",
+      "clinic": "剣士の治療をする施療所",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "archive"
+      ],
+      [
+        "transit",
+        "clinic"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "archive",
+          "clinic",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "heal",
+          "recorded",
+          "wait"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "recorded": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "recorded"
+      },
+      "patientAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "archive",
+          "clinic",
+          "transit"
+        ],
+        "meaning": "patient の所在または保持者"
+      },
+      "recorderAt": {
+        "type": "enum",
+        "initial": "archive",
+        "values": [
+          "entry",
+          "archive",
+          "clinic",
+          "transit",
+          "party",
+          "patient"
+        ],
+        "meaning": "recorder の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "patient": {
+        "holder": "patientAt",
+        "kind": "person"
+      },
+      "recorder": {
+        "holder": "recorderAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "傷に耳を寄せる様子を見せ、呪いを育てているように思わせる。声は本人の返事を聞けず、決まった言葉だけを繰り返す。剣士はそれを知っている。真実を説明すればすぐ治療に同意する人物にはしない。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "傷の治療を相談する証言室",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "consent": {
+        "title": "傷の治療を相談する証言室",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "borrow": {
+        "title": "記録具を貸す記録室",
+        "place": "archive",
+        "cast": [],
+        "requires": true
+      },
+      "record_ready": {
+        "title": "記録具を貸す記録室",
+        "place": "archive",
+        "cast": [],
+        "requires": true
+      },
+      "treat_sera": {
+        "title": "剣士の治療をする施療所",
+        "place": "clinic",
+        "cast": [],
+        "requires": true
+      },
+      "treat_clinic": {
+        "title": "剣士の治療をする施療所",
+        "place": "clinic",
+        "cast": [],
+        "requires": true
+      },
+      "treat_recorded": {
+        "title": "剣士の治療をする施療所",
+        "place": "clinic",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_wish": {
+        "from": [
+          "entry"
+        ],
+        "to": "consent",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "entry_record": {
+        "from": [
+          "entry"
+        ],
+        "to": "borrow",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "archive"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "archive",
+          "companions": []
+        },
+        "depart": []
+      },
+      "entry_wait": {
+        "from": [
+          "entry"
+        ],
+        "ending": "wait",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "wait"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "consent_sera": {
+        "from": [
+          "consent"
+        ],
+        "to": "treat_sera",
+        "requires": {
+          "op": "and",
+          "args": [
+            {
+              "op": "has_member",
+              "actor": "sera"
+            },
+            {
+              "op": "gt",
+              "left": {
+                "ref": "actors.sera.hp"
+              },
+              "right": 0
+            }
+          ]
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "patient"
+            ],
+            "path": [
+              "transit",
+              "clinic"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "clinic",
+          "companions": [
+            "patient"
+          ]
+        },
+        "depart": []
+      },
+      "consent_clinic": {
+        "from": [
+          "consent"
+        ],
+        "to": "treat_clinic",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "patient"
+            ],
+            "path": [
+              "transit",
+              "clinic"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "clinic",
+          "companions": [
+            "patient"
+          ]
+        },
+        "depart": []
+      },
+      "consent_recorded": {
+        "from": [
+          "consent"
+        ],
+        "to": "treat_recorded",
+        "requires": {
+          "op": "and",
+          "args": [
+            true,
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q161.values.recorded"
+              },
+              "right": true
+            }
+          ]
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "patient"
+            ],
+            "path": [
+              "transit",
+              "clinic"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "clinic",
+          "companions": [
+            "patient"
+          ]
+        },
+        "depart": []
+      },
+      "consent_wait": {
+        "from": [
+          "consent"
+        ],
+        "ending": "wait",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "wait"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "borrow_rent": {
+        "from": [
+          "borrow"
+        ],
+        "to": "record_ready",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "recorder",
+            "from": "archive",
+            "to": "party"
+          }
+        ],
+        "cost": {
+          "gold": 20
+        },
+        "once": false
+      },
+      "borrow_back": {
+        "from": [
+          "borrow"
+        ],
+        "to": "entry",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "record_ready_record": {
+        "from": [
+          "record_ready"
+        ],
+        "to": "consent",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "recorded",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "treat_sera_sera": {
+        "from": [
+          "treat_sera"
+        ],
+        "ending": "heal",
+        "requires": {
+          "op": "and",
+          "args": [
+            {
+              "op": "has_member",
+              "actor": "sera"
+            },
+            {
+              "op": "gt",
+              "left": {
+                "ref": "actors.sera.hp"
+              },
+              "right": 0
+            }
+          ]
+        },
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "heal"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "treat_sera_clinic": {
+        "from": [
+          "treat_sera"
+        ],
+        "ending": "heal",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "heal"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "treat_clinic_finish": {
+        "from": [
+          "treat_clinic"
+        ],
+        "ending": "heal",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "heal"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "treat_recorded_finish": {
+        "from": [
+          "treat_recorded"
+        ],
+        "ending": "recorded",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "recorder",
+            "from": "party",
+            "to": "patient"
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "recorded"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "heal": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q161.values.resolution"
+            },
+            "right": "heal"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q161.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q161.values.partyAt"
+                },
+                "right": "clinic"
+              }
+            ]
+          }
+        ]
+      },
+      "recorded": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q161.values.resolution"
+            },
+            "right": "recorded"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q161.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q161.values.partyAt"
+                },
+                "right": "clinic"
+              }
+            ]
+          }
+        ]
+      },
+      "wait": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q161.values.resolution"
+            },
+            "right": "wait"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q161.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q161.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "town",
+        "location": "royal_witness"
+      },
+      "archive": {
+        "kind": "town",
+        "location": "royal_archive"
+      },
+      "clinic": {
+        "kind": "town",
+        "location": "oddland_village_clinic"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_village",
+  "receptionLocations": [
+    "royal_board"
+  ]
+}

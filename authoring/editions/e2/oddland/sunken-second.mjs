@@ -1,6 +1,6 @@
 import {set,give,move,ref,eq,and,or} from '../../../story-kit.mjs';
 
-export function sunkenSecondSource(q){
+export function sunkenSecondSource(q,{cast=true}={}){
  const x={nodes:structuredClone(q.model.graph),places:{},flags:{},registry:{},entities:{}};
  const node=id=>x.nodes.find(n=>n.id===id),choice=(id,key)=>node(id).options.find(a=>a.id===key);
  const town=(key,name,location)=>x.places[key]={name,world:{kind:'town',location}};
@@ -22,6 +22,12 @@ export function sunkenSecondSource(q){
   add('treat_sera','clinic','剣士が施療所へ着き、治療を受ける準備ができた。',[opt('sera','セラに治療を頼む','@heal',{when:sera}),opt('clinic','イネの治療に立ち会う','@heal')]);
   end('treat_clinic','clinic','剣士と施療所へ来た。本人の同意を再確認し、イネの治療に立ち会う。','heal');
   end('treat_recorded','clinic','剣士と施療所へ来た。記録具を本人へ渡してから、治療に立ち会う。','recorded',[give('recorder','party','patient')]);
+  if(cast){
+   x.entities.patient.character='q161_patient';
+   entity('ine','clinic','person');x.entities.ine.character='q161_ine';
+   for(const id of ['entry','consent','treat_sera','treat_recorded'])node(id).cast=[{entity:'patient',display:{x:50,scale:.86}}];
+   node('treat_clinic').cast=[{entity:'patient',display:{x:33,scale:.86}},{entity:'ine',display:{x:67,scale:.86}}];
+  }
  }
  if(q.number===162){
   node('entry').id='bridge';cell('bridge','事故の起きた橋','bridge',5,3);cell('bank','救助後の橋の足場','bridge',11,3);town('entry','盾を借りるエルドの家','royal_lender');town('ceremony','姪の成人の式','royal_hall');town('workshop','船大工の工房','royal_shipyard');town('rescue','橋へ応援を出す救難隊','royal_rescue');

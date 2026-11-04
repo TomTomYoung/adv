@@ -365,7 +365,7 @@
     "entryScript": "q161.royal.visit",
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -374,7 +374,650 @@
       "saveRevision": 2,
       "scope": "沈没城後半10件の村・橋・試験場・砦・湖の現場接続。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "傷の治療を相談する証言室",
+            "archive": "記録具を貸す記録室",
+            "clinic": "剣士の治療をする施療所",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "archive"
+            ],
+            [
+              "transit",
+              "clinic"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "archive",
+                "clinic",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "heal",
+                "recorded",
+                "wait"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "recorded": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "recorded"
+            },
+            "patientAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "archive",
+                "clinic",
+                "transit"
+              ],
+              "meaning": "patient の所在または保持者"
+            },
+            "recorderAt": {
+              "type": "enum",
+              "initial": "archive",
+              "values": [
+                "entry",
+                "archive",
+                "clinic",
+                "transit",
+                "party",
+                "patient"
+              ],
+              "meaning": "recorder の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "patient": {
+              "holder": "patientAt",
+              "kind": "person"
+            },
+            "recorder": {
+              "holder": "recorderAt",
+              "kind": "item"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "傷に耳を寄せる様子を見せ、呪いを育てているように思わせる。声は本人の返事を聞けず、決まった言葉だけを繰り返す。剣士はそれを知っている。真実を説明すればすぐ治療に同意する人物にはしない。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "傷の治療を相談する証言室",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "consent": {
+              "title": "傷の治療を相談する証言室",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "borrow": {
+              "title": "記録具を貸す記録室",
+              "place": "archive",
+              "cast": [],
+              "requires": true
+            },
+            "record_ready": {
+              "title": "記録具を貸す記録室",
+              "place": "archive",
+              "cast": [],
+              "requires": true
+            },
+            "treat_sera": {
+              "title": "剣士の治療をする施療所",
+              "place": "clinic",
+              "cast": [],
+              "requires": true
+            },
+            "treat_clinic": {
+              "title": "剣士の治療をする施療所",
+              "place": "clinic",
+              "cast": [],
+              "requires": true
+            },
+            "treat_recorded": {
+              "title": "剣士の治療をする施療所",
+              "place": "clinic",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_wish": {
+              "from": [
+                "entry"
+              ],
+              "to": "consent",
+              "requires": true,
+              "effects": [],
+              "once": false
+            },
+            "entry_record": {
+              "from": [
+                "entry"
+              ],
+              "to": "borrow",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "archive"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "archive",
+                "companions": []
+              },
+              "depart": []
+            },
+            "entry_wait": {
+              "from": [
+                "entry"
+              ],
+              "ending": "wait",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "wait"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "consent_sera": {
+              "from": [
+                "consent"
+              ],
+              "to": "treat_sera",
+              "requires": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_member",
+                    "actor": "sera"
+                  },
+                  {
+                    "op": "gt",
+                    "left": {
+                      "ref": "actors.sera.hp"
+                    },
+                    "right": 0
+                  }
+                ]
+              },
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "patient"
+                  ],
+                  "path": [
+                    "transit",
+                    "clinic"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "clinic",
+                "companions": [
+                  "patient"
+                ]
+              },
+              "depart": []
+            },
+            "consent_clinic": {
+              "from": [
+                "consent"
+              ],
+              "to": "treat_clinic",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "patient"
+                  ],
+                  "path": [
+                    "transit",
+                    "clinic"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "clinic",
+                "companions": [
+                  "patient"
+                ]
+              },
+              "depart": []
+            },
+            "consent_recorded": {
+              "from": [
+                "consent"
+              ],
+              "to": "treat_recorded",
+              "requires": {
+                "op": "and",
+                "args": [
+                  true,
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q161.values.recorded"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "patient"
+                  ],
+                  "path": [
+                    "transit",
+                    "clinic"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "clinic",
+                "companions": [
+                  "patient"
+                ]
+              },
+              "depart": []
+            },
+            "consent_wait": {
+              "from": [
+                "consent"
+              ],
+              "ending": "wait",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "wait"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "borrow_rent": {
+              "from": [
+                "borrow"
+              ],
+              "to": "record_ready",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "recorder",
+                  "from": "archive",
+                  "to": "party"
+                }
+              ],
+              "cost": {
+                "gold": 20
+              },
+              "once": false
+            },
+            "borrow_back": {
+              "from": [
+                "borrow"
+              ],
+              "to": "entry",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "record_ready_record": {
+              "from": [
+                "record_ready"
+              ],
+              "to": "consent",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "recorded",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "treat_sera_sera": {
+              "from": [
+                "treat_sera"
+              ],
+              "ending": "heal",
+              "requires": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_member",
+                    "actor": "sera"
+                  },
+                  {
+                    "op": "gt",
+                    "left": {
+                      "ref": "actors.sera.hp"
+                    },
+                    "right": 0
+                  }
+                ]
+              },
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "heal"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "treat_sera_clinic": {
+              "from": [
+                "treat_sera"
+              ],
+              "ending": "heal",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "heal"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "treat_clinic_finish": {
+              "from": [
+                "treat_clinic"
+              ],
+              "ending": "heal",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "heal"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "treat_recorded_finish": {
+              "from": [
+                "treat_recorded"
+              ],
+              "ending": "recorded",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "recorder",
+                  "from": "party",
+                  "to": "patient"
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "recorded"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "heal": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q161.values.resolution"
+                  },
+                  "right": "heal"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q161.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q161.values.partyAt"
+                      },
+                      "right": "clinic"
+                    }
+                  ]
+                }
+              ]
+            },
+            "recorded": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q161.values.resolution"
+                  },
+                  "right": "recorded"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q161.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q161.values.partyAt"
+                      },
+                      "right": "clinic"
+                    }
+                  ]
+                }
+              ]
+            },
+            "wait": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q161.values.resolution"
+                  },
+                  "right": "wait"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q161.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q161.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "town",
+              "location": "royal_witness"
+            },
+            "archive": {
+              "kind": "town",
+              "location": "royal_archive"
+            },
+            "clinic": {
+              "kind": "town",
+              "location": "oddland_village_clinic"
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "ineAt",
+            "value": "clinic"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q161.scene.entry": {
@@ -1544,6 +2187,14 @@
           "patient"
         ],
         "meaning": "recorder の所在または保持者"
+      },
+      "ineAt": {
+        "type": "enum",
+        "initial": "clinic",
+        "values": [
+          "clinic"
+        ],
+        "meaning": "ine の所在または保持者"
       }
     },
     "entities": {
@@ -1553,11 +2204,17 @@
       },
       "patient": {
         "holder": "patientAt",
-        "kind": "person"
+        "kind": "person",
+        "character": "q161_patient"
       },
       "recorder": {
         "holder": "recorderAt",
         "kind": "item"
+      },
+      "ine": {
+        "holder": "ineAt",
+        "kind": "person",
+        "character": "q161_ine"
       }
     },
     "propositions": {
@@ -1571,13 +2228,29 @@
       "entry": {
         "title": "傷の治療を相談する証言室",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "patient",
+            "display": {
+              "x": 50,
+              "scale": 0.86
+            }
+          }
+        ],
         "requires": true
       },
       "consent": {
         "title": "傷の治療を相談する証言室",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "patient",
+            "display": {
+              "x": 50,
+              "scale": 0.86
+            }
+          }
+        ],
         "requires": true
       },
       "borrow": {
@@ -1595,19 +2268,50 @@
       "treat_sera": {
         "title": "剣士の治療をする施療所",
         "place": "clinic",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "patient",
+            "display": {
+              "x": 50,
+              "scale": 0.86
+            }
+          }
+        ],
         "requires": true
       },
       "treat_clinic": {
         "title": "剣士の治療をする施療所",
         "place": "clinic",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "patient",
+            "display": {
+              "x": 33,
+              "scale": 0.86
+            }
+          },
+          {
+            "entity": "ine",
+            "display": {
+              "x": 67,
+              "scale": 0.86
+            }
+          }
+        ],
         "requires": true
       },
       "treat_recorded": {
         "title": "剣士の治療をする施療所",
         "place": "clinic",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "patient",
+            "display": {
+              "x": 50,
+              "scale": 0.86
+            }
+          }
+        ],
         "requires": true
       }
     },
@@ -1674,18 +2378,42 @@
         ],
         "to": "treat_sera",
         "requires": {
-          "op": "and",
+          "op": "or",
           "args": [
             {
-              "op": "has_member",
-              "actor": "sera"
+              "op": "and",
+              "args": [
+                {
+                  "op": "has_member",
+                  "actor": "sera"
+                },
+                {
+                  "op": "gt",
+                  "left": {
+                    "ref": "actors.sera.hp"
+                  },
+                  "right": 0
+                }
+              ]
             },
             {
-              "op": "gt",
-              "left": {
-                "ref": "actors.sera.hp"
-              },
-              "right": 0
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "journey.quest"
+                  },
+                  "right": "q161"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "journey.action"
+                  },
+                  "right": "consent_sera"
+                }
+              ]
             }
           ]
         },
@@ -2094,7 +2822,7 @@
         "location": "oddland_village_clinic"
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "oddland_village",
   "receptionLocations": [
