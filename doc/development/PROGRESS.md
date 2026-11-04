@@ -7,6 +7,8 @@
 
 22:24:53〜22:25:11の操作E006-1〜4では、q161のPNG原本2点・WebP2点のGitHub blob保存がすべて成功し、ローカルとSHAが一致していた。その後のtree・commit・ブランチ反映・PR作成の完了記録はなく、再調査時もGitHubにq161のブランチとPRはなかった。主作業E001は開始記録だけで途切れており、停止原因を特定できるエラー本文は残っていない。Chromiumの再失敗とは断定しない。
 
+反映完了：[コミット `cc7a5eba`](https://github.com/TomTomYoung/adv/commit/cc7a5eba3c277a5efb52b47214a5bb82b7c9adab)をmasterへ反映し、GitHubから読み返したコミットとツリー `3c4bf6ffed9ca5a6cbf270266d5519e50dbebdc9` がローカルの32ファイルを含むツリーと一致した。更新は親コミットを期待SHAとして指定した通常のfast-forwardで、force=false。ブラウザーCIを起動するPRは作成していない。pushによる通常CIとPages配信は自動開始した。反映時点のローカル作業場所は `/workspace/scratch/433b1643f950/adv-work`、ブランチは `fix/q161-treatment-recovery` で、HEADもGitHubの確定コミットへ同期した。
+
 先行するChromium保留メモはmaster `a6f4221eda4317955244ed6ef55ae5de8bce26e6` に保存済みである。今回はこの文書を保持し、成功済みの素材blobを再利用してq161の反映だけを完了させる。q161のゲームコードと生成物は全2,569試験が成功した回収コミットの内容を維持する。再開時の文書変更だけを追加検証し、反映先のtree・commit・branchを読み返してローカルとの一致を確認する。各操作の開始・結果は既存の作業ログへ追記する。Chromium保留中はPR作成に伴うブラウザーCIを起動せず、現在のmasterを親とするコミットを作業ブランチへ保存し、期待SHA付き・force=falseの通常更新でmasterへ反映する。ブランチ保護が更新を拒否した場合は停止し、保護設定は変更しない。
 
 q162の補助調査には、存在しない `src/core/story-state.js` と `src/core/world-journey.js` を検索対象へ指定した `rg` 終了コード2が残っている。その後のローカルコピー作成は成功しているため、これを主作業の停止原因とは扱わない。q162は独立コピーの作成・調査までで、実装差分はない。次回は `rg --files` で存在するパスを確定してから対象を読む。
