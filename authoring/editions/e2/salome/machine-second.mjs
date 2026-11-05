@@ -18,12 +18,17 @@ export function machineSecondSource(q){
   for(const id of ['defense','collect_family','evacuated'])node(id).cast=[{entity:'dai',display:{x:31}},{entity:'family',display:{x:69}}];
  }
  if(q.number===172){
-  town('workshop','ルイ本人の刺繍工房','machine_lui');town('mother','母から昔の名を聞く家','machine_mother');town('market','作品の名を確かめる市','library_market');field('well_place','名前を取った井戸','cemetery',7,3);town('water','代わりの水源を手配する窓口','machine_registry');entity('lui','workshop','person');
+  town('workshop','ルイ本人の刺繍工房','machine_lui');town('mother','母から昔の名を聞く家','machine_mother');town('market','作品の名を確かめる市','library_market');field('well_place','名前を取った井戸','cemetery',7,3);town('water','代わりの水源を手配する窓口','machine_registry');entity('lui','workshop','person');entity('motherPerson','mother','person');entity('wellMaster','well_place','person');
   const from=intake('workshop','機関廟の相談所でルイの記憶の欠落を聞いた。本人の工房を訪ねる。');
   for(const [key,place,text] of [['mother','mother','母から昔の名と呼んでいた頃の事情を聞いた。'],['market','market','作品の刺繍と出品記録を照合し、本人が選んだ名を確認した。']]){const a=choice(from,key);a.to=key+'_heard';add(key+'_heard',place,text,[opt('return','本人の工房へ戻る',from)]);}
   node('well').place='well_place';choice(from,'well').companions=['lui'];route('well','back',from,{companions:['lui']});route('well','restore','restored_confirm',{companions:['lui'],depart:[set('memoriesReturned')]});add('restored_confirm','workshop','ルイと工房へ戻り、二つの名と過去を取り戻したことを本人に確認する。',[opt('mother','本人と母を訪ね、今の呼び名を伝える','restored',{companions:['lui'],depart:[set('nameConfirmed')]})]);end('restored','mother','母は呼び名を一度間違え、本人が望む今の名へ言い直した。','restore',[set('motherInformed')]);
   route('well','new','named',{companions:['lui']});end('named','workshop','本人が選んだ新しい呼び名を工房へ記した。記憶の欠落は回復済みにしない。','new',[set('newNameChosen')]);
   route('well','seal','water',{companions:['lui'],preparation:[set('wellSealed')]});end('water','water','井戸を封じたことと記憶の未回復を窓口へ伝え、代わりの水場を手配した。','seal',[set('waterArranged')]);
+  x.entities.lui.character='q172_lui';x.entities.motherPerson.character='q172_mother';x.entities.wellMaster.character='q172_well_master';
+  node('well').cast=[{entity:'lui',display:{x:31}},{entity:'wellMaster',display:{x:69}}];
+  for(const id of ['onsite','restored_confirm','named','water'])node(id).cast=[{entity:'lui',display:{x:50}}];
+  node('mother_heard').cast=[{entity:'motherPerson',display:{x:50}}];
+  node('restored').cast=[{entity:'lui',display:{x:31}},{entity:'motherPerson',display:{x:69}}];
  }
  if(q.number===173){
   town('home','テラの家','machine_tera');field('grave','墓守の精霊との面談場所','cemetery',3,5);entity('tera','home','person');entity('spiritPerson','grave','person');const from=intake('home','夜に帰る姿について、テラの家を訪ねる。本人と精霊の話は別々に聞く。');node('spirit').place='grave';
