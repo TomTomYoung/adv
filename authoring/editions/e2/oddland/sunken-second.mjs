@@ -107,7 +107,7 @@ export function sunkenSecondSource(q,{cast=true}={}){
    node('entry').cast=[{entity:'ruu',display:{x:31}},{entity:'master',display:{x:69}}];
    node('trial').cast=[{entity:'ruu',display:{x:31}},{entity:'porter',display:{x:69}}];
    for(const id of ['report','interview'])node(id).cast=[{entity:'ruu',display:{x:31}},{entity:'examiner',display:{x:69}}];
-   for(const id of ['retry_report','trial_battle_ready'])node(id).cast=[{entity:'ruu',display:{x:50}}];
+   node('retry_report').cast=[{entity:'ruu',display:{x:50}}];
   }
  }
  if(q.number===167){
