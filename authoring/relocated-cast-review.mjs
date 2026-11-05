@@ -3362,7 +3362,7 @@ export const RELOCATED_CAST_REVIEW={
   "next": "q172のlui・motherPerson・wellMasterへ呼称表示を接続した。二つの名と3結末を保持し、次はq173のテラと墓守の精霊を監査する。"
 },
   q173:{
-  "sourceSha256": "7ad11f8fb784f2e3ddd368a5d3d3b3b6858bd0ab9f34978ce57829a38480eab7",
+  "sourceSha256": "3e30eb8037e14bea523441dee311b6a27a588109f842d2a4d2971d5cfbe5f781",
   "identityNotes": [
     "依頼人は寡婦テラで、既存person teraの初期位置はhome。entryは相談受付からテラの家へ向かう導入なので、依頼人欄だけでentryへテラを移さない。",
     "墓守の精霊は既存person spiritPersonで初期位置grave。夫に似た帰宅姿の観察はonsite本文にあるが、現行の所在と経路は『本人と精霊の話は別々に聞く』構造で、onsiteからpartyだけが墓地へ移動する。精霊を家へ先回りさせない。",
@@ -3373,13 +3373,15 @@ export const RELOCATED_CAST_REVIEW={
   "people": {
     "q173_tera": {
       "label": "寡婦テラ",
-      "status": "candidate",
-      "need": "既存person teraへ接続する候補。onsite・wife・guest_agree・part_home・copy_home・copy_laterでhomeの所在に従って表示する。"
+      "status": "connected",
+      "entity": "tera",
+      "need": "既存person teraへ呼称表示を接続済み。onsite・wife・guest_agree・part_home・copy_home・copy_laterでhomeの所在に従って表示する。"
     },
     "q173_spirit": {
       "label": "墓守の精霊",
-      "status": "candidate",
-      "need": "既存person spiritPersonへ接続する候補。spiritではgrave、guest_agree・copy_home・copy_laterでは実移動後のhomeに表示し、part_homeやonsiteへ先回りさせない。"
+      "status": "connected",
+      "entity": "spiritPerson",
+      "need": "既存person spiritPersonへ呼称表示を接続済み。spiritではgrave、guest_agree・copy_home・copy_laterでは実移動後のhomeに表示し、part_homeやonsiteへ先回りさせない。"
     }
   },
   "scenes": {
@@ -3440,7 +3442,75 @@ export const RELOCATED_CAST_REVIEW={
       "visual": "家具を動かす変化に答えられない精霊とテラ。模倣の限界を示す。"
     }
   },
-  "next": "q173のテラと墓守の精霊を精読した。次はteraとspiritPersonの実所在へ表示を接続し、夫本人を追加せず3結末を保持する。"
+  "next": "q173のteraとspiritPersonへ実所在どおり呼称表示を接続した。夫本人を追加せず3結末を保持し、次はq174の娘と歩けない人々を監査する。"
+},
+  q174:{
+  "sourceSha256": "a06bee3f59a2852bc125121eff4717cc64019f353a6eaf41da72e249f202bcc4",
+  "identityNotes": [
+    "依頼人は村長だが、現行storyに村長personはなく、entryは知らせを受けて墓地道へ向かう導入。依頼人欄から村長を固定出演へ追加しない。",
+    "道化師の娘は既存person daughterPersonで初期位置procession。元原稿でも列には加わらず同じ現場で父への怒りを語る。葬列の一員や泣く役へ変えず、sealed・namedでも同じ現場に残る。",
+    "歩けない人々は既存group injuredで初期位置procession。onsite_peopleを選んだ場合だけpartyと救護先rescueへ実移動する。娘はこのgroupに含めず、救護先へ同行させない。",
+    "letterではpartyだけが道化師の小屋へ移動し、娘とinjuredはprocessionに残る。遺書letterSheetはitemであり、道化師本人の霊や小屋の管理人を人物表示へ追加しない。",
+    "sealed・namedは救出経路と排他的で、娘とinjuredがprocessionに残った状態で弔いを止める／終える。棺の主である故人を現在の人物entityとして追加しない。",
+    "coffinSealed・mourned・rescuedと3結末、遺書の受渡しを人物表示のために変更しない。娘の怒りを解消済みや赦し済みにせず、歩けない人々の人数・容貌も固定しない。"
+  ],
+  "people": {
+    "q174_daughter": {
+      "label": "道化師の娘",
+      "status": "candidate",
+      "need": "既存person daughterPersonへ接続する候補。onsite・sealed・namedの葬列現場で表示し、小屋や救護先へ同行させない。"
+    },
+    "q174_injured": {
+      "label": "歩けない人々",
+      "status": "candidate",
+      "need": "既存group injuredへ接続する候補。onsite・sealed・namedでは葬列現場、rescuedでは実移動後の救護先に表示する。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "道化師の葬列が止まらないという知らせを受け、墓地道へ向かう。",
+      "reason": "entry_visitでpartyだけがprocessionへ向かう。村長・娘・injuredを相談受付へ先回りさせない。",
+      "visual": "葬列現場へ向かう導入。特定人物の立ち絵は置かない。"
+    },
+    "letter": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "娘が怒ったままでも弔いはできる。",
+      "reason": "onsite_hutでpartyだけがhutへ移動し、daughterPersonとinjuredはprocessionに残る。遺書の記述だけから娘本人を小屋へ移さない。",
+      "visual": "道化師の小屋で遺書を読む。故人本人や娘を表示しない。"
+    },
+    "onsite": {
+      "decision": "person-evidence",
+      "people": ["q174_daughter","q174_injured"],
+      "evidence": "列の笑顔に反して足は擦り切れている。",
+      "reason": "entry_visitでpartyがprocessionへ到着し、daughterPersonとinjuredは初期位置processionにいる。娘は列に加わらず同じ現場で怒りを語り、injuredは救出対象になる。",
+      "visual": "葬列現場で列外の娘と歩けない人々を分けて表示する。"
+    },
+    "sealed": {
+      "decision": "person-evidence",
+      "people": ["q174_daughter","q174_injured"],
+      "evidence": "棺を封じて列の動きを止めた。",
+      "reason": "onsite_sealは移動せず、letter_sealでもpartyだけがprocessionへ戻る。救出を選んでいないためdaughterPersonとinjuredは現場に残る。",
+      "visual": "封印で止まった葬列の現場。娘と歩けない人々は残るが、弔い完了にはしない。"
+    },
+    "named": {
+      "decision": "person-evidence",
+      "people": ["q174_daughter","q174_injured"],
+      "evidence": "娘に涙や赦しを要求しない。",
+      "reason": "letter_nameでpartyが遺書を持ってprocessionへ戻る。daughterPersonとinjuredは現場に残っており、個人の名で送る結末を確認する。",
+      "visual": "個人の名で葬列を終える現場。娘の怒りを解消済みに描かない。"
+    },
+    "rescued": {
+      "decision": "person-evidence",
+      "people": ["q174_injured"],
+      "evidence": "歩けない人を救護先へ引き継いだ。",
+      "reason": "onsite_peopleでpartyとinjuredだけがrescueへ実移動する。daughterPersonはprocessionに残り、救護先へ同行しない。",
+      "visual": "救護先に着いた歩けない人々。娘や葬列全体は表示しない。"
+    }
+  },
+  "next": "q174の娘と歩けない人々を精読した。次はdaughterPersonとinjuredの現場・救護先表示を接続し、故人や村長を追加せず3結末を保持する。"
 }
  }
 };
