@@ -6,7 +6,7 @@ import {auditRelocatedCast,loadRelocatedCastQuests,relocatedCastFingerprint} fro
 const quests=await loadRelocatedCastQuests();
 test('cast audit distinguishes measured empty casts, reviewed scenes and candidate roles',()=>{
  const report=auditRelocatedCast(quests);
- assert.deepEqual(report.summary,{quests:100,scenes:753,emptyCastScenes:614,personEntities:116,characterLinkedEntities:46,reviewedQuests:36,reviewedScenes:227,noPersonEvidenceScenes:82,personEvidenceScenes:145,candidateRoles:4,connectedRoles:65,unreviewedScenes:526});
+ assert.deepEqual(report.summary,{quests:100,scenes:753,emptyCastScenes:608,personEntities:119,characterLinkedEntities:50,reviewedQuests:37,reviewedScenes:237,noPersonEvidenceScenes:89,personEvidenceScenes:148,candidateRoles:2,connectedRoles:69,unreviewedScenes:516});
  assert.ok(report.regions.every(r=>r.quests===20));
  assert.equal(report.quests.find(q=>q.id==='q071').scenes[0].review,null);
  assert.deepEqual(report.quests.find(q=>q.id==='q032').scenes.filter(s=>s.review.people.length).map(s=>s.id),['cell','workshop']);
@@ -17,8 +17,9 @@ test('cast audit distinguishes measured empty casts, reviewed scenes and candida
  assert.ok(aid.scenes.every(s=>s.review.people.includes('q165_lina')));
  assert.deepEqual(aid.scenes.filter(s=>s.review.people.includes('q165_il')).map(s=>s.id),['public','ask_il','secret_report','open_supply']);
  const apprentice=report.quests.find(q=>q.id==='q166');
- assert.deepEqual(Object.fromEntries(Object.entries(apprentice.review.people).map(([id,role])=>[id,role.status])),{
-  q166_ruu:'candidate',q166_master:'candidate',q166_examiner:'candidate',q166_porter:'candidate'
+ assert.deepEqual(Object.fromEntries(Object.entries(apprentice.review.people).map(([id,role])=>[id,{status:role.status,entity:role.entity}])),{
+  q166_ruu:{status:'connected',entity:'ruu'},q166_master:{status:'connected',entity:'master'},
+  q166_examiner:{status:'connected',entity:'examiner'},q166_porter:{status:'connected',entity:'porter'}
  });
  // A later ending or an office name does not place the master, examiner or porter in every scene.
  assert.deepEqual(Object.fromEntries(apprentice.scenes.map(s=>[s.id,s.review.people])),{
@@ -26,7 +27,19 @@ test('cast audit distinguishes measured empty casts, reviewed scenes and candida
   report:['q166_ruu','q166_examiner'],interview:['q166_ruu','q166_examiner'],
   retry_report:['q166_ruu'],trial_battle_ready:['q166_ruu']
  });
- assert.ok(apprentice.scenes.every(s=>s.cast.length===0),'reviewed candidates are not implemented cast');
+ assert.deepEqual(Object.fromEntries(apprentice.scenes.map(s=>[s.id,s.cast.map(c=>c.entity)])),{
+  entry:['ruu','master'],trial:['ruu','porter'],report:['ruu','examiner'],interview:['ruu','examiner'],
+  retry_report:['ruu'],trial_battle_ready:['ruu']
+ });
+ const strategist=report.quests.find(q=>q.id==='q167');
+ assert.deepEqual(Object.fromEntries(Object.entries(strategist.review.people).map(([id,role])=>[id,role.status])),{
+  q167_vice_captain:'candidate',q167_refugees:'candidate'
+ });
+ assert.deepEqual(Object.fromEntries(strategist.scenes.map(s=>[s.id,s.review.people])),{
+  entry:['q167_vice_captain','q167_refugees'],blocked:[],report:[],bridge_seen:[],enemy_seen:[],ridge:[],
+  captured:[],evacuate:['q167_vice_captain','q167_refugees'],safe:['q167_refugees'],ridge_battle_ready:[]
+ });
+ assert.ok(strategist.scenes.every(s=>s.cast.length===0),'q167 review does not implement cast yet');
 });
 
 test('a change to reviewed prose or location cannot silently retain the review',()=>{
@@ -62,9 +75,9 @@ test('future character and cast hookups change measured counts without marking u
  const changed=structuredClone(quests),q=changed.find(q=>q.id==='q071'),entity=Object.values(q.story.entities).find(e=>e.kind==='person');
  entity.character='future_owner';Object.values(q.story.scenes)[0].cast=[{entity:'workerPerson'}];
  const report=auditRelocatedCast(changed);
- assert.equal(report.summary.emptyCastScenes,613);
- assert.equal(report.summary.characterLinkedEntities,47);
- assert.equal(report.summary.reviewedScenes,227);
+ assert.equal(report.summary.emptyCastScenes,607);
+ assert.equal(report.summary.characterLinkedEntities,51);
+ assert.equal(report.summary.reviewedScenes,237);
  assert.equal(report.quests.find(q=>q.id==='q071').review,null);
 });
 

@@ -91,7 +91,7 @@ export function sunkenSecondSource(q,{cast=true}={}){
   }
  }
  if(q.number===166){
-  town('entry','師と試験官の受付','royal_archive');cell('trial','ルウが救助する試験場','trial',9,5);node('trial').place='trial';entity('ruu','entry','person');
+  town('entry','師と試験官の受付','royal_archive');cell('trial','ルウが救助する試験場','trial',9,5);node('trial').place='trial';entity('ruu','entry','person');entity('master','entry','person');entity('examiner','entry','person');entity('porter','trial','person');
   for(const key of ['rules','trial'])choice('entry',key).companions=['ruu'];
   // A battle result is recorded by its actual continuation, never by a
   // player-selectable success action. Defeat resumes here after returning.
@@ -99,6 +99,16 @@ export function sunkenSecondSource(q,{cast=true}={}){
   choice('trial','battle').when={op:'not',arg:failed};choice('trial','battle').recordBattleResult=true;choice('trial','battle').companions=['ruu'];delete choice('trial','battle').escape;delete choice('trial','battle').loss;
   choice('trial','train').when={op:'not',arg:failed};route('trial','train','retry_report',{companions:['ruu']});end('retry_report','entry','ルウと試験受付へ戻り、受験の延期を伝える。','retry');
   node('trial').options.push(opt('interview','ルウと撤退の面談へ戻る','interview',{when:failed,companions:['ruu']}));
+  if(cast){
+   x.entities.ruu.character='q166_ruu';
+   x.entities.master.character='q166_master';
+   x.entities.examiner.character='q166_examiner';
+   x.entities.porter.character='q166_porter';
+   node('entry').cast=[{entity:'ruu',display:{x:31}},{entity:'master',display:{x:69}}];
+   node('trial').cast=[{entity:'ruu',display:{x:31}},{entity:'porter',display:{x:69}}];
+   for(const id of ['report','interview'])node(id).cast=[{entity:'ruu',display:{x:31}},{entity:'examiner',display:{x:69}}];
+   node('retry_report').cast=[{entity:'ruu',display:{x:50}}];
+  }
  }
  if(q.number===167){
   cell('entry','副隊長と避難民の待つ陣地','fort',1,3);cell('bridge','崩れた橋の手前','fort',5,1);cell('enemy','対岸を見渡す偵察点','fort',5,5);cell('ridge','守りの薄い尾根','fort',11,5);cell('fort','奪還する砦','fort',13,1);town('report','帰還報告の救難隊詰所','royal_rescue');town('refuge','避難民を送り届ける高台','royal_refuge');entity('refugees','entry','group');
