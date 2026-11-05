@@ -55,6 +55,11 @@ export const relocatedCharacters=Object.fromEntries([
 ].map(([id,name,detail,provenance])=>[id,{id,name,role:'礼拝堂の現地の相手',detail,portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,
  provenance:provenance??'2026-10-29の美術設定。固有名・他人物との同一性は追加しない。具体的な外見・年齢感・服装は今回の美術設定。牢・格子・聖像・宝玉・石を人物画へ固定しない。'}]));
 // The group has no specified headcount or spokesperson. Ren is the existing actor.
+relocatedCharacters.q170_sef={
+ id:'q170_sef',name:'旅仲間セフ',role:'故郷で店を継ぐ前に最後の島行きを望む旅仲間',
+ detail:'港から湖岸、島の野営地、帰路、補給店、各別れの港まで既存の同行に従う。戦う以外の一便の役割も本人の合意どおり扱う。',
+ provenance:'2026-11-06。既存person sefの呼称表示。容貌・衣装・将来の店の外観は本文へ追加せず、専用画はこの段階では接続しない。'
+};
 relocatedCharacters.q169_mao={
  id:'q169_mao',name:'騎士マオ',role:'旧友へ旅の約束の指輪を託す騎士',
  detail:'自宅で指輪を預け、報告と後日の訂正を受ける。受取人宅や記録室へは同行しない。',
