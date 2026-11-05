@@ -80,6 +80,15 @@ export function sunkenSecondSource(q,{cast=true}={}){
   add('ask_il','entry','リナと宿へ戻り、イルへ援助の相談を伝えた。隊への参加とは別に、本人も商談へ来る。',[opt('public','双方と公開の商談席へ向かう','public',{companions:['lina','ilGuest']})]);
   route('private','secret','secret_supply',{companions:['lina']});add('secret_supply','supply','リナと補給店へ来た。本人へ説明しないまま援助を受け取る。',[opt('receive','補給を受け取り、宿へ戻る','secret_report',{companions:['lina'],depart:[give('aid','supply','party')]})]);end('secret_report','entry','宿でリナから援助のことを知ったイルに会った。受け取った補給について説明を求められる。','secret');
   route('public','agree','open_supply',{companions:['lina','ilGuest']});end('open_supply','supply','双方の条件を記した契約を持って補給店へ来た。合意した援助を受け取る。','open',[give('aid','supply','party')]);
+  if(cast){
+   x.entities.lina.character='q165_lina';
+   x.entities.ilGuest.character='q165_il';
+   for(const id of ['entry','private','secret_supply'])node(id).cast=[{entity:'lina',display:{x:50}}];
+   for(const id of ['public','ask_il','secret_report','open_supply'])node(id).cast=[
+    {entity:'lina',display:{x:29}},
+    {entity:'ilGuest',display:{x:71,scale:.86}}
+   ];
+  }
  }
  if(q.number===166){
   town('entry','師と試験官の受付','royal_archive');cell('trial','ルウが救助する試験場','trial',9,5);node('trial').place='trial';entity('ruu','entry','person');
