@@ -1,15 +1,15 @@
 # 旧100件の人物・出演監査
 
-照合日: 2026-11-06。第2版の現場接続済み100件を配布JSONから集計する。出演根拠の精読は42件・288場面まで。集計と精読、素材制作と実装を区別する。
+照合日: 2026-11-06。第2版の現場接続済み100件を配布JSONから集計する。出演根拠の精読は43件・296場面まで。集計と精読、素材制作と実装を区別する。
 
 [不足素材](../world/ASSET_BACKLOG.md) ／ [町・シーン切替](../world/SCENE_SWITCH_PLAN.md) ／ [機械可読の全場面一覧](RELOCATED_CAST_AUDIT.json) ／ [精読の正本](../../authoring/relocated-cast-review.mjs) ／ [集計器](../../tools/audit-relocated-cast.mjs)
 
 ## 現在の結果
 
-- 753場面中566場面のcastが空。空であることだけから人物画の不足とは判定しない。
-- 人物エンティティは延べ121件、そのうちcharacter接続は57件。依頼間の重複や集団を含み、新規人物数ではない。
-- 精読288場面のうち、特定人物の同席根拠なし92場面、人物の発言・動作や所在から出演根拠あり196場面。接続済み78役、未接続の制作候補4役。候補数は独立人物としての最終確定数ではない。
-- 残る465場面は未精読。未精読を「人物なし」や「制作不要」に変換しない。
+- 753場面中558場面のcastが空。空であることだけから人物画の不足とは判定しない。
+- 人物エンティティは延べ123件、そのうちcharacter接続は60件。依頼間の重複や集団を含み、新規人物数ではない。
+- 精読296場面のうち、特定人物の同席根拠なし93場面、人物の発言・動作や所在から出演根拠あり203場面。接続済み81役、未接続の制作候補3役。候補数は独立人物としての最終確定数ではない。
+- 残る457場面は未精読。未精読を「人物なし」や「制作不要」に変換しない。
 
 ## 精読済みの依頼
 
@@ -3595,7 +3595,7 @@ watch_wardは所在を変えず、partyとdaiはboundaryに残る。次のcontin
 
 依頼人は織工ルイで、既存person lui。luiAtの初期位置はworkshopであり、entryの相談受付には本人を自動配置しない。onsiteから井戸へ同行した後は、選んだ経路に従って工房・母の家・水源窓口へ実移動する。
 
-母はmother_heardとrestoredで現在の話者として明示されるが、既存person entityはない。氏名・容貌・家族構成を追加せず候補役とする。市場の出品記録を確認するmarket_heardには店員や記録係を追加しない。
+母はmother_heardとrestoredで現在の話者として明示されるため、専用person motherPersonを母の家に固定して接続した。氏名・容貌・家族構成は追加しない。市場の出品記録を確認するmarket_heardには店員や記録係を追加しない。
 
 井戸の主は元原稿で取引を曲解した主体で、wellの現在の交渉相手。井戸そのものの背景・怪異と会話役を区別し、sealで戦った後のwell_seal_readyへ居残り表示しない。
 
@@ -3603,9 +3603,9 @@ watch_wardは所在を変えず、partyとdaiはboundaryに残る。次のcontin
 
 seal経路の戦闘対象と井戸の主は同じ物語上の脅威として扱える候補だが、固定の人型・性別・容貌は決めない。代替水源の窓口にも未指定の係員を追加しない。
 
-- 制作候補 `q172_lui`：織工ルイ。既存person luiへ接続する候補。onsite・well・restored_confirm・restored・named・water・well_seal_readyで既存の所在と同行に従って表示する。
-- 制作候補 `q172_mother`：ルイの母。mother_heardとrestoredの現在の話者として専用entityを追加する候補。工房・市場・井戸へ同行させない。
-- 制作候補 `q172_well_master`：井戸の主。wellの交渉相手として呼称表示する候補。封印戦の勝利後や工房・母の家へ継続表示せず、外見は固定しない。
+- 接続済み `q172_lui`：織工ルイ。既存person luiへ呼称表示を接続済み。onsite・well・restored_confirm・restored・named・water・well_seal_readyで既存の所在と同行に従って表示する。
+- 接続済み `q172_mother`：ルイの母。mother_heardとrestoredの現在の話者として専用entity motherPersonを接続済み。工房・市場・井戸へ同行させない。
+- 接続済み `q172_well_master`：井戸の主。wellの交渉相手として専用entity wellMasterの呼称表示を接続済み。封印戦の勝利後や工房・母の家へ継続表示せず、外見は固定しない。
 
 #### entry
 
@@ -3707,7 +3707,106 @@ well_sealの戦闘勝利直後もluiは井戸に残る。倒した井戸の主�
 
 描き分け候補: 封印戦後の井戸でルイと次の移動を確認する。
 
-次の作業: q172のルイ・母・井戸の主を精読した。次はluiの実同行、母の家の話者、井戸の交渉相手を接続し、名の状態と3結末を保持する。
+次の作業: q172のlui・motherPerson・wellMasterへ呼称表示を接続した。二つの名と3結末を保持し、次はq173のテラと墓守の精霊を監査する。
+
+### q173 夜だけ帰る兵士
+
+依頼人: 寡婦テラ。[配布JSON](../../data/scenario-editions/e2/q173.json) ／ [現場接続の原稿](../../authoring/editions/e2/salome/machine-second.mjs)。
+
+依頼人は寡婦テラで、既存person teraの初期位置はhome。entryは相談受付からテラの家へ向かう導入なので、依頼人欄だけでentryへテラを移さない。
+
+墓守の精霊は既存person spiritPersonで初期位置grave。夫に似た帰宅姿の観察はonsite本文にあるが、現行の所在と経路は『本人と精霊の話は別々に聞く』構造で、onsiteからpartyだけが墓地へ移動する。精霊を家へ先回りさせない。
+
+spiritではpartyが墓地にいて精霊本人と話し、テラはhomeに残る。wifeではpartyだけがhomeへ戻り、精霊はgraveに残る。guestとcopyの経路だけspiritPersonがpartyとhomeへ実移動する。
+
+part経路ではpartyだけがhomeへ戻り、精霊はgraveに残ったまま別れを伝えた結果をテラと確認する。guest_agree・copy_home・copy_laterではteraとspiritPersonが同じhomeにいる。
+
+戦死した夫本人を第三の人物entityとして追加しない。精霊が拾った記憶・夫の悪い癖・家財は人物の同一性とは分け、bothAgreed・parted・laterVisit・imitationContinuesと3結末を人物表示のために変更しない。
+
+- 制作候補 `q173_tera`：寡婦テラ。既存person teraへ接続する候補。onsite・wife・guest_agree・part_home・copy_home・copy_laterでhomeの所在に従って表示する。
+- 制作候補 `q173_spirit`：墓守の精霊。既存person spiritPersonへ接続する候補。spiritではgrave、guest_agree・copy_home・copy_laterでは実移動後のhomeに表示し、part_homeやonsiteへ先回りさせない。
+
+#### entry
+
+場所: `region_8_f1` (5,1)。判定: 特定人物の同席根拠なし。
+
+本文の根拠: 夜に帰る姿について、テラの家を訪ねる。
+
+teraAtはhome、spiritPersonAtはgraveを初期位置とし、entry_visitでpartyだけがhomeへ向かう。相談受付へ二人を自動配置しない。
+
+描き分け候補: テラの家へ向かう相談受付。夫に似た姿や精霊はまだ表示しない。
+
+#### spirit
+
+場所: `e2_salome_cemetery` (3,5)。判定: 人物の出演根拠あり。出演役: `q173_spirit`。
+
+本文の根拠: 精霊は居場所を求めていた。
+
+onsiteの二選択またはwife_returnでpartyだけがgraveへ移動し、spiritPersonは初期位置graveにいる。テラはhomeに残る。
+
+描き分け候補: 墓地で墓守の精霊本人と話す。テラを墓地へ同行させない。
+
+#### onsite
+
+場所: 施設 `machine_tera`。判定: 人物の出演根拠あり。出演役: `q173_tera`。
+
+本文の根拠: 墓守の精霊が記憶を拾っていた。
+
+entry_visitでpartyがテラの家へ到着し、teraはhomeにいる。夫に似た姿の観察は精霊の正体を示すが、spiritPersonの現在地はgraveで、次の行動でpartyだけが墓地へ向かう。
+
+描き分け候補: テラの家で本人から状況を確かめる。夫本人や精霊を同じ画面へ固定しない。
+
+#### wife
+
+場所: 施設 `machine_tera`。判定: 人物の出演根拠あり。出演役: `q173_tera`。
+
+本文の根拠: テラに帰ってくる音を失いたくない気持ちを聞いた。
+
+spirit_wifeでpartyだけがhomeへ戻り、teraはhome、spiritPersonはgraveに残る。
+
+描き分け候補: テラ本人の意思を家で聞く。客としての同意はまだ成立していない。
+
+#### guest_agree
+
+場所: 施設 `machine_tera`。判定: 人物の出演根拠あり。出演役: `q173_tera`、`q173_spirit`。
+
+本文の根拠: 精霊とテラの双方に、夫でなく客として暮らす意思を確かめた。
+
+spirit_guestでpartyとspiritPersonがhomeへ実移動し、teraはhomeにいる。双方の同意がそろった現在場面。
+
+描き分け候補: 夫の代役ではなく客として同席するテラと精霊。
+
+#### part_home
+
+場所: 施設 `machine_tera`。判定: 人物の出演根拠あり。出演役: `q173_tera`。
+
+本文の根拠: テラが自分で戸を閉じる時刻を決める。
+
+spirit_partでpartyだけがhomeへ戻り、spiritPersonはgraveに残る。精霊の別れを結果として伝え、家ではテラ本人だけを表示する。
+
+描き分け候補: 精霊を墓地に残し、家で戸を閉じる時刻を決めるテラ。
+
+#### copy_home
+
+場所: 施設 `machine_tera`。判定: 人物の出演根拠あり。出演役: `q173_tera`、`q173_spirit`。
+
+本文の根拠: 当面は夫の模倣を続ける。
+
+spirit_copyでpartyとspiritPersonがhomeへ実移動し、teraもhomeにいる。模倣継続を夫本人の復活とは扱わない。
+
+描き分け候補: 家で模倣を続ける精霊と、それを受け入れるテラ。
+
+#### copy_later
+
+場所: 施設 `machine_tera`。判定: 人物の出演根拠あり。出演役: `q173_tera`、`q173_spirit`。
+
+本文の根拠: 精霊は家具を動かす相談へ答えられなかった。
+
+copy_homeから所在を変えず後日の相談へ進むため、teraとspiritPersonはともにhomeにいる。
+
+描き分け候補: 家具を動かす変化に答えられない精霊とテラ。模倣の限界を示す。
+
+次の作業: q173のテラと墓守の精霊を精読した。次はteraとspiritPersonの実所在へ表示を接続し、夫本人を追加せず3結末を保持する。
 
 ## 全100件の集計
 
@@ -3815,7 +3914,7 @@ well_sealの戦闘勝利直後もluiは井戸に残る。倒した井戸の主�
 
 ### 機関廟
 
-20件・163場面。cast空149場面、人物14件、character接続1件。
+20件・163場面。cast空141場面、人物16件、character接続4件。
 
 - [q071 止まれない門番](../../data/scenario-editions/e2/q071.json)：7場面、cast空7、人物1。依頼人: 整備士のフウ。未精読。
 - [q072 油の洗礼](../../data/scenario-editions/e2/q072.json)：5場面、cast空5、人物0。依頼人: 機関司祭のイオ。未精読。
@@ -3828,8 +3927,8 @@ well_sealの戦闘勝利直後もluiは井戸に残る。倒した井戸の主�
 - [q079 九十九回の再起動](../../data/scenario-editions/e2/q079.json)：5場面、cast空5、人物0。依頼人: 鐘番のユア。未精読。
 - [q080 鉄胎の継承](../../data/scenario-editions/e2/q080.json)：7場面、cast空7、人物0。依頼人: 修繕組合のセリ。未精読。
 - [q171 足音を持ち帰る](../../data/scenario-editions/e2/q171.json)：15場面、cast空1、人物1。依頼人: 靴職人ダイの妻。精読済み。
-- [q172 名前を返す井戸](../../data/scenario-editions/e2/q172.json)：10場面、cast空10、人物1。依頼人: 織工ルイ。精読済み。
-- [q173 夜だけ帰る兵士](../../data/scenario-editions/e2/q173.json)：8場面、cast空8、人物2。依頼人: 寡婦テラ。未精読。
+- [q172 名前を返す井戸](../../data/scenario-editions/e2/q172.json)：10場面、cast空2、人物3。依頼人: 織工ルイ。精読済み。
+- [q173 夜だけ帰る兵士](../../data/scenario-editions/e2/q173.json)：8場面、cast空8、人物2。依頼人: 寡婦テラ。精読済み。
 - [q174 泣かない葬列](../../data/scenario-editions/e2/q174.json)：6場面、cast空6、人物1。依頼人: 村長。未精読。
 - [q175 狩人を待つ獣](../../data/scenario-editions/e2/q175.json)：10場面、cast空10、人物2。依頼人: 猟師ミロの妹。未精読。
 - [q176 神様の忘れ物](../../data/scenario-editions/e2/q176.json)：8場面、cast空8、人物1。依頼人: 小さな街道神。未精読。
