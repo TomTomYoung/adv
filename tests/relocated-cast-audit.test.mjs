@@ -6,7 +6,7 @@ import {auditRelocatedCast,loadRelocatedCastQuests,relocatedCastFingerprint} fro
 const quests=await loadRelocatedCastQuests();
 test('cast audit distinguishes measured empty casts, reviewed scenes and candidate roles',()=>{
  const report=auditRelocatedCast(quests);
- assert.deepEqual(report.summary,{quests:100,scenes:753,emptyCastScenes:566,personEntities:121,characterLinkedEntities:57,reviewedQuests:42,reviewedScenes:288,noPersonEvidenceScenes:92,personEvidenceScenes:196,candidateRoles:4,connectedRoles:78,unreviewedScenes:465});
+ assert.deepEqual(report.summary,{quests:100,scenes:753,emptyCastScenes:558,personEntities:123,characterLinkedEntities:60,reviewedQuests:43,reviewedScenes:296,noPersonEvidenceScenes:93,personEvidenceScenes:203,candidateRoles:3,connectedRoles:81,unreviewedScenes:457});
  assert.ok(report.regions.every(r=>r.quests===20));
  assert.equal(report.quests.find(q=>q.id==='q071').scenes[0].review,null);
  assert.deepEqual(report.quests.find(q=>q.id==='q032').scenes.filter(s=>s.review.people.length).map(s=>s.id),['cell','workshop']);
@@ -92,15 +92,29 @@ test('cast audit distinguishes measured empty casts, reviewed scenes and candida
   collect_family:['dai','family'],evacuated:['dai','family'],watch_ward_ready:['dai']
  });
  const names=report.quests.find(q=>q.id==='q172');
- assert.deepEqual(Object.fromEntries(Object.entries(names.review.people).map(([id,role])=>[id,role.status])),{
-  q172_lui:'candidate',q172_mother:'candidate',q172_well_master:'candidate'
+ assert.deepEqual(Object.fromEntries(Object.entries(names.review.people).map(([id,role])=>[id,{status:role.status,entity:role.entity}])),{
+  q172_lui:{status:'connected',entity:'lui'},q172_mother:{status:'connected',entity:'motherPerson'},
+  q172_well_master:{status:'connected',entity:'wellMaster'}
  });
  assert.deepEqual(Object.fromEntries(names.scenes.map(s=>[s.id,s.review.people])),{
   entry:[],well:['q172_lui','q172_well_master'],onsite:['q172_lui'],mother_heard:['q172_mother'],
   market_heard:[],restored_confirm:['q172_lui'],restored:['q172_lui','q172_mother'],
   named:['q172_lui'],water:['q172_lui'],well_seal_ready:['q172_lui']
  });
- assert.ok(names.scenes.every(s=>s.cast.length===0),'q172 review does not implement cast yet');
+ assert.deepEqual(Object.fromEntries(names.scenes.map(s=>[s.id,s.cast.map(c=>c.entity)])),{
+  entry:[],well:['lui','wellMaster'],onsite:['lui'],mother_heard:['motherPerson'],market_heard:[],
+  restored_confirm:['lui'],restored:['lui','motherPerson'],named:['lui'],water:['lui'],well_seal_ready:['lui']
+ });
+ const soldier=report.quests.find(q=>q.id==='q173');
+ assert.deepEqual(Object.fromEntries(Object.entries(soldier.review.people).map(([id,role])=>[id,role.status])),{
+  q173_tera:'candidate',q173_spirit:'candidate'
+ });
+ assert.deepEqual(Object.fromEntries(soldier.scenes.map(s=>[s.id,s.review.people])),{
+  entry:[],spirit:['q173_spirit'],onsite:['q173_tera'],wife:['q173_tera'],
+  guest_agree:['q173_tera','q173_spirit'],part_home:['q173_tera'],
+  copy_home:['q173_tera','q173_spirit'],copy_later:['q173_tera','q173_spirit']
+ });
+ assert.ok(soldier.scenes.every(s=>s.cast.length===0),'q173 review does not implement cast yet');
 });
 
 test('a change to reviewed prose or location cannot silently retain the review',()=>{
@@ -136,9 +150,9 @@ test('future character and cast hookups change measured counts without marking u
  const changed=structuredClone(quests),q=changed.find(q=>q.id==='q071'),entity=Object.values(q.story.entities).find(e=>e.kind==='person');
  entity.character='future_owner';Object.values(q.story.scenes)[0].cast=[{entity:'workerPerson'}];
  const report=auditRelocatedCast(changed);
- assert.equal(report.summary.emptyCastScenes,565);
- assert.equal(report.summary.characterLinkedEntities,58);
- assert.equal(report.summary.reviewedScenes,288);
+ assert.equal(report.summary.emptyCastScenes,557);
+ assert.equal(report.summary.characterLinkedEntities,61);
+ assert.equal(report.summary.reviewedScenes,296);
  assert.equal(report.quests.find(q=>q.id==='q071').review,null);
 });
 
