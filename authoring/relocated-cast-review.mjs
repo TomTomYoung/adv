@@ -2864,24 +2864,26 @@ export const RELOCATED_CAST_REVIEW={
   "next": "q167の副隊長と既存refugeesの呼称表示を陣地・高台へ接続した。偵察・戦闘・報告へユウナを置かず、次はq168の双子の所在と出演を監査する。"
 },
   q168:{
-  "sourceSha256": "beef73ac8f457e2c4e911413548e7cda61d6bd29b40c1958384ec37bb8ee1706",
+  "sourceSha256": "59cea045c3de47d26b8796dc6aa62d3da538057e2b56c151500928c4f9d9d9ce",
   "identityNotes": [
     "依頼人は双子の術師ネムとノム。現行本文と物語状態は兄をbrother、弟をyoungerとして区別するが、ネム／ノムのどちらが兄か弟かは対応付けていない。名前を推測で割り当てず、監査と表示は『双子の兄』『双子の弟』で扱う。",
     "entryでは兄弟とも工房にいる。pair経路では魔力灯へ到着後に兄だけ別棟へ移り、roles経路では二人とも魔力灯に残る。弟は魔力灯側に残り、兄の現在地はbrotherAtがlampかotherかで分岐する。",
     "separatedは弟だけ、fetch_brotherとfetch_invoiceは別棟の兄だけが現在の相手。test_bothとinvoiceでは二人が実際に合流済み。adjust・gather・testedは弟が現在地におり、兄はbrotherAtがlampの経路だけ同席する条件付き場面として扱う。",
     "testedの『請求書の相談には二人とも立ち会う』やfetch_invoiceの『弟と合流し』は次の合流・移動を含む文脈で、兄弟を所在状態より早く同じ場所へ置く根拠にはしない。実移動は既存journeyに従う。",
-    "billはitemであり人物表示とは分ける。solo、repaired、3結末、料金の選択、兄の別棟往復、既存の旅程と旧保存を人物表示のために変更しない。双子の個別画像はまだ接続せず、本文にない容貌・衣装も追加しない。"
+    "billはitemであり人物表示とは分ける。solo、repaired、3結末、料金の選択、兄の別棟往復、既存の旅程と旧保存を人物表示のために変更しない。双子は呼称表示だけを接続し、本文にない容貌・衣装や個別画像は追加しない。"
   ],
   "people": {
     "q168_brother": {
       "label": "双子の兄",
-      "status": "candidate",
-      "need": "既存person brotherへ接続する候補。entry・invoice・fetch_brother・test_both・fetch_invoiceでは現在所在に従い、adjust・gather・testedはbrotherAtがlampのときだけ表示する。"
+      "status": "connected",
+      "entity": "brother",
+      "need": "既存person brotherへ呼称表示を接続済み。entry・invoice・fetch_brother・test_both・fetch_invoiceでは現在所在に従い、adjust・gather・testedはbrotherAtがlampのときだけ表示する。"
     },
     "q168_younger": {
       "label": "双子の弟",
-      "status": "candidate",
-      "need": "既存person youngerへ接続する候補。entryと魔力灯側の各場面、invoiceで表示し、兄を迎えに行く別棟のfetch_brother／fetch_invoiceには同行させない。"
+      "status": "connected",
+      "entity": "younger",
+      "need": "既存person youngerへ呼称表示を接続済み。entryと魔力灯側の各場面、invoiceで表示し、兄を迎えに行く別棟のfetch_brother／fetch_invoiceには同行させない。"
     }
   },
   "scenes": {
@@ -2949,7 +2951,74 @@ export const RELOCATED_CAST_REVIEW={
       "visual": "別棟で兄へ修理完了を伝える場面。弟はまだ魔力灯にいるため表示しない。"
     }
   },
-  "next": "q168の双子を精読した。兄弟の名前対応は保留し、次はbrother／youngerの所在条件付き表示を接続してq169を監査する。"
+  "next": "q168のbrother／youngerへ所在条件付きの呼称表示を接続した。兄弟の名前対応は保留し、次はq169のマオ・受取人と手紙の運搬役を監査する。"
+},
+  q169:{
+  "sourceSha256": "f86ffb7dc0cab266627ecd4d5320a781e91190e8fb9398700dc5a3bdcc51263d",
+  "identityNotes": [
+    "依頼人は騎士マオで、既存person mao。entryで指輪を預け、reportとlaterで探索隊の返事を受け取る現在の相手として本文に出る。指輪ringの所持と人物の在席は分ける。",
+    "受取人はマオの旧友で、recipientとfriendshipの現在の話者。現行story.entitiesには受取人本人のpersonがなく、messengerを受取人本人として流用しない。受取人の氏名・性別・容貌・現在の同居相手は本文から追加しない。",
+    "messengerは受取人の手紙をrecipientからpostへ運ぶための既存person保持者。mail本文は『記録室に受取人からの手紙が届いていた』としか書かず、messenger本人の発言・待機・受渡し動作を現在の出演として確定しない。手紙の物理保持者と画面出演を分ける。",
+    "reportでは指輪をまだpartyが保持し、honest／softの選択時にmaoへ返す。lieでは指輪を隠したまま手紙の経路へ進む。laterのadmitで返すまで、人物表示のためにringHeldやringAtを変更しない。",
+    "後日の手紙letterはrecipient→messenger→party→maoと既存の受渡しを行う。受取人本人を記録室へ移動させず、マオをmailへ先回りさせない。4結末、friendship、lied、旧保存と既存旅程を保持する。"
+  ],
+  "people": {
+    "q169_mao": {
+      "label": "騎士マオ",
+      "status": "candidate",
+      "need": "既存person maoへ接続する候補。entry・report・laterで表示し、受取人宅や記録室へ同行させない。"
+    },
+    "q169_recipient": {
+      "label": "旅仲間の受取人",
+      "status": "candidate",
+      "need": "recipient・friendshipの現在の話者として人物定義と専用entityを追加する候補。既存messengerとは別人物として扱う。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "person-evidence",
+      "people": ["q169_mao"],
+      "evidence": "マオは旅の約束の指輪を預けた。",
+      "reason": "依頼人マオ本人が指輪を預ける現在の場面。deliverの出発時にringだけがmaoからpartyへ移り、マオは自宅に残る。",
+      "visual": "マオの家で指輪を預かる場面。受取人や後日の手紙を先取りしない。"
+    },
+    "recipient": {
+      "decision": "person-evidence",
+      "people": ["q169_recipient"],
+      "evidence": "相手は別の暮らしを選んでいた。",
+      "reason": "旅仲間の現在の家で受取人本人が拒否を伝える。messengerは手紙運搬用の別personであり、この話者として同定しない。",
+      "visual": "受取人本人との面会。指輪はpartyが保持したまま、受領済みにはしない。"
+    },
+    "friendship": {
+      "decision": "person-evidence",
+      "people": ["q169_recipient"],
+      "evidence": "本人はその言葉をマオへ届けてよいと答えた。",
+      "reason": "recipientから移動せず、同じ受取人本人へ旅以外の交流を確認する場面。friendship=trueは次の帰路で記録する。",
+      "visual": "同じ受取人から手紙の交流だけは望む返事を聞く。別人物を追加しない。"
+    },
+    "report": {
+      "decision": "person-evidence",
+      "people": ["q169_mao"],
+      "evidence": "マオは、受け取ってくれたかと聞く。",
+      "reason": "探索隊だけが受取人宅からマオの家へ戻り、本人へ結果を報告する。受取人やmessengerは同行しない。",
+      "visual": "マオへ拒否または交流の返事を報告する場面。指輪の返却は選択後まで確定しない。"
+    },
+    "later": {
+      "decision": "person-evidence",
+      "people": ["q169_mao"],
+      "evidence": "マオがあなたを呼んだ。",
+      "reason": "嘘の報告後、手紙をマオへ届けて自宅へ戻った場面。マオ本人が説明を求め、指輪はadmitを選ぶまでpartyが保持する。",
+      "visual": "後日の手紙を受け取ったマオとの再対面。受取人本人やmessengerを自宅へ同行させない。"
+    },
+    "mail": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "後日、記録室に受取人からの手紙が届いていた。",
+      "reason": "手紙の物理保持者messengerはpostへ移動しているが、本文は人物としての発言・待機・手渡しを描かない。記録室の係員やmessengerを固定出演へ追加しない。",
+      "visual": "記録室に届いた手紙を受け取る場面。運搬役の人物像は固定せず、手紙の所在だけを示す。"
+    }
+  },
+  "next": "q169のマオと受取人を精読した。messengerは手紙運搬の保持者として分離し、次はmaoへの呼称表示と受取人用entityを接続してq170を監査する。"
 }
  }
 };
