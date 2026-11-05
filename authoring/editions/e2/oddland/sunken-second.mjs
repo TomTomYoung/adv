@@ -64,6 +64,15 @@ export function sunkenSecondSource(q,{cast=true}={}){
   add('invite','entry','客と宿へ戻り、レンを送別会へ招いた。準備した送辞は会まで伏せておく。',[opt('escort','レンと客と集会所へ向かう','secret_party',{companions:['renGuest','guests']})]);end('secret_party','hall','レンと客が集会所へ揃った。一人ずつ自分の言葉で送辞を伝える。','secret');
   route('entry','explain','rehearse',{companions:['renGuest','guests']});add('rehearse','prepare','レンにも事情を説明し、客の言葉を最後まで聞く練習をした。',[opt('party','皆で集会所へ向かう','explained',{companions:['renGuest','guests']})]);end('explained','hall','練習した皆が集会所へ来た。送辞を聞き、最後に短い歌を頼む。','explain');
   choice('entry','bring').companions=['renGuest','guests'];
+  if(cast){
+   x.entities.guests.character='q164_guests';
+   x.entities.renGuest.character='q164_ren';
+   for(const id of ['entry','prepare'])node(id).cast=[{entity:'guests',display:{x:50}}];
+   for(const id of ['together','invite','secret_party','rehearse','explained'])node(id).cast=[
+    {entity:'guests',display:{x:26}},
+    {entity:'renGuest',display:{x:66,scale:.86}}
+   ];
+  }
  }
  if(q.number===165){
   town('entry','リナとイルのいる宿','oddland_village_inn');town('private','援助を相談する別室','royal_witness');town('public','港の公開商談席','royal_harbor');town('supply','援助の補給を受け取る店','oddland_village_supply');entity('lina','entry','person');entity('ilGuest','entry','person');entity('aid','supply');node('private').place='private';node('public').place='public';

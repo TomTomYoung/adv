@@ -66,8 +66,8 @@ export function plainMarkdown(source){
 // Imported source models and authored world documents retain their original
 // formatting; building inventories must not rewrite unrelated source prose.
 for(const file of await currentMarkdown(folder)){
- // The cast audit is owned and checked byte-for-byte by its own generator.
- if(file.startsWith('world/')||['scenarios/PROSE_MODEL_V1.md','scenarios/PROSE_CHECKLIST.md','scenarios/RELOCATED_CAST_AUDIT.md'].includes(file))continue;
+ // Dedicated audit generators own these reports and check them byte-for-byte.
+ if(file.startsWith('world/')||['scenarios/PROSE_MODEL_V1.md','scenarios/PROSE_CHECKLIST.md','scenarios/RELOCATED_CAST_AUDIT.md','dungeons/REGIONAL_RELOCATION_CHECK.md'].includes(file))continue;
  const p=path.join(folder,file);await fs.writeFile(p,plainMarkdown(await fs.readFile(p,'utf8')));
 }
 console.log(`DOCS: ${snapshot.counts.quests} quests, ${snapshot.questOutcomes} endings, ${snapshot.counts.dungeons} dungeons; authored prose preserved`);

@@ -33,8 +33,10 @@ try{
   for(const layout of ['scene','classic'])for(const width of [1440,390]){
     await page.setViewportSize({width,height:width===390?844:1000});
     for(const [index,f] of fixtures.entries()){
-      const extension=f.imageExtension??'webp',textOnlyCast=f.textOnlyCast??[];
+      const extension=f.imageExtension??'webp',textOnlyCast=f.textOnlyCast??[],portraitOnlyCast=f.portraitOnlyCast??[];
+      const expectedImage=id=>f.imageExpectations?.[id]??{src:`assets/images/characters/${folder}/${id}.${extension}`,size:[1024,1536]};
       assert.ok(textOnlyCast.every(id=>f.cast.includes(id)),'text-only roles must be in the scene cast');
+      assert.ok(portraitOnlyCast.every(id=>f.cast.includes(id)&&!textOnlyCast.includes(id)),'portrait-only roles must have a scene image');
       await page.evaluate(({index,layout})=>h.start(index,layout),{index,layout});
       const before=await page.evaluate(()=>h.g.save());await page.evaluate(()=>h.resume());assert.equal(await page.evaluate(()=>h.g.save()),before);
       if(f.absentStoryScene){assert.deepEqual(f.cast,[]);assert.equal(await page.evaluate(()=>h.view.model.dialog.scene??null),null);}
@@ -42,7 +44,7 @@ try{
       assert.equal(await page.locator('[data-character]').count(),f.cast.length,'only the scene cast is displayed');
       if(['oddland','chapel','sunken'].includes(group)&&layout==='classic'&&await page.locator('.town-scene').count()){
         const shown=await page.locator('.town-character').evaluateAll(images=>images.map(i=>i.getAttribute('src')).sort());
-        assert.deepEqual(shown,f.cast.filter(id=>!textOnlyCast.includes(id)).map(id=>`assets/images/characters/${folder}/${id}.${extension}`).sort(),'town backdrop must not reveal an offstage character');
+        assert.deepEqual(shown,f.cast.filter(id=>!textOnlyCast.includes(id)&&!portraitOnlyCast.includes(id)).map(id=>expectedImage(id).src).sort(),'town backdrop must not reveal an offstage character');
       }
       const images=[];
       for(const id of f.cast){
@@ -53,7 +55,8 @@ try{
         }
         assert.equal(await img.count(),1);
         const info=await img.evaluate(async i=>{await i.decode();const c=document.createElement('canvas');c.width=i.naturalWidth;c.height=i.naturalHeight;const ctx=c.getContext('2d');ctx.drawImage(i,0,0);return {src:i.getAttribute('src'),width:i.naturalWidth,height:i.naturalHeight,cornerAlpha:ctx.getImageData(0,0,1,1).data[3],cornerAlphas:[[0,0],[c.width-1,0],[0,c.height-1],[c.width-1,c.height-1]].map(([x,y])=>ctx.getImageData(x,y,1,1).data[3]),bodyAlpha:ctx.getImageData(512,700,1,1).data[3]};});
-        assert.equal(info.src,`assets/images/characters/${folder}/${id}.${extension}`);assert.deepEqual([info.width,info.height],[1024,1536]);assert.ok(info.cornerAlphas.every(a=>a<=1),'all corners must be transparent to within one alpha level');assert.ok(info.bodyAlpha>240);
+        const expected=expectedImage(id);
+        assert.equal(info.src,expected.src);assert.deepEqual([info.width,info.height],expected.size);assert.ok(info.cornerAlphas.every(a=>a<=1),'all corners must be transparent to within one alpha level');assert.ok(info.bodyAlpha>240);
         assert.ok((await figure.textContent()).includes(await page.evaluate(id=>h.g.data.characters[id].name,id)));images.push({id,...info});
       }
       await page.evaluate(async()=>{await document.fonts.ready;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));});
@@ -119,9 +122,31 @@ try{
       for(const id of textOnlyCast){
         const label=page.locator(`[data-character="${id}"] figcaption`);
         assert.ok(await label.isVisible());
-        const info=await label.evaluate(e=>{const r=e.getBoundingClientRect(),s=getComputedStyle(e),hud=document.querySelector('.scene-hud')?.getBoundingClientRect(),dock=document.querySelector('.scene-dock')?.getBoundingClientRect();return {text:e.textContent,left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height,clip:s.clipPath,hudBottom:hud?.bottom,dockTop:dock?.top,viewport:innerWidth};});
+        const info=await label.evaluate(e=>{
+          const r=e.getBoundingClientRect(),s=getComputedStyle(e),hud=document.querySelector('.scene-hud')?.getBoundingClientRect(),dock=document.querySelector('.scene-dock')?.getBoundingClientRect();
+          const figure=e.closest('.scene-actor'),coveredBy=[];
+          if(figure){
+            const z=Number(getComputedStyle(figure).zIndex);
+            for(const other of figure.parentElement.children){
+              const img=other.querySelector('img'),style=getComputedStyle(other),otherZ=Number(style.zIndex);
+              const inFront=otherZ>z||(otherZ===z&&Boolean(figure.compareDocumentPosition(other)&Node.DOCUMENT_POSITION_FOLLOWING));
+              if(other===figure||!img||!inFront||Number(style.opacity)===0)continue;
+              const box=img.getBoundingClientRect(),scale=Math.min(box.width/img.naturalWidth,box.height/img.naturalHeight),position=getComputedStyle(img).objectPosition.split(' ').map(v=>parseFloat(v)/100);
+              const x=box.x+(box.width-img.naturalWidth*scale)*position[0],y=box.y+(box.height-img.naturalHeight*scale)*position[1];
+              const canvas=document.createElement('canvas');canvas.width=img.naturalWidth;canvas.height=img.naturalHeight;const ctx=canvas.getContext('2d');ctx.drawImage(img,0,0);
+              let covered=false;
+              for(const u of [.1,.5,.9])for(const v of [.1,.5,.9]){
+                const px=(r.left+r.width*u-x)/scale,py=(r.top+r.height*v-y)/scale;
+                if(px>=0&&py>=0&&px<img.naturalWidth&&py<img.naturalHeight&&ctx.getImageData(Math.floor(px),Math.floor(py),1,1).data[3]*Number(style.opacity)>64)covered=true;
+              }
+              if(covered)coveredBy.push(other.dataset.character);
+            }
+          }
+          return {text:e.textContent,left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height,clip:s.clipPath,hudBottom:hud?.bottom,dockTop:dock?.top,viewport:innerWidth,coveredBy};
+        });
         assert.ok(info.width>0&&info.height>0&&info.left>=0&&info.right<=info.viewport,'group label must fit the viewport');
         if(layout==='scene')assert.ok(info.clip==='none'&&info.top>=info.hudBottom&&info.bottom<=info.dockTop,'group label must remain between HUD and dialogue');
+        assert.deepEqual(info.coveredBy,[],`group label must not be covered by portraits: ${f.quest}/${f.scene}/${id}/${layout}/${width}`);
         labels.push({id,...info});
       }
       for(let i=0;i<labels.length;i++)for(let j=i+1;j<labels.length;j++){

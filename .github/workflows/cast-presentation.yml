@@ -82,6 +82,10 @@ on:
       - 'data/scenario-editions/e2/q163.json'
       - 'tools/locksmith-art-fixtures.mjs'
       - 'tests/fixtures/e2-q163-before-cast.json'
+      - 'data/scenario-editions/e2/q164.json'
+      - 'tools/farewell-art-fixtures.mjs'
+      - 'tests/fixtures/e2-q164-before-cast.json'
+      - 'assets/images/portraits/ren.webp'
       - 'tools/browser-sunken-art-smoke.mjs'
       - 'tests/fixtures/e2-q061-before-cast.json'
       - 'tests/fixtures/e2-q062-before-cast.json'
@@ -112,7 +116,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Install Chromium for q162
+      - name: Install Chromium for q162 to q164
         run: |
           npm install --no-save --package-lock=false playwright@1.58.2
           npx playwright install --with-deps chromium --only-shell
@@ -134,6 +138,16 @@ jobs:
         with:
           name: q163-locksmith-checkpoints
           path: /tmp/adv-locksmith-art-browser
+          if-no-files-found: warn
+      - name: Verify q164 guests and Ren across current and older saves
+        env:
+          ADV_BROWSER_OUTPUT: /tmp/adv-farewell-art-browser
+        run: node tools/browser-sunken-art-smoke.mjs --farewell-only
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: q164-farewell-checkpoints
+          path: /tmp/adv-farewell-art-browser
           if-no-files-found: warn
   cast-browser:
     # Match the pinned Playwright release; ubuntu-latest may move ahead of its supported OSes.

@@ -13,9 +13,10 @@ function portrait(c,cards){
   img.style.transform=c.display?.flip?'scaleX(-1)':'';return img;
 }
 function speaking(entry,c,scene,index){
-  const active=c.id===scene.speakerId,cards=scene.mode==='cards';
-  entry.figure.className=(cards?'story-person':'scene-actor')+(!c.portrait&&!c.sprite?' name-only':'')+(c.remote?' remote':'')+(active?' speaking':'');
-  entry.figure.style.zIndex=String((c.display?.layer??index)+(active?100:0));
+  const active=c.id===scene.speakerId,cards=scene.mode==='cards',nameOnly=!c.portrait&&!c.sprite;
+  entry.figure.className=(cards?'story-person':'scene-actor')+(nameOnly?' name-only':'')+(c.remote?' remote':'')+(active?' speaking':'');
+  // Portrait layers are 0..99, plus 100 for the speaker. Keep stage labels readable above them.
+  entry.figure.style.zIndex=String((c.display?.layer??index)+(active?100:0)+(!cards&&nameOnly?200:0));
   entry.caption.textContent=c.name+(c.remote?'（声）':'')+(active?'・発話中':'');
 }
 export class SceneCastRenderer{

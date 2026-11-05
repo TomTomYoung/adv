@@ -53,6 +53,18 @@ export const relocatedCharacters=Object.fromEntries([
  ['q035_patient','顔を隠す患者','配膳口の患者側で顔を隠したまま礼を言い、修理人の入室と見学者への公開を区別する匿名の患者。','2026-10-29の美術設定。顔全体を不透明な布で覆う姿を保ち、性別・病名・氏名・具体的な病状を追加しない。服装と布の色は美術上の選択。施療人ネイとは同定しない。皿・病室・修理人・見学者を人物画へ固定しない。']
 ].map(([id,name,detail,provenance])=>[id,{id,name,role:'礼拝堂の現地の相手',detail,portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,
  provenance:provenance??'2026-10-29の美術設定。固有名・他人物との同一性は追加しない。具体的な外見・年齢感・服装は今回の美術設定。牢・格子・聖像・宝玉・石を人物画へ固定しない。'}]));
+// The group has no specified headcount or spokesperson. Ren is the existing actor.
+relocatedCharacters.q164_guests={
+ id:'q164_guests',name:'帰り火亭の客',role:'レンへの送辞を準備する客',
+ detail:'自分たちの言葉で送辞を伝えたいと相談する集団。秘密の準備と宿への往復では客だけが同行する。',
+ provenance:'2026-11-05。既存group guestsの呼称を表示する。人数・氏名・代表者・個人画は追加しない。'
+};
+relocatedCharacters.q164_ren={
+ id:'q164_ren',name:'楽師レン',role:'送別会へ招かれる楽師',
+ detail:'客の送辞を聞く既存の仲間レン本人。物語上の同行と出撃隊への参加を別に扱う。',
+ portrait:'portrait_ren',
+ provenance:'2026-11-05。既存actor renの上半身の肖像をScene舞台とClassic人物カードへ再利用する。全身画は新設しない。秘密の相談・準備中は表示せず、招待後・説明・同伴の場面に表示する。'
+};
 relocatedCharacters.q070_port_people={
  id:'q070_port_people',name:'港の人',role:'沈没城の浮上前に避難する港の人たち',
  detail:'港で浮上作業を知らされ、隊と高台へ移る。到着後は高台に留まり、隊の制御台への帰路には同行しない。',
