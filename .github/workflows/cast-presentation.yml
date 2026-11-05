@@ -76,6 +76,9 @@ on:
       - 'data/scenario-editions/e2/q161.json'
       - 'tools/treatment-art-fixtures.mjs'
       - 'tests/fixtures/e2-q161-before-cast.json'
+      - 'data/scenario-editions/e2/q162.json'
+      - 'tools/shield-art-fixtures.mjs'
+      - 'tests/fixtures/e2-q162-before-cast.json'
       - 'tools/browser-sunken-art-smoke.mjs'
       - 'tests/fixtures/e2-q061-before-cast.json'
       - 'tests/fixtures/e2-q062-before-cast.json'
@@ -98,6 +101,27 @@ on:
 permissions:
   contents: read
 jobs:
+  shield-browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Chromium for q162
+        run: |
+          npm install --no-save --package-lock=false playwright@1.58.2
+          npx playwright install --with-deps chromium --only-shell
+          test -n "$(fc-list :lang=ja)"
+      - name: Verify q162 saves, groups and portraits
+        run: node tools/browser-sunken-art-smoke.mjs --shield-only
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: q162-shield-checkpoints
+          path: /tmp/adv-sunken-art-browser
+          if-no-files-found: warn
   cast-browser:
     # Match the pinned Playwright release; ubuntu-latest may move ahead of its supported OSes.
     runs-on: ubuntu-24.04

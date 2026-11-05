@@ -9,6 +9,24 @@ const prose=text=>typeof text==='string'?text:Array.isArray(text)?text.map(prose
 export function compileSunkenSecondQuest(first){
  const options={prefix:'royal',eventPrefix:'royal',settlement:'oddland_village',settlementName:'旧王領の村',board:'royal_board',boardName:'旧王領の村の依頼所',source:'authoring/editions/e2/oddland/sunken-second.mjs',stage:'sunken-second-ten',scope:'沈没城後半10件の村・橋・試験場・砦・湖の現場接続。受注済みの改訂2は旧経路を保持。',preserveAcceptedRoute:true,battle:'guard_7'};
  const quest=compileRelocatedQuest(first,sunkenSecondSource(first),options);
+ if(first.number===162){
+  // The rope preparation scene is inserted by the compiler. Assign the cast
+  // after compilation so it uses the same survivor as the bridge and bank.
+  const {entities,scenes}=quest.story;
+  for(const key of ['eld','niece','survivors','helpers']){
+   entities[key].character='q162_'+key;
+  }
+  const portrait=entity=>({entity,display:{x:50,scale:.86}});
+  for(const scene of ['entry','returned'])scenes[scene].cast=[portrait('eld')];
+  for(const scene of ['ceremony','workshop'])scenes[scene].cast=[portrait('niece')];
+  for(const scene of ['bridge','tell','bridge_rope_ready'])scenes[scene].cast=[{entity:'survivors'}];
+  scenes.help.cast=[{entity:'helpers'}];
+  scenes.help_bridge.cast=[{entity:'survivors',display:{x:33}},{entity:'helpers',display:{x:67}}];
+  scenes.rescued.cast=[
+   {entity:'survivors',display:{x:33}},
+   {entity:'helpers',when:eq(ref('stories.q162.values.helpersAt'),'bank'),display:{x:67}}
+  ];
+ }
  if(first.number===161){
   const previous=compileRelocatedQuest(first,sunkenSecondSource(first,{cast:false}),options).story;
   // Ine stays at the clinic and cannot acquire the patient's recording device.
