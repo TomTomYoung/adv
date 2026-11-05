@@ -27,6 +27,10 @@ export function compileSunkenSecondQuest(first){
    {entity:'helpers',when:eq(ref('stories.q162.values.helpersAt'),'bank'),display:{x:67}}
   ];
  }
+ if(first.number===166){
+  // The battle-ready scene is inserted by the compiler after sunkenSecondSource.
+  quest.story.scenes.trial_battle_ready.cast=[{entity:'ruu',display:{x:50}}];
+ }
  if(first.number===161){
   const previous=compileRelocatedQuest(first,sunkenSecondSource(first,{cast:false}),options).story;
   // Ine stays at the clinic and cannot acquire the patient's recording device.
