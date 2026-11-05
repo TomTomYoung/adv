@@ -55,6 +55,26 @@ export const relocatedCharacters=Object.fromEntries([
 ].map(([id,name,detail,provenance])=>[id,{id,name,role:'礼拝堂の現地の相手',detail,portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,
  provenance:provenance??'2026-10-29の美術設定。固有名・他人物との同一性は追加しない。具体的な外見・年齢感・服装は今回の美術設定。牢・格子・聖像・宝玉・石を人物画へ固定しない。'}]));
 // The group has no specified headcount or spokesperson. Ren is the existing actor.
+relocatedCharacters.q166_ruu={
+ id:'q166_ruu',name:'弟子戦士ルウ',role:'石喰い獣の試験を受ける弟子戦士',
+ detail:'受付から試験場、勝利後、報告・面談・延期受付まで既存の所在と同行に従う。戦闘パーティーや最後の一撃の担当へは変更しない。',
+ provenance:'2026-11-05。既存person ruuの呼称表示。氏名以外の年齢・容貌・衣装は本文へ追加せず、専用画はこの段階では接続しない。'
+};
+relocatedCharacters.q166_master={
+ id:'q166_master',name:'ルウの師',role:'最後の一撃を譲るよう助言する師',
+ detail:'初回受付で現在の発言が確認できる場面だけに表示する。試験場・報告・面談・延期受付への同行は追加しない。',
+ provenance:'2026-11-05。本文で氏名・性別・年齢・容貌は未指定。呼称表示だけを接続し、専用画はこの段階では接続しない。'
+};
+relocatedCharacters.q166_examiner={
+ id:'q166_examiner',name:'試験官',role:'共同作業と救助、撤退判断を評価する試験官',
+ detail:'勝利後の報告と撤退・敗北後の面談に限って表示する。初回相談や延期受付への同席は補わない。',
+ provenance:'2026-11-05。本文で氏名・性別・年齢・容貌は未指定。呼称表示だけを接続し、規則照会の有無と人物の在否を混同しない。'
+};
+relocatedCharacters.q166_porter={
+ id:'q166_porter',name:'荷担ぎ',role:'試験場でルウが救助に回る相手',
+ detail:'trialで本文に救助対象として出る呼称だけを表示する。勝利後・報告先への居残りや同行は追加しない。',
+ provenance:'2026-11-05。氏名・人数・容貌・負傷内容を固定しない呼称表示。個人画は追加しない。'
+};
 relocatedCharacters.q165_lina={
  id:'q165_lina',name:'商人リナ',role:'弟への援助を相談する商人',
  detail:'既存の同行と所在に従い、宿・別室・公開商談席・補給店で援助を相談する。',
