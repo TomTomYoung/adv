@@ -30,6 +30,11 @@ export function compileSunkenSecondQuest(first){
  if(first.number===166){
   // The battle-ready scene is inserted by the compiler after sunkenSecondSource.
   quest.story.scenes.trial_battle_ready.cast=[{entity:'ruu',display:{x:50}}];
+  // These roles are scene-local. Do not widen their holder domains merely
+  // because connectWorld knows every place used by the quest.
+  quest.story.registry.masterAt.values=['entry'];
+  quest.story.registry.examinerAt.values=['entry'];
+  quest.story.registry.porterAt.values=['trial'];
  }
  if(first.number===161){
   const previous=compileRelocatedQuest(first,sunkenSecondSource(first,{cast:false}),options).story;
