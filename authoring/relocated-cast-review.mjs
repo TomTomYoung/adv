@@ -3023,7 +3023,7 @@ export const RELOCATED_CAST_REVIEW={
   "next": "q169のmaoとrecipientPersonへ呼称表示を接続した。messengerは手紙運搬の保持者として分離し、次はq170のセフの同行を監査する。"
 },
   q170:{
-  "sourceSha256": "4185b8fed75711d7bbec7cb59bf39a309ebae420a6ae8c9282a1d7f0f0a29e60",
+  "sourceSha256": "17f02fb6ed048e7e3405cd8fc3a438de1b75f7198737b684864c95ffec4b0803",
   "identityNotes": [
     "依頼人は旅仲間セフで、既存person sef。港から湖岸、島の野営地、帰路、補給店、各別れの港まで全経路で本文またはjourneyのcompanionsにセフが明示される。",
     "campとroleは同じ島の野営地で、セフ本人が帰郷・休暇・一便だけの役割を話す。本人の決めた店継承を人物表示のために撤回させず、roleは無期限残留ではない。",
@@ -3034,8 +3034,9 @@ export const RELOCATED_CAST_REVIEW={
   "people": {
     "q170_sef": {
       "label": "旅仲間セフ",
-      "status": "candidate",
-      "need": "既存person sefへ接続する候補。全11場面で既存の実同行・所在に従って表示し、戦闘隊員や将来の店主状態を追加しない。"
+      "status": "connected",
+      "entity": "sef",
+      "need": "既存person sefへ呼称表示を接続済み。全11場面で既存の実同行・所在に従って表示し、戦闘隊員や将来の店主状態を追加しない。"
     }
   },
   "scenes": {
@@ -3117,7 +3118,143 @@ export const RELOCATED_CAST_REVIEW={
       "visual": "補給店で一便の荷を受け取るセフ。店員など未指定の人物は追加しない。"
     }
   },
-  "next": "q170のセフを全11場面で精読した。次は既存sefへ呼称表示を接続し、湖岸・島・補給店・3結末と旧保存を検証する。"
+  "next": "q170の既存sefへ全11場面の呼称表示を接続した。湖岸・島・補給店・3結末を保持し、次はq171のダイ・妻・家族を監査する。"
+},
+  q171:{
+  "sourceSha256": "bb68caf5d183da700a6c2c4b123011b956ec878f636707f8663bd1e4152d626a",
+  "identityNotes": [
+    "依頼人は靴職人ダイの妻。現行storyには夫のdaiと家族group familyがあり、妻個人のpersonはない。妻をfamilyとは別の候補役として精読するが、避難場面で妻と家族を二重表示しない。familyは妻を含む世帯集団として扱う。",
+    "ダイはhomeを初期位置とし、onsite_begin以降は既存journeyのcompanionsとして境界・境界標・靴店・試験路・封じの輪・機関廟入口・家・避難先を移動する。人物表示のために同行やtimeを追加しない。",
+    "entryの相談者は依頼人である妻。onsite・loop_home・return_home・defendedでは夫婦関係または妻の現在動作が本文・元原稿から確認できる。妻の氏名・容貌・職業は追加しない。",
+    "defense・collect_family・evacuatedは家族の避難を現在の行為として扱うため、既存group familyを候補とする。wife候補とfamilyを同じ場面へ重ねず、家族集団の中に妻も含むものとして扱う。",
+    "onsiteの『境界守が警告した』は元原稿の主要人物・同行者ではなく、三回で追跡者が道を覚える規則の説明元である。境界守を固定出演へ追加しない。靴店の店員、維持当番、下宿屋の人物も本文から追加しない。",
+    "追跡者は怪異・戦闘対象で、会話用の固定人物画とは分ける。time、rule、ward、sealed、detached、defended、evacuated、4結末と20Gの支払いを人物表示のために変更しない。"
+  ],
+  "people": {
+    "q171_dai": {
+      "label": "靴職人ダイ",
+      "status": "candidate",
+      "need": "既存person daiへ接続する候補。entry以外の14場面で既存の所在・実同行に従って表示する。"
+    },
+    "q171_wife": {
+      "label": "ダイの妻",
+      "status": "candidate",
+      "need": "依頼人と戸口の妻を同一人物として扱う候補。entry・onsite・loop_home・return_home・defendedで表示し、避難時はfamily集団と重複させない。"
+    },
+    "q171_family": {
+      "label": "ダイの家族",
+      "status": "candidate",
+      "need": "既存group familyへ接続する候補。defense・collect_family・evacuatedで妻を含む家族集団として表示する。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "person-evidence",
+      "people": ["q171_wife"],
+      "evidence": "ダイの帰宅路に続く足音の相談を受けた。",
+      "reason": "依頼人欄が靴職人ダイの妻で、現場受付でその相談を受ける。ダイ本人はhomeにいて、次に家の外で訪ねる。",
+      "visual": "機関廟の作業口で相談する妻。ダイや追跡者を受付へ先回りさせない。"
+    },
+    "watch": {
+      "decision": "person-evidence",
+      "people": ["q171_dai"],
+      "evidence": "帰宅路を教えないよう家の外に留まる。",
+      "reason": "onsite_beginでpartyとdaiがboundaryへ実移動した後の調査拠点。妻とfamilyはhomeに残る。",
+      "visual": "家から離れた境界でダイと調査する。追跡者はtimeが3に達した条件で現れる戦闘対象として分ける。"
+    },
+    "onsite": {
+      "decision": "person-evidence",
+      "people": ["q171_dai","q171_wife"],
+      "evidence": "職人が眠ると、足音だけが昼間の道を再現した。",
+      "reason": "entry_visitでpartyだけがhomeへ到着し、daiとfamilyは初期位置homeにいる。元原稿では妻が家へ入れない理由を抱え、夫婦の対立を家の外で確認する場面。境界守の警告は説明元で、現在同席者として追加しない。",
+      "visual": "戸口の外でダイと妻、濡れた足跡を確認する。境界守は表示しない。"
+    },
+    "rule_done": {
+      "decision": "person-evidence",
+      "people": ["q171_dai"],
+      "evidence": "境界標で、閉じた輪を歩かせる規則を確認した。",
+      "reason": "watch_ruleでpartyとdaiがrule_placeへ実移動する。規則の確認者として別の境界守を固定出演へ追加しない。",
+      "visual": "境界標でダイと規則を確認する。"
+    },
+    "ward_done": {
+      "decision": "person-evidence",
+      "people": ["q171_dai"],
+      "evidence": "輪を封じる護符を受け取った。",
+      "reason": "watch_ward_ready_continueでpartyとdaiが靴店へ実到着し、wardPaperを受け取る。店員は名指しされていない。",
+      "visual": "靴店でダイと護符を受け取る。20G支払い済みと人物表示を分ける。"
+    },
+    "wait_done": {
+      "decision": "person-evidence",
+      "people": ["q171_dai"],
+      "evidence": "帰宅路を避けて一巡歩き、足音の追従を観察した。",
+      "reason": "watch_waitでpartyとdaiがtest_placeへ実移動する。妻とfamilyはhomeに残る。",
+      "visual": "歩行試験路でダイと追跡を観察する。"
+    },
+    "ring": {
+      "decision": "person-evidence",
+      "people": ["q171_dai"],
+      "evidence": "規則どおりの輪へ足音を導き、護符で封じた。",
+      "reason": "watch_loopでpartyとdaiがringへ実移動する。維持当番は本文で特定人物として示されない。",
+      "visual": "封じの輪でダイと足音を誘導する。追跡者の人型を固定しない。"
+    },
+    "loop_home": {
+      "decision": "person-evidence",
+      "people": ["q171_dai","q171_wife"],
+      "evidence": "夫婦の話は別にやり直す。",
+      "reason": "ring_homeでpartyとdaiがhomeへ実帰着し、妻を含むfamilyはhomeに残っている。本文が夫婦を明示するため妻個人を候補にする。",
+      "visual": "封印後の戸口でダイと妻。怪異解決と夫婦の話合いを別に扱う。"
+    },
+    "returned": {
+      "decision": "person-evidence",
+      "people": ["q171_dai"],
+      "evidence": "機関廟へ続く道を歩き、足音を切り離した。",
+      "reason": "watch_returnでpartyとdaiがreturn_pathへ実移動する。妻とfamilyはhomeに残る。",
+      "visual": "機関廟入口でダイと足音を切り離す。"
+    },
+    "return_home": {
+      "decision": "person-evidence",
+      "people": ["q171_dai","q171_wife"],
+      "evidence": "一人分の音を聞いた妻が、戸を開けた。",
+      "reason": "returned_homeでpartyとdaiがhomeへ実帰着する。妻の現在動作が明示され、夫婦が戸口で対面する。",
+      "visual": "一人分の足音を確認して妻が戸を開ける。"
+    },
+    "defense": {
+      "decision": "person-evidence",
+      "people": ["q171_dai","q171_family"],
+      "evidence": "家族の避難路を残して迎える。",
+      "reason": "watch_fightでpartyとdaiがhomeへ戻り、familyはhomeにいる。妻をfamilyと重複表示せず、家族集団として扱う。",
+      "visual": "家の外でダイと家族を守る場面。追跡者は戦闘対象として別に扱う。"
+    },
+    "defended": {
+      "decision": "person-evidence",
+      "people": ["q171_dai","q171_wife"],
+      "evidence": "ダイが妻へ戸口の外で言い直した。",
+      "reason": "defenseの戦闘勝利後も所在はhome。本文がダイと妻の現在のやり取りを明示する。",
+      "visual": "防衛後、戸口の外で妻へ言い直すダイ。"
+    },
+    "collect_family": {
+      "decision": "person-evidence",
+      "people": ["q171_dai","q171_family"],
+      "evidence": "家族に脅威と退避先を伝え、必要な荷だけを持つ。",
+      "reason": "watch_leaveでpartyとdaiがhomeへ戻り、familyへ避難を伝える。妻個人を別表示せず家族集団に含める。",
+      "visual": "戸口でダイと家族が避難準備をする。"
+    },
+    "evacuated": {
+      "decision": "person-evidence",
+      "people": ["q171_dai","q171_family"],
+      "evidence": "家族の到着を確認した。",
+      "reason": "defense_evacuateまたはcollect_family_escortでparty・dai・familyがrefugeへ実到着する。",
+      "visual": "下宿屋へ到着したダイと家族。下宿屋の人物は追加しない。"
+    },
+    "watch_ward_ready": {
+      "decision": "person-evidence",
+      "people": ["q171_dai"],
+      "evidence": "必要な道具を使って準備を整えた。",
+      "reason": "watch_wardは所在を変えず、partyとdaiはboundaryに残る。次のcontinueで二人が靴店へ向かう。",
+      "visual": "境界でダイと護符受取の準備をする。"
+    }
+  },
+  "next": "q171のダイ・妻・家族を精読した。境界守は固定出演にせず、次はdaiの実同行、妻の戸口場面、familyの避難場面を重複なく接続する。"
 }
  }
 };
