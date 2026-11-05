@@ -13,6 +13,9 @@ export function machineSecondSource(q){
   // The third investigation exposes the threat. Travelling alone does not tick time.
   const fight=choice('watch','fight');delete fight.combat;route('watch','fight','defense',{companions:['dai']});add('defense','home','姿を現した追跡者が家へ迫る。家族の避難路を残して迎える。',[opt('fight','追跡者と戦い、家を守る','defended',{combat:'story_171',recordBattleResult:true,when:and(not(result('escape')),not(result('lose')))}),opt('evacuate','家族と避難する','evacuated',{companions:['dai','family']})]);end('defended','home','追跡者を退け、ダイが妻へ戸口の外で言い直した。','fight',[set('defended')]);
   route('watch','leave','collect_family',{companions:['dai']});add('collect_family','home','家族に脅威と退避先を伝え、必要な荷だけを持つ。',[opt('escort','家族を下宿屋へ案内する','evacuated',{companions:['dai','family']})]);end('evacuated','refuge','家族の到着を確認した。家への道が知られており、対処前には帰れないと報告する。','evacuate',[set('evacuated')]);
+  x.entities.dai.character='q171_dai';x.entities.family.character='q171_family';
+  for(const id of ['watch','onsite','rule_done','ward_done','wait_done','ring','loop_home','returned','return_home','defended'])node(id).cast=[{entity:'dai',display:{x:50}}];
+  for(const id of ['defense','collect_family','evacuated'])node(id).cast=[{entity:'dai',display:{x:31}},{entity:'family',display:{x:69}}];
  }
  if(q.number===172){
   town('workshop','ルイ本人の刺繍工房','machine_lui');town('mother','母から昔の名を聞く家','machine_mother');town('market','作品の名を確かめる市','library_market');field('well_place','名前を取った井戸','cemetery',7,3);town('water','代わりの水源を手配する窓口','machine_registry');entity('lui','workshop','person');
