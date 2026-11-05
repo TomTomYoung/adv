@@ -1,0 +1,2500 @@
+{
+  "schemaVersion": 1,
+  "id": "q162",
+  "number": 162,
+  "title": "騎士の盾を借りる",
+  "client": "騎士エルド",
+  "brief": "姪の成人式へ家の盾を届けてください。",
+  "region": 7,
+  "type": "scene_graph",
+  "recommendedLevel": 7,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 旧王領の村の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q162_scene",
+      "title": "騎士の盾を借りる：騎士エルド",
+      "points": [
+        {
+          "map": "region_7_f1",
+          "x": 4,
+          "y": 1,
+          "dungeon": "region_7"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q162.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q162.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q162.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q162"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_7"
+    },
+    {
+      "id": "q162_royal_bridge",
+      "title": "事故の起きた橋",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "bridge",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q162.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q162.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q162"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q162.royal.visit",
+      "points": [
+        {
+          "dungeon": "royal_sites",
+          "map": "e2_royal_bridge",
+          "x": 5,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "id": "q162_royal_bank",
+      "title": "救助後の橋の足場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "bank",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q162.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q162.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q162"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q162.royal.visit",
+      "points": [
+        {
+          "dungeon": "royal_sites",
+          "map": "e2_royal_bridge",
+          "x": 11,
+          "y": 3
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_7_f1",
+      "x": 4,
+      "y": 1,
+      "object": "q162_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "ceremony": {
+      "label": "盾と進路",
+      "text": "姪は盾を受け取り、船大工になると答えた。誓いを捨てたとは言わず、守り方を選んだ。",
+      "gold": 129,
+      "xp": 87
+    },
+    "workshop": {
+      "label": "船を守る盾",
+      "text": "盾は試作船の防護板になった。姪は家紋の脇に、自分が守りたい船の名を小さく刻んだ。",
+      "gold": 129,
+      "xp": 87
+    },
+    "return": {
+      "label": "受領を強いない",
+      "text": "盾はエルドへ返った。姪の進路を贈り物で変える計画はやめ、本人への依頼を考え直した。",
+      "gold": 129,
+      "xp": 87
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/sunken-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3816fa85bc3dd738a74b8",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "道中の橋で荷車が倒れ、盾を足場にすれば救助できるが家紋が傷つく。姪の職業選択は到着前から手紙で知れるようにし、盾をどう使ったかが後の会話の根拠になる。騎士だから必ず正しく、職人だから誓いを捨てるという構造にはしない。",
+      "fixedPast": "騎士エルドは、姪の成人式まで家の盾を運んでほしいと頼む。盾には領民を守る誓いが刻まれている。姪は騎士にならず船大工になるつもりで、エルドは盾を受け取れば気が変わると期待している。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "騎士エルド",
+        "beliefsAndGoals": "騎士エルドは、姪の成人式まで家の盾を運んでほしいと頼む。盾には領民を守る誓いが刻まれている。姪は騎士にならず船大工になるつもりで、エルドは盾を受け取れば気が変わると期待している。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "姪の成人式へ家の盾を届けてください。"
+      }
+    ],
+    "conflict": {
+      "design": "受領→橋の事故→盾を使う／別の資材で救助／応援へ引継ぎ→成人式。資材不足でも盾使用か引継ぎが可能だ。盾の傷を隠すか説明するかも選べ、後で修理痕が見つかる場合は嘘の履歴を残す。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "bridge",
+          "script": "q162.royal.bridge"
+        },
+        {
+          "id": "tell",
+          "script": "q162.royal.tell"
+        },
+        {
+          "id": "ceremony",
+          "script": "q162.royal.ceremony"
+        },
+        {
+          "id": "entry",
+          "script": "q162.royal.entry"
+        },
+        {
+          "id": "help",
+          "script": "q162.royal.help"
+        },
+        {
+          "id": "help_bridge",
+          "script": "q162.royal.help_bridge"
+        },
+        {
+          "id": "rescued",
+          "script": "q162.royal.rescued"
+        },
+        {
+          "id": "workshop",
+          "script": "q162.royal.workshop"
+        },
+        {
+          "id": "returned",
+          "script": "q162.royal.returned"
+        },
+        {
+          "id": "bridge_rope_ready",
+          "script": "q162.royal.bridge_rope_ready"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "姪の成人式へ家の盾を届けてください。"
+    },
+    "reveal": {
+      "newInformation": "道中の橋で荷車が倒れ、盾を足場にすれば救助できるが家紋が傷つく。姪の職業選択は到着前から手紙で知れるようにし、盾をどう使ったかが後の会話の根拠になる。騎士だから必ず正しく、職人だから誓いを捨てるという構造にはしない。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q162.scene.entry"
+      },
+      {
+        "id": "tell",
+        "script": "q162.scene.tell"
+      },
+      {
+        "id": "ceremony",
+        "script": "q162.scene.ceremony"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q162.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q162.scar",
+        "meaning": "作者原稿の scar に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q162.told",
+        "meaning": "作者原稿の told に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "tell"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q162.lied",
+        "meaning": "作者原稿の lied に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "tell"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "bridge",
+        "place": "bridge",
+        "text": "姪の手紙には、騎士でなく船大工になるとある。橋で荷車が倒れた。盾を足場にすれば人を渡せるが、家紋は傷つく。",
+        "options": [
+          {
+            "id": "shield",
+            "text": "盾を足場にして救助する",
+            "to": "tell",
+            "action": "bridge_shield"
+          },
+          {
+            "id": "rope",
+            "text": "縄一つで別の足場を組む",
+            "to": "bridge_rope_ready",
+            "action": "bridge_rope"
+          },
+          {
+            "id": "help",
+            "text": "応援へ位置を渡し、救助を引き継ぐ",
+            "to": "help",
+            "action": "bridge_help"
+          }
+        ]
+      },
+      {
+        "id": "tell",
+        "place": "bank",
+        "text": "盾に家紋を横切る傷ができた。受取人へどう話すかを選ぶ。",
+        "options": [
+          {
+            "id": "truth",
+            "text": "救助で使ったことを説明する",
+            "to": "ceremony",
+            "action": "tell_truth"
+          },
+          {
+            "id": "hide",
+            "text": "傷の事情は伏せる",
+            "to": "ceremony",
+            "action": "tell_hide"
+          }
+        ]
+      },
+      {
+        "id": "ceremony",
+        "place": "ceremony",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q162.values.lied"
+              },
+              "right": true
+            },
+            "yes": "姪は修理痕に気づき、事情を伏せたことを尋ねた。盾が勝手に無傷へ戻った扱いにはできない。",
+            "no": "姪は盾を受け取ることと、騎士になることを別々に答えたいと言った。"
+          }
+        ],
+        "options": [
+          {
+            "id": "ceremony",
+            "text": "進路を変える条件を付けず、式で盾を渡す",
+            "to": "@ceremony",
+            "action": "ceremony_ceremony"
+          },
+          {
+            "id": "workshop",
+            "text": "本人の希望で工房の防護板として渡す",
+            "to": "workshop",
+            "action": "ceremony_workshop"
+          },
+          {
+            "id": "return",
+            "text": "家の象徴を強いず、エルドへ返す",
+            "to": "returned",
+            "action": "ceremony_return"
+          }
+        ]
+      },
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "エルドから姪の成人の式へ届ける盾を借りる。橋を通って集会所へ向かう。",
+        "options": [
+          {
+            "id": "borrow",
+            "text": "盾を預かり、橋へ向かう",
+            "to": "bridge",
+            "action": "entry_borrow"
+          }
+        ]
+      },
+      {
+        "id": "help",
+        "place": "rescue",
+        "text": "救難隊へ橋の位置を伝えた。隊と橋へ戻り、荷車の人を渡す。",
+        "options": [
+          {
+            "id": "return",
+            "text": "救難隊と橋へ戻る",
+            "to": "help_bridge",
+            "action": "help_return"
+          }
+        ]
+      },
+      {
+        "id": "help_bridge",
+        "place": "bridge",
+        "text": "救難隊が事故の場所へ着いた。人を安全な足場へ案内する。",
+        "options": [
+          {
+            "id": "rescue",
+            "text": "救難隊と救助する",
+            "to": "rescued",
+            "action": "help_bridge_rescue"
+          }
+        ]
+      },
+      {
+        "id": "rescued",
+        "place": "bank",
+        "text": "荷車の人が橋の安全な足場へ移った。盾を式へ届ける。",
+        "options": [
+          {
+            "id": "ceremony",
+            "text": "盾を持って式へ向かう",
+            "to": "ceremony",
+            "action": "rescued_ceremony"
+          }
+        ]
+      },
+      {
+        "id": "workshop",
+        "place": "workshop",
+        "text": "姪と工房へ盾を運び、本人の希望どおり防護板として渡す。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@workshop",
+            "action": "workshop_finish"
+          }
+        ]
+      },
+      {
+        "id": "returned",
+        "place": "entry",
+        "text": "エルドの家へ盾を持ち帰った。傷があれば、そのままの状態で返す。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@return",
+            "action": "returned_finish"
+          }
+        ]
+      },
+      {
+        "id": "bridge_rope_ready",
+        "place": "bridge",
+        "text": "必要な道具を使って準備を整えた。ここから目的地まで運ぶ。",
+        "options": [
+          {
+            "id": "continue",
+            "text": "準備した相手・品物と目的地へ向かう",
+            "to": "rescued",
+            "action": "bridge_rope_ready_continue"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q162.scene.entry",
+        "action": "rope",
+        "option": "rope_supplies",
+        "shortage": "q162.scene.entry.rope.shortage",
+        "resume": "q162.scene.entry.rope.resume",
+        "cost": {
+          "rope": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q162.visit"
+    ],
+    "entryScript": "q162.royal.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "sunken-second-ten",
+      "settlement": "oddland_village",
+      "saveRevision": 2,
+      "scope": "沈没城後半10件の村・橋・試験場・砦・湖の現場接続。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q162.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q162.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "姪の手紙には、騎士でなく船大工になるとある。橋で荷車が倒れた。盾を足場にすれば人を渡せるが、家紋は傷つく。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "shield",
+              "text": "盾を足場にして救助する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q162.scar",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q162.scene.tell"
+                }
+              ]
+            },
+            {
+              "id": "rope",
+              "text": "縄一つで別の足場を組む",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "rope",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "縄 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "jump",
+                  "script": "q162.scene.ceremony"
+                }
+              ]
+            },
+            {
+              "id": "help",
+              "text": "応援へ位置を渡し、救助を引き継ぐ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q162.scene.ceremony"
+                }
+              ]
+            },
+            {
+              "id": "rope_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q162.scene.entry.rope.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q162.scene.tell": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q162.node",
+          "value": "tell"
+        },
+        {
+          "op": "say",
+          "text": "盾に家紋を横切る傷ができた。受取人へどう話すかを選ぶ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "truth",
+              "text": "救助で使ったことを説明する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q162.told",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q162.scene.ceremony"
+                }
+              ]
+            },
+            {
+              "id": "hide",
+              "text": "傷の事情は伏せる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q162.lied",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q162.scene.ceremony"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q162.scene.ceremony": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q162.node",
+          "value": "ceremony"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.quest.q162.lied"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "姪は修理痕に気づき、事情を伏せたことを尋ねた。盾が勝手に無傷へ戻った扱いにはできない。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "姪は盾を受け取ることと、騎士になることを別々に答えたいと言った。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "ceremony",
+              "text": "進路を変える条件を付けず、式で盾を渡す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q162.end.ceremony"
+                }
+              ]
+            },
+            {
+              "id": "workshop",
+              "text": "本人の希望で工房の防護板として渡す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q162.end.workshop"
+                }
+              ]
+            },
+            {
+              "id": "return",
+              "text": "家の象徴を強いず、エルドへ返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q162.end.return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q162.end.ceremony": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q162.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "姪は盾を受け取り、船大工になると答えた。誓いを捨てたとは言わず、守り方を選んだ。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q162",
+              "outcome": "ceremony"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q162.end.workshop": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q162.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "盾は試作船の防護板になった。姪は家紋の脇に、自分が守りたい船の名を小さく刻んだ。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q162",
+              "outcome": "workshop"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q162.end.return": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q162.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "盾はエルドへ返った。姪の進路を贈り物で変える計画はやめ、本人への依頼を考え直した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q162",
+              "outcome": "return"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q162.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q162"
+          },
+          "cases": [
+            {
+              "equals": "q162.scene.entry.rope.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q162.scene.entry.rope.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q162.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q162.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "ceremony",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "姪は盾を受け取り、船大工になると答えた。誓いを捨てたとは言わず、守り方を選んだ。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "workshop",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "盾は試作船の防護板になった。姪は家紋の脇に、自分が守りたい船の名を小さく刻んだ。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "return",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "盾はエルドへ返った。姪の進路を贈り物で変える計画はやめ、本人への依頼を考え直した。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q162.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q162.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "tell",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q162.scene.tell"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "ceremony",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q162.scene.ceremony"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q162.scene.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q162.scene.entry.rope.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q162",
+          "value": "q162.scene.entry.rope.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q162.scene.entry.rope.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q162",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q162.scene.entry"
+        }
+      ]
+    },
+    "q162.royal.bridge": {
+      "storyQuest": "q162",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q162",
+          "scene": "bridge"
+        },
+        {
+          "op": "narrate",
+          "text": "姪の手紙には、騎士でなく船大工になるとある。橋で荷車が倒れた。盾を足場にすれば人を渡せるが、家紋は傷つく。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "shield",
+              "text": "盾を足場にして救助する",
+              "storyAction": {
+                "quest": "q162",
+                "action": "bridge_shield"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q162",
+                  "action": "bridge_shield"
+                }
+              ]
+            },
+            {
+              "id": "rope",
+              "text": "縄一つで別の足場を組む",
+              "storyAction": {
+                "quest": "q162",
+                "action": "bridge_rope"
+              },
+              "requirement": "rope 1消費",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q162",
+                  "action": "bridge_rope"
+                },
+                {
+                  "op": "jump",
+                  "script": "q162.royal.bridge_rope_ready"
+                }
+              ]
+            },
+            {
+              "id": "help",
+              "text": "応援へ位置を渡し、救助を引き継ぐ",
+              "storyAction": {
+                "quest": "q162",
+                "action": "bridge_help"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q162",
+                  "action": "bridge_help"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q162.royal.tell": {
+      "storyQuest": "q162",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q162",
+          "scene": "tell"
+        },
+        {
+          "op": "narrate",
+          "text": "盾に家紋を横切る傷ができた。受取人へどう話すかを選ぶ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "truth",
+              "text": "救助で使ったことを説明する",
+              "storyAction": {
+                "quest": "q162",
+                "action": "tell_truth"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q162",
+                  "action": "tell_truth"
+                }
+              ]
+            },
+            {
+              "id": "hide",
+              "text": "傷の事情は伏せる",
+              "storyAction": {
+                "quest": "q162",
+                "action": "tell_hide"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q162",
+                  "action": "tell_hide"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q162.royal.ceremony": {
+      "storyQuest": "q162",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q162",
+          "scene": "ceremony"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q162.values.lied"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "姪は修理痕に気づき、事情を伏せたことを尋ねた。盾が勝手に無傷へ戻った扱いにはできない。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "姪は盾を受け取ることと、騎士になることを別々に答えたいと言った。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "ceremony",
+              "text": "進路を変える条件を付けず、式で盾を渡す",
+              "storyAction": {
+                "quest": "q162",
+                "action": "ceremony_ceremony"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q162",
+                  "action": "ceremony_ceremony"
+                },
+                {
+                  "op": "jump",
+                  "script": "q162.royal.end.ceremony"
+                }
+              ]
+            },
+            {
+              "id": "workshop",
+              "text": "本人の希望で工房の防護板として渡す",
+              "storyAction": {
+                "quest": "q162",
+                "action": "ceremony_workshop"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q162",
+                  "action": "ceremony_workshop"
+                }
+              ]
+            },
+            {
+              "id": "return",
+              "text": "家の象徴を強いず、エルドへ返す",
+              "storyAction": {
+                "quest": "q162",
+                "action": "ceremony_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q162",
+                  "action": "ceremony_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q162.royal.entry": {
+      "storyQuest": "q162",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q162",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "エルドから姪の成人の式へ届ける盾を借りる。橋を通って集会所へ向かう。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "borrow",
+              "text": "盾を預かり、橋へ向かう",
+              "storyAction": {
+                "quest": "q162",
+                "action": "entry_borrow"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q162",
+                  "action": "entry_borrow"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q162.royal.help": {
+      "storyQuest": "q162",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q162",
+          "scene": "help"
+        },
+        {
+          "op": "narrate",
+          "text": "救難隊へ橋の位置を伝えた。隊と橋へ戻り、荷車の人を渡す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "救難隊と橋へ戻る",
+              "storyAction": {
+                "quest": "q162",
+                "action": "help_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q162",
+                  "action": "help_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q162.royal.help_bridge": {
+      "storyQuest": "q162",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q162",
+          "scene": "help_bridge"
+        },
+        {
+          "op": "narrate",
+          "text": "救難隊が事故の場所へ着いた。人を安全な足場へ案内する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "rescue",
+              "text": "救難隊と救助する",
+              "storyAction": {
+                "quest": "q162",
+                "action": "help_bridge_rescue"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q162",
+                  "action": "help_bridge_rescue"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q162.royal.rescued": {
+      "storyQuest": "q162",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q162",
+          "scene": "rescued"
+        },
+        {
+          "op": "narrate",
+          "text": "荷車の人が橋の安全な足場へ移った。盾を式へ届ける。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "ceremony",
+              "text": "盾を持って式へ向かう",
+              "storyAction": {
+                "quest": "q162",
+                "action": "rescued_ceremony"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q162",
+                  "action": "rescued_ceremony"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q162.royal.workshop": {
+      "storyQuest": "q162",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q162",
+          "scene": "workshop"
+        },
+        {
+          "op": "narrate",
+          "text": "姪と工房へ盾を運び、本人の希望どおり防護板として渡す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q162",
+                "action": "workshop_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q162",
+                  "action": "workshop_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q162.royal.end.workshop"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q162.royal.returned": {
+      "storyQuest": "q162",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q162",
+          "scene": "returned"
+        },
+        {
+          "op": "narrate",
+          "text": "エルドの家へ盾を持ち帰った。傷があれば、そのままの状態で返す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q162",
+                "action": "returned_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q162",
+                  "action": "returned_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q162.royal.end.return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q162.royal.bridge_rope_ready": {
+      "storyQuest": "q162",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q162",
+          "scene": "bridge_rope_ready"
+        },
+        {
+          "op": "narrate",
+          "text": "必要な道具を使って準備を整えた。ここから目的地まで運ぶ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "continue",
+              "text": "準備した相手・品物と目的地へ向かう",
+              "storyAction": {
+                "quest": "q162",
+                "action": "bridge_rope_ready_continue"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q162",
+                  "action": "bridge_rope_ready_continue"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q162.royal.end.ceremony": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "姪は盾を受け取り、船大工になると答えた。誓いを捨てたとは言わず、守り方を選んだ。"
+        },
+        {
+          "op": "add",
+          "target": "vars.ceremony",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q162",
+          "outcome": "ceremony"
+        }
+      ]
+    },
+    "q162.royal.end.workshop": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "盾は試作船の防護板になった。姪は家紋の脇に、自分が守りたい船の名を小さく刻んだ。"
+        },
+        {
+          "op": "add",
+          "target": "vars.workshop",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q162",
+          "outcome": "workshop"
+        }
+      ]
+    },
+    "q162.royal.end.return": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "盾はエルドへ返った。姪の進路を贈り物で変える計画はやめ、本人への依頼を考え直した。"
+        },
+        {
+          "op": "add",
+          "target": "vars.return",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q162",
+          "outcome": "return"
+        }
+      ]
+    },
+    "q162.royal.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q162"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q162.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q162.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q162.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "ceremony",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "姪は盾を受け取り、船大工になると答えた。誓いを捨てたとは言わず、守り方を選んだ。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "workshop",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "盾は試作船の防護板になった。姪は家紋の脇に、自分が守りたい船の名を小さく刻んだ。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "return",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "盾はエルドへ返った。姪の進路を贈り物で変える計画はやめ、本人への依頼を考え直した。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q162"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q162.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "bridge",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q162.royal.bridge"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "tell",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q162.royal.tell"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "ceremony",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q162.royal.ceremony"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q162.royal.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "help",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q162.royal.help"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "help_bridge",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q162.royal.help_bridge"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "rescued",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q162.royal.rescued"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "workshop",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q162.royal.workshop"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "returned",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q162.royal.returned"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "bridge_rope_ready",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q162.royal.bridge_rope_ready"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q162.royal.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "盾を借りるエルドの家",
+      "bridge": "事故の起きた橋",
+      "bank": "救助後の橋の足場",
+      "ceremony": "姪の成人の式",
+      "workshop": "船大工の工房",
+      "rescue": "橋へ応援を出す救難隊",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "bridge"
+      ],
+      [
+        "transit",
+        "bank"
+      ],
+      [
+        "transit",
+        "ceremony"
+      ],
+      [
+        "transit",
+        "workshop"
+      ],
+      [
+        "transit",
+        "rescue"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "bridge",
+          "bank",
+          "ceremony",
+          "workshop",
+          "rescue",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "ceremony",
+          "workshop",
+          "return"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "scar": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "scar"
+      },
+      "told": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "told"
+      },
+      "lied": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "lied"
+      },
+      "eldAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "bridge",
+          "bank",
+          "ceremony",
+          "workshop",
+          "rescue",
+          "transit"
+        ],
+        "meaning": "eld の所在または保持者"
+      },
+      "shieldAt": {
+        "type": "enum",
+        "initial": "eld",
+        "values": [
+          "entry",
+          "bridge",
+          "bank",
+          "ceremony",
+          "workshop",
+          "rescue",
+          "transit",
+          "party",
+          "eld",
+          "niece",
+          "survivors",
+          "helpers"
+        ],
+        "meaning": "shield の所在または保持者"
+      },
+      "nieceAt": {
+        "type": "enum",
+        "initial": "ceremony",
+        "values": [
+          "entry",
+          "bridge",
+          "bank",
+          "ceremony",
+          "workshop",
+          "rescue",
+          "transit"
+        ],
+        "meaning": "niece の所在または保持者"
+      },
+      "survivorsAt": {
+        "type": "enum",
+        "initial": "bridge",
+        "values": [
+          "entry",
+          "bridge",
+          "bank",
+          "ceremony",
+          "workshop",
+          "rescue",
+          "transit"
+        ],
+        "meaning": "survivors の所在または保持者"
+      },
+      "helpersAt": {
+        "type": "enum",
+        "initial": "rescue",
+        "values": [
+          "entry",
+          "bridge",
+          "bank",
+          "ceremony",
+          "workshop",
+          "rescue",
+          "transit"
+        ],
+        "meaning": "helpers の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "eld": {
+        "holder": "eldAt",
+        "kind": "person"
+      },
+      "shield": {
+        "holder": "shieldAt",
+        "kind": "item"
+      },
+      "niece": {
+        "holder": "nieceAt",
+        "kind": "person"
+      },
+      "survivors": {
+        "holder": "survivorsAt",
+        "kind": "group"
+      },
+      "helpers": {
+        "holder": "helpersAt",
+        "kind": "group"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "道中の橋で荷車が倒れ、盾を足場にすれば救助できるが家紋が傷つく。姪の職業選択は到着前から手紙で知れるようにし、盾をどう使ったかが後の会話の根拠になる。騎士だから必ず正しく、職人だから誓いを捨てるという構造にはしない。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "bridge": {
+        "title": "事故の起きた橋",
+        "place": "bridge",
+        "cast": [],
+        "requires": true
+      },
+      "tell": {
+        "title": "救助後の橋の足場",
+        "place": "bank",
+        "cast": [],
+        "requires": true
+      },
+      "ceremony": {
+        "title": "姪の成人の式",
+        "place": "ceremony",
+        "cast": [],
+        "requires": true
+      },
+      "entry": {
+        "title": "盾を借りるエルドの家",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "help": {
+        "title": "橋へ応援を出す救難隊",
+        "place": "rescue",
+        "cast": [],
+        "requires": true
+      },
+      "help_bridge": {
+        "title": "事故の起きた橋",
+        "place": "bridge",
+        "cast": [],
+        "requires": true
+      },
+      "rescued": {
+        "title": "救助後の橋の足場",
+        "place": "bank",
+        "cast": [],
+        "requires": true
+      },
+      "workshop": {
+        "title": "船大工の工房",
+        "place": "workshop",
+        "cast": [],
+        "requires": true
+      },
+      "returned": {
+        "title": "盾を借りるエルドの家",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "bridge_rope_ready": {
+        "title": "事故の起きた橋",
+        "place": "bridge",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "bridge_shield": {
+        "from": [
+          "bridge"
+        ],
+        "to": "tell",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "survivors"
+            ],
+            "path": [
+              "transit",
+              "bank"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "scar",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "bank",
+          "companions": [
+            "survivors"
+          ]
+        },
+        "depart": []
+      },
+      "bridge_rope": {
+        "from": [
+          "bridge"
+        ],
+        "to": "bridge_rope_ready",
+        "requires": true,
+        "effects": [],
+        "cost": {
+          "rope": 1
+        },
+        "once": false
+      },
+      "bridge_help": {
+        "from": [
+          "bridge"
+        ],
+        "to": "help",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "rescue"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "rescue",
+          "companions": []
+        },
+        "depart": []
+      },
+      "tell_truth": {
+        "from": [
+          "tell"
+        ],
+        "to": "ceremony",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "ceremony"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "told",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "ceremony",
+          "companions": []
+        },
+        "depart": []
+      },
+      "tell_hide": {
+        "from": [
+          "tell"
+        ],
+        "to": "ceremony",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "ceremony"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "lied",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "ceremony",
+          "companions": []
+        },
+        "depart": []
+      },
+      "ceremony_ceremony": {
+        "from": [
+          "ceremony"
+        ],
+        "ending": "ceremony",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "shield",
+            "from": "party",
+            "to": "niece"
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "ceremony"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "ceremony_workshop": {
+        "from": [
+          "ceremony"
+        ],
+        "to": "workshop",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "niece"
+            ],
+            "path": [
+              "transit",
+              "workshop"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "workshop",
+          "companions": [
+            "niece"
+          ]
+        },
+        "depart": []
+      },
+      "ceremony_return": {
+        "from": [
+          "ceremony"
+        ],
+        "to": "returned",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "entry_borrow": {
+        "from": [
+          "entry"
+        ],
+        "to": "bridge",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "bridge"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "bridge",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "shield",
+            "from": "eld",
+            "to": "party"
+          }
+        ]
+      },
+      "help_return": {
+        "from": [
+          "help"
+        ],
+        "to": "help_bridge",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "helpers"
+            ],
+            "path": [
+              "transit",
+              "bridge"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "bridge",
+          "companions": [
+            "helpers"
+          ]
+        },
+        "depart": []
+      },
+      "help_bridge_rescue": {
+        "from": [
+          "help_bridge"
+        ],
+        "to": "rescued",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "helpers",
+              "survivors"
+            ],
+            "path": [
+              "transit",
+              "bank"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "bank",
+          "companions": [
+            "helpers",
+            "survivors"
+          ]
+        },
+        "depart": []
+      },
+      "rescued_ceremony": {
+        "from": [
+          "rescued"
+        ],
+        "to": "ceremony",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "ceremony"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "ceremony",
+          "companions": []
+        },
+        "depart": []
+      },
+      "workshop_finish": {
+        "from": [
+          "workshop"
+        ],
+        "ending": "workshop",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "shield",
+            "from": "party",
+            "to": "niece"
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "workshop"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "returned_finish": {
+        "from": [
+          "returned"
+        ],
+        "ending": "return",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "shield",
+            "from": "party",
+            "to": "eld"
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "return"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "bridge_rope_ready_continue": {
+        "from": [
+          "bridge_rope_ready"
+        ],
+        "to": "rescued",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "survivors"
+            ],
+            "path": [
+              "transit",
+              "bank"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "bank",
+          "companions": [
+            "survivors"
+          ]
+        },
+        "depart": []
+      }
+    },
+    "endings": {
+      "ceremony": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q162.values.resolution"
+            },
+            "right": "ceremony"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q162.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q162.values.partyAt"
+                },
+                "right": "ceremony"
+              }
+            ]
+          }
+        ]
+      },
+      "workshop": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q162.values.resolution"
+            },
+            "right": "workshop"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q162.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q162.values.partyAt"
+                },
+                "right": "workshop"
+              }
+            ]
+          }
+        ]
+      },
+      "return": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q162.values.resolution"
+            },
+            "right": "return"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q162.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q162.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "town",
+        "location": "royal_lender"
+      },
+      "bridge": {
+        "kind": "dungeon",
+        "dungeon": "royal_sites",
+        "map": "e2_royal_bridge",
+        "x": 5,
+        "y": 3
+      },
+      "bank": {
+        "kind": "dungeon",
+        "dungeon": "royal_sites",
+        "map": "e2_royal_bridge",
+        "x": 11,
+        "y": 3
+      },
+      "ceremony": {
+        "kind": "town",
+        "location": "royal_hall"
+      },
+      "workshop": {
+        "kind": "town",
+        "location": "royal_shipyard"
+      },
+      "rescue": {
+        "kind": "town",
+        "location": "royal_rescue"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_village",
+  "receptionLocations": [
+    "royal_board"
+  ]
+}

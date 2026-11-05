@@ -1,5 +1,6 @@
 // Edition-two regional bundle: relocated-quest roles, separate from border NPCs.
 export const RELOCATED_CHARACTER_ART=Object.fromEntries([
+ ...['eld','niece'].map(key=>['q162_'+key,'sunken-q162-2026-11-04']),
  ...['patient','ine'].map(key=>['q161_'+key,'sunken-q161-2026-11-04']),
  ['q069_sea_king','sunken-q069-2026-11-04'],
  ['q067_mermaid','sunken-q067-2026-11-02'],
@@ -56,6 +57,18 @@ relocatedCharacters.q070_port_people={
  detail:'港で浮上作業を知らされ、隊と高台へ移る。到着後は高台に留まり、隊の制御台への帰路には同行しない。',
  provenance:'2026-11-04。既存group portPeopleの呼称表示。人数・氏名・顔・代表者は追加しない。'
 };
+for(const [key,name,role,detail] of [
+ ['eld','騎士エルド','盾を貸す騎士','自宅で盾を貸し、返却する経路では同じ家で受け取る。'],
+ ['niece','エルドの姪','成人の式を迎える姪','式で船大工を志すと話す。工房へ運ぶときは自身も同行する。']
+]){
+ const id='q162_'+key;
+ relocatedCharacters[id]={id,name,role,detail,portrait:RELOCATED_CHARACTER_ART[id].asset,
+  sprite:RELOCATED_CHARACTER_ART[id].asset,provenance:'2026-11-04の美術設定。衣装と容姿は人物画用。盾の所持と傷は場面ごとの状態に従う。'};
+}
+relocatedCharacters.q162_survivors={id:'q162_survivors',name:'荷車の人',role:'橋で救助を待つ人',
+ detail:'盾・縄・救難隊の経路で橋から安全な足場へ渡る。',provenance:'既存group survivorsを呼称で表示する。'};
+relocatedCharacters.q162_helpers={id:'q162_helpers',name:'橋の救難隊',role:'橋への応援を引き受ける救難隊',
+ detail:'詰所から橋へ向かい、荷車の人と安全な足場へ渡る。',provenance:'既存group helpersを呼称で表示する。'};
 relocatedCharacters.q069_sea_king={
  id:'q069_sea_king',name:'海王',role:'城門を補修する通行税の徴収者',
  detail:'鉄片を城門の穴へ打ち込み、補修作業場で材料の運搬当番と通行条件を相談する。隊が港へ図を持ち帰る間も補修場に留まる。',

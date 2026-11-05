@@ -1,7 +1,7 @@
 // Editorial audit: candidate IDs are local; connected roles cite their game entity.
 // Update a fingerprint only after rereading the changed quest and its evidence.
 export const RELOCATED_CAST_REVIEW={
- reviewedAt:'2026-11-04',
+ reviewedAt:'2026-11-05',
  quests:{
   q031:{
    sourceSha256:'ab2cb40f75d0a430e00077b936b338b23736b74b01034aeaeb9333cda16cecf7',
@@ -2236,34 +2236,38 @@ export const RELOCATED_CAST_REVIEW={
   "next": "2役の表示と旧保存の移行、11経路・3結末・記録具の費用と受渡しを検証済み。次はq162のエルド・姪と救助者の表示、q163の出演監査。証言室・貸出道具・施療所の局所背景は残る。"
 },
   q162:{
-  "sourceSha256": "299bdd18e29ea3a336d162a965fef91b2c64c3ca565a103b3d26fe0a03fdd725",
+  "sourceSha256": "d88f4f636777bfe2890137f88c1e74052436e40d74937d5b73d3d391794d5846",
   "identityNotes": [
-    "エルドは依頼人であり既存person eld。貸出元の自宅entryと、同じ家で返却を確認するreturnedの2場面が候補。橋や式へ本人を同行させない。",
+    "エルドは依頼人であり既存person eld。貸出元の自宅entryと、同じ家で返却を確認するreturnedの2場面に表示する。橋や式へ本人を同行させない。",
     "姪は既存person niece。式ceremonyで本人が進路を語り、希望した経路では工房workshopへ実同行する。氏名・成人の具体年齢は未設定。他依頼の人物へ統合しない。",
-    "荷車の人は既存group survivors。橋で救助を待ち、盾または縄か応援を使ってbankへ実移動する。橋・縄の準備中・救助後の足場を通じて所在を保ち、式へは同行しない。人数・氏名・代表者を補わず、呼称表示を優先する。",
+    "荷車の人は既存group survivors。橋で救助を待ち、盾または縄か応援を使ってbankへ実移動する。橋・縄の準備中・救助後の足場を通じて所在を保ち、式へは同行しない。人数・氏名・代表者を補わず、呼称を表示する。",
     "救難隊は既存group helpers。helpから橋へ、救助後は足場へ同行する。rescuedは縄での自力救助と共用するので、救難隊は実同行で到着した経路だけに表示する。q061の図の受取先等とは名前だけで同定しない。",
     "盾は出発時にエルドから隊へ渡り、式・工房・返却先での最終行為まで隊が持つ。家紋の傷、説明と隠蔽、姪の進路と贈物の受領を区別する。工房の職人や式の参列者を追加しない。"
   ],
   "people": {
     "q162_eld": {
       "label": "騎士エルド",
-      "status": "candidate",
-      "need": "既存eldの所在を用い、自宅の貸出と返却確認へ専用画を接続する。盾を共通立ち絵へ固定しない。"
+      "status": "connected",
+      "need": "自宅の貸出と返却確認に同じ専用画を表示する。",
+      "entity": "eld"
     },
     "q162_niece": {
       "label": "エルドの姪",
-      "status": "candidate",
-      "need": "式と工房だけへ専用画を接続する。騎士になる選択を強制せず、実同行と盾の受取時点を保持する。"
+      "status": "connected",
+      "need": "式と工房に専用画を表示する。工房へは既存の実同行で到着する。",
+      "entity": "niece"
     },
     "q162_survivors": {
       "label": "荷車の人",
-      "status": "candidate",
-      "need": "橋・縄の準備中・救助後の足場へ既存groupの呼称を接続する。人数を補わず、実到着前の救助完了を描かない。"
+      "status": "connected",
+      "need": "橋・準備中・救助後の足場に呼称を表示する。",
+      "entity": "survivors"
     },
     "q162_helpers": {
       "label": "橋の救難隊",
-      "status": "candidate",
-      "need": "詰所・橋・応援経路の救助後に呼称を接続する。自力の縄救助へ常設しない。"
+      "status": "connected",
+      "need": "詰所・橋に呼称を表示する。足場では応援経路で到着した場合だけ表示する。",
+      "entity": "helpers"
     }
   },
   "scenes": {
@@ -2360,7 +2364,117 @@ export const RELOCATED_CAST_REVIEW={
       "visual": "組んだ縄と未到着の人、消費済みの縄とこれから渡る動作。"
     }
   },
-  "next": "エルドと姪の2役、荷車の人と救難隊の2群を既存所在に従って接続する。特にrescuedの応援有無、盾の傷・保持者・三結末と旧保存を検証し、q163を監査する。"
+  "next": "q162の4役を既存の所在に接続した。盾の傷、受取先、橋や工房の局所差分は次の素材候補。"
+},
+  q163:{
+  "sourceSha256": "1fde80fb144dc3ecdb6299160e63cf8fc7e8289e3a1ab2a3da6e4c07685ff4e2",
+  "identityNotes": [
+    "クエスト依頼人欄の「元盗賊の鍵師ソム」、本文のソム、既存person entity somは同一人物。所在は既存somAtで扱う。店主はソムに修理を頼む側で、クエスト依頼人とは区別する。",
+    "本文の店主、昔ソムに盗まれた相手、所有品を照合し受取印を出す人物、既存person entity ownerは同一人物。所在は既存ownerAtで扱う。",
+    "別の手段で修理するrepair系と、告白・合意後に古い経路を使うrepay系は同じ2人の分岐。別の被害者・盗賊・窓口係を追加する根拠はない。",
+    "保証人の主人公は既存group entity party。goodsは既存itemで、初期goodsAtはvault、全actionを通じて変更されない。人物候補にせず、金庫室から持ち出す設定を足さない。",
+    "entry_new・repay_agree・checked_repair_return・checked_repay_returnの4journeyはすべてsomとownerをcompanionsに持つ。partyと2人は実際の到着で行先へ移る。checked場面の「正面へ戻る」は帰還選択前の予定で、所在はまだvaultである。",
+    "出発処理はpartyAt・somAt・ownerAtをtransit、sceneをnullにし、VMを空にする。移動中の店先・金庫室への出演は追加せず、実到着後のworkまたはreceipt場面で2人を表示する。",
+    "receipt両場面の本文は「店主の受取印を正面で待ち、修理の代金を受け取る。」までを描く。未受領と断定しない。受取専用の所持品・フラグはなく、finishはresolutionとfinishedを設定する。repay結末では修理代が出ても長期の弁償契約が残る。",
+    "出演候補は移設後の現行ルートのactiveな全8場面を対象とする。旧保存のlegacyStoryRoutes.q163経路は従来スクリプトを使う。旧ルート、移動中、延期・完了後の結末および再訪に新たなscene castを付けない。",
+    "現行の有効な8場面には両者の同席根拠があり、片方だけ不在にする分岐や遠隔出演の根拠はない。接続時は既存のwhen判定と同所性検証に従い、人物のholderを表示都合で変えない。",
+    "延期結末の別業者は紹介への言及のみで、8場面への同席根拠はない。ソムの名前・職業・過去と店主の役割以外に、年齢・性別・外見・衣装・家族関係は本文で指定されていない。外見や衣装、表情、配置、小道具は演出案として扱い、設定の事実にしない。"
+  ],
+  "people": {
+    "q163_som": {
+      "label": "鍵師ソム",
+      "status": "candidate",
+      "need": "既存person som（holder: somAt）に対応する候補。初めて正式な修理を受けた元盗賊の鍵師で、クエスト依頼人。全8場面に既存の所在・同行根拠がある。"
+    },
+    "q163_owner": {
+      "label": "店主",
+      "status": "candidate",
+      "need": "既存person owner（holder: ownerAt）に対応する候補。過去にソムから盗みの被害を受け、今回ソムへ修理を頼む店主。全8場面に同席根拠がある。個人名・年齢・性別・外見は未指定。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "person-evidence",
+      "people": [
+        "q163_som",
+        "q163_owner"
+      ],
+      "evidence": "店主は昔ソムに盗まれた相手だった。",
+      "reason": "somAt・ownerAtの初期位置はともにentry。本文はソムと、修理を頼む店主による立会いの契約を描く。クエスト依頼人はソムで、保証人の主人公は既存partyである。",
+      "visual": "本文上は店先で契約を話す段階。同じ2人の共通立ち絵を使うのは演出案。修理完了、修理代の受領、過去の弁償完了を確定する描写にはまだ根拠がない。"
+    },
+    "repay": {
+      "decision": "person-evidence",
+      "people": [
+        "q163_som",
+        "q163_owner"
+      ],
+      "evidence": "ソムは別の日にも盗んだと認めた。店主は修理の代金と過去の弁償を別々に計算するよう求めた。",
+      "reason": "entry_oldは移動・状態変更を伴わず、同じ店先でソム本人が告白し、同じ店主が修理代と過去の弁償を分けるよう求める。別の日の盗みは別人物の導入ではなく、合意または延期は次の選択である。",
+      "visual": "店先で告白と合意前の話合いをする2人。表情や身振りは演出案。まだ選択されていない合意や弁償の完了、金庫の所有品の持ち出しを描かない。"
+    },
+    "work_repair": {
+      "decision": "person-evidence",
+      "people": [
+        "q163_som",
+        "q163_owner"
+      ],
+      "evidence": "店主とソムが金庫室へ来た。",
+      "reason": "entry_newのjourneyがparty・som・ownerを実到着後にvaultへ移し、本文も2人の到着を明示する。別の手段で作業する鍵師は同じソム。修理・照合の完了は次のrepair選択でrepaired=trueとなる。",
+      "visual": "金庫室に到着したソムと立ち会う店主。作業を示す表情や道具は演出案で、repaired=falseの段階に完了後の状態を先取りしない。goodsはvaultのまま扱う。"
+    },
+    "checked_repair": {
+      "decision": "person-evidence",
+      "people": [
+        "q163_som",
+        "q163_owner"
+      ],
+      "evidence": "修理と所有品の照合を終えた。品物は金庫室に残し、正面へ戻る。",
+      "reason": "work_repair_repairはrepairedをtrueにするだけで、party・som・ownerはvaultに残る。帰還選択肢も店主とソムの同行を明示する。実際の帰還はchecked_repair_returnのjourneyで起こる。",
+      "visual": "修理と照合を終え、まだ金庫室にいる2人。帰還に備える姿勢は演出案。店先に到着済みの状態や、金庫室から所有品を持ち出した状態は描かない。"
+    },
+    "receipt_repair": {
+      "decision": "person-evidence",
+      "people": [
+        "q163_som",
+        "q163_owner"
+      ],
+      "evidence": "店主の受取印を正面で待ち、修理の代金を受け取る。",
+      "reason": "checked_repair_returnの実到着でparty・som・ownerが一緒にentryへ戻る。待つ修理人は既存som、受取印を出す店主は既存owner。本文は待機と修理代の受領までを含み、別の窓口係や新しい受領フラグを設ける根拠はない。",
+      "visual": "正面へ戻った同じ2人。受取印を待つ場面や修理代を受け取る場面の表現を選べる。共通立ち絵を受領品なしにする案は再利用の都合で、未受領という設定ではない。goodsはvaultに残る。"
+    },
+    "work_repay": {
+      "decision": "person-evidence",
+      "people": [
+        "q163_som",
+        "q163_owner"
+      ],
+      "evidence": "店主の立会いで古い経路を使い、合意した修理を行う。",
+      "reason": "repay_agreeのjourneyはparty・som・ownerを実到着後にvaultへ移す。店主と、告白・合意後に古い経路を使うソム本人が同席する。修理と過去の弁償は別の契約で、古い経路は別の盗賊の登場を意味しない。",
+      "visual": "金庫室で修理を進める同じソムと店主。作業を示す表情や道具は演出案。まだ修理完了を先取りせず、その場で過去の弁償や全面的な赦しが完了した描写を足さない。"
+    },
+    "checked_repay": {
+      "decision": "person-evidence",
+      "people": [
+        "q163_som",
+        "q163_owner"
+      ],
+      "evidence": "修理と所有品の照合を終えた。品物は金庫室に残し、正面へ戻る。",
+      "reason": "work_repay_repairはrepairedをtrueにするだけで、party・som・ownerはvaultに残る。次のchecked_repay_returnは2人との帰還を指定する。repair側と同じ人物であり、弁償契約が終わったとは本文も状態も示さない。",
+      "visual": "照合後、金庫室にいる同じ2人。帰還に備える姿勢は演出案。goodsは金庫室に残し、店先への帰着や過去の弁償完了を先取りしない。"
+    },
+    "receipt_repay": {
+      "decision": "person-evidence",
+      "people": [
+        "q163_som",
+        "q163_owner"
+      ],
+      "evidence": "店主の受取印を正面で待ち、修理の代金を受け取る。",
+      "reason": "checked_repay_returnの実到着でparty・som・ownerが一緒にentryへ戻る。受取印を待つ修理人はソム。本文は修理代を受け取るところまで含み、repay結末は修理代が出ても長期の弁償契約が残ると明示する。",
+      "visual": "正面へ戻った同じソムと店主で、修理代の受領を表現してよい。弁償完了の証拠は加えない。両ルートで同じ衣装を使うのは任意の演出案で、新しい衣装を禁じる本文上の設定はない。goodsはvaultに残る。"
+    }
+  },
+  "next": "既存som・ownerに対応する2役の立ち絵とcharacterを用意し、現行ルートの全8場面へcastを接続する。新しい人物holder・場所・支払いフラグは不要。接続後に4回の実同行、移動中と結末・再訪の不在、goodsの金庫室保持、4経路3結末、旧保存経路の維持を確認する。"
 }
  }
 };
