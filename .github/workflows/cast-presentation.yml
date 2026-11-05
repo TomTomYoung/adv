@@ -79,6 +79,9 @@ on:
       - 'data/scenario-editions/e2/q162.json'
       - 'tools/shield-art-fixtures.mjs'
       - 'tests/fixtures/e2-q162-before-cast.json'
+      - 'data/scenario-editions/e2/q163.json'
+      - 'tools/locksmith-art-fixtures.mjs'
+      - 'tests/fixtures/e2-q163-before-cast.json'
       - 'tools/browser-sunken-art-smoke.mjs'
       - 'tests/fixtures/e2-q061-before-cast.json'
       - 'tests/fixtures/e2-q062-before-cast.json'
@@ -121,6 +124,16 @@ jobs:
         with:
           name: q162-shield-checkpoints
           path: /tmp/adv-sunken-art-browser
+          if-no-files-found: warn
+      - name: Verify q163 locksmith and owner across current and older saves
+        env:
+          ADV_BROWSER_OUTPUT: /tmp/adv-locksmith-art-browser
+        run: node tools/browser-sunken-art-smoke.mjs --locksmith-only
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: q163-locksmith-checkpoints
+          path: /tmp/adv-locksmith-art-browser
           if-no-files-found: warn
   cast-browser:
     # Match the pinned Playwright release; ubuntu-latest may move ahead of its supported OSes.

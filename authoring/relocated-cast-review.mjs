@@ -2367,29 +2367,31 @@ export const RELOCATED_CAST_REVIEW={
   "next": "q162の4役を既存の所在に接続した。盾の傷、受取先、橋や工房の局所差分は次の素材候補。"
 },
   q163:{
-  "sourceSha256": "1fde80fb144dc3ecdb6299160e63cf8fc7e8289e3a1ab2a3da6e4c07685ff4e2",
+  "sourceSha256": "d9e0505bc8f2e87eb5610d40f163d6a18c114c264713dbb26d2e44834bce4394",
   "identityNotes": [
     "クエスト依頼人欄の「元盗賊の鍵師ソム」、本文のソム、既存person entity somは同一人物。所在は既存somAtで扱う。店主はソムに修理を頼む側で、クエスト依頼人とは区別する。",
     "本文の店主、昔ソムに盗まれた相手、所有品を照合し受取印を出す人物、既存person entity ownerは同一人物。所在は既存ownerAtで扱う。",
     "別の手段で修理するrepair系と、告白・合意後に古い経路を使うrepay系は同じ2人の分岐。別の被害者・盗賊・窓口係を追加する根拠はない。",
-    "保証人の主人公は既存group entity party。goodsは既存itemで、初期goodsAtはvault、全actionを通じて変更されない。人物候補にせず、金庫室から持ち出す設定を足さない。",
+    "保証人の主人公は既存group entity party。goodsは既存itemで、初期goodsAtはvault、全actionを通じて変更されない。出演させず、金庫室から持ち出す設定を足さない。",
     "entry_new・repay_agree・checked_repair_return・checked_repay_returnの4journeyはすべてsomとownerをcompanionsに持つ。partyと2人は実際の到着で行先へ移る。checked場面の「正面へ戻る」は帰還選択前の予定で、所在はまだvaultである。",
     "出発処理はpartyAt・somAt・ownerAtをtransit、sceneをnullにし、VMを空にする。移動中の店先・金庫室への出演は追加せず、実到着後のworkまたはreceipt場面で2人を表示する。",
     "receipt両場面の本文は「店主の受取印を正面で待ち、修理の代金を受け取る。」までを描く。未受領と断定しない。受取専用の所持品・フラグはなく、finishはresolutionとfinishedを設定する。repay結末では修理代が出ても長期の弁償契約が残る。",
-    "出演候補は移設後の現行ルートのactiveな全8場面を対象とする。旧保存のlegacyStoryRoutes.q163経路は従来スクリプトを使う。旧ルート、移動中、延期・完了後の結末および再訪に新たなscene castを付けない。",
-    "現行の有効な8場面には両者の同席根拠があり、片方だけ不在にする分岐や遠隔出演の根拠はない。接続時は既存のwhen判定と同所性検証に従い、人物のholderを表示都合で変えない。",
+    "人物表示は移設後の現行ルートのactiveな全8場面を対象とする。旧保存のlegacyStoryRoutes.q163経路は従来スクリプトを使う。旧ルート、移動中、延期・完了後の結末および再訪に新たなscene castを付けない。",
+    "現行の有効な8場面には両者の同席根拠があり、片方だけ不在にする分岐や遠隔出演の根拠はない。2人は各場面で同じ場所におり、人物のholderを表示都合で変えない。",
     "延期結末の別業者は紹介への言及のみで、8場面への同席根拠はない。ソムの名前・職業・過去と店主の役割以外に、年齢・性別・外見・衣装・家族関係は本文で指定されていない。外見や衣装、表情、配置、小道具は演出案として扱い、設定の事実にしない。"
   ],
   "people": {
     "q163_som": {
       "label": "鍵師ソム",
-      "status": "candidate",
-      "need": "既存person som（holder: somAt）に対応する候補。初めて正式な修理を受けた元盗賊の鍵師で、クエスト依頼人。全8場面に既存の所在・同行根拠がある。"
+      "status": "connected",
+      "need": "店先と金庫室の全8場面に専用画を接続。4旅程では既存somAtに従う。",
+      "entity": "som"
     },
     "q163_owner": {
       "label": "店主",
-      "status": "candidate",
-      "need": "既存person owner（holder: ownerAt）に対応する候補。過去にソムから盗みの被害を受け、今回ソムへ修理を頼む店主。全8場面に同席根拠がある。個人名・年齢・性別・外見は未指定。"
+      "status": "connected",
+      "need": "店先と金庫室で修理に立ち会い、品を照合する店主の専用画を接続。品は金庫室に残る。",
+      "entity": "owner"
     }
   },
   "scenes": {
@@ -2474,7 +2476,99 @@ export const RELOCATED_CAST_REVIEW={
       "visual": "正面へ戻った同じソムと店主で、修理代の受領を表現してよい。弁償完了の証拠は加えない。両ルートで同じ衣装を使うのは任意の演出案で、新しい衣装を禁じる本文上の設定はない。goodsはvaultに残る。"
     }
   },
-  "next": "既存som・ownerに対応する2役の立ち絵とcharacterを用意し、現行ルートの全8場面へcastを接続する。新しい人物holder・場所・支払いフラグは不要。接続後に4回の実同行、移動中と結末・再訪の不在、goodsの金庫室保持、4経路3結末、旧保存経路の維持を確認する。"
+  "next": "2役の専用画を接続した。金庫の修理箇所・所有品の照合・受取印は背景や道具の差分候補。次はq164の客とレンの表示。"
+},
+  q164:{
+  "sourceSha256": "04a38c6a3f76448cd8f0af3b3b0a0647ce7a4a2427a63e51ab5eb45d0b44154b",
+  "identityNotes": [
+    "依頼人は帰り火亭の常連。本文の客は既存group guestsに対応し、人数や一人の代表は特定しない。",
+    "楽師は現行本文・在隊条件の actor ren と同じレン。旧設計のペルを別の人物として追加しない。物語の所在はrenGuestAt、出撃隊にいるかはhas_memberで別々に判定する。",
+    "宿の入口では客が自分たちの言葉で送辞を準備したいと相談する。レンは同じ宿を初期位置とするが、この内緒の相談に聞き手としている根拠はない。秘密の準備はレンが出撃隊を外れている場合に限る。隊を強制変更しない。",
+    "秘密の往復は客だけが同行し、レンは宿に留まる。招待後・事情を説明する準備・最初から同伴する経路は客とレンの実同行。既存portrait_renを人物表示に使えるかを確認し、客は呼称を用いる。"
+  ],
+  "people": {
+    "q164_guests": {
+      "label": "帰り火亭の客たち",
+      "status": "candidate",
+      "need": "既存guestsに集団の呼称を接続する候補。宿・控室・集会所で同行経路に従う。"
+    },
+    "q164_ren": {
+      "label": "楽師レン",
+      "status": "candidate",
+      "need": "既存renGuestと仲間renの顔絵を対応させる候補。秘密の準備中は宿に留まる。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "person-evidence",
+      "people": [
+        "q164_guests"
+      ],
+      "evidence": "客は、レンの前だと話の途中で歌にされると困っていた。",
+      "reason": "依頼を話す客がいる。宿の所在名や客が名前を挙げたことだけで、内緒の相談にレンを表示しない。",
+      "visual": "宿での相談、レンの在隊に応じた秘密の選択肢。"
+    },
+    "prepare": {
+      "decision": "person-evidence",
+      "people": [
+        "q164_guests"
+      ],
+      "evidence": "失敗談から、本人の傷つく部分を皆で削る。",
+      "reason": "秘密経路では客だけが控室へ同行し、レンは宿に残る。",
+      "visual": "客だけで送辞を整える控室。"
+    },
+    "together": {
+      "decision": "person-evidence",
+      "people": [
+        "q164_guests",
+        "q164_ren"
+      ],
+      "evidence": "レンが沈黙に耐えかね、歌い始めようとした。",
+      "reason": "最初から同伴した客とレンが集会所で対面する。客の発言を待つか歌に任せるかが分かれる。",
+      "visual": "歌い出す前の姿と、話し終えていない客。"
+    },
+    "invite": {
+      "decision": "person-evidence",
+      "people": [
+        "q164_guests",
+        "q164_ren"
+      ],
+      "evidence": "客と宿へ戻り、レンを送別会へ招いた。",
+      "reason": "客が宿へ帰着してレン本人を招く。集会所への出発前。",
+      "visual": "招待を伝える宿。送辞の中身を先に見せない。"
+    },
+    "secret_party": {
+      "decision": "person-evidence",
+      "people": [
+        "q164_guests",
+        "q164_ren"
+      ],
+      "evidence": "レンと客が集会所へ揃った。",
+      "reason": "招待に続き両者が実同行で到着した。",
+      "visual": "順に伝える送辞。"
+    },
+    "rehearse": {
+      "decision": "person-evidence",
+      "people": [
+        "q164_guests",
+        "q164_ren"
+      ],
+      "evidence": "レンにも事情を説明し、客の言葉を最後まで聞く練習をした。",
+      "reason": "説明経路では二者がともに控室へ来ており、秘密経路のprepareとは出演が異なる。",
+      "visual": "同じ控室でレンも練習する。"
+    },
+    "explained": {
+      "decision": "person-evidence",
+      "people": [
+        "q164_guests",
+        "q164_ren"
+      ],
+      "evidence": "練習した皆が集会所へ来た。",
+      "reason": "練習した二者が合流している。最後の短い歌を結末より早く描かない。",
+      "visual": "聞き終えた後で歌を頼む集会所。"
+    }
+  },
+  "next": "帰り火亭の客の呼称と既存レンの表示を接続する。秘密の準備、招待、説明、同伴の各旅程と在隊条件・全4結末を確認し、q165の出演を監査する。"
 }
  }
 };
