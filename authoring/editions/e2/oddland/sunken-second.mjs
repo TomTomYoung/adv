@@ -175,6 +175,10 @@ export function sunkenSecondSource(q,{cast=true}={}){
    end('farewell_'+outcome,'entry','セフと港へ戻った。'+(outcome==='role'?'運んだ一便の荷を引き渡し、合意した出発日を守って送り出す。':'本人の決めた別れ方で送り出す。'),outcome,outcome==='role'?[give('cargo','party','entry')]:[]);
   }
   add('cargo','supply','セフと約束した一便の補給を受け取る。これを港へ届けてから送り出す。',[opt('carry','一便の荷をセフと港へ運ぶ','farewell_role',{companions:['sef'],depart:[give('cargo','supply','party')]})]);
+  if(cast){
+   x.entities.sef.character='q170_sef';
+   for(const id of ['camp','role','entry','shore','ashore_send','farewell_send','ashore_holiday','farewell_holiday','ashore_role','farewell_role','cargo'])node(id).cast=[{entity:'sef',display:{x:50}}];
+  }
  }
  const rewrite=value=>{
   if(typeof value==='string')return value.replaceAll('$truth',q.model.reveal.newInformation);
