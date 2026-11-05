@@ -153,11 +153,17 @@ export function sunkenSecondSource(q,{cast=true}={}){
   }
  }
  if(q.number===169){
-  town('entry','指輪を預けたマオの家','royal_sender');town('recipient','旅仲間の現在の家','royal_recipient');town('post','後日の手紙を受け取る記録室','royal_archive');entity('mao','entry','person');entity('ring','mao');entity('letter','recipient');entity('messenger','recipient','person');node('recipient').place='recipient';node('friendship').place='recipient';
+  town('entry','指輪を預けたマオの家','royal_sender');town('recipient','旅仲間の現在の家','royal_recipient');town('post','後日の手紙を受け取る記録室','royal_archive');entity('mao','entry','person');entity('recipientPerson','recipient','person');entity('ring','mao');entity('letter','recipient');entity('messenger','recipient','person');node('recipient').place='recipient';node('friendship').place='recipient';
   choice('entry','deliver').depart=[give('ring','mao','party')];
   for(const key of ['honest','soft'])choice('report',key).effects=[give('ring','party','mao')];choice('later','admit').effects=[give('ring','party','mao')];
   route('report','lie','mail',{depart:[give('letter','recipient','messenger'),move('messenger','recipient','transit','post')]});
   add('mail','post','後日、記録室に受取人からの手紙が届いていた。「指輪はお返ししたはずです」。手紙を預かり、マオへ届ける。',[opt('deliver','手紙を持ってマオへ戻る','later',{depart:[give('letter','messenger','party')],effects:[give('letter','party','mao')]})]);
+  if(cast){
+   x.entities.mao.character='q169_mao';
+   x.entities.recipientPerson.character='q169_recipient';
+   for(const id of ['entry','report','later'])node(id).cast=[{entity:'mao',display:{x:50}}];
+   for(const id of ['recipient','friendship'])node(id).cast=[{entity:'recipientPerson',display:{x:50}}];
+  }
  }
  if(q.number===170){
   node('entry').id='camp';town('entry','セフと出発する港','royal_harbor');cell('shore','湖の渡し場','lakeshore',13,7);cell('camp','島の古い鍋のある野営地','island',9,5);town('supply','一便の荷を受け取る補給店','oddland_village_supply');entity('sef','entry','person');entity('cargo','supply');entity('pot','camp');node('camp').place='camp';node('role').place='camp';
