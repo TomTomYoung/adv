@@ -2766,11 +2766,11 @@ export const RELOCATED_CAST_REVIEW={
   "next": "q166の呼称表示を接続した。ルウの既存同行、戦闘結果と再開、5旅程、4結末、旧保存を検証し、次はq167の出演を監査する。"
 },
   q167:{
-  "sourceSha256": "eae013e244da782d06a697d3fddb97f41667d4f7b6ec77c6465e3aef8802064c",
+  "sourceSha256": "2afefa1d8b128b0b6cc52ccac23723a1dd6f285d0773bb486ec3d32707f0d410",
   "identityNotes": [
     "軍師ユウナは依頼名・固定過去・元原稿のいずれでも病欠中で、現場にはいない。blockedの伝言、reportの名義、結末後に戻る描写を現在の出演へ変換しない。",
-    "副隊長はentryで一、二、三の順に進めようとする現在の当事者。evacuateは同じ『副隊長と避難民の待つ陣地』へ戻る場面なので、陣地に残る副隊長の呼称表示候補とする。偵察・尾根・砦・帰還報告へ同行させる根拠はない。",
-    "避難民は既存group refugeesとして陣地に置かれている。entryとevacuateでは同じ陣地におり、evacuate_escortで隊と高台へ実移動した後はsafeにいる。人数・代表者・氏名・容貌は本文にないため集団の呼称だけを候補とする。",
+    "副隊長はentryで一、二、三の順に進めようとする現在の当事者。evacuateは同じ『副隊長と避難民の待つ陣地』へ戻る場面なので、陣地に残る副隊長の呼称表示を接続した。偵察・尾根・砦・帰還報告へ同行させない。",
+    "避難民は既存group refugeesとして陣地に置かれている。entryとevacuateでは同じ陣地におり、evacuate_escortで隊と高台へ実移動した後はsafeにいる。人数・代表者・氏名・容貌は本文にないため集団の呼称だけを接続した。",
     "bridge_seen・enemy_seenは探索隊だけの偵察、blockedは崩れた橋、ridgeとridge_battle_readyは実戦闘の地点、capturedは奪還直後の砦である。副隊長や避難民の同行を補わず、守備隊は戦闘敵を別の固定人物画へ置き換えない。",
     "reportの『今ここにいる隊』は現場で判断した隊を指すが、報告相手は名指しされていない。副隊長・ユウナ・避難民を救難隊詰所へ自動配置せず、誰の判断として報告するかという選択だけを保持する。",
     "人物表示のために橋の崩落、偵察履歴、戦闘結果、撤退後の護衛、3結末、報酬、物語改訂1や受注済み旧経路を変更しない。ユウナの不在と、現場で自分たちが判断するという主題を崩さない。"
@@ -2778,13 +2778,15 @@ export const RELOCATED_CAST_REVIEW={
   "people": {
     "q167_vice_captain": {
       "label": "副隊長",
-      "status": "candidate",
-      "need": "entryとevacuateの陣地にいる呼称表示候補。氏名・性別・年齢・容貌を補わず、偵察・戦闘・報告先へ同行させない。"
+      "status": "connected",
+      "entity": "viceCaptain",
+      "need": "entryとevacuateの陣地へ呼称表示を接続済み。氏名・性別・年齢・容貌を補わず、偵察・戦闘・報告先へ同行させない。"
     },
     "q167_refugees": {
       "label": "避難民",
-      "status": "candidate",
-      "need": "既存group refugeesへ集団名を接続する候補。陣地のentry／evacuateと、実護衛後のsafeに限り表示し、人数・代表者・個人画は追加しない。"
+      "status": "connected",
+      "entity": "refugees",
+      "need": "既存group refugeesへ集団名を接続済み。陣地のentry／evacuateと、実護衛後のsafeに限り表示し、人数・代表者・個人画は追加しない。"
     }
   },
   "scenes": {
@@ -2859,7 +2861,95 @@ export const RELOCATED_CAST_REVIEW={
       "visual": "勝利後の尾根。人物を補わず、次の砦到達前であることを保つ。"
     }
   },
-  "next": "q167の出演を精読した。次は副隊長と既存refugeesの呼称表示を陣地・高台へ接続し、偵察・戦闘・報告へユウナを置かないこと、戦闘結果・護衛・3結末・旧保存を検証してq168を監査する。"
+  "next": "q167の副隊長と既存refugeesの呼称表示を陣地・高台へ接続した。偵察・戦闘・報告へユウナを置かず、次はq168の双子の所在と出演を監査する。"
+},
+  q168:{
+  "sourceSha256": "beef73ac8f457e2c4e911413548e7cda61d6bd29b40c1958384ec37bb8ee1706",
+  "identityNotes": [
+    "依頼人は双子の術師ネムとノム。現行本文と物語状態は兄をbrother、弟をyoungerとして区別するが、ネム／ノムのどちらが兄か弟かは対応付けていない。名前を推測で割り当てず、監査と表示は『双子の兄』『双子の弟』で扱う。",
+    "entryでは兄弟とも工房にいる。pair経路では魔力灯へ到着後に兄だけ別棟へ移り、roles経路では二人とも魔力灯に残る。弟は魔力灯側に残り、兄の現在地はbrotherAtがlampかotherかで分岐する。",
+    "separatedは弟だけ、fetch_brotherとfetch_invoiceは別棟の兄だけが現在の相手。test_bothとinvoiceでは二人が実際に合流済み。adjust・gather・testedは弟が現在地におり、兄はbrotherAtがlampの経路だけ同席する条件付き場面として扱う。",
+    "testedの『請求書の相談には二人とも立ち会う』やfetch_invoiceの『弟と合流し』は次の合流・移動を含む文脈で、兄弟を所在状態より早く同じ場所へ置く根拠にはしない。実移動は既存journeyに従う。",
+    "billはitemであり人物表示とは分ける。solo、repaired、3結末、料金の選択、兄の別棟往復、既存の旅程と旧保存を人物表示のために変更しない。双子の個別画像はまだ接続せず、本文にない容貌・衣装も追加しない。"
+  ],
+  "people": {
+    "q168_brother": {
+      "label": "双子の兄",
+      "status": "candidate",
+      "need": "既存person brotherへ接続する候補。entry・invoice・fetch_brother・test_both・fetch_invoiceでは現在所在に従い、adjust・gather・testedはbrotherAtがlampのときだけ表示する。"
+    },
+    "q168_younger": {
+      "label": "双子の弟",
+      "status": "candidate",
+      "need": "既存person youngerへ接続する候補。entryと魔力灯側の各場面、invoiceで表示し、兄を迎えに行く別棟のfetch_brother／fetch_invoiceには同行させない。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "person-evidence",
+      "people": ["q168_brother","q168_younger"],
+      "evidence": "双子は同じ返事で違う工具を取った。",
+      "reason": "初期位置はbrother・youngerともentry。本文も兄の診断、弟の調整を同じ契約場面で示し、次の選択で二人とも魔力灯へ実同行する。",
+      "visual": "工房で同時に返事をする双子。兄弟の役割は区別するが、ネム／ノムの名前対応は補わない。"
+    },
+    "separated": {
+      "decision": "person-evidence",
+      "people": ["q168_younger"],
+      "evidence": "弟は一人で説明する言葉に詰まった。",
+      "reason": "entry_pairで二人が魔力灯へ到着した直後、brotherだけがotherへ移る。youngerはlampに残るため、ここで兄を表示しない。",
+      "visual": "魔力灯の前に残った弟。別棟へ呼ばれた兄を同じ画面へ置かない。"
+    },
+    "adjust": {
+      "decision": "person-evidence",
+      "people": ["q168_brother","q168_younger"],
+      "evidence": "弟が補正量を示した。「この値で通します」。",
+      "reason": "弟は常にlampにいる。entry_rolesから来た場合は兄もlampにいるが、separated_listenから来た場合は兄はotherのままなので、兄はbrotherAtがlampのときだけ表示する。",
+      "visual": "弟の調整を中心にし、兄は現在地が魔力灯の経路だけ条件付きで表示する。"
+    },
+    "invoice": {
+      "decision": "person-evidence",
+      "people": ["q168_brother","q168_younger"],
+      "evidence": "二人は働いた分を無断で減額しないと確認し、次の契約を相談する。",
+      "reason": "tested_invoiceでbrother・youngerの両者が港へ実同行して到着する。soloの有無は請求書の記述を変えるが、二人の在席は変えない。",
+      "visual": "港で二人が請求書と次の契約を相談する。料金の結末は選択前に固定しない。"
+    },
+    "fetch_brother": {
+      "decision": "person-evidence",
+      "people": ["q168_brother"],
+      "evidence": "別棟で兄の仕事が終わるのを待ち、魔力灯の試験へ呼び戻す。",
+      "reason": "partyがotherへ移動して兄を迎える場面。弟はlampに残っており、returnで兄と魔力灯へ戻った後に再合流する。",
+      "visual": "別棟で兄を迎える場面。弟を先回りして表示しない。"
+    },
+    "gather": {
+      "decision": "person-evidence",
+      "people": ["q168_brother","q168_younger"],
+      "evidence": "ここにいるなら二人で試験を始められる。",
+      "reason": "弟はlampにいる。兄がotherならfetchを選んで迎えに行き、brotherAtがlampなら二人で試験へ進めるため、兄は所在条件付きで表示する。",
+      "visual": "魔力灯で弟が待つ場面。兄が戻っている経路だけ二人を同時表示する。"
+    },
+    "test_both": {
+      "decision": "person-evidence",
+      "people": ["q168_brother","q168_younger"],
+      "evidence": "兄が魔力灯へ戻った。",
+      "reason": "fetch_brother_returnでpartyとbrotherがlampへ実帰着し、そこに残っていたyoungerと合流する。二人で点灯試験を行う直前の場面。",
+      "visual": "魔力灯へ戻った兄と待っていた弟。点灯試験完了は次の選択まで先取りしない。"
+    },
+    "tested": {
+      "decision": "person-evidence",
+      "people": ["q168_brother","q168_younger"],
+      "evidence": "請求書の相談には二人とも立ち会う。",
+      "reason": "弟はlampにいる。兄は経路によりlampまたはotherで、otherにいる場合はfetch_invoiceで迎えに行く必要がある。現在の表示はbrotherAtに従わせる。",
+      "visual": "点灯試験後の魔力灯。弟は表示し、兄は現在地がlampのときだけ表示する。"
+    },
+    "fetch_invoice": {
+      "decision": "person-evidence",
+      "people": ["q168_brother"],
+      "evidence": "修理の完了を兄に伝えた。",
+      "reason": "tested_fetchでpartyだけがotherへ移り、兄へ完了を伝える。弟はlampに残り、兄を連れて戻った後に再合流する。",
+      "visual": "別棟で兄へ修理完了を伝える場面。弟はまだ魔力灯にいるため表示しない。"
+    }
+  },
+  "next": "q168の双子を精読した。兄弟の名前対応は保留し、次はbrother／youngerの所在条件付き表示を接続してq169を監査する。"
 }
  }
 };
