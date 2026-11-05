@@ -10,7 +10,9 @@ export async function buildMachineQuests({check=false}={}){
  const quests=[];
  for(const n of [...Array.from({length:10},(_,i)=>71+i),...Array.from({length:10},(_,i)=>171+i)]){
   const first=JSON.parse(await fs.readFile(path.join(root,`data/quests/q${String(n).padStart(3,'0')}.json`),'utf8')),source=n<100?machineFirstSource:machineSecondSource;
-  quests.push(compileRelocatedQuest(first,source(first),{prefix:'machine',eventPrefix:'machine',settlement:'salome',settlementName:'サロメ',board:'salome_board',boardName:'サロメの共同依頼所',source:'authoring/editions/e2/salome/'+(n<100?'machine-first':'machine-second')+'.mjs',stage:'machine-twenty',scope:'機関廟20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。',preserveAcceptedRoute:true,battle:'boss_8'}));
+  const quest=compileRelocatedQuest(first,source(first),{prefix:'machine',eventPrefix:'machine',settlement:'salome',settlementName:'サロメ',board:'salome_board',boardName:'サロメの共同依頼所',source:'authoring/editions/e2/salome/'+(n<100?'machine-first':'machine-second')+'.mjs',stage:'machine-twenty',scope:'機関廟20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。',preserveAcceptedRoute:true,battle:'boss_8'});
+  if(n===171)quest.story.scenes.watch_ward_ready.cast=[{entity:'dai',display:{x:50}}];
+  quests.push(quest);
  }
  const outcomes=quests.reduce((n,q)=>n+Object.keys(q.outcomes).length,0);
  const lines=['# 鉄胎の機関廟・20件の第2版経路','','2026-10-27。q071〜080・q171〜180の既存本文・条件・'+outcomes+'結末・報酬を継承し、現場・同行・保持者・帰路を接続した。全文改稿ではない。','',
