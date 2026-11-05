@@ -6,7 +6,7 @@ import {auditRelocatedCast,loadRelocatedCastQuests,relocatedCastFingerprint} fro
 const quests=await loadRelocatedCastQuests();
 test('cast audit distinguishes measured empty casts, reviewed scenes and candidate roles',()=>{
  const report=auditRelocatedCast(quests);
- assert.deepEqual(report.summary,{quests:100,scenes:753,emptyCastScenes:596,personEntities:120,characterLinkedEntities:53,reviewedQuests:39,reviewedScenes:252,noPersonEvidenceScenes:90,personEvidenceScenes:162,candidateRoles:2,connectedRoles:73,unreviewedScenes:501});
+ assert.deepEqual(report.summary,{quests:100,scenes:753,emptyCastScenes:591,personEntities:121,characterLinkedEntities:55,reviewedQuests:40,reviewedScenes:263,noPersonEvidenceScenes:90,personEvidenceScenes:173,candidateRoles:1,connectedRoles:75,unreviewedScenes:490});
  assert.ok(report.regions.every(r=>r.quests===20));
  assert.equal(report.quests.find(q=>q.id==='q071').scenes[0].review,null);
  assert.deepEqual(report.quests.find(q=>q.id==='q032').scenes.filter(s=>s.review.people.length).map(s=>s.id),['cell','workshop']);
@@ -58,14 +58,22 @@ test('cast audit distinguishes measured empty casts, reviewed scenes and candida
   tested:['brother','younger'],fetch_invoice:['brother']
  });
  const ring=report.quests.find(q=>q.id==='q169');
- assert.deepEqual(Object.fromEntries(Object.entries(ring.review.people).map(([id,role])=>[id,role.status])),{
-  q169_mao:'candidate',q169_recipient:'candidate'
+ assert.deepEqual(Object.fromEntries(Object.entries(ring.review.people).map(([id,role])=>[id,{status:role.status,entity:role.entity}])),{
+  q169_mao:{status:'connected',entity:'mao'},q169_recipient:{status:'connected',entity:'recipientPerson'}
  });
  assert.deepEqual(Object.fromEntries(ring.scenes.map(s=>[s.id,s.review.people])),{
   entry:['q169_mao'],recipient:['q169_recipient'],friendship:['q169_recipient'],
   report:['q169_mao'],later:['q169_mao'],mail:[]
  });
- assert.ok(ring.scenes.every(s=>s.cast.length===0),'q169 review does not implement cast yet');
+ assert.deepEqual(Object.fromEntries(ring.scenes.map(s=>[s.id,s.cast.map(c=>c.entity)])),{
+  entry:['mao'],recipient:['recipientPerson'],friendship:['recipientPerson'],report:['mao'],later:['mao'],mail:[]
+ });
+ const farewell=report.quests.find(q=>q.id==='q170');
+ assert.deepEqual(Object.fromEntries(Object.entries(farewell.review.people).map(([id,role])=>[id,role.status])),{
+  q170_sef:'candidate'
+ });
+ assert.ok(farewell.scenes.every(s=>s.review.people.length===1&&s.review.people[0]==='q170_sef'));
+ assert.ok(farewell.scenes.every(s=>s.cast.length===0),'q170 review does not implement cast yet');
 });
 
 test('a change to reviewed prose or location cannot silently retain the review',()=>{
@@ -101,9 +109,9 @@ test('future character and cast hookups change measured counts without marking u
  const changed=structuredClone(quests),q=changed.find(q=>q.id==='q071'),entity=Object.values(q.story.entities).find(e=>e.kind==='person');
  entity.character='future_owner';Object.values(q.story.scenes)[0].cast=[{entity:'workerPerson'}];
  const report=auditRelocatedCast(changed);
- assert.equal(report.summary.emptyCastScenes,595);
- assert.equal(report.summary.characterLinkedEntities,54);
- assert.equal(report.summary.reviewedScenes,252);
+ assert.equal(report.summary.emptyCastScenes,590);
+ assert.equal(report.summary.characterLinkedEntities,56);
+ assert.equal(report.summary.reviewedScenes,263);
  assert.equal(report.quests.find(q=>q.id==='q071').review,null);
 });
 
