@@ -47,6 +47,16 @@ export function sunkenSecondSource(q,{cast=true}={}){
    add('work_'+outcome,'vault',outcome==='repair'?'店主とソムが金庫室へ来た。別の手段で修理し、所有品を店主と照合する。':'店主の立会いで古い経路を使い、合意した修理を行う。弁償の契約は別に残す。',[opt('repair','修理して所有品を照合する','checked_'+outcome,{effects:[set('repaired')]})]);
    add('checked_'+outcome,'vault','修理と所有品の照合を終えた。品物は金庫室に残し、正面へ戻る。',[opt('return','店主とソムと正面へ戻る','receipt_'+outcome,{companions:['som','owner']})]);end('receipt_'+outcome,'entry','店主の受取印を正面で待ち、修理の代金を受け取る。',outcome);
   }
+  if(cast){
+   x.entities.som.character='q163_som';
+   x.entities.owner.character='q163_owner';
+   for(const id of ['entry','repay','work_repair','checked_repair','receipt_repair','work_repay','checked_repay','receipt_repay']){
+    node(id).cast=[
+     {entity:'som',display:{x:32,scale:.83}},
+     {entity:'owner',display:{x:68,scale:.83}}
+    ];
+   }
+  }
  }
  if(q.number===164){
   town('entry','レンと客のいる宿','oddland_village_inn');town('prepare','送辞を揃える控室','royal_witness');town('hall','送別会の集会所','royal_hall');entity('renGuest','entry','person');entity('guests','entry','group');node('prepare').place='prepare';node('together').place='hall';

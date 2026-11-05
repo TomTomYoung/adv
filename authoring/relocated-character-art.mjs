@@ -1,5 +1,6 @@
 // Edition-two regional bundle: relocated-quest roles, separate from border NPCs.
 export const RELOCATED_CHARACTER_ART=Object.fromEntries([
+ ...['som','owner'].map(key=>['q163_'+key,'sunken-q163-2026-11-05']),
  ...['eld','niece'].map(key=>['q162_'+key,'sunken-q162-2026-11-04']),
  ...['patient','ine'].map(key=>['q161_'+key,'sunken-q161-2026-11-04']),
  ['q069_sea_king','sunken-q069-2026-11-04'],
@@ -57,6 +58,14 @@ relocatedCharacters.q070_port_people={
  detail:'港で浮上作業を知らされ、隊と高台へ移る。到着後は高台に留まり、隊の制御台への帰路には同行しない。',
  provenance:'2026-11-04。既存group portPeopleの呼称表示。人数・氏名・顔・代表者は追加しない。'
 };
+for(const [key,name,role,detail] of [
+ ['som','鍵師ソム','初めて正式な修理を引き受ける元盗賊','保証人と店主の立会いで金庫を修理する。過去の弁償を伴う経路では修理代と弁償を分ける。'],
+ ['owner','店主','修理に立ち会う店主','以前ソムに盗まれた相手。金庫室で所有品を照合し、店先で修理の受取を確かめる。']
+]){
+ const id='q163_'+key, asset=RELOCATED_CHARACTER_ART[id].asset;
+ relocatedCharacters[id]={id,name,role,detail,portrait:asset,sprite:asset,
+  provenance:'2026-11-05の美術設定。容姿と衣装は専用画のための選択。人物は空の手で描き、所有品と修理代の状態は元の物語に従う。'};
+}
 for(const [key,name,role,detail] of [
  ['eld','騎士エルド','盾を貸す騎士','自宅で盾を貸し、返却する経路では同じ家で受け取る。'],
  ['niece','エルドの姪','成人の式を迎える姪','式で船大工を志すと話す。工房へ運ぶときは自身も同行する。']
