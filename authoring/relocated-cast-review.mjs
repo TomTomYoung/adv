@@ -2954,7 +2954,7 @@ export const RELOCATED_CAST_REVIEW={
   "next": "q168のbrother／youngerへ所在条件付きの呼称表示を接続した。兄弟の名前対応は保留し、次はq169のマオ・受取人と手紙の運搬役を監査する。"
 },
   q169:{
-  "sourceSha256": "7b3558af3b564fd5cc60f02b0050f07022a9b40b1874ab3f00e12e0c4d7f4947",
+  "sourceSha256": "3f1b178a105a0634590d08734b193707501a3e5bedd7d3c4f8d2845fdf1209c0",
   "identityNotes": [
     "依頼人は騎士マオで、既存person mao。entryで指輪を預け、reportとlaterで探索隊の返事を受け取る現在の相手として本文に出る。指輪ringの所持と人物の在席は分ける。",
     "受取人はマオの旧友で、recipientとfriendshipの現在の話者。専用person recipientPersonを追加し、messengerを受取人本人として流用しない。受取人の氏名・性別・容貌・現在の同居相手は本文から追加しない。",
