@@ -1,0 +1,1860 @@
+{
+  "schemaVersion": 1,
+  "id": "q165",
+  "number": 165,
+  "title": "仲間を外す依頼",
+  "client": "商人リナ",
+  "brief": "魔術師イルが同席しない場で、商談をしたいのだ。",
+  "region": 7,
+  "type": "scene_graph",
+  "recommendedLevel": 7,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 旧王領の村の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q165_scene",
+      "title": "仲間を外す依頼：商人リナ",
+      "points": [
+        {
+          "map": "region_7_f1",
+          "x": 8,
+          "y": 1,
+          "dungeon": "region_7"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q165.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q165.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q165.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q165"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_7"
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_7_f1",
+      "x": 8,
+      "y": 1,
+      "object": "q165_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "secret": {
+      "label": "伏せた援助",
+      "text": "補給は受けた。後にリナから知ったイルは、黙って受け取った理由をあなたへ尋ねた。",
+      "gold": 129,
+      "xp": 87
+    },
+    "open": {
+      "label": "本人の返済条件",
+      "text": "イルが返済の予定を決めた。リナは別れ際、食事代を勝手に払わず財布をしまった。",
+      "gold": 129,
+      "xp": 87
+    },
+    "decline": {
+      "label": "客として頼む",
+      "text": "援助は辞退した。リナは家族としてでなく、次は客として仕事を頼むと言った。",
+      "gold": 129,
+      "xp": 87
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/sunken-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3816fa85bc3dd738a74b8",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "カイルの前では値段の話しかしない商人が、不在時には彼の苦手な料理を覚えている。秘密の援助を受けるかどうかは本人の問題だ。主人公が同席条件を満たせば何をしてもよい、とはしない。",
+      "fixedPast": "商人リナは、護衛隊の魔法剣士カイルを外して商談へ来てほしいと頼む。カイルの出自への差別を疑わせるが、彼はリナが昔支援した弟で、家族に仕事を救われたくないと言い続けている。リナは助けたいが、支配していた頃へ戻りたくない。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "商人リナ",
+        "beliefsAndGoals": "商人リナは、護衛隊の魔法剣士カイルを外して商談へ来てほしいと頼む。カイルの出自への差別を疑わせるが、彼はリナが昔支援した弟で、家族に仕事を救われたくないと言い続けている。リナは助けたいが、支配していた頃へ戻りたくない。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "魔術師イルが同席しない場で、商談をしたいのだ。"
+      }
+    ],
+    "conflict": {
+      "design": "招待→同席の理由を聞く／一時的に別行動→援助案→本人への確認または秘密の受領。本人を外したくなければ公開商談へ切り替えられる。秘密の援助は短期利益があるが、後に相手から知られた場合の説明を残す。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q165.royal.entry"
+        },
+        {
+          "id": "private",
+          "script": "q165.royal.private"
+        },
+        {
+          "id": "public",
+          "script": "q165.royal.public"
+        },
+        {
+          "id": "ask_il",
+          "script": "q165.royal.ask_il"
+        },
+        {
+          "id": "secret_supply",
+          "script": "q165.royal.secret_supply"
+        },
+        {
+          "id": "secret_report",
+          "script": "q165.royal.secret_report"
+        },
+        {
+          "id": "open_supply",
+          "script": "q165.royal.open_supply"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "魔術師イルが同席しない場で、商談をしたいのだ。"
+    },
+    "reveal": {
+      "newInformation": "カイルの前では値段の話しかしない商人が、不在時には彼の苦手な料理を覚えている。秘密の援助を受けるかどうかは本人の問題だ。主人公が同席条件を満たせば何をしてもよい、とはしない。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q165.scene.entry"
+      },
+      {
+        "id": "private",
+        "script": "q165.scene.private"
+      },
+      {
+        "id": "public",
+        "script": "q165.scene.public"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": [
+        "原稿のカイルを既存actorイルへ置換。本人不在はmembersを読む。強制離脱は行わず公開商談を常に選べる。"
+      ]
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q165.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "リナはイルの前だと値段の話しかしない。外して話す理由を尋ねると、「弟は家族に仕事を救われたくないと言うんです」と答えた。",
+        "options": [
+          {
+            "id": "private",
+            "text": "イルが隊にいない場で援助の話を聞く",
+            "to": "private",
+            "action": "entry_private"
+          },
+          {
+            "id": "open",
+            "text": "隊員を外さず、公開の商談に切り替える",
+            "to": "public",
+            "action": "entry_open"
+          },
+          {
+            "id": "decline",
+            "text": "秘密の援助は受けず、客としての依頼を頼む",
+            "to": "@decline",
+            "action": "entry_decline"
+          }
+        ]
+      },
+      {
+        "id": "private",
+        "place": "private",
+        "text": "リナは弟の苦手な料理を今も覚えていた。助けたいが、昔のように支配したくないという。本人へ知らせず受け取ることもできるが、説明の責任が残る。",
+        "options": [
+          {
+            "id": "secret",
+            "text": "本人に知らせず補給の援助を受ける",
+            "to": "secret_supply",
+            "action": "private_secret"
+          },
+          {
+            "id": "ask",
+            "text": "本人へ知らせて返済条件を相談する",
+            "to": "ask_il",
+            "action": "private_ask"
+          },
+          {
+            "id": "decline",
+            "text": "援助を辞退する",
+            "to": "@decline",
+            "action": "private_decline"
+          }
+        ]
+      },
+      {
+        "id": "public",
+        "place": "public",
+        "text": "イルは公開の援助なら返済日を自分で決めたいと言った。リナも条件に同意した。",
+        "options": [
+          {
+            "id": "agree",
+            "text": "双方の決めた援助契約を取り持つ",
+            "to": "open_supply",
+            "action": "public_agree"
+          },
+          {
+            "id": "decline",
+            "text": "今回は援助を辞退する",
+            "to": "@decline",
+            "action": "public_decline"
+          }
+        ]
+      },
+      {
+        "id": "ask_il",
+        "place": "entry",
+        "text": "リナと宿へ戻り、イルへ援助の相談を伝えた。隊への参加とは別に、本人も商談へ来る。",
+        "options": [
+          {
+            "id": "public",
+            "text": "双方と公開の商談席へ向かう",
+            "to": "public",
+            "action": "ask_il_public"
+          }
+        ]
+      },
+      {
+        "id": "secret_supply",
+        "place": "supply",
+        "text": "リナと補給店へ来た。本人へ説明しないまま援助を受け取る。",
+        "options": [
+          {
+            "id": "receive",
+            "text": "補給を受け取り、宿へ戻る",
+            "to": "secret_report",
+            "action": "secret_supply_receive"
+          }
+        ]
+      },
+      {
+        "id": "secret_report",
+        "place": "entry",
+        "text": "宿でリナから援助のことを知ったイルに会った。受け取った補給について説明を求められる。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@secret",
+            "action": "secret_report_finish"
+          }
+        ]
+      },
+      {
+        "id": "open_supply",
+        "place": "supply",
+        "text": "双方の条件を記した契約を持って補給店へ来た。合意した援助を受け取る。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@open",
+            "action": "open_supply_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "entryScript": "q165.royal.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "sunken-second-ten",
+      "settlement": "oddland_village",
+      "saveRevision": 2,
+      "scope": "沈没城後半10件の村・橋・試験場・砦・湖の現場接続。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q165.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q165.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "リナはイルの前だと値段の話しかしない。外して話す理由を尋ねると、「弟は家族に仕事を救われたくないと言うんです」と答えた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "private",
+              "text": "イルが隊にいない場で援助の話を聞く",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_member",
+                      "actor": "il"
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q165.scene.private"
+                }
+              ]
+            },
+            {
+              "id": "open",
+              "text": "隊員を外さず、公開の商談に切り替える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q165.scene.public"
+                }
+              ]
+            },
+            {
+              "id": "decline",
+              "text": "秘密の援助は受けず、客としての依頼を頼む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q165.end.decline"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q165.scene.private": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q165.node",
+          "value": "private"
+        },
+        {
+          "op": "say",
+          "text": "リナは弟の苦手な料理を今も覚えていた。助けたいが、昔のように支配したくないという。本人へ知らせず受け取ることもできるが、説明の責任が残る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "secret",
+              "text": "本人に知らせず補給の援助を受ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q165.end.secret"
+                }
+              ]
+            },
+            {
+              "id": "ask",
+              "text": "本人へ知らせて返済条件を相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q165.scene.public"
+                }
+              ]
+            },
+            {
+              "id": "decline",
+              "text": "援助を辞退する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q165.end.decline"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q165.scene.public": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q165.node",
+          "value": "public"
+        },
+        {
+          "op": "say",
+          "text": "イルは公開の援助なら返済日を自分で決めたいと言った。リナも条件に同意した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "双方の決めた援助契約を取り持つ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q165.end.open"
+                }
+              ]
+            },
+            {
+              "id": "decline",
+              "text": "今回は援助を辞退する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q165.end.decline"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q165.end.secret": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q165.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "補給は受けた。後にリナから知ったイルは、黙って受け取った理由をあなたへ尋ねた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q165",
+              "outcome": "secret"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q165.end.open": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q165.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "イルが返済の予定を決めた。リナは別れ際、食事代を勝手に払わず財布をしまった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q165",
+              "outcome": "open"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q165.end.decline": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q165.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "援助は辞退した。リナは家族としてでなく、次は客として仕事を頼むと言った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q165",
+              "outcome": "decline"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q165.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q165.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q165.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "secret",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "補給は受けた。後にリナから知ったイルは、黙って受け取った理由をあなたへ尋ねた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "open",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "イルが返済の予定を決めた。リナは別れ際、食事代を勝手に払わず財布をしまった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "decline",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "援助は辞退した。リナは家族としてでなく、次は客として仕事を頼むと言った。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q165.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q165.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "private",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q165.scene.private"
+                    }
+                  ]
+                },
+                {
+                  "equals": "public",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q165.scene.public"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q165.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q165.royal.entry": {
+      "storyQuest": "q165",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q165",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "リナはイルの前だと値段の話しかしない。外して話す理由を尋ねると、「弟は家族に仕事を救われたくないと言うんです」と答えた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "private",
+              "text": "イルが隊にいない場で援助の話を聞く",
+              "storyAction": {
+                "quest": "q165",
+                "action": "entry_private"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_member",
+                  "actor": "il"
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q165",
+                  "action": "entry_private"
+                }
+              ]
+            },
+            {
+              "id": "open",
+              "text": "隊員を外さず、公開の商談に切り替える",
+              "storyAction": {
+                "quest": "q165",
+                "action": "entry_open"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q165",
+                  "action": "entry_open"
+                }
+              ]
+            },
+            {
+              "id": "decline",
+              "text": "秘密の援助は受けず、客としての依頼を頼む",
+              "storyAction": {
+                "quest": "q165",
+                "action": "entry_decline"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q165",
+                  "action": "entry_decline"
+                },
+                {
+                  "op": "jump",
+                  "script": "q165.royal.end.decline"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q165.royal.private": {
+      "storyQuest": "q165",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q165",
+          "scene": "private"
+        },
+        {
+          "op": "narrate",
+          "text": "リナは弟の苦手な料理を今も覚えていた。助けたいが、昔のように支配したくないという。本人へ知らせず受け取ることもできるが、説明の責任が残る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "secret",
+              "text": "本人に知らせず補給の援助を受ける",
+              "storyAction": {
+                "quest": "q165",
+                "action": "private_secret"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q165",
+                  "action": "private_secret"
+                }
+              ]
+            },
+            {
+              "id": "ask",
+              "text": "本人へ知らせて返済条件を相談する",
+              "storyAction": {
+                "quest": "q165",
+                "action": "private_ask"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q165",
+                  "action": "private_ask"
+                }
+              ]
+            },
+            {
+              "id": "decline",
+              "text": "援助を辞退する",
+              "storyAction": {
+                "quest": "q165",
+                "action": "private_decline"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q165",
+                  "action": "private_decline"
+                },
+                {
+                  "op": "jump",
+                  "script": "q165.royal.end.decline"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q165.royal.public": {
+      "storyQuest": "q165",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q165",
+          "scene": "public"
+        },
+        {
+          "op": "narrate",
+          "text": "イルは公開の援助なら返済日を自分で決めたいと言った。リナも条件に同意した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "双方の決めた援助契約を取り持つ",
+              "storyAction": {
+                "quest": "q165",
+                "action": "public_agree"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q165",
+                  "action": "public_agree"
+                }
+              ]
+            },
+            {
+              "id": "decline",
+              "text": "今回は援助を辞退する",
+              "storyAction": {
+                "quest": "q165",
+                "action": "public_decline"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q165",
+                  "action": "public_decline"
+                },
+                {
+                  "op": "jump",
+                  "script": "q165.royal.end.decline"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q165.royal.ask_il": {
+      "storyQuest": "q165",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q165",
+          "scene": "ask_il"
+        },
+        {
+          "op": "narrate",
+          "text": "リナと宿へ戻り、イルへ援助の相談を伝えた。隊への参加とは別に、本人も商談へ来る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "public",
+              "text": "双方と公開の商談席へ向かう",
+              "storyAction": {
+                "quest": "q165",
+                "action": "ask_il_public"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q165",
+                  "action": "ask_il_public"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q165.royal.secret_supply": {
+      "storyQuest": "q165",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q165",
+          "scene": "secret_supply"
+        },
+        {
+          "op": "narrate",
+          "text": "リナと補給店へ来た。本人へ説明しないまま援助を受け取る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "receive",
+              "text": "補給を受け取り、宿へ戻る",
+              "storyAction": {
+                "quest": "q165",
+                "action": "secret_supply_receive"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q165",
+                  "action": "secret_supply_receive"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q165.royal.secret_report": {
+      "storyQuest": "q165",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q165",
+          "scene": "secret_report"
+        },
+        {
+          "op": "narrate",
+          "text": "宿でリナから援助のことを知ったイルに会った。受け取った補給について説明を求められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q165",
+                "action": "secret_report_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q165",
+                  "action": "secret_report_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q165.royal.end.secret"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q165.royal.open_supply": {
+      "storyQuest": "q165",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q165",
+          "scene": "open_supply"
+        },
+        {
+          "op": "narrate",
+          "text": "双方の条件を記した契約を持って補給店へ来た。合意した援助を受け取る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q165",
+                "action": "open_supply_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q165",
+                  "action": "open_supply_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q165.royal.end.open"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q165.royal.end.secret": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "補給は受けた。後にリナから知ったイルは、黙って受け取った理由をあなたへ尋ねた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.secret",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q165",
+          "outcome": "secret"
+        }
+      ]
+    },
+    "q165.royal.end.open": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "イルが返済の予定を決めた。リナは別れ際、食事代を勝手に払わず財布をしまった。"
+        },
+        {
+          "op": "add",
+          "target": "vars.open",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q165",
+          "outcome": "open"
+        }
+      ]
+    },
+    "q165.royal.end.decline": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "援助は辞退した。リナは家族としてでなく、次は客として仕事を頼むと言った。"
+        },
+        {
+          "op": "add",
+          "target": "vars.decline",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q165",
+          "outcome": "decline"
+        }
+      ]
+    },
+    "q165.royal.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q165"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q165.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q165.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q165.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "secret",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "補給は受けた。後にリナから知ったイルは、黙って受け取った理由をあなたへ尋ねた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "open",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "イルが返済の予定を決めた。リナは別れ際、食事代を勝手に払わず財布をしまった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "decline",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "援助は辞退した。リナは家族としてでなく、次は客として仕事を頼むと言った。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q165"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q165.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q165.royal.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "private",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q165.royal.private"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "public",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q165.royal.public"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "ask_il",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q165.royal.ask_il"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "secret_supply",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q165.royal.secret_supply"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "secret_report",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q165.royal.secret_report"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "open_supply",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q165.royal.open_supply"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q165.royal.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "リナとイルのいる宿",
+      "private": "援助を相談する別室",
+      "public": "港の公開商談席",
+      "supply": "援助の補給を受け取る店",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "private"
+      ],
+      [
+        "transit",
+        "public"
+      ],
+      [
+        "transit",
+        "supply"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "private",
+          "public",
+          "supply",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "secret",
+          "open",
+          "decline"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "linaAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "private",
+          "public",
+          "supply",
+          "transit"
+        ],
+        "meaning": "lina の所在または保持者"
+      },
+      "ilGuestAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "private",
+          "public",
+          "supply",
+          "transit"
+        ],
+        "meaning": "ilGuest の所在または保持者"
+      },
+      "aidAt": {
+        "type": "enum",
+        "initial": "supply",
+        "values": [
+          "entry",
+          "private",
+          "public",
+          "supply",
+          "transit",
+          "party",
+          "lina",
+          "ilGuest"
+        ],
+        "meaning": "aid の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "lina": {
+        "holder": "linaAt",
+        "kind": "person"
+      },
+      "ilGuest": {
+        "holder": "ilGuestAt",
+        "kind": "person"
+      },
+      "aid": {
+        "holder": "aidAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "カイルの前では値段の話しかしない商人が、不在時には彼の苦手な料理を覚えている。秘密の援助を受けるかどうかは本人の問題だ。主人公が同席条件を満たせば何をしてもよい、とはしない。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "リナとイルのいる宿",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "private": {
+        "title": "援助を相談する別室",
+        "place": "private",
+        "cast": [],
+        "requires": true
+      },
+      "public": {
+        "title": "港の公開商談席",
+        "place": "public",
+        "cast": [],
+        "requires": true
+      },
+      "ask_il": {
+        "title": "リナとイルのいる宿",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "secret_supply": {
+        "title": "援助の補給を受け取る店",
+        "place": "supply",
+        "cast": [],
+        "requires": true
+      },
+      "secret_report": {
+        "title": "リナとイルのいる宿",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "open_supply": {
+        "title": "援助の補給を受け取る店",
+        "place": "supply",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_private": {
+        "from": [
+          "entry"
+        ],
+        "to": "private",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "has_member",
+            "actor": "il"
+          }
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "lina"
+            ],
+            "path": [
+              "transit",
+              "private"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "private",
+          "companions": [
+            "lina"
+          ]
+        },
+        "depart": []
+      },
+      "entry_open": {
+        "from": [
+          "entry"
+        ],
+        "to": "public",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "lina",
+              "ilGuest"
+            ],
+            "path": [
+              "transit",
+              "public"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "public",
+          "companions": [
+            "lina",
+            "ilGuest"
+          ]
+        },
+        "depart": []
+      },
+      "entry_decline": {
+        "from": [
+          "entry"
+        ],
+        "ending": "decline",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "decline"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "private_secret": {
+        "from": [
+          "private"
+        ],
+        "to": "secret_supply",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "lina"
+            ],
+            "path": [
+              "transit",
+              "supply"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "supply",
+          "companions": [
+            "lina"
+          ]
+        },
+        "depart": []
+      },
+      "private_ask": {
+        "from": [
+          "private"
+        ],
+        "to": "ask_il",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "lina"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "lina"
+          ]
+        },
+        "depart": []
+      },
+      "private_decline": {
+        "from": [
+          "private"
+        ],
+        "ending": "decline",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "decline"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "public_agree": {
+        "from": [
+          "public"
+        ],
+        "to": "open_supply",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "lina",
+              "ilGuest"
+            ],
+            "path": [
+              "transit",
+              "supply"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "supply",
+          "companions": [
+            "lina",
+            "ilGuest"
+          ]
+        },
+        "depart": []
+      },
+      "public_decline": {
+        "from": [
+          "public"
+        ],
+        "ending": "decline",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "decline"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "ask_il_public": {
+        "from": [
+          "ask_il"
+        ],
+        "to": "public",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "lina",
+              "ilGuest"
+            ],
+            "path": [
+              "transit",
+              "public"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "public",
+          "companions": [
+            "lina",
+            "ilGuest"
+          ]
+        },
+        "depart": []
+      },
+      "secret_supply_receive": {
+        "from": [
+          "secret_supply"
+        ],
+        "to": "secret_report",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "lina"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "lina"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "aid",
+            "from": "supply",
+            "to": "party"
+          }
+        ]
+      },
+      "secret_report_finish": {
+        "from": [
+          "secret_report"
+        ],
+        "ending": "secret",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "secret"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "open_supply_finish": {
+        "from": [
+          "open_supply"
+        ],
+        "ending": "open",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "aid",
+            "from": "supply",
+            "to": "party"
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "open"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "secret": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q165.values.resolution"
+            },
+            "right": "secret"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q165.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q165.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "open": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q165.values.resolution"
+            },
+            "right": "open"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q165.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q165.values.partyAt"
+                },
+                "right": "supply"
+              }
+            ]
+          }
+        ]
+      },
+      "decline": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q165.values.resolution"
+            },
+            "right": "decline"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q165.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q165.values.partyAt"
+                },
+                "right": "entry"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q165.values.partyAt"
+                },
+                "right": "private"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q165.values.partyAt"
+                },
+                "right": "public"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "town",
+        "location": "oddland_village_inn"
+      },
+      "private": {
+        "kind": "town",
+        "location": "royal_witness"
+      },
+      "public": {
+        "kind": "town",
+        "location": "royal_harbor"
+      },
+      "supply": {
+        "kind": "town",
+        "location": "oddland_village_supply"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_village",
+  "receptionLocations": [
+    "royal_board"
+  ]
+}

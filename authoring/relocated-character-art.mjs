@@ -1,5 +1,6 @@
 // Edition-two regional bundle: relocated-quest roles, separate from border NPCs.
 export const RELOCATED_CHARACTER_ART=Object.fromEntries([
+ ['q165_lina','sunken-q165-2026-11-05'],
  ...['som','owner'].map(key=>['q163_'+key,'sunken-q163-2026-11-05']),
  ...['eld','niece'].map(key=>['q162_'+key,'sunken-q162-2026-11-04']),
  ...['patient','ine'].map(key=>['q161_'+key,'sunken-q161-2026-11-04']),
@@ -54,6 +55,18 @@ export const relocatedCharacters=Object.fromEntries([
 ].map(([id,name,detail,provenance])=>[id,{id,name,role:'礼拝堂の現地の相手',detail,portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,
  provenance:provenance??'2026-10-29の美術設定。固有名・他人物との同一性は追加しない。具体的な外見・年齢感・服装は今回の美術設定。牢・格子・聖像・宝玉・石を人物画へ固定しない。'}]));
 // The group has no specified headcount or spokesperson. Ren is the existing actor.
+relocatedCharacters.q165_lina={
+ id:'q165_lina',name:'商人リナ',role:'弟への援助を相談する商人',
+ detail:'既存の同行と所在に従い、宿・別室・公開商談席・補給店で援助を相談する。',
+ portrait:RELOCATED_CHARACTER_ART.q165_lina.asset,sprite:RELOCATED_CHARACTER_ART.q165_lina.asset,
+ provenance:'2026-11-05の美術設定。成人女性としての描画、暗い栗色の髪、青緑の上着と黄土色の胴着は美術上の選択。具体的な年齢・容姿・衣装を本文の経歴へ追加しない。空の手で描き、援助・契約・受渡し済みの状態を固定しない。'
+};
+relocatedCharacters.q165_il={
+ id:'q165_il',name:'魔術師イル',role:'援助について本人の条件を伝える相手',
+ detail:'リナの弟である既存の仲間イル本人。物語上の合流・同行と出撃隊への参加を別に扱う。',
+ portrait:'portrait_il',
+ provenance:'2026-11-05。既存actor ilの上半身の肖像をScene舞台とClassic人物カードへ再利用する。公開商談・本人への相談・秘密の援助後の帰着・公開の補給受取に限って表示する。非公開の相談と補給店へ同行させず、全身画を新設しない。'
+};
 relocatedCharacters.q164_guests={
  id:'q164_guests',name:'帰り火亭の客',role:'レンへの送辞を準備する客',
  detail:'自分たちの言葉で送辞を伝えたいと相談する集団。秘密の準備と宿への往復では客だけが同行する。',
