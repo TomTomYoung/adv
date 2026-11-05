@@ -55,6 +55,16 @@ export const relocatedCharacters=Object.fromEntries([
 ].map(([id,name,detail,provenance])=>[id,{id,name,role:'礼拝堂の現地の相手',detail,portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,
  provenance:provenance??'2026-10-29の美術設定。固有名・他人物との同一性は追加しない。具体的な外見・年齢感・服装は今回の美術設定。牢・格子・聖像・宝玉・石を人物画へ固定しない。'}]));
 // The group has no specified headcount or spokesperson. Ren is the existing actor.
+relocatedCharacters.q169_mao={
+ id:'q169_mao',name:'騎士マオ',role:'旧友へ旅の約束の指輪を託す騎士',
+ detail:'自宅で指輪を預け、報告と後日の訂正を受ける。受取人宅や記録室へは同行しない。',
+ provenance:'2026-11-06。既存person maoの呼称表示。氏名以外の容貌・衣装は本文へ追加せず、専用画はこの段階では接続しない。'
+};
+relocatedCharacters.q169_recipient={
+ id:'q169_recipient',name:'旅仲間の受取人',role:'昔の旅の約束と今の意思を分けて答える旧友',
+ detail:'recipientとfriendshipで現在の返事を伝える。手紙運搬用messengerとは別人物として扱う。',
+ provenance:'2026-11-06。氏名・性別・容貌・現在の同居相手を本文から補わない呼称表示。専用画は追加しない。'
+};
 relocatedCharacters.q168_brother={
  id:'q168_brother',name:'双子の兄',role:'診断を得意とする双子の術師の兄',
  detail:'工房から魔力灯へ移動し、pair経路では別棟へ呼ばれる。現在所在がlampの場面だけ弟と同席する。',
