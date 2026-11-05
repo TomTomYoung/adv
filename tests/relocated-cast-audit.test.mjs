@@ -6,7 +6,7 @@ import {auditRelocatedCast,loadRelocatedCastQuests,relocatedCastFingerprint} fro
 const quests=await loadRelocatedCastQuests();
 test('cast audit distinguishes measured empty casts, reviewed scenes and candidate roles',()=>{
  const report=auditRelocatedCast(quests);
- assert.deepEqual(report.summary,{quests:100,scenes:753,emptyCastScenes:558,personEntities:123,characterLinkedEntities:60,reviewedQuests:43,reviewedScenes:296,noPersonEvidenceScenes:93,personEvidenceScenes:203,candidateRoles:3,connectedRoles:81,unreviewedScenes:457});
+ assert.deepEqual(report.summary,{quests:100,scenes:753,emptyCastScenes:551,personEntities:123,characterLinkedEntities:62,reviewedQuests:44,reviewedScenes:302,noPersonEvidenceScenes:95,personEvidenceScenes:207,candidateRoles:3,connectedRoles:83,unreviewedScenes:451});
  assert.ok(report.regions.every(r=>r.quests===20));
  assert.equal(report.quests.find(q=>q.id==='q071').scenes[0].review,null);
  assert.deepEqual(report.quests.find(q=>q.id==='q032').scenes.filter(s=>s.review.people.length).map(s=>s.id),['cell','workshop']);
@@ -106,15 +106,27 @@ test('cast audit distinguishes measured empty casts, reviewed scenes and candida
   restored_confirm:['lui'],restored:['lui','motherPerson'],named:['lui'],water:['lui'],well_seal_ready:['lui']
  });
  const soldier=report.quests.find(q=>q.id==='q173');
- assert.deepEqual(Object.fromEntries(Object.entries(soldier.review.people).map(([id,role])=>[id,role.status])),{
-  q173_tera:'candidate',q173_spirit:'candidate'
+ assert.deepEqual(Object.fromEntries(Object.entries(soldier.review.people).map(([id,role])=>[id,{status:role.status,entity:role.entity}])),{
+  q173_tera:{status:'connected',entity:'tera'},q173_spirit:{status:'connected',entity:'spiritPerson'}
  });
  assert.deepEqual(Object.fromEntries(soldier.scenes.map(s=>[s.id,s.review.people])),{
   entry:[],spirit:['q173_spirit'],onsite:['q173_tera'],wife:['q173_tera'],
   guest_agree:['q173_tera','q173_spirit'],part_home:['q173_tera'],
   copy_home:['q173_tera','q173_spirit'],copy_later:['q173_tera','q173_spirit']
  });
- assert.ok(soldier.scenes.every(s=>s.cast.length===0),'q173 review does not implement cast yet');
+ assert.deepEqual(Object.fromEntries(soldier.scenes.map(s=>[s.id,s.cast.map(c=>c.entity)])),{
+  entry:[],spirit:['spiritPerson'],onsite:['tera'],wife:['tera'],guest_agree:['tera','spiritPerson'],
+  part_home:['tera'],copy_home:['tera','spiritPerson'],copy_later:['tera','spiritPerson']
+ });
+ const funeral=report.quests.find(q=>q.id==='q174');
+ assert.deepEqual(Object.fromEntries(Object.entries(funeral.review.people).map(([id,role])=>[id,role.status])),{
+  q174_daughter:'candidate',q174_injured:'candidate'
+ });
+ assert.deepEqual(Object.fromEntries(funeral.scenes.map(s=>[s.id,s.review.people])),{
+  entry:[],letter:[],onsite:['q174_daughter','q174_injured'],
+  sealed:['q174_daughter','q174_injured'],named:['q174_daughter','q174_injured'],rescued:['q174_injured']
+ });
+ assert.ok(funeral.scenes.every(s=>s.cast.length===0),'q174 review does not implement cast yet');
 });
 
 test('a change to reviewed prose or location cannot silently retain the review',()=>{
@@ -150,9 +162,9 @@ test('future character and cast hookups change measured counts without marking u
  const changed=structuredClone(quests),q=changed.find(q=>q.id==='q071'),entity=Object.values(q.story.entities).find(e=>e.kind==='person');
  entity.character='future_owner';Object.values(q.story.scenes)[0].cast=[{entity:'workerPerson'}];
  const report=auditRelocatedCast(changed);
- assert.equal(report.summary.emptyCastScenes,557);
- assert.equal(report.summary.characterLinkedEntities,61);
- assert.equal(report.summary.reviewedScenes,296);
+ assert.equal(report.summary.emptyCastScenes,550);
+ assert.equal(report.summary.characterLinkedEntities,63);
+ assert.equal(report.summary.reviewedScenes,302);
  assert.equal(report.quests.find(q=>q.id==='q071').review,null);
 });
 
