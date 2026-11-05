@@ -36,6 +36,10 @@ export function machineSecondSource(q){
   route('spirit','guest','guest_agree',{companions:['spiritPerson']});end('guest_agree','home','精霊とテラの双方に、夫でなく客として暮らす意思を確かめた。精霊は自分の食べたい料理を頼む。','guest',[set('bothAgreed')]);
   route('spirit','part','part_home');end('part_home','home','精霊が墓地へ戻る別れを伝えた。テラが自分で戸を閉じる時刻を決める。','part',[set('parted')]);
   route('spirit','copy','copy_home',{companions:['spiritPerson']});add('copy_home','home','当面は夫の模倣を続ける。後日、家具を動かす話が出た。',[opt('later','家具の置き方について改めて話す','copy_later',{effects:[set('laterVisit')]})]);end('copy_later','home','精霊は家具を動かす相談へ答えられなかった。模倣の安らぎと限界を残す。','copy',[set('imitationContinues')]);
+  x.entities.tera.character='q173_tera';x.entities.spiritPerson.character='q173_spirit';
+  for(const id of ['onsite','wife','part_home'])node(id).cast=[{entity:'tera',display:{x:50}}];
+  node('spirit').cast=[{entity:'spiritPerson',display:{x:50}}];
+  for(const id of ['guest_agree','copy_home','copy_later'])node(id).cast=[{entity:'tera',display:{x:31}},{entity:'spiritPerson',display:{x:69}}];
  }
  if(q.number===174){
   field('procession','止まらない葬列と棺','cemetery',9,3);town('hut','道化師の遺書のある小屋','machine_hut');town('rescue','歩けない人の救護先','salome_clinic');entity('letterSheet','hut');entity('injured','procession','group');entity('daughterPerson','procession','person');const from=intake('procession','道化師の葬列が止まらないという知らせを受け、墓地道へ向かう。');node('letter').place='hut';
