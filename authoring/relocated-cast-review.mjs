@@ -3259,10 +3259,10 @@ export const RELOCATED_CAST_REVIEW={
   "next": "q171のdaiとfamilyへ呼称表示を接続した。妻個人はfamilyとの所在重複を避けて候補のまま残し、次はq172のルイ・母・井戸の主を監査する。"
 },
   q172:{
-  "sourceSha256": "7d04c20d2af89f93fb41efa399944496f56cef5dc7b281ee45b06f70792adfdf",
+  "sourceSha256": "a6d6b42b9bc433c50a3623e6b9b35f600db11ac4d2fadeb8094a7130686cd011",
   "identityNotes": [
     "依頼人は織工ルイで、既存person lui。luiAtの初期位置はworkshopであり、entryの相談受付には本人を自動配置しない。onsiteから井戸へ同行した後は、選んだ経路に従って工房・母の家・水源窓口へ実移動する。",
-    "母はmother_heardとrestoredで現在の話者として明示されるが、既存person entityはない。氏名・容貌・家族構成を追加せず候補役とする。市場の出品記録を確認するmarket_heardには店員や記録係を追加しない。",
+    "母はmother_heardとrestoredで現在の話者として明示されるため、専用person motherPersonを母の家に固定して接続した。氏名・容貌・家族構成は追加しない。市場の出品記録を確認するmarket_heardには店員や記録係を追加しない。",
     "井戸の主は元原稿で取引を曲解した主体で、wellの現在の交渉相手。井戸そのものの背景・怪異と会話役を区別し、sealで戦った後のwell_seal_readyへ居残り表示しない。",
     "二つの名は状態・呼称であり別人物ではない。old・chosen・memoriesReturned・nameConfirmed・newNameChosen・motherInformed・wellSealed・waterArrangedと3結末を人物表示のために変更しない。",
     "seal経路の戦闘対象と井戸の主は同じ物語上の脅威として扱える候補だが、固定の人型・性別・容貌は決めない。代替水源の窓口にも未指定の係員を追加しない。"
@@ -3270,18 +3270,21 @@ export const RELOCATED_CAST_REVIEW={
   "people": {
     "q172_lui": {
       "label": "織工ルイ",
-      "status": "candidate",
-      "need": "既存person luiへ接続する候補。onsite・well・restored_confirm・restored・named・water・well_seal_readyで既存の所在と同行に従って表示する。"
+      "status": "connected",
+      "entity": "lui",
+      "need": "既存person luiへ呼称表示を接続済み。onsite・well・restored_confirm・restored・named・water・well_seal_readyで既存の所在と同行に従って表示する。"
     },
     "q172_mother": {
       "label": "ルイの母",
-      "status": "candidate",
-      "need": "mother_heardとrestoredの現在の話者として専用entityを追加する候補。工房・市場・井戸へ同行させない。"
+      "status": "connected",
+      "entity": "motherPerson",
+      "need": "mother_heardとrestoredの現在の話者として専用entity motherPersonを接続済み。工房・市場・井戸へ同行させない。"
     },
     "q172_well_master": {
       "label": "井戸の主",
-      "status": "candidate",
-      "need": "wellの交渉相手として呼称表示する候補。封印戦の勝利後や工房・母の家へ継続表示せず、外見は固定しない。"
+      "status": "connected",
+      "entity": "wellMaster",
+      "need": "wellの交渉相手として専用entity wellMasterの呼称表示を接続済み。封印戦の勝利後や工房・母の家へ継続表示せず、外見は固定しない。"
     }
   },
   "scenes": {
@@ -3356,7 +3359,88 @@ export const RELOCATED_CAST_REVIEW={
       "visual": "封印戦後の井戸でルイと次の移動を確認する。"
     }
   },
-  "next": "q172のルイ・母・井戸の主を精読した。次はluiの実同行、母の家の話者、井戸の交渉相手を接続し、名の状態と3結末を保持する。"
+  "next": "q172のlui・motherPerson・wellMasterへ呼称表示を接続した。二つの名と3結末を保持し、次はq173のテラと墓守の精霊を監査する。"
+},
+  q173:{
+  "sourceSha256": "7ad11f8fb784f2e3ddd368a5d3d3b3b6858bd0ab9f34978ce57829a38480eab7",
+  "identityNotes": [
+    "依頼人は寡婦テラで、既存person teraの初期位置はhome。entryは相談受付からテラの家へ向かう導入なので、依頼人欄だけでentryへテラを移さない。",
+    "墓守の精霊は既存person spiritPersonで初期位置grave。夫に似た帰宅姿の観察はonsite本文にあるが、現行の所在と経路は『本人と精霊の話は別々に聞く』構造で、onsiteからpartyだけが墓地へ移動する。精霊を家へ先回りさせない。",
+    "spiritではpartyが墓地にいて精霊本人と話し、テラはhomeに残る。wifeではpartyだけがhomeへ戻り、精霊はgraveに残る。guestとcopyの経路だけspiritPersonがpartyとhomeへ実移動する。",
+    "part経路ではpartyだけがhomeへ戻り、精霊はgraveに残ったまま別れを伝えた結果をテラと確認する。guest_agree・copy_home・copy_laterではteraとspiritPersonが同じhomeにいる。",
+    "戦死した夫本人を第三の人物entityとして追加しない。精霊が拾った記憶・夫の悪い癖・家財は人物の同一性とは分け、bothAgreed・parted・laterVisit・imitationContinuesと3結末を人物表示のために変更しない。"
+  ],
+  "people": {
+    "q173_tera": {
+      "label": "寡婦テラ",
+      "status": "candidate",
+      "need": "既存person teraへ接続する候補。onsite・wife・guest_agree・part_home・copy_home・copy_laterでhomeの所在に従って表示する。"
+    },
+    "q173_spirit": {
+      "label": "墓守の精霊",
+      "status": "candidate",
+      "need": "既存person spiritPersonへ接続する候補。spiritではgrave、guest_agree・copy_home・copy_laterでは実移動後のhomeに表示し、part_homeやonsiteへ先回りさせない。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "夜に帰る姿について、テラの家を訪ねる。",
+      "reason": "teraAtはhome、spiritPersonAtはgraveを初期位置とし、entry_visitでpartyだけがhomeへ向かう。相談受付へ二人を自動配置しない。",
+      "visual": "テラの家へ向かう相談受付。夫に似た姿や精霊はまだ表示しない。"
+    },
+    "spirit": {
+      "decision": "person-evidence",
+      "people": ["q173_spirit"],
+      "evidence": "精霊は居場所を求めていた。",
+      "reason": "onsiteの二選択またはwife_returnでpartyだけがgraveへ移動し、spiritPersonは初期位置graveにいる。テラはhomeに残る。",
+      "visual": "墓地で墓守の精霊本人と話す。テラを墓地へ同行させない。"
+    },
+    "onsite": {
+      "decision": "person-evidence",
+      "people": ["q173_tera"],
+      "evidence": "墓守の精霊が記憶を拾っていた。",
+      "reason": "entry_visitでpartyがテラの家へ到着し、teraはhomeにいる。夫に似た姿の観察は精霊の正体を示すが、spiritPersonの現在地はgraveで、次の行動でpartyだけが墓地へ向かう。",
+      "visual": "テラの家で本人から状況を確かめる。夫本人や精霊を同じ画面へ固定しない。"
+    },
+    "wife": {
+      "decision": "person-evidence",
+      "people": ["q173_tera"],
+      "evidence": "テラに帰ってくる音を失いたくない気持ちを聞いた。",
+      "reason": "spirit_wifeでpartyだけがhomeへ戻り、teraはhome、spiritPersonはgraveに残る。",
+      "visual": "テラ本人の意思を家で聞く。客としての同意はまだ成立していない。"
+    },
+    "guest_agree": {
+      "decision": "person-evidence",
+      "people": ["q173_tera","q173_spirit"],
+      "evidence": "精霊とテラの双方に、夫でなく客として暮らす意思を確かめた。",
+      "reason": "spirit_guestでpartyとspiritPersonがhomeへ実移動し、teraはhomeにいる。双方の同意がそろった現在場面。",
+      "visual": "夫の代役ではなく客として同席するテラと精霊。"
+    },
+    "part_home": {
+      "decision": "person-evidence",
+      "people": ["q173_tera"],
+      "evidence": "テラが自分で戸を閉じる時刻を決める。",
+      "reason": "spirit_partでpartyだけがhomeへ戻り、spiritPersonはgraveに残る。精霊の別れを結果として伝え、家ではテラ本人だけを表示する。",
+      "visual": "精霊を墓地に残し、家で戸を閉じる時刻を決めるテラ。"
+    },
+    "copy_home": {
+      "decision": "person-evidence",
+      "people": ["q173_tera","q173_spirit"],
+      "evidence": "当面は夫の模倣を続ける。",
+      "reason": "spirit_copyでpartyとspiritPersonがhomeへ実移動し、teraもhomeにいる。模倣継続を夫本人の復活とは扱わない。",
+      "visual": "家で模倣を続ける精霊と、それを受け入れるテラ。"
+    },
+    "copy_later": {
+      "decision": "person-evidence",
+      "people": ["q173_tera","q173_spirit"],
+      "evidence": "精霊は家具を動かす相談へ答えられなかった。",
+      "reason": "copy_homeから所在を変えず後日の相談へ進むため、teraとspiritPersonはともにhomeにいる。",
+      "visual": "家具を動かす変化に答えられない精霊とテラ。模倣の限界を示す。"
+    }
+  },
+  "next": "q173のテラと墓守の精霊を精読した。次はteraとspiritPersonの実所在へ表示を接続し、夫本人を追加せず3結末を保持する。"
 }
  }
 };
