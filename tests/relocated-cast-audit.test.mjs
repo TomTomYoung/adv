@@ -6,7 +6,7 @@ import {auditRelocatedCast,loadRelocatedCastQuests,relocatedCastFingerprint} fro
 const quests=await loadRelocatedCastQuests();
 test('cast audit distinguishes measured empty casts, reviewed scenes and candidate roles',()=>{
  const report=auditRelocatedCast(quests);
- assert.deepEqual(report.summary,{quests:100,scenes:753,emptyCastScenes:580,personEntities:121,characterLinkedEntities:56,reviewedQuests:41,reviewedScenes:278,noPersonEvidenceScenes:90,personEvidenceScenes:188,candidateRoles:3,connectedRoles:76,unreviewedScenes:475});
+ assert.deepEqual(report.summary,{quests:100,scenes:753,emptyCastScenes:566,personEntities:121,characterLinkedEntities:57,reviewedQuests:42,reviewedScenes:288,noPersonEvidenceScenes:92,personEvidenceScenes:196,candidateRoles:4,connectedRoles:78,unreviewedScenes:465});
  assert.ok(report.regions.every(r=>r.quests===20));
  assert.equal(report.quests.find(q=>q.id==='q071').scenes[0].review,null);
  assert.deepEqual(report.quests.find(q=>q.id==='q032').scenes.filter(s=>s.review.people.length).map(s=>s.id),['cell','workshop']);
@@ -75,8 +75,9 @@ test('cast audit distinguishes measured empty casts, reviewed scenes and candida
  assert.ok(farewell.scenes.every(s=>s.review.people.length===1&&s.review.people[0]==='q170_sef'));
  assert.ok(farewell.scenes.every(s=>s.cast.length===1&&s.cast[0].entity==='sef'));
  const footsteps=report.quests.find(q=>q.id==='q171');
- assert.deepEqual(Object.fromEntries(Object.entries(footsteps.review.people).map(([id,role])=>[id,role.status])),{
-  q171_dai:'candidate',q171_wife:'candidate',q171_family:'candidate'
+ assert.deepEqual(Object.fromEntries(Object.entries(footsteps.review.people).map(([id,role])=>[id,{status:role.status,entity:role.entity}])),{
+  q171_dai:{status:'connected',entity:'dai'},q171_wife:{status:'candidate',entity:undefined},
+  q171_family:{status:'connected',entity:'family'}
  });
  assert.deepEqual(Object.fromEntries(footsteps.scenes.map(s=>[s.id,s.review.people])),{
   entry:['q171_wife'],watch:['q171_dai'],onsite:['q171_dai','q171_wife'],rule_done:['q171_dai'],
@@ -85,7 +86,21 @@ test('cast audit distinguishes measured empty casts, reviewed scenes and candida
   defended:['q171_dai','q171_wife'],collect_family:['q171_dai','q171_family'],
   evacuated:['q171_dai','q171_family'],watch_ward_ready:['q171_dai']
  });
- assert.ok(footsteps.scenes.every(s=>s.cast.length===0),'q171 review does not implement cast yet');
+ assert.deepEqual(Object.fromEntries(footsteps.scenes.map(s=>[s.id,s.cast.map(c=>c.entity)])),{
+  entry:[],watch:['dai'],onsite:['dai'],rule_done:['dai'],ward_done:['dai'],wait_done:['dai'],ring:['dai'],
+  loop_home:['dai'],returned:['dai'],return_home:['dai'],defense:['dai','family'],defended:['dai'],
+  collect_family:['dai','family'],evacuated:['dai','family'],watch_ward_ready:['dai']
+ });
+ const names=report.quests.find(q=>q.id==='q172');
+ assert.deepEqual(Object.fromEntries(Object.entries(names.review.people).map(([id,role])=>[id,role.status])),{
+  q172_lui:'candidate',q172_mother:'candidate',q172_well_master:'candidate'
+ });
+ assert.deepEqual(Object.fromEntries(names.scenes.map(s=>[s.id,s.review.people])),{
+  entry:[],well:['q172_lui','q172_well_master'],onsite:['q172_lui'],mother_heard:['q172_mother'],
+  market_heard:[],restored_confirm:['q172_lui'],restored:['q172_lui','q172_mother'],
+  named:['q172_lui'],water:['q172_lui'],well_seal_ready:['q172_lui']
+ });
+ assert.ok(names.scenes.every(s=>s.cast.length===0),'q172 review does not implement cast yet');
 });
 
 test('a change to reviewed prose or location cannot silently retain the review',()=>{
@@ -121,9 +136,9 @@ test('future character and cast hookups change measured counts without marking u
  const changed=structuredClone(quests),q=changed.find(q=>q.id==='q071'),entity=Object.values(q.story.entities).find(e=>e.kind==='person');
  entity.character='future_owner';Object.values(q.story.scenes)[0].cast=[{entity:'workerPerson'}];
  const report=auditRelocatedCast(changed);
- assert.equal(report.summary.emptyCastScenes,579);
- assert.equal(report.summary.characterLinkedEntities,57);
- assert.equal(report.summary.reviewedScenes,278);
+ assert.equal(report.summary.emptyCastScenes,565);
+ assert.equal(report.summary.characterLinkedEntities,58);
+ assert.equal(report.summary.reviewedScenes,288);
  assert.equal(report.quests.find(q=>q.id==='q071').review,null);
 });
 
