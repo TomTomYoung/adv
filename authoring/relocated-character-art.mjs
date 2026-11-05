@@ -55,6 +55,21 @@ export const relocatedCharacters=Object.fromEntries([
 ].map(([id,name,detail,provenance])=>[id,{id,name,role:'礼拝堂の現地の相手',detail,portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,
  provenance:provenance??'2026-10-29の美術設定。固有名・他人物との同一性は追加しない。具体的な外見・年齢感・服装は今回の美術設定。牢・格子・聖像・宝玉・石を人物画へ固定しない。'}]));
 // The group has no specified headcount or spokesperson. Ren is the existing actor.
+relocatedCharacters.q172_lui={
+ id:'q172_lui',name:'織工ルイ',role:'井戸との取引で自分の名と記憶を失った織工',
+ detail:'刺繍工房から井戸へ同行し、復元・新しい呼び名・封印の各経路で既存の所在に従う。',
+ provenance:'2026-11-06。既存person luiの呼称表示。二つの名を別人物にせず、容貌・衣装は本文へ追加しない。専用画はこの段階では接続しない。'
+};
+relocatedCharacters.q172_mother={
+ id:'q172_mother',name:'ルイの母',role:'昔の呼び名と当時の事情を伝える母',
+ detail:'母の家で昔の名を伝え、復元後は本人が望む今の呼び名へ言い直す。',
+ provenance:'2026-11-06。氏名・容貌・家族構成を補わない呼称表示。工房・市場・井戸へ同行させない。'
+};
+relocatedCharacters.q172_well_master={
+ id:'q172_well_master',name:'井戸の主',role:'願いを口実にルイの記憶まで奪った取引の主',
+ detail:'井戸で現在の交渉相手として表示し、封印戦後や工房・母の家へ継続表示しない。',
+ provenance:'2026-11-06。人型・性別・容貌を固定しない呼称表示。怪異・戦闘対象の見た目を人物設定へ追加しない。'
+};
 relocatedCharacters.q171_dai={
  id:'q171_dai',name:'靴職人ダイ',role:'帰宅路へ続く遅れた足音を持ち帰った靴職人',
  detail:'家の外から調査境界・境界標・靴店・歩行試験路・封じの輪・機関廟入口・避難先まで既存の同行に従う。',
