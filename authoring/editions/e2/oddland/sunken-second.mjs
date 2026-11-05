@@ -142,6 +142,15 @@ export function sunkenSecondSource(q,{cast=true}={}){
   route('adjust','test','tested');
   add('tested','lamp','点灯試験が済んだ。請求書の相談には二人とも立ち会う。',[opt('fetch','別棟へ兄を迎えに行く','fetch_invoice',{when:eq(v('brotherAt'),'other')}),opt('invoice','二人と請求書を持って港へ行く','invoice',{companions:['brother','younger'],depart:[give('bill','lamp','party')]})]);
   add('fetch_invoice','other','修理の完了を兄に伝えた。弟と合流し、今回の仕事と次の契約を相談する。',[opt('return','兄と魔力灯へ戻る','tested',{companions:['brother']})]);
+  if(cast){
+   x.entities.brother.character='q168_brother';
+   x.entities.younger.character='q168_younger';
+   const both=[{entity:'brother',display:{x:31}},{entity:'younger',display:{x:69}}];
+   node('entry').cast=both;node('invoice').cast=both;node('test_both').cast=both;
+   node('separated').cast=[{entity:'younger',display:{x:50}}];
+   for(const id of ['adjust','gather','tested'])node(id).cast=[{entity:'brother',when:eq(v('brotherAt'),'lamp'),display:{x:31}},{entity:'younger',display:{x:69}}];
+   for(const id of ['fetch_brother','fetch_invoice'])node(id).cast=[{entity:'brother',display:{x:50}}];
+  }
  }
  if(q.number===169){
   town('entry','指輪を預けたマオの家','royal_sender');town('recipient','旅仲間の現在の家','royal_recipient');town('post','後日の手紙を受け取る記録室','royal_archive');entity('mao','entry','person');entity('ring','mao');entity('letter','recipient');entity('messenger','recipient','person');node('recipient').place='recipient';node('friendship').place='recipient';
