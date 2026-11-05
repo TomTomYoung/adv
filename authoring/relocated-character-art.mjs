@@ -55,6 +55,16 @@ export const relocatedCharacters=Object.fromEntries([
 ].map(([id,name,detail,provenance])=>[id,{id,name,role:'礼拝堂の現地の相手',detail,portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,
  provenance:provenance??'2026-10-29の美術設定。固有名・他人物との同一性は追加しない。具体的な外見・年齢感・服装は今回の美術設定。牢・格子・聖像・宝玉・石を人物画へ固定しない。'}]));
 // The group has no specified headcount or spokesperson. Ren is the existing actor.
+relocatedCharacters.q168_brother={
+ id:'q168_brother',name:'双子の兄',role:'診断を得意とする双子の術師の兄',
+ detail:'工房から魔力灯へ移動し、pair経路では別棟へ呼ばれる。現在所在がlampの場面だけ弟と同席する。',
+ provenance:'2026-11-06。依頼人名はネムとノムだが、どちらが兄かは本文で確定していないため名前を割り当てない。氏名対応・容貌・衣装を推測せず呼称表示だけを接続する。'
+};
+relocatedCharacters.q168_younger={
+ id:'q168_younger',name:'双子の弟',role:'調整を得意とする双子の術師の弟',
+ detail:'工房から魔力灯へ移動し、兄が別棟へ行く経路でも魔力灯側に残る。請求相談では兄と港へ同行する。',
+ provenance:'2026-11-06。依頼人名はネムとノムだが、どちらが弟かは本文で確定していないため名前を割り当てない。氏名対応・容貌・衣装を推測せず呼称表示だけを接続する。'
+};
 relocatedCharacters.q167_vice_captain={
  id:'q167_vice_captain',name:'副隊長',role:'軍師不在時に陣地で作戦選択を担う副隊長',
  detail:'出撃前と撤退後の陣地にいる。偵察・尾根戦・砦・帰還報告へ同行させない。',
