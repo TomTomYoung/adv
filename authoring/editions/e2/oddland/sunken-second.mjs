@@ -111,7 +111,7 @@ export function sunkenSecondSource(q,{cast=true}={}){
   }
  }
  if(q.number===167){
-  cell('entry','副隊長と避難民の待つ陣地','fort',1,3);cell('bridge','崩れた橋の手前','fort',5,1);cell('enemy','対岸を見渡す偵察点','fort',5,5);cell('ridge','守りの薄い尾根','fort',11,5);cell('fort','奪還する砦','fort',13,1);town('report','帰還報告の救難隊詰所','royal_rescue');town('refuge','避難民を送り届ける高台','royal_refuge');entity('refugees','entry','group');
+  cell('entry','副隊長と避難民の待つ陣地','fort',1,3);cell('bridge','崩れた橋の手前','fort',5,1);cell('enemy','対岸を見渡す偵察点','fort',5,5);cell('ridge','守りの薄い尾根','fort',11,5);cell('fort','奪還する砦','fort',13,1);town('report','帰還報告の救難隊詰所','royal_rescue');town('refuge','避難民を送り届ける高台','royal_refuge');entity('refugees','entry','group');entity('viceCaptain','entry','person');
   for(const key of ['bridge','enemy']){
    route('entry',key,key+'_seen');delete choice('entry',key).textAfter;
    add(key+'_seen',key,key==='bridge'?'橋は既に落ちていた。落ちた橋を歩いて渡る道はない。':'敵は橋の対岸に集中し、尾根の守りは薄い。',[opt('back','陣地へ戻って案を選ぶ','entry')]);
@@ -123,6 +123,12 @@ export function sunkenSecondSource(q,{cast=true}={}){
   add('captured','fort','尾根の守備隊を退け、砦へ到達した。奪還の結果を村へ報告する。',[opt('report','救難隊詰所へ帰還する','report')]);
   for(const [from,key] of [['entry','retreat'],['blocked','retreat']])route(from,key,'evacuate');
   add('evacuate','entry','避難民のいる陣地へ戻った。砦の奪還を済ませたことにはせず、村まで護衛する。',[opt('escort','避難民と村の高台へ向かう','safe',{companions:['refugees']})]);end('safe','refuge','避難民が村の高台へ着いた。護衛の成果と砦の未達を別々に報告する。','retreat');
+  if(cast){
+   x.entities.viceCaptain.character='q167_vice_captain';
+   x.entities.refugees.character='q167_refugees';
+   for(const id of ['entry','evacuate'])node(id).cast=[{entity:'viceCaptain',display:{x:31}},{entity:'refugees',display:{x:69}}];
+   node('safe').cast=[{entity:'refugees',display:{x:50}}];
+  }
  }
  if(q.number===168){
   town('entry','双子へ修理を頼む工房','royal_shipyard');town('lamp','診断と調整をする魔力灯','royal_lamp');town('other','兄が呼ばれた別棟','royal_other_lamp');town('invoice','料金を相談する港の席','royal_harbor');entity('brother','entry','person');entity('younger','entry','person');entity('bill','lamp');x.flags.repaired=false;

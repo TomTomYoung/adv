@@ -55,6 +55,16 @@ export const relocatedCharacters=Object.fromEntries([
 ].map(([id,name,detail,provenance])=>[id,{id,name,role:'礼拝堂の現地の相手',detail,portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,
  provenance:provenance??'2026-10-29の美術設定。固有名・他人物との同一性は追加しない。具体的な外見・年齢感・服装は今回の美術設定。牢・格子・聖像・宝玉・石を人物画へ固定しない。'}]));
 // The group has no specified headcount or spokesperson. Ren is the existing actor.
+relocatedCharacters.q167_vice_captain={
+ id:'q167_vice_captain',name:'副隊長',role:'軍師不在時に陣地で作戦選択を担う副隊長',
+ detail:'出撃前と撤退後の陣地にいる。偵察・尾根戦・砦・帰還報告へ同行させない。',
+ provenance:'2026-11-06。本文で氏名・性別・年齢・容貌は未指定。病欠中の軍師ユウナとは別人物で、呼称表示だけを接続する。'
+};
+relocatedCharacters.q167_refugees={
+ id:'q167_refugees',name:'避難民',role:'撤退時に村の高台まで護衛する避難民',
+ detail:'既存group refugeesの所在に従い、陣地から高台へ実護衛された場合だけ移動する。',
+ provenance:'2026-11-06。人数・代表者・氏名・容貌を固定しない集団の呼称表示。個人画は追加しない。'
+};
 relocatedCharacters.q166_ruu={
  id:'q166_ruu',name:'弟子戦士ルウ',role:'石喰い獣の試験を受ける弟子戦士',
  detail:'受付から試験場、勝利後、報告・面談・延期受付まで既存の所在と同行に従う。戦闘パーティーや最後の一撃の担当へは変更しない。',

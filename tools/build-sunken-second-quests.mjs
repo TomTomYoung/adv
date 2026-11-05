@@ -36,6 +36,10 @@ export function compileSunkenSecondQuest(first){
   quest.story.registry.examinerAt.values=['entry'];
   quest.story.registry.porterAt.values=['trial'];
  }
+ if(first.number===167){
+  // The vice-captain stays at the camp. Scouting, battle and reports do not move this role.
+  quest.story.registry.viceCaptainAt.values=['entry'];
+ }
  if(first.number===161){
   const previous=compileRelocatedQuest(first,sunkenSecondSource(first,{cast:false}),options).story;
   // Ine stays at the clinic and cannot acquire the patient's recording device.
