@@ -122,9 +122,31 @@ try{
       for(const id of textOnlyCast){
         const label=page.locator(`[data-character="${id}"] figcaption`);
         assert.ok(await label.isVisible());
-        const info=await label.evaluate(e=>{const r=e.getBoundingClientRect(),s=getComputedStyle(e),hud=document.querySelector('.scene-hud')?.getBoundingClientRect(),dock=document.querySelector('.scene-dock')?.getBoundingClientRect();return {text:e.textContent,left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height,clip:s.clipPath,hudBottom:hud?.bottom,dockTop:dock?.top,viewport:innerWidth};});
+        const info=await label.evaluate(e=>{
+          const r=e.getBoundingClientRect(),s=getComputedStyle(e),hud=document.querySelector('.scene-hud')?.getBoundingClientRect(),dock=document.querySelector('.scene-dock')?.getBoundingClientRect();
+          const figure=e.closest('.scene-actor'),coveredBy=[];
+          if(figure){
+            const z=Number(getComputedStyle(figure).zIndex);
+            for(const other of figure.parentElement.children){
+              const img=other.querySelector('img'),style=getComputedStyle(other),otherZ=Number(style.zIndex);
+              const inFront=otherZ>z||(otherZ===z&&Boolean(figure.compareDocumentPosition(other)&Node.DOCUMENT_POSITION_FOLLOWING));
+              if(other===figure||!img||!inFront||Number(style.opacity)===0)continue;
+              const box=img.getBoundingClientRect(),scale=Math.min(box.width/img.naturalWidth,box.height/img.naturalHeight),position=getComputedStyle(img).objectPosition.split(' ').map(v=>parseFloat(v)/100);
+              const x=box.x+(box.width-img.naturalWidth*scale)*position[0],y=box.y+(box.height-img.naturalHeight*scale)*position[1];
+              const canvas=document.createElement('canvas');canvas.width=img.naturalWidth;canvas.height=img.naturalHeight;const ctx=canvas.getContext('2d');ctx.drawImage(img,0,0);
+              let covered=false;
+              for(const u of [.1,.5,.9])for(const v of [.1,.5,.9]){
+                const px=(r.left+r.width*u-x)/scale,py=(r.top+r.height*v-y)/scale;
+                if(px>=0&&py>=0&&px<img.naturalWidth&&py<img.naturalHeight&&ctx.getImageData(Math.floor(px),Math.floor(py),1,1).data[3]*Number(style.opacity)>64)covered=true;
+              }
+              if(covered)coveredBy.push(other.dataset.character);
+            }
+          }
+          return {text:e.textContent,left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height,clip:s.clipPath,hudBottom:hud?.bottom,dockTop:dock?.top,viewport:innerWidth,coveredBy};
+        });
         assert.ok(info.width>0&&info.height>0&&info.left>=0&&info.right<=info.viewport,'group label must fit the viewport');
         if(layout==='scene')assert.ok(info.clip==='none'&&info.top>=info.hudBottom&&info.bottom<=info.dockTop,'group label must remain between HUD and dialogue');
+        assert.deepEqual(info.coveredBy,[],`group label must not be covered by portraits: ${f.quest}/${f.scene}/${id}/${layout}/${width}`);
         labels.push({id,...info});
       }
       for(let i=0;i<labels.length;i++)for(let j=i+1;j<labels.length;j++){

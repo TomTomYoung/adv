@@ -55,6 +55,21 @@ function animationDOM(){
 const person=(id,display={})=>({id,name:id,sprite:`${id}.png`,portrait:`${id}-card.png`,display});
 const scene=cast=>({mode:'stage',cast});
 const cue=(id,from,transition)=>({id,session:1,from:scene(from),transition});
+test('stage group labels remain above portraits even when the highest portrait layer is speaking',()=>{
+ const dom=installDOM(),v=new SceneCastRenderer();try{
+  const guests={id:'guests',name:'帰り火亭の客',display:{x:26}},ren=person('ren',{x:66,scale:.86,layer:99}),cast=[guests,ren];
+  const z=id=>Number(dom.root.querySelector(`[data-character="${id}"]`).style.zIndex);
+  v.render(dom.root,{mode:'stage',cast,speakerId:'ren'},null,'off',1);
+  assert.ok(z('guests')>z('ren'),'the portrait must not cover the group label');
+  const label=dom.root.querySelector('[data-character="guests"]');
+  v.render(dom.root,{mode:'stage',cast,speakerId:'guests'},null,'off',1);
+  assert.equal(dom.root.querySelector('[data-character="guests"]'),label);
+  assert.ok(z('guests')>z('ren'),'speaker changes must preserve label readability');
+  v.render(dom.root,{mode:'cards',cast,speakerId:'ren'},null,'off',1);
+  assert.equal(z('guests'),0,'Classic cards keep their authored stacking order');
+  assert.equal(z('ren'),199);
+ }finally{v.destroy();dom.restore();}
+});
 test('retained actors survive redraw and speaker changes; exiting actors remain until fade finishes',async()=>{
  const dom=animationDOM(),v=new SceneCastRenderer();try{
   const a=person('rookie',{x:20}),c=cue(1,[],{enter:500});v.render(dom.root,scene([a]),c,'full',1);const node=dom.root.querySelector('[data-character="rookie"]'),anim=dom.pending[0];
