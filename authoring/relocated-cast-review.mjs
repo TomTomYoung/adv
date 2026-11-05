@@ -3121,7 +3121,7 @@ export const RELOCATED_CAST_REVIEW={
   "next": "q170の既存sefへ全11場面の呼称表示を接続した。湖岸・島・補給店・3結末を保持し、次はq171のダイ・妻・家族を監査する。"
 },
   q171:{
-  "sourceSha256": "bb68caf5d183da700a6c2c4b123011b956ec878f636707f8663bd1e4152d626a",
+  "sourceSha256": "b4b6b186a6388beab4b73c7fc5353fb2511a00293c1144ba1c5995ffd514896a",
   "identityNotes": [
     "依頼人は靴職人ダイの妻。現行storyには夫のdaiと家族group familyがあり、妻個人のpersonはない。妻をfamilyとは別の候補役として精読するが、避難場面で妻と家族を二重表示しない。familyは妻を含む世帯集団として扱う。",
     "ダイはhomeを初期位置とし、onsite_begin以降は既存journeyのcompanionsとして境界・境界標・靴店・試験路・封じの輪・機関廟入口・家・避難先を移動する。人物表示のために同行やtimeを追加しない。",
@@ -3133,8 +3133,9 @@ export const RELOCATED_CAST_REVIEW={
   "people": {
     "q171_dai": {
       "label": "靴職人ダイ",
-      "status": "candidate",
-      "need": "既存person daiへ接続する候補。entry以外の14場面で既存の所在・実同行に従って表示する。"
+      "status": "connected",
+      "entity": "dai",
+      "need": "既存person daiへ呼称表示を接続済み。entry以外の14場面で既存の所在・実同行に従って表示する。"
     },
     "q171_wife": {
       "label": "ダイの妻",
@@ -3143,8 +3144,9 @@ export const RELOCATED_CAST_REVIEW={
     },
     "q171_family": {
       "label": "ダイの家族",
-      "status": "candidate",
-      "need": "既存group familyへ接続する候補。defense・collect_family・evacuatedで妻を含む家族集団として表示する。"
+      "status": "connected",
+      "entity": "family",
+      "need": "既存group familyへ呼称表示を接続済み。defense・collect_family・evacuatedで妻を含む家族集団として表示する。"
     }
   },
   "scenes": {
@@ -3254,7 +3256,107 @@ export const RELOCATED_CAST_REVIEW={
       "visual": "境界でダイと護符受取の準備をする。"
     }
   },
-  "next": "q171のダイ・妻・家族を精読した。境界守は固定出演にせず、次はdaiの実同行、妻の戸口場面、familyの避難場面を重複なく接続する。"
+  "next": "q171のdaiとfamilyへ呼称表示を接続した。妻個人はfamilyとの所在重複を避けて候補のまま残し、次はq172のルイ・母・井戸の主を監査する。"
+},
+  q172:{
+  "sourceSha256": "7d04c20d2af89f93fb41efa399944496f56cef5dc7b281ee45b06f70792adfdf",
+  "identityNotes": [
+    "依頼人は織工ルイで、既存person lui。luiAtの初期位置はworkshopであり、entryの相談受付には本人を自動配置しない。onsiteから井戸へ同行した後は、選んだ経路に従って工房・母の家・水源窓口へ実移動する。",
+    "母はmother_heardとrestoredで現在の話者として明示されるが、既存person entityはない。氏名・容貌・家族構成を追加せず候補役とする。市場の出品記録を確認するmarket_heardには店員や記録係を追加しない。",
+    "井戸の主は元原稿で取引を曲解した主体で、wellの現在の交渉相手。井戸そのものの背景・怪異と会話役を区別し、sealで戦った後のwell_seal_readyへ居残り表示しない。",
+    "二つの名は状態・呼称であり別人物ではない。old・chosen・memoriesReturned・nameConfirmed・newNameChosen・motherInformed・wellSealed・waterArrangedと3結末を人物表示のために変更しない。",
+    "seal経路の戦闘対象と井戸の主は同じ物語上の脅威として扱える候補だが、固定の人型・性別・容貌は決めない。代替水源の窓口にも未指定の係員を追加しない。"
+  ],
+  "people": {
+    "q172_lui": {
+      "label": "織工ルイ",
+      "status": "candidate",
+      "need": "既存person luiへ接続する候補。onsite・well・restored_confirm・restored・named・water・well_seal_readyで既存の所在と同行に従って表示する。"
+    },
+    "q172_mother": {
+      "label": "ルイの母",
+      "status": "candidate",
+      "need": "mother_heardとrestoredの現在の話者として専用entityを追加する候補。工房・市場・井戸へ同行させない。"
+    },
+    "q172_well_master": {
+      "label": "井戸の主",
+      "status": "candidate",
+      "need": "wellの交渉相手として呼称表示する候補。封印戦の勝利後や工房・母の家へ継続表示せず、外見は固定しない。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "機関廟の相談所でルイの記憶の欠落を聞いた。",
+      "reason": "luiAtはworkshopを初期位置とし、entry_visitでpartyだけが本人の工房へ向かう。依頼人欄だけからルイを相談所へ移さない。",
+      "visual": "相談所で記憶欠落の依頼を受ける導入。本人の立ち絵は工房到着後から。"
+    },
+    "well": {
+      "decision": "person-evidence",
+      "people": ["q172_lui","q172_well_master"],
+      "evidence": "井戸は「昔の名で呼ばれたくない」という願いを口実に、本人の記憶まで取った。",
+      "reason": "onsite_wellでpartyとluiが井戸へ実到着し、元原稿の井戸の主が取引の主体として現在の交渉相手になる。",
+      "visual": "ルイと井戸の主の交渉。主の人型・性別・容貌は固定しない。"
+    },
+    "onsite": {
+      "decision": "person-evidence",
+      "people": ["q172_lui"],
+      "evidence": "本人は成人後に別の名を選んでいた。",
+      "reason": "entry_visitでpartyがworkshopへ到着し、初期位置workshopのlui本人から二つの名の手掛かりを得る。",
+      "visual": "刺繍工房のルイと二種類の名の手掛かり。名を別人物として描かない。"
+    },
+    "mother_heard": {
+      "decision": "person-evidence",
+      "people": ["q172_mother"],
+      "evidence": "母から昔の名と呼んでいた頃の事情を聞いた。",
+      "reason": "onsite_motherではpartyだけが母の家へ移動し、luiはworkshopに残る。母本人だけを現在の話者として扱う。",
+      "visual": "母の家で昔の呼び名を聞く。ルイを同行させない。"
+    },
+    "market_heard": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "作品の刺繍と出品記録を照合し、本人が選んだ名を確認した。",
+      "reason": "onsite_marketではpartyだけが市場へ移動する。記録照合の場面で、店員・記録係・ルイ本人の同席は書かれていない。",
+      "visual": "作品の刺繍と出品記録。人物画は追加しない。"
+    },
+    "restored_confirm": {
+      "decision": "person-evidence",
+      "people": ["q172_lui"],
+      "evidence": "ルイと工房へ戻り、二つの名と過去を取り戻したことを本人に確認する。",
+      "reason": "well_restoreでpartyとluiがworkshopへ実帰着する。母はまだ母の家にいる。",
+      "visual": "工房で記憶の返還を本人と確認する。"
+    },
+    "restored": {
+      "decision": "person-evidence",
+      "people": ["q172_lui","q172_mother"],
+      "evidence": "母は呼び名を一度間違え、本人が望む今の名へ言い直した。",
+      "reason": "restored_confirm_motherでpartyとluiが母の家へ実移動し、母と本人が現在の呼び名を確認する。",
+      "visual": "母の家でルイと母が呼び名を言い直す。"
+    },
+    "named": {
+      "decision": "person-evidence",
+      "people": ["q172_lui"],
+      "evidence": "本人が選んだ新しい呼び名を工房へ記した。",
+      "reason": "well_newでpartyとluiがworkshopへ実帰着する。記憶の欠落は回復済みにしない。",
+      "visual": "工房で本人が選んだ呼び名を記すルイ。"
+    },
+    "water": {
+      "decision": "person-evidence",
+      "people": ["q172_lui"],
+      "evidence": "井戸を封じたことと記憶の未回復を窓口へ伝え、代わりの水場を手配した。",
+      "reason": "well_seal_ready_continueでpartyとluiがwaterへ実到着する。窓口の係員は名指しされない。",
+      "visual": "代替水源の窓口にいるルイ。未指定の係員は追加しない。"
+    },
+    "well_seal_ready": {
+      "decision": "person-evidence",
+      "people": ["q172_lui"],
+      "evidence": "戦いに勝利し、先へ進む道が開いた。",
+      "reason": "well_sealの戦闘勝利直後もluiは井戸に残る。倒した井戸の主を勝利後の固定出演として残さない。",
+      "visual": "封印戦後の井戸でルイと次の移動を確認する。"
+    }
+  },
+  "next": "q172のルイ・母・井戸の主を精読した。次はluiの実同行、母の家の話者、井戸の交渉相手を接続し、名の状態と3結末を保持する。"
 }
  }
 };
