@@ -6,7 +6,7 @@ import {auditRelocatedCast,loadRelocatedCastQuests,relocatedCastFingerprint} fro
 const quests=await loadRelocatedCastQuests();
 test('cast audit distinguishes measured empty casts, reviewed scenes and candidate roles',()=>{
  const report=auditRelocatedCast(quests);
- assert.deepEqual(report.summary,{quests:100,scenes:753,emptyCastScenes:531,personEntities:125,characterLinkedEntities:68,reviewedQuests:47,reviewedScenes:329,noPersonEvidenceScenes:104,personEvidenceScenes:225,candidateRoles:3,connectedRoles:92,unreviewedScenes:424});
+ assert.deepEqual(report.summary,{quests:100,scenes:753,emptyCastScenes:529,personEntities:126,characterLinkedEntities:69,reviewedQuests:48,reviewedScenes:338,noPersonEvidenceScenes:106,personEvidenceScenes:232,candidateRoles:4,connectedRoles:94,unreviewedScenes:415});
  assert.ok(report.regions.every(r=>r.quests===20));
  assert.equal(report.quests.find(q=>q.id==='q071').scenes[0].review,null);
  assert.deepEqual(report.quests.find(q=>q.id==='q032').scenes.filter(s=>s.review.people.length).map(s=>s.id),['cell','workshop']);
@@ -143,10 +143,18 @@ test('cast audit distinguishes measured empty casts, reviewed scenes and candida
  assert.match(god.scenes.find(s=>s.id==='road').review.reason,/shrineに留まり/);
  const mirror=report.quests.find(q=>q.id==='q177');
  assert.deepEqual(Object.keys(mirror.review.people),['q177_courier','q177_customers']);
- assert.ok(Object.values(mirror.review.people).every(p=>p.status==='candidate'));
+ assert.ok(Object.values(mirror.review.people).every(p=>p.status==='connected'));
  assert.deepEqual(mirror.scenes.filter(s=>s.review.people.includes('q177_courier')).map(s=>s.id),['onsite']);
  assert.deepEqual(mirror.scenes.filter(s=>s.review.people.includes('q177_customers')).map(s=>s.id),['notice']);
- assert.ok(mirror.scenes.every(s=>s.cast.length===0));
+ assert.deepEqual(mirror.scenes.filter(s=>s.cast.length).map(s=>[s.id,s.cast.map(c=>c.entity)]),[['onsite',['courierPerson']],['notice',['customers']]]);
+ const door=report.quests.find(q=>q.id==='q178');
+ assert.deepEqual(Object.keys(door.review.people),['q178_daughter','q178_parent','q178_host']);
+ assert.ok(Object.values(door.review.people).every(p=>p.status==='candidate'));
+ assert.deepEqual(door.scenes.filter(s=>s.review.people.includes('q178_parent')).map(s=>s.id),['family','wait_talk','wait']);
+ assert.deepEqual(door.scenes.filter(s=>s.review.people.includes('q178_host')).map(s=>s.id),['delivered']);
+ assert.deepEqual(door.scenes.filter(s=>!s.review.people.length).map(s=>s.id),['entry','closed']);
+ assert.match(door.scenes.find(s=>s.id==='daughter_door').review.reason,/次の出発時/);
+ assert.match(door.scenes.find(s=>s.id==='delivered').review.reason,/finish時/);
  assert.deepEqual(hunter.scenes.filter(s=>s.review.people.includes('q175_lookout')).map(s=>s.id),['warned','pursued']);
  assert.deepEqual(hunter.scenes.filter(s=>s.review.people.includes('q175_miro')).map(s=>s.id),['hidden','route','warning','onsite','battle','changed','warned','pursuit','pursued']);
  assert.deepEqual(hunter.scenes.filter(s=>s.review.people.includes('q175_sister')).map(s=>s.id),['hidden','route','warning','onsite','battle','changed','warned','pursuit','pursued']);
@@ -185,9 +193,9 @@ test('future character and cast hookups change measured counts without marking u
  const changed=structuredClone(quests),q=changed.find(q=>q.id==='q071'),entity=Object.values(q.story.entities).find(e=>e.kind==='person');
  entity.character='future_owner';Object.values(q.story.scenes)[0].cast=[{entity:'workerPerson'}];
  const report=auditRelocatedCast(changed);
- assert.equal(report.summary.emptyCastScenes,530);
- assert.equal(report.summary.characterLinkedEntities,69);
- assert.equal(report.summary.reviewedScenes,329);
+ assert.equal(report.summary.emptyCastScenes,528);
+ assert.equal(report.summary.characterLinkedEntities,70);
+ assert.equal(report.summary.reviewedScenes,338);
  assert.equal(report.quests.find(q=>q.id==='q071').review,null);
 });
 

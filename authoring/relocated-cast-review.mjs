@@ -1,7 +1,7 @@
 // Editorial audit: candidate IDs are local; connected roles cite their game entity.
 // Update a fingerprint only after rereading the changed quest and its evidence.
 export const RELOCATED_CAST_REVIEW={
- reviewedAt:'2026-11-06',
+ reviewedAt:'2026-11-07',
  quests:{
   q031:{
    sourceSha256:'ab2cb40f75d0a430e00077b936b338b23736b74b01034aeaeb9333cda16cecf7',
@@ -3789,25 +3789,27 @@ export const RELOCATED_CAST_REVIEW={
   "next": "q176の4役と所在・旧保存を接続した。次はq177の配達人と告知を受ける客の表示、続いてq178の出演監査。"
 },
   q177:{
-  "sourceSha256": "9e1d1777235a5b4c51487e04ae895350526fbc98c61b009c25eecd82f08b9839",
+  "sourceSha256": "b253b0d5617425e6a11c5983f6469d616f54f51a551a47cf4a7c81175c0d90fe",
   "identityNotes": [
     "原稿authoring/reference/volume-08.mdのGQ077、初版q177、現場接続後の全9場面・証拠の保持者・4結末を精読した。",
     "鏡が映すのは遠方で既に起きた出来事であり、未来予知ではない。商人は当初信じていたが途中で気づいても宣伝を変えていなかった。像の内容を選択に合わせて変えない。",
-    "onsiteに来る配達人とnoticeで告知を受ける客たちの2役が候補。商人という依頼人名だけで店や配達所へ配置せず、配達人と商人を同一視しない。",
-    "現行storyにはparty・evidence・mirrorDeviceのみがあり、人物entityはない。配達人の所在と追加保存値、人数未確定の客の所在を次に設計する。",
+    "onsiteに来る配達人とnoticeで告知を受ける客たちの2役を呼称表示へ接続した。商人という依頼人名だけで店や配達所へ配置せず、配達人と商人を同一視しない。",
+    "配達人courierPersonはshop、人数未確定の客customersはpublicへ所在を固定する。本文にない同行は追加しない。物語改訂1→2で旧保存へこの2値だけを補い、既存の品物の保持者に新しい人物を追加しない。",
     "window結末の店主と客の対話は完了後の本文である。現行window場面へ先取りせず、未使用の店主役を監査候補へ追加しない。",
     "未調査のnotice・closeと、証拠照合後のcorrect・window・closeを区別する。evidenceは比較の出発時に店から隊へ移り、訂正完了時に告知場所へ、閉店の告知出発時または窓の設定完了時に店へ戻る。閉店でも証拠を破壊しない。"
   ],
   "people": {
     "q177_courier": {
       "label": "配達人",
-      "status": "candidate",
-      "need": "onsiteで旗の日時を証言する配達人。商人とは別の役として所在と旧保存互換を設計してから表示する。"
+      "status": "connected",
+      "need": "shopに固定した配達人をonsiteだけへ接続した。配達所へは同行せず、旧保存へ所在だけを補う。",
+      "entity": "courierPerson"
     },
     "q177_customers": {
       "label": "告知を受ける客たち",
-      "status": "candidate",
-      "need": "noticeで決断を急がないよう伝えられる人数未確定の集団。補償予定だけのcorrectや完了前のwindowへ流用しない。"
+      "status": "connected",
+      "need": "publicに固定した人数未確定の集団をnoticeだけへ接続した。補償予定のcorrectや完了前のwindowへ流用しない。",
+      "entity": "customers"
     }
   },
   "scenes": {
@@ -3831,7 +3833,7 @@ export const RELOCATED_CAST_REVIEW={
         "q177_courier"
       ],
       "evidence": "鏡の旗は、現地では昨日降ろされた旗だという配達人が来た。像が来る時刻と、知らせが来る時刻に差がある。",
-      "reason": "配達人が来て旗が昨日降ろされたと証言する現場。商人と同一人物にせず、証言後に配達所まで同行するかは次の実装で判断する。",
+      "reason": "配達人が来て旗が昨日降ろされたと証言する現場。shopでの証言場面だけへ接続し、配達所への同行を補わない。商人とは同定しない。",
       "visual": "鏡の像と旗について証言する配達人。"
     },
     "notice": {
@@ -3879,7 +3881,118 @@ export const RELOCATED_CAST_REVIEW={
       "visual": "相手の同意範囲を映す窓として設定した鏡。"
     }
   },
-  "next": "配達人と客の所在・旧保存互換・表示を実装し、続いてq178を精読する。"
+  "next": "q177の2役と固定所在・旧保存を接続した。次はq178の越境・受渡し本文と実状態の差を整理して人物表示を実装し、続いてq179を精読する。"
+},
+  q178:{
+  "sourceSha256": "efe51723f653874de2c4bb3e0f9dc4d14d730d7618ef5a418953ad8d6c41d538",
+  "identityNotes": [
+    "原稿authoring/reference/volume-08.mdのGQ078、初版q178、現場接続後の全9場面・8旅程・3結末と状態値・品物の受渡しを精読した。",
+    "娘daughterPerson・親parentPersonと、手紙を受け取る宿主の3役を候補とする。宿主と親の同一性は本文から確定せず、別人であるとも断定しない。表示接続時に役と所在の扱いを確認する。",
+    "娘は扉へ、通常の朝では娘と親が翌朝の部屋へ実同行する。越境経路では娘だけが翌朝の部屋に残り、手紙の届け先へは同行しない。morning本文と、結末で一人旅立つ娘の時点を整理する。",
+    "daughter_doorは越境済み本文だが、越境の旗と翌朝への移動は次の出発時。player_doorも娘に続いて越える表現と旗の立つ時点を確認する。表示だけを先付けせず、不可逆の判断と旧保存を保つ解決を先に行う。",
+    "手紙はmorningからの出発時に隊へ移り、宿主への実受渡しはdeliveredのfinish時。受渡し済み本文との時点差を次に整える。通常の朝の髪紐はwaitのfinish時に娘へ渡す。",
+    "娘の髪紐は荷造りの忘れ物であり、必ず消える運命の証拠ではない。局所の翌朝と世界の時計を混同せず、越境後に夜の選択を再実行させない。語らなかった話を済んだことにせず、未来の記憶を人物へ追加しない。"
+  ],
+  "people": {
+    "q178_daughter": {
+      "label": "旅立つ娘",
+      "status": "candidate",
+      "need": "既存daughterPersonの相談・扉・翌朝の所在に基づく候補。越境済み本文と旗・実同行の時点差を旧保存も含めて整理してから接続する。"
+    },
+    "q178_parent": {
+      "label": "娘の親",
+      "status": "candidate",
+      "need": "既存parentPersonの相談室と通常の朝の見送りに限定する。宿主とは根拠なく同定せず、越境経路へ同行させない。"
+    },
+    "q178_host": {
+      "label": "手紙を受け取る宿主",
+      "status": "candidate",
+      "need": "deliveredの手紙の受取役。entityと保存値は未追加。親との同一性を断定せず、受渡し済み本文と実保持者を整理する。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "古い札には、人は夜へ戻れず、物だけ戻せるとある。娘は今夜話さずに出てしまえると考えていた。",
+      "reason": "娘の考えは過去の説明であり、既存daughterPerson・parentPersonはfamily_placeにいる。札と扉の受付へ同席させない。",
+      "visual": "札の、人は戻れず物だけ戻せるという規則。"
+    },
+    "family": {
+      "decision": "person-evidence",
+      "people": [
+        "q178_daughter",
+        "q178_parent"
+      ],
+      "evidence": "物は戻った。扉の向こうの髪紐は、娘が荷造りで忘れたものだ。必ず消える運命の証拠ではない。",
+      "reason": "既存の娘と親がfamily_placeにいる相談場面。髪紐はmorning_placeにあり、ここへ先取りしない。",
+      "visual": "相談する娘と親、翌朝の髪紐についての説明。"
+    },
+    "morning": {
+      "decision": "person-evidence",
+      "people": [
+        "q178_daughter"
+      ],
+      "evidence": "翌朝へ出た。夜へ戻る選択肢はない。娘の手紙が机にあり、髪紐が普通の忘れ物として残る。",
+      "reason": "daughterPersonが翌朝の部屋へ実同行している。本文は手紙と髪紐を述べ、結末では娘は一人で旅立つ。表示前に、同行後の所在と本文の時点を整理し、手紙だけを根拠に新しい対話を足さない。",
+      "visual": "翌朝の部屋と手紙・髪紐。娘の同席表示は実所在と出発の時点を整理してから接続する。"
+    },
+    "wait_talk": {
+      "decision": "person-evidence",
+      "people": [
+        "q178_daughter",
+        "q178_parent"
+      ],
+      "evidence": "親子で今夜の話をした。扉を使わず普通の朝を待つ。",
+      "reason": "親子が今夜話したことが明記され、両者ともfamily_placeにいる。扉を使わない通常の朝と分ける。",
+      "visual": "今夜話し合う娘と親。"
+    },
+    "wait": {
+      "decision": "person-evidence",
+      "people": [
+        "q178_daughter",
+        "q178_parent"
+      ],
+      "evidence": "忘れた髪紐を本人へ渡して送り出す。時刻を越える扉は使わない。",
+      "reason": "通常の朝に両者がmorning_placeへ実同行する。髪紐はfinish時にdaughterPersonへ渡り、それまでは部屋にある。",
+      "visual": "通常の朝に娘を見送る親。髪紐を渡す最終確認。"
+    },
+    "daughter_door": {
+      "decision": "person-evidence",
+      "people": [
+        "q178_daughter"
+      ],
+      "evidence": "戻れないことを承知した娘が扉を越えた。今夜の話し合いを済ませたことにはしない。",
+      "reason": "娘はentryへ実同行するが、本文では越えたとされ、daughterCrossed・nightClosedと翌朝への実移動は次の出発時に生じる。旧保存を含め本文と越境時点を整合させてから表示する。親は相談室に残る。",
+      "visual": "扉の前の娘。越境済み表示と実状態の差を先に整理する。"
+    },
+    "player_door": {
+      "decision": "person-evidence",
+      "people": [
+        "q178_daughter"
+      ],
+      "evidence": "娘に続いて翌朝へ越える。夜の判断へ戻る行為はない。",
+      "reason": "娘がentryへ実同行し、主人公と越える次のcross出発でplayerCrossed・daughterCrossed・nightClosedが立つ。娘が先に越えたと誤認させない本文・表示の時点を確認する。",
+      "visual": "翌朝へ越える前の娘と扉。不可逆である確認を維持する。"
+    },
+    "delivered": {
+      "decision": "person-evidence",
+      "people": [
+        "q178_host"
+      ],
+      "evidence": "机の手紙を宿主へ渡した。言えなかった話は済んだことにせず、髪紐は忘れ物として残す。",
+      "reason": "宿主への受渡しが本文に明記されるが、letterSheetはこの場面到着時にはpartyが持ち、実受渡しはfinish時。宿主のentityはなく、parentPersonを根拠なく宿主へ改名・移動しない。",
+      "visual": "宿主へ手紙を渡す最終確認。受渡し済み本文と保持者を整合させる。"
+    },
+    "closed": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "扉を封じた。人は越えず、明日のことは明日確かめる。",
+      "reason": "封印の操作だけが記され、娘・親はfamily_placeに残る。宿主という依頼人名だけで扉の場所へ表示しない。",
+      "visual": "人が越えなかった扉と封印の確認。"
+    }
+  },
+  "next": "越境・受渡し本文と実状態を整理し、娘・親・宿主の表示と旧保存互換を実装する。続いてq179の出演を精読する。"
 }
  }
 };

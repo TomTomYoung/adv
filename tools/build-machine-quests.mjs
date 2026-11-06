@@ -44,6 +44,14 @@ export async function buildMachineQuests({check=false}={}){
     {key:'merchantPersonAt',value:'departure'}
    ]}];
   }
+  if(n===177){
+   const previous=compileRelocatedQuest(first,source(first,{cast:false}),options).story;
+   for(const key of ['evidenceAt','mirrorDeviceAt'])quest.story.registry[key].values=structuredClone(previous.registry[key].values);
+   quest.story.registry.courierPersonAt.values=['shop'];
+   quest.story.registry.customersAt.values=['public'];
+   quest.story.revision=2;quest.model.edition.revision=2;
+   quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[{key:'courierPersonAt',value:'shop'},{key:'customersAt',value:'public'}]}];
+  }
   quests.push(quest);
  }
  const outcomes=quests.reduce((n,q)=>n+Object.keys(q.outcomes).length,0);
