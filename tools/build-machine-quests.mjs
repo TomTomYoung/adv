@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
+import {ref,eq,and} from '../authoring/story-kit.mjs';
 import {compileRelocatedQuest} from './compile-relocated-quest.mjs';
 import {machineFirstSource} from '../authoring/editions/e2/salome/machine-first.mjs';
 import {machineSecondSource} from '../authoring/editions/e2/salome/machine-second.mjs';
@@ -23,6 +24,25 @@ export async function buildMachineQuests({check=false}={}){
    quest.story.registry.lookoutAt.values=['warning_place'];
    quest.story.revision=2;quest.model.edition.revision=2;
    quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[{key:'lookoutAt',value:'warning_place'}]}];
+  }
+  if(n===176){
+   const previous=compileRelocatedQuest(first,source(first,{cast:false}),options).story;
+   quest.story.registry.sandalsAt.values=structuredClone(previous.registry.sandalsAt.values);
+   quest.story.registry.priestPersonAt.values=['shrine','priest','transit'];
+   quest.story.registry.roadkeepersAt.values=['priest','road_place','transit'];
+   quest.story.registry.merchantPersonAt.values=['departure'];
+   quest.story.revision=2;quest.model.edition.revision=2;
+   const arrived=action=>({op:'in',left:action,right:ref('stories.q176.events')});
+   const travelling=action=>and(eq(ref('journey.quest'),'q176'),eq(ref('journey.action'),action));
+   quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[
+    {key:'priestPersonAt',value:'shrine'},
+    {key:'priestPersonAt',value:'priest',when:arrived('onsite_road')},
+    {key:'priestPersonAt',value:'transit',when:travelling('onsite_road')},
+    {key:'roadkeepersAt',value:'priest'},
+    {key:'roadkeepersAt',value:'road_place',when:arrived('road_agree')},
+    {key:'roadkeepersAt',value:'transit',when:travelling('road_agree')},
+    {key:'merchantPersonAt',value:'departure'}
+   ]}];
   }
   quests.push(quest);
  }

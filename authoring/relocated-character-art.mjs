@@ -55,6 +55,26 @@ export const relocatedCharacters=Object.fromEntries([
 ].map(([id,name,detail,provenance])=>[id,{id,name,role:'礼拝堂の現地の相手',detail,portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,
  provenance:provenance??'2026-10-29の美術設定。固有名・他人物との同一性は追加しない。具体的な外見・年齢感・服装は今回の美術設定。牢・格子・聖像・宝玉・石を人物画へ固定しない。'}]));
 // The group has no specified headcount or spokesperson. Ren is the existing actor.
+relocatedCharacters.q176_god={
+ id:'q176_god',name:'小さな街道神',role:'歩いたことのない道へ旅立ちたい街道神',
+ detail:'祠で返却と季節の帰還を相談し、草鞋を受け取った見送りだけ分かれ道へ同行する。補修窓口と点検道へは同行しない。',
+ provenance:'2026-11-06。既存godPersonの呼称表示。容貌・性別・年齢を補わず、専用画は未接続。'
+};
+relocatedCharacters.q176_priest={
+ id:'q176_priest',name:'祠の司祭',role:'神の不在による祠の祝福の弱まりを心配する司祭',
+ detail:'祠で話し、補修の相談経路だけ窓口まで同行する。窓口に残り、道の点検と神の見送りへは同行しない。',
+ provenance:'2026-11-06。匿名のperson priestPersonの呼称表示。氏名・容貌・性別・年齢を補わず、専用画は未接続。'
+};
+relocatedCharacters.q176_roadkeepers={
+ id:'q176_roadkeepers',name:'道の補修を担う人たち',role:'神の不在中の補修を引き受ける旅人と住民',
+ detail:'窓口で補修を相談し、点検の経路では現地の住民の作業を示す人数未定の役。祭の不在告知と補修当番を確認する。',
+ provenance:'2026-11-06。group roadkeepersの呼称表示。人数・代表者・全員の同行を本文へ固定せず、個人画は追加しない。'
+};
+relocatedCharacters.q176_merchant={
+ id:'q176_merchant',name:'道を教える行商人',role:'最初の分かれ道で神に道を教える行商人',
+ detail:'無条件返却のtravelだけに表示する。季節の見送りseason、祠、補修相談へは出演させない。',
+ provenance:'2026-11-06。匿名のperson merchantPersonの呼称表示。氏名・容貌・性別・年齢を補わず、専用画は未接続。'
+};
 relocatedCharacters.q175_miro={
  id:'q175_miro',name:'猟師ミロ',role:'公開訓練の戦法を獣に学ばれた猟師',
  detail:'妹と寝床・稽古場・広場・谷道へ実際に同行し、別戦法・誘導・正面戦の結果を区別する。',

@@ -65,6 +65,18 @@ export function machineSecondSource(q,{cast=true}={}){
   field('shrine','草鞋を待つ神の祠','outskirts',3,5);town('priest','司祭と補修当番の窓口','machine_registry');field('road_place','住民が直す道','outskirts',7,7);field('departure','旅立ちの分かれ道','outskirts',15,5);entity('sandals','entry');entity('godPerson','shrine','person');const from=intake('shrine','預かった左右の違う草鞋を持ち、外縁の祠へ向かう。');choice('entry','visit').depart=[give('sandals','entry','party')];node('road').place='priest';
   route(from,'give','travel',{companions:['godPerson'],depart:[give('sandals','party','godPerson')]});route('road','give','return_shrine');add('return_shrine','shrine','補修体制に旅立ちの許可を結び付けず、草鞋を返した。',[opt('seeoff','神と分かれ道まで歩く','travel',{companions:['godPerson'],depart:[give('sandals','party','godPerson')]})]);end('travel','departure','草鞋を履いた神が旅立ち、最初の分かれ道で行商人に道を聞いた。','travel',[set('departed')]);
   choice(from,'keep').effects=[set('heldAsCondition')];route('road','agree','repair');add('repair','road_place','住民と道を点検し、季節ごとの補修当番と司祭の不在告知を確認する。',[opt('return','祠へ戻り、神へ当番と予定を伝える','season_return',{depart:[set('maintenanceAgreed')]})]);add('season_return','shrine','季節ごとに戻る約束を確認し、草鞋を返す。',[opt('seeoff','神を分かれ道まで見送る','season',{companions:['godPerson'],depart:[give('sandals','party','godPerson')]})]);end('season','departure','神が歩き始めた。不在の日があることと補修当番を、祭の予定へ残す。','season',[set('departed'),set('absenceAnnounced')]);
+  if(cast){
+   node('road').text='旅人と住民は不在中の補修を引き受け、司祭も祭に不在の日があると告知すると答えた。季節ごとの帰還は、祠へ戻って神と確認する。';
+   node('return_shrine').text='補修体制に旅立ちの許可を結び付けず、草鞋の返却を決めた。';
+   entity('priestPerson','shrine','person');entity('roadkeepers','priest','group');entity('merchantPerson','departure','person');
+   x.entities.godPerson.character='q176_god';x.entities.priestPerson.character='q176_priest';x.entities.roadkeepers.character='q176_roadkeepers';x.entities.merchantPerson.character='q176_merchant';
+   choice(from,'road').companions=['priestPerson'];choice('road','agree').companions=['roadkeepers'];
+   node('onsite').cast=[{entity:'godPerson',display:{x:31}},{entity:'priestPerson',display:{x:69}}];
+   node('road').cast=[{entity:'priestPerson',display:{x:31}},{entity:'roadkeepers',display:{x:69}}];
+   node('repair').cast=[{entity:'roadkeepers',display:{x:50}}];
+   node('travel').cast=[{entity:'godPerson',display:{x:31}},{entity:'merchantPerson',display:{x:69}}];
+   for(const id of ['return_shrine','season_return','season'])node(id).cast=[{entity:'godPerson',display:{x:50}}];
+  }
  }
  if(q.number===177){
   town('shop','像を残す鏡の商店','machine_mirror');town('post','場所と日付を照合する配達所','library_post');town('public','客への公開告知窓口','library_review');entity('evidence','shop');entity('mirrorDevice','shop');const from=intake('shop','鏡が未来を映すという宣伝について、配達人から相談を受けた。店で像と説明を確かめる。');node('proof').place='post';choice(from,'compare').depart=[give('evidence','shop','party')];
