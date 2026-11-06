@@ -412,7 +412,7 @@
       {
         "id": "road",
         "place": "priest",
-        "text": "旅人と住民は不在中の補修を引き受け、司祭も祭に不在の日があると告知すると答えた。神は季節ごとに戻ると言った。",
+        "text": "旅人と住民は不在中の補修を引き受け、司祭も祭に不在の日があると告知すると答えた。季節ごとの帰還は、祠へ戻って神と確認する。",
         "options": [
           {
             "id": "agree",
@@ -456,7 +456,7 @@
       {
         "id": "return_shrine",
         "place": "shrine",
-        "text": "補修体制に旅立ちの許可を結び付けず、草鞋を返した。",
+        "text": "補修体制に旅立ちの許可を結び付けず、草鞋の返却を決めた。",
         "options": [
           {
             "id": "seeoff",
@@ -529,7 +529,7 @@
     "entryScript": "q176.machine.visit",
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -538,7 +538,750 @@
       "saveRevision": 2,
       "scope": "機関廟20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "神様の忘れ物の現場受付",
+            "shrine": "草鞋を待つ神の祠",
+            "priest": "司祭と補修当番の窓口",
+            "road_place": "住民が直す道",
+            "departure": "旅立ちの分かれ道",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "shrine"
+            ],
+            [
+              "transit",
+              "priest"
+            ],
+            [
+              "transit",
+              "road_place"
+            ],
+            [
+              "transit",
+              "departure"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "shrine",
+                "priest",
+                "road_place",
+                "departure",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "travel",
+                "stay",
+                "season"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "heldAsCondition": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "heldAsCondition"
+            },
+            "departed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "departed"
+            },
+            "maintenanceAgreed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "maintenanceAgreed"
+            },
+            "absenceAnnounced": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "absenceAnnounced"
+            },
+            "sandalsAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "shrine",
+                "priest",
+                "road_place",
+                "departure",
+                "transit",
+                "party",
+                "godPerson"
+              ],
+              "meaning": "sandals の所在または保持者"
+            },
+            "godPersonAt": {
+              "type": "enum",
+              "initial": "shrine",
+              "values": [
+                "entry",
+                "shrine",
+                "priest",
+                "road_place",
+                "departure",
+                "transit"
+              ],
+              "meaning": "godPerson の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "sandals": {
+              "holder": "sandalsAt",
+              "kind": "item"
+            },
+            "godPerson": {
+              "holder": "godPersonAt",
+              "kind": "person"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "草鞋は古い旅人たちが修繕を重ねた物で、左右の大きさが違う。神が守ったから道が続いたのと同時に、旅人が歩いて直したから神が残れた。旅に出ると祠の小さな祝福は弱まり、司祭の心配にも根拠がある。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "神様の忘れ物の現場受付",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "road": {
+              "title": "司祭と補修当番の窓口",
+              "place": "priest",
+              "cast": [],
+              "requires": true
+            },
+            "onsite": {
+              "title": "草鞋を待つ神の祠",
+              "place": "shrine",
+              "cast": [],
+              "requires": true
+            },
+            "return_shrine": {
+              "title": "草鞋を待つ神の祠",
+              "place": "shrine",
+              "cast": [],
+              "requires": true
+            },
+            "travel": {
+              "title": "旅立ちの分かれ道",
+              "place": "departure",
+              "cast": [],
+              "requires": true
+            },
+            "repair": {
+              "title": "住民が直す道",
+              "place": "road_place",
+              "cast": [],
+              "requires": true
+            },
+            "season_return": {
+              "title": "草鞋を待つ神の祠",
+              "place": "shrine",
+              "cast": [],
+              "requires": true
+            },
+            "season": {
+              "title": "旅立ちの分かれ道",
+              "place": "departure",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_visit": {
+              "from": [
+                "entry"
+              ],
+              "to": "onsite",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "shrine"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "shrine",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "sandals",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "road_agree": {
+              "from": [
+                "road"
+              ],
+              "to": "repair",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "road_place"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "road_place",
+                "companions": []
+              },
+              "depart": []
+            },
+            "road_give": {
+              "from": [
+                "road"
+              ],
+              "to": "return_shrine",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "shrine"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "shrine",
+                "companions": []
+              },
+              "depart": []
+            },
+            "onsite_give": {
+              "from": [
+                "onsite"
+              ],
+              "to": "travel",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "godPerson"
+                  ],
+                  "path": [
+                    "transit",
+                    "departure"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "departure",
+                "companions": [
+                  "godPerson"
+                ]
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "sandals",
+                  "from": "party",
+                  "to": "godPerson"
+                }
+              ]
+            },
+            "onsite_keep": {
+              "from": [
+                "onsite"
+              ],
+              "ending": "stay",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "heldAsCondition",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "stay"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "onsite_road": {
+              "from": [
+                "onsite"
+              ],
+              "to": "road",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "priest"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "priest",
+                "companions": []
+              },
+              "depart": []
+            },
+            "return_shrine_seeoff": {
+              "from": [
+                "return_shrine"
+              ],
+              "to": "travel",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "godPerson"
+                  ],
+                  "path": [
+                    "transit",
+                    "departure"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "departure",
+                "companions": [
+                  "godPerson"
+                ]
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "sandals",
+                  "from": "party",
+                  "to": "godPerson"
+                }
+              ]
+            },
+            "travel_finish": {
+              "from": [
+                "travel"
+              ],
+              "ending": "travel",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "departed",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "travel"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "repair_return": {
+              "from": [
+                "repair"
+              ],
+              "to": "season_return",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "shrine"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "shrine",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "set",
+                  "key": "maintenanceAgreed",
+                  "value": true
+                }
+              ]
+            },
+            "season_return_seeoff": {
+              "from": [
+                "season_return"
+              ],
+              "to": "season",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "godPerson"
+                  ],
+                  "path": [
+                    "transit",
+                    "departure"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "departure",
+                "companions": [
+                  "godPerson"
+                ]
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "sandals",
+                  "from": "party",
+                  "to": "godPerson"
+                }
+              ]
+            },
+            "season_finish": {
+              "from": [
+                "season"
+              ],
+              "ending": "season",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "departed",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "absenceAnnounced",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "season"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "travel": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q176.values.resolution"
+                  },
+                  "right": "travel"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q176.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q176.values.partyAt"
+                      },
+                      "right": "departure"
+                    }
+                  ]
+                }
+              ]
+            },
+            "stay": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q176.values.resolution"
+                  },
+                  "right": "stay"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q176.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q176.values.partyAt"
+                      },
+                      "right": "shrine"
+                    }
+                  ]
+                }
+              ]
+            },
+            "season": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q176.values.resolution"
+                  },
+                  "right": "season"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q176.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q176.values.partyAt"
+                      },
+                      "right": "departure"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_8",
+              "map": "region_8_f2",
+              "x": 3,
+              "y": 1
+            },
+            "shrine": {
+              "kind": "dungeon",
+              "dungeon": "salome_road",
+              "map": "e2_salome_outskirts",
+              "x": 3,
+              "y": 5
+            },
+            "priest": {
+              "kind": "town",
+              "location": "machine_registry"
+            },
+            "road_place": {
+              "kind": "dungeon",
+              "dungeon": "salome_road",
+              "map": "e2_salome_outskirts",
+              "x": 7,
+              "y": 7
+            },
+            "departure": {
+              "kind": "dungeon",
+              "dungeon": "salome_road",
+              "map": "e2_salome_outskirts",
+              "x": 15,
+              "y": 5
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "priestPersonAt",
+            "value": "shrine"
+          },
+          {
+            "key": "priestPersonAt",
+            "value": "priest",
+            "when": {
+              "op": "in",
+              "left": "onsite_road",
+              "right": {
+                "ref": "stories.q176.events"
+              }
+            }
+          },
+          {
+            "key": "priestPersonAt",
+            "value": "transit",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "journey.quest"
+                  },
+                  "right": "q176"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "journey.action"
+                  },
+                  "right": "onsite_road"
+                }
+              ]
+            }
+          },
+          {
+            "key": "roadkeepersAt",
+            "value": "priest"
+          },
+          {
+            "key": "roadkeepersAt",
+            "value": "road_place",
+            "when": {
+              "op": "in",
+              "left": "road_agree",
+              "right": {
+                "ref": "stories.q176.events"
+              }
+            }
+          },
+          {
+            "key": "roadkeepersAt",
+            "value": "transit",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "journey.quest"
+                  },
+                  "right": "q176"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "journey.action"
+                  },
+                  "right": "road_agree"
+                }
+              ]
+            }
+          },
+          {
+            "key": "merchantPersonAt",
+            "value": "departure"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q176.scene.entry": {
@@ -841,7 +1584,7 @@
         },
         {
           "op": "narrate",
-          "text": "旅人と住民は不在中の補修を引き受け、司祭も祭に不在の日があると告知すると答えた。神は季節ごとに戻ると言った。"
+          "text": "旅人と住民は不在中の補修を引き受け、司祭も祭に不在の日があると告知すると答えた。季節ごとの帰還は、祠へ戻って神と確認する。"
         },
         {
           "op": "choice",
@@ -963,7 +1706,7 @@
         },
         {
           "op": "narrate",
-          "text": "補修体制に旅立ちの許可を結び付けず、草鞋を返した。"
+          "text": "補修体制に旅立ちの許可を結び付けず、草鞋の返却を決めた。"
         },
         {
           "op": "choice",
@@ -1463,6 +2206,34 @@
           "transit"
         ],
         "meaning": "godPerson の所在または保持者"
+      },
+      "priestPersonAt": {
+        "type": "enum",
+        "initial": "shrine",
+        "values": [
+          "shrine",
+          "priest",
+          "transit"
+        ],
+        "meaning": "priestPerson の所在または保持者"
+      },
+      "roadkeepersAt": {
+        "type": "enum",
+        "initial": "priest",
+        "values": [
+          "priest",
+          "road_place",
+          "transit"
+        ],
+        "meaning": "roadkeepers の所在または保持者"
+      },
+      "merchantPersonAt": {
+        "type": "enum",
+        "initial": "departure",
+        "values": [
+          "departure"
+        ],
+        "meaning": "merchantPerson の所在または保持者"
       }
     },
     "entities": {
@@ -1476,7 +2247,23 @@
       },
       "godPerson": {
         "holder": "godPersonAt",
-        "kind": "person"
+        "kind": "person",
+        "character": "q176_god"
+      },
+      "priestPerson": {
+        "holder": "priestPersonAt",
+        "kind": "person",
+        "character": "q176_priest"
+      },
+      "roadkeepers": {
+        "holder": "roadkeepersAt",
+        "kind": "group",
+        "character": "q176_roadkeepers"
+      },
+      "merchantPerson": {
+        "holder": "merchantPersonAt",
+        "kind": "person",
+        "character": "q176_merchant"
       }
     },
     "propositions": {
@@ -1496,43 +2283,110 @@
       "road": {
         "title": "司祭と補修当番の窓口",
         "place": "priest",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "priestPerson",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "roadkeepers",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "onsite": {
         "title": "草鞋を待つ神の祠",
         "place": "shrine",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "godPerson",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "priestPerson",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "return_shrine": {
         "title": "草鞋を待つ神の祠",
         "place": "shrine",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "godPerson",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "travel": {
         "title": "旅立ちの分かれ道",
         "place": "departure",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "godPerson",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "merchantPerson",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "repair": {
         "title": "住民が直す道",
         "place": "road_place",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "roadkeepers",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "season_return": {
         "title": "草鞋を待つ神の祠",
         "place": "shrine",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "godPerson",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "season": {
         "title": "旅立ちの分かれ道",
         "place": "departure",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "godPerson",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       }
     },
@@ -1581,7 +2435,8 @@
           {
             "op": "move",
             "entities": [
-              "party"
+              "party",
+              "roadkeepers"
             ],
             "path": [
               "transit",
@@ -1594,7 +2449,9 @@
         "once": false,
         "journey": {
           "to": "road_place",
-          "companions": []
+          "companions": [
+            "roadkeepers"
+          ]
         },
         "depart": []
       },
@@ -1697,7 +2554,8 @@
           {
             "op": "move",
             "entities": [
-              "party"
+              "party",
+              "priestPerson"
             ],
             "path": [
               "transit",
@@ -1710,7 +2568,9 @@
         "once": false,
         "journey": {
           "to": "priest",
-          "companions": []
+          "companions": [
+            "priestPerson"
+          ]
         },
         "depart": []
       },
@@ -2006,7 +2866,7 @@
         "y": 5
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "salome",
   "receptionLocations": [

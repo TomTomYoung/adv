@@ -13,10 +13,12 @@ on:
       - 'tools/night-soldier-art-fixtures.mjs'
       - 'tools/funeral-art-fixtures.mjs'
       - 'tools/hunter-art-fixtures.mjs'
+      - 'tools/god-sandals-art-fixtures.mjs'
       - 'tools/character-art-browser.mjs'
       - 'tests/fixtures/e2-q173-before-cast.json'
       - 'tests/fixtures/e2-q174-before-cast.json'
       - 'tests/fixtures/e2-q175-before-cast.json'
+      - 'tests/fixtures/e2-q176-before-cast.json'
       - '.github/workflows/machine-quests.yml'
   workflow_dispatch:
 concurrency:
@@ -90,6 +92,18 @@ jobs:
         with:
           name: q175-cast-checkpoints
           path: /tmp/adv-hunter-art-browser
+          if-no-files-found: ignore
+      - name: Verify q176 god, sandals and older saves
+        if: steps.ci.outputs.run == 'true'
+        env:
+          ADV_BROWSER_OUTPUT: /tmp/adv-god-sandals-art-browser
+        run: node tools/browser-machine-cast-smoke.mjs --god-sandals-only
+      - name: Keep q176 cast checkpoints
+        if: always() && steps.ci.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: q176-cast-checkpoints
+          path: /tmp/adv-god-sandals-art-browser
           if-no-files-found: ignore
       - name: Remember successful inputs
         if: success() && steps.ci.outputs.run == 'true' && github.event_name != 'workflow_dispatch'
