@@ -6,7 +6,7 @@ import {auditRelocatedCast,loadRelocatedCastQuests,relocatedCastFingerprint} fro
 const quests=await loadRelocatedCastQuests();
 test('cast audit distinguishes measured empty casts, reviewed scenes and candidate roles',()=>{
  const report=auditRelocatedCast(quests);
- assert.deepEqual(report.summary,{quests:100,scenes:753,emptyCastScenes:547,personEntities:123,characterLinkedEntities:63,reviewedQuests:45,reviewedScenes:312,noPersonEvidenceScenes:96,personEvidenceScenes:216,candidateRoles:4,connectedRoles:85,unreviewedScenes:441});
+ assert.deepEqual(report.summary,{quests:100,scenes:753,emptyCastScenes:538,personEntities:123,characterLinkedEntities:65,reviewedQuests:46,reviewedScenes:320,noPersonEvidenceScenes:97,personEvidenceScenes:223,candidateRoles:5,connectedRoles:88,unreviewedScenes:433});
  assert.ok(report.regions.every(r=>r.quests===20));
  assert.equal(report.quests.find(q=>q.id==='q071').scenes[0].review,null);
  assert.deepEqual(report.quests.find(q=>q.id==='q032').scenes.filter(s=>s.review.people.length).map(s=>s.id),['cell','workshop']);
@@ -133,8 +133,12 @@ test('cast audit distinguishes measured empty casts, reviewed scenes and candida
   entry:[],letter:[],onsite:['daughterPerson','injured'],sealed:['daughterPerson','injured'],named:['daughterPerson','injured'],rescued:['injured']
  });
  const hunter=report.quests.find(q=>q.id==='q175');
- assert.ok(Object.values(hunter.review.people).every(p=>p.status==='candidate'));
- assert.ok(hunter.scenes.every(s=>s.cast.length===0));
+ assert.ok(Object.values(hunter.review.people).every(p=>p.status==='connected'));
+ assert.deepEqual(hunter.scenes.filter(s=>!s.cast.length).map(s=>s.id),['entry']);
+ const god=report.quests.find(q=>q.id==='q176');assert.equal(Object.keys(god.review.people).length,4);
+ assert.ok(Object.values(god.review.people).every(p=>p.status==='candidate'));assert.ok(god.scenes.every(s=>s.cast.length===0));
+ assert.deepEqual(god.scenes.filter(s=>s.review.people.includes('q176_merchant')).map(s=>s.id),['travel']);
+ assert.match(god.scenes.find(s=>s.id==='road').review.reason,/shrine.*矛盾/);
  assert.deepEqual(hunter.scenes.filter(s=>s.review.people.includes('q175_lookout')).map(s=>s.id),['warned','pursued']);
  assert.deepEqual(hunter.scenes.filter(s=>s.review.people.includes('q175_miro')).map(s=>s.id),['hidden','route','warning','onsite','battle','changed','warned','pursuit','pursued']);
  assert.deepEqual(hunter.scenes.filter(s=>s.review.people.includes('q175_sister')).map(s=>s.id),['hidden','route','warning','onsite','battle','changed','warned','pursuit','pursued']);
@@ -173,9 +177,9 @@ test('future character and cast hookups change measured counts without marking u
  const changed=structuredClone(quests),q=changed.find(q=>q.id==='q071'),entity=Object.values(q.story.entities).find(e=>e.kind==='person');
  entity.character='future_owner';Object.values(q.story.scenes)[0].cast=[{entity:'workerPerson'}];
  const report=auditRelocatedCast(changed);
- assert.equal(report.summary.emptyCastScenes,546);
- assert.equal(report.summary.characterLinkedEntities,64);
- assert.equal(report.summary.reviewedScenes,312);
+ assert.equal(report.summary.emptyCastScenes,537);
+ assert.equal(report.summary.characterLinkedEntities,66);
+ assert.equal(report.summary.reviewedScenes,320);
  assert.equal(report.quests.find(q=>q.id==='q071').review,null);
 });
 

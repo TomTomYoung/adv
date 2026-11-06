@@ -605,7 +605,7 @@
     },
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -614,7 +614,845 @@
       "saveRevision": 2,
       "scope": "機関廟20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "狩人を待つ獣の現場受付",
+            "lair": "獣の寝床と訓練標",
+            "practice": "非公開の稽古場",
+            "public": "偽の突撃を見せる広場",
+            "route_place": "畑を避けて空ける谷道",
+            "warning_place": "谷の向こうの集落の見張り場",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "lair"
+            ],
+            [
+              "transit",
+              "practice"
+            ],
+            [
+              "transit",
+              "public"
+            ],
+            [
+              "transit",
+              "route_place"
+            ],
+            [
+              "transit",
+              "warning_place"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "lair",
+                "practice",
+                "public",
+                "route_place",
+                "warning_place",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "changed",
+                "drive",
+                "front"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "secretPractice": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "secretPractice"
+            },
+            "driven": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "driven"
+            },
+            "defeated": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "defeated"
+            },
+            "warned": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "warned"
+            },
+            "reported": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "reported"
+            },
+            "miroAt": {
+              "type": "enum",
+              "initial": "lair",
+              "values": [
+                "entry",
+                "lair",
+                "practice",
+                "public",
+                "route_place",
+                "warning_place",
+                "transit"
+              ],
+              "meaning": "miro の所在または保持者"
+            },
+            "sisterAt": {
+              "type": "enum",
+              "initial": "lair",
+              "values": [
+                "entry",
+                "lair",
+                "practice",
+                "public",
+                "route_place",
+                "warning_place",
+                "transit"
+              ],
+              "meaning": "sister の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "miro": {
+              "holder": "miroAt",
+              "kind": "person"
+            },
+            "sister": {
+              "holder": "sisterAt",
+              "kind": "person"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "獣の寝床に、人間用の訓練標が引きずり込まれている。最初にミロが人前で同じ構えを誇る場面を置き、後で獣が同じ間を取る。努力が無意味なのではなく、見せることが相手への教材になっている。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "狩人を待つ獣の現場受付",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "hidden": {
+              "title": "非公開の稽古場",
+              "place": "practice",
+              "cast": [],
+              "requires": true
+            },
+            "route": {
+              "title": "偽の突撃を見せる広場",
+              "place": "public",
+              "cast": [],
+              "requires": true
+            },
+            "warning": {
+              "title": "畑を避けて空ける谷道",
+              "place": "route_place",
+              "cast": [],
+              "requires": true
+            },
+            "onsite": {
+              "title": "獣の寝床と訓練標",
+              "place": "lair",
+              "cast": [],
+              "requires": true
+            },
+            "battle": {
+              "title": "獣の寝床と訓練標",
+              "place": "lair",
+              "cast": [],
+              "requires": true
+            },
+            "changed": {
+              "title": "獣の寝床と訓練標",
+              "place": "lair",
+              "cast": [],
+              "requires": true
+            },
+            "warned": {
+              "title": "谷の向こうの集落の見張り場",
+              "place": "warning_place",
+              "cast": [],
+              "requires": true
+            },
+            "pursuit": {
+              "title": "谷の向こうの集落の見張り場",
+              "place": "warning_place",
+              "cast": [],
+              "requires": true
+            },
+            "pursued": {
+              "title": "谷の向こうの集落の見張り場",
+              "place": "warning_place",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_visit": {
+              "from": [
+                "entry"
+              ],
+              "to": "onsite",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "lair"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "lair",
+                "companions": []
+              },
+              "depart": []
+            },
+            "hidden_fight": {
+              "from": [
+                "hidden"
+              ],
+              "to": "battle",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "miro",
+                    "sister"
+                  ],
+                  "path": [
+                    "transit",
+                    "lair"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "lair",
+                "companions": [
+                  "miro",
+                  "sister"
+                ]
+              },
+              "depart": [
+                {
+                  "op": "set",
+                  "key": "secretPractice",
+                  "value": true
+                }
+              ]
+            },
+            "hidden_decoy": {
+              "from": [
+                "hidden"
+              ],
+              "to": "route",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "miro",
+                    "sister"
+                  ],
+                  "path": [
+                    "transit",
+                    "public"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "public",
+                "companions": [
+                  "miro",
+                  "sister"
+                ]
+              },
+              "depart": []
+            },
+            "route_guide": {
+              "from": [
+                "route"
+              ],
+              "to": "warning",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "miro",
+                    "sister"
+                  ],
+                  "path": [
+                    "transit",
+                    "route_place"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "driven",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "route_place",
+                "companions": [
+                  "miro",
+                  "sister"
+                ]
+              },
+              "depart": []
+            },
+            "route_hidden": {
+              "from": [
+                "route"
+              ],
+              "to": "hidden",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "miro",
+                    "sister"
+                  ],
+                  "path": [
+                    "transit",
+                    "practice"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "practice",
+                "companions": [
+                  "miro",
+                  "sister"
+                ]
+              },
+              "depart": []
+            },
+            "warning_warn": {
+              "from": [
+                "warning"
+              ],
+              "to": "warned",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "miro",
+                    "sister"
+                  ],
+                  "path": [
+                    "transit",
+                    "warning_place"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "warning_place",
+                "companions": [
+                  "miro",
+                  "sister"
+                ]
+              },
+              "depart": []
+            },
+            "warning_pursue": {
+              "from": [
+                "warning"
+              ],
+              "to": "pursuit",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "miro",
+                    "sister"
+                  ],
+                  "path": [
+                    "transit",
+                    "warning_place"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "warning_place",
+                "companions": [
+                  "miro",
+                  "sister"
+                ]
+              },
+              "depart": []
+            },
+            "onsite_hidden": {
+              "from": [
+                "onsite"
+              ],
+              "to": "hidden",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "miro",
+                    "sister"
+                  ],
+                  "path": [
+                    "transit",
+                    "practice"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "practice",
+                "companions": [
+                  "miro",
+                  "sister"
+                ]
+              },
+              "depart": []
+            },
+            "onsite_fake": {
+              "from": [
+                "onsite"
+              ],
+              "to": "route",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "miro",
+                    "sister"
+                  ],
+                  "path": [
+                    "transit",
+                    "public"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "public",
+                "companions": [
+                  "miro",
+                  "sister"
+                ]
+              },
+              "depart": []
+            },
+            "onsite_front": {
+              "from": [
+                "onsite"
+              ],
+              "ending": "front",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "front"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "battle_fight": {
+              "from": [
+                "battle"
+              ],
+              "to": "changed",
+              "requires": true,
+              "effects": [],
+              "once": false
+            },
+            "battle_retreat": {
+              "from": [
+                "battle"
+              ],
+              "to": "hidden",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "miro",
+                    "sister"
+                  ],
+                  "path": [
+                    "transit",
+                    "practice"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "practice",
+                "companions": [
+                  "miro",
+                  "sister"
+                ]
+              },
+              "depart": []
+            },
+            "changed_finish": {
+              "from": [
+                "changed"
+              ],
+              "ending": "changed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "defeated",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "changed"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "warned_finish": {
+              "from": [
+                "warned"
+              ],
+              "ending": "drive",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "warned",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "drive"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "pursuit_fight": {
+              "from": [
+                "pursuit"
+              ],
+              "to": "pursued",
+              "requires": true,
+              "effects": [],
+              "once": false
+            },
+            "pursuit_retreat": {
+              "from": [
+                "pursuit"
+              ],
+              "to": "warning",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "miro",
+                    "sister"
+                  ],
+                  "path": [
+                    "transit",
+                    "route_place"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "route_place",
+                "companions": [
+                  "miro",
+                  "sister"
+                ]
+              },
+              "depart": []
+            },
+            "pursued_finish": {
+              "from": [
+                "pursued"
+              ],
+              "ending": "changed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "defeated",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "reported",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "changed"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "changed": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q175.values.resolution"
+                  },
+                  "right": "changed"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q175.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q175.values.partyAt"
+                      },
+                      "right": "lair"
+                    },
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q175.values.partyAt"
+                      },
+                      "right": "warning_place"
+                    }
+                  ]
+                }
+              ]
+            },
+            "drive": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q175.values.resolution"
+                  },
+                  "right": "drive"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q175.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q175.values.partyAt"
+                      },
+                      "right": "warning_place"
+                    }
+                  ]
+                }
+              ]
+            },
+            "front": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q175.values.resolution"
+                  },
+                  "right": "front"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q175.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q175.values.partyAt"
+                      },
+                      "right": "lair"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_8",
+              "map": "region_8_f1",
+              "x": 8,
+              "y": 1
+            },
+            "lair": {
+              "kind": "dungeon",
+              "dungeon": "salome_road",
+              "map": "e2_salome_valley",
+              "x": 7,
+              "y": 3
+            },
+            "practice": {
+              "kind": "town",
+              "location": "library_rehearsal"
+            },
+            "public": {
+              "kind": "town",
+              "location": "library_stage"
+            },
+            "route_place": {
+              "kind": "dungeon",
+              "dungeon": "salome_road",
+              "map": "e2_salome_valley",
+              "x": 11,
+              "y": 5
+            },
+            "warning_place": {
+              "kind": "dungeon",
+              "dungeon": "salome_road",
+              "map": "e2_salome_valley",
+              "x": 15,
+              "y": 7
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "lookoutAt",
+            "value": "warning_place"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q175.scene.entry": {
@@ -2213,6 +3051,14 @@
           "transit"
         ],
         "meaning": "sister の所在または保持者"
+      },
+      "lookoutAt": {
+        "type": "enum",
+        "initial": "warning_place",
+        "values": [
+          "warning_place"
+        ],
+        "meaning": "lookout の所在または保持者"
       }
     },
     "entities": {
@@ -2222,11 +3068,18 @@
       },
       "miro": {
         "holder": "miroAt",
-        "kind": "person"
+        "kind": "person",
+        "character": "q175_miro"
       },
       "sister": {
         "holder": "sisterAt",
-        "kind": "person"
+        "kind": "person",
+        "character": "q175_sister"
+      },
+      "lookout": {
+        "holder": "lookoutAt",
+        "kind": "group",
+        "character": "q175_lookout"
       }
     },
     "propositions": {
@@ -2246,55 +3099,184 @@
       "hidden": {
         "title": "非公開の稽古場",
         "place": "practice",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "miro",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "sister",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "route": {
         "title": "偽の突撃を見せる広場",
         "place": "public",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "miro",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "sister",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "warning": {
         "title": "畑を避けて空ける谷道",
         "place": "route_place",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "miro",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "sister",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "onsite": {
         "title": "獣の寝床と訓練標",
         "place": "lair",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "miro",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "sister",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "battle": {
         "title": "獣の寝床と訓練標",
         "place": "lair",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "miro",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "sister",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "changed": {
         "title": "獣の寝床と訓練標",
         "place": "lair",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "miro",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "sister",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "warned": {
         "title": "谷の向こうの集落の見張り場",
         "place": "warning_place",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "miro",
+            "display": {
+              "x": 22
+            }
+          },
+          {
+            "entity": "sister",
+            "display": {
+              "x": 50
+            }
+          },
+          {
+            "entity": "lookout",
+            "display": {
+              "x": 78
+            }
+          }
+        ],
         "requires": true
       },
       "pursuit": {
         "title": "谷の向こうの集落の見張り場",
         "place": "warning_place",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "miro",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "sister",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "pursued": {
         "title": "谷の向こうの集落の見張り場",
         "place": "warning_place",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "miro",
+            "display": {
+              "x": 22
+            }
+          },
+          {
+            "entity": "sister",
+            "display": {
+              "x": 50
+            }
+          },
+          {
+            "entity": "lookout",
+            "display": {
+              "x": 78
+            }
+          }
+        ],
         "requires": true
       }
     },
@@ -2916,7 +3898,7 @@
         "y": 7
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "salome",
   "receptionLocations": [
