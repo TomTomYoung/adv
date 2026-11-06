@@ -1,15 +1,15 @@
 # 旧100件の人物・出演監査
 
-照合日: 2026-11-06。第2版の現場接続済み100件を配布JSONから集計する。出演根拠の精読は43件・296場面まで。集計と精読、素材制作と実装を区別する。
+照合日: 2026-11-06。第2版の現場接続済み100件を配布JSONから集計する。出演根拠の精読は44件・302場面まで。集計と精読、素材制作と実装を区別する。
 
 [不足素材](../world/ASSET_BACKLOG.md) ／ [町・シーン切替](../world/SCENE_SWITCH_PLAN.md) ／ [機械可読の全場面一覧](RELOCATED_CAST_AUDIT.json) ／ [精読の正本](../../authoring/relocated-cast-review.mjs) ／ [集計器](../../tools/audit-relocated-cast.mjs)
 
 ## 現在の結果
 
-- 753場面中558場面のcastが空。空であることだけから人物画の不足とは判定しない。
-- 人物エンティティは延べ123件、そのうちcharacter接続は60件。依頼間の重複や集団を含み、新規人物数ではない。
-- 精読296場面のうち、特定人物の同席根拠なし93場面、人物の発言・動作や所在から出演根拠あり203場面。接続済み81役、未接続の制作候補3役。候補数は独立人物としての最終確定数ではない。
-- 残る457場面は未精読。未精読を「人物なし」や「制作不要」に変換しない。
+- 753場面中551場面のcastが空。空であることだけから人物画の不足とは判定しない。
+- 人物エンティティは延べ123件、そのうちcharacter接続は62件。依頼間の重複や集団を含み、新規人物数ではない。
+- 精読302場面のうち、特定人物の同席根拠なし95場面、人物の発言・動作や所在から出演根拠あり207場面。接続済み83役、未接続の制作候補3役。候補数は独立人物としての最終確定数ではない。
+- 残る451場面は未精読。未精読を「人物なし」や「制作不要」に変換しない。
 
 ## 精読済みの依頼
 
@@ -3723,8 +3723,8 @@ part経路ではpartyだけがhomeへ戻り、精霊はgraveに残ったまま�
 
 戦死した夫本人を第三の人物entityとして追加しない。精霊が拾った記憶・夫の悪い癖・家財は人物の同一性とは分け、bothAgreed・parted・laterVisit・imitationContinuesと3結末を人物表示のために変更しない。
 
-- 制作候補 `q173_tera`：寡婦テラ。既存person teraへ接続する候補。onsite・wife・guest_agree・part_home・copy_home・copy_laterでhomeの所在に従って表示する。
-- 制作候補 `q173_spirit`：墓守の精霊。既存person spiritPersonへ接続する候補。spiritではgrave、guest_agree・copy_home・copy_laterでは実移動後のhomeに表示し、part_homeやonsiteへ先回りさせない。
+- 接続済み `q173_tera`：寡婦テラ。既存person teraへ呼称表示を接続済み。onsite・wife・guest_agree・part_home・copy_home・copy_laterでhomeの所在に従って表示する。
+- 接続済み `q173_spirit`：墓守の精霊。既存person spiritPersonへ呼称表示を接続済み。spiritではgrave、guest_agree・copy_home・copy_laterでは実移動後のhomeに表示し、part_homeやonsiteへ先回りさせない。
 
 #### entry
 
@@ -3806,7 +3806,88 @@ copy_homeから所在を変えず後日の相談へ進むため、teraとspiritP
 
 描き分け候補: 家具を動かす変化に答えられない精霊とテラ。模倣の限界を示す。
 
-次の作業: q173のテラと墓守の精霊を精読した。次はteraとspiritPersonの実所在へ表示を接続し、夫本人を追加せず3結末を保持する。
+次の作業: テラと墓守の精霊を実所在へ接続済み。3結末・双方の同意・旧保存を保持した。q174の娘と足を傷めた人たちの監査も完了し、次はその表示とq175の出演監査。
+
+### q174 泣かない葬列
+
+依頼人: 村長。[配布JSON](../../data/scenario-editions/e2/q174.json) ／ [現場接続の原稿](../../authoring/editions/e2/salome/machine-second.mjs)。
+
+原稿authoring/reference/volume-08.mdのGQ074、初版q174、現場接続後の全6場面と所在・受渡し・3結末を精読した。村長は依頼人名義で、受付や葬列への本人の同席は確定しない。
+
+娘は既存person daughterPersonでprocessionに残る。列に加わっていないことと、葬列の現場で話すことを区別し、負傷者集団に含めない。名前・年齢・容貌は補わない。
+
+足を傷めた人たちは既存group injuredに対応する。列全員の人数・代表者を決めず、救出の対象と列全体を同一視しない。onsite_peopleだけがinjuredを救護先へ実移動させる。
+
+小屋には遺書を読むためpartyだけが移動する。娘や負傷者を小屋へ同行させず、紙の書き手である死んだ道化師を現在の出演者にしない。棺・仮面・遺書は人物と分ける。
+
+sealed・namedでは娘とinjuredの所在はprocessionのまま。娘が怒ったまま帰るのはnameの結末本文であり、namedの確認前に退場済みとはしない。rescuedはinjuredだけがrescueへ到着し、娘はprocessionに残る。
+
+個人として弔う、棺を封じる、負傷者を救出する3結末を区別する。涙・赦しを娘へ要求せず、救出だけで葬列の終了を成立させない。
+
+- 制作候補 `q174_daughter`：道化師の娘。既存person daughterPersonへ接続する候補。onsite・sealed・namedの葬列の現場に表示し、小屋と救護先には同行させない。
+- 制作候補 `q174_injured`：足を傷めた葬列の人たち。既存group injuredの呼称表示候補。onsite・sealed・namedではprocession、rescuedでは実護衛後のrescue。個人画・人数・代弁者を決めない。
+
+#### entry
+
+場所: `region_8_f1` (6,1)。判定: 特定人物の同席根拠なし。
+
+本文の根拠: 道化師の葬列が止まらないという知らせを受け、墓地道へ向かう。
+
+entry_visitはpartyだけをprocessionへ移す導入。依頼人欄から村長を受付へ配置しない。
+
+描き分け候補: 葬列へ向かう受付。人物は固定しない。
+
+#### letter
+
+場所: 施設 `machine_hut`。判定: 特定人物の同席根拠なし。
+
+本文の根拠: 遺書には、泣くだけでなく役柄を離れた本人の名で送ってほしいとあった。
+
+onsite_hutでpartyだけがhutへ移動する。娘とinjuredはprocession、遺書はhutにある。書き手を現在の人物として表示しない。
+
+描き分け候補: 小屋の遺書と道化の道具。娘や死者の立ち絵は追加しない。
+
+#### onsite
+
+場所: `e2_salome_cemetery` (9,3)。判定: 人物の出演根拠あり。出演役: `q174_daughter`、`q174_injured`。
+
+本文の根拠: 列の笑顔に反して足は擦り切れている。道化師の娘だけは列に加わらず、父への怒りを語った。
+
+partyがprocessionへ到着し、娘とinjuredも同じ現場にいる。娘は列へ加わっておらず、負傷者とは別の役として扱う。
+
+描き分け候補: 列の足の傷と、列の外から話す娘。笑顔を楽しさや同意と同一視しない。
+
+#### sealed
+
+場所: `e2_salome_cemetery` (9,3)。判定: 人物の出演根拠あり。出演役: `q174_daughter`、`q174_injured`。
+
+本文の根拠: 棺を封じて列の動きを止めた。
+
+封印経路はpartyだけをprocessionへ戻すか同地で進む。娘とinjuredの所在は変わらず、停止した列の現場に残る。
+
+描き分け候補: 止まった棺と足を休める人たち、列の外の娘。弔いは未完。
+
+#### named
+
+場所: `e2_salome_cemetery` (9,3)。判定: 人物の出演根拠あり。出演役: `q174_daughter`、`q174_injured`。
+
+本文の根拠: 本人の名を遺書で確かめて送り、葬列を終えた。娘に涙や赦しを要求しない。
+
+letter_nameでpartyと遺書がprocessionへ戻る。娘とinjuredは現場に残り、遺書の受渡しと結末はfinishで確定する。娘の帰宅は結末本文に属する。
+
+描き分け候補: 個人の名で送った現場。娘の怒りと、解放される列の人たちを両立させる。
+
+#### rescued
+
+場所: 施設 `salome_clinic`。判定: 人物の出演根拠あり。出演役: `q174_injured`。
+
+本文の根拠: 歩けない人を救護先へ引き継いだ。
+
+onsite_peopleがinjuredをpartyとともにrescueへ移動させる。娘はprocessionに残る。施設名だけで救護担当者を新規出演させない。
+
+描き分け候補: 救護先へ到着した負傷者の集団。葬列の終了や娘の同意を付け足さない。
+
+次の作業: 全6場面の出演監査を完了。次はdaughterPersonとinjuredの既存所在へ呼称表示を接続し、q175の出演を精読する。
 
 ## 全100件の集計
 
@@ -3914,7 +3995,7 @@ copy_homeから所在を変えず後日の相談へ進むため、teraとspiritP
 
 ### 機関廟
 
-20件・163場面。cast空141場面、人物16件、character接続4件。
+20件・163場面。cast空134場面、人物16件、character接続6件。
 
 - [q071 止まれない門番](../../data/scenario-editions/e2/q071.json)：7場面、cast空7、人物1。依頼人: 整備士のフウ。未精読。
 - [q072 油の洗礼](../../data/scenario-editions/e2/q072.json)：5場面、cast空5、人物0。依頼人: 機関司祭のイオ。未精読。
@@ -3928,8 +4009,8 @@ copy_homeから所在を変えず後日の相談へ進むため、teraとspiritP
 - [q080 鉄胎の継承](../../data/scenario-editions/e2/q080.json)：7場面、cast空7、人物0。依頼人: 修繕組合のセリ。未精読。
 - [q171 足音を持ち帰る](../../data/scenario-editions/e2/q171.json)：15場面、cast空1、人物1。依頼人: 靴職人ダイの妻。精読済み。
 - [q172 名前を返す井戸](../../data/scenario-editions/e2/q172.json)：10場面、cast空2、人物3。依頼人: 織工ルイ。精読済み。
-- [q173 夜だけ帰る兵士](../../data/scenario-editions/e2/q173.json)：8場面、cast空8、人物2。依頼人: 寡婦テラ。精読済み。
-- [q174 泣かない葬列](../../data/scenario-editions/e2/q174.json)：6場面、cast空6、人物1。依頼人: 村長。未精読。
+- [q173 夜だけ帰る兵士](../../data/scenario-editions/e2/q173.json)：8場面、cast空1、人物2。依頼人: 寡婦テラ。精読済み。
+- [q174 泣かない葬列](../../data/scenario-editions/e2/q174.json)：6場面、cast空6、人物1。依頼人: 村長。精読済み。
 - [q175 狩人を待つ獣](../../data/scenario-editions/e2/q175.json)：10場面、cast空10、人物2。依頼人: 猟師ミロの妹。未精読。
 - [q176 神様の忘れ物](../../data/scenario-editions/e2/q176.json)：8場面、cast空8、人物1。依頼人: 小さな街道神。未精読。
 - [q177 嘘をつかない鏡](../../data/scenario-editions/e2/q177.json)：9場面、cast空9、人物0。依頼人: 鏡を売る商人。未精読。
