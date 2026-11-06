@@ -2,6 +2,9 @@ name: Validate Oddland border and quests in Chromium
 on:
   pull_request:
     paths:
+      - 'tools/ci-scope.mjs'
+      - '.github/actions/ci-plan/**'
+      - '.github/actions/ci-record/**'
       - 'src/**'
       - 'data/scenario-editions/**'
       - 'data/scenario-editions.json'
@@ -11,6 +14,9 @@ on:
       - 'data/assets.json'
       - '.github/workflows/oddland-quests.yml'
   workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 permissions:
   contents: read
 jobs:
@@ -19,21 +25,37 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Select checks and reuse identical successful inputs
+        id: ci
+        uses: ./.github/actions/ci-plan
+        with:
+          suite: oddland-browser
       - name: Install browser test runtime
+        if: steps.ci.outputs.run == 'true'
         run: |
           npm install --no-save --package-lock=false playwright@1.58.2
           npx playwright install --with-deps chromium --only-shell
           # Playwright's Linux dependencies include IPA Gothic for Japanese.
           test -n "$(fc-list :lang=ja)"
       - name: Verify border, pilgrimage roads and complete quests in both layouts and widths
+        if: steps.ci.outputs.run == 'true'
         run: node tools/browser-oddland-smoke.mjs
       - name: Keep Oddland viewport checkpoints
-        if: always()
+        if: always() && steps.ci.outputs.run == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: oddland-browser-checkpoints
           path: /tmp/adv-oddland-browser
           if-no-files-found: ignore
+      - name: Remember successful inputs
+        if: success() && steps.ci.outputs.run == 'true' && github.event_name != 'workflow_dispatch'
+        uses: ./.github/actions/ci-record
+        with:
+          key: ${{ steps.ci.outputs.key }}
+          path: ${{ steps.ci.outputs.path }}

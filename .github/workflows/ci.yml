@@ -1,29 +1,53 @@
 name: Validate dungeon RPG
 on:
   push:
+    branches: [master]
   pull_request:
   workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 permissions:
   contents: read
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Select checks and reuse identical successful inputs
+        id: ci
+        uses: ./.github/actions/ci-plan
+        with:
+          suite: validate
       - name: Verify distribution revision and content hashes
+        if: steps.ci.outputs.run == 'true'
         run: npm run check:runtime
       - name: Validate all data and asset references
+        if: steps.ci.outputs.run == 'true'
         run: node tools/validate.mjs
       - name: Verify authored scenario editions
+        if: steps.ci.outputs.run == 'true'
         run: npm run check:editions
       - name: Validate config editor pages and source JSON
+        if: steps.ci.outputs.run == 'true'
         run: node tools/check-config-editors.mjs
       - name: Check static files and view boundaries
+        if: steps.ci.outputs.run == 'true'
         run: node tools/check-static.mjs
       - name: Validate generated documentation and links
         run: node tools/check-docs.mjs
       - name: Exercise all quest branches and a normal campaign
+        if: steps.ci.outputs.run == 'true'
         run: node --test tests/*.test.mjs
+      - name: Remember successful inputs
+        if: success() && steps.ci.outputs.run == 'true' && github.event_name != 'workflow_dispatch'
+        uses: ./.github/actions/ci-record
+        with:
+          key: ${{ steps.ci.outputs.key }}
+          path: ${{ steps.ci.outputs.path }}

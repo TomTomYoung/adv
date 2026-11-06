@@ -1,0 +1,45 @@
+name: Reuse successful checks for identical inputs
+description: Keep documentation checks independent and reuse only exact successful test inputs.
+inputs:
+  suite:
+    description: Separate result for each job
+    required: true
+outputs:
+  run:
+    description: Whether this job must execute its expensive checks
+    value: ${{ steps.decision.outputs.run }}
+  key:
+    description: Exact input and environment key
+    value: ${{ steps.key.outputs.key }}
+  path:
+    description: Success record directory
+    value: ${{ steps.key.outputs.path }}
+runs:
+  using: composite
+  steps:
+    - id: scope
+      shell: bash
+      run: node tools/ci-scope.mjs inspect
+    - id: key
+      shell: bash
+      env:
+        CI_SUITE: ${{ inputs.suite }}
+        CI_FINGERPRINT: ${{ steps.scope.outputs.fingerprint }}
+      run: |
+        echo "key=adv-ci-v1-${CI_SUITE}-${CI_FINGERPRINT}" >> "$GITHUB_OUTPUT"
+        echo "path=${RUNNER_TEMP}/adv-ci-success/${CI_SUITE}" >> "$GITHUB_OUTPUT"
+    - id: cache
+      if: steps.scope.outputs.docs_only != 'true' && github.event_name != 'workflow_dispatch'
+      uses: actions/cache/restore@v4
+      with:
+        key: ${{ steps.key.outputs.key }}
+        path: ${{ steps.key.outputs.path }}
+    - id: decision
+      shell: bash
+      env:
+        CI_SUITE: ${{ inputs.suite }}
+        CI_DOCS_ONLY: ${{ steps.scope.outputs.docs_only }}
+        CI_CACHE_HIT: ${{ steps.cache.outputs.cache-hit }}
+        CI_CACHE_KEY: ${{ steps.key.outputs.key }}
+        CI_RESULT_PATH: ${{ steps.key.outputs.path }}
+      run: node tools/ci-scope.mjs decide

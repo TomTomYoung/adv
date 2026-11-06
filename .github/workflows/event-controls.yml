@@ -2,6 +2,9 @@ name: Validate dungeon and battle controls in Chromium
 on:
   pull_request:
     paths:
+      - 'tools/ci-scope.mjs'
+      - '.github/actions/ci-plan/**'
+      - '.github/actions/ci-record/**'
       - 'src/view/**'
       - 'tools/browser-event-controls-smoke.mjs'
       - 'tools/browser-battle-smoke.mjs'
@@ -36,6 +39,9 @@ on:
       - 'tools/browser-generated-dungeon-engine-smoke.mjs'
       - '.github/workflows/event-controls.yml'
   workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 permissions:
   contents: read
 jobs:
@@ -45,47 +51,71 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Select checks and reuse identical successful inputs
+        id: ci
+        uses: ./.github/actions/ci-plan
+        with:
+          suite: event-controls-browser
       - name: Install browser test runtime
+        if: steps.ci.outputs.run == 'true'
         run: |
           npm install --no-save --package-lock=false playwright@1.58.2
           npx playwright install --with-deps chromium --only-shell
       - name: Verify fixed movement coordinates and event choices
+        if: steps.ci.outputs.run == 'true'
         run: node tools/browser-event-controls-smoke.mjs
       - name: Verify battle entry and attack target coordinates
+        if: steps.ci.outputs.run == 'true'
         run: node tools/browser-battle-smoke.mjs
       - name: Verify expanded Kagaribi districts and outpost services
+        if: steps.ci.outputs.run == 'true'
         run: node tools/browser-kagaribi-smoke.mjs
       - name: Verify supply camps, skill purchases and checkpoint departures
+        if: steps.ci.outputs.run == 'true'
         run: node tools/browser-expedition-smoke.mjs
       - name: Verify shop scrolling, purchase recipients and separate skill store
+        if: steps.ci.outputs.run == 'true'
         run: node tools/browser-shop-smoke.mjs
       - name: Verify alternative Q001 return paths and the shared rookie rescue
+        if: steps.ci.outputs.run == 'true'
         run: node tools/browser-q001-return-smoke.mjs
       - name: Verify field skill targets, keyboard safety and narrow profiles
+        if: steps.ci.outputs.run == 'true'
         run: node tools/browser-field-skills-smoke.mjs
       - name: Verify generated dungeon through the actual game engine
+        if: steps.ci.outputs.run == 'true'
         run: node tools/browser-generated-dungeon-engine-smoke.mjs
       - name: Verify config editing and reusable dungeon packages
+        if: steps.ci.outputs.run == 'true'
         run: |
           node tools/browser-config-smoke.mjs
           node tools/browser-packages-smoke.mjs
       - name: Verify scout skills, stun and preemptive actions
+        if: steps.ci.outputs.run == 'true'
         run: node tools/browser-scouting-smoke.mjs
       - name: Verify persistent action statuses and sealed controls
+        if: steps.ci.outputs.run == 'true'
         run: node tools/browser-action-statuses-smoke.mjs
       - name: Verify Grid formations, range previews and overlapping sprites
+        if: steps.ci.outputs.run == 'true'
         run: node tools/browser-grid-smoke.mjs
       - name: Verify Frontline battle tester and silhouettes
+        if: steps.ci.outputs.run == 'true'
         run: node tools/browser-frontline-smoke.mjs
       - name: Verify embedded battle engine playtest
+        if: steps.ci.outputs.run == 'true'
         run: node tools/browser-battle-engine-smoke.mjs
       - name: Verify Frontline bodies, variable rows and removal
+        if: steps.ci.outputs.run == 'true'
         run: node tools/browser-frontline-lifecycle-smoke.mjs
       - name: Keep viewport checkpoints
-        if: always()
+        if: always() && steps.ci.outputs.run == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: dungeon-event-controls-checkpoints
@@ -107,3 +137,9 @@ jobs:
             /tmp/adv-studio-*.png
             /tmp/adv-packages-editor.png
           if-no-files-found: ignore
+      - name: Remember successful inputs
+        if: success() && steps.ci.outputs.run == 'true' && github.event_name != 'workflow_dispatch'
+        uses: ./.github/actions/ci-record
+        with:
+          key: ${{ steps.ci.outputs.key }}
+          path: ${{ steps.ci.outputs.path }}

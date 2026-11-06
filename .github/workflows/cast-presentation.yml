@@ -2,6 +2,9 @@ name: Validate cast presentation in Chromium
 on:
   pull_request:
     paths:
+      - 'tools/ci-scope.mjs'
+      - '.github/actions/ci-plan/**'
+      - '.github/actions/ci-record/**'
       - 'src/**'
       - 'data/characters.json'
       - 'data/assets.json'
@@ -110,6 +113,9 @@ on:
       - 'tools/kagaribi-art-fixtures.mjs'
       - '.github/workflows/cast-presentation.yml'
   workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 permissions:
   contents: read
 jobs:
@@ -118,78 +124,111 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Select checks and reuse identical successful inputs
+        id: ci
+        uses: ./.github/actions/ci-plan
+        with:
+          suite: shield-browser
       - name: Install Chromium for q162 to q165
+        if: steps.ci.outputs.run == 'true'
         run: |
           npm install --no-save --package-lock=false playwright@1.58.2
           npx playwright install --with-deps chromium --only-shell
           test -n "$(fc-list :lang=ja)"
       - name: Verify q162 saves, groups and portraits
+        if: steps.ci.outputs.run == 'true'
         run: node tools/browser-sunken-art-smoke.mjs --shield-only
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: always() && steps.ci.outputs.run == 'true'
         with:
           name: q162-shield-checkpoints
           path: /tmp/adv-sunken-art-browser
           if-no-files-found: warn
       - name: Verify q163 locksmith and owner across current and older saves
+        if: steps.ci.outputs.run == 'true'
         env:
           ADV_BROWSER_OUTPUT: /tmp/adv-locksmith-art-browser
         run: node tools/browser-sunken-art-smoke.mjs --locksmith-only
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: always() && steps.ci.outputs.run == 'true'
         with:
           name: q163-locksmith-checkpoints
           path: /tmp/adv-locksmith-art-browser
           if-no-files-found: warn
       - name: Verify q164 guests and Ren across current and older saves
+        if: steps.ci.outputs.run == 'true'
         env:
           ADV_BROWSER_OUTPUT: /tmp/adv-farewell-art-browser
         run: node tools/browser-sunken-art-smoke.mjs --farewell-only
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: always() && steps.ci.outputs.run == 'true'
         with:
           name: q164-farewell-checkpoints
           path: /tmp/adv-farewell-art-browser
           if-no-files-found: warn
       - name: Verify q165 Lina and Il across current and older saves
+        if: steps.ci.outputs.run == 'true'
         env:
           ADV_BROWSER_OUTPUT: /tmp/adv-aid-art-browser
         run: node tools/browser-sunken-art-smoke.mjs --aid-only
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: always() && steps.ci.outputs.run == 'true'
         with:
           name: q165-aid-checkpoints
           path: /tmp/adv-aid-art-browser
           if-no-files-found: warn
+      - name: Remember successful inputs
+        if: success() && steps.ci.outputs.run == 'true' && github.event_name != 'workflow_dispatch'
+        uses: ./.github/actions/ci-record
+        with:
+          key: ${{ steps.ci.outputs.key }}
+          path: ${{ steps.ci.outputs.path }}
   cast-browser:
     # Match the pinned Playwright release; ubuntu-latest may move ahead of its supported OSes.
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Select checks and reuse identical successful inputs
+        id: ci
+        uses: ./.github/actions/ci-plan
+        with:
+          suite: cast-browser
       - name: Install browser test runtime
+        if: steps.ci.outputs.run == 'true'
         run: |
           npm install --no-save --package-lock=false playwright@1.58.2
           npx playwright install --with-deps chromium --only-shell
           test -n "$(fc-list :lang=ja)"
       - name: Verify native cast animations and script waits
+        if: steps.ci.outputs.run == 'true'
         run: node tools/browser-cast-smoke.mjs
       - name: Verify Kagaribi character art in both editions, layouts and widths
+        if: steps.ci.outputs.run == 'true'
         run: node tools/browser-kagaribi-art-smoke.mjs
       - name: Verify Oddland character art in both layouts and widths
+        if: steps.ci.outputs.run == 'true'
         run: node tools/browser-oddland-art-smoke.mjs
       - name: Verify chapel cast and migrated saves in both layouts and widths
+        if: steps.ci.outputs.run == 'true'
         run: node tools/browser-chapel-art-smoke.mjs
       - name: Verify sunken castle cast and migrated saves in both layouts and widths
+        if: steps.ci.outputs.run == 'true'
         run: node tools/browser-sunken-art-smoke.mjs
       - name: Keep animation checkpoints
-        if: always()
+        if: always() && steps.ci.outputs.run == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: cast-presentation-checkpoints
@@ -200,7 +239,7 @@ jobs:
           if-no-files-found: ignore
       # Keep each archive below the 512 MiB download limit as reviewed quests grow.
       - name: Keep chapel Scene checkpoints and results
-        if: always()
+        if: always() && steps.ci.outputs.run == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: chapel-scene-checkpoints
@@ -210,16 +249,22 @@ jobs:
             /tmp/adv-chapel-art-browser/overlapping-group-labels.png
           if-no-files-found: ignore
       - name: Keep chapel Classic checkpoints
-        if: always()
+        if: always() && steps.ci.outputs.run == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: chapel-classic-checkpoints
           path: /tmp/adv-chapel-art-browser/*-classic-*.png
           if-no-files-found: ignore
       - name: Keep sunken castle checkpoints and results
-        if: always()
+        if: always() && steps.ci.outputs.run == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: sunken-cast-checkpoints
           path: /tmp/adv-sunken-art-browser
           if-no-files-found: ignore
+      - name: Remember successful inputs
+        if: success() && steps.ci.outputs.run == 'true' && github.event_name != 'workflow_dispatch'
+        uses: ./.github/actions/ci-record
+        with:
+          key: ${{ steps.ci.outputs.key }}
+          path: ${{ steps.ci.outputs.path }}

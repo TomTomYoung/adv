@@ -2,6 +2,9 @@ name: Validate cached runtime updates in Chromium
 on:
   pull_request:
     paths:
+      - 'tools/ci-scope.mjs'
+      - '.github/actions/ci-plan/**'
+      - '.github/actions/ci-record/**'
       - 'index.html'
       - 'runtime.json'
       - 'src/**'
@@ -12,6 +15,9 @@ on:
       - 'tools/browser-scenario-editions-smoke.mjs'
       - '.github/workflows/runtime-update.yml'
   workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 permissions:
   contents: read
 jobs:
@@ -21,20 +27,32 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Select checks and reuse identical successful inputs
+        id: ci
+        uses: ./.github/actions/ci-plan
+        with:
+          suite: runtime-browser
       - run: npm run check:runtime
+        if: steps.ci.outputs.run == 'true'
       - name: Install browser test runtime
+        if: steps.ci.outputs.run == 'true'
         run: |
           npm install --no-save --package-lock=false playwright@1.58.2
           npx playwright install --with-deps chromium --only-shell
       - name: Verify warm-cache updates and partial deployments
+        if: steps.ci.outputs.run == 'true'
         run: node tools/browser-runtime-smoke.mjs
       - name: Verify scenario selection and independent saves
+        if: steps.ci.outputs.run == 'true'
         run: node tools/browser-scenario-editions-smoke.mjs
       - name: Keep update checkpoints
-        if: always()
+        if: always() && steps.ci.outputs.run == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: runtime-update-checkpoints
@@ -42,3 +60,9 @@ jobs:
             /tmp/adv-runtime-browser
             /tmp/adv-editions-browser
           if-no-files-found: ignore
+      - name: Remember successful inputs
+        if: success() && steps.ci.outputs.run == 'true' && github.event_name != 'workflow_dispatch'
+        uses: ./.github/actions/ci-record
+        with:
+          key: ${{ steps.ci.outputs.key }}
+          path: ${{ steps.ci.outputs.path }}
