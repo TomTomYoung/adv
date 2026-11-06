@@ -55,6 +55,16 @@ export const relocatedCharacters=Object.fromEntries([
 ].map(([id,name,detail,provenance])=>[id,{id,name,role:'礼拝堂の現地の相手',detail,portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,
  provenance:provenance??'2026-10-29の美術設定。固有名・他人物との同一性は追加しない。具体的な外見・年齢感・服装は今回の美術設定。牢・格子・聖像・宝玉・石を人物画へ固定しない。'}]));
 // The group has no specified headcount or spokesperson. Ren is the existing actor.
+relocatedCharacters.q173_tera={
+ id:'q173_tera',name:'寡婦テラ',role:'夫に似た姿の身元確認を頼む寡婦',
+ detail:'家で本人の意思を聞き、精霊が実際に同行した経路だけ同席する。客としての双方の同意、別れ、模倣継続を区別する。',
+ provenance:'2026-11-06。既存person teraの呼称表示。容貌・年齢・衣装は補わず、専用画はこの段階では接続しない。'
+};
+relocatedCharacters.q173_spirit={
+ id:'q173_spirit',name:'墓守の精霊',role:'戦死した夫の記憶を拾い、居場所を求める精霊',
+ detail:'墓地で会話し、客としての滞在と模倣継続の経路だけ家へ同行する。別れの経路では墓地に残る。',
+ provenance:'2026-11-06。既存person spiritPersonの呼称表示。戦死した夫本人とは同一視せず、性別・容貌・衣装や新しい固有名を補わない。'
+};
 relocatedCharacters.q172_lui={
  id:'q172_lui',name:'織工ルイ',role:'井戸との取引で自分の名と記憶を失った織工',
  detail:'刺繍工房から井戸へ同行し、復元・新しい呼び名・封印の各経路で既存の所在に従う。',

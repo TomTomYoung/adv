@@ -6,6 +6,10 @@ on:
       - 'data/scenario-editions/**'
       - 'data/scenario-editions.json'
       - 'tools/browser-machine-smoke.mjs'
+      - 'tools/browser-machine-cast-smoke.mjs'
+      - 'tools/night-soldier-art-fixtures.mjs'
+      - 'tools/character-art-browser.mjs'
+      - 'tests/fixtures/e2-q173-before-cast.json'
       - '.github/workflows/machine-quests.yml'
   workflow_dispatch:
 permissions:
@@ -32,4 +36,13 @@ jobs:
         with:
           name: machine-browser-checkpoints
           path: /tmp/adv-machine-browser
+          if-no-files-found: ignore
+      - name: Verify q173 cast, consent, and current and older saves
+        run: node tools/browser-machine-cast-smoke.mjs
+      - name: Keep q173 cast checkpoints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: q173-cast-checkpoints
+          path: /tmp/adv-machine-art-browser
           if-no-files-found: ignore

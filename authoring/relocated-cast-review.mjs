@@ -3362,7 +3362,7 @@ export const RELOCATED_CAST_REVIEW={
   "next": "q172のlui・motherPerson・wellMasterへ呼称表示を接続した。二つの名と3結末を保持し、次はq173のテラと墓守の精霊を監査する。"
 },
   q173:{
-  "sourceSha256": "7ad11f8fb784f2e3ddd368a5d3d3b3b6858bd0ab9f34978ce57829a38480eab7",
+  "sourceSha256": "3e30eb8037e14bea523441dee311b6a27a588109f842d2a4d2971d5cfbe5f781",
   "identityNotes": [
     "依頼人は寡婦テラで、既存person teraの初期位置はhome。entryは相談受付からテラの家へ向かう導入なので、依頼人欄だけでentryへテラを移さない。",
     "墓守の精霊は既存person spiritPersonで初期位置grave。夫に似た帰宅姿の観察はonsite本文にあるが、現行の所在と経路は『本人と精霊の話は別々に聞く』構造で、onsiteからpartyだけが墓地へ移動する。精霊を家へ先回りさせない。",
@@ -3373,13 +3373,15 @@ export const RELOCATED_CAST_REVIEW={
   "people": {
     "q173_tera": {
       "label": "寡婦テラ",
-      "status": "candidate",
-      "need": "既存person teraへ接続する候補。onsite・wife・guest_agree・part_home・copy_home・copy_laterでhomeの所在に従って表示する。"
+      "status": "connected",
+      "need": "既存person teraへ呼称表示を接続済み。onsite・wife・guest_agree・part_home・copy_home・copy_laterでhomeの所在に従って表示する。",
+      "entity": "tera"
     },
     "q173_spirit": {
       "label": "墓守の精霊",
-      "status": "candidate",
-      "need": "既存person spiritPersonへ接続する候補。spiritではgrave、guest_agree・copy_home・copy_laterでは実移動後のhomeに表示し、part_homeやonsiteへ先回りさせない。"
+      "status": "connected",
+      "need": "既存person spiritPersonへ呼称表示を接続済み。spiritではgrave、guest_agree・copy_home・copy_laterでは実移動後のhomeに表示し、part_homeやonsiteへ先回りさせない。",
+      "entity": "spiritPerson"
     }
   },
   "scenes": {
@@ -3392,55 +3394,151 @@ export const RELOCATED_CAST_REVIEW={
     },
     "spirit": {
       "decision": "person-evidence",
-      "people": ["q173_spirit"],
+      "people": [
+        "q173_spirit"
+      ],
       "evidence": "精霊は居場所を求めていた。",
       "reason": "onsiteの二選択またはwife_returnでpartyだけがgraveへ移動し、spiritPersonは初期位置graveにいる。テラはhomeに残る。",
       "visual": "墓地で墓守の精霊本人と話す。テラを墓地へ同行させない。"
     },
     "onsite": {
       "decision": "person-evidence",
-      "people": ["q173_tera"],
+      "people": [
+        "q173_tera"
+      ],
       "evidence": "墓守の精霊が記憶を拾っていた。",
       "reason": "entry_visitでpartyがテラの家へ到着し、teraはhomeにいる。夫に似た姿の観察は精霊の正体を示すが、spiritPersonの現在地はgraveで、次の行動でpartyだけが墓地へ向かう。",
       "visual": "テラの家で本人から状況を確かめる。夫本人や精霊を同じ画面へ固定しない。"
     },
     "wife": {
       "decision": "person-evidence",
-      "people": ["q173_tera"],
+      "people": [
+        "q173_tera"
+      ],
       "evidence": "テラに帰ってくる音を失いたくない気持ちを聞いた。",
       "reason": "spirit_wifeでpartyだけがhomeへ戻り、teraはhome、spiritPersonはgraveに残る。",
       "visual": "テラ本人の意思を家で聞く。客としての同意はまだ成立していない。"
     },
     "guest_agree": {
       "decision": "person-evidence",
-      "people": ["q173_tera","q173_spirit"],
+      "people": [
+        "q173_tera",
+        "q173_spirit"
+      ],
       "evidence": "精霊とテラの双方に、夫でなく客として暮らす意思を確かめた。",
       "reason": "spirit_guestでpartyとspiritPersonがhomeへ実移動し、teraはhomeにいる。双方の同意がそろった現在場面。",
       "visual": "夫の代役ではなく客として同席するテラと精霊。"
     },
     "part_home": {
       "decision": "person-evidence",
-      "people": ["q173_tera"],
+      "people": [
+        "q173_tera"
+      ],
       "evidence": "テラが自分で戸を閉じる時刻を決める。",
       "reason": "spirit_partでpartyだけがhomeへ戻り、spiritPersonはgraveに残る。精霊の別れを結果として伝え、家ではテラ本人だけを表示する。",
       "visual": "精霊を墓地に残し、家で戸を閉じる時刻を決めるテラ。"
     },
     "copy_home": {
       "decision": "person-evidence",
-      "people": ["q173_tera","q173_spirit"],
+      "people": [
+        "q173_tera",
+        "q173_spirit"
+      ],
       "evidence": "当面は夫の模倣を続ける。",
       "reason": "spirit_copyでpartyとspiritPersonがhomeへ実移動し、teraもhomeにいる。模倣継続を夫本人の復活とは扱わない。",
       "visual": "家で模倣を続ける精霊と、それを受け入れるテラ。"
     },
     "copy_later": {
       "decision": "person-evidence",
-      "people": ["q173_tera","q173_spirit"],
+      "people": [
+        "q173_tera",
+        "q173_spirit"
+      ],
       "evidence": "精霊は家具を動かす相談へ答えられなかった。",
       "reason": "copy_homeから所在を変えず後日の相談へ進むため、teraとspiritPersonはともにhomeにいる。",
       "visual": "家具を動かす変化に答えられない精霊とテラ。模倣の限界を示す。"
     }
   },
-  "next": "q173のテラと墓守の精霊を精読した。次はteraとspiritPersonの実所在へ表示を接続し、夫本人を追加せず3結末を保持する。"
+  "next": "テラと墓守の精霊を実所在へ接続済み。3結末・双方の同意・旧保存を保持した。q174の娘と足を傷めた人たちの監査も完了し、次はその表示とq175の出演監査。"
+},
+  q174:{
+  "sourceSha256": "a06bee3f59a2852bc125121eff4717cc64019f353a6eaf41da72e249f202bcc4",
+  "identityNotes": [
+    "原稿authoring/reference/volume-08.mdのGQ074、初版q174、現場接続後の全6場面と所在・受渡し・3結末を精読した。村長は依頼人名義で、受付や葬列への本人の同席は確定しない。",
+    "娘は既存person daughterPersonでprocessionに残る。列に加わっていないことと、葬列の現場で話すことを区別し、負傷者集団に含めない。名前・年齢・容貌は補わない。",
+    "足を傷めた人たちは既存group injuredに対応する。列全員の人数・代表者を決めず、救出の対象と列全体を同一視しない。onsite_peopleだけがinjuredを救護先へ実移動させる。",
+    "小屋には遺書を読むためpartyだけが移動する。娘や負傷者を小屋へ同行させず、紙の書き手である死んだ道化師を現在の出演者にしない。棺・仮面・遺書は人物と分ける。",
+    "sealed・namedでは娘とinjuredの所在はprocessionのまま。娘が怒ったまま帰るのはnameの結末本文であり、namedの確認前に退場済みとはしない。rescuedはinjuredだけがrescueへ到着し、娘はprocessionに残る。",
+    "個人として弔う、棺を封じる、負傷者を救出する3結末を区別する。涙・赦しを娘へ要求せず、救出だけで葬列の終了を成立させない。"
+  ],
+  "people": {
+    "q174_daughter": {
+      "label": "道化師の娘",
+      "status": "candidate",
+      "need": "既存person daughterPersonへ接続する候補。onsite・sealed・namedの葬列の現場に表示し、小屋と救護先には同行させない。"
+    },
+    "q174_injured": {
+      "label": "足を傷めた葬列の人たち",
+      "status": "candidate",
+      "need": "既存group injuredの呼称表示候補。onsite・sealed・namedではprocession、rescuedでは実護衛後のrescue。個人画・人数・代弁者を決めない。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "道化師の葬列が止まらないという知らせを受け、墓地道へ向かう。",
+      "reason": "entry_visitはpartyだけをprocessionへ移す導入。依頼人欄から村長を受付へ配置しない。",
+      "visual": "葬列へ向かう受付。人物は固定しない。"
+    },
+    "letter": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "遺書には、泣くだけでなく役柄を離れた本人の名で送ってほしいとあった。",
+      "reason": "onsite_hutでpartyだけがhutへ移動する。娘とinjuredはprocession、遺書はhutにある。書き手を現在の人物として表示しない。",
+      "visual": "小屋の遺書と道化の道具。娘や死者の立ち絵は追加しない。"
+    },
+    "onsite": {
+      "decision": "person-evidence",
+      "people": [
+        "q174_daughter",
+        "q174_injured"
+      ],
+      "evidence": "列の笑顔に反して足は擦り切れている。道化師の娘だけは列に加わらず、父への怒りを語った。",
+      "reason": "partyがprocessionへ到着し、娘とinjuredも同じ現場にいる。娘は列へ加わっておらず、負傷者とは別の役として扱う。",
+      "visual": "列の足の傷と、列の外から話す娘。笑顔を楽しさや同意と同一視しない。"
+    },
+    "sealed": {
+      "decision": "person-evidence",
+      "people": [
+        "q174_daughter",
+        "q174_injured"
+      ],
+      "evidence": "棺を封じて列の動きを止めた。",
+      "reason": "封印経路はpartyだけをprocessionへ戻すか同地で進む。娘とinjuredの所在は変わらず、停止した列の現場に残る。",
+      "visual": "止まった棺と足を休める人たち、列の外の娘。弔いは未完。"
+    },
+    "named": {
+      "decision": "person-evidence",
+      "people": [
+        "q174_daughter",
+        "q174_injured"
+      ],
+      "evidence": "本人の名を遺書で確かめて送り、葬列を終えた。娘に涙や赦しを要求しない。",
+      "reason": "letter_nameでpartyと遺書がprocessionへ戻る。娘とinjuredは現場に残り、遺書の受渡しと結末はfinishで確定する。娘の帰宅は結末本文に属する。",
+      "visual": "個人の名で送った現場。娘の怒りと、解放される列の人たちを両立させる。"
+    },
+    "rescued": {
+      "decision": "person-evidence",
+      "people": [
+        "q174_injured"
+      ],
+      "evidence": "歩けない人を救護先へ引き継いだ。",
+      "reason": "onsite_peopleがinjuredをpartyとともにrescueへ移動させる。娘はprocessionに残る。施設名だけで救護担当者を新規出演させない。",
+      "visual": "救護先へ到着した負傷者の集団。葬列の終了や娘の同意を付け足さない。"
+    }
+  },
+  "next": "全6場面の出演監査を完了。次はdaughterPersonとinjuredの既存所在へ呼称表示を接続し、q175の出演を精読する。"
 }
  }
 };

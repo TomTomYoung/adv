@@ -145,9 +145,9 @@
 
 **目的**: 機関廟系列の現場移動・帰路・施設表示が実ブラウザ上で成立することを確認する。
 
-**検査**: `browser-machine-smoke.mjs` でworker return、ward collection、3 homesを両layout・複数幅で歩行確認する。
+**検査**: `browser-machine-smoke.mjs` でworker return、ward collection、3 homesを両layout・複数幅で歩行確認する。`browser-machine-cast-smoke.mjs` はq173の現行・表示追加前・旧受注の19保存点をScene／Classic × 1440／390pxの76条件で表示する。人物の所在、呼称だけの表示、同意前のguest選択の無効化、保存再開、本文送り、画面内のラベル配置を確認する。
 
-**出力**: 標準ログ、viewport checkpoint。artifactは `machine-browser-checkpoints`。
+**出力**: 標準ログ、viewport checkpoint。歩行側のartifactは `machine-browser-checkpoints`。q173は結果JSONとPNGを `q173-cast-checkpoints` に保存する。成功時は件数と成功だけを報告し、失敗時だけ該当状態の要点を取得する。
 
 ## 7. OddlandブラウザCI: `.github/workflows/oddland-quests.yml`
 
