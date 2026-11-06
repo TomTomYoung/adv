@@ -4,9 +4,25 @@
 
 この文書は、advで実行される主要な自動検査について、**何を守るためのテストか、何を実際に検査するか、何を出力するか**をまとめたものです。テスト結果を会話へ持ち込む際の運用は末尾の「会話ログへの持ち込み」を基準にします。
 
+## 変更範囲と成功結果の再利用
+
+文書本文だけのPR・master差分では、通常CIの文書・リンク・生成文書検査だけを行います。対象は `doc/**/*.md`、`README.md`、`AGENTS.md`。実行試験の入力でもある地域移設と出演監査の生成Markdown、および文書内JSONは除外し、通常の検査対象に残します。
+
+ゲーム変更を含むPRへ後から文書だけを追記しても、GitHubのpaths判定ではPR全体が対象になるため、ワークフロー自体は再起動します。各ジョブの開始時に[判定処理](../../tools/ci-scope.mjs)と[共通action](../../.github/actions/ci-plan/action.yml)が、文書本文を除くGitの全ファイルのパス・モード・blob、Node版・OS・CPU・runner imageの指紋を求めます。正本、配布JSON、画像、テスト、実行器、CI設定、不明なファイルを含め、入力の変更は成功結果の再利用を無効にします。
+
+同じジョブ・入力・環境の成功記録が完全一致するときだけ、重い試験・Chromium導入・重複画像生成を省略します。文書検査は常に実行します。再利用元の成功runをActions概要へ残し、スクリーンショットはそのrunのartifactを参照します。cacheへ保存するのは小さな成功記録だけです。すべての試験とartifact保存が成功した後だけ[記録action](../../.github/actions/ci-record/action.yml)を実行し、失敗・中止・文書のみ・cache再利用では新しい成功記録を作りません。完全一致しないcacheや壊れた記録、消失したcacheは検査を省略する根拠にしません。
+
+PRの差分はmerge-baseからHEADまでを判定します。直前コミットだけを見る方法では、先に入れた未検証のゲーム変更を文書追記で隠せるため採用しません。履歴を取得できない場合は検査する側へ倒します。履歴の比較には全commit/treeを取得し、古い画像blobは必要になるまで取得しないpartial cloneを使います。同じPRの古い実行は新しい実行で打ち切りますが、masterへのpushや手動実行は別グループで保持します。
+
+手動のworkflow_dispatchは、cacheがあっても選択ワークフローの検査を実行します。ゲーム変更の初回と入力が変わった場合の全体試験・既存の画面検査範囲は維持します。ローカルでは関連試験から始め、修正がまとまった後に全体試験を一度行います。
+
+[判定の6試験](../../tests/ci-scope.test.mjs)は実Gitリポジトリを作り、文書のみ、ゲーム変更後の文書追記、削除・移動・実行属性、原稿・生成監査・JSON・画像・CI設定、比較履歴不足、環境差、成功記録の欠落・不一致、手動強制を検証します。
+
+参考：[GitHubの差分・paths判定](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow)、[cacheの一致条件とPRごとの範囲](https://docs.github.com/en/actions/reference/workflows-and-actions/dependency-caching)、[actions/cache](https://github.com/actions/cache)。
+
 ## 1. 通常CI: `.github/workflows/ci.yml`
 
-ワークフロー名: `Validate dungeon RPG`。push、pull request、手動実行で起動します。Node.js 22 / Ubuntu上で実行し、ブラウザは使用しません。
+ワークフロー名: `Validate dungeon RPG`。masterへのpush、pull request、手動実行で起動します。作業ブランチへのpush単独では起動しません。Node.js 22 / Ubuntu上で実行し、ブラウザは使用しません。
 
 ### `npm run check:runtime`
 
@@ -145,9 +161,9 @@
 
 **目的**: 機関廟系列の現場移動・帰路・施設表示が実ブラウザ上で成立することを確認する。
 
-**検査**: `browser-machine-smoke.mjs` でworker return、ward collection、3 homesを両layout・複数幅で歩行確認する。`browser-machine-cast-smoke.mjs` はq173の現行・表示追加前・旧受注の19保存点をScene／Classic × 1440／390pxの76条件で表示する。人物の所在、呼称だけの表示、同意前のguest選択の無効化、保存再開、本文送り、画面内のラベル配置を確認する。
+**検査**: `browser-machine-smoke.mjs` でworker return、ward collection、3 homesを両layout・複数幅で歩行確認する。`browser-machine-cast-smoke.mjs` はq173の現行・表示追加前・旧受注の19保存点をScene／Classic × 1440／390pxの76条件で表示する。`--funeral-only` はq174の現行6・表示追加前6・旧受注1の13保存点を同じ組合せの52条件で表示し、娘の非同行・負傷者の救護先・遺書の受渡し・旧受注表示を検査する。人物の所在、呼称だけの表示、同意前のguest選択の無効化、保存再開、本文送り、画面内のラベル配置を確認する。
 
-**出力**: 標準ログ、viewport checkpoint。歩行側のartifactは `machine-browser-checkpoints`。q173は結果JSONとPNGを `q173-cast-checkpoints` に保存する。成功時は件数と成功だけを報告し、失敗時だけ該当状態の要点を取得する。
+**出力**: 標準ログ、viewport checkpoint。歩行側のartifactは `machine-browser-checkpoints`。q173は結果JSONとPNGを `q173-cast-checkpoints` に保存する。q174は `q174-cast-checkpoints` に分離する。成功時は件数と成功だけを報告し、失敗時だけ該当状態の要点を取得する。
 
 ## 7. OddlandブラウザCI: `.github/workflows/oddland-quests.yml`
 

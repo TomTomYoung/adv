@@ -45,6 +45,9 @@ export function machineSecondSource(q){
   field('procession','止まらない葬列と棺','cemetery',9,3);town('hut','道化師の遺書のある小屋','machine_hut');town('rescue','歩けない人の救護先','salome_clinic');entity('letterSheet','hut');entity('injured','procession','group');entity('daughterPerson','procession','person');const from=intake('procession','道化師の葬列が止まらないという知らせを受け、墓地道へ向かう。');node('letter').place='hut';
   for(const [src,key] of [[from,'seal'],['letter','seal']])route(src,key,'sealed');end('sealed','procession','棺を封じて列の動きを止めた。弔いは未完で、土地に怪異が残る。','seal',[set('coffinSealed')]);
   route('letter','name','named',{depart:[give('letterSheet','hut','party')]});end('named','procession','本人の名を遺書で確かめて送り、葬列を終えた。娘に涙や赦しを要求しない。','name',[give('letterSheet','party','procession'),set('mourned')]);route(from,'people','rescued',{companions:['injured']});end('rescued','rescue','歩けない人を救護先へ引き継いだ。葬列そのものは終わっていない。','rescue',[set('rescued')]);
+  x.entities.daughterPerson.character='q174_daughter';x.entities.injured.character='q174_injured';
+  for(const id of ['onsite','sealed','named'])node(id).cast=[{entity:'daughterPerson',display:{x:31}},{entity:'injured',display:{x:69}}];
+  node('rescued').cast=[{entity:'injured',display:{x:50}}];
  }
  if(q.number===175){
   field('lair','獣の寝床と訓練標','valley',7,3);town('practice','非公開の稽古場','library_rehearsal');town('public','偽の突撃を見せる広場','library_stage');field('route_place','畑を避けて空ける谷道','valley',11,5);field('warning_place','谷の向こうの集落の見張り場','valley',15,7);entity('miro','lair','person');entity('sister','lair','person');const crew=['miro','sister'];const from=intake('lair','獣の動きを調べるため、ミロの待つ谷へ向かう。');node('hidden').place='practice';node('route').place='public';node('warning').place='route_place';

@@ -55,6 +55,16 @@ export const relocatedCharacters=Object.fromEntries([
 ].map(([id,name,detail,provenance])=>[id,{id,name,role:'礼拝堂の現地の相手',detail,portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,
  provenance:provenance??'2026-10-29の美術設定。固有名・他人物との同一性は追加しない。具体的な外見・年齢感・服装は今回の美術設定。牢・格子・聖像・宝玉・石を人物画へ固定しない。'}]));
 // The group has no specified headcount or spokesperson. Ren is the existing actor.
+relocatedCharacters.q174_daughter={
+ id:'q174_daughter',name:'道化師の娘',role:'葬列へ加わらず父への怒りを語る娘',
+ detail:'葬列の現場で話す。小屋と救護先へは同行せず、涙や赦しを弔いの条件にしない。',
+ provenance:'2026-11-06。既存person daughterPersonの呼称表示。氏名・年齢・容貌を補わず、負傷者集団に含めない。専用画は未接続。'
+};
+relocatedCharacters.q174_injured={
+ id:'q174_injured',name:'足を傷めた葬列の人たち',role:'歩き続けて足を傷めた救出対象の集団',
+ detail:'葬列の現場で表示し、救出の経路だけ救護先へ実際に同行する。救出と葬列全体の終了を区別する。',
+ provenance:'2026-11-06。既存group injuredの呼称表示。人数・代表者・個人画を決めず、娘や葬列全員と同一視しない。'
+};
 relocatedCharacters.q173_tera={
  id:'q173_tera',name:'寡婦テラ',role:'夫に似た姿の身元確認を頼む寡婦',
  detail:'家で本人の意思を聞き、精霊が実際に同行した経路だけ同席する。客としての双方の同意、別れ、模倣継続を区別する。',

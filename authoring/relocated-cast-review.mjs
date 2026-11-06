@@ -3462,7 +3462,7 @@ export const RELOCATED_CAST_REVIEW={
   "next": "テラと墓守の精霊を実所在へ接続済み。3結末・双方の同意・旧保存を保持した。q174の娘と足を傷めた人たちの監査も完了し、次はその表示とq175の出演監査。"
 },
   q174:{
-  "sourceSha256": "a06bee3f59a2852bc125121eff4717cc64019f353a6eaf41da72e249f202bcc4",
+  "sourceSha256": "c8960ef9bda164b98718e71776d93a26dcf52a3ed42d617e201f1f72377da8ed",
   "identityNotes": [
     "原稿authoring/reference/volume-08.mdのGQ074、初版q174、現場接続後の全6場面と所在・受渡し・3結末を精読した。村長は依頼人名義で、受付や葬列への本人の同席は確定しない。",
     "娘は既存person daughterPersonでprocessionに残る。列に加わっていないことと、葬列の現場で話すことを区別し、負傷者集団に含めない。名前・年齢・容貌は補わない。",
@@ -3474,13 +3474,15 @@ export const RELOCATED_CAST_REVIEW={
   "people": {
     "q174_daughter": {
       "label": "道化師の娘",
-      "status": "candidate",
-      "need": "既存person daughterPersonへ接続する候補。onsite・sealed・namedの葬列の現場に表示し、小屋と救護先には同行させない。"
+      "status": "connected",
+      "need": "既存person daughterPersonへ接続済み。onsite・sealed・namedの葬列の現場に表示し、小屋と救護先には同行させない。",
+      "entity": "daughterPerson"
     },
     "q174_injured": {
       "label": "足を傷めた葬列の人たち",
-      "status": "candidate",
-      "need": "既存group injuredの呼称表示候補。onsite・sealed・namedではprocession、rescuedでは実護衛後のrescue。個人画・人数・代弁者を決めない。"
+      "status": "connected",
+      "need": "既存group injuredの呼称表示を接続済み。onsite・sealed・namedではprocession、rescuedでは実護衛後のrescue。個人画・人数・代弁者を決めない。",
+      "entity": "injured"
     }
   },
   "scenes": {
@@ -3538,7 +3540,136 @@ export const RELOCATED_CAST_REVIEW={
       "visual": "救護先へ到着した負傷者の集団。葬列の終了や娘の同意を付け足さない。"
     }
   },
-  "next": "全6場面の出演監査を完了。次はdaughterPersonとinjuredの既存所在へ呼称表示を接続し、q175の出演を精読する。"
+  "next": "娘と負傷者の呼称表示を既存所在へ接続した。3結末・娘の非同行・遺書の受渡し・旧保存を保持。次はq175の人物表示とq176の出演監査。"
+},
+  q175:{
+  "sourceSha256": "a268f798ffb8bf48a8a5219559b7065ec7170bd6c26716f5d83be5a4485cf94e",
+  "identityNotes": [
+    "原稿authoring/reference/volume-08.mdのGQ075、初版q175、現場接続後の全10場面・全旅程・戦闘再開と3結末を精読した。",
+    "猟師ミロと妹は既存person miro・sister。受付からの最初の移動を除き、稽古場・広場・谷道・寝床・谷の先へ実同行する。戦闘パーティーへ自動加入させない。",
+    "妹が稽古場の出入口を見張ることと、向こう側の集落の見張り役を区別する。warned・pursuedには見張りへの伝達が明記されるが、既存entityはない。候補として残し、実装時に所在・保存互換を確認する。人数・代表者・氏名は補わない。",
+    "鏡牙獣の学習は公開訓練を見た固定遭遇の差替えであり、心を読む能力や未実装の全技能履歴を追加しない。獣・訓練標・獣跡は人の呼称表示から分ける。",
+    "非公開の別戦法、正面戦、遠方への誘導と警告を区別する。warningは警告前で、誘導だけで討伐済みとしない。敗北・逃走と再挑戦経路を維持する。"
+  ],
+  "people": {
+    "q175_miro": {
+      "label": "猟師ミロ",
+      "status": "candidate",
+      "need": "既存person miroの所在へ接続する。受付以外の9場面と実同行・戦闘後の会話を対象にする。"
+    },
+    "q175_sister": {
+      "label": "ミロの妹",
+      "status": "candidate",
+      "need": "既存person sisterの所在へ接続する。受付以外の9場面。依頼人名義だけで受付に表示しない。"
+    },
+    "q175_lookout": {
+      "label": "集落の見張り",
+      "status": "candidate",
+      "need": "warned・pursuedで伝達を受ける役。既存entityなし。人数未確定の役の所在と旧保存への追加方法を確認してから表示する。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "獣の動きを調べるため、ミロの待つ谷へ向かう。",
+      "reason": "受付では谷で待つミロへ向かう知らせだけ。依頼人である妹も初期所在はlairであり、受付へ二人を配置しない。",
+      "visual": "谷へ向かう受付。現在の同席人物を追加しない。"
+    },
+    "hidden": {
+      "decision": "person-evidence",
+      "people": [
+        "q175_miro",
+        "q175_sister"
+      ],
+      "evidence": "ミロは一度退いて側面へ回る動きを練習した。妹は稽古場の出入口を見張った。",
+      "reason": "ミロの別戦法と妹の出入口の見張りが明記され、二人がpracticeへ実同行する。",
+      "visual": "ミロが非公開で稽古し、妹が出入口を見る。集落の見張り役とは分ける。"
+    },
+    "route": {
+      "decision": "person-evidence",
+      "people": [
+        "q175_miro",
+        "q175_sister"
+      ],
+      "evidence": "獣は見せた突撃の先へ回り込む。畑から離れた谷道を空ければ、そこへ誘い出せる。",
+      "reason": "広場にはmiroとsisterが実同行して偽の訓練を見せる。観客の人数や別の訓練生は追加しない。",
+      "visual": "ミロと妹による偽の公開訓練。"
+    },
+    "warning": {
+      "decision": "person-evidence",
+      "people": [
+        "q175_miro",
+        "q175_sister"
+      ],
+      "evidence": "獣は谷へ去った。倒してはいない。向こう側には別の村がある。",
+      "reason": "二人が谷道へ実同行した後。獣は去っており、警告はまだ集落に届けていない。",
+      "visual": "ミロと妹、畑から離した谷道。集落の見張りを先取り表示しない。"
+    },
+    "onsite": {
+      "decision": "person-evidence",
+      "people": [
+        "q175_miro",
+        "q175_sister"
+      ],
+      "evidence": "獣の寝床に広場の訓練標がある。ミロの突撃を見て学んでいるらしい。",
+      "reason": "ミロと妹は既存entityでlairにいる。寝床・訓練標の調査から同行を始める。獣の学習を超能力にしない。",
+      "visual": "ミロと妹、獣の寝床の訓練標。獣の戦闘表示は別の既存遭遇定義に従う。"
+    },
+    "battle": {
+      "decision": "person-evidence",
+      "people": [
+        "q175_miro",
+        "q175_sister"
+      ],
+      "evidence": "非公開で練った戦法を、獣のいる現場で実行する。",
+      "reason": "二人が稽古場からlairへ戻った状態。非公開で練った戦法の実戦前で、まだ勝利ではない。",
+      "visual": "ミロと妹、実行前の寝床。"
+    },
+    "changed": {
+      "decision": "person-evidence",
+      "people": [
+        "q175_miro",
+        "q175_sister"
+      ],
+      "evidence": "別戦法で獣を退けた。ミロが妹へ変更の必要を認める。",
+      "reason": "ミロが妹に変更の必要を認める対話。二人の所在はlair。獣を生きた同席人物として追加しない。",
+      "visual": "ミロと妹の戦後の対話。"
+    },
+    "warned": {
+      "decision": "person-evidence",
+      "people": [
+        "q175_miro",
+        "q175_sister",
+        "q175_lookout"
+      ],
+      "evidence": "集落の見張りへ獣の行先を伝え、警戒を引き継いだ。誘導は討伐ではない。",
+      "reason": "二人がwarning_placeへ実同行し、集落の見張りへ警戒を引き継ぐ。見張りは本文に受取人として明記されるが、既存entityは未定義。",
+      "visual": "ミロと妹と、警告を受け取る集落の見張り。人数・氏名・容貌は未確定。"
+    },
+    "pursuit": {
+      "decision": "person-evidence",
+      "people": [
+        "q175_miro",
+        "q175_sister"
+      ],
+      "evidence": "獣を谷の先まで追った。現地で戦い、逃れた場合は谷道へ戻れる。",
+      "reason": "二人がwarning_placeまで追跡した実所在を保つ。ここでは戦闘・撤退の相談で、まだ見張りへの報告本文はない。",
+      "visual": "ミロと妹、谷の先の戦場。"
+    },
+    "pursued": {
+      "decision": "person-evidence",
+      "people": [
+        "q175_miro",
+        "q175_sister",
+        "q175_lookout"
+      ],
+      "evidence": "追って獣を退け、向こう側の見張りへ結果を伝えた。",
+      "reason": "二人は追跡先に残り、向こう側の見張りへ結果を伝える。warnedと同じ集落側の受取役として扱い、別人を増やさない。",
+      "visual": "ミロと妹と結果を受け取る集落の見張り。討伐と誘導のみの結末を区別する。"
+    }
+  },
+  "next": "次はミロ・妹の実所在と集落の見張りの所在・保存互換を整え、q176の出演を精読する。"
 }
  }
 };

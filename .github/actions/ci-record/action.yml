@@ -1,0 +1,21 @@
+name: Record a successful check
+description: Called only after all test and artifact steps succeed.
+inputs:
+  key:
+    description: Exact input and environment key from ci-plan
+    required: true
+  path:
+    description: Success record directory from ci-plan
+    required: true
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        CI_CACHE_KEY: ${{ inputs.key }}
+        CI_RESULT_PATH: ${{ inputs.path }}
+      run: node tools/ci-scope.mjs record
+    - uses: actions/cache/save@v4
+      with:
+        key: ${{ inputs.key }}
+        path: ${{ inputs.path }}
