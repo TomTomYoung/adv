@@ -55,6 +55,16 @@ export const relocatedCharacters=Object.fromEntries([
 ].map(([id,name,detail,provenance])=>[id,{id,name,role:'礼拝堂の現地の相手',detail,portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,
  provenance:provenance??'2026-10-29の美術設定。固有名・他人物との同一性は追加しない。具体的な外見・年齢感・服装は今回の美術設定。牢・格子・聖像・宝玉・石を人物画へ固定しない。'}]));
 // The group has no specified headcount or spokesperson. Ren is the existing actor.
+relocatedCharacters.q177_courier={
+ id:'q177_courier',name:'配達人',role:'鏡の旗が昨日降ろされたと証言する配達人',
+ detail:'鏡の店のonsiteだけに呼称を表示する。配達所へ同行させず、依頼人の商人とは同定しない。',
+ provenance:'2026-11-07。匿名のperson courierPersonの呼称表示。氏名・容貌・性別・年齢を補わず、専用画は未接続。'
+};
+relocatedCharacters.q177_customers={
+ id:'q177_customers',name:'告知を受ける客たち',role:'像の日時は未確認と伝えられ、決断を急がないよう求められる客',
+ detail:'noticeだけに表示する人数未確定の集団。補償予定だけのcorrect、遠隔同意、完了前のwindowへ流用しない。',
+ provenance:'2026-11-07。group customersの呼称表示。人数・代表者・容貌を補わず、個人画は追加しない。'
+};
 relocatedCharacters.q176_god={
  id:'q176_god',name:'小さな街道神',role:'歩いたことのない道へ旅立ちたい街道神',
  detail:'祠で返却と季節の帰還を相談し、草鞋を受け取った見送りだけ分かれ道へ同行する。補修窓口と点検道へは同行しない。',

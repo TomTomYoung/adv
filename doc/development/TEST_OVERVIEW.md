@@ -161,9 +161,9 @@ PRの差分はmerge-baseからHEADまでを判定します。直前コミット�
 
 **目的**: 機関廟系列の現場移動・帰路・施設表示が実ブラウザ上で成立することを確認する。
 
-**検査**: `browser-machine-smoke.mjs` でworker return、ward collection、3 homesを両layout・複数幅で歩行確認する。`browser-machine-cast-smoke.mjs` はq173の現行・表示追加前・旧受注の19保存点をScene／Classic × 1440／390pxの76条件で表示する。`--funeral-only` はq174の現行6・表示追加前6・旧受注1の13保存点を同じ組合せの52条件で表示し、娘の非同行・負傷者の救護先・遺書の受渡し・旧受注表示を検査する。`--hunter-only` はq175の現行10・表示追加前10・戦闘再開10・旧受注1の31保存点を124条件で検査し、戦闘前と報告後の見張りの表示を区別する。[専用6試験](../../tests/hunter-cast.test.mjs)では全場面・全旅程・3結末・報酬の一回性、旧戦闘保存の勝利・逃走・敗北・再挑戦、正面戦の逃走不可と不正保存の拒否を検査する。`--god-sandals-only` はq176の現行8・表示追加前8・旧旅程の到着後2・旧受注2の20保存点を80条件で検査する。[専用7試験](../../tests/god-sandals-cast.test.mjs)は全8旅程・3結末・草鞋の受渡し・神の所在・追加3役の保存移行・旧待機本文の保持と到着後の本文修正・不正保存の拒否・報酬の一回性を検査する。人物の所在、呼称だけの表示、同意前のguest選択の無効化、保存再開、本文送り、画面内のラベル配置を確認する。
+**検査**: `browser-machine-smoke.mjs` でworker return、ward collection、3 homesを両layout・複数幅で歩行確認する。`browser-machine-cast-smoke.mjs` はq173の現行・表示追加前・旧受注の19保存点をScene／Classic × 1440／390pxの76条件で表示する。`--funeral-only` はq174の現行6・表示追加前6・旧受注1の13保存点を同じ組合せの52条件で表示し、娘の非同行・負傷者の救護先・遺書の受渡し・旧受注表示を検査する。`--hunter-only` はq175の現行10・表示追加前10・戦闘再開10・旧受注1の31保存点を124条件で検査し、戦闘前と報告後の見張りの表示を区別する。[専用6試験](../../tests/hunter-cast.test.mjs)では全場面・全旅程・3結末・報酬の一回性、旧戦闘保存の勝利・逃走・敗北・再挑戦、正面戦の逃走不可と不正保存の拒否を検査する。`--god-sandals-only` はq176の現行8・表示追加前8・旧旅程の到着後2・旧受注2の20保存点を80条件で検査する。[専用7試験](../../tests/god-sandals-cast.test.mjs)は全8旅程・3結末・草鞋の受渡し・神の所在・追加3役の保存移行・旧待機本文の保持と到着後の本文修正・不正保存の拒否・報酬の一回性を検査する。`--mirror-only` はq177の現行9・表示追加前9・旧受注2の20保存点を80条件で検査する。[専用6試験](../../tests/truth-mirror-cast.test.mjs)は表示・所在追加以外の配布定義の一致、全7旅程・4結末・証拠の受渡し時点・暫定告知の未確認・遠隔同意後の設定・旧保存の厳密な移行・不正保存の拒否・報酬の一回性を検査する。人物の所在、呼称だけの表示、同意前のguest選択の無効化、保存再開、本文送り、画面内のラベル配置を確認する。
 
-**出力**: 標準ログ、viewport checkpoint。歩行側のartifactは `machine-browser-checkpoints`。q173は結果JSONとPNGを `q173-cast-checkpoints` に保存する。q174は `q174-cast-checkpoints`、q175は `q175-cast-checkpoints`、q176は `q176-cast-checkpoints` に分離する。成功時は件数と成功だけを報告し、失敗時だけ該当状態の要点を取得する。
+**出力**: 標準ログ、viewport checkpoint。歩行側のartifactは `machine-browser-checkpoints`。q173は結果JSONとPNGを `q173-cast-checkpoints` に保存する。q174は `q174-cast-checkpoints`、q175は `q175-cast-checkpoints`、q176は `q176-cast-checkpoints`、q177は `q177-cast-checkpoints` に分離する。成功時は件数と成功だけを報告し、失敗時だけ該当状態の要点を取得する。
 
 ## 7. OddlandブラウザCI: `.github/workflows/oddland-quests.yml`
 

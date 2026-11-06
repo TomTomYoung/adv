@@ -412,7 +412,7 @@
     "entryScript": "q177.machine.visit",
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -421,7 +421,739 @@
       "saveRevision": 2,
       "scope": "機関廟20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "嘘をつかない鏡の現場受付",
+            "shop": "像を残す鏡の商店",
+            "post": "場所と日付を照合する配達所",
+            "public": "客への公開告知窓口",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "shop"
+            ],
+            [
+              "transit",
+              "post"
+            ],
+            [
+              "transit",
+              "public"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "shop",
+                "post",
+                "public",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "notice",
+                "correct",
+                "window",
+                "close"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "proof": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "proof"
+            },
+            "noticePosted": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "noticePosted"
+            },
+            "corrected": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "corrected"
+            },
+            "closed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "closed"
+            },
+            "evidencePreserved": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "evidencePreserved"
+            },
+            "closurePosted": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "closurePosted"
+            },
+            "consentReceived": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "consentReceived"
+            },
+            "windowConfigured": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "windowConfigured"
+            },
+            "evidenceAt": {
+              "type": "enum",
+              "initial": "shop",
+              "values": [
+                "entry",
+                "shop",
+                "post",
+                "public",
+                "transit",
+                "party",
+                "mirrorDevice"
+              ],
+              "meaning": "evidence の所在または保持者"
+            },
+            "mirrorDeviceAt": {
+              "type": "enum",
+              "initial": "shop",
+              "values": [
+                "entry",
+                "shop",
+                "post",
+                "public",
+                "transit",
+                "party",
+                "evidence"
+              ],
+              "meaning": "mirrorDevice の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "evidence": {
+              "holder": "evidenceAt",
+              "kind": "item"
+            },
+            "mirrorDevice": {
+              "holder": "mirrorDeviceAt",
+              "kind": "item"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "映った旗が現地では昨日降ろされたものだと分かる。運命を告げられた客が、必要のない決断を始める。予言への反証を探すのでなく、映像の時刻と場所を確かめる謎だ。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "嘘をつかない鏡の現場受付",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "proof": {
+              "title": "場所と日付を照合する配達所",
+              "place": "post",
+              "cast": [],
+              "requires": true
+            },
+            "onsite": {
+              "title": "像を残す鏡の商店",
+              "place": "shop",
+              "cast": [],
+              "requires": true
+            },
+            "notice": {
+              "title": "客への公開告知窓口",
+              "place": "public",
+              "cast": [],
+              "requires": true
+            },
+            "correct": {
+              "title": "客への公開告知窓口",
+              "place": "public",
+              "cast": [],
+              "requires": true
+            },
+            "close": {
+              "title": "像を残す鏡の商店",
+              "place": "shop",
+              "cast": [],
+              "requires": true
+            },
+            "closed": {
+              "title": "客への公開告知窓口",
+              "place": "public",
+              "cast": [],
+              "requires": true
+            },
+            "consent": {
+              "title": "場所と日付を照合する配達所",
+              "place": "post",
+              "cast": [],
+              "requires": true
+            },
+            "window": {
+              "title": "像を残す鏡の商店",
+              "place": "shop",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_visit": {
+              "from": [
+                "entry"
+              ],
+              "to": "onsite",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "shop"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "shop",
+                "companions": []
+              },
+              "depart": []
+            },
+            "proof_correct": {
+              "from": [
+                "proof"
+              ],
+              "to": "correct",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "public"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "public",
+                "companions": []
+              },
+              "depart": []
+            },
+            "proof_window": {
+              "from": [
+                "proof"
+              ],
+              "to": "consent",
+              "requires": true,
+              "effects": [],
+              "once": false
+            },
+            "proof_close": {
+              "from": [
+                "proof"
+              ],
+              "to": "close",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "shop"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "shop",
+                "companions": []
+              },
+              "depart": []
+            },
+            "onsite_compare": {
+              "from": [
+                "onsite"
+              ],
+              "to": "proof",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "post"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "proof",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "post",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "evidence",
+                  "from": "shop",
+                  "to": "party"
+                }
+              ]
+            },
+            "onsite_notice": {
+              "from": [
+                "onsite"
+              ],
+              "to": "notice",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "public"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "public",
+                "companions": []
+              },
+              "depart": []
+            },
+            "onsite_close": {
+              "from": [
+                "onsite"
+              ],
+              "to": "close",
+              "requires": true,
+              "effects": [],
+              "once": false
+            },
+            "notice_finish": {
+              "from": [
+                "notice"
+              ],
+              "ending": "notice",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "noticePosted",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "notice"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "correct_finish": {
+              "from": [
+                "correct"
+              ],
+              "ending": "correct",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "evidence",
+                  "from": "party",
+                  "to": "public"
+                },
+                {
+                  "op": "set",
+                  "key": "corrected",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "correct"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "close_notice": {
+              "from": [
+                "close"
+              ],
+              "to": "closed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "public"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "public",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "evidence",
+                  "from": "party",
+                  "to": "shop",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q177.values.evidenceAt"
+                    },
+                    "right": "party"
+                  }
+                },
+                {
+                  "op": "set",
+                  "key": "closed",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "evidencePreserved",
+                  "value": true
+                }
+              ]
+            },
+            "closed_finish": {
+              "from": [
+                "closed"
+              ],
+              "ending": "close",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "closurePosted",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "close"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "consent_return": {
+              "from": [
+                "consent"
+              ],
+              "to": "window",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "shop"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "shop",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "set",
+                  "key": "consentReceived",
+                  "value": true
+                }
+              ]
+            },
+            "window_finish": {
+              "from": [
+                "window"
+              ],
+              "ending": "window",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "evidence",
+                  "from": "party",
+                  "to": "shop"
+                },
+                {
+                  "op": "set",
+                  "key": "windowConfigured",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "window"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "notice": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q177.values.resolution"
+                  },
+                  "right": "notice"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q177.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q177.values.partyAt"
+                      },
+                      "right": "public"
+                    }
+                  ]
+                }
+              ]
+            },
+            "correct": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q177.values.resolution"
+                  },
+                  "right": "correct"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q177.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q177.values.partyAt"
+                      },
+                      "right": "public"
+                    }
+                  ]
+                }
+              ]
+            },
+            "window": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q177.values.resolution"
+                  },
+                  "right": "window"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q177.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q177.values.partyAt"
+                      },
+                      "right": "shop"
+                    }
+                  ]
+                }
+              ]
+            },
+            "close": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q177.values.resolution"
+                  },
+                  "right": "close"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q177.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q177.values.partyAt"
+                      },
+                      "right": "public"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_8",
+              "map": "region_8_f2",
+              "x": 4,
+              "y": 1
+            },
+            "shop": {
+              "kind": "town",
+              "location": "machine_mirror"
+            },
+            "post": {
+              "kind": "town",
+              "location": "library_post"
+            },
+            "public": {
+              "kind": "town",
+              "location": "library_review"
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "courierPersonAt",
+            "value": "shop"
+          },
+          {
+            "key": "customersAt",
+            "value": "public"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q177.scene.entry": {
@@ -1511,6 +2243,22 @@
           "evidence"
         ],
         "meaning": "mirrorDevice の所在または保持者"
+      },
+      "courierPersonAt": {
+        "type": "enum",
+        "initial": "shop",
+        "values": [
+          "shop"
+        ],
+        "meaning": "courierPerson の所在または保持者"
+      },
+      "customersAt": {
+        "type": "enum",
+        "initial": "public",
+        "values": [
+          "public"
+        ],
+        "meaning": "customers の所在または保持者"
       }
     },
     "entities": {
@@ -1525,6 +2273,16 @@
       "mirrorDevice": {
         "holder": "mirrorDeviceAt",
         "kind": "item"
+      },
+      "courierPerson": {
+        "holder": "courierPersonAt",
+        "kind": "person",
+        "character": "q177_courier"
+      },
+      "customers": {
+        "holder": "customersAt",
+        "kind": "group",
+        "character": "q177_customers"
       }
     },
     "propositions": {
@@ -1550,13 +2308,27 @@
       "onsite": {
         "title": "像を残す鏡の商店",
         "place": "shop",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "courierPerson",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "notice": {
         "title": "客への公開告知窓口",
         "place": "public",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "customers",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "correct": {
@@ -2100,7 +2872,7 @@
         "location": "library_review"
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "salome",
   "receptionLocations": [

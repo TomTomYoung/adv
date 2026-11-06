@@ -84,6 +84,12 @@ export function machineSecondSource(q,{cast=true}={}){
   end('notice','public','予言としての販売を保留し、像の日時は未確認と告知する。客へ決断を急がないよう伝えた。','notice',[set('noticePosted')]);end('correct','public','配達記録を添えて時差を公開訂正した。客への補償は別の仕事として残す。','correct',[give('evidence','party','public'),set('corrected')]);
   add('close','shop','営業を止め、鏡と取引記録を壊さず保管した。',[opt('notice','営業停止と証拠の保管を窓口へ届ける','closed',{depart:[transfer('evidence','party','shop'),set('closed'),set('evidencePreserved')]})]);end('closed','public','営業停止を告知した。調査前なら像の日時は未確認のまま残す。','close',[set('closurePosted')]);
   route('proof','window','consent');add('consent','post','配達所を通じて、相手側が映す場所の範囲に同意した返事を受け取った。',[opt('return','同意範囲を持ち、店の鏡を設定する','window',{depart:[set('consentReceived')]})]);end('window','shop','同意した場所だけを映す窓として設定し、予言の宣伝を取り下げた。','window',[give('evidence','party','shop'),set('windowConfigured')]);
+  if(cast){
+   entity('courierPerson','shop','person');entity('customers','public','group');
+   x.entities.courierPerson.character='q177_courier';x.entities.customers.character='q177_customers';
+   node('onsite').cast=[{entity:'courierPerson',display:{x:50}}];
+   node('notice').cast=[{entity:'customers',display:{x:50}}];
+  }
  }
  if(q.number===178){
   town('family_place','宿の家族の相談室','machine_family');town('morning_place','扉の先の翌朝の部屋','machine_morning');town('host','手紙を受け取る宿主の席','salome_inn');entity('testObject','entry');entity('ribbon','morning_place');entity('letterSheet','morning_place');entity('daughterPerson','family_place','person');entity('parentPerson','family_place','person');node('family').place='family_place';
