@@ -1,15 +1,15 @@
 # 旧100件の人物・出演監査
 
-照合日: 2026-11-06。第2版の現場接続済み100件を配布JSONから集計する。出演根拠の精読は38件・246場面まで。集計と精読、素材制作と実装を区別する。
+照合日: 2026-11-06。第2版の現場接続済み100件を配布JSONから集計する。出演根拠の精読は43件・296場面まで。集計と精読、素材制作と実装を区別する。
 
 [不足素材](../world/ASSET_BACKLOG.md) ／ [町・シーン切替](../world/SCENE_SWITCH_PLAN.md) ／ [機械可読の全場面一覧](RELOCATED_CAST_AUDIT.json) ／ [精読の正本](../../authoring/relocated-cast-review.mjs) ／ [集計器](../../tools/audit-relocated-cast.mjs)
 
 ## 現在の結果
 
-- 753場面中605場面のcastが空。空であることだけから人物画の不足とは判定しない。
-- 人物エンティティは延べ120件、そのうちcharacter接続は51件。依頼間の重複や集団を含み、新規人物数ではない。
-- 精読246場面のうち、特定人物の同席根拠なし89場面、人物の発言・動作や所在から出演根拠あり157場面。接続済み71役、未接続の制作候補2役。候補数は独立人物としての最終確定数ではない。
-- 残る507場面は未精読。未精読を「人物なし」や「制作不要」に変換しない。
+- 753場面中558場面のcastが空。空であることだけから人物画の不足とは判定しない。
+- 人物エンティティは延べ123件、そのうちcharacter接続は60件。依頼間の重複や集団を含み、新規人物数ではない。
+- 精読296場面のうち、特定人物の同席根拠なし93場面、人物の発言・動作や所在から出演根拠あり203場面。接続済み81役、未接続の制作候補3役。候補数は独立人物としての最終確定数ではない。
+- 残る457場面は未精読。未精読を「人物なし」や「制作不要」に変換しない。
 
 ## 精読済みの依頼
 
@@ -3113,10 +3113,10 @@ separatedは弟だけ、fetch_brotherとfetch_invoiceは別棟の兄だけが現
 
 testedの『請求書の相談には二人とも立ち会う』やfetch_invoiceの『弟と合流し』は次の合流・移動を含む文脈で、兄弟を所在状態より早く同じ場所へ置く根拠にはしない。実移動は既存journeyに従う。
 
-billはitemであり人物表示とは分ける。solo、repaired、3結末、料金の選択、兄の別棟往復、既存の旅程と旧保存を人物表示のために変更しない。双子の個別画像はまだ接続せず、本文にない容貌・衣装も追加しない。
+billはitemであり人物表示とは分ける。solo、repaired、3結末、料金の選択、兄の別棟往復、既存の旅程と旧保存を人物表示のために変更しない。双子は呼称表示だけを接続し、本文にない容貌・衣装や個別画像は追加しない。
 
-- 制作候補 `q168_brother`：双子の兄。既存person brotherへ接続する候補。entry・invoice・fetch_brother・test_both・fetch_invoiceでは現在所在に従い、adjust・gather・testedはbrotherAtがlampのときだけ表示する。
-- 制作候補 `q168_younger`：双子の弟。既存person youngerへ接続する候補。entryと魔力灯側の各場面、invoiceで表示し、兄を迎えに行く別棟のfetch_brother／fetch_invoiceには同行させない。
+- 接続済み `q168_brother`：双子の兄。既存person brotherへ呼称表示を接続済み。entry・invoice・fetch_brother・test_both・fetch_invoiceでは現在所在に従い、adjust・gather・testedはbrotherAtがlampのときだけ表示する。
+- 接続済み `q168_younger`：双子の弟。既存person youngerへ呼称表示を接続済み。entryと魔力灯側の各場面、invoiceで表示し、兄を迎えに行く別棟のfetch_brother／fetch_invoiceには同行させない。
 
 #### entry
 
@@ -3208,7 +3208,605 @@ tested_fetchでpartyだけがotherへ移り、兄へ完了を伝える。弟はl
 
 描き分け候補: 別棟で兄へ修理完了を伝える場面。弟はまだ魔力灯にいるため表示しない。
 
-次の作業: q168の双子を精読した。兄弟の名前対応は保留し、次はbrother／youngerの所在条件付き表示を接続してq169を監査する。
+次の作業: q168のbrother／youngerへ所在条件付きの呼称表示を接続した。兄弟の名前対応は保留し、次はq169のマオ・受取人と手紙の運搬役を監査する。
+
+### q169 誰にも贈れない指輪
+
+依頼人: 騎士マオ。[配布JSON](../../data/scenario-editions/e2/q169.json) ／ [現場接続の原稿](../../authoring/editions/e2/oddland/sunken-second.mjs)。
+
+依頼人は騎士マオで、既存person mao。entryで指輪を預け、reportとlaterで探索隊の返事を受け取る現在の相手として本文に出る。指輪ringの所持と人物の在席は分ける。
+
+受取人はマオの旧友で、recipientとfriendshipの現在の話者。専用person recipientPersonを追加し、messengerを受取人本人として流用しない。受取人の氏名・性別・容貌・現在の同居相手は本文から追加しない。
+
+messengerは受取人の手紙をrecipientからpostへ運ぶための既存person保持者。mail本文は『記録室に受取人からの手紙が届いていた』としか書かず、messenger本人の発言・待機・受渡し動作を現在の出演として確定しない。手紙の物理保持者と画面出演を分ける。
+
+reportでは指輪をまだpartyが保持し、honest／softの選択時にmaoへ返す。lieでは指輪を隠したまま手紙の経路へ進む。laterのadmitで返すまで、人物表示のためにringHeldやringAtを変更しない。
+
+後日の手紙letterはrecipient→messenger→party→maoと既存の受渡しを行う。受取人本人を記録室へ移動させず、マオをmailへ先回りさせない。4結末、friendship、lied、旧保存と既存旅程を保持する。
+
+- 接続済み `q169_mao`：騎士マオ。既存person maoへ呼称表示を接続済み。entry・report・laterで表示し、受取人宅や記録室へ同行させない。
+- 接続済み `q169_recipient`：旅仲間の受取人。recipient・friendshipの現在の話者として専用entity recipientPersonと呼称表示を接続済み。既存messengerとは別人物として扱う。
+
+#### entry
+
+場所: 施設 `royal_sender`。判定: 人物の出演根拠あり。出演役: `q169_mao`。
+
+本文の根拠: マオは旅の約束の指輪を預けた。
+
+依頼人マオ本人が指輪を預ける現在の場面。deliverの出発時にringだけがmaoからpartyへ移り、マオは自宅に残る。
+
+描き分け候補: マオの家で指輪を預かる場面。受取人や後日の手紙を先取りしない。
+
+#### recipient
+
+場所: 施設 `royal_recipient`。判定: 人物の出演根拠あり。出演役: `q169_recipient`。
+
+本文の根拠: 相手は別の暮らしを選んでいた。
+
+旅仲間の現在の家で受取人本人が拒否を伝える。messengerは手紙運搬用の別personであり、この話者として同定しない。
+
+描き分け候補: 受取人本人との面会。指輪はpartyが保持したまま、受領済みにはしない。
+
+#### friendship
+
+場所: 施設 `royal_recipient`。判定: 人物の出演根拠あり。出演役: `q169_recipient`。
+
+本文の根拠: 本人はその言葉をマオへ届けてよいと答えた。
+
+recipientから移動せず、同じ受取人本人へ旅以外の交流を確認する場面。friendship=trueは次の帰路で記録する。
+
+描き分け候補: 同じ受取人から手紙の交流だけは望む返事を聞く。別人物を追加しない。
+
+#### report
+
+場所: 施設 `royal_sender`。判定: 人物の出演根拠あり。出演役: `q169_mao`。
+
+本文の根拠: マオは、受け取ってくれたかと聞く。
+
+探索隊だけが受取人宅からマオの家へ戻り、本人へ結果を報告する。受取人やmessengerは同行しない。
+
+描き分け候補: マオへ拒否または交流の返事を報告する場面。指輪の返却は選択後まで確定しない。
+
+#### later
+
+場所: 施設 `royal_sender`。判定: 人物の出演根拠あり。出演役: `q169_mao`。
+
+本文の根拠: マオがあなたを呼んだ。
+
+嘘の報告後、手紙をマオへ届けて自宅へ戻った場面。マオ本人が説明を求め、指輪はadmitを選ぶまでpartyが保持する。
+
+描き分け候補: 後日の手紙を受け取ったマオとの再対面。受取人本人やmessengerを自宅へ同行させない。
+
+#### mail
+
+場所: 施設 `royal_archive`。判定: 特定人物の同席根拠なし。
+
+本文の根拠: 後日、記録室に受取人からの手紙が届いていた。
+
+手紙の物理保持者messengerはpostへ移動しているが、本文は人物としての発言・待機・手渡しを描かない。記録室の係員やmessengerを固定出演へ追加しない。
+
+描き分け候補: 記録室に届いた手紙を受け取る場面。運搬役の人物像は固定せず、手紙の所在だけを示す。
+
+次の作業: q169のmaoとrecipientPersonへ呼称表示を接続した。messengerは手紙運搬の保持者として分離し、次はq170のセフの同行を監査する。
+
+### q170 別れるための冒険
+
+依頼人: 旅仲間セフ。[配布JSON](../../data/scenario-editions/e2/q170.json) ／ [現場接続の原稿](../../authoring/editions/e2/oddland/sunken-second.mjs)。
+
+依頼人は旅仲間セフで、既存person sef。港から湖岸、島の野営地、帰路、補給店、各別れの港まで全経路で本文またはjourneyのcompanionsにセフが明示される。
+
+campとroleは同じ島の野営地で、セフ本人が帰郷・休暇・一便だけの役割を話す。本人の決めた店継承を人物表示のために撤回させず、roleは無期限残留ではない。
+
+entry→shore→camp、camp／role→ashore_*→farewell_*、ashore_role→cargo→farewell_roleはすべて既存の実移動でセフを伴う。表示のために別の同行状態や戦闘加入を追加しない。
+
+potは島の古い鍋、cargoは補給店の一便の荷でitem。人物画へ固定せず、keepsakeや荷の受渡しとセフ本人の表示を分ける。
+
+send・holiday・roleの3結末、cargoの受渡し、既存の出発日と旧保存を保持する。将来の店や再会を現在の場面へ先取りせず、セフ以外の店員・船頭・港の人を本文から追加しない。
+
+- 接続済み `q170_sef`：旅仲間セフ。既存person sefへ呼称表示を接続済み。全11場面で既存の実同行・所在に従って表示し、戦闘隊員や将来の店主状態を追加しない。
+
+#### camp
+
+場所: `e2_royal_island` (9,5)。判定: 人物の出演根拠あり。出演役: `q170_sef`。
+
+本文の根拠: セフは故郷で店を継ぐと決めていた。
+
+shore_islandでpartyとsefが野営地へ実到着した後の現在の会話。古い鍋potはitemで、セフの決断と別に扱う。
+
+描き分け候補: 島の野営地で古い鍋を前にセフが帰郷を告げる場面。将来の店は描かない。
+
+#### role
+
+場所: `e2_royal_island` (9,5)。判定: 人物の出演根拠あり。出演役: `q170_sef`。
+
+本文の根拠: セフは無期限には残れないが、開店前の一便だけ補給を手伝えると言う。
+
+campから移動せず同じ野営地で本人の条件を確認する。残留へ変更せず、一便と出発日の合意だけを扱う。
+
+描き分け候補: 同じ野営地で一便だけの役割を相談するセフ。
+
+#### entry
+
+場所: 施設 `royal_harbor`。判定: 人物の出演根拠あり。出演役: `q170_sef`。
+
+本文の根拠: セフと湖の島を調べに行く約束をした。
+
+港の出発場面でセフ本人が同行者。次のentry_lakeでpartyとsefが湖岸へ実移動する。
+
+描き分け候補: 港で島行きを約束したセフ。別れの結末はまだ先。
+
+#### shore
+
+場所: `e2_royal_lakeshore` (13,7)。判定: 人物の出演根拠あり。出演役: `q170_sef`。
+
+本文の根拠: 湖の渡し場へ着いた。
+
+entry_lakeのjourneyがsefをcompanionsとして湖岸へ実到着させる。shore_islandでもそのままセフと島へ向かう。
+
+描き分け候補: 湖の渡し場で島へ向かうセフ。船頭など未指定の人物は追加しない。
+
+#### ashore_send
+
+場所: `e2_royal_lakeshore` (13,7)。判定: 人物の出演根拠あり。出演役: `q170_sef`。
+
+本文の根拠: セフと渡し舟で湖岸へ戻った。
+
+send経路でcampまたはroleからsefと実帰着した湖岸。次の旅程もセフと港へ戻る。
+
+描き分け候補: 帰郷を選んだ後の湖岸。セフ本人の同行だけを表示する。
+
+#### farewell_send
+
+場所: 施設 `royal_harbor`。判定: 人物の出演根拠あり。出演役: `q170_sef`。
+
+本文の根拠: セフと港へ戻った。
+
+ashore_send_continueでpartyとsefが港へ実帰着した別れの場面。finishでsend結末を確定する。
+
+描き分け候補: 港で本人の決めた別れ方で送り出す直前のセフ。
+
+#### ashore_holiday
+
+場所: `e2_royal_lakeshore` (13,7)。判定: 人物の出演根拠あり。出演役: `q170_sef`。
+
+本文の根拠: セフと渡し舟で湖岸へ戻った。
+
+holiday経路でcampからsefと実帰着した湖岸。次の旅程もセフと港へ戻る。
+
+描き分け候補: 休暇と再会条件を選んだ後の湖岸。
+
+#### farewell_holiday
+
+場所: 施設 `royal_harbor`。判定: 人物の出演根拠あり。出演役: `q170_sef`。
+
+本文の根拠: セフと港へ戻った。
+
+ashore_holiday_continueでpartyとsefが港へ実帰着した。finishでholiday結末を確定する。
+
+描き分け候補: 港で休暇へ送り出す直前のセフ。
+
+#### ashore_role
+
+場所: `e2_royal_lakeshore` (13,7)。判定: 人物の出演根拠あり。出演役: `q170_sef`。
+
+本文の根拠: セフと渡し舟で湖岸へ戻った。
+
+一便だけの役割に合意した後、partyとsefが湖岸へ実帰着する。次は補給店へ二人で向かう。
+
+描き分け候補: 補給店へ向かう前の湖岸。セフの出発日はまだ維持されている。
+
+#### farewell_role
+
+場所: 施設 `royal_harbor`。判定: 人物の出演根拠あり。出演役: `q170_sef`。
+
+本文の根拠: セフと港へ戻った。
+
+cargo_carryでpartyとsefが一便の荷を運んで港へ実帰着する。finishで荷をentryへ渡し、role結末を確定する。
+
+描き分け候補: 一便の荷を運び終えた港のセフ。荷の受渡しと人物画を分ける。
+
+#### cargo
+
+場所: 施設 `oddland_village_supply`。判定: 人物の出演根拠あり。出演役: `q170_sef`。
+
+本文の根拠: セフと約束した一便の補給を受け取る。
+
+ashore_role_continueでpartyとsefが補給店へ実到着する。cargoはこの場面から出発するときpartyへ移るitem。
+
+描き分け候補: 補給店で一便の荷を受け取るセフ。店員など未指定の人物は追加しない。
+
+次の作業: q170の既存sefへ全11場面の呼称表示を接続した。湖岸・島・補給店・3結末を保持し、次はq171のダイ・妻・家族を監査する。
+
+### q171 足音を持ち帰る
+
+依頼人: 靴職人ダイの妻。[配布JSON](../../data/scenario-editions/e2/q171.json) ／ [現場接続の原稿](../../authoring/editions/e2/salome/machine-second.mjs)。
+
+依頼人は靴職人ダイの妻。現行storyには夫のdaiと家族group familyがあり、妻個人のpersonはない。妻をfamilyとは別の候補役として精読するが、避難場面で妻と家族を二重表示しない。familyは妻を含む世帯集団として扱う。
+
+ダイはhomeを初期位置とし、onsite_begin以降は既存journeyのcompanionsとして境界・境界標・靴店・試験路・封じの輪・機関廟入口・家・避難先を移動する。人物表示のために同行やtimeを追加しない。
+
+entryの相談者は依頼人である妻。onsite・loop_home・return_home・defendedでは夫婦関係または妻の現在動作が本文・元原稿から確認できる。妻の氏名・容貌・職業は追加しない。
+
+defense・collect_family・evacuatedは家族の避難を現在の行為として扱うため、既存group familyを候補とする。wife候補とfamilyを同じ場面へ重ねず、家族集団の中に妻も含むものとして扱う。
+
+onsiteの『境界守が警告した』は元原稿の主要人物・同行者ではなく、三回で追跡者が道を覚える規則の説明元である。境界守を固定出演へ追加しない。靴店の店員、維持当番、下宿屋の人物も本文から追加しない。
+
+追跡者は怪異・戦闘対象で、会話用の固定人物画とは分ける。time、rule、ward、sealed、detached、defended、evacuated、4結末と20Gの支払いを人物表示のために変更しない。
+
+- 接続済み `q171_dai`：靴職人ダイ。既存person daiへ呼称表示を接続済み。entry以外の14場面で既存の所在・実同行に従って表示する。
+- 制作候補 `q171_wife`：ダイの妻。依頼人と戸口の妻を同一人物として扱う候補。entry・onsite・loop_home・return_home・defendedで表示し、避難時はfamily集団と重複させない。
+- 接続済み `q171_family`：ダイの家族。既存group familyへ呼称表示を接続済み。defense・collect_family・evacuatedで妻を含む家族集団として表示する。
+
+#### entry
+
+場所: `region_8_f1` (3,1)。判定: 人物の出演根拠あり。出演役: `q171_wife`。
+
+本文の根拠: ダイの帰宅路に続く足音の相談を受けた。
+
+依頼人欄が靴職人ダイの妻で、現場受付でその相談を受ける。ダイ本人はhomeにいて、次に家の外で訪ねる。
+
+描き分け候補: 機関廟の作業口で相談する妻。ダイや追跡者を受付へ先回りさせない。
+
+#### watch
+
+場所: `e2_salome_outskirts` (3,3)。判定: 人物の出演根拠あり。出演役: `q171_dai`。
+
+本文の根拠: 帰宅路を教えないよう家の外に留まる。
+
+onsite_beginでpartyとdaiがboundaryへ実移動した後の調査拠点。妻とfamilyはhomeに残る。
+
+描き分け候補: 家から離れた境界でダイと調査する。追跡者はtimeが3に達した条件で現れる戦闘対象として分ける。
+
+#### onsite
+
+場所: 施設 `machine_home`。判定: 人物の出演根拠あり。出演役: `q171_dai`、`q171_wife`。
+
+本文の根拠: 職人が眠ると、足音だけが昼間の道を再現した。
+
+entry_visitでpartyだけがhomeへ到着し、daiとfamilyは初期位置homeにいる。元原稿では妻が家へ入れない理由を抱え、夫婦の対立を家の外で確認する場面。境界守の警告は説明元で、現在同席者として追加しない。
+
+描き分け候補: 戸口の外でダイと妻、濡れた足跡を確認する。境界守は表示しない。
+
+#### rule_done
+
+場所: `e2_salome_outskirts` (7,1)。判定: 人物の出演根拠あり。出演役: `q171_dai`。
+
+本文の根拠: 境界標で、閉じた輪を歩かせる規則を確認した。
+
+watch_ruleでpartyとdaiがrule_placeへ実移動する。規則の確認者として別の境界守を固定出演へ追加しない。
+
+描き分け候補: 境界標でダイと規則を確認する。
+
+#### ward_done
+
+場所: 施設 `machine_shoes`。判定: 人物の出演根拠あり。出演役: `q171_dai`。
+
+本文の根拠: 輪を封じる護符を受け取った。
+
+watch_ward_ready_continueでpartyとdaiが靴店へ実到着し、wardPaperを受け取る。店員は名指しされていない。
+
+描き分け候補: 靴店でダイと護符を受け取る。20G支払い済みと人物表示を分ける。
+
+#### wait_done
+
+場所: `e2_salome_outskirts` (7,5)。判定: 人物の出演根拠あり。出演役: `q171_dai`。
+
+本文の根拠: 帰宅路を避けて一巡歩き、足音の追従を観察した。
+
+watch_waitでpartyとdaiがtest_placeへ実移動する。妻とfamilyはhomeに残る。
+
+描き分け候補: 歩行試験路でダイと追跡を観察する。
+
+#### ring
+
+場所: `e2_salome_outskirts` (13,3)。判定: 人物の出演根拠あり。出演役: `q171_dai`。
+
+本文の根拠: 規則どおりの輪へ足音を導き、護符で封じた。
+
+watch_loopでpartyとdaiがringへ実移動する。維持当番は本文で特定人物として示されない。
+
+描き分け候補: 封じの輪でダイと足音を誘導する。追跡者の人型を固定しない。
+
+#### loop_home
+
+場所: 施設 `machine_home`。判定: 人物の出演根拠あり。出演役: `q171_dai`、`q171_wife`。
+
+本文の根拠: 夫婦の話は別にやり直す。
+
+ring_homeでpartyとdaiがhomeへ実帰着し、妻を含むfamilyはhomeに残っている。本文が夫婦を明示するため妻個人を候補にする。
+
+描き分け候補: 封印後の戸口でダイと妻。怪異解決と夫婦の話合いを別に扱う。
+
+#### returned
+
+場所: `region_8_f1` (1,1)。判定: 人物の出演根拠あり。出演役: `q171_dai`。
+
+本文の根拠: 機関廟へ続く道を歩き、足音を切り離した。
+
+watch_returnでpartyとdaiがreturn_pathへ実移動する。妻とfamilyはhomeに残る。
+
+描き分け候補: 機関廟入口でダイと足音を切り離す。
+
+#### return_home
+
+場所: 施設 `machine_home`。判定: 人物の出演根拠あり。出演役: `q171_dai`、`q171_wife`。
+
+本文の根拠: 一人分の音を聞いた妻が、戸を開けた。
+
+returned_homeでpartyとdaiがhomeへ実帰着する。妻の現在動作が明示され、夫婦が戸口で対面する。
+
+描き分け候補: 一人分の足音を確認して妻が戸を開ける。
+
+#### defense
+
+場所: 施設 `machine_home`。判定: 人物の出演根拠あり。出演役: `q171_dai`、`q171_family`。
+
+本文の根拠: 家族の避難路を残して迎える。
+
+watch_fightでpartyとdaiがhomeへ戻り、familyはhomeにいる。妻をfamilyと重複表示せず、家族集団として扱う。
+
+描き分け候補: 家の外でダイと家族を守る場面。追跡者は戦闘対象として別に扱う。
+
+#### defended
+
+場所: 施設 `machine_home`。判定: 人物の出演根拠あり。出演役: `q171_dai`、`q171_wife`。
+
+本文の根拠: ダイが妻へ戸口の外で言い直した。
+
+defenseの戦闘勝利後も所在はhome。本文がダイと妻の現在のやり取りを明示する。
+
+描き分け候補: 防衛後、戸口の外で妻へ言い直すダイ。
+
+#### collect_family
+
+場所: 施設 `machine_home`。判定: 人物の出演根拠あり。出演役: `q171_dai`、`q171_family`。
+
+本文の根拠: 家族に脅威と退避先を伝え、必要な荷だけを持つ。
+
+watch_leaveでpartyとdaiがhomeへ戻り、familyへ避難を伝える。妻個人を別表示せず家族集団に含める。
+
+描き分け候補: 戸口でダイと家族が避難準備をする。
+
+#### evacuated
+
+場所: 施設 `salome_inn`。判定: 人物の出演根拠あり。出演役: `q171_dai`、`q171_family`。
+
+本文の根拠: 家族の到着を確認した。
+
+defense_evacuateまたはcollect_family_escortでparty・dai・familyがrefugeへ実到着する。
+
+描き分け候補: 下宿屋へ到着したダイと家族。下宿屋の人物は追加しない。
+
+#### watch_ward_ready
+
+場所: `e2_salome_outskirts` (3,3)。判定: 人物の出演根拠あり。出演役: `q171_dai`。
+
+本文の根拠: 必要な道具を使って準備を整えた。
+
+watch_wardは所在を変えず、partyとdaiはboundaryに残る。次のcontinueで二人が靴店へ向かう。
+
+描き分け候補: 境界でダイと護符受取の準備をする。
+
+次の作業: q171のdaiとfamilyへ呼称表示を接続した。妻個人はfamilyとの所在重複を避けて候補のまま残し、次はq172のルイ・母・井戸の主を監査する。
+
+### q172 名前を返す井戸
+
+依頼人: 織工ルイ。[配布JSON](../../data/scenario-editions/e2/q172.json) ／ [現場接続の原稿](../../authoring/editions/e2/salome/machine-second.mjs)。
+
+依頼人は織工ルイで、既存person lui。luiAtの初期位置はworkshopであり、entryの相談受付には本人を自動配置しない。onsiteから井戸へ同行した後は、選んだ経路に従って工房・母の家・水源窓口へ実移動する。
+
+母はmother_heardとrestoredで現在の話者として明示されるため、専用person motherPersonを母の家に固定して接続した。氏名・容貌・家族構成は追加しない。市場の出品記録を確認するmarket_heardには店員や記録係を追加しない。
+
+井戸の主は元原稿で取引を曲解した主体で、wellの現在の交渉相手。井戸そのものの背景・怪異と会話役を区別し、sealで戦った後のwell_seal_readyへ居残り表示しない。
+
+二つの名は状態・呼称であり別人物ではない。old・chosen・memoriesReturned・nameConfirmed・newNameChosen・motherInformed・wellSealed・waterArrangedと3結末を人物表示のために変更しない。
+
+seal経路の戦闘対象と井戸の主は同じ物語上の脅威として扱える候補だが、固定の人型・性別・容貌は決めない。代替水源の窓口にも未指定の係員を追加しない。
+
+- 接続済み `q172_lui`：織工ルイ。既存person luiへ呼称表示を接続済み。onsite・well・restored_confirm・restored・named・water・well_seal_readyで既存の所在と同行に従って表示する。
+- 接続済み `q172_mother`：ルイの母。mother_heardとrestoredの現在の話者として専用entity motherPersonを接続済み。工房・市場・井戸へ同行させない。
+- 接続済み `q172_well_master`：井戸の主。wellの交渉相手として専用entity wellMasterの呼称表示を接続済み。封印戦の勝利後や工房・母の家へ継続表示せず、外見は固定しない。
+
+#### entry
+
+場所: `region_8_f1` (4,1)。判定: 特定人物の同席根拠なし。
+
+本文の根拠: 機関廟の相談所でルイの記憶の欠落を聞いた。
+
+luiAtはworkshopを初期位置とし、entry_visitでpartyだけが本人の工房へ向かう。依頼人欄だけからルイを相談所へ移さない。
+
+描き分け候補: 相談所で記憶欠落の依頼を受ける導入。本人の立ち絵は工房到着後から。
+
+#### well
+
+場所: `e2_salome_cemetery` (7,3)。判定: 人物の出演根拠あり。出演役: `q172_lui`、`q172_well_master`。
+
+本文の根拠: 井戸は「昔の名で呼ばれたくない」という願いを口実に、本人の記憶まで取った。
+
+onsite_wellでpartyとluiが井戸へ実到着し、元原稿の井戸の主が取引の主体として現在の交渉相手になる。
+
+描き分け候補: ルイと井戸の主の交渉。主の人型・性別・容貌は固定しない。
+
+#### onsite
+
+場所: 施設 `machine_lui`。判定: 人物の出演根拠あり。出演役: `q172_lui`。
+
+本文の根拠: 本人は成人後に別の名を選んでいた。
+
+entry_visitでpartyがworkshopへ到着し、初期位置workshopのlui本人から二つの名の手掛かりを得る。
+
+描き分け候補: 刺繍工房のルイと二種類の名の手掛かり。名を別人物として描かない。
+
+#### mother_heard
+
+場所: 施設 `machine_mother`。判定: 人物の出演根拠あり。出演役: `q172_mother`。
+
+本文の根拠: 母から昔の名と呼んでいた頃の事情を聞いた。
+
+onsite_motherではpartyだけが母の家へ移動し、luiはworkshopに残る。母本人だけを現在の話者として扱う。
+
+描き分け候補: 母の家で昔の呼び名を聞く。ルイを同行させない。
+
+#### market_heard
+
+場所: 施設 `library_market`。判定: 特定人物の同席根拠なし。
+
+本文の根拠: 作品の刺繍と出品記録を照合し、本人が選んだ名を確認した。
+
+onsite_marketではpartyだけが市場へ移動する。記録照合の場面で、店員・記録係・ルイ本人の同席は書かれていない。
+
+描き分け候補: 作品の刺繍と出品記録。人物画は追加しない。
+
+#### restored_confirm
+
+場所: 施設 `machine_lui`。判定: 人物の出演根拠あり。出演役: `q172_lui`。
+
+本文の根拠: ルイと工房へ戻り、二つの名と過去を取り戻したことを本人に確認する。
+
+well_restoreでpartyとluiがworkshopへ実帰着する。母はまだ母の家にいる。
+
+描き分け候補: 工房で記憶の返還を本人と確認する。
+
+#### restored
+
+場所: 施設 `machine_mother`。判定: 人物の出演根拠あり。出演役: `q172_lui`、`q172_mother`。
+
+本文の根拠: 母は呼び名を一度間違え、本人が望む今の名へ言い直した。
+
+restored_confirm_motherでpartyとluiが母の家へ実移動し、母と本人が現在の呼び名を確認する。
+
+描き分け候補: 母の家でルイと母が呼び名を言い直す。
+
+#### named
+
+場所: 施設 `machine_lui`。判定: 人物の出演根拠あり。出演役: `q172_lui`。
+
+本文の根拠: 本人が選んだ新しい呼び名を工房へ記した。
+
+well_newでpartyとluiがworkshopへ実帰着する。記憶の欠落は回復済みにしない。
+
+描き分け候補: 工房で本人が選んだ呼び名を記すルイ。
+
+#### water
+
+場所: 施設 `machine_registry`。判定: 人物の出演根拠あり。出演役: `q172_lui`。
+
+本文の根拠: 井戸を封じたことと記憶の未回復を窓口へ伝え、代わりの水場を手配した。
+
+well_seal_ready_continueでpartyとluiがwaterへ実到着する。窓口の係員は名指しされない。
+
+描き分け候補: 代替水源の窓口にいるルイ。未指定の係員は追加しない。
+
+#### well_seal_ready
+
+場所: `e2_salome_cemetery` (7,3)。判定: 人物の出演根拠あり。出演役: `q172_lui`。
+
+本文の根拠: 戦いに勝利し、先へ進む道が開いた。
+
+well_sealの戦闘勝利直後もluiは井戸に残る。倒した井戸の主を勝利後の固定出演として残さない。
+
+描き分け候補: 封印戦後の井戸でルイと次の移動を確認する。
+
+次の作業: q172のlui・motherPerson・wellMasterへ呼称表示を接続した。二つの名と3結末を保持し、次はq173のテラと墓守の精霊を監査する。
+
+### q173 夜だけ帰る兵士
+
+依頼人: 寡婦テラ。[配布JSON](../../data/scenario-editions/e2/q173.json) ／ [現場接続の原稿](../../authoring/editions/e2/salome/machine-second.mjs)。
+
+依頼人は寡婦テラで、既存person teraの初期位置はhome。entryは相談受付からテラの家へ向かう導入なので、依頼人欄だけでentryへテラを移さない。
+
+墓守の精霊は既存person spiritPersonで初期位置grave。夫に似た帰宅姿の観察はonsite本文にあるが、現行の所在と経路は『本人と精霊の話は別々に聞く』構造で、onsiteからpartyだけが墓地へ移動する。精霊を家へ先回りさせない。
+
+spiritではpartyが墓地にいて精霊本人と話し、テラはhomeに残る。wifeではpartyだけがhomeへ戻り、精霊はgraveに残る。guestとcopyの経路だけspiritPersonがpartyとhomeへ実移動する。
+
+part経路ではpartyだけがhomeへ戻り、精霊はgraveに残ったまま別れを伝えた結果をテラと確認する。guest_agree・copy_home・copy_laterではteraとspiritPersonが同じhomeにいる。
+
+戦死した夫本人を第三の人物entityとして追加しない。精霊が拾った記憶・夫の悪い癖・家財は人物の同一性とは分け、bothAgreed・parted・laterVisit・imitationContinuesと3結末を人物表示のために変更しない。
+
+- 制作候補 `q173_tera`：寡婦テラ。既存person teraへ接続する候補。onsite・wife・guest_agree・part_home・copy_home・copy_laterでhomeの所在に従って表示する。
+- 制作候補 `q173_spirit`：墓守の精霊。既存person spiritPersonへ接続する候補。spiritではgrave、guest_agree・copy_home・copy_laterでは実移動後のhomeに表示し、part_homeやonsiteへ先回りさせない。
+
+#### entry
+
+場所: `region_8_f1` (5,1)。判定: 特定人物の同席根拠なし。
+
+本文の根拠: 夜に帰る姿について、テラの家を訪ねる。
+
+teraAtはhome、spiritPersonAtはgraveを初期位置とし、entry_visitでpartyだけがhomeへ向かう。相談受付へ二人を自動配置しない。
+
+描き分け候補: テラの家へ向かう相談受付。夫に似た姿や精霊はまだ表示しない。
+
+#### spirit
+
+場所: `e2_salome_cemetery` (3,5)。判定: 人物の出演根拠あり。出演役: `q173_spirit`。
+
+本文の根拠: 精霊は居場所を求めていた。
+
+onsiteの二選択またはwife_returnでpartyだけがgraveへ移動し、spiritPersonは初期位置graveにいる。テラはhomeに残る。
+
+描き分け候補: 墓地で墓守の精霊本人と話す。テラを墓地へ同行させない。
+
+#### onsite
+
+場所: 施設 `machine_tera`。判定: 人物の出演根拠あり。出演役: `q173_tera`。
+
+本文の根拠: 墓守の精霊が記憶を拾っていた。
+
+entry_visitでpartyがテラの家へ到着し、teraはhomeにいる。夫に似た姿の観察は精霊の正体を示すが、spiritPersonの現在地はgraveで、次の行動でpartyだけが墓地へ向かう。
+
+描き分け候補: テラの家で本人から状況を確かめる。夫本人や精霊を同じ画面へ固定しない。
+
+#### wife
+
+場所: 施設 `machine_tera`。判定: 人物の出演根拠あり。出演役: `q173_tera`。
+
+本文の根拠: テラに帰ってくる音を失いたくない気持ちを聞いた。
+
+spirit_wifeでpartyだけがhomeへ戻り、teraはhome、spiritPersonはgraveに残る。
+
+描き分け候補: テラ本人の意思を家で聞く。客としての同意はまだ成立していない。
+
+#### guest_agree
+
+場所: 施設 `machine_tera`。判定: 人物の出演根拠あり。出演役: `q173_tera`、`q173_spirit`。
+
+本文の根拠: 精霊とテラの双方に、夫でなく客として暮らす意思を確かめた。
+
+spirit_guestでpartyとspiritPersonがhomeへ実移動し、teraはhomeにいる。双方の同意がそろった現在場面。
+
+描き分け候補: 夫の代役ではなく客として同席するテラと精霊。
+
+#### part_home
+
+場所: 施設 `machine_tera`。判定: 人物の出演根拠あり。出演役: `q173_tera`。
+
+本文の根拠: テラが自分で戸を閉じる時刻を決める。
+
+spirit_partでpartyだけがhomeへ戻り、spiritPersonはgraveに残る。精霊の別れを結果として伝え、家ではテラ本人だけを表示する。
+
+描き分け候補: 精霊を墓地に残し、家で戸を閉じる時刻を決めるテラ。
+
+#### copy_home
+
+場所: 施設 `machine_tera`。判定: 人物の出演根拠あり。出演役: `q173_tera`、`q173_spirit`。
+
+本文の根拠: 当面は夫の模倣を続ける。
+
+spirit_copyでpartyとspiritPersonがhomeへ実移動し、teraもhomeにいる。模倣継続を夫本人の復活とは扱わない。
+
+描き分け候補: 家で模倣を続ける精霊と、それを受け入れるテラ。
+
+#### copy_later
+
+場所: 施設 `machine_tera`。判定: 人物の出演根拠あり。出演役: `q173_tera`、`q173_spirit`。
+
+本文の根拠: 精霊は家具を動かす相談へ答えられなかった。
+
+copy_homeから所在を変えず後日の相談へ進むため、teraとspiritPersonはともにhomeにいる。
+
+描き分け候補: 家具を動かす変化に答えられない精霊とテラ。模倣の限界を示す。
+
+次の作業: q173のテラと墓守の精霊を精読した。次はteraとspiritPersonの実所在へ表示を接続し、夫本人を追加せず3結末を保持する。
 
 ## 全100件の集計
 
@@ -3241,7 +3839,7 @@ tested_fetchでpartyだけがotherへ移り、兄へ完了を伝える。弟はl
 
 ### 沈没城
 
-20件・141場面。cast空73場面、人物22件、character接続17件。
+20件・141場面。cast空48場面、人物23件、character接続22件。
 
 - [q061 濡れない海図](../../data/scenario-editions/e2/q061.json)：5場面、cast空4、人物0。依頼人: 航海士のナギ。精読済み。
 - [q062 王の救命胴衣](../../data/scenario-editions/e2/q062.json)：4場面、cast空2、人物0。依頼人: 潜水士のナオ。精読済み。
@@ -3260,9 +3858,9 @@ tested_fetchでpartyだけがotherへ移り、兄へ完了を伝える。弟はl
 - [q165 仲間を外す依頼](../../data/scenario-editions/e2/q165.json)：7場面、cast空0、人物2。依頼人: 商人リナ。精読済み。
 - [q166 最後の一撃を譲れ](../../data/scenario-editions/e2/q166.json)：6場面、cast空0、人物4。依頼人: 弟子戦士ルウ。精読済み。
 - [q167 軍師のいない勝利](../../data/scenario-editions/e2/q167.json)：10場面、cast空7、人物1。依頼人: 病欠した軍師ユウナの隊。精読済み。
-- [q168 ふたりでひとり分の報酬](../../data/scenario-editions/e2/q168.json)：9場面、cast空9、人物2。依頼人: 双子の術師ネムとノム。精読済み。
-- [q169 誰にも贈れない指輪](../../data/scenario-editions/e2/q169.json)：6場面、cast空6、人物2。依頼人: 騎士マオ。未精読。
-- [q170 別れるための冒険](../../data/scenario-editions/e2/q170.json)：11場面、cast空11、人物1。依頼人: 旅仲間セフ。未精読。
+- [q168 ふたりでひとり分の報酬](../../data/scenario-editions/e2/q168.json)：9場面、cast空0、人物2。依頼人: 双子の術師ネムとノム。精読済み。
+- [q169 誰にも贈れない指輪](../../data/scenario-editions/e2/q169.json)：6場面、cast空1、人物3。依頼人: 騎士マオ。精読済み。
+- [q170 別れるための冒険](../../data/scenario-editions/e2/q170.json)：11場面、cast空0、人物1。依頼人: 旅仲間セフ。精読済み。
 
 ### 地下観測所
 
@@ -3316,7 +3914,7 @@ tested_fetchでpartyだけがotherへ移り、兄へ完了を伝える。弟はl
 
 ### 機関廟
 
-20件・163場面。cast空163場面、人物14件、character接続0件。
+20件・163場面。cast空141場面、人物16件、character接続4件。
 
 - [q071 止まれない門番](../../data/scenario-editions/e2/q071.json)：7場面、cast空7、人物1。依頼人: 整備士のフウ。未精読。
 - [q072 油の洗礼](../../data/scenario-editions/e2/q072.json)：5場面、cast空5、人物0。依頼人: 機関司祭のイオ。未精読。
@@ -3328,9 +3926,9 @@ tested_fetchでpartyだけがotherへ移り、兄へ完了を伝える。弟はl
 - [q078 部品の記憶](../../data/scenario-editions/e2/q078.json)：5場面、cast空5、人物1。依頼人: 義肢職人のリン。未精読。
 - [q079 九十九回の再起動](../../data/scenario-editions/e2/q079.json)：5場面、cast空5、人物0。依頼人: 鐘番のユア。未精読。
 - [q080 鉄胎の継承](../../data/scenario-editions/e2/q080.json)：7場面、cast空7、人物0。依頼人: 修繕組合のセリ。未精読。
-- [q171 足音を持ち帰る](../../data/scenario-editions/e2/q171.json)：15場面、cast空15、人物1。依頼人: 靴職人ダイの妻。未精読。
-- [q172 名前を返す井戸](../../data/scenario-editions/e2/q172.json)：10場面、cast空10、人物1。依頼人: 織工ルイ。未精読。
-- [q173 夜だけ帰る兵士](../../data/scenario-editions/e2/q173.json)：8場面、cast空8、人物2。依頼人: 寡婦テラ。未精読。
+- [q171 足音を持ち帰る](../../data/scenario-editions/e2/q171.json)：15場面、cast空1、人物1。依頼人: 靴職人ダイの妻。精読済み。
+- [q172 名前を返す井戸](../../data/scenario-editions/e2/q172.json)：10場面、cast空2、人物3。依頼人: 織工ルイ。精読済み。
+- [q173 夜だけ帰る兵士](../../data/scenario-editions/e2/q173.json)：8場面、cast空8、人物2。依頼人: 寡婦テラ。精読済み。
 - [q174 泣かない葬列](../../data/scenario-editions/e2/q174.json)：6場面、cast空6、人物1。依頼人: 村長。未精読。
 - [q175 狩人を待つ獣](../../data/scenario-editions/e2/q175.json)：10場面、cast空10、人物2。依頼人: 猟師ミロの妹。未精読。
 - [q176 神様の忘れ物](../../data/scenario-editions/e2/q176.json)：8場面、cast空8、人物1。依頼人: 小さな街道神。未精読。

@@ -40,6 +40,11 @@ export function compileSunkenSecondQuest(first){
   // The vice-captain stays at the camp. Scouting, battle and reports do not move this role.
   quest.story.registry.viceCaptainAt.values=['entry'];
  }
+ if(first.number===169){
+  // Mao remains at home; the recipient remains at their own house. The messenger is a separate carrier.
+  quest.story.registry.maoAt.values=['entry'];
+  quest.story.registry.recipientPersonAt.values=['recipient'];
+ }
  if(first.number===161){
   const previous=compileRelocatedQuest(first,sunkenSecondSource(first,{cast:false}),options).story;
   // Ine stays at the clinic and cannot acquire the patient's recording device.

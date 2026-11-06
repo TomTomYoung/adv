@@ -6,7 +6,7 @@ import {auditRelocatedCast,loadRelocatedCastQuests,relocatedCastFingerprint} fro
 const quests=await loadRelocatedCastQuests();
 test('cast audit distinguishes measured empty casts, reviewed scenes and candidate roles',()=>{
  const report=auditRelocatedCast(quests);
- assert.deepEqual(report.summary,{quests:100,scenes:753,emptyCastScenes:605,personEntities:120,characterLinkedEntities:51,reviewedQuests:38,reviewedScenes:246,noPersonEvidenceScenes:89,personEvidenceScenes:157,candidateRoles:2,connectedRoles:71,unreviewedScenes:507});
+ assert.deepEqual(report.summary,{quests:100,scenes:753,emptyCastScenes:558,personEntities:123,characterLinkedEntities:60,reviewedQuests:43,reviewedScenes:296,noPersonEvidenceScenes:93,personEvidenceScenes:203,candidateRoles:3,connectedRoles:81,unreviewedScenes:457});
  assert.ok(report.regions.every(r=>r.quests===20));
  assert.equal(report.quests.find(q=>q.id==='q071').scenes[0].review,null);
  assert.deepEqual(report.quests.find(q=>q.id==='q032').scenes.filter(s=>s.review.people.length).map(s=>s.id),['cell','workshop']);
@@ -44,15 +44,77 @@ test('cast audit distinguishes measured empty casts, reviewed scenes and candida
   captured:[],evacuate:['viceCaptain','refugees'],safe:['refugees'],ridge_battle_ready:[]
  });
  const twins=report.quests.find(q=>q.id==='q168');
- assert.deepEqual(Object.fromEntries(Object.entries(twins.review.people).map(([id,role])=>[id,role.status])),{
-  q168_brother:'candidate',q168_younger:'candidate'
+ assert.deepEqual(Object.fromEntries(Object.entries(twins.review.people).map(([id,role])=>[id,{status:role.status,entity:role.entity}])),{
+  q168_brother:{status:'connected',entity:'brother'},q168_younger:{status:'connected',entity:'younger'}
  });
  assert.deepEqual(Object.fromEntries(twins.scenes.map(s=>[s.id,s.review.people])),{
   entry:['q168_brother','q168_younger'],separated:['q168_younger'],adjust:['q168_brother','q168_younger'],
   invoice:['q168_brother','q168_younger'],fetch_brother:['q168_brother'],gather:['q168_brother','q168_younger'],
   test_both:['q168_brother','q168_younger'],tested:['q168_brother','q168_younger'],fetch_invoice:['q168_brother']
  });
- assert.ok(twins.scenes.every(s=>s.cast.length===0),'q168 review does not implement cast yet');
+ assert.deepEqual(Object.fromEntries(twins.scenes.map(s=>[s.id,s.cast.map(c=>c.entity)])),{
+  entry:['brother','younger'],separated:['younger'],adjust:['brother','younger'],invoice:['brother','younger'],
+  fetch_brother:['brother'],gather:['brother','younger'],test_both:['brother','younger'],
+  tested:['brother','younger'],fetch_invoice:['brother']
+ });
+ const ring=report.quests.find(q=>q.id==='q169');
+ assert.deepEqual(Object.fromEntries(Object.entries(ring.review.people).map(([id,role])=>[id,{status:role.status,entity:role.entity}])),{
+  q169_mao:{status:'connected',entity:'mao'},q169_recipient:{status:'connected',entity:'recipientPerson'}
+ });
+ assert.deepEqual(Object.fromEntries(ring.scenes.map(s=>[s.id,s.review.people])),{
+  entry:['q169_mao'],recipient:['q169_recipient'],friendship:['q169_recipient'],
+  report:['q169_mao'],later:['q169_mao'],mail:[]
+ });
+ assert.deepEqual(Object.fromEntries(ring.scenes.map(s=>[s.id,s.cast.map(c=>c.entity)])),{
+  entry:['mao'],recipient:['recipientPerson'],friendship:['recipientPerson'],report:['mao'],later:['mao'],mail:[]
+ });
+ const farewell=report.quests.find(q=>q.id==='q170');
+ assert.deepEqual(Object.fromEntries(Object.entries(farewell.review.people).map(([id,role])=>[id,{status:role.status,entity:role.entity}])),{
+  q170_sef:{status:'connected',entity:'sef'}
+ });
+ assert.ok(farewell.scenes.every(s=>s.review.people.length===1&&s.review.people[0]==='q170_sef'));
+ assert.ok(farewell.scenes.every(s=>s.cast.length===1&&s.cast[0].entity==='sef'));
+ const footsteps=report.quests.find(q=>q.id==='q171');
+ assert.deepEqual(Object.fromEntries(Object.entries(footsteps.review.people).map(([id,role])=>[id,{status:role.status,entity:role.entity}])),{
+  q171_dai:{status:'connected',entity:'dai'},q171_wife:{status:'candidate',entity:undefined},
+  q171_family:{status:'connected',entity:'family'}
+ });
+ assert.deepEqual(Object.fromEntries(footsteps.scenes.map(s=>[s.id,s.review.people])),{
+  entry:['q171_wife'],watch:['q171_dai'],onsite:['q171_dai','q171_wife'],rule_done:['q171_dai'],
+  ward_done:['q171_dai'],wait_done:['q171_dai'],ring:['q171_dai'],loop_home:['q171_dai','q171_wife'],
+  returned:['q171_dai'],return_home:['q171_dai','q171_wife'],defense:['q171_dai','q171_family'],
+  defended:['q171_dai','q171_wife'],collect_family:['q171_dai','q171_family'],
+  evacuated:['q171_dai','q171_family'],watch_ward_ready:['q171_dai']
+ });
+ assert.deepEqual(Object.fromEntries(footsteps.scenes.map(s=>[s.id,s.cast.map(c=>c.entity)])),{
+  entry:[],watch:['dai'],onsite:['dai'],rule_done:['dai'],ward_done:['dai'],wait_done:['dai'],ring:['dai'],
+  loop_home:['dai'],returned:['dai'],return_home:['dai'],defense:['dai','family'],defended:['dai'],
+  collect_family:['dai','family'],evacuated:['dai','family'],watch_ward_ready:['dai']
+ });
+ const names=report.quests.find(q=>q.id==='q172');
+ assert.deepEqual(Object.fromEntries(Object.entries(names.review.people).map(([id,role])=>[id,{status:role.status,entity:role.entity}])),{
+  q172_lui:{status:'connected',entity:'lui'},q172_mother:{status:'connected',entity:'motherPerson'},
+  q172_well_master:{status:'connected',entity:'wellMaster'}
+ });
+ assert.deepEqual(Object.fromEntries(names.scenes.map(s=>[s.id,s.review.people])),{
+  entry:[],well:['q172_lui','q172_well_master'],onsite:['q172_lui'],mother_heard:['q172_mother'],
+  market_heard:[],restored_confirm:['q172_lui'],restored:['q172_lui','q172_mother'],
+  named:['q172_lui'],water:['q172_lui'],well_seal_ready:['q172_lui']
+ });
+ assert.deepEqual(Object.fromEntries(names.scenes.map(s=>[s.id,s.cast.map(c=>c.entity)])),{
+  entry:[],well:['lui','wellMaster'],onsite:['lui'],mother_heard:['motherPerson'],market_heard:[],
+  restored_confirm:['lui'],restored:['lui','motherPerson'],named:['lui'],water:['lui'],well_seal_ready:['lui']
+ });
+ const soldier=report.quests.find(q=>q.id==='q173');
+ assert.deepEqual(Object.fromEntries(Object.entries(soldier.review.people).map(([id,role])=>[id,role.status])),{
+  q173_tera:'candidate',q173_spirit:'candidate'
+ });
+ assert.deepEqual(Object.fromEntries(soldier.scenes.map(s=>[s.id,s.review.people])),{
+  entry:[],spirit:['q173_spirit'],onsite:['q173_tera'],wife:['q173_tera'],
+  guest_agree:['q173_tera','q173_spirit'],part_home:['q173_tera'],
+  copy_home:['q173_tera','q173_spirit'],copy_later:['q173_tera','q173_spirit']
+ });
+ assert.ok(soldier.scenes.every(s=>s.cast.length===0),'q173 review does not implement cast yet');
 });
 
 test('a change to reviewed prose or location cannot silently retain the review',()=>{
@@ -88,9 +150,9 @@ test('future character and cast hookups change measured counts without marking u
  const changed=structuredClone(quests),q=changed.find(q=>q.id==='q071'),entity=Object.values(q.story.entities).find(e=>e.kind==='person');
  entity.character='future_owner';Object.values(q.story.scenes)[0].cast=[{entity:'workerPerson'}];
  const report=auditRelocatedCast(changed);
- assert.equal(report.summary.emptyCastScenes,604);
- assert.equal(report.summary.characterLinkedEntities,52);
- assert.equal(report.summary.reviewedScenes,246);
+ assert.equal(report.summary.emptyCastScenes,557);
+ assert.equal(report.summary.characterLinkedEntities,61);
+ assert.equal(report.summary.reviewedScenes,296);
  assert.equal(report.quests.find(q=>q.id==='q071').review,null);
 });
 

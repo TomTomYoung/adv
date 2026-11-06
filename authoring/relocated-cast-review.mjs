@@ -2864,24 +2864,26 @@ export const RELOCATED_CAST_REVIEW={
   "next": "q167の副隊長と既存refugeesの呼称表示を陣地・高台へ接続した。偵察・戦闘・報告へユウナを置かず、次はq168の双子の所在と出演を監査する。"
 },
   q168:{
-  "sourceSha256": "beef73ac8f457e2c4e911413548e7cda61d6bd29b40c1958384ec37bb8ee1706",
+  "sourceSha256": "59cea045c3de47d26b8796dc6aa62d3da538057e2b56c151500928c4f9d9d9ce",
   "identityNotes": [
     "依頼人は双子の術師ネムとノム。現行本文と物語状態は兄をbrother、弟をyoungerとして区別するが、ネム／ノムのどちらが兄か弟かは対応付けていない。名前を推測で割り当てず、監査と表示は『双子の兄』『双子の弟』で扱う。",
     "entryでは兄弟とも工房にいる。pair経路では魔力灯へ到着後に兄だけ別棟へ移り、roles経路では二人とも魔力灯に残る。弟は魔力灯側に残り、兄の現在地はbrotherAtがlampかotherかで分岐する。",
     "separatedは弟だけ、fetch_brotherとfetch_invoiceは別棟の兄だけが現在の相手。test_bothとinvoiceでは二人が実際に合流済み。adjust・gather・testedは弟が現在地におり、兄はbrotherAtがlampの経路だけ同席する条件付き場面として扱う。",
     "testedの『請求書の相談には二人とも立ち会う』やfetch_invoiceの『弟と合流し』は次の合流・移動を含む文脈で、兄弟を所在状態より早く同じ場所へ置く根拠にはしない。実移動は既存journeyに従う。",
-    "billはitemであり人物表示とは分ける。solo、repaired、3結末、料金の選択、兄の別棟往復、既存の旅程と旧保存を人物表示のために変更しない。双子の個別画像はまだ接続せず、本文にない容貌・衣装も追加しない。"
+    "billはitemであり人物表示とは分ける。solo、repaired、3結末、料金の選択、兄の別棟往復、既存の旅程と旧保存を人物表示のために変更しない。双子は呼称表示だけを接続し、本文にない容貌・衣装や個別画像は追加しない。"
   ],
   "people": {
     "q168_brother": {
       "label": "双子の兄",
-      "status": "candidate",
-      "need": "既存person brotherへ接続する候補。entry・invoice・fetch_brother・test_both・fetch_invoiceでは現在所在に従い、adjust・gather・testedはbrotherAtがlampのときだけ表示する。"
+      "status": "connected",
+      "entity": "brother",
+      "need": "既存person brotherへ呼称表示を接続済み。entry・invoice・fetch_brother・test_both・fetch_invoiceでは現在所在に従い、adjust・gather・testedはbrotherAtがlampのときだけ表示する。"
     },
     "q168_younger": {
       "label": "双子の弟",
-      "status": "candidate",
-      "need": "既存person youngerへ接続する候補。entryと魔力灯側の各場面、invoiceで表示し、兄を迎えに行く別棟のfetch_brother／fetch_invoiceには同行させない。"
+      "status": "connected",
+      "entity": "younger",
+      "need": "既存person youngerへ呼称表示を接続済み。entryと魔力灯側の各場面、invoiceで表示し、兄を迎えに行く別棟のfetch_brother／fetch_invoiceには同行させない。"
     }
   },
   "scenes": {
@@ -2949,7 +2951,496 @@ export const RELOCATED_CAST_REVIEW={
       "visual": "別棟で兄へ修理完了を伝える場面。弟はまだ魔力灯にいるため表示しない。"
     }
   },
-  "next": "q168の双子を精読した。兄弟の名前対応は保留し、次はbrother／youngerの所在条件付き表示を接続してq169を監査する。"
+  "next": "q168のbrother／youngerへ所在条件付きの呼称表示を接続した。兄弟の名前対応は保留し、次はq169のマオ・受取人と手紙の運搬役を監査する。"
+},
+  q169:{
+  "sourceSha256": "3f1b178a105a0634590d08734b193707501a3e5bedd7d3c4f8d2845fdf1209c0",
+  "identityNotes": [
+    "依頼人は騎士マオで、既存person mao。entryで指輪を預け、reportとlaterで探索隊の返事を受け取る現在の相手として本文に出る。指輪ringの所持と人物の在席は分ける。",
+    "受取人はマオの旧友で、recipientとfriendshipの現在の話者。専用person recipientPersonを追加し、messengerを受取人本人として流用しない。受取人の氏名・性別・容貌・現在の同居相手は本文から追加しない。",
+    "messengerは受取人の手紙をrecipientからpostへ運ぶための既存person保持者。mail本文は『記録室に受取人からの手紙が届いていた』としか書かず、messenger本人の発言・待機・受渡し動作を現在の出演として確定しない。手紙の物理保持者と画面出演を分ける。",
+    "reportでは指輪をまだpartyが保持し、honest／softの選択時にmaoへ返す。lieでは指輪を隠したまま手紙の経路へ進む。laterのadmitで返すまで、人物表示のためにringHeldやringAtを変更しない。",
+    "後日の手紙letterはrecipient→messenger→party→maoと既存の受渡しを行う。受取人本人を記録室へ移動させず、マオをmailへ先回りさせない。4結末、friendship、lied、旧保存と既存旅程を保持する。"
+  ],
+  "people": {
+    "q169_mao": {
+      "label": "騎士マオ",
+      "status": "connected",
+      "entity": "mao",
+      "need": "既存person maoへ呼称表示を接続済み。entry・report・laterで表示し、受取人宅や記録室へ同行させない。"
+    },
+    "q169_recipient": {
+      "label": "旅仲間の受取人",
+      "status": "connected",
+      "entity": "recipientPerson",
+      "need": "recipient・friendshipの現在の話者として専用entity recipientPersonと呼称表示を接続済み。既存messengerとは別人物として扱う。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "person-evidence",
+      "people": ["q169_mao"],
+      "evidence": "マオは旅の約束の指輪を預けた。",
+      "reason": "依頼人マオ本人が指輪を預ける現在の場面。deliverの出発時にringだけがmaoからpartyへ移り、マオは自宅に残る。",
+      "visual": "マオの家で指輪を預かる場面。受取人や後日の手紙を先取りしない。"
+    },
+    "recipient": {
+      "decision": "person-evidence",
+      "people": ["q169_recipient"],
+      "evidence": "相手は別の暮らしを選んでいた。",
+      "reason": "旅仲間の現在の家で受取人本人が拒否を伝える。messengerは手紙運搬用の別personであり、この話者として同定しない。",
+      "visual": "受取人本人との面会。指輪はpartyが保持したまま、受領済みにはしない。"
+    },
+    "friendship": {
+      "decision": "person-evidence",
+      "people": ["q169_recipient"],
+      "evidence": "本人はその言葉をマオへ届けてよいと答えた。",
+      "reason": "recipientから移動せず、同じ受取人本人へ旅以外の交流を確認する場面。friendship=trueは次の帰路で記録する。",
+      "visual": "同じ受取人から手紙の交流だけは望む返事を聞く。別人物を追加しない。"
+    },
+    "report": {
+      "decision": "person-evidence",
+      "people": ["q169_mao"],
+      "evidence": "マオは、受け取ってくれたかと聞く。",
+      "reason": "探索隊だけが受取人宅からマオの家へ戻り、本人へ結果を報告する。受取人やmessengerは同行しない。",
+      "visual": "マオへ拒否または交流の返事を報告する場面。指輪の返却は選択後まで確定しない。"
+    },
+    "later": {
+      "decision": "person-evidence",
+      "people": ["q169_mao"],
+      "evidence": "マオがあなたを呼んだ。",
+      "reason": "嘘の報告後、手紙をマオへ届けて自宅へ戻った場面。マオ本人が説明を求め、指輪はadmitを選ぶまでpartyが保持する。",
+      "visual": "後日の手紙を受け取ったマオとの再対面。受取人本人やmessengerを自宅へ同行させない。"
+    },
+    "mail": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "後日、記録室に受取人からの手紙が届いていた。",
+      "reason": "手紙の物理保持者messengerはpostへ移動しているが、本文は人物としての発言・待機・手渡しを描かない。記録室の係員やmessengerを固定出演へ追加しない。",
+      "visual": "記録室に届いた手紙を受け取る場面。運搬役の人物像は固定せず、手紙の所在だけを示す。"
+    }
+  },
+  "next": "q169のmaoとrecipientPersonへ呼称表示を接続した。messengerは手紙運搬の保持者として分離し、次はq170のセフの同行を監査する。"
+},
+  q170:{
+  "sourceSha256": "17f02fb6ed048e7e3405cd8fc3a438de1b75f7198737b684864c95ffec4b0803",
+  "identityNotes": [
+    "依頼人は旅仲間セフで、既存person sef。港から湖岸、島の野営地、帰路、補給店、各別れの港まで全経路で本文またはjourneyのcompanionsにセフが明示される。",
+    "campとroleは同じ島の野営地で、セフ本人が帰郷・休暇・一便だけの役割を話す。本人の決めた店継承を人物表示のために撤回させず、roleは無期限残留ではない。",
+    "entry→shore→camp、camp／role→ashore_*→farewell_*、ashore_role→cargo→farewell_roleはすべて既存の実移動でセフを伴う。表示のために別の同行状態や戦闘加入を追加しない。",
+    "potは島の古い鍋、cargoは補給店の一便の荷でitem。人物画へ固定せず、keepsakeや荷の受渡しとセフ本人の表示を分ける。",
+    "send・holiday・roleの3結末、cargoの受渡し、既存の出発日と旧保存を保持する。将来の店や再会を現在の場面へ先取りせず、セフ以外の店員・船頭・港の人を本文から追加しない。"
+  ],
+  "people": {
+    "q170_sef": {
+      "label": "旅仲間セフ",
+      "status": "connected",
+      "entity": "sef",
+      "need": "既存person sefへ呼称表示を接続済み。全11場面で既存の実同行・所在に従って表示し、戦闘隊員や将来の店主状態を追加しない。"
+    }
+  },
+  "scenes": {
+    "camp": {
+      "decision": "person-evidence",
+      "people": ["q170_sef"],
+      "evidence": "セフは故郷で店を継ぐと決めていた。",
+      "reason": "shore_islandでpartyとsefが野営地へ実到着した後の現在の会話。古い鍋potはitemで、セフの決断と別に扱う。",
+      "visual": "島の野営地で古い鍋を前にセフが帰郷を告げる場面。将来の店は描かない。"
+    },
+    "role": {
+      "decision": "person-evidence",
+      "people": ["q170_sef"],
+      "evidence": "セフは無期限には残れないが、開店前の一便だけ補給を手伝えると言う。",
+      "reason": "campから移動せず同じ野営地で本人の条件を確認する。残留へ変更せず、一便と出発日の合意だけを扱う。",
+      "visual": "同じ野営地で一便だけの役割を相談するセフ。"
+    },
+    "entry": {
+      "decision": "person-evidence",
+      "people": ["q170_sef"],
+      "evidence": "セフと湖の島を調べに行く約束をした。",
+      "reason": "港の出発場面でセフ本人が同行者。次のentry_lakeでpartyとsefが湖岸へ実移動する。",
+      "visual": "港で島行きを約束したセフ。別れの結末はまだ先。"
+    },
+    "shore": {
+      "decision": "person-evidence",
+      "people": ["q170_sef"],
+      "evidence": "湖の渡し場へ着いた。",
+      "reason": "entry_lakeのjourneyがsefをcompanionsとして湖岸へ実到着させる。shore_islandでもそのままセフと島へ向かう。",
+      "visual": "湖の渡し場で島へ向かうセフ。船頭など未指定の人物は追加しない。"
+    },
+    "ashore_send": {
+      "decision": "person-evidence",
+      "people": ["q170_sef"],
+      "evidence": "セフと渡し舟で湖岸へ戻った。",
+      "reason": "send経路でcampまたはroleからsefと実帰着した湖岸。次の旅程もセフと港へ戻る。",
+      "visual": "帰郷を選んだ後の湖岸。セフ本人の同行だけを表示する。"
+    },
+    "farewell_send": {
+      "decision": "person-evidence",
+      "people": ["q170_sef"],
+      "evidence": "セフと港へ戻った。",
+      "reason": "ashore_send_continueでpartyとsefが港へ実帰着した別れの場面。finishでsend結末を確定する。",
+      "visual": "港で本人の決めた別れ方で送り出す直前のセフ。"
+    },
+    "ashore_holiday": {
+      "decision": "person-evidence",
+      "people": ["q170_sef"],
+      "evidence": "セフと渡し舟で湖岸へ戻った。",
+      "reason": "holiday経路でcampからsefと実帰着した湖岸。次の旅程もセフと港へ戻る。",
+      "visual": "休暇と再会条件を選んだ後の湖岸。"
+    },
+    "farewell_holiday": {
+      "decision": "person-evidence",
+      "people": ["q170_sef"],
+      "evidence": "セフと港へ戻った。",
+      "reason": "ashore_holiday_continueでpartyとsefが港へ実帰着した。finishでholiday結末を確定する。",
+      "visual": "港で休暇へ送り出す直前のセフ。"
+    },
+    "ashore_role": {
+      "decision": "person-evidence",
+      "people": ["q170_sef"],
+      "evidence": "セフと渡し舟で湖岸へ戻った。",
+      "reason": "一便だけの役割に合意した後、partyとsefが湖岸へ実帰着する。次は補給店へ二人で向かう。",
+      "visual": "補給店へ向かう前の湖岸。セフの出発日はまだ維持されている。"
+    },
+    "farewell_role": {
+      "decision": "person-evidence",
+      "people": ["q170_sef"],
+      "evidence": "セフと港へ戻った。",
+      "reason": "cargo_carryでpartyとsefが一便の荷を運んで港へ実帰着する。finishで荷をentryへ渡し、role結末を確定する。",
+      "visual": "一便の荷を運び終えた港のセフ。荷の受渡しと人物画を分ける。"
+    },
+    "cargo": {
+      "decision": "person-evidence",
+      "people": ["q170_sef"],
+      "evidence": "セフと約束した一便の補給を受け取る。",
+      "reason": "ashore_role_continueでpartyとsefが補給店へ実到着する。cargoはこの場面から出発するときpartyへ移るitem。",
+      "visual": "補給店で一便の荷を受け取るセフ。店員など未指定の人物は追加しない。"
+    }
+  },
+  "next": "q170の既存sefへ全11場面の呼称表示を接続した。湖岸・島・補給店・3結末を保持し、次はq171のダイ・妻・家族を監査する。"
+},
+  q171:{
+  "sourceSha256": "b4b6b186a6388beab4b73c7fc5353fb2511a00293c1144ba1c5995ffd514896a",
+  "identityNotes": [
+    "依頼人は靴職人ダイの妻。現行storyには夫のdaiと家族group familyがあり、妻個人のpersonはない。妻をfamilyとは別の候補役として精読するが、避難場面で妻と家族を二重表示しない。familyは妻を含む世帯集団として扱う。",
+    "ダイはhomeを初期位置とし、onsite_begin以降は既存journeyのcompanionsとして境界・境界標・靴店・試験路・封じの輪・機関廟入口・家・避難先を移動する。人物表示のために同行やtimeを追加しない。",
+    "entryの相談者は依頼人である妻。onsite・loop_home・return_home・defendedでは夫婦関係または妻の現在動作が本文・元原稿から確認できる。妻の氏名・容貌・職業は追加しない。",
+    "defense・collect_family・evacuatedは家族の避難を現在の行為として扱うため、既存group familyを候補とする。wife候補とfamilyを同じ場面へ重ねず、家族集団の中に妻も含むものとして扱う。",
+    "onsiteの『境界守が警告した』は元原稿の主要人物・同行者ではなく、三回で追跡者が道を覚える規則の説明元である。境界守を固定出演へ追加しない。靴店の店員、維持当番、下宿屋の人物も本文から追加しない。",
+    "追跡者は怪異・戦闘対象で、会話用の固定人物画とは分ける。time、rule、ward、sealed、detached、defended、evacuated、4結末と20Gの支払いを人物表示のために変更しない。"
+  ],
+  "people": {
+    "q171_dai": {
+      "label": "靴職人ダイ",
+      "status": "connected",
+      "entity": "dai",
+      "need": "既存person daiへ呼称表示を接続済み。entry以外の14場面で既存の所在・実同行に従って表示する。"
+    },
+    "q171_wife": {
+      "label": "ダイの妻",
+      "status": "candidate",
+      "need": "依頼人と戸口の妻を同一人物として扱う候補。entry・onsite・loop_home・return_home・defendedで表示し、避難時はfamily集団と重複させない。"
+    },
+    "q171_family": {
+      "label": "ダイの家族",
+      "status": "connected",
+      "entity": "family",
+      "need": "既存group familyへ呼称表示を接続済み。defense・collect_family・evacuatedで妻を含む家族集団として表示する。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "person-evidence",
+      "people": ["q171_wife"],
+      "evidence": "ダイの帰宅路に続く足音の相談を受けた。",
+      "reason": "依頼人欄が靴職人ダイの妻で、現場受付でその相談を受ける。ダイ本人はhomeにいて、次に家の外で訪ねる。",
+      "visual": "機関廟の作業口で相談する妻。ダイや追跡者を受付へ先回りさせない。"
+    },
+    "watch": {
+      "decision": "person-evidence",
+      "people": ["q171_dai"],
+      "evidence": "帰宅路を教えないよう家の外に留まる。",
+      "reason": "onsite_beginでpartyとdaiがboundaryへ実移動した後の調査拠点。妻とfamilyはhomeに残る。",
+      "visual": "家から離れた境界でダイと調査する。追跡者はtimeが3に達した条件で現れる戦闘対象として分ける。"
+    },
+    "onsite": {
+      "decision": "person-evidence",
+      "people": ["q171_dai","q171_wife"],
+      "evidence": "職人が眠ると、足音だけが昼間の道を再現した。",
+      "reason": "entry_visitでpartyだけがhomeへ到着し、daiとfamilyは初期位置homeにいる。元原稿では妻が家へ入れない理由を抱え、夫婦の対立を家の外で確認する場面。境界守の警告は説明元で、現在同席者として追加しない。",
+      "visual": "戸口の外でダイと妻、濡れた足跡を確認する。境界守は表示しない。"
+    },
+    "rule_done": {
+      "decision": "person-evidence",
+      "people": ["q171_dai"],
+      "evidence": "境界標で、閉じた輪を歩かせる規則を確認した。",
+      "reason": "watch_ruleでpartyとdaiがrule_placeへ実移動する。規則の確認者として別の境界守を固定出演へ追加しない。",
+      "visual": "境界標でダイと規則を確認する。"
+    },
+    "ward_done": {
+      "decision": "person-evidence",
+      "people": ["q171_dai"],
+      "evidence": "輪を封じる護符を受け取った。",
+      "reason": "watch_ward_ready_continueでpartyとdaiが靴店へ実到着し、wardPaperを受け取る。店員は名指しされていない。",
+      "visual": "靴店でダイと護符を受け取る。20G支払い済みと人物表示を分ける。"
+    },
+    "wait_done": {
+      "decision": "person-evidence",
+      "people": ["q171_dai"],
+      "evidence": "帰宅路を避けて一巡歩き、足音の追従を観察した。",
+      "reason": "watch_waitでpartyとdaiがtest_placeへ実移動する。妻とfamilyはhomeに残る。",
+      "visual": "歩行試験路でダイと追跡を観察する。"
+    },
+    "ring": {
+      "decision": "person-evidence",
+      "people": ["q171_dai"],
+      "evidence": "規則どおりの輪へ足音を導き、護符で封じた。",
+      "reason": "watch_loopでpartyとdaiがringへ実移動する。維持当番は本文で特定人物として示されない。",
+      "visual": "封じの輪でダイと足音を誘導する。追跡者の人型を固定しない。"
+    },
+    "loop_home": {
+      "decision": "person-evidence",
+      "people": ["q171_dai","q171_wife"],
+      "evidence": "夫婦の話は別にやり直す。",
+      "reason": "ring_homeでpartyとdaiがhomeへ実帰着し、妻を含むfamilyはhomeに残っている。本文が夫婦を明示するため妻個人を候補にする。",
+      "visual": "封印後の戸口でダイと妻。怪異解決と夫婦の話合いを別に扱う。"
+    },
+    "returned": {
+      "decision": "person-evidence",
+      "people": ["q171_dai"],
+      "evidence": "機関廟へ続く道を歩き、足音を切り離した。",
+      "reason": "watch_returnでpartyとdaiがreturn_pathへ実移動する。妻とfamilyはhomeに残る。",
+      "visual": "機関廟入口でダイと足音を切り離す。"
+    },
+    "return_home": {
+      "decision": "person-evidence",
+      "people": ["q171_dai","q171_wife"],
+      "evidence": "一人分の音を聞いた妻が、戸を開けた。",
+      "reason": "returned_homeでpartyとdaiがhomeへ実帰着する。妻の現在動作が明示され、夫婦が戸口で対面する。",
+      "visual": "一人分の足音を確認して妻が戸を開ける。"
+    },
+    "defense": {
+      "decision": "person-evidence",
+      "people": ["q171_dai","q171_family"],
+      "evidence": "家族の避難路を残して迎える。",
+      "reason": "watch_fightでpartyとdaiがhomeへ戻り、familyはhomeにいる。妻をfamilyと重複表示せず、家族集団として扱う。",
+      "visual": "家の外でダイと家族を守る場面。追跡者は戦闘対象として別に扱う。"
+    },
+    "defended": {
+      "decision": "person-evidence",
+      "people": ["q171_dai","q171_wife"],
+      "evidence": "ダイが妻へ戸口の外で言い直した。",
+      "reason": "defenseの戦闘勝利後も所在はhome。本文がダイと妻の現在のやり取りを明示する。",
+      "visual": "防衛後、戸口の外で妻へ言い直すダイ。"
+    },
+    "collect_family": {
+      "decision": "person-evidence",
+      "people": ["q171_dai","q171_family"],
+      "evidence": "家族に脅威と退避先を伝え、必要な荷だけを持つ。",
+      "reason": "watch_leaveでpartyとdaiがhomeへ戻り、familyへ避難を伝える。妻個人を別表示せず家族集団に含める。",
+      "visual": "戸口でダイと家族が避難準備をする。"
+    },
+    "evacuated": {
+      "decision": "person-evidence",
+      "people": ["q171_dai","q171_family"],
+      "evidence": "家族の到着を確認した。",
+      "reason": "defense_evacuateまたはcollect_family_escortでparty・dai・familyがrefugeへ実到着する。",
+      "visual": "下宿屋へ到着したダイと家族。下宿屋の人物は追加しない。"
+    },
+    "watch_ward_ready": {
+      "decision": "person-evidence",
+      "people": ["q171_dai"],
+      "evidence": "必要な道具を使って準備を整えた。",
+      "reason": "watch_wardは所在を変えず、partyとdaiはboundaryに残る。次のcontinueで二人が靴店へ向かう。",
+      "visual": "境界でダイと護符受取の準備をする。"
+    }
+  },
+  "next": "q171のdaiとfamilyへ呼称表示を接続した。妻個人はfamilyとの所在重複を避けて候補のまま残し、次はq172のルイ・母・井戸の主を監査する。"
+},
+  q172:{
+  "sourceSha256": "a6d6b42b9bc433c50a3623e6b9b35f600db11ac4d2fadeb8094a7130686cd011",
+  "identityNotes": [
+    "依頼人は織工ルイで、既存person lui。luiAtの初期位置はworkshopであり、entryの相談受付には本人を自動配置しない。onsiteから井戸へ同行した後は、選んだ経路に従って工房・母の家・水源窓口へ実移動する。",
+    "母はmother_heardとrestoredで現在の話者として明示されるため、専用person motherPersonを母の家に固定して接続した。氏名・容貌・家族構成は追加しない。市場の出品記録を確認するmarket_heardには店員や記録係を追加しない。",
+    "井戸の主は元原稿で取引を曲解した主体で、wellの現在の交渉相手。井戸そのものの背景・怪異と会話役を区別し、sealで戦った後のwell_seal_readyへ居残り表示しない。",
+    "二つの名は状態・呼称であり別人物ではない。old・chosen・memoriesReturned・nameConfirmed・newNameChosen・motherInformed・wellSealed・waterArrangedと3結末を人物表示のために変更しない。",
+    "seal経路の戦闘対象と井戸の主は同じ物語上の脅威として扱える候補だが、固定の人型・性別・容貌は決めない。代替水源の窓口にも未指定の係員を追加しない。"
+  ],
+  "people": {
+    "q172_lui": {
+      "label": "織工ルイ",
+      "status": "connected",
+      "entity": "lui",
+      "need": "既存person luiへ呼称表示を接続済み。onsite・well・restored_confirm・restored・named・water・well_seal_readyで既存の所在と同行に従って表示する。"
+    },
+    "q172_mother": {
+      "label": "ルイの母",
+      "status": "connected",
+      "entity": "motherPerson",
+      "need": "mother_heardとrestoredの現在の話者として専用entity motherPersonを接続済み。工房・市場・井戸へ同行させない。"
+    },
+    "q172_well_master": {
+      "label": "井戸の主",
+      "status": "connected",
+      "entity": "wellMaster",
+      "need": "wellの交渉相手として専用entity wellMasterの呼称表示を接続済み。封印戦の勝利後や工房・母の家へ継続表示せず、外見は固定しない。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "機関廟の相談所でルイの記憶の欠落を聞いた。",
+      "reason": "luiAtはworkshopを初期位置とし、entry_visitでpartyだけが本人の工房へ向かう。依頼人欄だけからルイを相談所へ移さない。",
+      "visual": "相談所で記憶欠落の依頼を受ける導入。本人の立ち絵は工房到着後から。"
+    },
+    "well": {
+      "decision": "person-evidence",
+      "people": ["q172_lui","q172_well_master"],
+      "evidence": "井戸は「昔の名で呼ばれたくない」という願いを口実に、本人の記憶まで取った。",
+      "reason": "onsite_wellでpartyとluiが井戸へ実到着し、元原稿の井戸の主が取引の主体として現在の交渉相手になる。",
+      "visual": "ルイと井戸の主の交渉。主の人型・性別・容貌は固定しない。"
+    },
+    "onsite": {
+      "decision": "person-evidence",
+      "people": ["q172_lui"],
+      "evidence": "本人は成人後に別の名を選んでいた。",
+      "reason": "entry_visitでpartyがworkshopへ到着し、初期位置workshopのlui本人から二つの名の手掛かりを得る。",
+      "visual": "刺繍工房のルイと二種類の名の手掛かり。名を別人物として描かない。"
+    },
+    "mother_heard": {
+      "decision": "person-evidence",
+      "people": ["q172_mother"],
+      "evidence": "母から昔の名と呼んでいた頃の事情を聞いた。",
+      "reason": "onsite_motherではpartyだけが母の家へ移動し、luiはworkshopに残る。母本人だけを現在の話者として扱う。",
+      "visual": "母の家で昔の呼び名を聞く。ルイを同行させない。"
+    },
+    "market_heard": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "作品の刺繍と出品記録を照合し、本人が選んだ名を確認した。",
+      "reason": "onsite_marketではpartyだけが市場へ移動する。記録照合の場面で、店員・記録係・ルイ本人の同席は書かれていない。",
+      "visual": "作品の刺繍と出品記録。人物画は追加しない。"
+    },
+    "restored_confirm": {
+      "decision": "person-evidence",
+      "people": ["q172_lui"],
+      "evidence": "ルイと工房へ戻り、二つの名と過去を取り戻したことを本人に確認する。",
+      "reason": "well_restoreでpartyとluiがworkshopへ実帰着する。母はまだ母の家にいる。",
+      "visual": "工房で記憶の返還を本人と確認する。"
+    },
+    "restored": {
+      "decision": "person-evidence",
+      "people": ["q172_lui","q172_mother"],
+      "evidence": "母は呼び名を一度間違え、本人が望む今の名へ言い直した。",
+      "reason": "restored_confirm_motherでpartyとluiが母の家へ実移動し、母と本人が現在の呼び名を確認する。",
+      "visual": "母の家でルイと母が呼び名を言い直す。"
+    },
+    "named": {
+      "decision": "person-evidence",
+      "people": ["q172_lui"],
+      "evidence": "本人が選んだ新しい呼び名を工房へ記した。",
+      "reason": "well_newでpartyとluiがworkshopへ実帰着する。記憶の欠落は回復済みにしない。",
+      "visual": "工房で本人が選んだ呼び名を記すルイ。"
+    },
+    "water": {
+      "decision": "person-evidence",
+      "people": ["q172_lui"],
+      "evidence": "井戸を封じたことと記憶の未回復を窓口へ伝え、代わりの水場を手配した。",
+      "reason": "well_seal_ready_continueでpartyとluiがwaterへ実到着する。窓口の係員は名指しされない。",
+      "visual": "代替水源の窓口にいるルイ。未指定の係員は追加しない。"
+    },
+    "well_seal_ready": {
+      "decision": "person-evidence",
+      "people": ["q172_lui"],
+      "evidence": "戦いに勝利し、先へ進む道が開いた。",
+      "reason": "well_sealの戦闘勝利直後もluiは井戸に残る。倒した井戸の主を勝利後の固定出演として残さない。",
+      "visual": "封印戦後の井戸でルイと次の移動を確認する。"
+    }
+  },
+  "next": "q172のlui・motherPerson・wellMasterへ呼称表示を接続した。二つの名と3結末を保持し、次はq173のテラと墓守の精霊を監査する。"
+},
+  q173:{
+  "sourceSha256": "7ad11f8fb784f2e3ddd368a5d3d3b3b6858bd0ab9f34978ce57829a38480eab7",
+  "identityNotes": [
+    "依頼人は寡婦テラで、既存person teraの初期位置はhome。entryは相談受付からテラの家へ向かう導入なので、依頼人欄だけでentryへテラを移さない。",
+    "墓守の精霊は既存person spiritPersonで初期位置grave。夫に似た帰宅姿の観察はonsite本文にあるが、現行の所在と経路は『本人と精霊の話は別々に聞く』構造で、onsiteからpartyだけが墓地へ移動する。精霊を家へ先回りさせない。",
+    "spiritではpartyが墓地にいて精霊本人と話し、テラはhomeに残る。wifeではpartyだけがhomeへ戻り、精霊はgraveに残る。guestとcopyの経路だけspiritPersonがpartyとhomeへ実移動する。",
+    "part経路ではpartyだけがhomeへ戻り、精霊はgraveに残ったまま別れを伝えた結果をテラと確認する。guest_agree・copy_home・copy_laterではteraとspiritPersonが同じhomeにいる。",
+    "戦死した夫本人を第三の人物entityとして追加しない。精霊が拾った記憶・夫の悪い癖・家財は人物の同一性とは分け、bothAgreed・parted・laterVisit・imitationContinuesと3結末を人物表示のために変更しない。"
+  ],
+  "people": {
+    "q173_tera": {
+      "label": "寡婦テラ",
+      "status": "candidate",
+      "need": "既存person teraへ接続する候補。onsite・wife・guest_agree・part_home・copy_home・copy_laterでhomeの所在に従って表示する。"
+    },
+    "q173_spirit": {
+      "label": "墓守の精霊",
+      "status": "candidate",
+      "need": "既存person spiritPersonへ接続する候補。spiritではgrave、guest_agree・copy_home・copy_laterでは実移動後のhomeに表示し、part_homeやonsiteへ先回りさせない。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "夜に帰る姿について、テラの家を訪ねる。",
+      "reason": "teraAtはhome、spiritPersonAtはgraveを初期位置とし、entry_visitでpartyだけがhomeへ向かう。相談受付へ二人を自動配置しない。",
+      "visual": "テラの家へ向かう相談受付。夫に似た姿や精霊はまだ表示しない。"
+    },
+    "spirit": {
+      "decision": "person-evidence",
+      "people": ["q173_spirit"],
+      "evidence": "精霊は居場所を求めていた。",
+      "reason": "onsiteの二選択またはwife_returnでpartyだけがgraveへ移動し、spiritPersonは初期位置graveにいる。テラはhomeに残る。",
+      "visual": "墓地で墓守の精霊本人と話す。テラを墓地へ同行させない。"
+    },
+    "onsite": {
+      "decision": "person-evidence",
+      "people": ["q173_tera"],
+      "evidence": "墓守の精霊が記憶を拾っていた。",
+      "reason": "entry_visitでpartyがテラの家へ到着し、teraはhomeにいる。夫に似た姿の観察は精霊の正体を示すが、spiritPersonの現在地はgraveで、次の行動でpartyだけが墓地へ向かう。",
+      "visual": "テラの家で本人から状況を確かめる。夫本人や精霊を同じ画面へ固定しない。"
+    },
+    "wife": {
+      "decision": "person-evidence",
+      "people": ["q173_tera"],
+      "evidence": "テラに帰ってくる音を失いたくない気持ちを聞いた。",
+      "reason": "spirit_wifeでpartyだけがhomeへ戻り、teraはhome、spiritPersonはgraveに残る。",
+      "visual": "テラ本人の意思を家で聞く。客としての同意はまだ成立していない。"
+    },
+    "guest_agree": {
+      "decision": "person-evidence",
+      "people": ["q173_tera","q173_spirit"],
+      "evidence": "精霊とテラの双方に、夫でなく客として暮らす意思を確かめた。",
+      "reason": "spirit_guestでpartyとspiritPersonがhomeへ実移動し、teraはhomeにいる。双方の同意がそろった現在場面。",
+      "visual": "夫の代役ではなく客として同席するテラと精霊。"
+    },
+    "part_home": {
+      "decision": "person-evidence",
+      "people": ["q173_tera"],
+      "evidence": "テラが自分で戸を閉じる時刻を決める。",
+      "reason": "spirit_partでpartyだけがhomeへ戻り、spiritPersonはgraveに残る。精霊の別れを結果として伝え、家ではテラ本人だけを表示する。",
+      "visual": "精霊を墓地に残し、家で戸を閉じる時刻を決めるテラ。"
+    },
+    "copy_home": {
+      "decision": "person-evidence",
+      "people": ["q173_tera","q173_spirit"],
+      "evidence": "当面は夫の模倣を続ける。",
+      "reason": "spirit_copyでpartyとspiritPersonがhomeへ実移動し、teraもhomeにいる。模倣継続を夫本人の復活とは扱わない。",
+      "visual": "家で模倣を続ける精霊と、それを受け入れるテラ。"
+    },
+    "copy_later": {
+      "decision": "person-evidence",
+      "people": ["q173_tera","q173_spirit"],
+      "evidence": "精霊は家具を動かす相談へ答えられなかった。",
+      "reason": "copy_homeから所在を変えず後日の相談へ進むため、teraとspiritPersonはともにhomeにいる。",
+      "visual": "家具を動かす変化に答えられない精霊とテラ。模倣の限界を示す。"
+    }
+  },
+  "next": "q173のテラと墓守の精霊を精読した。次はteraとspiritPersonの実所在へ表示を接続し、夫本人を追加せず3結末を保持する。"
 }
  }
 };

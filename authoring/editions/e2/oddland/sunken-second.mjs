@@ -142,13 +142,28 @@ export function sunkenSecondSource(q,{cast=true}={}){
   route('adjust','test','tested');
   add('tested','lamp','点灯試験が済んだ。請求書の相談には二人とも立ち会う。',[opt('fetch','別棟へ兄を迎えに行く','fetch_invoice',{when:eq(v('brotherAt'),'other')}),opt('invoice','二人と請求書を持って港へ行く','invoice',{companions:['brother','younger'],depart:[give('bill','lamp','party')]})]);
   add('fetch_invoice','other','修理の完了を兄に伝えた。弟と合流し、今回の仕事と次の契約を相談する。',[opt('return','兄と魔力灯へ戻る','tested',{companions:['brother']})]);
+  if(cast){
+   x.entities.brother.character='q168_brother';
+   x.entities.younger.character='q168_younger';
+   const both=[{entity:'brother',display:{x:31}},{entity:'younger',display:{x:69}}];
+   node('entry').cast=both;node('invoice').cast=both;node('test_both').cast=both;
+   node('separated').cast=[{entity:'younger',display:{x:50}}];
+   for(const id of ['adjust','gather','tested'])node(id).cast=[{entity:'brother',when:eq(v('brotherAt'),'lamp'),display:{x:31}},{entity:'younger',display:{x:69}}];
+   for(const id of ['fetch_brother','fetch_invoice'])node(id).cast=[{entity:'brother',display:{x:50}}];
+  }
  }
  if(q.number===169){
-  town('entry','指輪を預けたマオの家','royal_sender');town('recipient','旅仲間の現在の家','royal_recipient');town('post','後日の手紙を受け取る記録室','royal_archive');entity('mao','entry','person');entity('ring','mao');entity('letter','recipient');entity('messenger','recipient','person');node('recipient').place='recipient';node('friendship').place='recipient';
+  town('entry','指輪を預けたマオの家','royal_sender');town('recipient','旅仲間の現在の家','royal_recipient');town('post','後日の手紙を受け取る記録室','royal_archive');entity('mao','entry','person');entity('recipientPerson','recipient','person');entity('ring','mao');entity('letter','recipient');entity('messenger','recipient','person');node('recipient').place='recipient';node('friendship').place='recipient';
   choice('entry','deliver').depart=[give('ring','mao','party')];
   for(const key of ['honest','soft'])choice('report',key).effects=[give('ring','party','mao')];choice('later','admit').effects=[give('ring','party','mao')];
   route('report','lie','mail',{depart:[give('letter','recipient','messenger'),move('messenger','recipient','transit','post')]});
   add('mail','post','後日、記録室に受取人からの手紙が届いていた。「指輪はお返ししたはずです」。手紙を預かり、マオへ届ける。',[opt('deliver','手紙を持ってマオへ戻る','later',{depart:[give('letter','messenger','party')],effects:[give('letter','party','mao')]})]);
+  if(cast){
+   x.entities.mao.character='q169_mao';
+   x.entities.recipientPerson.character='q169_recipient';
+   for(const id of ['entry','report','later'])node(id).cast=[{entity:'mao',display:{x:50}}];
+   for(const id of ['recipient','friendship'])node(id).cast=[{entity:'recipientPerson',display:{x:50}}];
+  }
  }
  if(q.number===170){
   node('entry').id='camp';town('entry','セフと出発する港','royal_harbor');cell('shore','湖の渡し場','lakeshore',13,7);cell('camp','島の古い鍋のある野営地','island',9,5);town('supply','一便の荷を受け取る補給店','oddland_village_supply');entity('sef','entry','person');entity('cargo','supply');entity('pot','camp');node('camp').place='camp';node('role').place='camp';
@@ -160,6 +175,10 @@ export function sunkenSecondSource(q,{cast=true}={}){
    end('farewell_'+outcome,'entry','セフと港へ戻った。'+(outcome==='role'?'運んだ一便の荷を引き渡し、合意した出発日を守って送り出す。':'本人の決めた別れ方で送り出す。'),outcome,outcome==='role'?[give('cargo','party','entry')]:[]);
   }
   add('cargo','supply','セフと約束した一便の補給を受け取る。これを港へ届けてから送り出す。',[opt('carry','一便の荷をセフと港へ運ぶ','farewell_role',{companions:['sef'],depart:[give('cargo','supply','party')]})]);
+  if(cast){
+   x.entities.sef.character='q170_sef';
+   for(const id of ['camp','role','entry','shore','ashore_send','farewell_send','ashore_holiday','farewell_holiday','ashore_role','farewell_role','cargo'])node(id).cast=[{entity:'sef',display:{x:50}}];
+  }
  }
  const rewrite=value=>{
   if(typeof value==='string')return value.replaceAll('$truth',q.model.reveal.newInformation);
