@@ -55,6 +55,21 @@ export const relocatedCharacters=Object.fromEntries([
 ].map(([id,name,detail,provenance])=>[id,{id,name,role:'礼拝堂の現地の相手',detail,portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,
  provenance:provenance??'2026-10-29の美術設定。固有名・他人物との同一性は追加しない。具体的な外見・年齢感・服装は今回の美術設定。牢・格子・聖像・宝玉・石を人物画へ固定しない。'}]));
 // The group has no specified headcount or spokesperson. Ren is the existing actor.
+relocatedCharacters.q175_miro={
+ id:'q175_miro',name:'猟師ミロ',role:'公開訓練の戦法を獣に学ばれた猟師',
+ detail:'妹と寝床・稽古場・広場・谷道へ実際に同行し、別戦法・誘導・正面戦の結果を区別する。',
+ provenance:'2026-11-06。既存person miroの呼称表示。容貌・年齢・衣装を補わず、戦闘パーティーに追加しない。専用画は未接続。'
+};
+relocatedCharacters.q175_sister={
+ id:'q175_sister',name:'ミロの妹',role:'兄の負傷を見て、非公開の稽古場の出入口を見張る妹',
+ detail:'既存sisterの同行先だけに表示する。受付の依頼人名義と実所在を分け、集落の見張りと同一視しない。',
+ provenance:'2026-11-06。既存person sisterの呼称表示。氏名・年齢・容貌は補わず、専用画は未接続。'
+};
+relocatedCharacters.q175_lookout={
+ id:'q175_lookout',name:'集落の見張り',role:'谷の向こうで獣の行先と結果を受け取る見張り役',
+ detail:'警告を渡すwarnedと追跡後の報告pursuedに表示する。同じ見張り場でも戦闘前のpursuitには表示しない。',
+ provenance:'2026-11-06。人数未確定の役をgroup lookoutで表す。人数・代表者・氏名・容貌を決めず、warning_placeに留める。'
+};
 relocatedCharacters.q174_daughter={
  id:'q174_daughter',name:'道化師の娘',role:'葬列へ加わらず父への怒りを語る娘',
  detail:'葬列の現場で話す。小屋と救護先へは同行せず、涙や赦しを弔いの条件にしない。',

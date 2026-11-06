@@ -1,6 +1,6 @@
 import {set,give,eq,not,and,ref} from '../../../story-kit.mjs';
 import {machineSource} from './machine-common.mjs';
-export function machineSecondSource(q){
+export function machineSecondSource(q,{cast=true}={}){
  const {x,node,choice,town,cell,field,entity,opt,add,route,end,v,transfer,int,finish}=machineSource(q);
  const intake=(place,text,cast=[])=>{const n=node('entry'),options=n.options,original=n.text;n.text=text;n.options=[opt('visit','依頼人のいる現場へ向かう','onsite',{companions:cast})];add('onsite',place,original,options);return 'onsite';};
  const result=r=>eq(ref(`flags.relocatedBattleResult.${q.id}`),r);
@@ -54,6 +54,12 @@ export function machineSecondSource(q){
   for(const [src,key] of [[from,'hidden'],[from,'fake'],['hidden','decoy'],['route','hidden'],['route','guide']])choice(src,key).companions=crew;
   const hidden=choice('hidden','fight');delete hidden.combat;route('hidden','fight','battle',{companions:crew,depart:[set('secretPractice')]});add('battle','lair','非公開で練った戦法を、獣のいる現場で実行する。',[opt('fight','別戦法で獣と戦う','changed',{combat:'story_175'}),opt('retreat','戦場を離れ、非公開の稽古場へ戻る','hidden',{companions:crew})]);end('changed','lair','別戦法で獣を退けた。ミロが妹へ変更の必要を認める。','changed',[set('defeated')]);
   route('warning','warn','warned',{companions:crew});end('warned','warning_place','集落の見張りへ獣の行先を伝え、警戒を引き継いだ。誘導は討伐ではない。','drive',[set('warned')]);choice('route','guide').effects=[set('driven')];delete choice('warning','pursue').combat;route('warning','pursue','pursuit',{companions:crew});add('pursuit','warning_place','獣を谷の先まで追った。現地で戦い、逃れた場合は谷道へ戻れる。',[opt('fight','別戦法で獣を退ける','pursued',{combat:'story_175'}),opt('retreat','戦いを切り上げ、谷道へ戻る','warning',{companions:crew})]);end('pursued','warning_place','追って獣を退け、向こう側の見張りへ結果を伝えた。','changed',[set('defeated'),set('reported')]);
+  if(cast){
+   entity('lookout','warning_place','group');
+   x.entities.miro.character='q175_miro';x.entities.sister.character='q175_sister';x.entities.lookout.character='q175_lookout';
+   for(const id of ['hidden','route','warning','onsite','battle','changed','pursuit'])node(id).cast=[{entity:'miro',display:{x:31}},{entity:'sister',display:{x:69}}];
+   for(const id of ['warned','pursued'])node(id).cast=[{entity:'miro',display:{x:22}},{entity:'sister',display:{x:50}},{entity:'lookout',display:{x:78}}];
+  }
  }
  if(q.number===176){
   field('shrine','草鞋を待つ神の祠','outskirts',3,5);town('priest','司祭と補修当番の窓口','machine_registry');field('road_place','住民が直す道','outskirts',7,7);field('departure','旅立ちの分かれ道','outskirts',15,5);entity('sandals','entry');entity('godPerson','shrine','person');const from=intake('shrine','預かった左右の違う草鞋を持ち、外縁の祠へ向かう。');choice('entry','visit').depart=[give('sandals','entry','party')];node('road').place='priest';

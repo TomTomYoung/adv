@@ -10,12 +10,19 @@ export async function buildMachineQuests({check=false}={}){
  const quests=[];
  for(const n of [...Array.from({length:10},(_,i)=>71+i),...Array.from({length:10},(_,i)=>171+i)]){
   const first=JSON.parse(await fs.readFile(path.join(root,`data/quests/q${String(n).padStart(3,'0')}.json`),'utf8')),source=n<100?machineFirstSource:machineSecondSource;
-  const quest=compileRelocatedQuest(first,source(first),{prefix:'machine',eventPrefix:'machine',settlement:'salome',settlementName:'サロメ',board:'salome_board',boardName:'サロメの共同依頼所',source:'authoring/editions/e2/salome/'+(n<100?'machine-first':'machine-second')+'.mjs',stage:'machine-twenty',scope:'機関廟20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。',preserveAcceptedRoute:true,battle:'boss_8'});
+  const options={prefix:'machine',eventPrefix:'machine',settlement:'salome',settlementName:'サロメ',board:'salome_board',boardName:'サロメの共同依頼所',source:'authoring/editions/e2/salome/'+(n<100?'machine-first':'machine-second')+'.mjs',stage:'machine-twenty',scope:'機関廟20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。',preserveAcceptedRoute:true,battle:'boss_8'};
+  const quest=compileRelocatedQuest(first,source(first),options);
   if(n===171)quest.story.scenes.watch_ward_ready.cast=[{entity:'dai',display:{x:50}}];
   if(n===172){
    quest.story.scenes.well_seal_ready.cast=[{entity:'lui',display:{x:50}}];
    quest.story.registry.motherPersonAt.values=['mother'];
    quest.story.registry.wellMasterAt.values=['well_place'];
+  }
+  if(n===175){
+   const previous=compileRelocatedQuest(first,source(first,{cast:false}),options).story;
+   quest.story.registry.lookoutAt.values=['warning_place'];
+   quest.story.revision=2;quest.model.edition.revision=2;
+   quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[{key:'lookoutAt',value:'warning_place'}]}];
   }
   quests.push(quest);
  }
