@@ -97,6 +97,16 @@ export function machineSecondSource(q,{cast=true}={}){
   route('family','daughter','daughter_door',{companions:['daughterPerson'],depart:[set('daughterAgreed')]});add('daughter_door','entry','戻れないことを承知した娘が扉を越えた。今夜の話し合いを済ませたことにはしない。',[opt('morning','普通に朝を待ち、手紙のある部屋を訪ねる','morning',{companions:['daughterPerson'],depart:[set('daughterCrossed'),set('nightClosed')]})]);
   route('family','player','player_door',{companions:['daughterPerson'],depart:[set('playerAgreed')]});add('player_door','entry','娘に続いて翌朝へ越える。夜の判断へ戻る行為はない。',[opt('cross','戻れない扉を越えて翌朝へ進む','morning',{companions:['daughterPerson'],depart:[set('playerCrossed'),set('daughterCrossed'),set('nightClosed')]})]);node('morning').place='morning_place';route('morning','finish','delivered',{depart:[give('letterSheet','morning_place','party')]});end('delivered','host','机の手紙を宿主へ渡した。言えなかった話は済んだことにせず、髪紐は忘れ物として残す。','cross',[give('letterSheet','party','host'),set('letterDelivered')]);
   for(const src of ['entry','family'])route(src,'close','closed');end('closed','entry','扉を封じた。人は越えず、明日のことは明日確かめる。','close',[set('doorSealed')]);
+  if(cast){
+   node('daughter_door').text='戻れないことを承知した娘は、扉を越えると決めた。今夜の話し合いを済ませたことにはしない。';
+   node('player_door').text='娘と翌朝へ越えることを決めた。越えれば夜の判断へは戻れない。';
+   node('delivered').text='机の手紙を持って宿主の席へ着いた。言えなかった話は済んだことにせず、髪紐は忘れ物として残す。';
+   entity('hostPerson','host','person');
+   x.entities.daughterPerson.character='q178_daughter';x.entities.parentPerson.character='q178_parent';x.entities.hostPerson.character='q178_host';
+   for(const id of ['family','wait_talk','wait'])node(id).cast=[{entity:'daughterPerson',display:{x:31}},{entity:'parentPerson',display:{x:69}}];
+   for(const id of ['daughter_door','player_door','morning'])node(id).cast=[{entity:'daughterPerson',display:{x:50}}];
+   node('delivered').cast=[{entity:'hostPerson',display:{x:50}}];
+  }
  }
  if(q.number===179){
   field('garden','根を伸ばす墓標の庭','cemetery',11,5);field('junction','三家を訪ねる分かれ道','outskirts',7,3);town('rescue','住居被害を引き継ぐ救援窓口','salome_clinic');entity('keeper','garden','person');int('homes',3);const from=intake('garden','墓標から家の床へ根が伸びるという知らせを受け、墓地の庭を調べる。');node('houses').place='junction';choice(from,'begin').companions=['keeper'];

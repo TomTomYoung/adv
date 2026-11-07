@@ -340,7 +340,7 @@
       {
         "id": "daughter_door",
         "place": "entry",
-        "text": "戻れないことを承知した娘が扉を越えた。今夜の話し合いを済ませたことにはしない。",
+        "text": "戻れないことを承知した娘は、扉を越えると決めた。今夜の話し合いを済ませたことにはしない。",
         "options": [
           {
             "id": "morning",
@@ -353,7 +353,7 @@
       {
         "id": "player_door",
         "place": "entry",
-        "text": "娘に続いて翌朝へ越える。夜の判断へ戻る行為はない。",
+        "text": "娘と翌朝へ越えることを決めた。越えれば夜の判断へは戻れない。",
         "options": [
           {
             "id": "cross",
@@ -366,7 +366,7 @@
       {
         "id": "delivered",
         "place": "host",
-        "text": "机の手紙を宿主へ渡した。言えなかった話は済んだことにせず、髪紐は忘れ物として残す。",
+        "text": "机の手紙を持って宿主の席へ着いた。言えなかった話は済んだことにせず、髪紐は忘れ物として残す。",
         "options": [
           {
             "id": "finish",
@@ -400,7 +400,7 @@
     "entryScript": "q178.machine.visit",
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -409,7 +409,806 @@
       "saveRevision": 2,
       "scope": "機関廟20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "扉の向こうの明日の現場受付",
+            "family_place": "宿の家族の相談室",
+            "morning_place": "扉の先の翌朝の部屋",
+            "host": "手紙を受け取る宿主の席",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "family_place"
+            ],
+            [
+              "transit",
+              "morning_place"
+            ],
+            [
+              "transit",
+              "host"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "family_place",
+                "morning_place",
+                "host",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "wait",
+                "cross",
+                "close"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "objectReturned": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "objectReturned"
+            },
+            "daughterAgreed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "daughterAgreed"
+            },
+            "playerAgreed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "playerAgreed"
+            },
+            "talked": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "talked"
+            },
+            "ordinaryMorning": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "ordinaryMorning"
+            },
+            "daughterCrossed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "daughterCrossed"
+            },
+            "nightClosed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "nightClosed"
+            },
+            "playerCrossed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "playerCrossed"
+            },
+            "letterDelivered": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "letterDelivered"
+            },
+            "doorSealed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "doorSealed"
+            },
+            "testObjectAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "family_place",
+                "morning_place",
+                "host",
+                "transit",
+                "party",
+                "ribbon",
+                "letterSheet",
+                "daughterPerson",
+                "parentPerson"
+              ],
+              "meaning": "testObject の所在または保持者"
+            },
+            "ribbonAt": {
+              "type": "enum",
+              "initial": "morning_place",
+              "values": [
+                "entry",
+                "family_place",
+                "morning_place",
+                "host",
+                "transit",
+                "party",
+                "testObject",
+                "letterSheet",
+                "daughterPerson",
+                "parentPerson"
+              ],
+              "meaning": "ribbon の所在または保持者"
+            },
+            "letterSheetAt": {
+              "type": "enum",
+              "initial": "morning_place",
+              "values": [
+                "entry",
+                "family_place",
+                "morning_place",
+                "host",
+                "transit",
+                "party",
+                "testObject",
+                "ribbon",
+                "daughterPerson",
+                "parentPerson"
+              ],
+              "meaning": "letterSheet の所在または保持者"
+            },
+            "daughterPersonAt": {
+              "type": "enum",
+              "initial": "family_place",
+              "values": [
+                "entry",
+                "family_place",
+                "morning_place",
+                "host",
+                "transit"
+              ],
+              "meaning": "daughterPerson の所在または保持者"
+            },
+            "parentPersonAt": {
+              "type": "enum",
+              "initial": "family_place",
+              "values": [
+                "entry",
+                "family_place",
+                "morning_place",
+                "host",
+                "transit"
+              ],
+              "meaning": "parentPerson の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "testObject": {
+              "holder": "testObjectAt",
+              "kind": "item"
+            },
+            "ribbon": {
+              "holder": "ribbonAt",
+              "kind": "item"
+            },
+            "letterSheet": {
+              "holder": "letterSheetAt",
+              "kind": "item"
+            },
+            "daughterPerson": {
+              "holder": "daughterPersonAt",
+              "kind": "person"
+            },
+            "parentPerson": {
+              "holder": "parentPersonAt",
+              "kind": "person"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "翌朝の部屋には娘の忘れた髪紐がある。彼女が消える運命なのではなく、行こうとして荷造りした痕跡だ。未来を見ることで変わるのは今夜の判断で、物の送り手と時刻を追えるようにする。分岐した未来の記憶を人物へ無断で追加しない。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "扉の向こうの明日の現場受付",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "family": {
+              "title": "宿の家族の相談室",
+              "place": "family_place",
+              "cast": [],
+              "requires": true
+            },
+            "morning": {
+              "title": "扉の先の翌朝の部屋",
+              "place": "morning_place",
+              "cast": [],
+              "requires": true
+            },
+            "wait_talk": {
+              "title": "宿の家族の相談室",
+              "place": "family_place",
+              "cast": [],
+              "requires": true
+            },
+            "wait": {
+              "title": "扉の先の翌朝の部屋",
+              "place": "morning_place",
+              "cast": [],
+              "requires": true
+            },
+            "daughter_door": {
+              "title": "扉の向こうの明日の現場受付",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "player_door": {
+              "title": "扉の向こうの明日の現場受付",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "delivered": {
+              "title": "手紙を受け取る宿主の席",
+              "place": "host",
+              "cast": [],
+              "requires": true
+            },
+            "closed": {
+              "title": "扉の向こうの明日の現場受付",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_test": {
+              "from": [
+                "entry"
+              ],
+              "to": "family",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "family_place"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "objectReturned",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "family_place",
+                "companions": []
+              },
+              "depart": []
+            },
+            "entry_close": {
+              "from": [
+                "entry"
+              ],
+              "to": "closed",
+              "requires": true,
+              "effects": [],
+              "once": false
+            },
+            "family_wait": {
+              "from": [
+                "family"
+              ],
+              "to": "wait_talk",
+              "requires": true,
+              "effects": [],
+              "once": false
+            },
+            "family_daughter": {
+              "from": [
+                "family"
+              ],
+              "to": "daughter_door",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "daughterPerson"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": [
+                  "daughterPerson"
+                ]
+              },
+              "depart": [
+                {
+                  "op": "set",
+                  "key": "daughterAgreed",
+                  "value": true
+                }
+              ]
+            },
+            "family_player": {
+              "from": [
+                "family"
+              ],
+              "to": "player_door",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "daughterPerson"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": [
+                  "daughterPerson"
+                ]
+              },
+              "depart": [
+                {
+                  "op": "set",
+                  "key": "playerAgreed",
+                  "value": true
+                }
+              ]
+            },
+            "family_close": {
+              "from": [
+                "family"
+              ],
+              "to": "closed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "morning_finish": {
+              "from": [
+                "morning"
+              ],
+              "to": "delivered",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "host"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "host",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "letterSheet",
+                  "from": "morning_place",
+                  "to": "party"
+                }
+              ]
+            },
+            "wait_talk_morning": {
+              "from": [
+                "wait_talk"
+              ],
+              "to": "wait",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "daughterPerson",
+                    "parentPerson"
+                  ],
+                  "path": [
+                    "transit",
+                    "morning_place"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "morning_place",
+                "companions": [
+                  "daughterPerson",
+                  "parentPerson"
+                ]
+              },
+              "depart": [
+                {
+                  "op": "set",
+                  "key": "talked",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "ordinaryMorning",
+                  "value": true
+                }
+              ]
+            },
+            "wait_finish": {
+              "from": [
+                "wait"
+              ],
+              "ending": "wait",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "ribbon",
+                  "from": "morning_place",
+                  "to": "daughterPerson"
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "wait"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "daughter_door_morning": {
+              "from": [
+                "daughter_door"
+              ],
+              "to": "morning",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "daughterPerson"
+                  ],
+                  "path": [
+                    "transit",
+                    "morning_place"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "morning_place",
+                "companions": [
+                  "daughterPerson"
+                ]
+              },
+              "depart": [
+                {
+                  "op": "set",
+                  "key": "daughterCrossed",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "nightClosed",
+                  "value": true
+                }
+              ]
+            },
+            "player_door_cross": {
+              "from": [
+                "player_door"
+              ],
+              "to": "morning",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "daughterPerson"
+                  ],
+                  "path": [
+                    "transit",
+                    "morning_place"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "morning_place",
+                "companions": [
+                  "daughterPerson"
+                ]
+              },
+              "depart": [
+                {
+                  "op": "set",
+                  "key": "playerCrossed",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "daughterCrossed",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "nightClosed",
+                  "value": true
+                }
+              ]
+            },
+            "delivered_finish": {
+              "from": [
+                "delivered"
+              ],
+              "ending": "cross",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "letterSheet",
+                  "from": "party",
+                  "to": "host"
+                },
+                {
+                  "op": "set",
+                  "key": "letterDelivered",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "cross"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "closed_finish": {
+              "from": [
+                "closed"
+              ],
+              "ending": "close",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "doorSealed",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "close"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "wait": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q178.values.resolution"
+                  },
+                  "right": "wait"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q178.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q178.values.partyAt"
+                      },
+                      "right": "morning_place"
+                    }
+                  ]
+                }
+              ]
+            },
+            "cross": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q178.values.resolution"
+                  },
+                  "right": "cross"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q178.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q178.values.partyAt"
+                      },
+                      "right": "host"
+                    }
+                  ]
+                }
+              ]
+            },
+            "close": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q178.values.resolution"
+                  },
+                  "right": "close"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q178.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q178.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_8",
+              "map": "region_8_f2",
+              "x": 5,
+              "y": 1
+            },
+            "family_place": {
+              "kind": "town",
+              "location": "machine_family"
+            },
+            "morning_place": {
+              "kind": "town",
+              "location": "machine_morning"
+            },
+            "host": {
+              "kind": "town",
+              "location": "salome_inn"
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "hostPersonAt",
+            "value": "host"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q178.scene.entry": {
@@ -977,7 +1776,7 @@
         },
         {
           "op": "narrate",
-          "text": "戻れないことを承知した娘が扉を越えた。今夜の話し合いを済ませたことにはしない。"
+          "text": "戻れないことを承知した娘は、扉を越えると決めた。今夜の話し合いを済ませたことにはしない。"
         },
         {
           "op": "choice",
@@ -1012,7 +1811,7 @@
         },
         {
           "op": "narrate",
-          "text": "娘に続いて翌朝へ越える。夜の判断へ戻る行為はない。"
+          "text": "娘と翌朝へ越えることを決めた。越えれば夜の判断へは戻れない。"
         },
         {
           "op": "choice",
@@ -1047,7 +1846,7 @@
         },
         {
           "op": "narrate",
-          "text": "机の手紙を宿主へ渡した。言えなかった話は済んだことにせず、髪紐は忘れ物として残す。"
+          "text": "机の手紙を持って宿主の席へ着いた。言えなかった話は済んだことにせず、髪紐は忘れ物として残す。"
         },
         {
           "op": "choice",
@@ -1522,6 +2321,14 @@
           "transit"
         ],
         "meaning": "parentPerson の所在または保持者"
+      },
+      "hostPersonAt": {
+        "type": "enum",
+        "initial": "host",
+        "values": [
+          "host"
+        ],
+        "meaning": "hostPerson の所在または保持者"
       }
     },
     "entities": {
@@ -1543,11 +2350,18 @@
       },
       "daughterPerson": {
         "holder": "daughterPersonAt",
-        "kind": "person"
+        "kind": "person",
+        "character": "q178_daughter"
       },
       "parentPerson": {
         "holder": "parentPersonAt",
-        "kind": "person"
+        "kind": "person",
+        "character": "q178_parent"
+      },
+      "hostPerson": {
+        "holder": "hostPersonAt",
+        "kind": "person",
+        "character": "q178_host"
       }
     },
     "propositions": {
@@ -1567,43 +2381,110 @@
       "family": {
         "title": "宿の家族の相談室",
         "place": "family_place",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "daughterPerson",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "parentPerson",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "morning": {
         "title": "扉の先の翌朝の部屋",
         "place": "morning_place",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "daughterPerson",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "wait_talk": {
         "title": "宿の家族の相談室",
         "place": "family_place",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "daughterPerson",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "parentPerson",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "wait": {
         "title": "扉の先の翌朝の部屋",
         "place": "morning_place",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "daughterPerson",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "parentPerson",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "daughter_door": {
         "title": "扉の向こうの明日の現場受付",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "daughterPerson",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "player_door": {
         "title": "扉の向こうの明日の現場受付",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "daughterPerson",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "delivered": {
         "title": "手紙を受け取る宿主の席",
         "place": "host",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "hostPerson",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "closed": {
@@ -2126,7 +3007,7 @@
         "location": "salome_inn"
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "salome",
   "receptionLocations": [
