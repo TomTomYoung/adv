@@ -4196,25 +4196,27 @@ export const RELOCATED_CAST_REVIEW={
   "next": "q179の4役・焼却と救援の時点・旧保存を接続済み。次は精読済みq180のムイと聞き手の表示、および語り・封印・台本の本文と操作の時点を整える。"
 },
   q180:{
-  "sourceSha256": "8c9f951655a3fe5eee13611215f129fc6fb9939d85d48f726f1beeec979748d5",
+  "sourceSha256": "b1470ccd8c9a314dd340536cef09564f5c9ba2261deb86019c5ff697a0afe2ae",
   "identityNotes": [
-    "原稿authoring/reference/volume-08.mdのGQ080、初版q180、現場接続後の全9場面・8旅程・4結末を精読した。",
+    "原稿authoring/reference/volume-08.mdのGQ080、初版q180、現場接続後の全9場面・8旅程・4結末を再精読し、ムイと聞き手を呼称表示で接続した。",
     "ムイmuiは語り部。受付entry以外の全8場面で実所在が一致する。宿から台本庫へ同行し、封印経路では聞き手と別室へ移動した後、本人だけ台本庫へ戻る。戦闘の仲間にはしない。",
-    "聞き手listenersは人数未確定の集団。宿のonsite・told_original・told_new・sealed_hereと、退避後のsealed_refuge・bannedを表示候補にする。台本庫のending・storedへ同行させない。",
+    "聞き手listenersは人数未確定の集団。宿のonsite・told_original・told_new・sealed_hereと、退避後のsealed_refuge・bannedに表示する。台本庫のending・storedへ同行させない。",
     "宿主は依頼人欄にあるが、現行の本文に発言・動作・同席の根拠がない。所在を創作して表示せず、ムイとも同定しない。怪物は現象の説明対象で、人物役や新しい戦闘を追加しない。",
-    "endingは台本庫なのに聞き手の席を整えたと記す。席の準備は宿の場面との関係を次工程で整理する。told_original・told_newは語了済みの本文だがstoryFinishedと台本のmuiへの受渡しはfinish時。sealed_hereは封印済みの本文だがphenomenonSealedはescort出発時。bannedは告知済みの本文だがbannedはfinish時。",
+    "endingは宿へ戻って席を整える予定とし、told_original・told_newは語る準備までの本文に修正した。storyFinishedと台本のmuiへの受渡しはfinish時。sealed_hereは封印と退避の手順確認までとし、phenomenonSealedはescort出発時。stored・bannedもfinish前の保管・禁止の準備として記す。修正は6場面の本文と表示だけで、物語改訂1・旧待機本文と選択肢・状態を維持する。",
     "台本scriptPagesは原稿を選んだ出発時に隊へ、語りのfinish時にムイへ渡す。封印経路では台本庫に残る。storedの保管確定と、怪異の封印、聞き手の退避、物語の完結を別状態として保つ。旧保存・4結末・局所の夜と世界の時計を維持する。"
   ],
   "people": {
     "q180_mui": {
       "label": "語り部ムイ",
-      "status": "candidate",
-      "need": "既存muiの所在と実同行に合わせる。本文にない宿主との関係や容貌を補わない。"
+      "status": "connected",
+      "need": "既存muiの所在と実同行に合わせる。本文にない宿主との関係や容貌を補わない。",
+      "entity": "mui"
     },
     "q180_listeners": {
       "label": "怪談の聞き手たち",
-      "status": "candidate",
-      "need": "宿と実退避後の別室だけに表示する人数未確定のgroup。台本庫へ同行させない。"
+      "status": "connected",
+      "need": "宿と実退避後の別室だけに表示する人数未確定のgroup。台本庫へ同行させない。",
+      "entity": "listeners"
     }
   },
   "scenes": {
@@ -4230,8 +4232,8 @@ export const RELOCATED_CAST_REVIEW={
       "people": [
         "q180_mui"
       ],
-      "evidence": "元の後半は、村へ帰るだけの話だった。起きた事実を消さず、新しい帰着先で終えることもできる。怖い場面を最後まで聞く席を整えた。",
-      "reason": "ムイが台本庫へ実同行する。聞き手は宿に残るため、席を整えた本文を根拠に台本庫へ出現させない。",
+      "evidence": "元の後半は、村へ帰るだけの話だった。起きた事実を消さず、新しい帰着先で終えることもできる。宿へ戻り、怖い場面を最後まで聞ける席を整える。",
+      "reason": "ムイだけが台本庫へ実同行する。席は宿へ戻って整える予定とし、聞き手を台本庫へ出現させない。",
       "visual": "台本の後半を調べるムイ。"
     },
     "onsite": {
@@ -4250,8 +4252,8 @@ export const RELOCATED_CAST_REVIEW={
         "q180_mui",
         "q180_listeners"
       ],
-      "evidence": "聞き手の席を整え、元の帰郷まで語り終えた。討伐したという記録は付けない。",
-      "reason": "ムイと台本を持って宿へ帰る。聞き手は宿に残る。語了済みの本文とfinish時のstoryFinished・台本受渡しの差は次工程で整理する。",
+      "evidence": "ムイと台本を持って宿へ戻り、聞き手の席を整えた。元の帰郷まで語る準備ができた。討伐したという記録は付けない。",
+      "reason": "ムイと台本を持って宿へ帰り、聞き手の席を整えた。語了・台本の返却はfinish時。",
       "visual": "元の帰郷まで語る席のムイと聞き手。"
     },
     "told_new": {
@@ -4260,8 +4262,8 @@ export const RELOCATED_CAST_REVIEW={
         "q180_mui",
         "q180_listeners"
       ],
-      "evidence": "起きた事実を消さず、遠い宿へ帰る後半を最後まで語った。",
-      "reason": "ムイと台本を持って宿へ帰る。聞き手は宿に残る。既出事実を消さず、用意済みの新しい帰着先を選ぶ。語了の旗はfinish時。",
+      "evidence": "ムイと台本を持って宿へ戻り、聞き手の席を整えた。起きた事実を消さず、遠い宿へ帰る後半を最後まで語る準備ができた。",
+      "reason": "ムイと台本を持って宿へ帰り、聞き手の席を整えた。既出事実を消さず用意済みの後半を語る準備とし、語了はfinish時。",
       "visual": "遠い宿へ帰る後半を語るムイと聞き手。"
     },
     "sealed_here": {
@@ -4270,8 +4272,8 @@ export const RELOCATED_CAST_REVIEW={
         "q180_mui",
         "q180_listeners"
       ],
-      "evidence": "怪異を封じた。話は未完のままなので、聞き手を退避させて台本を管理する。",
-      "reason": "ムイと聞き手は宿にいる。台本庫経由でもムイは宿へ戻る。封印済み本文とescort出発時の旗を次工程で整理する。",
+      "evidence": "怪異を封じる手順と、聞き手の退避先を確認した。話は未完のままなので、台本も管理する。",
+      "reason": "ムイと聞き手が宿にいる。台本庫経由でもムイは宿へ戻る。封印前の手順確認で、escort出発時に封印の旗が立つ。",
       "visual": "退避を待つムイと聞き手。"
     },
     "sealed_refuge": {
@@ -4289,8 +4291,8 @@ export const RELOCATED_CAST_REVIEW={
       "people": [
         "q180_mui"
       ],
-      "evidence": "台本庫に封印の制約を記した。話を完結させたことにはしない。",
-      "reason": "ムイだけが台本庫へ実同行する。聞き手は別室。保管庫の職員や完結した話を追加しない。",
+      "evidence": "ムイと台本庫へ戻った。未完の台本を保管するため、封印の制約を記す。話を完結させたことにはしない。",
+      "reason": "ムイだけが台本庫へ実同行し、聞き手は別室に残る。台本の保管はfinish時で、物語を完結扱いにしない。",
       "visual": "未完の台本を保管するムイ。"
     },
     "banned": {
@@ -4299,12 +4301,150 @@ export const RELOCATED_CAST_REVIEW={
         "q180_mui",
         "q180_listeners"
       ],
-      "evidence": "語りの禁止を告知し、聞き手を静かな別室へ案内した。未完の話の扱いは後日に残す。",
-      "reason": "ムイと聞き手が別室へ実到着している。語り禁止の告知済み本文とfinish時の旗を次工程で整理し、話を完結扱いにしない。",
+      "evidence": "聞き手を静かな別室へ案内した。ここで語りの禁止を告知する。未完の話の扱いは後日に残す。",
+      "reason": "ムイと聞き手が別室へ実到着した。禁止の告知はfinish時とし、未完の話の扱いを残す。",
       "visual": "静かな別室のムイと聞き手。"
     }
   },
-  "next": "ムイと聞き手を実所在へ接続し、語了・封印・禁止・台本の本文と操作確定の時点を整理する。4結末と旧保存を維持する。"
+  "next": "q180のムイ・聞き手の表示と本文6箇所の時点を整理済み。次は精読済みq181の表示と白い矢筒の保持者・本文の整合を実装する。"
+},
+  q181:{
+  "sourceSha256": "b989e70abf0a19120fd806073afe59e50e45698183445bcc14a8909e8aa84865",
+  "identityNotes": [
+    "原稿authoring/reference/volume-09.mdのGQ081、初版q181、現場接続後の全9場面・8旅程・3結末を精読した。",
+    "現行ではenvoyとveteranを別のpersonとして持ち、全旅程で両者が同行する。原稿にない氏名・容貌・人物同定は加えず、戦闘の仲間へ追加しない。captainは陣地entryに残る。",
+    "傭兵への通達が明記されたbriefedと誤射のmisfireでは人数未確定の傭兵集団が候補。entryの弓を構える傭兵とsignalの敵側の返礼は距離・所在が確定しないため、遠隔描写だけで同席させない。双方の傭兵の人数や配置も創作しない。",
+    "meetingでは使者が対面する相手が候補。敵側の役職や氏名、返礼を上げた人物との同一性、同行は追加しない。",
+    "entryは古参が白い矢筒を掲げた本文だが、現在の保持者quiverAtはenvoy。使者と古参を同一人物とせず、次工程で保持状態と本文を整える。休戦を結ぶ経路だけagreedのfinishでenvoy→captain→veteranと渡す。救援・撤回ではenvoyの所持を保つ。",
+    "noticeはbriefedへの到着時、agreedはmeetingからの帰還出発時に立つ。会談路・遺体回収の短い休戦・使者救援・撤回と戦争終結を区別する。旧受注経路、3結末、報酬、白い矢筒の受渡しを維持する。"
+  ],
+  "people": {
+    "q181_envoy": {
+      "label": "使者",
+      "status": "candidate",
+      "need": "既存envoyの所在と全旅程に合わせる。古参との同一性を断定しない。"
+    },
+    "q181_veteran": {
+      "label": "古参",
+      "status": "candidate",
+      "need": "既存veteranの所在と全旅程に合わせる。白い矢筒の保持者と本文の差を整理する。"
+    },
+    "q181_captain": {
+      "label": "新任の弓兵隊長",
+      "status": "candidate",
+      "need": "既存captainが留まる陣地だけ。前線や対面先へ同行させない。"
+    },
+    "q181_mercenaries": {
+      "label": "傭兵たち",
+      "status": "candidate",
+      "need": "briefedとmisfireの場面に限定する人数未確定の集団。両陣の人数・代表者や遠隔場面への同席を創作しない。"
+    },
+    "q181_counterpart": {
+      "label": "対面の相手",
+      "status": "candidate",
+      "need": "meetingだけの呼称候補。氏名・役職・返礼役との同一性を補わない。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "person-evidence",
+      "people": [
+        "q181_envoy",
+        "q181_veteran",
+        "q181_captain"
+      ],
+      "evidence": "古参は矢尻を外し、白い矢筒を掲げた。隊長は臆病だと笑う。敵側にも同じ筒が上がったが、傭兵はまだ弓を構えている。",
+      "reason": "使者と古参と隊長が陣地にいる。敵の返礼や傭兵の弓は遠隔描写として扱う。",
+      "visual": "使者・古参・新任の弓兵隊長のいる白い矢筒を準備する陣地。"
+    },
+    "signal": {
+      "decision": "person-evidence",
+      "people": [
+        "q181_envoy",
+        "q181_veteran"
+      ],
+      "evidence": "返礼が届いた。示すのは戦争全体の終結でなく、この使者が話すための道だ。",
+      "reason": "使者と古参が前線へ実到着する。敵の返礼は相手の同席を意味しない。",
+      "visual": "使者・古参のいる返礼を受ける前線。"
+    },
+    "briefed": {
+      "decision": "person-evidence",
+      "people": [
+        "q181_envoy",
+        "q181_veteran",
+        "q181_mercenaries"
+      ],
+      "evidence": "古参と傭兵の持場へ来て、白い矢筒の慣習と使者の通る道を説明した。",
+      "reason": "使者と古参が傭兵の持場へ到着し、通達する。隊長は陣地。",
+      "visual": "使者・古参・傭兵たちのいる慣習を伝える傭兵の持場。"
+    },
+    "meeting": {
+      "decision": "person-evidence",
+      "people": [
+        "q181_envoy",
+        "q181_veteran",
+        "q181_counterpart"
+      ],
+      "evidence": "使者が対面した。遺体回収に限る短い休戦の時間を取り決める。",
+      "reason": "使者と古参が対面先へ到着する。対面相手の氏名や役職は確定しない。",
+      "visual": "使者・古参・対面の相手のいる使者が対面する場所。"
+    },
+    "agreed": {
+      "decision": "person-evidence",
+      "people": [
+        "q181_envoy",
+        "q181_veteran",
+        "q181_captain"
+      ],
+      "evidence": "陣地へ戻り、合意した時間と範囲を隊長へ報告する。",
+      "reason": "使者と古参が陣地へ帰着し、隊長へ報告する。矢筒の受渡しはfinish時。",
+      "visual": "使者・古参・新任の弓兵隊長のいる白い矢筒を準備する陣地。"
+    },
+    "misfire": {
+      "decision": "person-evidence",
+      "people": [
+        "q181_envoy",
+        "q181_veteran",
+        "q181_mercenaries"
+      ],
+      "evidence": "使者と前へ出ると、通達を受けていない傭兵が誤射した。使者を退避させる。",
+      "reason": "使者と古参が前線へ出て、通達を受けていない傭兵の誤射に遭う。",
+      "visual": "使者・古参・傭兵たちのいる返礼を受ける前線。"
+    },
+    "rescued": {
+      "decision": "person-evidence",
+      "people": [
+        "q181_envoy",
+        "q181_veteran"
+      ],
+      "evidence": "使者を前線から運び出した。陣地へ戻り、印だけに頼った手順を伝え直す。",
+      "reason": "使者と古参が退避先へ実到着する。施設名から救護職員を追加しない。",
+      "visual": "使者・古参のいる誤射された使者の退避先。"
+    },
+    "rescue_report": {
+      "decision": "person-evidence",
+      "people": [
+        "q181_envoy",
+        "q181_veteran",
+        "q181_captain"
+      ],
+      "evidence": "使者が陣地へ戻った。誤射と救援を報告し、伝達の手順を見直す。",
+      "reason": "使者と古参が陣地へ戻って報告する。隊長は既存の所在に留まる。",
+      "visual": "使者・古参・新任の弓兵隊長のいる白い矢筒を準備する陣地。"
+    },
+    "withdrawn": {
+      "decision": "person-evidence",
+      "people": [
+        "q181_envoy",
+        "q181_veteran",
+        "q181_captain"
+      ],
+      "evidence": "使者と陣地へ戻り、今回の伝達を撤回したと報告する。",
+      "reason": "陣地での即撤回でも前線からの帰還でも、使者・古参・隊長が陣地にいる。",
+      "visual": "使者・古参・新任の弓兵隊長のいる白い矢筒を準備する陣地。"
+    }
+  },
+  "next": "使者と古参の全行程、隊長の陣地、傭兵と対面相手の場面別表示を実装し、entryの白い矢筒の本文と保持者を整える。旧保存・3結末・受渡しを維持する。"
 }
  }
 };
