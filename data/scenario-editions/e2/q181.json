@@ -465,7 +465,7 @@
       {
         "id": "entry",
         "place": "entry",
-        "text": "古参は矢尻を外し、白い矢筒を掲げた。隊長は臆病だと笑う。敵側にも同じ筒が上がったが、傭兵はまだ弓を構えている。",
+        "text": "古参は矢尻を外した。使者は白い矢筒を掲げ、隊長は古参を臆病だと笑う。敵側にも同じ筒が上がったが、傭兵はまだ弓を構えている。",
         "options": [
           {
             "id": "ask",
@@ -608,7 +608,7 @@
     "entryScript": "q181.observatory.visit",
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -617,7 +617,726 @@
       "saveRevision": 2,
       "scope": "観測所20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "白い矢筒を準備する陣地",
+            "mercenaries": "慣習を伝える傭兵の持場",
+            "signal": "返礼を受ける前線",
+            "meeting": "使者が対面する場所",
+            "rescue": "誤射された使者の退避先",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "mercenaries"
+            ],
+            [
+              "transit",
+              "signal"
+            ],
+            [
+              "transit",
+              "meeting"
+            ],
+            [
+              "transit",
+              "rescue"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "mercenaries",
+                "signal",
+                "meeting",
+                "rescue",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "meet",
+                "rescue",
+                "withdraw"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "notice": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "notice"
+            },
+            "agreed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "agreed"
+            },
+            "envoyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "mercenaries",
+                "signal",
+                "meeting",
+                "rescue",
+                "transit"
+              ],
+              "meaning": "envoy の所在または保持者"
+            },
+            "veteranAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "mercenaries",
+                "signal",
+                "meeting",
+                "rescue",
+                "transit"
+              ],
+              "meaning": "veteran の所在または保持者"
+            },
+            "captainAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "mercenaries",
+                "signal",
+                "meeting",
+                "rescue",
+                "transit"
+              ],
+              "meaning": "captain の所在または保持者"
+            },
+            "quiverAt": {
+              "type": "enum",
+              "initial": "envoy",
+              "values": [
+                "entry",
+                "mercenaries",
+                "signal",
+                "meeting",
+                "rescue",
+                "transit",
+                "party",
+                "envoy",
+                "veteran",
+                "captain"
+              ],
+              "meaning": "quiver の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "envoy": {
+              "holder": "envoyAt",
+              "kind": "person"
+            },
+            "veteran": {
+              "holder": "veteranAt",
+              "kind": "person"
+            },
+            "captain": {
+              "holder": "captainAt",
+              "kind": "person"
+            },
+            "quiver": {
+              "holder": "quiverAt",
+              "kind": "item"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "古参が矢尻を外す動作を、戦闘準備不足に見せる。敵側からも同じ白い筒が掲げられ、双方に共有する慣習と分かる。ただし慣習を知らない傭兵も戦場におり、印だけで安全が保証されない。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "白い矢筒を準備する陣地",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "signal": {
+              "title": "返礼を受ける前線",
+              "place": "signal",
+              "cast": [],
+              "requires": true
+            },
+            "briefed": {
+              "title": "慣習を伝える傭兵の持場",
+              "place": "mercenaries",
+              "cast": [],
+              "requires": true
+            },
+            "meeting": {
+              "title": "使者が対面する場所",
+              "place": "meeting",
+              "cast": [],
+              "requires": true
+            },
+            "agreed": {
+              "title": "白い矢筒を準備する陣地",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "misfire": {
+              "title": "返礼を受ける前線",
+              "place": "signal",
+              "cast": [],
+              "requires": true
+            },
+            "rescued": {
+              "title": "誤射された使者の退避先",
+              "place": "rescue",
+              "cast": [],
+              "requires": true
+            },
+            "rescue_report": {
+              "title": "白い矢筒を準備する陣地",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "withdrawn": {
+              "title": "白い矢筒を準備する陣地",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_ask": {
+              "from": [
+                "entry"
+              ],
+              "to": "briefed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "envoy",
+                    "veteran"
+                  ],
+                  "path": [
+                    "transit",
+                    "mercenaries"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "notice",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "mercenaries",
+                "companions": [
+                  "envoy",
+                  "veteran"
+                ]
+              },
+              "depart": []
+            },
+            "entry_front": {
+              "from": [
+                "entry"
+              ],
+              "to": "misfire",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "envoy",
+                    "veteran"
+                  ],
+                  "path": [
+                    "transit",
+                    "signal"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "signal",
+                "companions": [
+                  "envoy",
+                  "veteran"
+                ]
+              },
+              "depart": []
+            },
+            "entry_withdraw": {
+              "from": [
+                "entry"
+              ],
+              "to": "withdrawn",
+              "requires": true,
+              "effects": [],
+              "once": false
+            },
+            "signal_meet": {
+              "from": [
+                "signal"
+              ],
+              "to": "meeting",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "envoy",
+                    "veteran"
+                  ],
+                  "path": [
+                    "transit",
+                    "meeting"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "meeting",
+                "companions": [
+                  "envoy",
+                  "veteran"
+                ]
+              },
+              "depart": []
+            },
+            "signal_withdraw": {
+              "from": [
+                "signal"
+              ],
+              "to": "withdrawn",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "envoy",
+                    "veteran"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": [
+                  "envoy",
+                  "veteran"
+                ]
+              },
+              "depart": []
+            },
+            "briefed_signal": {
+              "from": [
+                "briefed"
+              ],
+              "to": "signal",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "envoy",
+                    "veteran"
+                  ],
+                  "path": [
+                    "transit",
+                    "signal"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "signal",
+                "companions": [
+                  "envoy",
+                  "veteran"
+                ]
+              },
+              "depart": []
+            },
+            "meeting_return": {
+              "from": [
+                "meeting"
+              ],
+              "to": "agreed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "envoy",
+                    "veteran"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": [
+                  "envoy",
+                  "veteran"
+                ]
+              },
+              "depart": [
+                {
+                  "op": "set",
+                  "key": "agreed",
+                  "value": true
+                }
+              ]
+            },
+            "agreed_finish": {
+              "from": [
+                "agreed"
+              ],
+              "ending": "meet",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "quiver",
+                  "from": "envoy",
+                  "to": "captain"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "quiver",
+                  "from": "captain",
+                  "to": "veteran"
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "meet"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "misfire_rescue": {
+              "from": [
+                "misfire"
+              ],
+              "to": "rescued",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "envoy",
+                    "veteran"
+                  ],
+                  "path": [
+                    "transit",
+                    "rescue"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "rescue",
+                "companions": [
+                  "envoy",
+                  "veteran"
+                ]
+              },
+              "depart": []
+            },
+            "rescued_return": {
+              "from": [
+                "rescued"
+              ],
+              "to": "rescue_report",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "envoy",
+                    "veteran"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": [
+                  "envoy",
+                  "veteran"
+                ]
+              },
+              "depart": []
+            },
+            "rescue_report_finish": {
+              "from": [
+                "rescue_report"
+              ],
+              "ending": "rescue",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "rescue"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "withdrawn_finish": {
+              "from": [
+                "withdrawn"
+              ],
+              "ending": "withdraw",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "withdraw"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "meet": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q181.values.resolution"
+                  },
+                  "right": "meet"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q181.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q181.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "rescue": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q181.values.resolution"
+                  },
+                  "right": "rescue"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q181.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q181.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "withdraw": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q181.values.resolution"
+                  },
+                  "right": "withdraw"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q181.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q181.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "observatory_sites",
+              "map": "e2_observatory_front",
+              "x": 1,
+              "y": 3
+            },
+            "mercenaries": {
+              "kind": "dungeon",
+              "dungeon": "observatory_sites",
+              "map": "e2_observatory_front",
+              "x": 5,
+              "y": 3
+            },
+            "signal": {
+              "kind": "dungeon",
+              "dungeon": "observatory_sites",
+              "map": "e2_observatory_front",
+              "x": 9,
+              "y": 3
+            },
+            "meeting": {
+              "kind": "dungeon",
+              "dungeon": "observatory_sites",
+              "map": "e2_observatory_front",
+              "x": 13,
+              "y": 3
+            },
+            "rescue": {
+              "kind": "dungeon",
+              "dungeon": "observatory_sites",
+              "map": "e2_observatory_front",
+              "x": 5,
+              "y": 7
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "postMercenariesAt",
+            "value": "mercenaries"
+          },
+          {
+            "key": "frontMercenariesAt",
+            "value": "signal"
+          },
+          {
+            "key": "counterpartAt",
+            "value": "meeting"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q181.scene.entry": {
@@ -890,7 +1609,7 @@
         },
         {
           "op": "narrate",
-          "text": "古参は矢尻を外し、白い矢筒を掲げた。隊長は臆病だと笑う。敵側にも同じ筒が上がったが、傭兵はまだ弓を構えている。"
+          "text": "古参は矢尻を外した。使者は白い矢筒を掲げ、隊長は古参を臆病だと笑う。敵側にも同じ筒が上がったが、傭兵はまだ弓を構えている。"
         },
         {
           "op": "choice",
@@ -1613,6 +2332,30 @@
           "captain"
         ],
         "meaning": "quiver の所在または保持者"
+      },
+      "postMercenariesAt": {
+        "type": "enum",
+        "initial": "mercenaries",
+        "values": [
+          "mercenaries"
+        ],
+        "meaning": "postMercenaries の所在または保持者"
+      },
+      "frontMercenariesAt": {
+        "type": "enum",
+        "initial": "signal",
+        "values": [
+          "signal"
+        ],
+        "meaning": "frontMercenaries の所在または保持者"
+      },
+      "counterpartAt": {
+        "type": "enum",
+        "initial": "meeting",
+        "values": [
+          "meeting"
+        ],
+        "meaning": "counterpart の所在または保持者"
       }
     },
     "entities": {
@@ -1622,19 +2365,37 @@
       },
       "envoy": {
         "holder": "envoyAt",
-        "kind": "person"
+        "kind": "person",
+        "character": "q181_envoy"
       },
       "veteran": {
         "holder": "veteranAt",
-        "kind": "person"
+        "kind": "person",
+        "character": "q181_veteran"
       },
       "captain": {
         "holder": "captainAt",
-        "kind": "person"
+        "kind": "person",
+        "character": "q181_captain"
       },
       "quiver": {
         "holder": "quiverAt",
         "kind": "item"
+      },
+      "postMercenaries": {
+        "holder": "postMercenariesAt",
+        "kind": "group",
+        "character": "q181_post_mercenaries"
+      },
+      "frontMercenaries": {
+        "holder": "frontMercenariesAt",
+        "kind": "group",
+        "character": "q181_front_mercenaries"
+      },
+      "counterpart": {
+        "holder": "counterpartAt",
+        "kind": "person",
+        "character": "q181_counterpart"
       }
     },
     "propositions": {
@@ -1648,55 +2409,214 @@
       "entry": {
         "title": "白い矢筒を準備する陣地",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "envoy",
+            "display": {
+              "x": 20
+            }
+          },
+          {
+            "entity": "veteran",
+            "display": {
+              "x": 50
+            }
+          },
+          {
+            "entity": "captain",
+            "display": {
+              "x": 80
+            }
+          }
+        ],
         "requires": true
       },
       "signal": {
         "title": "返礼を受ける前線",
         "place": "signal",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "envoy",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "veteran",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "briefed": {
         "title": "慣習を伝える傭兵の持場",
         "place": "mercenaries",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "envoy",
+            "display": {
+              "x": 20
+            }
+          },
+          {
+            "entity": "veteran",
+            "display": {
+              "x": 50
+            }
+          },
+          {
+            "entity": "postMercenaries",
+            "display": {
+              "x": 80
+            }
+          }
+        ],
         "requires": true
       },
       "meeting": {
         "title": "使者が対面する場所",
         "place": "meeting",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "envoy",
+            "display": {
+              "x": 20
+            }
+          },
+          {
+            "entity": "veteran",
+            "display": {
+              "x": 50
+            }
+          },
+          {
+            "entity": "counterpart",
+            "display": {
+              "x": 80
+            }
+          }
+        ],
         "requires": true
       },
       "agreed": {
         "title": "白い矢筒を準備する陣地",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "envoy",
+            "display": {
+              "x": 20
+            }
+          },
+          {
+            "entity": "veteran",
+            "display": {
+              "x": 50
+            }
+          },
+          {
+            "entity": "captain",
+            "display": {
+              "x": 80
+            }
+          }
+        ],
         "requires": true
       },
       "misfire": {
         "title": "返礼を受ける前線",
         "place": "signal",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "envoy",
+            "display": {
+              "x": 20
+            }
+          },
+          {
+            "entity": "veteran",
+            "display": {
+              "x": 50
+            }
+          },
+          {
+            "entity": "frontMercenaries",
+            "display": {
+              "x": 80
+            }
+          }
+        ],
         "requires": true
       },
       "rescued": {
         "title": "誤射された使者の退避先",
         "place": "rescue",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "envoy",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "veteran",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "rescue_report": {
         "title": "白い矢筒を準備する陣地",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "envoy",
+            "display": {
+              "x": 20
+            }
+          },
+          {
+            "entity": "veteran",
+            "display": {
+              "x": 50
+            }
+          },
+          {
+            "entity": "captain",
+            "display": {
+              "x": 80
+            }
+          }
+        ],
         "requires": true
       },
       "withdrawn": {
         "title": "白い矢筒を準備する陣地",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "envoy",
+            "display": {
+              "x": 20
+            }
+          },
+          {
+            "entity": "veteran",
+            "display": {
+              "x": 50
+            }
+          },
+          {
+            "entity": "captain",
+            "display": {
+              "x": 80
+            }
+          }
+        ],
         "requires": true
       }
     },
@@ -2182,7 +3102,7 @@
         "y": 7
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "oddland_village",
   "receptionLocations": [

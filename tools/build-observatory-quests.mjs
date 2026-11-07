@@ -10,7 +10,17 @@ export async function buildObservatoryQuests({check=false}={}){
  const quests=[];
  for(const n of [...Array.from({length:10},(_,i)=>81+i),...Array.from({length:10},(_,i)=>181+i)]){
   const first=JSON.parse(await fs.readFile(path.join(root,`data/quests/q${String(n).padStart(3,'0')}.json`),'utf8')),source=n<100?observatoryFirstSource:observatorySecondSource;
-  quests.push(compileRelocatedQuest(first,source(first),{prefix:'observatory',eventPrefix:'observatory',settlement:'oddland_village',settlementName:'旧王領の村',board:'royal_board',boardName:'旧王領の村の依頼所',source:`authoring/editions/e2/oddland/observatory-${n<100?'first':'second'}.mjs`,stage:'observatory-twenty',scope:'観測所20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。',preserveAcceptedRoute:true,battle:'boss_9'}));
+  const options={prefix:'observatory',eventPrefix:'observatory',settlement:'oddland_village',settlementName:'旧王領の村',board:'royal_board',boardName:'旧王領の村の依頼所',source:`authoring/editions/e2/oddland/observatory-${n<100?'first':'second'}.mjs`,stage:'observatory-twenty',scope:'観測所20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。',preserveAcceptedRoute:true,battle:'boss_9'};
+  const quest=compileRelocatedQuest(first,source(first),options);
+  if(n===181){
+   const previous=compileRelocatedQuest(first,source(first,{cast:false}),options).story;
+   quest.story.registry.quiverAt.values=structuredClone(previous.registry.quiverAt.values);
+   const values=[{key:'postMercenariesAt',value:'mercenaries'},{key:'frontMercenariesAt',value:'signal'},{key:'counterpartAt',value:'meeting'}];
+   for(const {key,value} of values)quest.story.registry[key].values=[value];
+   quest.story.revision=2;quest.model.edition.revision=2;
+   quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values}];
+  }
+  quests.push(quest);
  }
  const outcomes=quests.reduce((n,q)=>n+Object.keys(q.outcomes).length,0);
  const lines=['# 星欠けの地下観測所・20件の第2版経路','','2026-10-26。q081〜090・q181〜190の既存本文・条件・'+outcomes+'結末・報酬を継承し、観測所と周辺の現場、出張、同行、受渡しを接続した。全文改稿ではない。','',
