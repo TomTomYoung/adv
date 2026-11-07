@@ -52,6 +52,13 @@ export async function buildMachineQuests({check=false}={}){
    quest.story.revision=2;quest.model.edition.revision=2;
    quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[{key:'courierPersonAt',value:'shop'},{key:'customersAt',value:'public'}]}];
   }
+  if(n===178){
+   const previous=compileRelocatedQuest(first,source(first,{cast:false}),options).story;
+   for(const key of ['testObjectAt','ribbonAt','letterSheetAt'])quest.story.registry[key].values=structuredClone(previous.registry[key].values);
+   quest.story.registry.hostPersonAt.values=['host'];
+   quest.story.revision=2;quest.model.edition.revision=2;
+   quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[{key:'hostPersonAt',value:'host'}]}];
+  }
   quests.push(quest);
  }
  const outcomes=quests.reduce((n,q)=>n+Object.keys(q.outcomes).length,0);

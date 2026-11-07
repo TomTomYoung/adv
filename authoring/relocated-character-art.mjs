@@ -55,6 +55,21 @@ export const relocatedCharacters=Object.fromEntries([
 ].map(([id,name,detail,provenance])=>[id,{id,name,role:'礼拝堂の現地の相手',detail,portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,
  provenance:provenance??'2026-10-29の美術設定。固有名・他人物との同一性は追加しない。具体的な外見・年齢感・服装は今回の美術設定。牢・格子・聖像・宝玉・石を人物画へ固定しない。'}]));
 // The group has no specified headcount or spokesperson. Ren is the existing actor.
+relocatedCharacters.q178_daughter={
+ id:'q178_daughter',name:'旅立つ娘',role:'翌朝への扉を前に旅立ちを決める娘',
+ detail:'親との相談、扉の前、実同行後の翌朝の部屋に表示する。手紙の届け先へは同行しない。髪紐は普通の忘れ物として扱う。',
+ provenance:'2026-11-07。既存daughterPersonの呼称表示。氏名・容貌・年齢や未来の記憶を補わず、専用画は未接続。'
+};
+relocatedCharacters.q178_parent={
+ id:'q178_parent',name:'娘の親',role:'今夜の相談と通常の朝の見送りに立ち会う親',
+ detail:'相談室と、扉を使わず娘と実同行した翌朝の部屋に表示する。越境経路では相談室に残る。宿主との同一性は未確定。',
+ provenance:'2026-11-07。既存parentPersonの呼称表示。氏名・性別・容貌を補わず、専用画は未接続。'
+};
+relocatedCharacters.q178_host={
+ id:'q178_host',name:'手紙を受け取る宿主',role:'翌朝に娘の手紙を受け取る宿主',
+ detail:'手紙を届けるhostの席だけに表示する受取役。親と同一人物とも別人とも確定せず、本文にない同行や対話を加えない。',
+ provenance:'2026-11-07。hostPersonの呼称表示。役の所在を固定し、氏名・性別・容貌を補わず、専用画は未接続。'
+};
 relocatedCharacters.q177_courier={
  id:'q177_courier',name:'配達人',role:'鏡の旗が昨日降ろされたと証言する配達人',
  detail:'鏡の店のonsiteだけに呼称を表示する。配達所へ同行させず、依頼人の商人とは同定しない。',

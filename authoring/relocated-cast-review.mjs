@@ -3884,30 +3884,33 @@ export const RELOCATED_CAST_REVIEW={
   "next": "q177の2役と固定所在・旧保存を接続した。次はq178の越境・受渡し本文と実状態の差を整理して人物表示を実装し、続いてq179を精読する。"
 },
   q178:{
-  "sourceSha256": "efe51723f653874de2c4bb3e0f9dc4d14d730d7618ef5a418953ad8d6c41d538",
+  "sourceSha256": "25211ed644872466af0f32136851895c6c68e236971699a26389173a9a34c257",
   "identityNotes": [
-    "原稿authoring/reference/volume-08.mdのGQ078、初版q178、現場接続後の全9場面・8旅程・3結末と状態値・品物の受渡しを精読した。",
-    "娘daughterPerson・親parentPersonと、手紙を受け取る宿主の3役を候補とする。宿主と親の同一性は本文から確定せず、別人であるとも断定しない。表示接続時に役と所在の扱いを確認する。",
-    "娘は扉へ、通常の朝では娘と親が翌朝の部屋へ実同行する。越境経路では娘だけが翌朝の部屋に残り、手紙の届け先へは同行しない。morning本文と、結末で一人旅立つ娘の時点を整理する。",
-    "daughter_doorは越境済み本文だが、越境の旗と翌朝への移動は次の出発時。player_doorも娘に続いて越える表現と旗の立つ時点を確認する。表示だけを先付けせず、不可逆の判断と旧保存を保つ解決を先に行う。",
-    "手紙はmorningからの出発時に隊へ移り、宿主への実受渡しはdeliveredのfinish時。受渡し済み本文との時点差を次に整える。通常の朝の髪紐はwaitのfinish時に娘へ渡す。",
+    "原稿authoring/reference/volume-08.mdのGQ078、初版q178、現場接続後の全9場面・8旅程・3結末と状態値・品物の受渡しを再精読した。",
+    "娘daughterPerson・親parentPerson・手紙の受取役hostPersonの3役を呼称で接続した。宿主と親の同一性は本文から確定せず、別人であるとも断定しない。役ごとの所在を扱い、同時表示や新しい関係を作らない。",
+    "娘は扉へ、通常の朝では娘と親が翌朝の部屋へ実同行する。越境経路のmorningでは実同行した娘を表示し、手紙の届け先へは同行させない。一人で旅立つ結末より前の場面として、新しい対話や行為を追加しない。",
+    "daughter_door・player_doorを越えると決めた段階の本文へ修正した。越境の旗と翌朝への実移動は次の出発時のまま。物語改訂1→2はhostPersonAtだけを補い、表示中の旧本文・選択肢を保つ。旧旅程を再開して到着すると修正文を使う。",
+    "deliveredを手紙を持って宿主の席へ着いた本文へ修正した。手紙はmorning出発時に隊へ、deliveredのfinish時に従来のhostへ渡す。通常の朝の髪紐はwaitのfinish時に娘へ渡す。新しい宿主entityを品物の保持者へ追加しない。",
     "娘の髪紐は荷造りの忘れ物であり、必ず消える運命の証拠ではない。局所の翌朝と世界の時計を混同せず、越境後に夜の選択を再実行させない。語らなかった話を済んだことにせず、未来の記憶を人物へ追加しない。"
   ],
   "people": {
     "q178_daughter": {
       "label": "旅立つ娘",
-      "status": "candidate",
-      "need": "既存daughterPersonの相談・扉・翌朝の所在に基づく候補。越境済み本文と旗・実同行の時点差を旧保存も含めて整理してから接続する。"
+      "status": "connected",
+      "need": "相談・扉・実同行後の翌朝に呼称表示。越境済みではない本文と既存の出発時の旗を合わせ、手紙の届け先へ同行させない。",
+      "entity": "daughterPerson"
     },
     "q178_parent": {
       "label": "娘の親",
-      "status": "candidate",
-      "need": "既存parentPersonの相談室と通常の朝の見送りに限定する。宿主とは根拠なく同定せず、越境経路へ同行させない。"
+      "status": "connected",
+      "need": "相談室と通常の朝の見送りに呼称表示。越境経路では相談室に残し、宿主と同一とも別人とも断定しない。",
+      "entity": "parentPerson"
     },
     "q178_host": {
       "label": "手紙を受け取る宿主",
-      "status": "candidate",
-      "need": "deliveredの手紙の受取役。entityと保存値は未追加。親との同一性を断定せず、受渡し済み本文と実保持者を整理する。"
+      "status": "connected",
+      "need": "deliveredだけに呼称表示。hostに固定した受取役の所在だけ旧保存へ補う。手紙の保持者は従来のhostを保つ。",
+      "entity": "hostPerson"
     }
   },
   "scenes": {
@@ -3934,8 +3937,8 @@ export const RELOCATED_CAST_REVIEW={
         "q178_daughter"
       ],
       "evidence": "翌朝へ出た。夜へ戻る選択肢はない。娘の手紙が机にあり、髪紐が普通の忘れ物として残る。",
-      "reason": "daughterPersonが翌朝の部屋へ実同行している。本文は手紙と髪紐を述べ、結末では娘は一人で旅立つ。表示前に、同行後の所在と本文の時点を整理し、手紙だけを根拠に新しい対話を足さない。",
-      "visual": "翌朝の部屋と手紙・髪紐。娘の同席表示は実所在と出発の時点を整理してから接続する。"
+      "reason": "daughterPersonが翌朝の部屋へ実同行している。結末で一人旅立つより前の場面として、実所在に基づき表示する。親は相談室に残り、娘は手紙の届け先へ同行しない。",
+      "visual": "翌朝の部屋に到着した娘と、机の手紙・普通の忘れ物の髪紐。"
     },
     "wait_talk": {
       "decision": "person-evidence",
@@ -3962,27 +3965,27 @@ export const RELOCATED_CAST_REVIEW={
       "people": [
         "q178_daughter"
       ],
-      "evidence": "戻れないことを承知した娘が扉を越えた。今夜の話し合いを済ませたことにはしない。",
-      "reason": "娘はentryへ実同行するが、本文では越えたとされ、daughterCrossed・nightClosedと翌朝への実移動は次の出発時に生じる。旧保存を含め本文と越境時点を整合させてから表示する。親は相談室に残る。",
-      "visual": "扉の前の娘。越境済み表示と実状態の差を先に整理する。"
+      "evidence": "戻れないことを承知した娘は、扉を越えると決めた。今夜の話し合いを済ませたことにはしない。",
+      "reason": "娘はentryへ実同行し、扉を越えると決めた段階。daughterCrossed・nightClosedと翌朝への実移動は次の出発時のまま保つ。親は相談室に残る。旧保存で表示中の本文は保持する。",
+      "visual": "扉の前で、戻れないことを承知して越境を決めた娘。"
     },
     "player_door": {
       "decision": "person-evidence",
       "people": [
         "q178_daughter"
       ],
-      "evidence": "娘に続いて翌朝へ越える。夜の判断へ戻る行為はない。",
-      "reason": "娘がentryへ実同行し、主人公と越える次のcross出発でplayerCrossed・daughterCrossed・nightClosedが立つ。娘が先に越えたと誤認させない本文・表示の時点を確認する。",
-      "visual": "翌朝へ越える前の娘と扉。不可逆である確認を維持する。"
+      "evidence": "娘と翌朝へ越えることを決めた。越えれば夜の判断へは戻れない。",
+      "reason": "娘がentryへ実同行し、次のcross出発でplayerCrossed・daughterCrossed・nightClosedが立つ。娘が先に越えた表現を、娘と越えると決めた本文へ整えた。旧保存で表示中の本文は保持する。",
+      "visual": "娘と翌朝へ越える前の扉。戻れない判断を確認する。"
     },
     "delivered": {
       "decision": "person-evidence",
       "people": [
         "q178_host"
       ],
-      "evidence": "机の手紙を宿主へ渡した。言えなかった話は済んだことにせず、髪紐は忘れ物として残す。",
-      "reason": "宿主への受渡しが本文に明記されるが、letterSheetはこの場面到着時にはpartyが持ち、実受渡しはfinish時。宿主のentityはなく、parentPersonを根拠なく宿主へ改名・移動しない。",
-      "visual": "宿主へ手紙を渡す最終確認。受渡し済み本文と保持者を整合させる。"
+      "evidence": "机の手紙を持って宿主の席へ着いた。言えなかった話は済んだことにせず、髪紐は忘れ物として残す。",
+      "reason": "hostの席へ着いた時点ではletterSheetをpartyが持ち、実受渡しはfinish時。hostPersonは席に固定した受取役で、親を改名・移動しない。旧保存で表示中の本文は保持する。",
+      "visual": "手紙を持って到着した探索隊と受取役の宿主。"
     },
     "closed": {
       "decision": "no-person-evidence",
@@ -3992,7 +3995,201 @@ export const RELOCATED_CAST_REVIEW={
       "visual": "人が越えなかった扉と封印の確認。"
     }
   },
-  "next": "越境・受渡し本文と実状態を整理し、娘・親・宿主の表示と旧保存互換を実装する。続いてq179の出演を精読する。"
+  "next": "q178の3役・越境と受渡しの本文・旧保存を接続済み。次はq179の墓守と三家の意思確認役を実所在へ接続し、本文と状態値の時点を確認する。続いてq180の出演監査。"
+},
+  q179:{
+  "sourceSha256": "8de4695ed2777118e605c3c4ff41ebe255c6d62a2e5c458fac36d688678292c2",
+  "identityNotes": [
+    "原稿authoring/reference/volume-08.mdのGQ079、初版q179、現場接続後の全17場面・15旅程・3結末を精読した。現行の本文・選択・所在・標の保持者・準備費用と結末を照合する。",
+    "墓守keeperはgardenにいる依頼人で元庭師。受付entry以外は既存の全旅程へ実同行し、縄の準備場面houses_cut_readyにも残る。戦闘の仲間へ追加しない。",
+    "三家の標を受け取った本人を家ごとに3役の候補とする。本人の意思を聞くhouse1〜3と応答直後のhouse1_done〜3_doneだけを対象にする。世帯人数や代表者を創作せず、三家のうち誰が裕福な買主かは確定しない。",
+    "各家の標marker1〜3はitemであり人の墓・寿命や人物そのものへ同定しない。collectでは本人の希望で隊が預かり、rejectでは家に残る。starvedのfinishは隊が持つ標だけ庭へ移す。",
+    "三家の訪問は任意順で、応答済みの家は再選択できない。homesは応答した家数で回収本数ではない。縄1本はhouses_cutの準備時だけ消費し、各cut出発でroot1Cut〜root3Cutが立つ。通常の移動や保存再開で増減させない。",
+    "cut1〜3は根の切断の説明だけなので、事前訪問の有無にかかわらず住人の同席を断定しない。救援窓口という施設名から職員を追加しない。現行に救援戦はなく、原稿の案を人物表示の作業で新規実装しない。",
+    "burned・rushの焼却済み本文に対しburnedの旗はそれぞれfinish・report出発時、damagedの救援引受本文に対しaidRequestedはfinish時。次の表示実装では本文と操作確定の時点を整理し、旧保存と費用・3結末を維持する。"
+  ],
+  "people": {
+    "q179_keeper": {
+      "label": "墓守",
+      "status": "candidate",
+      "need": "既存keeperの実同行と所在に合わせる。元庭師として標を広めた責任を認めるが、容貌・氏名や戦闘参加を追加しない。"
+    },
+    "q179_house1": {
+      "label": "第1家で標の受入れを決める本人",
+      "status": "candidate",
+      "need": "house1とhouse1_doneの意思確認役。人数・氏名・容貌・裕福な買主との同一性は未確定。家のentityと所在は未追加。"
+    },
+    "q179_house2": {
+      "label": "第2家で標の受入れを決める本人",
+      "status": "candidate",
+      "need": "house2とhouse2_doneの意思確認役。人数・氏名・容貌・裕福な買主との同一性は未確定。家のentityと所在は未追加。"
+    },
+    "q179_house3": {
+      "label": "第3家で標の受入れを決める本人",
+      "status": "candidate",
+      "need": "house3とhouse3_doneの意思確認役。人数・氏名・容貌・裕福な買主との同一性は未確定。家のentityと所在は未追加。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "墓標から家の床へ根が伸びるという知らせを受け、墓地の庭を調べる。",
+      "reason": "知らせを受ける受付であり、墓守はgardenにいる。依頼人名だけで同席させない。",
+      "visual": "墓地の庭を調べる依頼と受付。"
+    },
+    "houses": {
+      "decision": "person-evidence",
+      "people": [
+        "q179_keeper"
+      ],
+      "evidence": "墓守は標を美しいと広めた責任を認め、一軒ずつ訪ねる。回収か拒絶の宣言を本人に選んでもらう。",
+      "reason": "墓守が責任を認め、分かれ道へ実同行する。これから訪ねる各家の本人は同席させない。",
+      "visual": "三家への分かれ道と墓守。"
+    },
+    "onsite": {
+      "decision": "person-evidence",
+      "people": [
+        "q179_keeper"
+      ],
+      "evidence": "買い取られた墓標から床へ根が伸びた。庭は未来を予知せず、墓を受け入れた人から寿命を奪う。焼く前に家への根を断つ必要がある。",
+      "reason": "墓守は庭にいる既存keeper。根の仕組みを確認する現場であり、標の名だけで村人を出現させない。",
+      "visual": "根が家へ伸びた墓標の庭と墓守。"
+    },
+    "house1": {
+      "decision": "person-evidence",
+      "people": [
+        "q179_keeper",
+        "q179_house1"
+      ],
+      "evidence": "本人に根の危険を伝え、標の回収か拒絶の宣言を選んでもらう。",
+      "reason": "墓守が実同行し、標の回収か拒絶を本人に選んでもらう。家ごとの本人を候補とし、他家・裕福な買主への同定は行わない。",
+      "visual": "第1家での本人の選択と墓守。標の保持者は回収の選択に従う。"
+    },
+    "house1_done": {
+      "decision": "person-evidence",
+      "people": [
+        "q179_keeper",
+        "q179_house1"
+      ],
+      "evidence": "この家の意思を記録した。他の家の返事を代わりに決めない。",
+      "reason": "本人の応答を記録した直後で、移動は次のreturn。墓守とこの家の意思確認役を対象とし、他家の返事を代決しない。",
+      "visual": "第1家での本人の選択と墓守。標の保持者は回収の選択に従う。"
+    },
+    "house2": {
+      "decision": "person-evidence",
+      "people": [
+        "q179_keeper",
+        "q179_house2"
+      ],
+      "evidence": "本人に根の危険を伝え、標の回収か拒絶の宣言を選んでもらう。",
+      "reason": "墓守が実同行し、標の回収か拒絶を本人に選んでもらう。家ごとの本人を候補とし、他家・裕福な買主への同定は行わない。",
+      "visual": "第2家での本人の選択と墓守。標の保持者は回収の選択に従う。"
+    },
+    "house2_done": {
+      "decision": "person-evidence",
+      "people": [
+        "q179_keeper",
+        "q179_house2"
+      ],
+      "evidence": "この家の意思を記録した。他の家の返事を代わりに決めない。",
+      "reason": "本人の応答を記録した直後で、移動は次のreturn。墓守とこの家の意思確認役を対象とし、他家の返事を代決しない。",
+      "visual": "第2家での本人の選択と墓守。標の保持者は回収の選択に従う。"
+    },
+    "house3": {
+      "decision": "person-evidence",
+      "people": [
+        "q179_keeper",
+        "q179_house3"
+      ],
+      "evidence": "本人に根の危険を伝え、標の回収か拒絶の宣言を選んでもらう。",
+      "reason": "墓守が実同行し、標の回収か拒絶を本人に選んでもらう。家ごとの本人を候補とし、他家・裕福な買主への同定は行わない。",
+      "visual": "第3家での本人の選択と墓守。標の保持者は回収の選択に従う。"
+    },
+    "house3_done": {
+      "decision": "person-evidence",
+      "people": [
+        "q179_keeper",
+        "q179_house3"
+      ],
+      "evidence": "この家の意思を記録した。他の家の返事を代わりに決めない。",
+      "reason": "本人の応答を記録した直後で、移動は次のreturn。墓守とこの家の意思確認役を対象とし、他家の返事を代決しない。",
+      "visual": "第3家での本人の選択と墓守。標の保持者は回収の選択に従う。"
+    },
+    "starved": {
+      "decision": "person-evidence",
+      "people": [
+        "q179_keeper"
+      ],
+      "evidence": "三家の拒絶または回収を照合し、枯れた標の見張り当番を決めた。",
+      "reason": "三家の応答後、墓守が庭へ実同行する。見張り当番の決定だけから新たな担当者を表示しない。",
+      "visual": "枯れた標と墓守、見張りの確認。"
+    },
+    "cut1": {
+      "decision": "person-evidence",
+      "people": [
+        "q179_keeper"
+      ],
+      "evidence": "家の床と墓標の根の接続を確認し、切り離す。",
+      "reason": "墓守が当該の家へ実同行する。根の接続と切断だけの本文で、家を事前訪問していない経路もあるため住人の同席は断定しない。",
+      "visual": "家の床から墓標へ続く根と、同行した墓守。"
+    },
+    "cut2": {
+      "decision": "person-evidence",
+      "people": [
+        "q179_keeper"
+      ],
+      "evidence": "家の床と墓標の根の接続を確認し、切り離す。",
+      "reason": "墓守が当該の家へ実同行する。根の接続と切断だけの本文で、家を事前訪問していない経路もあるため住人の同席は断定しない。",
+      "visual": "家の床から墓標へ続く根と、同行した墓守。"
+    },
+    "cut3": {
+      "decision": "person-evidence",
+      "people": [
+        "q179_keeper"
+      ],
+      "evidence": "家の床と墓標の根の接続を確認し、切り離す。",
+      "reason": "墓守が当該の家へ実同行する。根の接続と切断だけの本文で、家を事前訪問していない経路もあるため住人の同席は断定しない。",
+      "visual": "家の床から墓標へ続く根と、同行した墓守。"
+    },
+    "burned": {
+      "decision": "person-evidence",
+      "people": [
+        "q179_keeper"
+      ],
+      "evidence": "三家への根を全て切り離した後で庭を焼いた。家の修繕が必要な被害は出していない。",
+      "reason": "墓守と三家の根を切って庭へ戻る。本文は焼却済み、burnedの旗はfinish時なので次工程で本文と確定操作の時点を確認する。",
+      "visual": "切断後の庭と墓守。住居被害を加えない。"
+    },
+    "rush": {
+      "decision": "person-evidence",
+      "people": [
+        "q179_keeper"
+      ],
+      "evidence": "根を切らずに庭を焼いたため、つながった住居にも火が届いた。危険の除去と救援を分けて報告する。",
+      "reason": "墓守が庭へ実同行する。根を切らない焼却と住居被害を記す本文に対し、burned・homesDamagedはreport出発時。次工程で本文と状態の時点を確認する。",
+      "visual": "根でつながった庭と住居被害の報告、墓守。"
+    },
+    "damaged": {
+      "decision": "person-evidence",
+      "people": [
+        "q179_keeper"
+      ],
+      "evidence": "被害の出た家を報告し、住居の修繕を引き受けた。",
+      "reason": "墓守がrescueへ実同行する。施設名だけで救援職員を候補にしない。救援の引受済み本文とaidRequestedのfinish時を次工程で確認する。",
+      "visual": "救援窓口で住居被害を報告する墓守。"
+    },
+    "houses_cut_ready": {
+      "decision": "person-evidence",
+      "people": [
+        "q179_keeper"
+      ],
+      "evidence": "必要な道具を使って準備を整えた。ここから目的地まで運ぶ。",
+      "reason": "縄を消費した準備段階で、墓守はjunctionに残っている。出発前に各家へ先行表示しない。",
+      "visual": "縄の準備を整えた墓守と三家への分かれ道。"
+    }
+  },
+  "next": "墓守と三家の意思確認役を実所在へ接続し、焼却・救援本文と操作確定の時点を整理する。旧保存・任意順訪問・縄1本・3結末を保持し、続いてq180の出演を精読する。"
 }
  }
 };

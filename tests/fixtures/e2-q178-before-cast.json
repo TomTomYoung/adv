@@ -1,0 +1,2135 @@
+{
+  "schemaVersion": 1,
+  "id": "q178",
+  "number": 178,
+  "title": "扉の向こうの明日",
+  "client": "宿主と旅立つ娘",
+  "brief": "物置に現れた、翌朝へつながる扉を調べてください。",
+  "region": 8,
+  "type": "scene_graph",
+  "recommendedLevel": 8,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 サロメの共同依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q178_scene",
+      "title": "扉の向こうの明日：宿主と旅立つ娘",
+      "points": [
+        {
+          "map": "region_8_f2",
+          "x": 5,
+          "y": 1,
+          "dungeon": "region_8"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q178.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q178.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q178.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q178"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_8"
+    },
+    {
+      "id": "q178_machine_entry",
+      "title": "扉の向こうの明日の現場受付",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q178.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q178.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q178"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q178.machine.visit",
+      "points": [
+        {
+          "dungeon": "region_8",
+          "map": "region_8_f2",
+          "x": 5,
+          "y": 1
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_8_f2",
+      "x": 5,
+      "y": 1,
+      "object": "q178_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "wait": {
+      "label": "見送る朝",
+      "text": "親子は今夜話してから朝を迎えた。髪紐を渡すため戸口で呼び止める、普通の別れができた。",
+      "gold": 141,
+      "xp": 93
+    },
+    "cross": {
+      "label": "言い直せない夜",
+      "text": "娘は一人で旅立ち、手紙を残した。時刻を越えても、言えなかった話まで済んだことにはならなかった。",
+      "gold": 141,
+      "xp": 93
+    },
+    "close": {
+      "label": "不確かな朝を選ぶ",
+      "text": "扉を封じた。客の数も出発の言葉も、明日確かめるものに戻った。",
+      "gold": 141,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/salome/machine-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381d79e52f9b1f447f1d2",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "翌朝の部屋には娘の忘れた髪紐がある。彼女が消える運命なのではなく、行こうとして荷造りした痕跡だ。未来を見ることで変わるのは今夜の判断で、物の送り手と時刻を追えるようにする。分岐した未来の記憶を人物へ無断で追加しない。",
+      "fixedPast": "宿の物置に、翌朝の同じ部屋へ出る扉が現れる。宿主は一日先の客数を知って仕入れを減らしたい。娘は旅立ちを親へ言えず、明日なら既に出発できていると考える。扉は人を戻せず、物だけが元の夜へ戻れると古い札に書かれている。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "宿主と旅立つ娘",
+        "beliefsAndGoals": "宿の物置に、翌朝の同じ部屋へ出る扉が現れる。宿主は一日先の客数を知って仕入れを減らしたい。娘は旅立ちを親へ言えず、明日なら既に出発できていると考える。扉は人を戻せず、物だけが元の夜へ戻れると古い札に書かれている。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "物置に現れた、翌朝へつながる扉を調べてください。"
+      }
+    ],
+    "conflict": {
+      "design": "扉の発見→物を試す→家族の相談→扉を閉じる／娘が越える／全員が通常の朝を待つ。主人公が越えた場合も翌朝の別節へ移り、夜の選択を再実行できない。戻せない結果は悲劇だけでなく、言い直す機会の喪失として描く。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q178.machine.entry"
+        },
+        {
+          "id": "family",
+          "script": "q178.machine.family"
+        },
+        {
+          "id": "morning",
+          "script": "q178.machine.morning"
+        },
+        {
+          "id": "wait_talk",
+          "script": "q178.machine.wait_talk"
+        },
+        {
+          "id": "wait",
+          "script": "q178.machine.wait"
+        },
+        {
+          "id": "daughter_door",
+          "script": "q178.machine.daughter_door"
+        },
+        {
+          "id": "player_door",
+          "script": "q178.machine.player_door"
+        },
+        {
+          "id": "delivered",
+          "script": "q178.machine.delivered"
+        },
+        {
+          "id": "closed",
+          "script": "q178.machine.closed"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "物置に現れた、翌朝へつながる扉を調べてください。"
+    },
+    "reveal": {
+      "newInformation": "翌朝の部屋には娘の忘れた髪紐がある。彼女が消える運命なのではなく、行こうとして荷造りした痕跡だ。未来を見ることで変わるのは今夜の判断で、物の送り手と時刻を追えるようにする。分岐した未来の記憶を人物へ無断で追加しない。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q178.scene.entry"
+      },
+      {
+        "id": "family",
+        "script": "q178.scene.family"
+      },
+      {
+        "id": "morning",
+        "script": "q178.scene.morning"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q178.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "古い札には、人は夜へ戻れず、物だけ戻せるとある。娘は今夜話さずに出てしまえると考えていた。",
+        "options": [
+          {
+            "id": "test",
+            "text": "紐を結んだ物で扉を試す",
+            "to": "family",
+            "action": "entry_test"
+          },
+          {
+            "id": "close",
+            "text": "試さず扉を封じる",
+            "to": "closed",
+            "action": "entry_close"
+          }
+        ]
+      },
+      {
+        "id": "family",
+        "place": "family_place",
+        "text": "物は戻った。扉の向こうの髪紐は、娘が荷造りで忘れたものだ。必ず消える運命の証拠ではない。",
+        "options": [
+          {
+            "id": "wait",
+            "text": "娘と親が話し、通常の朝を待つ",
+            "to": "wait_talk",
+            "action": "family_wait"
+          },
+          {
+            "id": "daughter",
+            "text": "戻れないと承知した娘が一人で越える",
+            "to": "daughter_door",
+            "action": "family_daughter"
+          },
+          {
+            "id": "player",
+            "text": "主人公も翌朝へ越える。今夜の選択はやり直せない",
+            "to": "player_door",
+            "action": "family_player"
+          },
+          {
+            "id": "close",
+            "text": "扉を閉じ、普通の一日を迎える",
+            "to": "closed",
+            "action": "family_close"
+          }
+        ]
+      },
+      {
+        "id": "morning",
+        "place": "morning_place",
+        "text": "翌朝へ出た。夜へ戻る選択肢はない。娘の手紙が机にあり、髪紐が普通の忘れ物として残る。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "手紙を宿主へ渡す",
+            "to": "delivered",
+            "action": "morning_finish"
+          }
+        ]
+      },
+      {
+        "id": "wait_talk",
+        "place": "family_place",
+        "text": "親子で今夜の話をした。扉を使わず普通の朝を待つ。",
+        "options": [
+          {
+            "id": "morning",
+            "text": "朝になってから、親子と部屋へ行く",
+            "to": "wait",
+            "action": "wait_talk_morning"
+          }
+        ]
+      },
+      {
+        "id": "wait",
+        "place": "morning_place",
+        "text": "忘れた髪紐を本人へ渡して送り出す。時刻を越える扉は使わない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@wait",
+            "action": "wait_finish"
+          }
+        ]
+      },
+      {
+        "id": "daughter_door",
+        "place": "entry",
+        "text": "戻れないことを承知した娘が扉を越えた。今夜の話し合いを済ませたことにはしない。",
+        "options": [
+          {
+            "id": "morning",
+            "text": "普通に朝を待ち、手紙のある部屋を訪ねる",
+            "to": "morning",
+            "action": "daughter_door_morning"
+          }
+        ]
+      },
+      {
+        "id": "player_door",
+        "place": "entry",
+        "text": "娘に続いて翌朝へ越える。夜の判断へ戻る行為はない。",
+        "options": [
+          {
+            "id": "cross",
+            "text": "戻れない扉を越えて翌朝へ進む",
+            "to": "morning",
+            "action": "player_door_cross"
+          }
+        ]
+      },
+      {
+        "id": "delivered",
+        "place": "host",
+        "text": "机の手紙を宿主へ渡した。言えなかった話は済んだことにせず、髪紐は忘れ物として残す。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@cross",
+            "action": "delivered_finish"
+          }
+        ]
+      },
+      {
+        "id": "closed",
+        "place": "entry",
+        "text": "扉を封じた。人は越えず、明日のことは明日確かめる。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@close",
+            "action": "closed_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "entryScript": "q178.machine.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "machine-twenty",
+      "settlement": "salome",
+      "saveRevision": 2,
+      "scope": "機関廟20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q178.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q178.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "古い札には、人は夜へ戻れず、物だけ戻せるとある。娘は今夜話さずに出てしまえると考えていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "test",
+              "text": "紐を結んだ物で扉を試す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q178.scene.family"
+                }
+              ]
+            },
+            {
+              "id": "close",
+              "text": "試さず扉を封じる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q178.end.close"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q178.scene.family": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q178.node",
+          "value": "family"
+        },
+        {
+          "op": "say",
+          "text": "物は戻った。扉の向こうの髪紐は、娘が荷造りで忘れたものだ。必ず消える運命の証拠ではない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wait",
+              "text": "娘と親が話し、通常の朝を待つ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q178.end.wait"
+                }
+              ]
+            },
+            {
+              "id": "daughter",
+              "text": "戻れないと承知した娘が一人で越える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q178.end.cross"
+                }
+              ]
+            },
+            {
+              "id": "player",
+              "text": "主人公も翌朝へ越える。今夜の選択はやり直せない",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q178.scene.morning"
+                }
+              ]
+            },
+            {
+              "id": "close",
+              "text": "扉を閉じ、普通の一日を迎える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q178.end.close"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q178.scene.morning": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q178.node",
+          "value": "morning"
+        },
+        {
+          "op": "say",
+          "text": "翌朝へ出た。夜へ戻る選択肢はない。娘の手紙が机にあり、髪紐が普通の忘れ物として残る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "手紙を宿主へ渡す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q178.end.cross"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q178.end.wait": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q178.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "親子は今夜話してから朝を迎えた。髪紐を渡すため戸口で呼び止める、普通の別れができた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q178",
+              "outcome": "wait"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q178.end.cross": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q178.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "娘は一人で旅立ち、手紙を残した。時刻を越えても、言えなかった話まで済んだことにはならなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q178",
+              "outcome": "cross"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q178.end.close": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q178.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "扉を封じた。客の数も出発の言葉も、明日確かめるものに戻った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q178",
+              "outcome": "close"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q178.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q178.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q178.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "wait",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "親子は今夜話してから朝を迎えた。髪紐を渡すため戸口で呼び止める、普通の別れができた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "cross",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "娘は一人で旅立ち、手紙を残した。時刻を越えても、言えなかった話まで済んだことにはならなかった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "close",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "扉を封じた。客の数も出発の言葉も、明日確かめるものに戻った。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q178.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q178.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "family",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q178.scene.family"
+                    }
+                  ]
+                },
+                {
+                  "equals": "morning",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q178.scene.morning"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q178.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q178.machine.entry": {
+      "storyQuest": "q178",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q178",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "古い札には、人は夜へ戻れず、物だけ戻せるとある。娘は今夜話さずに出てしまえると考えていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "test",
+              "text": "紐を結んだ物で扉を試す",
+              "storyAction": {
+                "quest": "q178",
+                "action": "entry_test"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q178",
+                  "action": "entry_test"
+                }
+              ]
+            },
+            {
+              "id": "close",
+              "text": "試さず扉を封じる",
+              "storyAction": {
+                "quest": "q178",
+                "action": "entry_close"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q178",
+                  "action": "entry_close"
+                },
+                {
+                  "op": "jump",
+                  "script": "q178.machine.closed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q178.machine.family": {
+      "storyQuest": "q178",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q178",
+          "scene": "family"
+        },
+        {
+          "op": "narrate",
+          "text": "物は戻った。扉の向こうの髪紐は、娘が荷造りで忘れたものだ。必ず消える運命の証拠ではない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wait",
+              "text": "娘と親が話し、通常の朝を待つ",
+              "storyAction": {
+                "quest": "q178",
+                "action": "family_wait"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q178",
+                  "action": "family_wait"
+                },
+                {
+                  "op": "jump",
+                  "script": "q178.machine.wait_talk"
+                }
+              ]
+            },
+            {
+              "id": "daughter",
+              "text": "戻れないと承知した娘が一人で越える",
+              "storyAction": {
+                "quest": "q178",
+                "action": "family_daughter"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q178",
+                  "action": "family_daughter"
+                }
+              ]
+            },
+            {
+              "id": "player",
+              "text": "主人公も翌朝へ越える。今夜の選択はやり直せない",
+              "storyAction": {
+                "quest": "q178",
+                "action": "family_player"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q178",
+                  "action": "family_player"
+                }
+              ]
+            },
+            {
+              "id": "close",
+              "text": "扉を閉じ、普通の一日を迎える",
+              "storyAction": {
+                "quest": "q178",
+                "action": "family_close"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q178",
+                  "action": "family_close"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q178.machine.morning": {
+      "storyQuest": "q178",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q178",
+          "scene": "morning"
+        },
+        {
+          "op": "narrate",
+          "text": "翌朝へ出た。夜へ戻る選択肢はない。娘の手紙が机にあり、髪紐が普通の忘れ物として残る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "手紙を宿主へ渡す",
+              "storyAction": {
+                "quest": "q178",
+                "action": "morning_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q178",
+                  "action": "morning_finish"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q178.machine.wait_talk": {
+      "storyQuest": "q178",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q178",
+          "scene": "wait_talk"
+        },
+        {
+          "op": "narrate",
+          "text": "親子で今夜の話をした。扉を使わず普通の朝を待つ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "morning",
+              "text": "朝になってから、親子と部屋へ行く",
+              "storyAction": {
+                "quest": "q178",
+                "action": "wait_talk_morning"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q178",
+                  "action": "wait_talk_morning"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q178.machine.wait": {
+      "storyQuest": "q178",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q178",
+          "scene": "wait"
+        },
+        {
+          "op": "narrate",
+          "text": "忘れた髪紐を本人へ渡して送り出す。時刻を越える扉は使わない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q178",
+                "action": "wait_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q178",
+                  "action": "wait_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q178.machine.end.wait"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q178.machine.daughter_door": {
+      "storyQuest": "q178",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q178",
+          "scene": "daughter_door"
+        },
+        {
+          "op": "narrate",
+          "text": "戻れないことを承知した娘が扉を越えた。今夜の話し合いを済ませたことにはしない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "morning",
+              "text": "普通に朝を待ち、手紙のある部屋を訪ねる",
+              "storyAction": {
+                "quest": "q178",
+                "action": "daughter_door_morning"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q178",
+                  "action": "daughter_door_morning"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q178.machine.player_door": {
+      "storyQuest": "q178",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q178",
+          "scene": "player_door"
+        },
+        {
+          "op": "narrate",
+          "text": "娘に続いて翌朝へ越える。夜の判断へ戻る行為はない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "cross",
+              "text": "戻れない扉を越えて翌朝へ進む",
+              "storyAction": {
+                "quest": "q178",
+                "action": "player_door_cross"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q178",
+                  "action": "player_door_cross"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q178.machine.delivered": {
+      "storyQuest": "q178",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q178",
+          "scene": "delivered"
+        },
+        {
+          "op": "narrate",
+          "text": "机の手紙を宿主へ渡した。言えなかった話は済んだことにせず、髪紐は忘れ物として残す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q178",
+                "action": "delivered_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q178",
+                  "action": "delivered_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q178.machine.end.cross"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q178.machine.closed": {
+      "storyQuest": "q178",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q178",
+          "scene": "closed"
+        },
+        {
+          "op": "narrate",
+          "text": "扉を封じた。人は越えず、明日のことは明日確かめる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q178",
+                "action": "closed_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q178",
+                  "action": "closed_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q178.machine.end.close"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q178.machine.end.wait": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "親子は今夜話してから朝を迎えた。髪紐を渡すため戸口で呼び止める、普通の別れができた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.wait",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q178",
+          "outcome": "wait"
+        }
+      ]
+    },
+    "q178.machine.end.cross": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "娘は一人で旅立ち、手紙を残した。時刻を越えても、言えなかった話まで済んだことにはならなかった。"
+        },
+        {
+          "op": "add",
+          "target": "vars.cross",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q178",
+          "outcome": "cross"
+        }
+      ]
+    },
+    "q178.machine.end.close": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "扉を封じた。客の数も出発の言葉も、明日確かめるものに戻った。"
+        },
+        {
+          "op": "add",
+          "target": "vars.close",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q178",
+          "outcome": "close"
+        }
+      ]
+    },
+    "q178.machine.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q178"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q178.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q178.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q178.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "wait",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "親子は今夜話してから朝を迎えた。髪紐を渡すため戸口で呼び止める、普通の別れができた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "cross",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "娘は一人で旅立ち、手紙を残した。時刻を越えても、言えなかった話まで済んだことにはならなかった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "close",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "扉を封じた。客の数も出発の言葉も、明日確かめるものに戻った。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q178"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q178.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q178.machine.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "family",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q178.machine.family"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "morning",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q178.machine.morning"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "wait_talk",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q178.machine.wait_talk"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "wait",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q178.machine.wait"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "daughter_door",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q178.machine.daughter_door"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "player_door",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q178.machine.player_door"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "delivered",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q178.machine.delivered"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "closed",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q178.machine.closed"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q178.machine.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "扉の向こうの明日の現場受付",
+      "family_place": "宿の家族の相談室",
+      "morning_place": "扉の先の翌朝の部屋",
+      "host": "手紙を受け取る宿主の席",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "family_place"
+      ],
+      [
+        "transit",
+        "morning_place"
+      ],
+      [
+        "transit",
+        "host"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "family_place",
+          "morning_place",
+          "host",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "wait",
+          "cross",
+          "close"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "objectReturned": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "objectReturned"
+      },
+      "daughterAgreed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "daughterAgreed"
+      },
+      "playerAgreed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "playerAgreed"
+      },
+      "talked": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "talked"
+      },
+      "ordinaryMorning": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "ordinaryMorning"
+      },
+      "daughterCrossed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "daughterCrossed"
+      },
+      "nightClosed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "nightClosed"
+      },
+      "playerCrossed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "playerCrossed"
+      },
+      "letterDelivered": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "letterDelivered"
+      },
+      "doorSealed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "doorSealed"
+      },
+      "testObjectAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "family_place",
+          "morning_place",
+          "host",
+          "transit",
+          "party",
+          "ribbon",
+          "letterSheet",
+          "daughterPerson",
+          "parentPerson"
+        ],
+        "meaning": "testObject の所在または保持者"
+      },
+      "ribbonAt": {
+        "type": "enum",
+        "initial": "morning_place",
+        "values": [
+          "entry",
+          "family_place",
+          "morning_place",
+          "host",
+          "transit",
+          "party",
+          "testObject",
+          "letterSheet",
+          "daughterPerson",
+          "parentPerson"
+        ],
+        "meaning": "ribbon の所在または保持者"
+      },
+      "letterSheetAt": {
+        "type": "enum",
+        "initial": "morning_place",
+        "values": [
+          "entry",
+          "family_place",
+          "morning_place",
+          "host",
+          "transit",
+          "party",
+          "testObject",
+          "ribbon",
+          "daughterPerson",
+          "parentPerson"
+        ],
+        "meaning": "letterSheet の所在または保持者"
+      },
+      "daughterPersonAt": {
+        "type": "enum",
+        "initial": "family_place",
+        "values": [
+          "entry",
+          "family_place",
+          "morning_place",
+          "host",
+          "transit"
+        ],
+        "meaning": "daughterPerson の所在または保持者"
+      },
+      "parentPersonAt": {
+        "type": "enum",
+        "initial": "family_place",
+        "values": [
+          "entry",
+          "family_place",
+          "morning_place",
+          "host",
+          "transit"
+        ],
+        "meaning": "parentPerson の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "testObject": {
+        "holder": "testObjectAt",
+        "kind": "item"
+      },
+      "ribbon": {
+        "holder": "ribbonAt",
+        "kind": "item"
+      },
+      "letterSheet": {
+        "holder": "letterSheetAt",
+        "kind": "item"
+      },
+      "daughterPerson": {
+        "holder": "daughterPersonAt",
+        "kind": "person"
+      },
+      "parentPerson": {
+        "holder": "parentPersonAt",
+        "kind": "person"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "翌朝の部屋には娘の忘れた髪紐がある。彼女が消える運命なのではなく、行こうとして荷造りした痕跡だ。未来を見ることで変わるのは今夜の判断で、物の送り手と時刻を追えるようにする。分岐した未来の記憶を人物へ無断で追加しない。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "扉の向こうの明日の現場受付",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "family": {
+        "title": "宿の家族の相談室",
+        "place": "family_place",
+        "cast": [],
+        "requires": true
+      },
+      "morning": {
+        "title": "扉の先の翌朝の部屋",
+        "place": "morning_place",
+        "cast": [],
+        "requires": true
+      },
+      "wait_talk": {
+        "title": "宿の家族の相談室",
+        "place": "family_place",
+        "cast": [],
+        "requires": true
+      },
+      "wait": {
+        "title": "扉の先の翌朝の部屋",
+        "place": "morning_place",
+        "cast": [],
+        "requires": true
+      },
+      "daughter_door": {
+        "title": "扉の向こうの明日の現場受付",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "player_door": {
+        "title": "扉の向こうの明日の現場受付",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "delivered": {
+        "title": "手紙を受け取る宿主の席",
+        "place": "host",
+        "cast": [],
+        "requires": true
+      },
+      "closed": {
+        "title": "扉の向こうの明日の現場受付",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_test": {
+        "from": [
+          "entry"
+        ],
+        "to": "family",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "family_place"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "objectReturned",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "family_place",
+          "companions": []
+        },
+        "depart": []
+      },
+      "entry_close": {
+        "from": [
+          "entry"
+        ],
+        "to": "closed",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "family_wait": {
+        "from": [
+          "family"
+        ],
+        "to": "wait_talk",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "family_daughter": {
+        "from": [
+          "family"
+        ],
+        "to": "daughter_door",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "daughterPerson"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "daughterPerson"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "daughterAgreed",
+            "value": true
+          }
+        ]
+      },
+      "family_player": {
+        "from": [
+          "family"
+        ],
+        "to": "player_door",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "daughterPerson"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "daughterPerson"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "playerAgreed",
+            "value": true
+          }
+        ]
+      },
+      "family_close": {
+        "from": [
+          "family"
+        ],
+        "to": "closed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "morning_finish": {
+        "from": [
+          "morning"
+        ],
+        "to": "delivered",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "host"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "host",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "letterSheet",
+            "from": "morning_place",
+            "to": "party"
+          }
+        ]
+      },
+      "wait_talk_morning": {
+        "from": [
+          "wait_talk"
+        ],
+        "to": "wait",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "daughterPerson",
+              "parentPerson"
+            ],
+            "path": [
+              "transit",
+              "morning_place"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "morning_place",
+          "companions": [
+            "daughterPerson",
+            "parentPerson"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "talked",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "ordinaryMorning",
+            "value": true
+          }
+        ]
+      },
+      "wait_finish": {
+        "from": [
+          "wait"
+        ],
+        "ending": "wait",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "ribbon",
+            "from": "morning_place",
+            "to": "daughterPerson"
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "wait"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "daughter_door_morning": {
+        "from": [
+          "daughter_door"
+        ],
+        "to": "morning",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "daughterPerson"
+            ],
+            "path": [
+              "transit",
+              "morning_place"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "morning_place",
+          "companions": [
+            "daughterPerson"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "daughterCrossed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "nightClosed",
+            "value": true
+          }
+        ]
+      },
+      "player_door_cross": {
+        "from": [
+          "player_door"
+        ],
+        "to": "morning",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "daughterPerson"
+            ],
+            "path": [
+              "transit",
+              "morning_place"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "morning_place",
+          "companions": [
+            "daughterPerson"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "playerCrossed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "daughterCrossed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "nightClosed",
+            "value": true
+          }
+        ]
+      },
+      "delivered_finish": {
+        "from": [
+          "delivered"
+        ],
+        "ending": "cross",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "letterSheet",
+            "from": "party",
+            "to": "host"
+          },
+          {
+            "op": "set",
+            "key": "letterDelivered",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "cross"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "closed_finish": {
+        "from": [
+          "closed"
+        ],
+        "ending": "close",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "doorSealed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "close"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "wait": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q178.values.resolution"
+            },
+            "right": "wait"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q178.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q178.values.partyAt"
+                },
+                "right": "morning_place"
+              }
+            ]
+          }
+        ]
+      },
+      "cross": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q178.values.resolution"
+            },
+            "right": "cross"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q178.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q178.values.partyAt"
+                },
+                "right": "host"
+              }
+            ]
+          }
+        ]
+      },
+      "close": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q178.values.resolution"
+            },
+            "right": "close"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q178.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q178.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_8",
+        "map": "region_8_f2",
+        "x": 5,
+        "y": 1
+      },
+      "family_place": {
+        "kind": "town",
+        "location": "machine_family"
+      },
+      "morning_place": {
+        "kind": "town",
+        "location": "machine_morning"
+      },
+      "host": {
+        "kind": "town",
+        "location": "salome_inn"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "salome",
+  "receptionLocations": [
+    "salome_board"
+  ]
+}
