@@ -1,3 +1,4 @@
+import {lastTaleArtFixtures} from './last-tale-art-fixtures.mjs';
 import {gardenArtFixtures} from './garden-art-fixtures.mjs';
 import {tomorrowDoorArtFixtures} from './tomorrow-door-art-fixtures.mjs';
 import {truthMirrorArtFixtures} from './truth-mirror-art-fixtures.mjs';
@@ -6,5 +7,5 @@ import {funeralArtFixtures} from './funeral-art-fixtures.mjs';
 import {hunterArtFixtures} from './hunter-art-fixtures.mjs';
 import {godSandalsArtFixtures} from './god-sandals-art-fixtures.mjs';
 import {runCharacterArtSmoke} from './character-art-browser.mjs';
-const fixtures=process.argv.includes('--garden-only')?gardenArtFixtures:process.argv.includes('--tomorrow-door-only')?tomorrowDoorArtFixtures:process.argv.includes('--mirror-only')?truthMirrorArtFixtures:process.argv.includes('--god-sandals-only')?godSandalsArtFixtures:process.argv.includes('--hunter-only')?hunterArtFixtures:process.argv.includes('--funeral-only')?funeralArtFixtures:nightSoldierArtFixtures;
+const fixtures=process.argv.includes('--last-tale-only')?lastTaleArtFixtures:process.argv.includes('--garden-only')?gardenArtFixtures:process.argv.includes('--tomorrow-door-only')?tomorrowDoorArtFixtures:process.argv.includes('--mirror-only')?truthMirrorArtFixtures:process.argv.includes('--god-sandals-only')?godSandalsArtFixtures:process.argv.includes('--hunter-only')?hunterArtFixtures:process.argv.includes('--funeral-only')?funeralArtFixtures:nightSoldierArtFixtures;
 await runCharacterArtSmoke({...await fixtures(),group:'machine',folder:'relocated'});

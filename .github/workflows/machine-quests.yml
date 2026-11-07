@@ -17,6 +17,7 @@ on:
       - 'tools/truth-mirror-art-fixtures.mjs'
       - 'tools/tomorrow-door-art-fixtures.mjs'
       - 'tools/garden-art-fixtures.mjs'
+      - 'tools/last-tale-art-fixtures.mjs'
       - 'tools/character-art-browser.mjs'
       - 'tests/fixtures/e2-q173-before-cast.json'
       - 'tests/fixtures/e2-q174-before-cast.json'
@@ -25,6 +26,7 @@ on:
       - 'tests/fixtures/e2-q177-before-cast.json'
       - 'tests/fixtures/e2-q178-before-cast.json'
       - 'tests/fixtures/e2-q179-before-cast.json'
+      - 'tests/fixtures/e2-q180-before-cast.json'
       - '.github/workflows/machine-quests.yml'
   workflow_dispatch:
 concurrency:
@@ -146,6 +148,18 @@ jobs:
         with:
           name: q179-cast-checkpoints
           path: /tmp/adv-garden-art-browser
+          if-no-files-found: ignore
+      - name: Verify q180 storyteller, listeners, timing and older saves
+        if: steps.ci.outputs.run == 'true'
+        env:
+          ADV_BROWSER_OUTPUT: /tmp/adv-last-tale-art-browser
+        run: node tools/browser-machine-cast-smoke.mjs --last-tale-only
+      - name: Keep q180 cast checkpoints
+        if: always() && steps.ci.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: q180-cast-checkpoints
+          path: /tmp/adv-last-tale-art-browser
           if-no-files-found: ignore
       - name: Remember successful inputs
         if: success() && steps.ci.outputs.run == 'true' && github.event_name != 'workflow_dispatch'

@@ -136,5 +136,16 @@ export function machineSecondSource(q,{cast=true}={}){
   route(from,'seal','sealed_here');route('ending','seal','sealed_here',{companions:['mui']});add('sealed_here','tale','怪異を封じた。話は未完のままなので、聞き手を退避させて台本を管理する。',[opt('escort','ムイと聞き手を別室へ案内する','sealed_refuge',{companions:['mui','listeners'],depart:[set('phenomenonSealed')]})]);add('sealed_refuge','refuge','聞き手の退避を確認した。未完の台本は勝手に開けない保管品にする。',[opt('store','ムイと台本庫へ戻り、保管を確認する','stored',{companions:['mui']})]);end('stored','scripts_place','台本庫に封印の制約を記した。話を完結させたことにはしない。','seal',[set('stored')]);
   route(from,'ban','banned',{companions:['mui','listeners']});end('banned','refuge','語りの禁止を告知し、聞き手を静かな別室へ案内した。未完の話の扱いは後日に残す。','ban',[set('banned')]);
  }
+ if(q.number===180&&cast){
+  x.entities.mui.character='q180_mui';x.entities.listeners.character='q180_listeners';
+  for(const id of ['ending','stored'])node(id).cast=[{entity:'mui',display:{x:50}}];
+  for(const id of ['onsite','told_original','told_new','sealed_here','sealed_refuge','banned'])node(id).cast=[{entity:'mui',display:{x:31}},{entity:'listeners',display:{x:69}}];
+  node('ending').text='元の後半は、村へ帰るだけの話だった。起きた事実を消さず、新しい帰着先で終えることもできる。宿へ戻り、怖い場面を最後まで聞ける席を整える。';
+  node('told_original').text='ムイと台本を持って宿へ戻り、聞き手の席を整えた。元の帰郷まで語る準備ができた。討伐したという記録は付けない。';
+  node('told_new').text='ムイと台本を持って宿へ戻り、聞き手の席を整えた。起きた事実を消さず、遠い宿へ帰る後半を最後まで語る準備ができた。';
+  node('sealed_here').text='怪異を封じる手順と、聞き手の退避先を確認した。話は未完のままなので、台本も管理する。';
+  node('stored').text='ムイと台本庫へ戻った。未完の台本を保管するため、封印の制約を記す。話を完結させたことにはしない。';
+  node('banned').text='聞き手を静かな別室へ案内した。ここで語りの禁止を告知する。未完の話の扱いは後日に残す。';
+ }
  return finish();
 }

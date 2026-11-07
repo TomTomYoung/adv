@@ -55,6 +55,16 @@ export const relocatedCharacters=Object.fromEntries([
 ].map(([id,name,detail,provenance])=>[id,{id,name,role:'礼拝堂の現地の相手',detail,portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,
  provenance:provenance??'2026-10-29の美術設定。固有名・他人物との同一性は追加しない。具体的な外見・年齢感・服装は今回の美術設定。牢・格子・聖像・宝玉・石を人物画へ固定しない。'}]));
 // The group has no specified headcount or spokesperson. Ren is the existing actor.
+relocatedCharacters.q180_mui={
+ id:'q180_mui',name:'語り部ムイ',role:'未完の怪談を語り、台本の後半と話の扱いを確認する語り部',
+ detail:'宿・台本庫・聞き手の退避先で、既存muiの実所在に合わせて表示する。台本庫へ戻る経路では聞き手を別室に残す。',
+ provenance:'2026-11-07。既存muiの呼称表示。宿主との同一性・容貌・性別・年齢を追加せず、専用画は未接続。'
+};
+relocatedCharacters.q180_listeners={
+ id:'q180_listeners',name:'怪談の聞き手たち',role:'怪談を聞き、封印や禁止の経路では別室へ退避する聞き手',
+ detail:'宿と実退避後の別室だけに表示する人数未確定の集団。台本庫へ同行させず、話を聞き終えたことと退避を区別する。',
+ provenance:'2026-11-07。既存group listenersの呼称表示。人数・代表者・容貌を追加せず、個人画は未接続。'
+};
 relocatedCharacters.q179_keeper={
  id:'q179_keeper',name:'墓守',role:'標を広めた責任を認め、三家への対処に同行する元庭師',
  detail:'庭の調査から各家の訪問・根の切断・救援窓口まで実同行する。受付には表示せず、戦闘の仲間へ追加しない。',
