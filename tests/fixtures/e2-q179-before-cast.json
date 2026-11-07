@@ -1,0 +1,3668 @@
+{
+  "schemaVersion": 1,
+  "id": "q179",
+  "number": 179,
+  "title": "墓を増やす庭",
+  "client": "墓守",
+  "brief": "生きている人の墓標が育つ庭を調べてください。",
+  "region": 8,
+  "type": "scene_graph",
+  "recommendedLevel": 8,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 サロメの共同依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q179_scene",
+      "title": "墓を増やす庭：墓守",
+      "points": [
+        {
+          "map": "region_8_f2",
+          "x": 6,
+          "y": 1,
+          "dungeon": "region_8"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q179.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q179.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q179.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q179"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_8"
+    },
+    {
+      "id": "q179_machine_entry",
+      "title": "墓を増やす庭の現場受付",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q179.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q179.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q179"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q179.machine.visit",
+      "points": [
+        {
+          "dungeon": "region_8",
+          "map": "region_8_f2",
+          "x": 6,
+          "y": 1
+        }
+      ]
+    },
+    {
+      "id": "q179_machine_garden",
+      "title": "根を伸ばす墓標の庭",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "garden",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q179.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q179.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q179"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q179.machine.visit",
+      "points": [
+        {
+          "dungeon": "salome_road",
+          "map": "e2_salome_cemetery",
+          "x": 11,
+          "y": 5
+        }
+      ]
+    },
+    {
+      "id": "q179_machine_junction",
+      "title": "三家を訪ねる分かれ道",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "junction",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q179.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q179.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q179"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q179.machine.visit",
+      "points": [
+        {
+          "dungeon": "salome_road",
+          "map": "e2_salome_outskirts",
+          "x": 7,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "id": "q179_machine_house1",
+      "title": "墓標を受け取った第1家",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "house1",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q179.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q179.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q179"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q179.machine.visit",
+      "points": [
+        {
+          "dungeon": "salome_road",
+          "map": "e2_salome_outskirts",
+          "x": 3,
+          "y": 7
+        }
+      ]
+    },
+    {
+      "id": "q179_machine_house2",
+      "title": "墓標を受け取った第2家",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "house2",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q179.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q179.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q179"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q179.machine.visit",
+      "points": [
+        {
+          "dungeon": "salome_road",
+          "map": "e2_salome_outskirts",
+          "x": 9,
+          "y": 7
+        }
+      ]
+    },
+    {
+      "id": "q179_machine_house3",
+      "title": "墓標を受け取った第3家",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "house3",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q179.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q179.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q179"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q179.machine.visit",
+      "points": [
+        {
+          "dungeon": "salome_road",
+          "map": "e2_salome_outskirts",
+          "x": 13,
+          "y": 7
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_8_f2",
+      "x": 6,
+      "y": 1,
+      "object": "q179_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "starve": {
+      "label": "枯れた標の監視",
+      "text": "村人が拒絶し、標は枯れた。再び根を張らないか見張る当番が残った。",
+      "gold": 141,
+      "xp": 93
+    },
+    "burn": {
+      "label": "根を断つ焼却",
+      "text": "家を切り離して庭を焼いた。墓守は名を彫らない標を作り、必要になるまで倉へしまった。",
+      "gold": 141,
+      "xp": 93
+    },
+    "damage": {
+      "label": "家へ届いた火",
+      "text": "庭は焼けたが、つながった住居にも被害が出た。墓守とあなたは危険の除去と住居の修繕を別々に引き受けた。",
+      "gold": 141,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/salome/machine-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381d79e52f9b1f447f1d2",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "死んだ者の標より、買い取って屋内に置いた標だけに根が伸びる。最初に庭の木目が家の床板へ続く異常を示す。庭師だった墓守は美しい標を褒めて広めてしまい、責任から逃げず全戸を訪ねる必要がある。",
+      "fixedPast": "墓守の庭に、まだ生きている村人の墓標が育つ。墓守は凶兆として伐採を頼み、裕福な村人は自分の標だけを買い取ろうとする。庭は未来を予知するのでなく、名を刻まれた者が墓を受け入れると寿命を奪う捕食者だ。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "墓守",
+        "beliefsAndGoals": "墓守の庭に、まだ生きている村人の墓標が育つ。墓守は凶兆として伐採を頼み、裕福な村人は自分の標だけを買い取ろうとする。庭は未来を予知するのでなく、名を刻まれた者が墓を受け入れると寿命を奪う捕食者だ。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "生きている人の墓標が育つ庭を調べてください。"
+      }
+    ],
+    "conflict": {
+      "design": "墓地→三家の訪問を任意順→標の回収／拒絶の宣言→根の処理。焼く前に家との根を断つ条件を知れ、無警告の破壊には住居被害が出る。全員が標を拒めば庭を飢えさせられる。買主が拒まなければその家の救援戦へ分岐する。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q179.machine.entry"
+        },
+        {
+          "id": "houses",
+          "script": "q179.machine.houses"
+        },
+        {
+          "id": "onsite",
+          "script": "q179.machine.onsite"
+        },
+        {
+          "id": "house1",
+          "script": "q179.machine.house1"
+        },
+        {
+          "id": "house1_done",
+          "script": "q179.machine.house1_done"
+        },
+        {
+          "id": "house2",
+          "script": "q179.machine.house2"
+        },
+        {
+          "id": "house2_done",
+          "script": "q179.machine.house2_done"
+        },
+        {
+          "id": "house3",
+          "script": "q179.machine.house3"
+        },
+        {
+          "id": "house3_done",
+          "script": "q179.machine.house3_done"
+        },
+        {
+          "id": "starved",
+          "script": "q179.machine.starved"
+        },
+        {
+          "id": "cut1",
+          "script": "q179.machine.cut1"
+        },
+        {
+          "id": "cut2",
+          "script": "q179.machine.cut2"
+        },
+        {
+          "id": "cut3",
+          "script": "q179.machine.cut3"
+        },
+        {
+          "id": "burned",
+          "script": "q179.machine.burned"
+        },
+        {
+          "id": "rush",
+          "script": "q179.machine.rush"
+        },
+        {
+          "id": "damaged",
+          "script": "q179.machine.damaged"
+        },
+        {
+          "id": "houses_cut_ready",
+          "script": "q179.machine.houses_cut_ready"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "生きている人の墓標が育つ庭を調べてください。"
+    },
+    "reveal": {
+      "newInformation": "死んだ者の標より、買い取って屋内に置いた標だけに根が伸びる。最初に庭の木目が家の床板へ続く異常を示す。庭師だった墓守は美しい標を褒めて広めてしまい、責任から逃げず全戸を訪ねる必要がある。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q179.scene.entry"
+      },
+      {
+        "id": "houses",
+        "script": "q179.scene.houses"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q179.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q179.homes",
+        "meaning": "作者原稿の homes に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry",
+          "houses"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "墓標から家の床へ根が伸びるという知らせを受け、墓地の庭を調べる。",
+        "options": [
+          {
+            "id": "visit",
+            "text": "依頼人のいる現場へ向かう",
+            "to": "onsite",
+            "action": "entry_visit"
+          }
+        ]
+      },
+      {
+        "id": "houses",
+        "place": "junction",
+        "text": "墓守は標を美しいと広めた責任を認め、一軒ずつ訪ねる。回収か拒絶の宣言を本人に選んでもらう。",
+        "options": [
+          {
+            "id": "house3",
+            "text": "第3家で本人の意思を聞く",
+            "to": "house3",
+            "action": "houses_house3"
+          },
+          {
+            "id": "house2",
+            "text": "第2家で本人の意思を聞く",
+            "to": "house2",
+            "action": "houses_house2"
+          },
+          {
+            "id": "house1",
+            "text": "第1家で本人の意思を聞く",
+            "to": "house1",
+            "action": "houses_house1"
+          },
+          {
+            "id": "starve",
+            "text": "三軒の拒絶で庭を飢えさせる",
+            "to": "starved",
+            "action": "houses_starve"
+          },
+          {
+            "id": "cut",
+            "text": "家へ伸びる根を全て断ってから焼く",
+            "to": "houses_cut_ready",
+            "action": "houses_cut"
+          },
+          {
+            "id": "rush",
+            "text": "家との根を断たず今すぐ焼く（住居にも被害）",
+            "to": "rush",
+            "action": "houses_rush"
+          }
+        ]
+      },
+      {
+        "id": "onsite",
+        "place": "garden",
+        "text": "買い取られた墓標から床へ根が伸びた。庭は未来を予知せず、墓を受け入れた人から寿命を奪う。焼く前に家への根を断つ必要がある。",
+        "options": [
+          {
+            "id": "begin",
+            "text": "墓守と三軒を訪ねる",
+            "to": "houses",
+            "action": "onsite_begin"
+          }
+        ]
+      },
+      {
+        "id": "house1",
+        "place": "house1",
+        "text": "本人に根の危険を伝え、標の回収か拒絶の宣言を選んでもらう。",
+        "options": [
+          {
+            "id": "collect",
+            "text": "本人の希望で標を回収する",
+            "to": "house1_done",
+            "action": "house1_collect"
+          },
+          {
+            "id": "reject",
+            "text": "標を受け入れないという宣言を確認する",
+            "to": "house1_done",
+            "action": "house1_reject"
+          }
+        ]
+      },
+      {
+        "id": "house1_done",
+        "place": "house1",
+        "text": "この家の意思を記録した。他の家の返事を代わりに決めない。",
+        "options": [
+          {
+            "id": "return",
+            "text": "墓守と分かれ道へ戻る",
+            "to": "houses",
+            "action": "house1_done_return"
+          }
+        ]
+      },
+      {
+        "id": "house2",
+        "place": "house2",
+        "text": "本人に根の危険を伝え、標の回収か拒絶の宣言を選んでもらう。",
+        "options": [
+          {
+            "id": "collect",
+            "text": "本人の希望で標を回収する",
+            "to": "house2_done",
+            "action": "house2_collect"
+          },
+          {
+            "id": "reject",
+            "text": "標を受け入れないという宣言を確認する",
+            "to": "house2_done",
+            "action": "house2_reject"
+          }
+        ]
+      },
+      {
+        "id": "house2_done",
+        "place": "house2",
+        "text": "この家の意思を記録した。他の家の返事を代わりに決めない。",
+        "options": [
+          {
+            "id": "return",
+            "text": "墓守と分かれ道へ戻る",
+            "to": "houses",
+            "action": "house2_done_return"
+          }
+        ]
+      },
+      {
+        "id": "house3",
+        "place": "house3",
+        "text": "本人に根の危険を伝え、標の回収か拒絶の宣言を選んでもらう。",
+        "options": [
+          {
+            "id": "collect",
+            "text": "本人の希望で標を回収する",
+            "to": "house3_done",
+            "action": "house3_collect"
+          },
+          {
+            "id": "reject",
+            "text": "標を受け入れないという宣言を確認する",
+            "to": "house3_done",
+            "action": "house3_reject"
+          }
+        ]
+      },
+      {
+        "id": "house3_done",
+        "place": "house3",
+        "text": "この家の意思を記録した。他の家の返事を代わりに決めない。",
+        "options": [
+          {
+            "id": "return",
+            "text": "墓守と分かれ道へ戻る",
+            "to": "houses",
+            "action": "house3_done_return"
+          }
+        ]
+      },
+      {
+        "id": "starved",
+        "place": "garden",
+        "text": "三家の拒絶または回収を照合し、枯れた標の見張り当番を決めた。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@starve",
+            "action": "starved_finish"
+          }
+        ]
+      },
+      {
+        "id": "cut1",
+        "place": "house1",
+        "text": "家の床と墓標の根の接続を確認し、切り離す。",
+        "options": [
+          {
+            "id": "cut",
+            "text": "この家の根を切り、次の家へ向かう",
+            "to": "cut2",
+            "action": "cut1_cut"
+          }
+        ]
+      },
+      {
+        "id": "cut2",
+        "place": "house2",
+        "text": "家の床と墓標の根の接続を確認し、切り離す。",
+        "options": [
+          {
+            "id": "cut",
+            "text": "この家の根を切り、次の家へ向かう",
+            "to": "cut3",
+            "action": "cut2_cut"
+          }
+        ]
+      },
+      {
+        "id": "cut3",
+        "place": "house3",
+        "text": "家の床と墓標の根の接続を確認し、切り離す。",
+        "options": [
+          {
+            "id": "cut",
+            "text": "最後の家の根を切り、庭へ戻る",
+            "to": "burned",
+            "action": "cut3_cut"
+          }
+        ]
+      },
+      {
+        "id": "burned",
+        "place": "garden",
+        "text": "三家への根を全て切り離した後で庭を焼いた。家の修繕が必要な被害は出していない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@burn",
+            "action": "burned_finish"
+          }
+        ]
+      },
+      {
+        "id": "rush",
+        "place": "garden",
+        "text": "根を切らずに庭を焼いたため、つながった住居にも火が届いた。危険の除去と救援を分けて報告する。",
+        "options": [
+          {
+            "id": "report",
+            "text": "墓守と救援窓口へ行く",
+            "to": "damaged",
+            "action": "rush_report"
+          }
+        ]
+      },
+      {
+        "id": "damaged",
+        "place": "rescue",
+        "text": "被害の出た家を報告し、住居の修繕を引き受けた。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@damage",
+            "action": "damaged_finish"
+          }
+        ]
+      },
+      {
+        "id": "houses_cut_ready",
+        "place": "junction",
+        "text": "必要な道具を使って準備を整えた。ここから目的地まで運ぶ。",
+        "options": [
+          {
+            "id": "continue",
+            "text": "準備した相手・品物と目的地へ向かう",
+            "to": "cut1",
+            "action": "houses_cut_ready_continue"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q179.scene.houses",
+        "action": "cut",
+        "option": "cut_supplies",
+        "shortage": "q179.scene.houses.cut.shortage",
+        "resume": "q179.scene.houses.cut.resume",
+        "cost": {
+          "rope": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q179.visit"
+    ],
+    "entryScript": "q179.machine.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "machine-twenty",
+      "settlement": "salome",
+      "saveRevision": 2,
+      "scope": "機関廟20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q179.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q179.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "買い取られた墓標から床へ根が伸びた。庭は未来を予知せず、墓を受け入れた人から寿命を奪う。焼く前に家への根を断つ必要がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "begin",
+              "text": "墓守と三軒を訪ねる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q179.homes",
+                  "value": 0
+                },
+                {
+                  "op": "jump",
+                  "script": "q179.scene.houses"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q179.scene.houses": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q179.node",
+          "value": "houses"
+        },
+        {
+          "op": "say",
+          "text": "墓守は標を美しいと広めた責任を認め、一軒ずつ訪ねる。回収か拒絶の宣言を本人に選んでもらう。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "visit",
+              "text": "次の一軒で、標を受け入れない意思を確認する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "flags.quest.q179.homes"
+                    },
+                    "right": 3
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q179.homes",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "flags.quest.q179.homes"
+                      },
+                      1
+                    ]
+                  }
+                },
+                {
+                  "op": "jump",
+                  "script": "q179.scene.houses"
+                }
+              ]
+            },
+            {
+              "id": "starve",
+              "text": "三軒の拒絶で庭を飢えさせる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "flags.quest.q179.homes"
+                    },
+                    "right": 3
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q179.end.starve"
+                }
+              ]
+            },
+            {
+              "id": "cut",
+              "text": "家へ伸びる根を全て断ってから焼く",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "rope",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "縄 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "jump",
+                  "script": "q179.end.burn"
+                }
+              ]
+            },
+            {
+              "id": "rush",
+              "text": "家との根を断たず今すぐ焼く（住居にも被害）",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q179.end.damage"
+                }
+              ]
+            },
+            {
+              "id": "cut_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q179.scene.houses.cut.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q179.end.starve": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q179.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "村人が拒絶し、標は枯れた。再び根を張らないか見張る当番が残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q179",
+              "outcome": "starve"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q179.end.burn": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q179.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "家を切り離して庭を焼いた。墓守は名を彫らない標を作り、必要になるまで倉へしまった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q179",
+              "outcome": "burn"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q179.end.damage": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q179.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "庭は焼けたが、つながった住居にも被害が出た。墓守とあなたは危険の除去と住居の修繕を別々に引き受けた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q179",
+              "outcome": "damage"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q179.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q179"
+          },
+          "cases": [
+            {
+              "equals": "q179.scene.houses.cut.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q179.scene.houses.cut.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q179.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q179.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "starve",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "村人が拒絶し、標は枯れた。再び根を張らないか見張る当番が残った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "burn",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "家を切り離して庭を焼いた。墓守は名を彫らない標を作り、必要になるまで倉へしまった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "damage",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "庭は焼けたが、つながった住居にも被害が出た。墓守とあなたは危険の除去と住居の修繕を別々に引き受けた。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q179.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q179.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "houses",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q179.scene.houses"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q179.scene.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q179.scene.houses.cut.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q179",
+          "value": "q179.scene.houses.cut.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q179.scene.houses.cut.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q179",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q179.scene.houses"
+        }
+      ]
+    },
+    "q179.machine.entry": {
+      "storyQuest": "q179",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q179",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "墓標から家の床へ根が伸びるという知らせを受け、墓地の庭を調べる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "visit",
+              "text": "依頼人のいる現場へ向かう",
+              "storyAction": {
+                "quest": "q179",
+                "action": "entry_visit"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q179",
+                  "action": "entry_visit"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q179.machine.houses": {
+      "storyQuest": "q179",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q179",
+          "scene": "houses"
+        },
+        {
+          "op": "narrate",
+          "text": "墓守は標を美しいと広めた責任を認め、一軒ずつ訪ねる。回収か拒絶の宣言を本人に選んでもらう。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "house3",
+              "text": "第3家で本人の意思を聞く",
+              "storyAction": {
+                "quest": "q179",
+                "action": "houses_house3"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q179.values.house3"
+                  },
+                  "right": true
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q179",
+                  "action": "houses_house3"
+                }
+              ]
+            },
+            {
+              "id": "house2",
+              "text": "第2家で本人の意思を聞く",
+              "storyAction": {
+                "quest": "q179",
+                "action": "houses_house2"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q179.values.house2"
+                  },
+                  "right": true
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q179",
+                  "action": "houses_house2"
+                }
+              ]
+            },
+            {
+              "id": "house1",
+              "text": "第1家で本人の意思を聞く",
+              "storyAction": {
+                "quest": "q179",
+                "action": "houses_house1"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q179.values.house1"
+                  },
+                  "right": true
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q179",
+                  "action": "houses_house1"
+                }
+              ]
+            },
+            {
+              "id": "starve",
+              "text": "三軒の拒絶で庭を飢えさせる",
+              "storyAction": {
+                "quest": "q179",
+                "action": "houses_starve"
+              },
+              "condition": {
+                "op": "gte",
+                "left": {
+                  "ref": "stories.q179.values.homes"
+                },
+                "right": 3
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q179",
+                  "action": "houses_starve"
+                }
+              ]
+            },
+            {
+              "id": "cut",
+              "text": "家へ伸びる根を全て断ってから焼く",
+              "storyAction": {
+                "quest": "q179",
+                "action": "houses_cut"
+              },
+              "requirement": "rope 1消費",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q179",
+                  "action": "houses_cut"
+                },
+                {
+                  "op": "jump",
+                  "script": "q179.machine.houses_cut_ready"
+                }
+              ]
+            },
+            {
+              "id": "rush",
+              "text": "家との根を断たず今すぐ焼く（住居にも被害）",
+              "storyAction": {
+                "quest": "q179",
+                "action": "houses_rush"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q179",
+                  "action": "houses_rush"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q179.machine.onsite": {
+      "storyQuest": "q179",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q179",
+          "scene": "onsite"
+        },
+        {
+          "op": "narrate",
+          "text": "買い取られた墓標から床へ根が伸びた。庭は未来を予知せず、墓を受け入れた人から寿命を奪う。焼く前に家への根を断つ必要がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "begin",
+              "text": "墓守と三軒を訪ねる",
+              "storyAction": {
+                "quest": "q179",
+                "action": "onsite_begin"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q179",
+                  "action": "onsite_begin"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q179.machine.house1": {
+      "storyQuest": "q179",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q179",
+          "scene": "house1"
+        },
+        {
+          "op": "narrate",
+          "text": "本人に根の危険を伝え、標の回収か拒絶の宣言を選んでもらう。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "collect",
+              "text": "本人の希望で標を回収する",
+              "storyAction": {
+                "quest": "q179",
+                "action": "house1_collect"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q179",
+                  "action": "house1_collect"
+                },
+                {
+                  "op": "jump",
+                  "script": "q179.machine.house1_done"
+                }
+              ]
+            },
+            {
+              "id": "reject",
+              "text": "標を受け入れないという宣言を確認する",
+              "storyAction": {
+                "quest": "q179",
+                "action": "house1_reject"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q179",
+                  "action": "house1_reject"
+                },
+                {
+                  "op": "jump",
+                  "script": "q179.machine.house1_done"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q179.machine.house1_done": {
+      "storyQuest": "q179",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q179",
+          "scene": "house1_done"
+        },
+        {
+          "op": "narrate",
+          "text": "この家の意思を記録した。他の家の返事を代わりに決めない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "墓守と分かれ道へ戻る",
+              "storyAction": {
+                "quest": "q179",
+                "action": "house1_done_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q179",
+                  "action": "house1_done_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q179.machine.house2": {
+      "storyQuest": "q179",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q179",
+          "scene": "house2"
+        },
+        {
+          "op": "narrate",
+          "text": "本人に根の危険を伝え、標の回収か拒絶の宣言を選んでもらう。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "collect",
+              "text": "本人の希望で標を回収する",
+              "storyAction": {
+                "quest": "q179",
+                "action": "house2_collect"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q179",
+                  "action": "house2_collect"
+                },
+                {
+                  "op": "jump",
+                  "script": "q179.machine.house2_done"
+                }
+              ]
+            },
+            {
+              "id": "reject",
+              "text": "標を受け入れないという宣言を確認する",
+              "storyAction": {
+                "quest": "q179",
+                "action": "house2_reject"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q179",
+                  "action": "house2_reject"
+                },
+                {
+                  "op": "jump",
+                  "script": "q179.machine.house2_done"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q179.machine.house2_done": {
+      "storyQuest": "q179",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q179",
+          "scene": "house2_done"
+        },
+        {
+          "op": "narrate",
+          "text": "この家の意思を記録した。他の家の返事を代わりに決めない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "墓守と分かれ道へ戻る",
+              "storyAction": {
+                "quest": "q179",
+                "action": "house2_done_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q179",
+                  "action": "house2_done_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q179.machine.house3": {
+      "storyQuest": "q179",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q179",
+          "scene": "house3"
+        },
+        {
+          "op": "narrate",
+          "text": "本人に根の危険を伝え、標の回収か拒絶の宣言を選んでもらう。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "collect",
+              "text": "本人の希望で標を回収する",
+              "storyAction": {
+                "quest": "q179",
+                "action": "house3_collect"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q179",
+                  "action": "house3_collect"
+                },
+                {
+                  "op": "jump",
+                  "script": "q179.machine.house3_done"
+                }
+              ]
+            },
+            {
+              "id": "reject",
+              "text": "標を受け入れないという宣言を確認する",
+              "storyAction": {
+                "quest": "q179",
+                "action": "house3_reject"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q179",
+                  "action": "house3_reject"
+                },
+                {
+                  "op": "jump",
+                  "script": "q179.machine.house3_done"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q179.machine.house3_done": {
+      "storyQuest": "q179",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q179",
+          "scene": "house3_done"
+        },
+        {
+          "op": "narrate",
+          "text": "この家の意思を記録した。他の家の返事を代わりに決めない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "墓守と分かれ道へ戻る",
+              "storyAction": {
+                "quest": "q179",
+                "action": "house3_done_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q179",
+                  "action": "house3_done_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q179.machine.starved": {
+      "storyQuest": "q179",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q179",
+          "scene": "starved"
+        },
+        {
+          "op": "narrate",
+          "text": "三家の拒絶または回収を照合し、枯れた標の見張り当番を決めた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q179",
+                "action": "starved_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q179",
+                  "action": "starved_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q179.machine.end.starve"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q179.machine.cut1": {
+      "storyQuest": "q179",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q179",
+          "scene": "cut1"
+        },
+        {
+          "op": "narrate",
+          "text": "家の床と墓標の根の接続を確認し、切り離す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "cut",
+              "text": "この家の根を切り、次の家へ向かう",
+              "storyAction": {
+                "quest": "q179",
+                "action": "cut1_cut"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q179",
+                  "action": "cut1_cut"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q179.machine.cut2": {
+      "storyQuest": "q179",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q179",
+          "scene": "cut2"
+        },
+        {
+          "op": "narrate",
+          "text": "家の床と墓標の根の接続を確認し、切り離す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "cut",
+              "text": "この家の根を切り、次の家へ向かう",
+              "storyAction": {
+                "quest": "q179",
+                "action": "cut2_cut"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q179",
+                  "action": "cut2_cut"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q179.machine.cut3": {
+      "storyQuest": "q179",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q179",
+          "scene": "cut3"
+        },
+        {
+          "op": "narrate",
+          "text": "家の床と墓標の根の接続を確認し、切り離す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "cut",
+              "text": "最後の家の根を切り、庭へ戻る",
+              "storyAction": {
+                "quest": "q179",
+                "action": "cut3_cut"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q179",
+                  "action": "cut3_cut"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q179.machine.burned": {
+      "storyQuest": "q179",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q179",
+          "scene": "burned"
+        },
+        {
+          "op": "narrate",
+          "text": "三家への根を全て切り離した後で庭を焼いた。家の修繕が必要な被害は出していない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q179",
+                "action": "burned_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q179",
+                  "action": "burned_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q179.machine.end.burn"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q179.machine.rush": {
+      "storyQuest": "q179",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q179",
+          "scene": "rush"
+        },
+        {
+          "op": "narrate",
+          "text": "根を切らずに庭を焼いたため、つながった住居にも火が届いた。危険の除去と救援を分けて報告する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "report",
+              "text": "墓守と救援窓口へ行く",
+              "storyAction": {
+                "quest": "q179",
+                "action": "rush_report"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q179",
+                  "action": "rush_report"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q179.machine.damaged": {
+      "storyQuest": "q179",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q179",
+          "scene": "damaged"
+        },
+        {
+          "op": "narrate",
+          "text": "被害の出た家を報告し、住居の修繕を引き受けた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q179",
+                "action": "damaged_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q179",
+                  "action": "damaged_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q179.machine.end.damage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q179.machine.houses_cut_ready": {
+      "storyQuest": "q179",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q179",
+          "scene": "houses_cut_ready"
+        },
+        {
+          "op": "narrate",
+          "text": "必要な道具を使って準備を整えた。ここから目的地まで運ぶ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "continue",
+              "text": "準備した相手・品物と目的地へ向かう",
+              "storyAction": {
+                "quest": "q179",
+                "action": "houses_cut_ready_continue"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q179",
+                  "action": "houses_cut_ready_continue"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q179.machine.end.starve": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "村人が拒絶し、標は枯れた。再び根を張らないか見張る当番が残った。"
+        },
+        {
+          "op": "add",
+          "target": "vars.starve",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q179",
+          "outcome": "starve"
+        }
+      ]
+    },
+    "q179.machine.end.burn": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "家を切り離して庭を焼いた。墓守は名を彫らない標を作り、必要になるまで倉へしまった。"
+        },
+        {
+          "op": "add",
+          "target": "vars.burn",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q179",
+          "outcome": "burn"
+        }
+      ]
+    },
+    "q179.machine.end.damage": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "庭は焼けたが、つながった住居にも被害が出た。墓守とあなたは危険の除去と住居の修繕を別々に引き受けた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.damage",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q179",
+          "outcome": "damage"
+        }
+      ]
+    },
+    "q179.machine.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q179"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q179.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q179.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q179.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "starve",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "村人が拒絶し、標は枯れた。再び根を張らないか見張る当番が残った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "burn",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "家を切り離して庭を焼いた。墓守は名を彫らない標を作り、必要になるまで倉へしまった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "damage",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "庭は焼けたが、つながった住居にも被害が出た。墓守とあなたは危険の除去と住居の修繕を別々に引き受けた。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q179"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q179.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q179.machine.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "houses",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q179.machine.houses"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "onsite",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q179.machine.onsite"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "house1",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q179.machine.house1"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "house1_done",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q179.machine.house1_done"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "house2",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q179.machine.house2"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "house2_done",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q179.machine.house2_done"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "house3",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q179.machine.house3"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "house3_done",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q179.machine.house3_done"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "starved",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q179.machine.starved"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "cut1",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q179.machine.cut1"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "cut2",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q179.machine.cut2"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "cut3",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q179.machine.cut3"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "burned",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q179.machine.burned"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "rush",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q179.machine.rush"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "damaged",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q179.machine.damaged"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "houses_cut_ready",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q179.machine.houses_cut_ready"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q179.machine.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "墓を増やす庭の現場受付",
+      "garden": "根を伸ばす墓標の庭",
+      "junction": "三家を訪ねる分かれ道",
+      "rescue": "住居被害を引き継ぐ救援窓口",
+      "house1": "墓標を受け取った第1家",
+      "house2": "墓標を受け取った第2家",
+      "house3": "墓標を受け取った第3家",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "garden"
+      ],
+      [
+        "transit",
+        "junction"
+      ],
+      [
+        "transit",
+        "rescue"
+      ],
+      [
+        "transit",
+        "house1"
+      ],
+      [
+        "transit",
+        "house2"
+      ],
+      [
+        "transit",
+        "house3"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "garden",
+          "junction",
+          "rescue",
+          "house1",
+          "house2",
+          "house3",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "starve",
+          "burn",
+          "damage"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "house1": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "house1"
+      },
+      "house2": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "house2"
+      },
+      "house3": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "house3"
+      },
+      "ropeUsed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "ropeUsed"
+      },
+      "starved": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "starved"
+      },
+      "root1Cut": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "root1Cut"
+      },
+      "root2Cut": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "root2Cut"
+      },
+      "root3Cut": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "root3Cut"
+      },
+      "burned": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "burned"
+      },
+      "homesDamaged": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "homesDamaged"
+      },
+      "aidRequested": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "aidRequested"
+      },
+      "homes": {
+        "type": "integer",
+        "initial": 0,
+        "min": 0,
+        "max": 3,
+        "meaning": "homes"
+      },
+      "keeperAt": {
+        "type": "enum",
+        "initial": "garden",
+        "values": [
+          "entry",
+          "garden",
+          "junction",
+          "rescue",
+          "house1",
+          "house2",
+          "house3",
+          "transit"
+        ],
+        "meaning": "keeper の所在または保持者"
+      },
+      "marker1At": {
+        "type": "enum",
+        "initial": "house1",
+        "values": [
+          "entry",
+          "garden",
+          "junction",
+          "rescue",
+          "house1",
+          "house2",
+          "house3",
+          "transit",
+          "party",
+          "keeper",
+          "marker2",
+          "marker3"
+        ],
+        "meaning": "marker1 の所在または保持者"
+      },
+      "marker2At": {
+        "type": "enum",
+        "initial": "house2",
+        "values": [
+          "entry",
+          "garden",
+          "junction",
+          "rescue",
+          "house1",
+          "house2",
+          "house3",
+          "transit",
+          "party",
+          "keeper",
+          "marker1",
+          "marker3"
+        ],
+        "meaning": "marker2 の所在または保持者"
+      },
+      "marker3At": {
+        "type": "enum",
+        "initial": "house3",
+        "values": [
+          "entry",
+          "garden",
+          "junction",
+          "rescue",
+          "house1",
+          "house2",
+          "house3",
+          "transit",
+          "party",
+          "keeper",
+          "marker1",
+          "marker2"
+        ],
+        "meaning": "marker3 の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "keeper": {
+        "holder": "keeperAt",
+        "kind": "person"
+      },
+      "marker1": {
+        "holder": "marker1At",
+        "kind": "item"
+      },
+      "marker2": {
+        "holder": "marker2At",
+        "kind": "item"
+      },
+      "marker3": {
+        "holder": "marker3At",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "死んだ者の標より、買い取って屋内に置いた標だけに根が伸びる。最初に庭の木目が家の床板へ続く異常を示す。庭師だった墓守は美しい標を褒めて広めてしまい、責任から逃げず全戸を訪ねる必要がある。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "墓を増やす庭の現場受付",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "houses": {
+        "title": "三家を訪ねる分かれ道",
+        "place": "junction",
+        "cast": [],
+        "requires": true
+      },
+      "onsite": {
+        "title": "根を伸ばす墓標の庭",
+        "place": "garden",
+        "cast": [],
+        "requires": true
+      },
+      "house1": {
+        "title": "墓標を受け取った第1家",
+        "place": "house1",
+        "cast": [],
+        "requires": true
+      },
+      "house1_done": {
+        "title": "墓標を受け取った第1家",
+        "place": "house1",
+        "cast": [],
+        "requires": true
+      },
+      "house2": {
+        "title": "墓標を受け取った第2家",
+        "place": "house2",
+        "cast": [],
+        "requires": true
+      },
+      "house2_done": {
+        "title": "墓標を受け取った第2家",
+        "place": "house2",
+        "cast": [],
+        "requires": true
+      },
+      "house3": {
+        "title": "墓標を受け取った第3家",
+        "place": "house3",
+        "cast": [],
+        "requires": true
+      },
+      "house3_done": {
+        "title": "墓標を受け取った第3家",
+        "place": "house3",
+        "cast": [],
+        "requires": true
+      },
+      "starved": {
+        "title": "根を伸ばす墓標の庭",
+        "place": "garden",
+        "cast": [],
+        "requires": true
+      },
+      "cut1": {
+        "title": "墓標を受け取った第1家",
+        "place": "house1",
+        "cast": [],
+        "requires": true
+      },
+      "cut2": {
+        "title": "墓標を受け取った第2家",
+        "place": "house2",
+        "cast": [],
+        "requires": true
+      },
+      "cut3": {
+        "title": "墓標を受け取った第3家",
+        "place": "house3",
+        "cast": [],
+        "requires": true
+      },
+      "burned": {
+        "title": "根を伸ばす墓標の庭",
+        "place": "garden",
+        "cast": [],
+        "requires": true
+      },
+      "rush": {
+        "title": "根を伸ばす墓標の庭",
+        "place": "garden",
+        "cast": [],
+        "requires": true
+      },
+      "damaged": {
+        "title": "住居被害を引き継ぐ救援窓口",
+        "place": "rescue",
+        "cast": [],
+        "requires": true
+      },
+      "houses_cut_ready": {
+        "title": "三家を訪ねる分かれ道",
+        "place": "junction",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_visit": {
+        "from": [
+          "entry"
+        ],
+        "to": "onsite",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "garden"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "garden",
+          "companions": []
+        },
+        "depart": []
+      },
+      "houses_house3": {
+        "from": [
+          "houses"
+        ],
+        "to": "house3",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q179.values.house3"
+            },
+            "right": true
+          }
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "keeper"
+            ],
+            "path": [
+              "transit",
+              "house3"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "house3",
+          "companions": [
+            "keeper"
+          ]
+        },
+        "depart": []
+      },
+      "houses_house2": {
+        "from": [
+          "houses"
+        ],
+        "to": "house2",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q179.values.house2"
+            },
+            "right": true
+          }
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "keeper"
+            ],
+            "path": [
+              "transit",
+              "house2"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "house2",
+          "companions": [
+            "keeper"
+          ]
+        },
+        "depart": []
+      },
+      "houses_house1": {
+        "from": [
+          "houses"
+        ],
+        "to": "house1",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q179.values.house1"
+            },
+            "right": true
+          }
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "keeper"
+            ],
+            "path": [
+              "transit",
+              "house1"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "house1",
+          "companions": [
+            "keeper"
+          ]
+        },
+        "depart": []
+      },
+      "houses_starve": {
+        "from": [
+          "houses"
+        ],
+        "to": "starved",
+        "requires": {
+          "op": "gte",
+          "left": {
+            "ref": "stories.q179.values.homes"
+          },
+          "right": 3
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "keeper"
+            ],
+            "path": [
+              "transit",
+              "garden"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "garden",
+          "companions": [
+            "keeper"
+          ]
+        },
+        "depart": []
+      },
+      "houses_cut": {
+        "from": [
+          "houses"
+        ],
+        "to": "houses_cut_ready",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "ropeUsed",
+            "value": true
+          }
+        ],
+        "cost": {
+          "rope": 1
+        },
+        "once": false
+      },
+      "houses_rush": {
+        "from": [
+          "houses"
+        ],
+        "to": "rush",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "keeper"
+            ],
+            "path": [
+              "transit",
+              "garden"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "garden",
+          "companions": [
+            "keeper"
+          ]
+        },
+        "depart": []
+      },
+      "onsite_begin": {
+        "from": [
+          "onsite"
+        ],
+        "to": "houses",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "keeper"
+            ],
+            "path": [
+              "transit",
+              "junction"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "homes",
+            "value": 0
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "junction",
+          "companions": [
+            "keeper"
+          ]
+        },
+        "depart": []
+      },
+      "house1_collect": {
+        "from": [
+          "house1"
+        ],
+        "to": "house1_done",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "marker1",
+            "from": "house1",
+            "to": "party"
+          },
+          {
+            "op": "set",
+            "key": "house1",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "homes",
+            "value": {
+              "op": "add",
+              "args": [
+                {
+                  "ref": "stories.q179.values.homes"
+                },
+                1
+              ]
+            }
+          }
+        ],
+        "once": false
+      },
+      "house1_reject": {
+        "from": [
+          "house1"
+        ],
+        "to": "house1_done",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "house1",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "homes",
+            "value": {
+              "op": "add",
+              "args": [
+                {
+                  "ref": "stories.q179.values.homes"
+                },
+                1
+              ]
+            }
+          }
+        ],
+        "once": false
+      },
+      "house1_done_return": {
+        "from": [
+          "house1_done"
+        ],
+        "to": "houses",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "keeper"
+            ],
+            "path": [
+              "transit",
+              "junction"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "junction",
+          "companions": [
+            "keeper"
+          ]
+        },
+        "depart": []
+      },
+      "house2_collect": {
+        "from": [
+          "house2"
+        ],
+        "to": "house2_done",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "marker2",
+            "from": "house2",
+            "to": "party"
+          },
+          {
+            "op": "set",
+            "key": "house2",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "homes",
+            "value": {
+              "op": "add",
+              "args": [
+                {
+                  "ref": "stories.q179.values.homes"
+                },
+                1
+              ]
+            }
+          }
+        ],
+        "once": false
+      },
+      "house2_reject": {
+        "from": [
+          "house2"
+        ],
+        "to": "house2_done",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "house2",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "homes",
+            "value": {
+              "op": "add",
+              "args": [
+                {
+                  "ref": "stories.q179.values.homes"
+                },
+                1
+              ]
+            }
+          }
+        ],
+        "once": false
+      },
+      "house2_done_return": {
+        "from": [
+          "house2_done"
+        ],
+        "to": "houses",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "keeper"
+            ],
+            "path": [
+              "transit",
+              "junction"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "junction",
+          "companions": [
+            "keeper"
+          ]
+        },
+        "depart": []
+      },
+      "house3_collect": {
+        "from": [
+          "house3"
+        ],
+        "to": "house3_done",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "marker3",
+            "from": "house3",
+            "to": "party"
+          },
+          {
+            "op": "set",
+            "key": "house3",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "homes",
+            "value": {
+              "op": "add",
+              "args": [
+                {
+                  "ref": "stories.q179.values.homes"
+                },
+                1
+              ]
+            }
+          }
+        ],
+        "once": false
+      },
+      "house3_reject": {
+        "from": [
+          "house3"
+        ],
+        "to": "house3_done",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "house3",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "homes",
+            "value": {
+              "op": "add",
+              "args": [
+                {
+                  "ref": "stories.q179.values.homes"
+                },
+                1
+              ]
+            }
+          }
+        ],
+        "once": false
+      },
+      "house3_done_return": {
+        "from": [
+          "house3_done"
+        ],
+        "to": "houses",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "keeper"
+            ],
+            "path": [
+              "transit",
+              "junction"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "junction",
+          "companions": [
+            "keeper"
+          ]
+        },
+        "depart": []
+      },
+      "starved_finish": {
+        "from": [
+          "starved"
+        ],
+        "ending": "starve",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "starved",
+            "value": true
+          },
+          {
+            "op": "transfer",
+            "entity": "marker1",
+            "from": "party",
+            "to": "garden",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q179.values.marker1At"
+              },
+              "right": "party"
+            }
+          },
+          {
+            "op": "transfer",
+            "entity": "marker2",
+            "from": "party",
+            "to": "garden",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q179.values.marker2At"
+              },
+              "right": "party"
+            }
+          },
+          {
+            "op": "transfer",
+            "entity": "marker3",
+            "from": "party",
+            "to": "garden",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q179.values.marker3At"
+              },
+              "right": "party"
+            }
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "starve"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "cut1_cut": {
+        "from": [
+          "cut1"
+        ],
+        "to": "cut2",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "keeper"
+            ],
+            "path": [
+              "transit",
+              "house2"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "house2",
+          "companions": [
+            "keeper"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "root1Cut",
+            "value": true
+          }
+        ]
+      },
+      "cut2_cut": {
+        "from": [
+          "cut2"
+        ],
+        "to": "cut3",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "keeper"
+            ],
+            "path": [
+              "transit",
+              "house3"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "house3",
+          "companions": [
+            "keeper"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "root2Cut",
+            "value": true
+          }
+        ]
+      },
+      "cut3_cut": {
+        "from": [
+          "cut3"
+        ],
+        "to": "burned",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "keeper"
+            ],
+            "path": [
+              "transit",
+              "garden"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "garden",
+          "companions": [
+            "keeper"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "root3Cut",
+            "value": true
+          }
+        ]
+      },
+      "burned_finish": {
+        "from": [
+          "burned"
+        ],
+        "ending": "burn",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "burned",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "burn"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "rush_report": {
+        "from": [
+          "rush"
+        ],
+        "to": "damaged",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "keeper"
+            ],
+            "path": [
+              "transit",
+              "rescue"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "rescue",
+          "companions": [
+            "keeper"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "burned",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "homesDamaged",
+            "value": true
+          }
+        ]
+      },
+      "damaged_finish": {
+        "from": [
+          "damaged"
+        ],
+        "ending": "damage",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "aidRequested",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "damage"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "houses_cut_ready_continue": {
+        "from": [
+          "houses_cut_ready"
+        ],
+        "to": "cut1",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "keeper"
+            ],
+            "path": [
+              "transit",
+              "house1"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "house1",
+          "companions": [
+            "keeper"
+          ]
+        },
+        "depart": []
+      }
+    },
+    "endings": {
+      "starve": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q179.values.resolution"
+            },
+            "right": "starve"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q179.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q179.values.partyAt"
+                },
+                "right": "garden"
+              }
+            ]
+          }
+        ]
+      },
+      "burn": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q179.values.resolution"
+            },
+            "right": "burn"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q179.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q179.values.partyAt"
+                },
+                "right": "garden"
+              }
+            ]
+          }
+        ]
+      },
+      "damage": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q179.values.resolution"
+            },
+            "right": "damage"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q179.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q179.values.partyAt"
+                },
+                "right": "rescue"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_8",
+        "map": "region_8_f2",
+        "x": 6,
+        "y": 1
+      },
+      "garden": {
+        "kind": "dungeon",
+        "dungeon": "salome_road",
+        "map": "e2_salome_cemetery",
+        "x": 11,
+        "y": 5
+      },
+      "junction": {
+        "kind": "dungeon",
+        "dungeon": "salome_road",
+        "map": "e2_salome_outskirts",
+        "x": 7,
+        "y": 3
+      },
+      "rescue": {
+        "kind": "town",
+        "location": "salome_clinic"
+      },
+      "house1": {
+        "kind": "dungeon",
+        "dungeon": "salome_road",
+        "map": "e2_salome_outskirts",
+        "x": 3,
+        "y": 7
+      },
+      "house2": {
+        "kind": "dungeon",
+        "dungeon": "salome_road",
+        "map": "e2_salome_outskirts",
+        "x": 9,
+        "y": 7
+      },
+      "house3": {
+        "kind": "dungeon",
+        "dungeon": "salome_road",
+        "map": "e2_salome_outskirts",
+        "x": 13,
+        "y": 7
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "salome",
+  "receptionLocations": [
+    "salome_board"
+  ]
+}

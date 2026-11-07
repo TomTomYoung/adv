@@ -767,7 +767,7 @@
       {
         "id": "burned",
         "place": "garden",
-        "text": "三家への根を全て切り離した後で庭を焼いた。家の修繕が必要な被害は出していない。",
+        "text": "三家への根を全て切り離し、墓守と庭へ戻った。家へ火が伝わらない状態を確かめてから、庭を焼く。",
         "options": [
           {
             "id": "finish",
@@ -780,7 +780,7 @@
       {
         "id": "rush",
         "place": "garden",
-        "text": "根を切らずに庭を焼いたため、つながった住居にも火が届いた。危険の除去と救援を分けて報告する。",
+        "text": "墓守と庭へ戻った。家との根はつながったままで、このまま焼けば住居にも火が届く。焼却後は救援窓口へ被害を報告する。",
         "options": [
           {
             "id": "report",
@@ -793,7 +793,7 @@
       {
         "id": "damaged",
         "place": "rescue",
-        "text": "被害の出た家を報告し、住居の修繕を引き受けた。",
+        "text": "被害の出た家の情報を持ち、墓守と救援窓口へ着いた。危険の除去と住居の修繕を分けて報告する。",
         "options": [
           {
             "id": "finish",
@@ -842,7 +842,7 @@
     "entryScript": "q179.machine.visit",
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -851,7 +851,1349 @@
       "saveRevision": 2,
       "scope": "機関廟20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "墓を増やす庭の現場受付",
+            "garden": "根を伸ばす墓標の庭",
+            "junction": "三家を訪ねる分かれ道",
+            "rescue": "住居被害を引き継ぐ救援窓口",
+            "house1": "墓標を受け取った第1家",
+            "house2": "墓標を受け取った第2家",
+            "house3": "墓標を受け取った第3家",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "garden"
+            ],
+            [
+              "transit",
+              "junction"
+            ],
+            [
+              "transit",
+              "rescue"
+            ],
+            [
+              "transit",
+              "house1"
+            ],
+            [
+              "transit",
+              "house2"
+            ],
+            [
+              "transit",
+              "house3"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "garden",
+                "junction",
+                "rescue",
+                "house1",
+                "house2",
+                "house3",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "starve",
+                "burn",
+                "damage"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "house1": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "house1"
+            },
+            "house2": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "house2"
+            },
+            "house3": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "house3"
+            },
+            "ropeUsed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "ropeUsed"
+            },
+            "starved": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "starved"
+            },
+            "root1Cut": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "root1Cut"
+            },
+            "root2Cut": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "root2Cut"
+            },
+            "root3Cut": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "root3Cut"
+            },
+            "burned": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "burned"
+            },
+            "homesDamaged": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "homesDamaged"
+            },
+            "aidRequested": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "aidRequested"
+            },
+            "homes": {
+              "type": "integer",
+              "initial": 0,
+              "min": 0,
+              "max": 3,
+              "meaning": "homes"
+            },
+            "keeperAt": {
+              "type": "enum",
+              "initial": "garden",
+              "values": [
+                "entry",
+                "garden",
+                "junction",
+                "rescue",
+                "house1",
+                "house2",
+                "house3",
+                "transit"
+              ],
+              "meaning": "keeper の所在または保持者"
+            },
+            "marker1At": {
+              "type": "enum",
+              "initial": "house1",
+              "values": [
+                "entry",
+                "garden",
+                "junction",
+                "rescue",
+                "house1",
+                "house2",
+                "house3",
+                "transit",
+                "party",
+                "keeper",
+                "marker2",
+                "marker3"
+              ],
+              "meaning": "marker1 の所在または保持者"
+            },
+            "marker2At": {
+              "type": "enum",
+              "initial": "house2",
+              "values": [
+                "entry",
+                "garden",
+                "junction",
+                "rescue",
+                "house1",
+                "house2",
+                "house3",
+                "transit",
+                "party",
+                "keeper",
+                "marker1",
+                "marker3"
+              ],
+              "meaning": "marker2 の所在または保持者"
+            },
+            "marker3At": {
+              "type": "enum",
+              "initial": "house3",
+              "values": [
+                "entry",
+                "garden",
+                "junction",
+                "rescue",
+                "house1",
+                "house2",
+                "house3",
+                "transit",
+                "party",
+                "keeper",
+                "marker1",
+                "marker2"
+              ],
+              "meaning": "marker3 の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "keeper": {
+              "holder": "keeperAt",
+              "kind": "person"
+            },
+            "marker1": {
+              "holder": "marker1At",
+              "kind": "item"
+            },
+            "marker2": {
+              "holder": "marker2At",
+              "kind": "item"
+            },
+            "marker3": {
+              "holder": "marker3At",
+              "kind": "item"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "死んだ者の標より、買い取って屋内に置いた標だけに根が伸びる。最初に庭の木目が家の床板へ続く異常を示す。庭師だった墓守は美しい標を褒めて広めてしまい、責任から逃げず全戸を訪ねる必要がある。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "墓を増やす庭の現場受付",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "houses": {
+              "title": "三家を訪ねる分かれ道",
+              "place": "junction",
+              "cast": [],
+              "requires": true
+            },
+            "onsite": {
+              "title": "根を伸ばす墓標の庭",
+              "place": "garden",
+              "cast": [],
+              "requires": true
+            },
+            "house1": {
+              "title": "墓標を受け取った第1家",
+              "place": "house1",
+              "cast": [],
+              "requires": true
+            },
+            "house1_done": {
+              "title": "墓標を受け取った第1家",
+              "place": "house1",
+              "cast": [],
+              "requires": true
+            },
+            "house2": {
+              "title": "墓標を受け取った第2家",
+              "place": "house2",
+              "cast": [],
+              "requires": true
+            },
+            "house2_done": {
+              "title": "墓標を受け取った第2家",
+              "place": "house2",
+              "cast": [],
+              "requires": true
+            },
+            "house3": {
+              "title": "墓標を受け取った第3家",
+              "place": "house3",
+              "cast": [],
+              "requires": true
+            },
+            "house3_done": {
+              "title": "墓標を受け取った第3家",
+              "place": "house3",
+              "cast": [],
+              "requires": true
+            },
+            "starved": {
+              "title": "根を伸ばす墓標の庭",
+              "place": "garden",
+              "cast": [],
+              "requires": true
+            },
+            "cut1": {
+              "title": "墓標を受け取った第1家",
+              "place": "house1",
+              "cast": [],
+              "requires": true
+            },
+            "cut2": {
+              "title": "墓標を受け取った第2家",
+              "place": "house2",
+              "cast": [],
+              "requires": true
+            },
+            "cut3": {
+              "title": "墓標を受け取った第3家",
+              "place": "house3",
+              "cast": [],
+              "requires": true
+            },
+            "burned": {
+              "title": "根を伸ばす墓標の庭",
+              "place": "garden",
+              "cast": [],
+              "requires": true
+            },
+            "rush": {
+              "title": "根を伸ばす墓標の庭",
+              "place": "garden",
+              "cast": [],
+              "requires": true
+            },
+            "damaged": {
+              "title": "住居被害を引き継ぐ救援窓口",
+              "place": "rescue",
+              "cast": [],
+              "requires": true
+            },
+            "houses_cut_ready": {
+              "title": "三家を訪ねる分かれ道",
+              "place": "junction",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_visit": {
+              "from": [
+                "entry"
+              ],
+              "to": "onsite",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "garden"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "garden",
+                "companions": []
+              },
+              "depart": []
+            },
+            "houses_house3": {
+              "from": [
+                "houses"
+              ],
+              "to": "house3",
+              "requires": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q179.values.house3"
+                  },
+                  "right": true
+                }
+              },
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "keeper"
+                  ],
+                  "path": [
+                    "transit",
+                    "house3"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "house3",
+                "companions": [
+                  "keeper"
+                ]
+              },
+              "depart": []
+            },
+            "houses_house2": {
+              "from": [
+                "houses"
+              ],
+              "to": "house2",
+              "requires": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q179.values.house2"
+                  },
+                  "right": true
+                }
+              },
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "keeper"
+                  ],
+                  "path": [
+                    "transit",
+                    "house2"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "house2",
+                "companions": [
+                  "keeper"
+                ]
+              },
+              "depart": []
+            },
+            "houses_house1": {
+              "from": [
+                "houses"
+              ],
+              "to": "house1",
+              "requires": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q179.values.house1"
+                  },
+                  "right": true
+                }
+              },
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "keeper"
+                  ],
+                  "path": [
+                    "transit",
+                    "house1"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "house1",
+                "companions": [
+                  "keeper"
+                ]
+              },
+              "depart": []
+            },
+            "houses_starve": {
+              "from": [
+                "houses"
+              ],
+              "to": "starved",
+              "requires": {
+                "op": "gte",
+                "left": {
+                  "ref": "stories.q179.values.homes"
+                },
+                "right": 3
+              },
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "keeper"
+                  ],
+                  "path": [
+                    "transit",
+                    "garden"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "garden",
+                "companions": [
+                  "keeper"
+                ]
+              },
+              "depart": []
+            },
+            "houses_cut": {
+              "from": [
+                "houses"
+              ],
+              "to": "houses_cut_ready",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "ropeUsed",
+                  "value": true
+                }
+              ],
+              "cost": {
+                "rope": 1
+              },
+              "once": false
+            },
+            "houses_rush": {
+              "from": [
+                "houses"
+              ],
+              "to": "rush",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "keeper"
+                  ],
+                  "path": [
+                    "transit",
+                    "garden"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "garden",
+                "companions": [
+                  "keeper"
+                ]
+              },
+              "depart": []
+            },
+            "onsite_begin": {
+              "from": [
+                "onsite"
+              ],
+              "to": "houses",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "keeper"
+                  ],
+                  "path": [
+                    "transit",
+                    "junction"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "homes",
+                  "value": 0
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "junction",
+                "companions": [
+                  "keeper"
+                ]
+              },
+              "depart": []
+            },
+            "house1_collect": {
+              "from": [
+                "house1"
+              ],
+              "to": "house1_done",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "marker1",
+                  "from": "house1",
+                  "to": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "house1",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "homes",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "stories.q179.values.homes"
+                      },
+                      1
+                    ]
+                  }
+                }
+              ],
+              "once": false
+            },
+            "house1_reject": {
+              "from": [
+                "house1"
+              ],
+              "to": "house1_done",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "house1",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "homes",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "stories.q179.values.homes"
+                      },
+                      1
+                    ]
+                  }
+                }
+              ],
+              "once": false
+            },
+            "house1_done_return": {
+              "from": [
+                "house1_done"
+              ],
+              "to": "houses",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "keeper"
+                  ],
+                  "path": [
+                    "transit",
+                    "junction"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "junction",
+                "companions": [
+                  "keeper"
+                ]
+              },
+              "depart": []
+            },
+            "house2_collect": {
+              "from": [
+                "house2"
+              ],
+              "to": "house2_done",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "marker2",
+                  "from": "house2",
+                  "to": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "house2",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "homes",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "stories.q179.values.homes"
+                      },
+                      1
+                    ]
+                  }
+                }
+              ],
+              "once": false
+            },
+            "house2_reject": {
+              "from": [
+                "house2"
+              ],
+              "to": "house2_done",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "house2",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "homes",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "stories.q179.values.homes"
+                      },
+                      1
+                    ]
+                  }
+                }
+              ],
+              "once": false
+            },
+            "house2_done_return": {
+              "from": [
+                "house2_done"
+              ],
+              "to": "houses",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "keeper"
+                  ],
+                  "path": [
+                    "transit",
+                    "junction"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "junction",
+                "companions": [
+                  "keeper"
+                ]
+              },
+              "depart": []
+            },
+            "house3_collect": {
+              "from": [
+                "house3"
+              ],
+              "to": "house3_done",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "marker3",
+                  "from": "house3",
+                  "to": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "house3",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "homes",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "stories.q179.values.homes"
+                      },
+                      1
+                    ]
+                  }
+                }
+              ],
+              "once": false
+            },
+            "house3_reject": {
+              "from": [
+                "house3"
+              ],
+              "to": "house3_done",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "house3",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "homes",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "stories.q179.values.homes"
+                      },
+                      1
+                    ]
+                  }
+                }
+              ],
+              "once": false
+            },
+            "house3_done_return": {
+              "from": [
+                "house3_done"
+              ],
+              "to": "houses",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "keeper"
+                  ],
+                  "path": [
+                    "transit",
+                    "junction"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "junction",
+                "companions": [
+                  "keeper"
+                ]
+              },
+              "depart": []
+            },
+            "starved_finish": {
+              "from": [
+                "starved"
+              ],
+              "ending": "starve",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "starved",
+                  "value": true
+                },
+                {
+                  "op": "transfer",
+                  "entity": "marker1",
+                  "from": "party",
+                  "to": "garden",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q179.values.marker1At"
+                    },
+                    "right": "party"
+                  }
+                },
+                {
+                  "op": "transfer",
+                  "entity": "marker2",
+                  "from": "party",
+                  "to": "garden",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q179.values.marker2At"
+                    },
+                    "right": "party"
+                  }
+                },
+                {
+                  "op": "transfer",
+                  "entity": "marker3",
+                  "from": "party",
+                  "to": "garden",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q179.values.marker3At"
+                    },
+                    "right": "party"
+                  }
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "starve"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "cut1_cut": {
+              "from": [
+                "cut1"
+              ],
+              "to": "cut2",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "keeper"
+                  ],
+                  "path": [
+                    "transit",
+                    "house2"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "house2",
+                "companions": [
+                  "keeper"
+                ]
+              },
+              "depart": [
+                {
+                  "op": "set",
+                  "key": "root1Cut",
+                  "value": true
+                }
+              ]
+            },
+            "cut2_cut": {
+              "from": [
+                "cut2"
+              ],
+              "to": "cut3",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "keeper"
+                  ],
+                  "path": [
+                    "transit",
+                    "house3"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "house3",
+                "companions": [
+                  "keeper"
+                ]
+              },
+              "depart": [
+                {
+                  "op": "set",
+                  "key": "root2Cut",
+                  "value": true
+                }
+              ]
+            },
+            "cut3_cut": {
+              "from": [
+                "cut3"
+              ],
+              "to": "burned",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "keeper"
+                  ],
+                  "path": [
+                    "transit",
+                    "garden"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "garden",
+                "companions": [
+                  "keeper"
+                ]
+              },
+              "depart": [
+                {
+                  "op": "set",
+                  "key": "root3Cut",
+                  "value": true
+                }
+              ]
+            },
+            "burned_finish": {
+              "from": [
+                "burned"
+              ],
+              "ending": "burn",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "burned",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "burn"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "rush_report": {
+              "from": [
+                "rush"
+              ],
+              "to": "damaged",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "keeper"
+                  ],
+                  "path": [
+                    "transit",
+                    "rescue"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "rescue",
+                "companions": [
+                  "keeper"
+                ]
+              },
+              "depart": [
+                {
+                  "op": "set",
+                  "key": "burned",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "homesDamaged",
+                  "value": true
+                }
+              ]
+            },
+            "damaged_finish": {
+              "from": [
+                "damaged"
+              ],
+              "ending": "damage",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "aidRequested",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "damage"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "houses_cut_ready_continue": {
+              "from": [
+                "houses_cut_ready"
+              ],
+              "to": "cut1",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "keeper"
+                  ],
+                  "path": [
+                    "transit",
+                    "house1"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "house1",
+                "companions": [
+                  "keeper"
+                ]
+              },
+              "depart": []
+            }
+          },
+          "endings": {
+            "starve": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q179.values.resolution"
+                  },
+                  "right": "starve"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q179.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q179.values.partyAt"
+                      },
+                      "right": "garden"
+                    }
+                  ]
+                }
+              ]
+            },
+            "burn": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q179.values.resolution"
+                  },
+                  "right": "burn"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q179.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q179.values.partyAt"
+                      },
+                      "right": "garden"
+                    }
+                  ]
+                }
+              ]
+            },
+            "damage": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q179.values.resolution"
+                  },
+                  "right": "damage"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q179.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q179.values.partyAt"
+                      },
+                      "right": "rescue"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_8",
+              "map": "region_8_f2",
+              "x": 6,
+              "y": 1
+            },
+            "garden": {
+              "kind": "dungeon",
+              "dungeon": "salome_road",
+              "map": "e2_salome_cemetery",
+              "x": 11,
+              "y": 5
+            },
+            "junction": {
+              "kind": "dungeon",
+              "dungeon": "salome_road",
+              "map": "e2_salome_outskirts",
+              "x": 7,
+              "y": 3
+            },
+            "rescue": {
+              "kind": "town",
+              "location": "salome_clinic"
+            },
+            "house1": {
+              "kind": "dungeon",
+              "dungeon": "salome_road",
+              "map": "e2_salome_outskirts",
+              "x": 3,
+              "y": 7
+            },
+            "house2": {
+              "kind": "dungeon",
+              "dungeon": "salome_road",
+              "map": "e2_salome_outskirts",
+              "x": 9,
+              "y": 7
+            },
+            "house3": {
+              "kind": "dungeon",
+              "dungeon": "salome_road",
+              "map": "e2_salome_outskirts",
+              "x": 13,
+              "y": 7
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "house1PersonAt",
+            "value": "house1"
+          },
+          {
+            "key": "house2PersonAt",
+            "value": "house2"
+          },
+          {
+            "key": "house3PersonAt",
+            "value": "house3"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q179.scene.entry": {
@@ -1903,7 +3245,7 @@
         },
         {
           "op": "narrate",
-          "text": "三家への根を全て切り離した後で庭を焼いた。家の修繕が必要な被害は出していない。"
+          "text": "三家への根を全て切り離し、墓守と庭へ戻った。家へ火が伝わらない状態を確かめてから、庭を焼く。"
         },
         {
           "op": "choice",
@@ -1942,7 +3284,7 @@
         },
         {
           "op": "narrate",
-          "text": "根を切らずに庭を焼いたため、つながった住居にも火が届いた。危険の除去と救援を分けて報告する。"
+          "text": "墓守と庭へ戻った。家との根はつながったままで、このまま焼けば住居にも火が届く。焼却後は救援窓口へ被害を報告する。"
         },
         {
           "op": "choice",
@@ -1977,7 +3319,7 @@
         },
         {
           "op": "narrate",
-          "text": "被害の出た家を報告し、住居の修繕を引き受けた。"
+          "text": "被害の出た家の情報を持ち、墓守と救援窓口へ着いた。危険の除去と住居の修繕を分けて報告する。"
         },
         {
           "op": "choice",
@@ -2547,6 +3889,30 @@
           "marker2"
         ],
         "meaning": "marker3 の所在または保持者"
+      },
+      "house1PersonAt": {
+        "type": "enum",
+        "initial": "house1",
+        "values": [
+          "house1"
+        ],
+        "meaning": "house1Person の所在または保持者"
+      },
+      "house2PersonAt": {
+        "type": "enum",
+        "initial": "house2",
+        "values": [
+          "house2"
+        ],
+        "meaning": "house2Person の所在または保持者"
+      },
+      "house3PersonAt": {
+        "type": "enum",
+        "initial": "house3",
+        "values": [
+          "house3"
+        ],
+        "meaning": "house3Person の所在または保持者"
       }
     },
     "entities": {
@@ -2556,7 +3922,8 @@
       },
       "keeper": {
         "holder": "keeperAt",
-        "kind": "person"
+        "kind": "person",
+        "character": "q179_keeper"
       },
       "marker1": {
         "holder": "marker1At",
@@ -2569,6 +3936,21 @@
       "marker3": {
         "holder": "marker3At",
         "kind": "item"
+      },
+      "house1Person": {
+        "holder": "house1PersonAt",
+        "kind": "person",
+        "character": "q179_house1"
+      },
+      "house2Person": {
+        "holder": "house2PersonAt",
+        "kind": "person",
+        "character": "q179_house2"
+      },
+      "house3Person": {
+        "holder": "house3PersonAt",
+        "kind": "person",
+        "character": "q179_house3"
       }
     },
     "propositions": {
@@ -2588,97 +3970,245 @@
       "houses": {
         "title": "三家を訪ねる分かれ道",
         "place": "junction",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "keeper",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "onsite": {
         "title": "根を伸ばす墓標の庭",
         "place": "garden",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "keeper",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "house1": {
         "title": "墓標を受け取った第1家",
         "place": "house1",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "keeper",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "house1Person",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "house1_done": {
         "title": "墓標を受け取った第1家",
         "place": "house1",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "keeper",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "house1Person",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "house2": {
         "title": "墓標を受け取った第2家",
         "place": "house2",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "keeper",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "house2Person",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "house2_done": {
         "title": "墓標を受け取った第2家",
         "place": "house2",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "keeper",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "house2Person",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "house3": {
         "title": "墓標を受け取った第3家",
         "place": "house3",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "keeper",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "house3Person",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "house3_done": {
         "title": "墓標を受け取った第3家",
         "place": "house3",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "keeper",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "house3Person",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "starved": {
         "title": "根を伸ばす墓標の庭",
         "place": "garden",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "keeper",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "cut1": {
         "title": "墓標を受け取った第1家",
         "place": "house1",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "keeper",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "cut2": {
         "title": "墓標を受け取った第2家",
         "place": "house2",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "keeper",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "cut3": {
         "title": "墓標を受け取った第3家",
         "place": "house3",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "keeper",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "burned": {
         "title": "根を伸ばす墓標の庭",
         "place": "garden",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "keeper",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "rush": {
         "title": "根を伸ばす墓標の庭",
         "place": "garden",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "keeper",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "damaged": {
         "title": "住居被害を引き継ぐ救援窓口",
         "place": "rescue",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "keeper",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "houses_cut_ready": {
         "title": "三家を訪ねる分かれ道",
         "place": "junction",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "keeper",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       }
     },
@@ -3659,7 +5189,7 @@
         "y": 7
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "salome",
   "receptionLocations": [
