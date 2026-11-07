@@ -15,7 +15,13 @@ daughter_door・player_doorを翌朝へ越えると決めた段階、delivered�
 
 [24保存点](../../tools/tomorrow-door-art-fixtures.mjs)は現行9・表示追加前9・旧旅程の到着後3・旧受注3。Scene／Classic × 1440／390pxの96条件を機関廟CIへ追加した。結果JSONとPNGは `q178-cast-checkpoints` に保存する。今回は前回の作業コピーが失われていたため、実Gitオブジェクトを取得して専用worktreeを作成した。文書生成後に無関係な本文を保持する処理で、生成日のみの変更も戻したため、最初の全体検査は文書照合で停止した。日付だけが変わる22文書を生成器の出力へ揃え、手書きの追記は保持して再検査した。同名ファイルの不在と既存用途を確認して新規試験・fixtureを作成し、詳細ログ停止の方針を継続した。
 
+[PR #215](https://github.com/TomTomYoung/adv/pull/215)の実装コミット `87d78a193caa77015a263cd25041b759171f53cd` に対する[機関廟CI](https://github.com/TomTomYoung/adv/actions/runs/42331270701)で96条件・3結末が成功した。結果JSONのerrors・保存点の重複・欠落は0。artifact `13557418744` のZIPは配信元SHA-256 `7a99eb96dff6fecfcfcf3145318112eaa979f5185209cf4c4e0405a3dfb59453` と一致し、PNG96枚に破損はなかった。代表8枚を目視し、相談室と通常の朝の親子、扉の前の娘、越境前の本文、手紙を持って到着した宿主の席、旧待機本文の保持と旧受注表示を確認した。
+
+目視対象は `e2-scene-1440-q178-family-current.png`、`e2-classic-390-q178-wait-current.png`、`e2-scene-390-q178-daughter_door-previous-arrived.png`、`e2-classic-1440-q178-player_door-current.png`、`e2-scene-390-q178-delivered-current.png`、`e2-classic-1440-q178-delivered-current.png`、`e2-classic-390-q178-delivered-previous.png`、`e2-classic-390-q178-entry-accepted-legacy.png`。狭幅の宿主の呼称は折り返し、本文と重ならない。本文は既存のページ送り、長い選択肢は操作枠内のスクロールを使う。スクリーンショットは最終本文ページを含み、本文全体と選択肢は自動検査でも確認した。
+
 q179「墓を増やす庭」は原稿GQ079・初版・現行の全17場面・15旅程・3結末を精読した。既存keeperに加え、各家で標の受入れを決める本人を3役の候補とした。家ごとの意思確認と応答直後だけを候補場面とし、根を切る場面へ住人を一律に配置しない。裕福な買主との同定、世帯人数、救援職員や救援戦は追加しない。次工程で焼却・救援の本文と旗の確定時点を整理し、縄1本の一回消費と任意順訪問を保持する。
+
+実装コミットに対する全8ワークフロー・9ジョブが成功した。[通常CI](https://github.com/TomTomYoung/adv/actions/runs/42331270677)、[共通人物表示](https://github.com/TomTomYoung/adv/actions/runs/42331270705)、機関廟・国境・サロメ・屋外・室内・配信更新も成功。CIの失敗による再実行は0件。この検証結果と文書生成日の注意だけを追記し、同じ入力の成功結果を再利用する。再利用の実測と公開確認は[PR #215](https://github.com/TomTomYoung/adv/pull/215)およびActions概要を参照する。
 
 出演監査は49件・355場面、出演根拠あり248・なし107、接続済み97役・候補5役、未精読398場面。第2版の人物定義は183件（画像あり132・呼称のみ51）。次はq179の表示と時点整理、続いてq180の出演監査。
 
