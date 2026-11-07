@@ -119,6 +119,17 @@ export function machineSecondSource(q,{cast=true}={}){
   route('houses','cut','cut1',{companions:['keeper'],preparation:[set('ropeUsed')]});for(let i=1;i<=3;i++)add('cut'+i,'house'+i,'家の床と墓標の根の接続を確認し、切り離す。',[opt('cut',i<3?'この家の根を切り、次の家へ向かう':'最後の家の根を切り、庭へ戻る',i<3?'cut'+(i+1):'burned',{companions:['keeper'],depart:[set('root'+i+'Cut')]})]);end('burned','garden','三家への根を全て切り離した後で庭を焼いた。家の修繕が必要な被害は出していない。','burn',[set('burned')]);
   route('houses','rush','rush',{companions:['keeper']});add('rush','garden','根を切らずに庭を焼いたため、つながった住居にも火が届いた。危険の除去と救援を分けて報告する。',[opt('report','墓守と救援窓口へ行く','damaged',{companions:['keeper'],depart:[set('burned'),set('homesDamaged')]})]);end('damaged','rescue','被害の出た家を報告し、住居の修繕を引き受けた。','damage',[set('aidRequested')]);
  }
+ if(q.number===179&&cast){
+  x.entities.keeper.character='q179_keeper';
+  for(const n of x.nodes)if(n.id!=='entry')n.cast=[{entity:'keeper',display:{x:50}}];
+  for(let i=1;i<=3;i++){
+   const id='house'+i+'Person';entity(id,'house'+i,'person');x.entities[id].character='q179_house'+i;
+   for(const scene of ['house'+i,'house'+i+'_done'])node(scene).cast=[{entity:'keeper',display:{x:31}},{entity:id,display:{x:69}}];
+  }
+  node('burned').text='三家への根を全て切り離し、墓守と庭へ戻った。家へ火が伝わらない状態を確かめてから、庭を焼く。';
+  node('rush').text='墓守と庭へ戻った。家との根はつながったままで、このまま焼けば住居にも火が届く。焼却後は救援窓口へ被害を報告する。';
+  node('damaged').text='被害の出た家の情報を持ち、墓守と救援窓口へ着いた。危険の除去と住居の修繕を分けて報告する。';
+ }
  if(q.number===180){
   town('tale','語り部と聞き手のいる宿','salome_inn');town('scripts_place','散った台本の保管庫','machine_scripts');town('refuge','聞き手が待つ別室','machine_family');entity('mui','tale','person');entity('listeners','tale','group');entity('scriptPages','scripts_place');const from=intake('tale','未完の怪談の怪物について、語り部ムイのいる宿を訪ねる。');node('ending').place='scripts_place';choice(from,'scripts').companions=['mui'];
   for(const [key,outcome] of [['original','home'],['new','new']]){route('ending',key,'told_'+key,{companions:['mui'],depart:[give('scriptPages','scripts_place','party')]});end('told_'+key,'tale',key==='original'?'聞き手の席を整え、元の帰郷まで語り終えた。討伐したという記録は付けない。':'起きた事実を消さず、遠い宿へ帰る後半を最後まで語った。',''+outcome,[give('scriptPages','party','mui'),set('storyFinished')]);}

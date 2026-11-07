@@ -59,6 +59,16 @@ export async function buildMachineQuests({check=false}={}){
    quest.story.revision=2;quest.model.edition.revision=2;
    quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[{key:'hostPersonAt',value:'host'}]}];
   }
+  if(n===179){
+   const previous=compileRelocatedQuest(first,source(first,{cast:false}),options).story;
+   for(let i=1;i<=3;i++){
+    quest.story.registry['marker'+i+'At'].values=structuredClone(previous.registry['marker'+i+'At'].values);
+    quest.story.registry['house'+i+'PersonAt'].values=['house'+i];
+   }
+   quest.story.scenes.houses_cut_ready.cast=[{entity:'keeper',display:{x:50}}];
+   quest.story.revision=2;quest.model.edition.revision=2;
+   quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[1,2,3].map(i=>({key:'house'+i+'PersonAt',value:'house'+i}))}];
+  }
   quests.push(quest);
  }
  const outcomes=quests.reduce((n,q)=>n+Object.keys(q.outcomes).length,0);

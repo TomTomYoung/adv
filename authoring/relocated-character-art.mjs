@@ -55,6 +55,16 @@ export const relocatedCharacters=Object.fromEntries([
 ].map(([id,name,detail,provenance])=>[id,{id,name,role:'礼拝堂の現地の相手',detail,portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,
  provenance:provenance??'2026-10-29の美術設定。固有名・他人物との同一性は追加しない。具体的な外見・年齢感・服装は今回の美術設定。牢・格子・聖像・宝玉・石を人物画へ固定しない。'}]));
 // The group has no specified headcount or spokesperson. Ren is the existing actor.
+relocatedCharacters.q179_keeper={
+ id:'q179_keeper',name:'墓守',role:'標を広めた責任を認め、三家への対処に同行する元庭師',
+ detail:'庭の調査から各家の訪問・根の切断・救援窓口まで実同行する。受付には表示せず、戦闘の仲間へ追加しない。',
+ provenance:'2026-11-07。既存keeperの呼称表示。氏名・容貌・性別・年齢を補わず、専用画は未接続。'
+};
+for(let i=1;i<=3;i++)relocatedCharacters['q179_house'+i]={
+ id:'q179_house'+i,name:`第${i}家の本人`,role:`第${i}家で標の回収か拒絶を選ぶ本人`,
+ detail:'意思確認と応答直後の場面だけに表示する。根の切断場面への同席や、他家への同行は追加しない。',
+ provenance:'2026-11-07。house'+i+'Personの呼称表示。世帯人数・代表者・氏名・容貌・裕福な買主との同一性を補わず、専用画は未接続。'
+};
 relocatedCharacters.q178_daughter={
  id:'q178_daughter',name:'旅立つ娘',role:'翌朝への扉を前に旅立ちを決める娘',
  detail:'親との相談、扉の前、実同行後の翌朝の部屋に表示する。手紙の届け先へは同行しない。髪紐は普通の忘れ物として扱う。',
