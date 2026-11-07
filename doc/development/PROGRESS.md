@@ -9,7 +9,11 @@ master `9f3246973e2094ec129cce62fa5899a34eb300c5` を基点に、q180「最後�
 
 ending・told_original・told_new・sealed_here・stored・bannedの本文6箇所を、席の準備、語了・封印・保管・禁止を確定する前の状態へ整えた。物語改訂1と旧保存の待機本文・選択肢・全状態を保持し、次の実到着から修正文を使う。旧受注経路、全8旅程・4結末・台本の保持者と受渡し、141G・93XPの報酬を維持した。
 
-専用7試験と関連試験を実施し、26保存点・104画面条件のCI検査を追加した。全体検査・ブラウザー結果は確定後に追記する。
+専用7試験と関連試験が成功し、`npm run check` は全2,670試験成功・失敗0・スキップ0。26保存点・104画面条件のCI検査を追加した。[q180ブラウザー検査](https://github.com/TomTomYoung/adv/actions/runs/42344720754)は実装先端 `b73a9aa11ee446514f61e06f5155f1f817cb613e` で成功した。成果物 `q180-cast-checkpoints`（ID `13563596184`、SHA-256 `d9161918db8ed334c87b6977bf139e423e453cbe80fd6e2e18c485e5fd5014be`）を取得し、104条件・4結末・エラー0、PNG104枚の整合を確認した。Scene／Classic × 1440／390pxは各26条件。
+
+PR #217の実装先端で全8ワークフロー・9ジョブが成功した。文書だけの結果追記では成功済み入力を再利用する。
+
+代表8枚を目視した。`e2-scene-1440-q180-onsite-current.png`、`e2-classic-390-q180-ending-current.png`、`e2-scene-390-q180-told_original-current.png`、`e2-classic-1440-q180-told_new-current.png`、`e2-scene-390-q180-sealed_here-previous-arrived.png`、`e2-classic-390-q180-stored-current.png`、`e2-classic-1440-q180-banned-previous.png`、`e2-scene-1440-q180-entry-accepted-legacy.png`。宿の二役、台本庫のムイだけの表示、封印前・語了前の本文、旧待機本文の保持、旧受注経路へ新しい出演者を追加しないこと、狭幅の呼称折返しと本文送りを確認した。
 
 q181は原稿GQ081・初版・現行の全9場面・8旅程・3結末を精読した。使者・古参は実同行、隊長は陣地のみ、傭兵と対面相手は本文に根拠のある場面だけを表示候補とした。entryの矢筒を掲げる人物と既存保持者の差を次工程で整える。遠隔の返礼役との同一性、両陣の人数や容貌は補わない。監査は51件・373場面、出演根拠あり265・なし108、接続済み103役・候補6役、未精読380場面。
 
