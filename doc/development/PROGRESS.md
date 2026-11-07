@@ -9,7 +9,9 @@ master `6193dd707c9bd1d0739f2b0549c4252d344b62de` を基点に、q179「墓を�
 
 burned・rushを焼却前、damagedを被害情報を持って救援窓口へ着いた段階へ整えた。焼却はburnedのfinish・rushのreport出発時、救援はdamagedのfinish時のまま。物語改訂1→2は三家の本人の所在だけを補い、旧保存の待機本文・選択肢・命令列・結末・費用を保持する。標の保持者に新しい本人entityを追加しない。
 
-[専用7試験](../../tests/garden-cast.test.mjs)が成功。許可差分以外の配布定義の一致、全17場面・15旅程・3結末と各待機段階、6訪問順×8応答×新旧保存の96通り、縄の一回消費、切断・焼却・住居被害・救援の確定時点、各家の固定所在、旧受注経路、報酬の一回性と不正保存の原子的拒否を確認した。[39保存点](../../tools/garden-art-fixtures.mjs)をScene／Classic × 1440／390pxの156条件で確認するCIを追加した。結果は本項へ追記する。
+[専用7試験](../../tests/garden-cast.test.mjs)が成功。許可差分以外の配布定義の一致、全17場面・15旅程・3結末と各待機段階、6訪問順×8応答×新旧保存の96通り、縄の一回消費、切断・焼却・住居被害・救援の確定時点、各家の固定所在、旧受注経路、報酬の一回性と不正保存の原子的拒否を確認した。全2,663試験が成功し、失敗・中止・スキップは0。配信指紋・生成シナリオ・データ・設定画面・静的検査・文書整合も通過した。全体検査の実行は1回。[39保存点](../../tools/garden-art-fixtures.mjs)をScene／Classic × 1440／390pxの156条件で確認するCIを追加した。[PR #216](https://github.com/TomTomYoung/adv/pull/216)の実装コミット `9bc56f10c4ec68b926d548be60fbd99fba71be04` に対する[機関廟CI](https://github.com/TomTomYoung/adv/actions/runs/42341435345)で156条件・3結末が成功した。結果JSONのerrors・重複・欠落は0、PNG156枚の破損は0。artifact `13562225526` のZIPは配信元SHA-256 `c8f270b3fd635f29051d20e8549b4a391661bd34ffe2e3843b150b238b141d34` と一致した。
+
+代表8枚を目視した。`e2-scene-1440-q179-house1-current.png`、`e2-classic-390-q179-house2_done-current.png`、`e2-scene-390-q179-cut1-current.png`、`e2-classic-1440-q179-burned-current.png`、`e2-scene-390-q179-rush-previous-arrived.png`、`e2-classic-390-q179-damaged-current.png`、`e2-classic-390-q179-damaged-previous.png`、`e2-scene-1440-q179-entry-accepted-legacy.png`。家の本人と墓守の表示、切断時に墓守だけが残ること、焼却・救援前の修正文、旧待機本文と旧受注表示を確認した。Scene狭幅は既存の本文ページ送りと選択欄内スクロールを使用し、呼称と本文は重ならない。
 
 q180は原稿GQ080・初版・現行の全9場面・8旅程・4結末を精読し、ムイと聞き手を候補にした。宿主は依頼人欄だけで同席させず、聞き手は台本庫へ同行しない。語了・封印・禁止の本文と旗の時点差、台本庫で聞き手の席を整えたと記す本文を次工程へ残した。監査は50件・364場面、出演根拠あり256・なし108、接続済み101役・候補3役、未精読389場面。
 
