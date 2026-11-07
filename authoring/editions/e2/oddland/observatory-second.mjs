@@ -2,7 +2,7 @@ import {set,give,ref,eq,or} from '../../../story-kit.mjs';
 import {observatorySource} from './observatory-common.mjs';
 const not=arg=>({op:'not',arg});
 
-export function observatorySecondSource(q){
+export function observatorySecondSource(q,{cast=true}={}){
  const {x,node,choice,town,field,entity,opt,add,route,end,v,transfer,int,finish}=observatorySource(q);
  const result=ref(`flags.relocatedBattleResult.${q.id}`),escaped=eq(result,'escape'),failed=or(escaped,eq(result,'lose'));
  if(q.number===181){
@@ -80,6 +80,15 @@ export function observatorySecondSource(q){
   route('cleanup','collect','collectors',{companions:['fuu']});add('collectors','store','三つの封鎖と受入れを確認し、軍の回収班と合流した。',[opt('first','フウと回収班で第1区画へ向かう','collect1',{companions:['fuu','collectors']})]);
   for(let i=1;i<=3;i++)add('collect'+i,'site'+i,'封鎖した第'+i+'区画で魔石を回収する。',[opt('carry',i===3?'回収した魔石を保管庫へ運ぶ':'魔石を持って次の区画へ向かう',i===3?'collected':'collect'+(i+1),{companions:['fuu','collectors'],depart:[give('crystal'+i,'site'+i,'party')]})]);
   end('collected','store','回収班と三か所の魔石を保管庫へ運び込んだ。軍の受入れを確認して引き渡す。','collect',[1,2,3].map(i=>give('crystal'+i,'party','store')));
+ }
+ if(q.number===181&&cast){
+  for(const id of ['envoy','veteran','captain'])x.entities[id].character='q181_'+id;
+  for(const [id,place,kind,character] of [['postMercenaries','mercenaries','group','q181_post_mercenaries'],['frontMercenaries','signal','group','q181_front_mercenaries'],['counterpart','meeting','person','q181_counterpart']]){entity(id,place,kind);x.entities[id].character=character;}
+  for(const n of x.nodes){
+   const extra=['entry','agreed','rescue_report','withdrawn'].includes(n.id)?'captain':n.id==='briefed'?'postMercenaries':n.id==='misfire'?'frontMercenaries':n.id==='meeting'?'counterpart':null;
+   const people=['envoy','veteran',...(extra?[extra]:[])],positions=extra?[20,50,80]:[31,69];n.cast=people.map((entity,i)=>({entity,display:{x:positions[i]}}));
+  }
+  node('entry').text='古参は矢尻を外した。使者は白い矢筒を掲げ、隊長は古参を臆病だと笑う。敵側にも同じ筒が上がったが、傭兵はまだ弓を構えている。';
  }
  return finish();
 }

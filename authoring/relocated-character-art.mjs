@@ -55,6 +55,48 @@ export const relocatedCharacters=Object.fromEntries([
 ].map(([id,name,detail,provenance])=>[id,{id,name,role:'礼拝堂の現地の相手',detail,portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,
  provenance:provenance??'2026-10-29の美術設定。固有名・他人物との同一性は追加しない。具体的な外見・年齢感・服装は今回の美術設定。牢・格子・聖像・宝玉・石を人物画へ固定しない。'}]));
 // The group has no specified headcount or spokesperson. Ren is the existing actor.
+relocatedCharacters.q181_envoy={
+ "id": "q181_envoy",
+ "name": "使者",
+ "role": "白い矢筒を持って対面・救援・撤回の行程を進む使者",
+ "detail": "既存envoyの実所在と同行だけを使う。古参と同一人物にはしない。",
+ "provenance": "2026-11-07。本文と既存経路に基づく呼称表示。容貌・性別・年齢や国軍名を追加せず、専用画は未接続。"
+};
+relocatedCharacters.q181_veteran={
+ "id": "q181_veteran",
+ "name": "古参",
+ "role": "白い矢筒の慣習を知り、使者に同行する古参",
+ "detail": "既存veteranの実所在を使う。矢筒は休戦報告のfinishで受け取る。",
+ "provenance": "2026-11-07。本文と既存経路に基づく呼称表示。容貌・性別・年齢や国軍名を追加せず、専用画は未接続。"
+};
+relocatedCharacters.q181_captain={
+ "id": "q181_captain",
+ "name": "新任の弓兵隊長",
+ "role": "陣地で使者を送り、帰還後の報告を受ける隊長",
+ "detail": "既存captainの陣地に限定し、前線へ同行させない。",
+ "provenance": "2026-11-07。本文と既存経路に基づく呼称表示。容貌・性別・年齢や国軍名を追加せず、専用画は未接続。"
+};
+relocatedCharacters.q181_post_mercenaries={
+ "id": "q181_post_mercenaries",
+ "name": "持場の傭兵たち",
+ "role": "白い矢筒の慣習と通行路の説明を受ける傭兵",
+ "detail": "briefedだけの人数未確定の集団表示。誤射側の傭兵との同一性・別人性を確定しない。",
+ "provenance": "2026-11-07。本文と既存経路に基づく呼称表示。容貌・性別・年齢や国軍名を追加せず、専用画は未接続。"
+};
+relocatedCharacters.q181_front_mercenaries={
+ "id": "q181_front_mercenaries",
+ "name": "未通達の傭兵たち",
+ "role": "前線で通達を受けず誤射した傭兵",
+ "detail": "misfireだけの人数未確定の集団表示。持場の傭兵との同一性・別人性を確定せず、遠隔の返礼場面には出さない。",
+ "provenance": "2026-11-07。本文と既存経路に基づく呼称表示。容貌・性別・年齢や国軍名を追加せず、専用画は未接続。"
+};
+relocatedCharacters.q181_counterpart={
+ "id": "q181_counterpart",
+ "name": "対面の相手",
+ "role": "使者と遺体回収のための短い休戦を話す相手",
+ "detail": "meetingだけに所在を固定する。敵側の役職・氏名や返礼役との同一性を補わない。",
+ "provenance": "2026-11-07。本文と既存経路に基づく呼称表示。容貌・性別・年齢や国軍名を追加せず、専用画は未接続。"
+};
 relocatedCharacters.q180_mui={
  id:'q180_mui',name:'語り部ムイ',role:'未完の怪談を語り、台本の後半と話の扱いを確認する語り部',
  detail:'宿・台本庫・聞き手の退避先で、既存muiの実所在に合わせて表示する。台本庫へ戻る経路では聞き手を別室に残す。',
