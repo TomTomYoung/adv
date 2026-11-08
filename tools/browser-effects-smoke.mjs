@@ -115,7 +115,7 @@ try{
   assert.equal(await page.locator('.fx-overlay').count(),0);
   checks.push('reduced/off/OS reduced motion, classic layout, final blow after enemy removal, and cancellation before impact');
   await page.evaluate(()=>setup());
-  await page.evaluate(async()=>{g.random=()=>0;dispatch({type:'battle',action:'skill',skill:'attack',target:'enemy_0'});await new Promise(r=>setTimeout(r,175));freeze();});
+  await page.evaluate(async()=>{const {applyStatus}=await import('./src/core/status-effects.js');applyStatus(g.data,g.state,g.state.actors.ada,'guaranteed_critical',{turns:2});dispatch({type:'battle',action:'skill',skill:'attack',target:'enemy_0'});await new Promise(r=>setTimeout(r,175));freeze();});
   assert.ok(await page.locator('.fx-accent-critical.fx-impact-particle').count());assert.ok(await page.locator('.fx-critical').count());await page.screenshot({path:path.join(output,'critical-enhanced.png')});
   await page.evaluate(()=>setup({actor:'toma'}));
   await page.evaluate(async()=>{g.state.actors.toma.hp=Math.max(1,g.state.actors.toma.hp-8);render();dispatch({type:'battle',action:'skill',skill:'group_heal'});await new Promise(r=>setTimeout(r,175));freeze();});
@@ -125,7 +125,7 @@ try{
   assert.ok(await page.locator('.fx-accent-defeat.fx-impact-particle').count());await page.screenshot({path:path.join(output,'defeat-enhanced.png')});
   await page.evaluate(()=>view.playback.finish());assert.equal(await page.locator('.fx-impact-ring,.fx-impact-particle').count(),0);
   for(const mode of ['reduced','off']){
-    await page.evaluate(mode=>setup({mode}),mode);await page.evaluate(async()=>{g.random=()=>0;dispatch({type:'battle',action:'skill',skill:'attack',target:'enemy_0'});await new Promise(r=>setTimeout(r,175));freeze();});
+    await page.evaluate(mode=>setup({mode}),mode);await page.evaluate(async()=>{const {applyStatus}=await import('./src/core/status-effects.js');applyStatus(g.data,g.state,g.state.actors.ada,'guaranteed_critical',{turns:2});dispatch({type:'battle',action:'skill',skill:'attack',target:'enemy_0'});await new Promise(r=>setTimeout(r,175));freeze();});
     assert.equal(await page.locator('.fx-impact-ring,.fx-impact-particle').count(),0);
   }
   checks.push('critical sparks and shock ring, healing motes, defeat debris; skip cleans every overlay; reduced/off suppress moving accents');
