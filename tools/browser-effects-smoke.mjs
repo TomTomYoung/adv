@@ -117,6 +117,7 @@ try{
   await page.evaluate(()=>setup());
   await page.evaluate(async()=>{const {applyStatus}=await import('./src/core/status-effects.js');applyStatus(g.data,g.state,g.state.actors.ada,'guaranteed_critical',{turns:2});dispatch({type:'battle',action:'skill',skill:'attack',target:'enemy_0'});await new Promise(r=>setTimeout(r,175));freeze();});
   assert.ok(await page.locator('.fx-accent-critical.fx-impact-particle').count());assert.ok(await page.locator('.fx-critical').count());await page.screenshot({path:path.join(output,'critical-enhanced.png')});
+  assert.ok(await page.evaluate(()=>Number(getComputedStyle(document.querySelector('.fx-impact-ring')).zIndex)>Number(getComputedStyle(document.querySelector('.fx-ghost')).zIndex)),'critical light must appear above the recoil sprite');
   await page.evaluate(()=>setup({actor:'toma'}));
   await page.evaluate(async()=>{g.state.actors.toma.hp=Math.max(1,g.state.actors.toma.hp-8);render();dispatch({type:'battle',action:'skill',skill:'group_heal'});await new Promise(r=>setTimeout(r,175));freeze();});
   assert.ok(await page.locator('.fx-accent-heal.fx-impact-particle').count());await page.screenshot({path:path.join(output,'heal-enhanced.png')});
