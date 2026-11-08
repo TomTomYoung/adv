@@ -1,0 +1,2209 @@
+{
+  "schemaVersion": 1,
+  "id": "q184",
+  "number": 184,
+  "title": "捕虜の鍋",
+  "client": "捕虜収容所の料理係",
+  "brief": "なくなった大鍋を捜してください。",
+  "region": 9,
+  "type": "scene_graph",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 旧王領の村の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q184_scene",
+      "title": "捕虜の鍋：捕虜収容所の料理係",
+      "points": [
+        {
+          "map": "region_9_f1",
+          "x": 6,
+          "y": 1,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q184.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q184.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q184.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q184"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "q184_observatory_entry",
+      "title": "ジャルが鍋を使う隠し厨房",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q184.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q184.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q184"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q184.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_camp",
+          "x": 9,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "id": "q184_observatory_store",
+      "title": "別鍋を貸し出す倉庫",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "store",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q184.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q184.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q184"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q184.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_camp",
+          "x": 1,
+          "y": 7
+        }
+      ]
+    },
+    {
+      "id": "q184_observatory_ordinary",
+      "title": "普通食を作る厨房",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "ordinary",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q184.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q184.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q184"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q184.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_camp",
+          "x": 3,
+          "y": 7
+        }
+      ]
+    },
+    {
+      "id": "q184_observatory_inspection",
+      "title": "食材を検査する場所",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "inspection",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q184.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q184.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q184"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q184.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_camp",
+          "x": 11,
+          "y": 5
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_9_f1",
+      "x": 6,
+      "y": 1,
+      "object": "q184_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "take": {
+      "label": "鍋の没収",
+      "text": "鍋は戻った。規律は守られたが、食事を取らない人の不満も残った。",
+      "gold": 153,
+      "xp": 99
+    },
+    "other": {
+      "label": "距離のある食事",
+      "text": "別鍋の料理が増えた。距離を保ちながら食べられるものを選べるようになった。",
+      "gold": 153,
+      "xp": 99
+    },
+    "joint": {
+      "label": "火加減の相談",
+      "text": "共同炊事が始まった。二人の料理人は、捕虜と看守の話より先に火加減へ文句を言い合った。",
+      "gold": 153,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/observatory-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38166a207eb49f89ac578",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "捕虜は空腹でも配膳に手を付けず、鍋から同じ香草の匂いがすると近づく。政治的な意味はあるが、慣れない味や調理法への拒否も混ざっている。全員を一つの信念で動かさず、一人は単純に焦げた食事が嫌だと明かす。",
+      "fixedPast": "捕虜収容所の料理係が、盗まれた大鍋の捜索を頼む。鍋は敵兵の料理人ジャルが隠し、断食している捕虜へ故郷の料理を作ろうとしている。監督は食事拒否を反抗と考え、ジャルは相手の食べ物を口にすれば屈服だと思っている。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "捕虜収容所の料理係",
+        "beliefsAndGoals": "捕虜収容所の料理係が、盗まれた大鍋の捜索を頼む。鍋は敵兵の料理人ジャルが隠し、断食している捕虜へ故郷の料理を作ろうとしている。監督は食事拒否を反抗と考え、ジャルは相手の食べ物を口にすれば屈服だと思っている。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "なくなった大鍋を捜してください。"
+      }
+    ],
+    "conflict": {
+      "design": "捜索→隠し厨房→没収／別鍋を貸す／共同炊事を交渉。共同には検査と本人の協力が必要だ。材料が不足すれば似た料理でよいか捕虜へ相談できる。拒否されたら普通食と別鍋を併存させられる。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q184.observatory.entry"
+        },
+        {
+          "id": "joint",
+          "script": "q184.observatory.joint"
+        },
+        {
+          "id": "taken",
+          "script": "q184.observatory.taken"
+        },
+        {
+          "id": "checked",
+          "script": "q184.observatory.checked"
+        },
+        {
+          "id": "invite",
+          "script": "q184.observatory.invite"
+        },
+        {
+          "id": "joint_cooking",
+          "script": "q184.observatory.joint_cooking"
+        },
+        {
+          "id": "spare",
+          "script": "q184.observatory.spare"
+        },
+        {
+          "id": "swap",
+          "script": "q184.observatory.swap"
+        },
+        {
+          "id": "parallel",
+          "script": "q184.observatory.parallel"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "なくなった大鍋を捜してください。"
+    },
+    "reveal": {
+      "newInformation": "捕虜は空腹でも配膳に手を付けず、鍋から同じ香草の匂いがすると近づく。政治的な意味はあるが、慣れない味や調理法への拒否も混ざっている。全員を一つの信念で動かさず、一人は単純に焦げた食事が嫌だと明かす。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q184.scene.entry"
+      },
+      {
+        "id": "joint",
+        "script": "q184.scene.joint"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q184.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "敵兵の料理人ジャルが隠し厨房で鍋を使っていた。慣れた香草の匂いがすると捕虜が近づく。「反抗じゃない、焦げてるのが嫌だ」と言う者もいた。",
+        "options": [
+          {
+            "id": "take",
+            "text": "規律を優先して鍋を没収する",
+            "to": "taken",
+            "action": "entry_take"
+          },
+          {
+            "id": "other",
+            "text": "別鍋を貸し、普通食と並行して作る",
+            "to": "spare",
+            "action": "entry_other"
+          },
+          {
+            "id": "joint",
+            "text": "検査と本人の協力を条件に共同炊事を相談する",
+            "to": "joint",
+            "action": "entry_joint"
+          }
+        ]
+      },
+      {
+        "id": "joint",
+        "place": "inspection",
+        "text": "ジャルは食材検査に同意し、監督は味を変える裁量を認めた。全員へ同じ信念を要求せず、普通食も選べるよう残す。",
+        "options": [
+          {
+            "id": "agree",
+            "text": "共同炊事の手順を確定する",
+            "to": "checked",
+            "action": "joint_agree"
+          },
+          {
+            "id": "other",
+            "text": "同じ厨房にはせず別鍋で並行する",
+            "to": "spare",
+            "action": "joint_other"
+          }
+        ]
+      },
+      {
+        "id": "taken",
+        "place": "ordinary",
+        "text": "没収した大鍋を普通食の厨房へ戻す。食事を選ぶ人の不満までは解決していない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@take",
+            "action": "taken_finish"
+          }
+        ]
+      },
+      {
+        "id": "checked",
+        "place": "inspection",
+        "text": "合意した食材の検査を済ませた。ジャルと監督で普通食の料理人を呼びに行く。",
+        "options": [
+          {
+            "id": "invite",
+            "text": "普通食の料理人へ共同炊事を伝える",
+            "to": "invite",
+            "action": "checked_invite"
+          }
+        ]
+      },
+      {
+        "id": "invite",
+        "place": "ordinary",
+        "text": "普通食も選べることを確かめ、料理人を共同の厨房へ案内する。",
+        "options": [
+          {
+            "id": "escort",
+            "text": "二人の料理人と監督で厨房へ向かう",
+            "to": "joint_cooking",
+            "action": "invite_escort"
+          }
+        ]
+      },
+      {
+        "id": "joint_cooking",
+        "place": "entry",
+        "text": "食材の検査を終えた厨房に二人の料理人と監督が揃った。共同炊事の手順を確定する。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@joint",
+            "action": "joint_cooking_finish"
+          }
+        ]
+      },
+      {
+        "id": "spare",
+        "place": "store",
+        "text": "倉庫へ別鍋を借りに来た。ジャルと厨房へ運び、元の大鍋を返す。",
+        "options": [
+          {
+            "id": "carry",
+            "text": "別鍋をジャルと厨房へ運ぶ",
+            "to": "swap",
+            "action": "spare_carry"
+          }
+        ]
+      },
+      {
+        "id": "swap",
+        "place": "entry",
+        "text": "別鍋を厨房へ運んだ。ジャルへ貸し、元の大鍋を普通食の厨房へ返す。",
+        "options": [
+          {
+            "id": "return",
+            "text": "別鍋を貸し、元の鍋を返しに行く",
+            "to": "parallel",
+            "action": "swap_return"
+          }
+        ]
+      },
+      {
+        "id": "parallel",
+        "place": "ordinary",
+        "text": "元の大鍋を普通食の料理人へ戻す。別の厨房ではジャルが借りた鍋を使う。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@other",
+            "action": "parallel_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "entryScript": "q184.observatory.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "observatory-twenty",
+      "settlement": "oddland_village",
+      "saveRevision": 2,
+      "scope": "観測所20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q184.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q184.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "敵兵の料理人ジャルが隠し厨房で鍋を使っていた。慣れた香草の匂いがすると捕虜が近づく。「反抗じゃない、焦げてるのが嫌だ」と言う者もいた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "take",
+              "text": "規律を優先して鍋を没収する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q184.end.take"
+                }
+              ]
+            },
+            {
+              "id": "other",
+              "text": "別鍋を貸し、普通食と並行して作る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q184.end.other"
+                }
+              ]
+            },
+            {
+              "id": "joint",
+              "text": "検査と本人の協力を条件に共同炊事を相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q184.scene.joint"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q184.scene.joint": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q184.node",
+          "value": "joint"
+        },
+        {
+          "op": "say",
+          "text": "ジャルは食材検査に同意し、監督は味を変える裁量を認めた。全員へ同じ信念を要求せず、普通食も選べるよう残す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "共同炊事の手順を確定する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q184.end.joint"
+                }
+              ]
+            },
+            {
+              "id": "other",
+              "text": "同じ厨房にはせず別鍋で並行する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q184.end.other"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q184.end.take": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q184.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "鍋は戻った。規律は守られたが、食事を取らない人の不満も残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q184",
+              "outcome": "take"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q184.end.other": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q184.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "別鍋の料理が増えた。距離を保ちながら食べられるものを選べるようになった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q184",
+              "outcome": "other"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q184.end.joint": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q184.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "共同炊事が始まった。二人の料理人は、捕虜と看守の話より先に火加減へ文句を言い合った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q184",
+              "outcome": "joint"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q184.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q184.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q184.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "take",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "鍋は戻った。規律は守られたが、食事を取らない人の不満も残った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "other",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "別鍋の料理が増えた。距離を保ちながら食べられるものを選べるようになった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "joint",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "共同炊事が始まった。二人の料理人は、捕虜と看守の話より先に火加減へ文句を言い合った。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q184.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q184.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "joint",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q184.scene.joint"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q184.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q184.observatory.entry": {
+      "storyQuest": "q184",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q184",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "敵兵の料理人ジャルが隠し厨房で鍋を使っていた。慣れた香草の匂いがすると捕虜が近づく。「反抗じゃない、焦げてるのが嫌だ」と言う者もいた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "take",
+              "text": "規律を優先して鍋を没収する",
+              "storyAction": {
+                "quest": "q184",
+                "action": "entry_take"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q184",
+                  "action": "entry_take"
+                }
+              ]
+            },
+            {
+              "id": "other",
+              "text": "別鍋を貸し、普通食と並行して作る",
+              "storyAction": {
+                "quest": "q184",
+                "action": "entry_other"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q184",
+                  "action": "entry_other"
+                }
+              ]
+            },
+            {
+              "id": "joint",
+              "text": "検査と本人の協力を条件に共同炊事を相談する",
+              "storyAction": {
+                "quest": "q184",
+                "action": "entry_joint"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q184",
+                  "action": "entry_joint"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q184.observatory.joint": {
+      "storyQuest": "q184",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q184",
+          "scene": "joint"
+        },
+        {
+          "op": "narrate",
+          "text": "ジャルは食材検査に同意し、監督は味を変える裁量を認めた。全員へ同じ信念を要求せず、普通食も選べるよう残す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "共同炊事の手順を確定する",
+              "storyAction": {
+                "quest": "q184",
+                "action": "joint_agree"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q184",
+                  "action": "joint_agree"
+                },
+                {
+                  "op": "jump",
+                  "script": "q184.observatory.checked"
+                }
+              ]
+            },
+            {
+              "id": "other",
+              "text": "同じ厨房にはせず別鍋で並行する",
+              "storyAction": {
+                "quest": "q184",
+                "action": "joint_other"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q184",
+                  "action": "joint_other"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q184.observatory.taken": {
+      "storyQuest": "q184",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q184",
+          "scene": "taken"
+        },
+        {
+          "op": "narrate",
+          "text": "没収した大鍋を普通食の厨房へ戻す。食事を選ぶ人の不満までは解決していない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q184",
+                "action": "taken_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q184",
+                  "action": "taken_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q184.observatory.end.take"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q184.observatory.checked": {
+      "storyQuest": "q184",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q184",
+          "scene": "checked"
+        },
+        {
+          "op": "narrate",
+          "text": "合意した食材の検査を済ませた。ジャルと監督で普通食の料理人を呼びに行く。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "invite",
+              "text": "普通食の料理人へ共同炊事を伝える",
+              "storyAction": {
+                "quest": "q184",
+                "action": "checked_invite"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q184",
+                  "action": "checked_invite"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q184.observatory.invite": {
+      "storyQuest": "q184",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q184",
+          "scene": "invite"
+        },
+        {
+          "op": "narrate",
+          "text": "普通食も選べることを確かめ、料理人を共同の厨房へ案内する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "escort",
+              "text": "二人の料理人と監督で厨房へ向かう",
+              "storyAction": {
+                "quest": "q184",
+                "action": "invite_escort"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q184",
+                  "action": "invite_escort"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q184.observatory.joint_cooking": {
+      "storyQuest": "q184",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q184",
+          "scene": "joint_cooking"
+        },
+        {
+          "op": "narrate",
+          "text": "食材の検査を終えた厨房に二人の料理人と監督が揃った。共同炊事の手順を確定する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q184",
+                "action": "joint_cooking_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q184",
+                  "action": "joint_cooking_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q184.observatory.end.joint"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q184.observatory.spare": {
+      "storyQuest": "q184",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q184",
+          "scene": "spare"
+        },
+        {
+          "op": "narrate",
+          "text": "倉庫へ別鍋を借りに来た。ジャルと厨房へ運び、元の大鍋を返す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "carry",
+              "text": "別鍋をジャルと厨房へ運ぶ",
+              "storyAction": {
+                "quest": "q184",
+                "action": "spare_carry"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q184",
+                  "action": "spare_carry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q184.observatory.swap": {
+      "storyQuest": "q184",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q184",
+          "scene": "swap"
+        },
+        {
+          "op": "narrate",
+          "text": "別鍋を厨房へ運んだ。ジャルへ貸し、元の大鍋を普通食の厨房へ返す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "別鍋を貸し、元の鍋を返しに行く",
+              "storyAction": {
+                "quest": "q184",
+                "action": "swap_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q184",
+                  "action": "swap_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q184.observatory.parallel": {
+      "storyQuest": "q184",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q184",
+          "scene": "parallel"
+        },
+        {
+          "op": "narrate",
+          "text": "元の大鍋を普通食の料理人へ戻す。別の厨房ではジャルが借りた鍋を使う。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q184",
+                "action": "parallel_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q184",
+                  "action": "parallel_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q184.observatory.end.other"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q184.observatory.end.take": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "鍋は戻った。規律は守られたが、食事を取らない人の不満も残った。"
+        },
+        {
+          "op": "add",
+          "target": "vars.take",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q184",
+          "outcome": "take"
+        }
+      ]
+    },
+    "q184.observatory.end.other": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "別鍋の料理が増えた。距離を保ちながら食べられるものを選べるようになった。"
+        },
+        {
+          "op": "add",
+          "target": "vars.other",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q184",
+          "outcome": "other"
+        }
+      ]
+    },
+    "q184.observatory.end.joint": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "共同炊事が始まった。二人の料理人は、捕虜と看守の話より先に火加減へ文句を言い合った。"
+        },
+        {
+          "op": "add",
+          "target": "vars.joint",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q184",
+          "outcome": "joint"
+        }
+      ]
+    },
+    "q184.observatory.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q184"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q184.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q184.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q184.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "take",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "鍋は戻った。規律は守られたが、食事を取らない人の不満も残った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "other",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "別鍋の料理が増えた。距離を保ちながら食べられるものを選べるようになった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "joint",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "共同炊事が始まった。二人の料理人は、捕虜と看守の話より先に火加減へ文句を言い合った。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q184"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q184.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q184.observatory.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "joint",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q184.observatory.joint"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "taken",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q184.observatory.taken"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "checked",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q184.observatory.checked"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "invite",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q184.observatory.invite"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "joint_cooking",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q184.observatory.joint_cooking"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "spare",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q184.observatory.spare"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "swap",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q184.observatory.swap"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "parallel",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q184.observatory.parallel"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q184.observatory.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "ジャルが鍋を使う隠し厨房",
+      "store": "別鍋を貸し出す倉庫",
+      "ordinary": "普通食を作る厨房",
+      "inspection": "食材を検査する場所",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "store"
+      ],
+      [
+        "transit",
+        "ordinary"
+      ],
+      [
+        "transit",
+        "inspection"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "store",
+          "ordinary",
+          "inspection",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "take",
+          "other",
+          "joint"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "inspected": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "inspected"
+      },
+      "cooking": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "cooking"
+      },
+      "jarlAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "store",
+          "ordinary",
+          "inspection",
+          "transit"
+        ],
+        "meaning": "jarl の所在または保持者"
+      },
+      "cookAt": {
+        "type": "enum",
+        "initial": "ordinary",
+        "values": [
+          "entry",
+          "store",
+          "ordinary",
+          "inspection",
+          "transit"
+        ],
+        "meaning": "cook の所在または保持者"
+      },
+      "supervisorAt": {
+        "type": "enum",
+        "initial": "inspection",
+        "values": [
+          "entry",
+          "store",
+          "ordinary",
+          "inspection",
+          "transit"
+        ],
+        "meaning": "supervisor の所在または保持者"
+      },
+      "potAt": {
+        "type": "enum",
+        "initial": "jarl",
+        "values": [
+          "entry",
+          "store",
+          "ordinary",
+          "inspection",
+          "transit",
+          "party",
+          "jarl",
+          "cook",
+          "supervisor",
+          "spare",
+          "ingredients",
+          "prisoners"
+        ],
+        "meaning": "pot の所在または保持者"
+      },
+      "spareAt": {
+        "type": "enum",
+        "initial": "store",
+        "values": [
+          "entry",
+          "store",
+          "ordinary",
+          "inspection",
+          "transit",
+          "party",
+          "jarl",
+          "cook",
+          "supervisor",
+          "pot",
+          "ingredients",
+          "prisoners"
+        ],
+        "meaning": "spare の所在または保持者"
+      },
+      "ingredientsAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "store",
+          "ordinary",
+          "inspection",
+          "transit",
+          "party",
+          "jarl",
+          "cook",
+          "supervisor",
+          "pot",
+          "spare",
+          "prisoners"
+        ],
+        "meaning": "ingredients の所在または保持者"
+      },
+      "prisonersAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "store",
+          "ordinary",
+          "inspection",
+          "transit"
+        ],
+        "meaning": "prisoners の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "jarl": {
+        "holder": "jarlAt",
+        "kind": "person"
+      },
+      "cook": {
+        "holder": "cookAt",
+        "kind": "person"
+      },
+      "supervisor": {
+        "holder": "supervisorAt",
+        "kind": "person"
+      },
+      "pot": {
+        "holder": "potAt",
+        "kind": "item"
+      },
+      "spare": {
+        "holder": "spareAt",
+        "kind": "item"
+      },
+      "ingredients": {
+        "holder": "ingredientsAt",
+        "kind": "item"
+      },
+      "prisoners": {
+        "holder": "prisonersAt",
+        "kind": "group"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "捕虜は空腹でも配膳に手を付けず、鍋から同じ香草の匂いがすると近づく。政治的な意味はあるが、慣れない味や調理法への拒否も混ざっている。全員を一つの信念で動かさず、一人は単純に焦げた食事が嫌だと明かす。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "ジャルが鍋を使う隠し厨房",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "joint": {
+        "title": "食材を検査する場所",
+        "place": "inspection",
+        "cast": [],
+        "requires": true
+      },
+      "taken": {
+        "title": "普通食を作る厨房",
+        "place": "ordinary",
+        "cast": [],
+        "requires": true
+      },
+      "checked": {
+        "title": "食材を検査する場所",
+        "place": "inspection",
+        "cast": [],
+        "requires": true
+      },
+      "invite": {
+        "title": "普通食を作る厨房",
+        "place": "ordinary",
+        "cast": [],
+        "requires": true
+      },
+      "joint_cooking": {
+        "title": "ジャルが鍋を使う隠し厨房",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "spare": {
+        "title": "別鍋を貸し出す倉庫",
+        "place": "store",
+        "cast": [],
+        "requires": true
+      },
+      "swap": {
+        "title": "ジャルが鍋を使う隠し厨房",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "parallel": {
+        "title": "普通食を作る厨房",
+        "place": "ordinary",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_take": {
+        "from": [
+          "entry"
+        ],
+        "to": "taken",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "ordinary"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "ordinary",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "pot",
+            "from": "jarl",
+            "to": "party"
+          }
+        ]
+      },
+      "entry_other": {
+        "from": [
+          "entry"
+        ],
+        "to": "spare",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "jarl"
+            ],
+            "path": [
+              "transit",
+              "store"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "store",
+          "companions": [
+            "jarl"
+          ]
+        },
+        "depart": []
+      },
+      "entry_joint": {
+        "from": [
+          "entry"
+        ],
+        "to": "joint",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "jarl"
+            ],
+            "path": [
+              "transit",
+              "inspection"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "inspection",
+          "companions": [
+            "jarl"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "ingredients",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      },
+      "joint_agree": {
+        "from": [
+          "joint"
+        ],
+        "to": "checked",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "inspected",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "joint_other": {
+        "from": [
+          "joint"
+        ],
+        "to": "spare",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "jarl"
+            ],
+            "path": [
+              "transit",
+              "store"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "store",
+          "companions": [
+            "jarl"
+          ]
+        },
+        "depart": []
+      },
+      "taken_finish": {
+        "from": [
+          "taken"
+        ],
+        "ending": "take",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "pot",
+            "from": "party",
+            "to": "cook"
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "take"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "checked_invite": {
+        "from": [
+          "checked"
+        ],
+        "to": "invite",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "jarl",
+              "supervisor"
+            ],
+            "path": [
+              "transit",
+              "ordinary"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "ordinary",
+          "companions": [
+            "jarl",
+            "supervisor"
+          ]
+        },
+        "depart": []
+      },
+      "invite_escort": {
+        "from": [
+          "invite"
+        ],
+        "to": "joint_cooking",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "jarl",
+              "supervisor",
+              "cook"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "ingredients",
+            "from": "party",
+            "to": "entry"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "jarl",
+            "supervisor",
+            "cook"
+          ]
+        },
+        "depart": []
+      },
+      "joint_cooking_finish": {
+        "from": [
+          "joint_cooking"
+        ],
+        "ending": "joint",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "cooking",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "joint"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "spare_carry": {
+        "from": [
+          "spare"
+        ],
+        "to": "swap",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "jarl"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "ingredients",
+            "from": "party",
+            "to": "entry",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q184.values.ingredientsAt"
+              },
+              "right": "party"
+            }
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "jarl"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "spare",
+            "from": "store",
+            "to": "party"
+          }
+        ]
+      },
+      "swap_return": {
+        "from": [
+          "swap"
+        ],
+        "to": "parallel",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "ordinary"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "ordinary",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "spare",
+            "from": "party",
+            "to": "jarl"
+          },
+          {
+            "op": "transfer",
+            "entity": "pot",
+            "from": "jarl",
+            "to": "party"
+          }
+        ]
+      },
+      "parallel_finish": {
+        "from": [
+          "parallel"
+        ],
+        "ending": "other",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "pot",
+            "from": "party",
+            "to": "cook"
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "other"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "take": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q184.values.resolution"
+            },
+            "right": "take"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q184.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q184.values.partyAt"
+                },
+                "right": "ordinary"
+              }
+            ]
+          }
+        ]
+      },
+      "other": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q184.values.resolution"
+            },
+            "right": "other"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q184.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q184.values.partyAt"
+                },
+                "right": "ordinary"
+              }
+            ]
+          }
+        ]
+      },
+      "joint": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q184.values.resolution"
+            },
+            "right": "joint"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q184.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q184.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_camp",
+        "x": 9,
+        "y": 3
+      },
+      "store": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_camp",
+        "x": 1,
+        "y": 7
+      },
+      "ordinary": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_camp",
+        "x": 3,
+        "y": 7
+      },
+      "inspection": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_camp",
+        "x": 11,
+        "y": 5
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_village",
+  "receptionLocations": [
+    "royal_board"
+  ]
+}

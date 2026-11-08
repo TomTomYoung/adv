@@ -55,6 +55,26 @@ export const relocatedCharacters=Object.fromEntries([
 ].map(([id,name,detail,provenance])=>[id,{id,name,role:'礼拝堂の現地の相手',detail,portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,
  provenance:provenance??'2026-10-29の美術設定。固有名・他人物との同一性は追加しない。具体的な外見・年齢感・服装は今回の美術設定。牢・格子・聖像・宝玉・石を人物画へ固定しない。'}]));
 // The group has no specified headcount or spokesperson. Ren is the existing actor.
+relocatedCharacters.q184_jarl={
+ id:'q184_jarl',name:'料理人ジャル',role:'捕虜へ故郷の料理を作ろうとする敵兵の料理人',
+ detail:'既存jarlの実同行に沿って隠し厨房・検査場・普通食厨房・倉庫に表示する。大鍋の没収後と返却時は隠し厨房に残る。',
+ provenance:'2026-11-08。原稿と現場本文に基づく呼称表示。新しい氏名・軍名・容貌・専用画は追加しない。'
+};
+relocatedCharacters.q184_cook={
+ id:'q184_cook',name:'普通食の料理人',role:'普通食を作り、大鍋の返却を受ける料理人',
+ detail:'普通食の厨房にいる場面と、ジャル・監督と実同行した共同厨房に表示する。依頼人の料理係との同一性を断定しない。',
+ provenance:'2026-11-08。既存cookの所在と受渡しに基づく呼称表示。氏名・容貌・専用画は追加しない。'
+};
+relocatedCharacters.q184_supervisor={
+ id:'q184_supervisor',name:'監督',role:'食材の検査と料理の裁量を確認する監督',
+ detail:'検査場、料理人を招く普通食厨房、実同行後の共同厨房に表示する。別鍋を借りる経路には同行しない。',
+ provenance:'2026-11-08。既存supervisorの所在と本文に基づく呼称表示。階級・氏名・軍名・専用画は追加しない。'
+};
+relocatedCharacters.q184_prisoners={
+ id:'q184_prisoners',name:'捕虜たち',role:'慣れた香草の匂いに近づく捕虜たち',
+ detail:'entryだけに表示する人数未確定の集団。焦げた食事への不満や食事拒否の理由を全員共通とせず、同じ厨房でも後の場面へ自動表示しない。',
+ provenance:'2026-11-08。既存prisonersと原稿に基づく集団の呼称表示。人数・代表者・専用画は追加しない。'
+};
 relocatedCharacters.q183_soldiers={
  id:'q183_soldiers',name:'洗濯場の兵士たち',role:'死んだ友の名を襟へ縫い、支援を続けるため帰還を偽る兵士たち',
  detail:'洗濯場のentryだけに表示する人数未確定の集団。遺族の家や給付・記録の窓口へ同行させない。',

@@ -102,5 +102,10 @@ export function observatorySecondSource(q,{cast=true}={}){
   node('entry').cast=[{entity:'soldiers',display:{x:50}}];
   for(const scene of ['support','supported_ready','confirmed','reported'])node(scene).cast=[{entity:'bereaved',display:{x:50}}];
  }
+ if(q.number===184&&cast){
+  for(const id of ['jarl','cook','supervisor','prisoners'])x.entities[id].character='q184_'+id;
+  const scenes={entry:['jarl','prisoners'],joint:['jarl','supervisor'],taken:['cook'],checked:['jarl','supervisor'],invite:['jarl','supervisor','cook'],joint_cooking:['jarl','supervisor','cook'],spare:['jarl'],swap:['jarl'],parallel:['cook']};
+  for(const [scene,people] of Object.entries(scenes)){const positions=people.length===3?[20,50,80]:people.length===2?[31,69]:[50];node(scene).cast=people.map((entity,i)=>({entity,display:{x:positions[i]}}));}
+ }
  return finish();
 }
