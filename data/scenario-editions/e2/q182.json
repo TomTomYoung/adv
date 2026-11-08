@@ -603,7 +603,7 @@
     "entryScript": "q182.observatory.visit",
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -612,7 +612,796 @@
       "saveRevision": 2,
       "scope": "観測所20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "砲を搬入する出発点",
+            "gun": "岩壁を向いた砲の設置点",
+            "command": "用途を相談する司令の持場",
+            "evac": "合図を待つ避難隊",
+            "safe": "照らされた避難路の出口",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "gun"
+            ],
+            [
+              "transit",
+              "command"
+            ],
+            [
+              "transit",
+              "evac"
+            ],
+            [
+              "transit",
+              "safe"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "gun",
+                "command",
+                "evac",
+                "safe",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "light",
+                "attack",
+                "hold"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "command": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "command"
+            },
+            "evac": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "evac"
+            },
+            "lit": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "lit"
+            },
+            "attacked": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "attacked"
+            },
+            "charge": {
+              "type": "integer",
+              "initial": 1,
+              "min": 0,
+              "max": 1,
+              "meaning": "charge",
+              "container": "crystal"
+            },
+            "spent": {
+              "type": "integer",
+              "initial": 0,
+              "min": 0,
+              "max": 1,
+              "meaning": "spent"
+            },
+            "cannonAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "gun",
+                "command",
+                "evac",
+                "safe",
+                "transit",
+                "party",
+                "crystal",
+                "evacuees"
+              ],
+              "meaning": "cannon の所在または保持者"
+            },
+            "crystalAt": {
+              "type": "enum",
+              "initial": "cannon",
+              "values": [
+                "entry",
+                "gun",
+                "command",
+                "evac",
+                "safe",
+                "transit",
+                "party",
+                "cannon",
+                "evacuees"
+              ],
+              "meaning": "crystal の所在または保持者"
+            },
+            "evacueesAt": {
+              "type": "enum",
+              "initial": "evac",
+              "values": [
+                "entry",
+                "gun",
+                "command",
+                "evac",
+                "safe",
+                "transit"
+              ],
+              "meaning": "evacuees の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "cannon": {
+              "holder": "cannonAt",
+              "kind": "item"
+            },
+            "crystal": {
+              "holder": "crystalAt",
+              "kind": "item"
+            },
+            "evacuees": {
+              "holder": "evacueesAt",
+              "kind": "group"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "照準は敵城でなく谷の岩壁へ向いている。壁に残る古い反射鏡の跡が、砲台の元の用途を示す。避難者が来ていない段階で点灯しても役立たず、軍が退却を勘づかれる危険もあるため、合図と移動の調整が必要だ。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "gun": {
+              "title": "岩壁を向いた砲の設置点",
+              "place": "gun",
+              "cast": [],
+              "requires": true
+            },
+            "entry": {
+              "title": "砲を搬入する出発点",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "command_agreed": {
+              "title": "用途を相談する司令の持場",
+              "place": "command",
+              "cast": [],
+              "requires": true
+            },
+            "evac_agreed": {
+              "title": "合図を待つ避難隊",
+              "place": "evac",
+              "cast": [],
+              "requires": true
+            },
+            "lit": {
+              "title": "岩壁を向いた砲の設置点",
+              "place": "gun",
+              "cast": [],
+              "requires": true
+            },
+            "evac_ready": {
+              "title": "合図を待つ避難隊",
+              "place": "evac",
+              "cast": [],
+              "requires": true
+            },
+            "safe": {
+              "title": "照らされた避難路の出口",
+              "place": "safe",
+              "cast": [],
+              "requires": true
+            },
+            "stored": {
+              "title": "砲を搬入する出発点",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "gun_command": {
+              "from": [
+                "gun"
+              ],
+              "to": "command_agreed",
+              "requires": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q182.values.command"
+                  },
+                  "right": true
+                }
+              },
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "command"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "command",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "command",
+                "companions": []
+              },
+              "depart": []
+            },
+            "gun_evac": {
+              "from": [
+                "gun"
+              ],
+              "to": "evac_agreed",
+              "requires": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q182.values.evac"
+                  },
+                  "right": true
+                }
+              },
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "evac"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "evac",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "evac",
+                "companions": []
+              },
+              "depart": []
+            },
+            "gun_light": {
+              "from": [
+                "gun"
+              ],
+              "to": "lit",
+              "requires": {
+                "op": "and",
+                "args": [
+                  true,
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q182.values.command"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q182.values.evac"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "effects": [
+                {
+                  "op": "consume",
+                  "key": "charge",
+                  "amount": 1,
+                  "sink": "spent"
+                },
+                {
+                  "op": "set",
+                  "key": "lit",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "gun_attack": {
+              "from": [
+                "gun"
+              ],
+              "ending": "attack",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "consume",
+                  "key": "charge",
+                  "amount": 1,
+                  "sink": "spent"
+                },
+                {
+                  "op": "set",
+                  "key": "attacked",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "attack"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "gun_hold": {
+              "from": [
+                "gun"
+              ],
+              "to": "stored",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "crystal",
+                  "from": "cannon",
+                  "to": "party"
+                }
+              ]
+            },
+            "entry_deploy": {
+              "from": [
+                "entry"
+              ],
+              "to": "gun",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "gun"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "cannon",
+                  "from": "party",
+                  "to": "gun"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "gun",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "cannon",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "command_agreed_return": {
+              "from": [
+                "command_agreed"
+              ],
+              "to": "gun",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "gun"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "gun",
+                "companions": []
+              },
+              "depart": []
+            },
+            "evac_agreed_return": {
+              "from": [
+                "evac_agreed"
+              ],
+              "to": "gun",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "gun"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "gun",
+                "companions": []
+              },
+              "depart": []
+            },
+            "lit_join": {
+              "from": [
+                "lit"
+              ],
+              "to": "evac_ready",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "evac"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "evac",
+                "companions": []
+              },
+              "depart": []
+            },
+            "evac_ready_escort": {
+              "from": [
+                "evac_ready"
+              ],
+              "to": "safe",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "evacuees"
+                  ],
+                  "path": [
+                    "transit",
+                    "safe"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "safe",
+                "companions": [
+                  "evacuees"
+                ]
+              },
+              "depart": []
+            },
+            "safe_finish": {
+              "from": [
+                "safe"
+              ],
+              "ending": "light",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "light"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "stored_finish": {
+              "from": [
+                "stored"
+              ],
+              "ending": "hold",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "crystal",
+                  "from": "party",
+                  "to": "entry"
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "hold"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "light": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q182.values.resolution"
+                  },
+                  "right": "light"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q182.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q182.values.partyAt"
+                      },
+                      "right": "safe"
+                    }
+                  ]
+                }
+              ]
+            },
+            "attack": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q182.values.resolution"
+                  },
+                  "right": "attack"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q182.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q182.values.partyAt"
+                      },
+                      "right": "gun"
+                    }
+                  ]
+                }
+              ]
+            },
+            "hold": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q182.values.resolution"
+                  },
+                  "right": "hold"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q182.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q182.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "observatory_sites",
+              "map": "e2_observatory_artillery",
+              "x": 1,
+              "y": 1
+            },
+            "gun": {
+              "kind": "dungeon",
+              "dungeon": "observatory_sites",
+              "map": "e2_observatory_artillery",
+              "x": 9,
+              "y": 3
+            },
+            "command": {
+              "kind": "dungeon",
+              "dungeon": "observatory_sites",
+              "map": "e2_observatory_artillery",
+              "x": 1,
+              "y": 3
+            },
+            "evac": {
+              "kind": "dungeon",
+              "dungeon": "observatory_sites",
+              "map": "e2_observatory_artillery",
+              "x": 5,
+              "y": 7
+            },
+            "safe": {
+              "kind": "dungeon",
+              "dungeon": "observatory_sites",
+              "map": "e2_observatory_artillery",
+              "x": 13,
+              "y": 7
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "olAt",
+            "value": "entry"
+          },
+          {
+            "key": "olAt",
+            "value": "gun",
+            "when": {
+              "op": "in",
+              "left": "entry_deploy",
+              "right": {
+                "ref": "stories.q182.events"
+              }
+            }
+          },
+          {
+            "key": "olAt",
+            "value": "transit",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "journey.quest"
+                  },
+                  "right": "q182"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "journey.action"
+                  },
+                  "right": "entry_deploy"
+                }
+              ]
+            }
+          },
+          {
+            "key": "commanderAt",
+            "value": "command"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q182.scene.entry": {
@@ -1661,6 +2450,24 @@
           "transit"
         ],
         "meaning": "evacuees の所在または保持者"
+      },
+      "olAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "gun",
+          "transit"
+        ],
+        "meaning": "ol の所在または保持者"
+      },
+      "commanderAt": {
+        "type": "enum",
+        "initial": "command",
+        "values": [
+          "command"
+        ],
+        "meaning": "commander の所在または保持者"
       }
     },
     "entities": {
@@ -1678,7 +2485,18 @@
       },
       "evacuees": {
         "holder": "evacueesAt",
-        "kind": "group"
+        "kind": "group",
+        "character": "q182_evacuees"
+      },
+      "ol": {
+        "holder": "olAt",
+        "kind": "person",
+        "character": "q182_ol"
+      },
+      "commander": {
+        "holder": "commanderAt",
+        "kind": "person",
+        "character": "q182_commander"
       }
     },
     "propositions": {
@@ -1692,43 +2510,92 @@
       "gun": {
         "title": "岩壁を向いた砲の設置点",
         "place": "gun",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "ol",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "entry": {
         "title": "砲を搬入する出発点",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "ol",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "command_agreed": {
         "title": "用途を相談する司令の持場",
         "place": "command",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "commander",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "evac_agreed": {
         "title": "合図を待つ避難隊",
         "place": "evac",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "evacuees",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "lit": {
         "title": "岩壁を向いた砲の設置点",
         "place": "gun",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "ol",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "evac_ready": {
         "title": "合図を待つ避難隊",
         "place": "evac",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "evacuees",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "safe": {
         "title": "照らされた避難路の出口",
         "place": "safe",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "evacuees",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "stored": {
@@ -1936,7 +2803,8 @@
           {
             "op": "move",
             "entities": [
-              "party"
+              "party",
+              "ol"
             ],
             "path": [
               "transit",
@@ -1955,7 +2823,9 @@
         "once": false,
         "journey": {
           "to": "gun",
-          "companions": []
+          "companions": [
+            "ol"
+          ]
         },
         "depart": [
           {
@@ -2256,7 +3126,7 @@
         "y": 7
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "oddland_village",
   "receptionLocations": [

@@ -1,7 +1,7 @@
 // Editorial audit: candidate IDs are local; connected roles cite their game entity.
 // Update a fingerprint only after rereading the changed quest and its evidence.
 export const RELOCATED_CAST_REVIEW={
- reviewedAt:'2026-11-07',
+ reviewedAt:'2026-11-08',
  quests:{
   q031:{
    sourceSha256:'ab2cb40f75d0a430e00077b936b338b23736b74b01034aeaeb9333cda16cecf7',
@@ -4459,30 +4459,33 @@ export const RELOCATED_CAST_REVIEW={
   "next": "q181の6役と矢筒の本文・保持者を整合済み。次は精読済みq182のオル・司令・避難隊の所在と表示を実装し、最後の魔石の一回消費と旧保存・3結末を保つ。"
 },
   q182:{
-  "sourceSha256": "7e09f552ca4df84cecf8f1b4766f5cbeafaed3cdeb7ad0ed935f239c541eb95e",
+  "sourceSha256": "bb113dbb9953a7864f7f4c380f8766c1329dac9bffe8438e8fe9292e19fada2a",
   "identityNotes": [
     "原稿authoring/reference/volume-09.mdのGQ082、初版q182、現場接続後の全8場面・8旅程・3結末を精読した。",
-    "オルはentryで搬入を待ち、gunで用途を語り、litで砲を照明に使う砲手として表示候補。現行にpersonや同行はないため、搬入時にentryからgunへ移る所在を次工程で定義する。司令の持場・避難先・保管先への一律同行は創作しない。",
-    "司令は用途の合意が明記されたcommand_agreedだけの候補。軍の名称・軍位・容貌やq181の隊長との同一性を追加しない。",
-    "evacueesは既存の人数未確定のgroup。evac_agreed・evac_readyの待機場所と実退避後のsafeが候補。砲の設置点へ同行させない。",
+    "オルをentry・gun・litへ呼称表示した。搬入のentry_deployだけ出発点→transit→gunへ実同行し、その後は砲の設置点に残る。物語改訂1→2では既存の搬入イベントと移動中の記録から所在を補い、待機本文と操作を保持する。",
+    "司令はcommandに所在を固定し、用途の合意が明記されたcommand_agreedだけに表示する。軍の名称・軍位・容貌やq181の隊長との同一性を追加しない。",
+    "evacueesは既存の人数未確定のgroup。evac_agreed・evac_readyの待機場所と、実退避後のsafeだけに表示する。砲の設置点へ同行させない。",
     "砲cannonはdeploy出発で隊へ、到着でgunへ渡す。最後の魔石はcharge=1で、照明・攻撃で一回だけspentへ移す。照明は司令と避難隊の準備条件を要し、保留では未消費の魔石を隊が持ち帰ってstoredのfinishでentryへ置く。",
     "原稿の反射鏡・軍の処遇・歓声を新しい人物や準備条件へ勝手に増やさず、現行のcommand・evac・lit・attacked、3結末・報酬・旧受注経路を保持する。storedは保管先に着いた段階で、保管係やオルを施設名だけから追加しない。"
   ],
   "people": {
     "q182_ol": {
       "label": "魔導砲手オル",
-      "status": "candidate",
-      "need": "搬入待ちと砲の設置点の3場面。既存にない所在と搬入時の移動を次工程で整える。"
+      "status": "connected",
+      "need": "搬入待ち・砲の設置点・点灯直後の3場面。搬入時のみ実同行し、相談・避難・保管先には表示しない。",
+      "entity": "ol"
     },
     "q182_commander": {
       "label": "司令",
-      "status": "candidate",
-      "need": "用途を相談して合意したcommand_agreedだけ。別クエストの軍人と同定しない。"
+      "status": "connected",
+      "need": "固定所在commandのcommand_agreedだけに呼称表示する。",
+      "entity": "commander"
     },
     "q182_evacuees": {
       "label": "避難隊",
-      "status": "candidate",
-      "need": "既存evacueesの待機場所と実到着先だけ。人数・代表者・個人画は追加しない。"
+      "status": "connected",
+      "need": "既存evacueesの待機場所と実到着した出口だけに集団の呼称表示を接続する。",
+      "entity": "evacuees"
     }
   },
   "scenes": {
@@ -4501,7 +4504,7 @@ export const RELOCATED_CAST_REVIEW={
         "q182_ol"
       ],
       "evidence": "オルが砲の搬入を待っている。最後の魔石を載せた砲を、岩壁の見える設置点へ運ぶ。",
-      "reason": "本文でオルが砲の搬入を待っている。次のdeployでの移動は未実装なので次工程で整理する。",
+      "reason": "本文でオルが砲の搬入を待っている。次のdeployだけ同行して設置点へ移る。",
       "visual": "魔導砲手オルのいる砲を搬入する出発点。"
     },
     "command_agreed": {
@@ -4510,7 +4513,7 @@ export const RELOCATED_CAST_REVIEW={
         "q182_commander"
       ],
       "evidence": "司令の持場で用途と軍の危険を説明し、合意を得た。",
-      "reason": "司令の持場で用途と危険を説明して合意している。オルは既存で同行していない。",
+      "reason": "司令の固定所在で用途と危険について合意する。オルは砲の設置点に残る。",
       "visual": "司令のいる用途を相談する司令の持場。"
     },
     "evac_agreed": {
@@ -4557,7 +4560,7 @@ export const RELOCATED_CAST_REVIEW={
       "visual": "未使用の魔石を持ち帰った出発点。"
     }
   },
-  "next": "オルの搬入時の所在、司令の固定所在、避難隊の実移動に表示を接続する。魔石の一回消費・保留時の未消費と受渡し・旧保存を検証する。"
+  "next": "q182の3役の所在・表示、魔石の一回消費・保留時の未消費と受渡し、旧保存の互換を接続済み。次はq183の原稿・全場面を精読し、洗濯場の兵士・係長・遺族・受付の出演根拠を確認する。"
 }
  }
 };

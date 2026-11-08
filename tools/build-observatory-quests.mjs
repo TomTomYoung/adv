@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
+import {ref,eq,and} from '../authoring/story-kit.mjs';
 import {compileRelocatedQuest} from './compile-relocated-quest.mjs';
 import {observatoryFirstSource} from '../authoring/editions/e2/oddland/observatory-first.mjs';
 import {observatorySecondSource} from '../authoring/editions/e2/oddland/observatory-second.mjs';
@@ -19,6 +20,20 @@ export async function buildObservatoryQuests({check=false}={}){
    for(const {key,value} of values)quest.story.registry[key].values=[value];
    quest.story.revision=2;quest.model.edition.revision=2;
    quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values}];
+  }
+  if(n===182){
+   const previous=compileRelocatedQuest(first,source(first,{cast:false}),options).story;
+   // Added people must not become new legal holders for the existing items.
+   for(const [key,entry] of Object.entries(previous.registry))quest.story.registry[key]=structuredClone(entry);
+   quest.story.registry.olAt.values=['entry','gun','transit'];
+   quest.story.registry.commanderAt.values=['command'];
+   quest.story.revision=2;quest.model.edition.revision=2;
+   quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[
+    {key:'olAt',value:'entry'},
+    {key:'olAt',value:'gun',when:{op:'in',left:'entry_deploy',right:ref('stories.q182.events')}},
+    {key:'olAt',value:'transit',when:and(eq(ref('journey.quest'),'q182'),eq(ref('journey.action'),'entry_deploy'))},
+    {key:'commanderAt',value:'command'}
+   ]}];
   }
   quests.push(quest);
  }
