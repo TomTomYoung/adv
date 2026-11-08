@@ -96,5 +96,11 @@ export function observatorySecondSource(q,{cast=true}={}){
   choice('entry','deploy').companions=['ol'];
   for(const [scene,person] of Object.entries({entry:'ol',gun:'ol',lit:'ol',command_agreed:'commander',evac_agreed:'evacuees',evac_ready:'evacuees',safe:'evacuees'}))node(scene).cast=[{entity:person,display:{x:50}}];
  }
+ if(q.number===183&&cast){
+  entity('soldiers','entry','group');entity('bereaved','families','group');
+  for(const id of ['soldiers','bereaved'])x.entities[id].character='q183_'+id;
+  node('entry').cast=[{entity:'soldiers',display:{x:50}}];
+  for(const scene of ['support','supported_ready','confirmed','reported'])node(scene).cast=[{entity:'bereaved',display:{x:50}}];
+ }
  return finish();
 }

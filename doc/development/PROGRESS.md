@@ -2,6 +2,31 @@
 
 この文書は実施日・対象コミットごとの検証履歴です。過去の件数・環境制約は当時の記録として保持します。現在の実装範囲は[CURRENT_STATUS](../CURRENT_STATUS.md)、未実装の順序は[HANDOFF](../HANDOFF.md)を参照してください。
 
+## 2026-11-08：q183の洗濯場・遺族の表示とq184出演監査
+
+[PR #219](https://github.com/TomTomYoung/adv/pull/219)をmaster `69e7c8e1968c65c8693ca05ca4e692b633f7b8fc` へ統合した。統合ツリーはPRで検証した `dde9ede9821d7b9fbf5ca8f04ee3da02d2acde39` と一致。[統合後の全体CI](https://github.com/TomTomYoung/adv/actions/runs/42453647342)と[公開](https://github.com/TomTomYoung/adv/actions/runs/42453647268)も成功した。このmasterを基点にq183「勝者の洗濯場」の原稿GQ083・初版・現行全8場面を精読して実装した。
+
+洗濯場の兵士たちをentry、軍服を受け取る遺族たちをsupport・supported_ready・confirmed・reportedへ呼称表示する。人数・家族構成・死亡認識・偽装への全員同意は補わない。依頼人の係長と窓口係を推測で同席させず、official・supported・report_nowは空castを保つ。2群の所在はentry／familiesに固定し、物語改訂1→2ではこの2値だけを補う。既存の本文・操作・値域・待機本文・全8旅程・3結末・旧受注経路を保持した。
+
+軍服は家族訪問または報告への出発時に隊へ移り、現物援助／家族宅での黙認／各届け先への到着時にfamiliesへ渡る。入口からの黙認はentryに残る。確認書はofficial_deliverの出発時にreliefからparty、到着時にfamiliesへ渡す。goodsの糧食2つだけを一回消費し、糧食0／1でも公的援助・報告・黙認へ進める。援助完了と台帳訂正は既存の確定時点を保つ。全6経路と153G・99XPの一回報酬を検証した。
+
+専用8試験を含む関連69試験は成功・失敗0・スキップ0。現行8・表示追加前8・旧受注2・糧食不足1の19保存点、Scene／Classic × 1440／390pxの76画面条件を既存Oddland CIへ追加した。ローカルChromiumのsocket作成制限は前回確認済みで、再インストール・再試行は行わずGitHub CIで画面を検証する。`npm run check` は全2,693試験成功・失敗0・スキップ0。配布指紋・生成シナリオ・全データと素材参照・設定画面・静的ファイル・文書の検査も成功した。文書生成器による無関係な手書き表の書式変更を保持しないよう、意図した手書き本文を復元した。[Oddland CI](https://github.com/TomTomYoung/adv/actions/runs/42454538999)は実装コミット `22ba8b6190e78236dde6570e171a29dbba2783a5` で成功した。q183は76画面条件・3結末・エラー0。成果物 `q183-cast-checkpoints`（ID `13606919031`、SHA-256 `bbf4f78dd7157b155eff9734fdf431e82edc1f6706390a9b98cdfb937c41fdeb`）の結果JSONとPNG76枚を照合し、Scene／Classic × 1440／390px各19条件、保存点19種の一致を確認した。代表8枚を目視し、兵士と遺族の呼称、窓口・記録受付の人物非表示、糧食不足時の無効選択肢と公的援助の選択、旧待機本文・旧受注経路、狭幅の折返しと本文送りを確認した。
+
+目視したPNGは次の8枚（全76枚を目視したという意味ではない）。
+
+- `e2-scene-1440-q183-entry-current.png`
+- `e2-classic-390-q183-entry-previous.png`
+- `e2-scene-390-q183-support-no-rations.png`
+- `e2-classic-1440-q183-confirmed-current.png`
+- `e2-scene-1440-q183-official-current.png`
+- `e2-classic-390-q183-supported-current.png`
+- `e2-scene-390-q183-reported-current.png`
+- `e2-scene-390-q183-entry-accepted-legacy.png`
+
+実装先端 `22ba8b6190e78236dde6570e171a29dbba2783a5` の全8ワークフロー・9ジョブが成功した。[全体CI](https://github.com/TomTomYoung/adv/actions/runs/42454538957)、[共通人物表示CI](https://github.com/TomTomYoung/adv/actions/runs/42454538947)も成功。実装と記録は[PR #220](https://github.com/TomTomYoung/adv/pull/220)へまとめ、この記録時点ではmasterへ未統合。全ジョブ完了後の結果追記はこの文書とHANDOFFのみで、重い試験は同一入力の成功結果を再利用する。
+
+q184「捕虜の鍋」は原稿GQ084・初版・現行全9場面・8旅程・4経路・3結末を精読した。ヤール・通常厨房の料理番・監督官・囚人たちを候補とし、既存の実同行・到着先・鍋と予備鍋と食材の受渡しを監査へ記録した。囚人たちはentryの発言場面だけを候補とし、通常厨房の料理番と依頼人を同定しない。q184は監査までで実装は次工程。監査集計は54件・398場面、出演根拠あり286・なし112、未精読355場面。空cast477、人物エンティティ133・character接続83、接続済み114役・候補5役。第2版の人物定義は200件（画像あり132・呼称のみ68）。
+
 ## 2026-11-08：q182の人物表示・搬入時の移動・旧保存
 
 master `f518b581b6d312ca6906d09c21a7b0145cc1de8a`（PR #218統合済み）を基点に、q182「一発も撃たない砲手」を実装した。q181の再実装は行っていない。オルはentry・gun・litの3場面、司令はcommand_agreed、人数未確定の避難隊はevac_agreed・evac_ready・実退避後のsafeに呼称表示する。storedには人物を追加しない。新しい専用画像・氏名・人数・軍名は追加しない。

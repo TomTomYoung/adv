@@ -1,0 +1,2070 @@
+{
+  "schemaVersion": 1,
+  "id": "q183",
+  "number": 183,
+  "title": "勝者の洗濯場",
+  "client": "戦後の洗濯場の係長",
+  "brief": "同じ名の軍服が何枚も届く理由を調べてください。",
+  "region": 9,
+  "type": "scene_graph",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 旧王領の村の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q183_scene",
+      "title": "勝者の洗濯場：戦後の洗濯場の係長",
+      "points": [
+        {
+          "map": "region_9_f1",
+          "x": 5,
+          "y": 1,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q183.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q183.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q183.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q183"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "q183_observatory_entry",
+      "title": "名札の同じ軍服が届く洗濯場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q183.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q183.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q183"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q183.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_camp",
+          "x": 3,
+          "y": 3
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_9_f1",
+      "x": 5,
+      "y": 1,
+      "object": "q183_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "report": {
+      "label": "帰還記録の訂正",
+      "text": "死の知らせが届き、弔いができた。支援の切替と兵たちの処分は別に残った。",
+      "gold": 153,
+      "xp": 99
+    },
+    "supported": {
+      "label": "支援をつなぐ訂正",
+      "text": "当面の支援を確かめてから記録を直した。返した服には、名札を縫い直した小さな穴が残った。",
+      "gold": 153,
+      "xp": 99
+    },
+    "hidden": {
+      "label": "待ち続ける家",
+      "text": "支援は続いたが、本当に帰りを待つ家も残った。兵たちは次の洗い代を、自分の財布から出した。",
+      "gold": 153,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/observatory-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38166a207eb49f89ac578",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "泥は別々の戦場のものなのに、名札の糸は同じだ。最初に金目当ての偽装を疑わせ、洗い代だけ兵たちが自腹で払っていることを見せる。遺族側には既に死を察している者と、本当に帰りを待つ者がいる。",
+      "fixedPast": "戦後の洗濯場で、同じ兵の軍服が何枚も届く。係長は横流しを疑い調査を頼む。兵士たちは死んだ友の名を自分の襟へ縫い、全員帰還したことにして遺族年金を止めないようにしている。目的は支援だが、死の知らせも遺族の選択も奪っている。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "戦後の洗濯場の係長",
+        "beliefsAndGoals": "戦後の洗濯場で、同じ兵の軍服が何枚も届く。係長は横流しを疑い調査を頼む。兵士たちは死んだ友の名を自分の襟へ縫い、全員帰還したことにして遺族年金を止めないようにしている。目的は支援だが、死の知らせも遺族の選択も奪っている。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "同じ名の軍服が何枚も届く理由を調べてください。"
+      }
+    ],
+    "conflict": {
+      "design": "衣類調査→兵士／遺族→報告と支援の選択。即時告発、実際の支援を確保してから訂正、当面の秘匿がある。支援確保は物資の引渡しか公的な受給確認で、口約束だけでは成立しない。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q183.observatory.entry"
+        },
+        {
+          "id": "support",
+          "script": "q183.observatory.support"
+        },
+        {
+          "id": "supported_ready",
+          "script": "q183.observatory.supported_ready"
+        },
+        {
+          "id": "official",
+          "script": "q183.observatory.official"
+        },
+        {
+          "id": "confirmed",
+          "script": "q183.observatory.confirmed"
+        },
+        {
+          "id": "supported",
+          "script": "q183.observatory.supported"
+        },
+        {
+          "id": "report_now",
+          "script": "q183.observatory.report_now"
+        },
+        {
+          "id": "reported",
+          "script": "q183.observatory.reported"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "同じ名の軍服が何枚も届く理由を調べてください。"
+    },
+    "reveal": {
+      "newInformation": "泥は別々の戦場のものなのに、名札の糸は同じだ。最初に金目当ての偽装を疑わせ、洗い代だけ兵たちが自腹で払っていることを見せる。遺族側には既に死を察している者と、本当に帰りを待つ者がいる。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q183.scene.entry"
+      },
+      {
+        "id": "support",
+        "script": "q183.scene.support"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q183.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "泥は違う戦場のものだが、襟の名札の糸は同じだった。兵たちは死んだ友の名を縫い、支援が止まらないよう帰還を偽っていた。",
+        "options": [
+          {
+            "id": "families",
+            "text": "遺族の話を聞く",
+            "to": "support",
+            "action": "entry_families"
+          },
+          {
+            "id": "report",
+            "text": "直ちに偽装を告発する",
+            "to": "report_now",
+            "action": "entry_report"
+          },
+          {
+            "id": "hidden",
+            "text": "当面は秘匿し、支援を続ける",
+            "to": "@hidden",
+            "action": "entry_hidden"
+          }
+        ]
+      },
+      {
+        "id": "support",
+        "place": "families",
+        "text": "既に死を察した家も、本当に帰りを待つ家もある。支援を確保してから訂正するなら、口約束でなく現物か受給確認が必要だ。",
+        "options": [
+          {
+            "id": "goods",
+            "text": "糧食二つを家へ渡してから訂正する",
+            "to": "supported_ready",
+            "action": "support_goods"
+          },
+          {
+            "id": "official",
+            "text": "公的窓口で遺族給付の受給確認を取って訂正する",
+            "to": "official",
+            "action": "support_official"
+          },
+          {
+            "id": "report",
+            "text": "支援確保を待たず訂正する",
+            "to": "report_now",
+            "action": "support_report"
+          },
+          {
+            "id": "hidden",
+            "text": "今日の訂正は見送る",
+            "to": "@hidden",
+            "action": "support_hidden"
+          }
+        ]
+      },
+      {
+        "id": "supported_ready",
+        "place": "families",
+        "text": "糧食二つと洗濯物を家へ渡した。当面の支援を確かめてから記録の受付へ行く。",
+        "options": [
+          {
+            "id": "correct",
+            "text": "帰還記録の受付へ訂正を届ける",
+            "to": "supported",
+            "action": "supported_ready_correct"
+          }
+        ]
+      },
+      {
+        "id": "official",
+        "place": "relief",
+        "text": "窓口で遺族給付の受給を確認した。確認書を家へ届け、口約束だけで終えない。",
+        "options": [
+          {
+            "id": "deliver",
+            "text": "受給確認書と洗濯物を家へ届ける",
+            "to": "confirmed",
+            "action": "official_deliver"
+          }
+        ]
+      },
+      {
+        "id": "confirmed",
+        "place": "families",
+        "text": "家で受給確認書を渡した。次は帰還記録を訂正する。",
+        "options": [
+          {
+            "id": "correct",
+            "text": "帰還記録の受付へ訂正を届ける",
+            "to": "supported",
+            "action": "confirmed_correct"
+          }
+        ]
+      },
+      {
+        "id": "supported",
+        "place": "records",
+        "text": "支援の確保を示し、帰還記録を訂正する。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@supported",
+            "action": "supported_finish"
+          }
+        ]
+      },
+      {
+        "id": "report_now",
+        "place": "records",
+        "text": "支援の切替を待たず、帰還記録を訂正する。死の知らせと洗濯物を家へ届ける。",
+        "options": [
+          {
+            "id": "deliver",
+            "text": "訂正した知らせと洗濯物を届ける",
+            "to": "reported",
+            "action": "report_now_deliver"
+          }
+        ]
+      },
+      {
+        "id": "reported",
+        "place": "families",
+        "text": "家へ死の知らせを届けた。給付の切替や処分が済んだとは伝えない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@report",
+            "action": "reported_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q183.scene.support",
+        "action": "goods",
+        "option": "goods_supplies",
+        "shortage": "q183.scene.support.goods.shortage",
+        "resume": "q183.scene.support.goods.resume",
+        "cost": {
+          "ration": 2
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q183.visit"
+    ],
+    "entryScript": "q183.observatory.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "observatory-twenty",
+      "settlement": "oddland_village",
+      "saveRevision": 2,
+      "scope": "観測所20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q183.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q183.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "泥は違う戦場のものだが、襟の名札の糸は同じだった。兵たちは死んだ友の名を縫い、支援が止まらないよう帰還を偽っていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "families",
+              "text": "遺族の話を聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q183.scene.support"
+                }
+              ]
+            },
+            {
+              "id": "report",
+              "text": "直ちに偽装を告発する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q183.end.report"
+                }
+              ]
+            },
+            {
+              "id": "hidden",
+              "text": "当面は秘匿し、支援を続ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q183.end.hidden"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q183.scene.support": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q183.node",
+          "value": "support"
+        },
+        {
+          "op": "say",
+          "text": "既に死を察した家も、本当に帰りを待つ家もある。支援を確保してから訂正するなら、口約束でなく現物か受給確認が必要だ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "goods",
+              "text": "糧食二つを家へ渡してから訂正する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "ration",
+                    "count": 2
+                  }
+                ]
+              },
+              "requirement": "野営糧食 2消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "ration",
+                  "count": 2
+                },
+                {
+                  "op": "jump",
+                  "script": "q183.end.supported"
+                }
+              ]
+            },
+            {
+              "id": "official",
+              "text": "公的窓口で遺族給付の受給確認を取って訂正する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q183.end.supported"
+                }
+              ]
+            },
+            {
+              "id": "report",
+              "text": "支援確保を待たず訂正する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q183.end.report"
+                }
+              ]
+            },
+            {
+              "id": "hidden",
+              "text": "今日の訂正は見送る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q183.end.hidden"
+                }
+              ]
+            },
+            {
+              "id": "goods_supplies",
+              "text": "野営糧食2個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "ration",
+                  "count": 2
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "ration",
+                  "count": 2
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q183.scene.support.goods.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q183.end.report": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q183.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "死の知らせが届き、弔いができた。支援の切替と兵たちの処分は別に残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q183",
+              "outcome": "report"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q183.end.supported": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q183.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "当面の支援を確かめてから記録を直した。返した服には、名札を縫い直した小さな穴が残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q183",
+              "outcome": "supported"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q183.end.hidden": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q183.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "支援は続いたが、本当に帰りを待つ家も残った。兵たちは次の洗い代を、自分の財布から出した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q183",
+              "outcome": "hidden"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q183.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q183"
+          },
+          "cases": [
+            {
+              "equals": "q183.scene.support.goods.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q183.scene.support.goods.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q183.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q183.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "report",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "死の知らせが届き、弔いができた。支援の切替と兵たちの処分は別に残った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "supported",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "当面の支援を確かめてから記録を直した。返した服には、名札を縫い直した小さな穴が残った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "hidden",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "支援は続いたが、本当に帰りを待つ家も残った。兵たちは次の洗い代を、自分の財布から出した。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q183.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q183.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "support",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q183.scene.support"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q183.scene.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q183.scene.support.goods.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q183",
+          "value": "q183.scene.support.goods.resume"
+        },
+        {
+          "op": "say",
+          "text": "野営糧食2個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q183.scene.support.goods.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q183",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "野営糧食2個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q183.scene.support"
+        }
+      ]
+    },
+    "q183.observatory.entry": {
+      "storyQuest": "q183",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q183",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "泥は違う戦場のものだが、襟の名札の糸は同じだった。兵たちは死んだ友の名を縫い、支援が止まらないよう帰還を偽っていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "families",
+              "text": "遺族の話を聞く",
+              "storyAction": {
+                "quest": "q183",
+                "action": "entry_families"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q183",
+                  "action": "entry_families"
+                }
+              ]
+            },
+            {
+              "id": "report",
+              "text": "直ちに偽装を告発する",
+              "storyAction": {
+                "quest": "q183",
+                "action": "entry_report"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q183",
+                  "action": "entry_report"
+                }
+              ]
+            },
+            {
+              "id": "hidden",
+              "text": "当面は秘匿し、支援を続ける",
+              "storyAction": {
+                "quest": "q183",
+                "action": "entry_hidden"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q183",
+                  "action": "entry_hidden"
+                },
+                {
+                  "op": "jump",
+                  "script": "q183.observatory.end.hidden"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q183.observatory.support": {
+      "storyQuest": "q183",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q183",
+          "scene": "support"
+        },
+        {
+          "op": "narrate",
+          "text": "既に死を察した家も、本当に帰りを待つ家もある。支援を確保してから訂正するなら、口約束でなく現物か受給確認が必要だ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "goods",
+              "text": "糧食二つを家へ渡してから訂正する",
+              "storyAction": {
+                "quest": "q183",
+                "action": "support_goods"
+              },
+              "requirement": "ration 2消費",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q183",
+                  "action": "support_goods"
+                },
+                {
+                  "op": "jump",
+                  "script": "q183.observatory.supported_ready"
+                }
+              ]
+            },
+            {
+              "id": "official",
+              "text": "公的窓口で遺族給付の受給確認を取って訂正する",
+              "storyAction": {
+                "quest": "q183",
+                "action": "support_official"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q183",
+                  "action": "support_official"
+                }
+              ]
+            },
+            {
+              "id": "report",
+              "text": "支援確保を待たず訂正する",
+              "storyAction": {
+                "quest": "q183",
+                "action": "support_report"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q183",
+                  "action": "support_report"
+                }
+              ]
+            },
+            {
+              "id": "hidden",
+              "text": "今日の訂正は見送る",
+              "storyAction": {
+                "quest": "q183",
+                "action": "support_hidden"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q183",
+                  "action": "support_hidden"
+                },
+                {
+                  "op": "jump",
+                  "script": "q183.observatory.end.hidden"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q183.observatory.supported_ready": {
+      "storyQuest": "q183",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q183",
+          "scene": "supported_ready"
+        },
+        {
+          "op": "narrate",
+          "text": "糧食二つと洗濯物を家へ渡した。当面の支援を確かめてから記録の受付へ行く。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "correct",
+              "text": "帰還記録の受付へ訂正を届ける",
+              "storyAction": {
+                "quest": "q183",
+                "action": "supported_ready_correct"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q183",
+                  "action": "supported_ready_correct"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q183.observatory.official": {
+      "storyQuest": "q183",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q183",
+          "scene": "official"
+        },
+        {
+          "op": "narrate",
+          "text": "窓口で遺族給付の受給を確認した。確認書を家へ届け、口約束だけで終えない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "deliver",
+              "text": "受給確認書と洗濯物を家へ届ける",
+              "storyAction": {
+                "quest": "q183",
+                "action": "official_deliver"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q183",
+                  "action": "official_deliver"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q183.observatory.confirmed": {
+      "storyQuest": "q183",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q183",
+          "scene": "confirmed"
+        },
+        {
+          "op": "narrate",
+          "text": "家で受給確認書を渡した。次は帰還記録を訂正する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "correct",
+              "text": "帰還記録の受付へ訂正を届ける",
+              "storyAction": {
+                "quest": "q183",
+                "action": "confirmed_correct"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q183",
+                  "action": "confirmed_correct"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q183.observatory.supported": {
+      "storyQuest": "q183",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q183",
+          "scene": "supported"
+        },
+        {
+          "op": "narrate",
+          "text": "支援の確保を示し、帰還記録を訂正する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q183",
+                "action": "supported_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q183",
+                  "action": "supported_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q183.observatory.end.supported"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q183.observatory.report_now": {
+      "storyQuest": "q183",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q183",
+          "scene": "report_now"
+        },
+        {
+          "op": "narrate",
+          "text": "支援の切替を待たず、帰還記録を訂正する。死の知らせと洗濯物を家へ届ける。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "deliver",
+              "text": "訂正した知らせと洗濯物を届ける",
+              "storyAction": {
+                "quest": "q183",
+                "action": "report_now_deliver"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q183",
+                  "action": "report_now_deliver"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q183.observatory.reported": {
+      "storyQuest": "q183",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q183",
+          "scene": "reported"
+        },
+        {
+          "op": "narrate",
+          "text": "家へ死の知らせを届けた。給付の切替や処分が済んだとは伝えない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q183",
+                "action": "reported_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q183",
+                  "action": "reported_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q183.observatory.end.report"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q183.observatory.end.report": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "死の知らせが届き、弔いができた。支援の切替と兵たちの処分は別に残った。"
+        },
+        {
+          "op": "add",
+          "target": "vars.report",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q183",
+          "outcome": "report"
+        }
+      ]
+    },
+    "q183.observatory.end.supported": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "当面の支援を確かめてから記録を直した。返した服には、名札を縫い直した小さな穴が残った。"
+        },
+        {
+          "op": "add",
+          "target": "vars.supported",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q183",
+          "outcome": "supported"
+        }
+      ]
+    },
+    "q183.observatory.end.hidden": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "支援は続いたが、本当に帰りを待つ家も残った。兵たちは次の洗い代を、自分の財布から出した。"
+        },
+        {
+          "op": "add",
+          "target": "vars.hidden",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q183",
+          "outcome": "hidden"
+        }
+      ]
+    },
+    "q183.observatory.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q183"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q183.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q183.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q183.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "report",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "死の知らせが届き、弔いができた。支援の切替と兵たちの処分は別に残った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "supported",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "当面の支援を確かめてから記録を直した。返した服には、名札を縫い直した小さな穴が残った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "hidden",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "支援は続いたが、本当に帰りを待つ家も残った。兵たちは次の洗い代を、自分の財布から出した。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q183"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q183.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q183.observatory.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "support",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q183.observatory.support"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "supported_ready",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q183.observatory.supported_ready"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "official",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q183.observatory.official"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "confirmed",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q183.observatory.confirmed"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "supported",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q183.observatory.supported"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "report_now",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q183.observatory.report_now"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "reported",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q183.observatory.reported"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q183.observatory.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "名札の同じ軍服が届く洗濯場",
+      "families": "遺族が軍服を受け取る家々",
+      "relief": "遺族給付の受給確認窓口",
+      "records": "帰還記録を訂正する受付",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "families"
+      ],
+      [
+        "transit",
+        "relief"
+      ],
+      [
+        "transit",
+        "records"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "families",
+          "relief",
+          "records",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "report",
+          "supported",
+          "hidden"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "aidSecured": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "aidSecured"
+      },
+      "corrected": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "corrected"
+      },
+      "rationsGiven": {
+        "type": "integer",
+        "initial": 0,
+        "min": 0,
+        "max": 2,
+        "meaning": "rationsGiven"
+      },
+      "uniformsAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "families",
+          "relief",
+          "records",
+          "transit",
+          "party",
+          "certificate"
+        ],
+        "meaning": "uniforms の所在または保持者"
+      },
+      "certificateAt": {
+        "type": "enum",
+        "initial": "relief",
+        "values": [
+          "entry",
+          "families",
+          "relief",
+          "records",
+          "transit",
+          "party",
+          "uniforms"
+        ],
+        "meaning": "certificate の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "uniforms": {
+        "holder": "uniformsAt",
+        "kind": "item"
+      },
+      "certificate": {
+        "holder": "certificateAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "泥は別々の戦場のものなのに、名札の糸は同じだ。最初に金目当ての偽装を疑わせ、洗い代だけ兵たちが自腹で払っていることを見せる。遺族側には既に死を察している者と、本当に帰りを待つ者がいる。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "名札の同じ軍服が届く洗濯場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "support": {
+        "title": "遺族が軍服を受け取る家々",
+        "place": "families",
+        "cast": [],
+        "requires": true
+      },
+      "supported_ready": {
+        "title": "遺族が軍服を受け取る家々",
+        "place": "families",
+        "cast": [],
+        "requires": true
+      },
+      "official": {
+        "title": "遺族給付の受給確認窓口",
+        "place": "relief",
+        "cast": [],
+        "requires": true
+      },
+      "confirmed": {
+        "title": "遺族が軍服を受け取る家々",
+        "place": "families",
+        "cast": [],
+        "requires": true
+      },
+      "supported": {
+        "title": "帰還記録を訂正する受付",
+        "place": "records",
+        "cast": [],
+        "requires": true
+      },
+      "report_now": {
+        "title": "帰還記録を訂正する受付",
+        "place": "records",
+        "cast": [],
+        "requires": true
+      },
+      "reported": {
+        "title": "遺族が軍服を受け取る家々",
+        "place": "families",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_families": {
+        "from": [
+          "entry"
+        ],
+        "to": "support",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "families"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "families",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "uniforms",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      },
+      "entry_report": {
+        "from": [
+          "entry"
+        ],
+        "to": "report_now",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "records"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "records",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "uniforms",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      },
+      "entry_hidden": {
+        "from": [
+          "entry"
+        ],
+        "ending": "hidden",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "hidden"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "support_goods": {
+        "from": [
+          "support"
+        ],
+        "to": "supported_ready",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "rationsGiven",
+            "value": 2
+          },
+          {
+            "op": "set",
+            "key": "aidSecured",
+            "value": true
+          },
+          {
+            "op": "transfer",
+            "entity": "uniforms",
+            "from": "party",
+            "to": "families"
+          }
+        ],
+        "cost": {
+          "ration": 2
+        },
+        "once": false
+      },
+      "support_official": {
+        "from": [
+          "support"
+        ],
+        "to": "official",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "relief"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "relief",
+          "companions": []
+        },
+        "depart": []
+      },
+      "support_report": {
+        "from": [
+          "support"
+        ],
+        "to": "report_now",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "records"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "records",
+          "companions": []
+        },
+        "depart": []
+      },
+      "support_hidden": {
+        "from": [
+          "support"
+        ],
+        "ending": "hidden",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "uniforms",
+            "from": "party",
+            "to": "families"
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "hidden"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "supported_ready_correct": {
+        "from": [
+          "supported_ready"
+        ],
+        "to": "supported",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "records"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "records",
+          "companions": []
+        },
+        "depart": []
+      },
+      "official_deliver": {
+        "from": [
+          "official"
+        ],
+        "to": "confirmed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "families"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "certificate",
+            "from": "party",
+            "to": "families"
+          },
+          {
+            "op": "transfer",
+            "entity": "uniforms",
+            "from": "party",
+            "to": "families"
+          },
+          {
+            "op": "set",
+            "key": "aidSecured",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "families",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "certificate",
+            "from": "relief",
+            "to": "party"
+          }
+        ]
+      },
+      "confirmed_correct": {
+        "from": [
+          "confirmed"
+        ],
+        "to": "supported",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "records"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "records",
+          "companions": []
+        },
+        "depart": []
+      },
+      "supported_finish": {
+        "from": [
+          "supported"
+        ],
+        "ending": "supported",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "corrected",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "supported"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "report_now_deliver": {
+        "from": [
+          "report_now"
+        ],
+        "to": "reported",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "families"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "uniforms",
+            "from": "party",
+            "to": "families"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "families",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "corrected",
+            "value": true
+          }
+        ]
+      },
+      "reported_finish": {
+        "from": [
+          "reported"
+        ],
+        "ending": "report",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "report"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "report": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q183.values.resolution"
+            },
+            "right": "report"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q183.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q183.values.partyAt"
+                },
+                "right": "families"
+              }
+            ]
+          }
+        ]
+      },
+      "supported": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q183.values.resolution"
+            },
+            "right": "supported"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q183.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q183.values.partyAt"
+                },
+                "right": "records"
+              }
+            ]
+          }
+        ]
+      },
+      "hidden": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q183.values.resolution"
+            },
+            "right": "hidden"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q183.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q183.values.partyAt"
+                },
+                "right": "entry"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q183.values.partyAt"
+                },
+                "right": "families"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_camp",
+        "x": 3,
+        "y": 3
+      },
+      "families": {
+        "kind": "town",
+        "location": "observatory_families"
+      },
+      "relief": {
+        "kind": "town",
+        "location": "observatory_relief"
+      },
+      "records": {
+        "kind": "town",
+        "location": "observatory_muster"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_village",
+  "receptionLocations": [
+    "royal_board"
+  ]
+}

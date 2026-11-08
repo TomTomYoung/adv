@@ -400,7 +400,7 @@
     "entryScript": "q183.observatory.visit",
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -409,7 +409,710 @@
       "saveRevision": 2,
       "scope": "観測所20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "名札の同じ軍服が届く洗濯場",
+            "families": "遺族が軍服を受け取る家々",
+            "relief": "遺族給付の受給確認窓口",
+            "records": "帰還記録を訂正する受付",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "families"
+            ],
+            [
+              "transit",
+              "relief"
+            ],
+            [
+              "transit",
+              "records"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "families",
+                "relief",
+                "records",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "report",
+                "supported",
+                "hidden"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "aidSecured": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "aidSecured"
+            },
+            "corrected": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "corrected"
+            },
+            "rationsGiven": {
+              "type": "integer",
+              "initial": 0,
+              "min": 0,
+              "max": 2,
+              "meaning": "rationsGiven"
+            },
+            "uniformsAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "families",
+                "relief",
+                "records",
+                "transit",
+                "party",
+                "certificate"
+              ],
+              "meaning": "uniforms の所在または保持者"
+            },
+            "certificateAt": {
+              "type": "enum",
+              "initial": "relief",
+              "values": [
+                "entry",
+                "families",
+                "relief",
+                "records",
+                "transit",
+                "party",
+                "uniforms"
+              ],
+              "meaning": "certificate の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "uniforms": {
+              "holder": "uniformsAt",
+              "kind": "item"
+            },
+            "certificate": {
+              "holder": "certificateAt",
+              "kind": "item"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "泥は別々の戦場のものなのに、名札の糸は同じだ。最初に金目当ての偽装を疑わせ、洗い代だけ兵たちが自腹で払っていることを見せる。遺族側には既に死を察している者と、本当に帰りを待つ者がいる。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "名札の同じ軍服が届く洗濯場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "support": {
+              "title": "遺族が軍服を受け取る家々",
+              "place": "families",
+              "cast": [],
+              "requires": true
+            },
+            "supported_ready": {
+              "title": "遺族が軍服を受け取る家々",
+              "place": "families",
+              "cast": [],
+              "requires": true
+            },
+            "official": {
+              "title": "遺族給付の受給確認窓口",
+              "place": "relief",
+              "cast": [],
+              "requires": true
+            },
+            "confirmed": {
+              "title": "遺族が軍服を受け取る家々",
+              "place": "families",
+              "cast": [],
+              "requires": true
+            },
+            "supported": {
+              "title": "帰還記録を訂正する受付",
+              "place": "records",
+              "cast": [],
+              "requires": true
+            },
+            "report_now": {
+              "title": "帰還記録を訂正する受付",
+              "place": "records",
+              "cast": [],
+              "requires": true
+            },
+            "reported": {
+              "title": "遺族が軍服を受け取る家々",
+              "place": "families",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_families": {
+              "from": [
+                "entry"
+              ],
+              "to": "support",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "families"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "families",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "uniforms",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "entry_report": {
+              "from": [
+                "entry"
+              ],
+              "to": "report_now",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "records"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "records",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "uniforms",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "entry_hidden": {
+              "from": [
+                "entry"
+              ],
+              "ending": "hidden",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "hidden"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "support_goods": {
+              "from": [
+                "support"
+              ],
+              "to": "supported_ready",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "rationsGiven",
+                  "value": 2
+                },
+                {
+                  "op": "set",
+                  "key": "aidSecured",
+                  "value": true
+                },
+                {
+                  "op": "transfer",
+                  "entity": "uniforms",
+                  "from": "party",
+                  "to": "families"
+                }
+              ],
+              "cost": {
+                "ration": 2
+              },
+              "once": false
+            },
+            "support_official": {
+              "from": [
+                "support"
+              ],
+              "to": "official",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "relief"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "relief",
+                "companions": []
+              },
+              "depart": []
+            },
+            "support_report": {
+              "from": [
+                "support"
+              ],
+              "to": "report_now",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "records"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "records",
+                "companions": []
+              },
+              "depart": []
+            },
+            "support_hidden": {
+              "from": [
+                "support"
+              ],
+              "ending": "hidden",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "uniforms",
+                  "from": "party",
+                  "to": "families"
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "hidden"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "supported_ready_correct": {
+              "from": [
+                "supported_ready"
+              ],
+              "to": "supported",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "records"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "records",
+                "companions": []
+              },
+              "depart": []
+            },
+            "official_deliver": {
+              "from": [
+                "official"
+              ],
+              "to": "confirmed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "families"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "certificate",
+                  "from": "party",
+                  "to": "families"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "uniforms",
+                  "from": "party",
+                  "to": "families"
+                },
+                {
+                  "op": "set",
+                  "key": "aidSecured",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "families",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "certificate",
+                  "from": "relief",
+                  "to": "party"
+                }
+              ]
+            },
+            "confirmed_correct": {
+              "from": [
+                "confirmed"
+              ],
+              "to": "supported",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "records"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "records",
+                "companions": []
+              },
+              "depart": []
+            },
+            "supported_finish": {
+              "from": [
+                "supported"
+              ],
+              "ending": "supported",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "corrected",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "supported"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "report_now_deliver": {
+              "from": [
+                "report_now"
+              ],
+              "to": "reported",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "families"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "uniforms",
+                  "from": "party",
+                  "to": "families"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "families",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "set",
+                  "key": "corrected",
+                  "value": true
+                }
+              ]
+            },
+            "reported_finish": {
+              "from": [
+                "reported"
+              ],
+              "ending": "report",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "report"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "report": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q183.values.resolution"
+                  },
+                  "right": "report"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q183.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q183.values.partyAt"
+                      },
+                      "right": "families"
+                    }
+                  ]
+                }
+              ]
+            },
+            "supported": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q183.values.resolution"
+                  },
+                  "right": "supported"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q183.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q183.values.partyAt"
+                      },
+                      "right": "records"
+                    }
+                  ]
+                }
+              ]
+            },
+            "hidden": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q183.values.resolution"
+                  },
+                  "right": "hidden"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q183.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q183.values.partyAt"
+                      },
+                      "right": "entry"
+                    },
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q183.values.partyAt"
+                      },
+                      "right": "families"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "observatory_sites",
+              "map": "e2_observatory_camp",
+              "x": 3,
+              "y": 3
+            },
+            "families": {
+              "kind": "town",
+              "location": "observatory_families"
+            },
+            "relief": {
+              "kind": "town",
+              "location": "observatory_relief"
+            },
+            "records": {
+              "kind": "town",
+              "location": "observatory_muster"
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "soldiersAt",
+            "value": "entry"
+          },
+          {
+            "key": "bereavedAt",
+            "value": "families"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q183.scene.entry": {
@@ -1477,6 +2180,22 @@
           "uniforms"
         ],
         "meaning": "certificate の所在または保持者"
+      },
+      "soldiersAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry"
+        ],
+        "meaning": "soldiers の所在または保持者"
+      },
+      "bereavedAt": {
+        "type": "enum",
+        "initial": "families",
+        "values": [
+          "families"
+        ],
+        "meaning": "bereaved の所在または保持者"
       }
     },
     "entities": {
@@ -1491,6 +2210,16 @@
       "certificate": {
         "holder": "certificateAt",
         "kind": "item"
+      },
+      "soldiers": {
+        "holder": "soldiersAt",
+        "kind": "group",
+        "character": "q183_soldiers"
+      },
+      "bereaved": {
+        "holder": "bereavedAt",
+        "kind": "group",
+        "character": "q183_bereaved"
       }
     },
     "propositions": {
@@ -1504,19 +2233,40 @@
       "entry": {
         "title": "名札の同じ軍服が届く洗濯場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "soldiers",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "support": {
         "title": "遺族が軍服を受け取る家々",
         "place": "families",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "bereaved",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "supported_ready": {
         "title": "遺族が軍服を受け取る家々",
         "place": "families",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "bereaved",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "official": {
@@ -1528,7 +2278,14 @@
       "confirmed": {
         "title": "遺族が軍服を受け取る家々",
         "place": "families",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "bereaved",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "supported": {
@@ -1546,7 +2303,14 @@
       "reported": {
         "title": "遺族が軍服を受け取る家々",
         "place": "families",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "bereaved",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       }
     },
@@ -2061,7 +2825,7 @@
         "location": "observatory_muster"
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "oddland_village",
   "receptionLocations": [

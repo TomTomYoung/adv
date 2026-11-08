@@ -55,6 +55,16 @@ export const relocatedCharacters=Object.fromEntries([
 ].map(([id,name,detail,provenance])=>[id,{id,name,role:'礼拝堂の現地の相手',detail,portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,
  provenance:provenance??'2026-10-29の美術設定。固有名・他人物との同一性は追加しない。具体的な外見・年齢感・服装は今回の美術設定。牢・格子・聖像・宝玉・石を人物画へ固定しない。'}]));
 // The group has no specified headcount or spokesperson. Ren is the existing actor.
+relocatedCharacters.q183_soldiers={
+ id:'q183_soldiers',name:'洗濯場の兵士たち',role:'死んだ友の名を襟へ縫い、支援を続けるため帰還を偽る兵士たち',
+ detail:'洗濯場のentryだけに表示する人数未確定の集団。遺族の家や給付・記録の窓口へ同行させない。',
+ provenance:'2026-11-08。原稿と現場本文に基づく呼称表示。係長・死者と同一視せず、人数・氏名・軍名・個人画を追加しない。'
+};
+relocatedCharacters.q183_bereaved={
+ id:'q183_bereaved',name:'軍服を受け取る遺族たち',role:'軍服と支援、死の知らせを受け取る家々の遺族',
+ detail:'家々のsupport・supported_ready・confirmed・reportedだけに表示する。死を察した家と帰りを待つ家を一つの反応に決めつけない。',
+ provenance:'2026-11-08。原稿と受渡し先に基づく人数未確定の集団の呼称表示。家数・代表者・亡くなった本人の立ち絵は追加しない。'
+};
 relocatedCharacters.q182_ol={
  id:'q182_ol',name:'魔導砲手オル',role:'砲の搬入を待ち、設置点で照明への転用を提案する砲手',
  detail:'搬入時だけ出発点から砲の設置点へ同行し、その後は砲のそばに残る。司令への相談・避難・魔石の保管には同行しない。',

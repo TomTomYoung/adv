@@ -4561,6 +4561,226 @@ export const RELOCATED_CAST_REVIEW={
     }
   },
   "next": "q182の3役の所在・表示、魔石の一回消費・保留時の未消費と受渡し、旧保存の互換を接続済み。次はq183の原稿・全場面を精読し、洗濯場の兵士・係長・遺族・受付の出演根拠を確認する。"
+},
+  q183:{
+  "sourceSha256": "52f0fa3dcad8f1a6d11a70aa8f093a091e9170252e5892540793339b5279fd90",
+  "identityNotes": [
+    "原稿authoring/reference/volume-09.mdのGQ083、初版q183、現場接続後の全8場面・8旅程・6経路・3結末を精読した。",
+    "洗濯場の兵士たちはentryだけ、軍服を受け取る遺族たちは家々の4場面だけに呼称表示する。双方を人数未確定のgroupとし、係長・代表者・戦死者本人を加えない。",
+    "係長は依頼人欄と原稿の調査依頼に現れるが、現場での同席や会話の記述がない。給付窓口と記録受付は施設であり、職員を施設名だけから追加しない。",
+    "死を察した家と本当に帰りを待つ家を区別し、遺族全員が真相を知る・偽装に同意するとは補わない。家数・人数・氏名・軍名は確定しない。",
+    "軍服は家々への出発または直接訂正へ向かう出発でentryからpartyへ移る。支援・届け出の到着時または家々での秘匿時にfamiliesへ渡す。洗濯場から直接秘匿する場合はentryに残る。",
+    "現物支援は糧食2個を消費してrationsGiven=2とaidSecuredを立てる。給付経路は確認書を窓口出発時にpartyへ、家々への到着時にfamiliesへ渡してaidSecuredを立て、糧食を消費しない。",
+    "支援経路のcorrectedは記録受付のfinish、即時訂正経路は死の知らせを届ける出発時に立つ。秘匿では訂正しない。旧受注経路・3結末・153G/99XPと物語改訂1→2の待機本文を保持する。"
+  ],
+  "people": {
+    "q183_soldiers": {
+      "label": "洗濯場の兵士たち",
+      "status": "connected",
+      "entity": "soldiers",
+      "need": "洗濯場のentryだけ。人数未確定のgroupを固定所在に接続する。"
+    },
+    "q183_bereaved": {
+      "label": "軍服を受け取る遺族たち",
+      "status": "connected",
+      "entity": "bereaved",
+      "need": "家々での相談・現物支援・確認書・死の知らせの4場面。固定所在だけを補い、窓口へ同行させない。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "person-evidence",
+      "people": [
+        "q183_soldiers"
+      ],
+      "evidence": "泥は違う戦場のものだが、襟の名札の糸は同じだった。兵たちは死んだ友の名を縫い、支援が止まらないよう帰還を偽っていた。",
+      "reason": "原稿は洗濯場の兵士から説明を聞く経路。本文でも友の名を縫って帰還を偽る兵たちを扱う。係長の同席は追加しない。",
+      "visual": "名札の同じ軍服が届く洗濯場と兵士たち。"
+    },
+    "support": {
+      "decision": "person-evidence",
+      "people": [
+        "q183_bereaved"
+      ],
+      "evidence": "既に死を察した家も、本当に帰りを待つ家もある。支援を確保してから訂正するなら、口約束でなく現物か受給確認が必要だ。",
+      "reason": "家々で遺族の異なる受止め方と支援を確認する。全員の同意や認識を揃えない。",
+      "visual": "軍服を受け取る家々と遺族たち。"
+    },
+    "supported_ready": {
+      "decision": "person-evidence",
+      "people": [
+        "q183_bereaved"
+      ],
+      "evidence": "糧食二つと洗濯物を家へ渡した。当面の支援を確かめてから記録の受付へ行く。",
+      "reason": "家々へ糧食2個と軍服を渡した後。支援は確保済みだが記録は未訂正。",
+      "visual": "現物支援を受け取った家々。"
+    },
+    "official": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "窓口で遺族給付の受給を確認した。確認書を家へ届け、口約束だけで終えない。",
+      "reason": "給付の受給確認は窓口の手続きとして描写され、担当者の人物描写や同席指定はない。",
+      "visual": "遺族給付の受給確認窓口。"
+    },
+    "confirmed": {
+      "decision": "person-evidence",
+      "people": [
+        "q183_bereaved"
+      ],
+      "evidence": "家で受給確認書を渡した。次は帰還記録を訂正する。",
+      "reason": "家々への実到着で確認書と軍服を渡した。記録訂正は次の受付で行う。",
+      "visual": "確認書と軍服を受け取った家々。"
+    },
+    "supported": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "支援の確保を示し、帰還記録を訂正する。",
+      "reason": "記録受付で支援を示して訂正する手続き。施設名から職員や遺族の同行を追加しない。",
+      "visual": "帰還記録を訂正する受付。"
+    },
+    "report_now": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "支援の切替を待たず、帰還記録を訂正する。死の知らせと洗濯物を家へ届ける。",
+      "reason": "支援を待たない訂正を決めた受付。死の知らせの届け先へは次の出発で移動する。",
+      "visual": "帰還記録を訂正する受付。"
+    },
+    "reported": {
+      "decision": "person-evidence",
+      "people": [
+        "q183_bereaved"
+      ],
+      "evidence": "家へ死の知らせを届けた。給付の切替や処分が済んだとは伝えない。",
+      "reason": "家々へ実到着し軍服と死の知らせを届けた。給付切替や処分完了とはしない。",
+      "visual": "死の知らせと軍服を受け取った家々。"
+    }
+  },
+  "next": "q183の2群を固定所在へ接続済み。次は精読済みq184のジャル・普通食の料理人・監督・捕虜を既存所在と同行へ接続し、鍋の受渡しと共同検査・旧保存を保つ。"
+},
+  q184:{
+  "sourceSha256": "4dbb3e6ec1c90e742059c13711ac9270fc9780d4a9ad5d7d87a180158b3204b5",
+  "identityNotes": [
+    "原稿authoring/reference/volume-09.mdのGQ084、初版q184、現場接続後の全9場面・8旅程・4経路・3結末を精読した。",
+    "ジャル・普通食の料理人・監督は既存のperson。氏名があるのはジャルだけ。依頼人の料理係と普通食の料理人との同一性を確定せず、依頼人だけの別役も加えない。",
+    "ジャルはentry・joint・checked・invite・joint_cooking・spare・swap、普通食の料理人はtaken・invite・joint_cooking・parallel、監督はjoint・checked・invite・joint_cookingの候補。既存の同行で到着した場面に限定する。",
+    "捕虜は既存prisonersの人数未確定group。香草の匂いで近づき、焦げた食事への不満を述べるentryだけを表示候補とする。joint_cookingやswapは同じ厨房でも本文で同席を特定していないため追加しない。",
+    "材料検査への同意と味の裁量はjointの本文、検査完了inspectedはagree、共同炊事cookingはjoint_cookingのfinishで確定する。新たな必要材料や本人の同意条件を創作しない。",
+    "大鍋は没収出発または別鍋を貸す出発でjarlからpartyへ、普通食の厨房のfinishでcookへ渡す。別鍋は倉庫出発時にpartyへ、swapからの出発時にjarlへ渡す。材料は共同経路の出発でparty、厨房へ帰着時にentryへ戻す。",
+    "parallelではジャルは別厨房に残り、監督は別鍋経路へ同行しない。捕虜の拒否を全員共通の政治信条にせず、普通食と別鍋の併存・3結末・旧受注経路を維持する。"
+  ],
+  "people": {
+    "q184_jarl": {
+      "label": "料理人ジャル",
+      "status": "candidate",
+      "need": "既存jarlの実同行に沿う7場面。没収後と普通食厨房への鍋返却には表示しない。"
+    },
+    "q184_cook": {
+      "label": "普通食の料理人",
+      "status": "candidate",
+      "need": "既存cookのいる普通食厨房と実同行後の共同厨房の4場面。"
+    },
+    "q184_supervisor": {
+      "label": "監督",
+      "status": "candidate",
+      "need": "既存supervisorの検査・料理人招待・共同厨房の4場面。別鍋経路には同行しない。"
+    },
+    "q184_prisoners": {
+      "label": "捕虜たち",
+      "status": "candidate",
+      "need": "香草の匂いで近づくentryだけ。人数・代表者を固定しない。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "person-evidence",
+      "people": [
+        "q184_jarl",
+        "q184_prisoners"
+      ],
+      "evidence": "敵兵の料理人ジャルが隠し厨房で鍋を使っていた。慣れた香草の匂いがすると捕虜が近づく。「反抗じゃない、焦げてるのが嫌だ」と言う者もいた。",
+      "reason": "ジャルと近づく捕虜が本文にいる。焦げた食事への不満を集団全員の信念にしない。",
+      "visual": "隠し厨房のジャルと捕虜たち。"
+    },
+    "joint": {
+      "decision": "person-evidence",
+      "people": [
+        "q184_jarl",
+        "q184_supervisor"
+      ],
+      "evidence": "ジャルは食材検査に同意し、監督は味を変える裁量を認めた。全員へ同じ信念を要求せず、普通食も選べるよう残す。",
+      "reason": "ジャルが検査場へ実同行し、その場の監督と検査・裁量の合意を確認する。",
+      "visual": "食材検査の場所で合意するジャルと監督。"
+    },
+    "taken": {
+      "decision": "person-evidence",
+      "people": [
+        "q184_cook"
+      ],
+      "evidence": "没収した大鍋を普通食の厨房へ戻す。食事を選ぶ人の不満までは解決していない。",
+      "reason": "既存cookが普通食厨房にいる。大鍋はまだpartyが持ち、finishで本人へ返す。",
+      "visual": "普通食の厨房と大鍋を受け取る料理人。"
+    },
+    "checked": {
+      "decision": "person-evidence",
+      "people": [
+        "q184_jarl",
+        "q184_supervisor"
+      ],
+      "evidence": "合意した食材の検査を済ませた。ジャルと監督で普通食の料理人を呼びに行く。",
+      "reason": "検査を完了した二人が料理人を呼びに行く前の場面。",
+      "visual": "検査を終えたジャルと監督。"
+    },
+    "invite": {
+      "decision": "person-evidence",
+      "people": [
+        "q184_jarl",
+        "q184_supervisor",
+        "q184_cook"
+      ],
+      "evidence": "普通食も選べることを確かめ、料理人を共同の厨房へ案内する。",
+      "reason": "ジャルと監督が普通食厨房へ実到着し、その場の料理人を案内する。",
+      "visual": "普通食厨房に揃う二人の料理人と監督。"
+    },
+    "joint_cooking": {
+      "decision": "person-evidence",
+      "people": [
+        "q184_jarl",
+        "q184_supervisor",
+        "q184_cook"
+      ],
+      "evidence": "食材の検査を終えた厨房に二人の料理人と監督が揃った。共同炊事の手順を確定する。",
+      "reason": "三者が共同厨房へ実同行して揃った。捕虜は本文で同席が示されない。",
+      "visual": "共同炊事の手順を確認する三者。"
+    },
+    "spare": {
+      "decision": "person-evidence",
+      "people": [
+        "q184_jarl"
+      ],
+      "evidence": "倉庫へ別鍋を借りに来た。ジャルと厨房へ運び、元の大鍋を返す。",
+      "reason": "ジャルだけが倉庫へ実同行した。倉庫係を施設名から追加しない。",
+      "visual": "別鍋を借りに来たジャル。"
+    },
+    "swap": {
+      "decision": "person-evidence",
+      "people": [
+        "q184_jarl"
+      ],
+      "evidence": "別鍋を厨房へ運んだ。ジャルへ貸し、元の大鍋を普通食の厨房へ返す。",
+      "reason": "別鍋を運んだ隊とジャルが厨房へ戻った。貸出しと元の鍋の引取りは次の出発時。",
+      "visual": "別鍋の受渡しを待つジャル。"
+    },
+    "parallel": {
+      "decision": "person-evidence",
+      "people": [
+        "q184_cook"
+      ],
+      "evidence": "元の大鍋を普通食の料理人へ戻す。別の厨房ではジャルが借りた鍋を使う。",
+      "reason": "普通食厨房の料理人へ大鍋を返す。ジャルは別厨房に残り、ここへ同行していない。",
+      "visual": "元の大鍋を受け取る普通食の料理人。"
+    }
+  },
+  "next": "既存4役の所在と実同行へ呼称表示を接続する。大鍋・別鍋・食材の保持者、検査と共同炊事の確定時点、4経路・3結末・旧保存を検証する。"
 }
  }
 };
