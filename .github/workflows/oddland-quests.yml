@@ -12,6 +12,9 @@ on:
       - 'tools/browser-observatory-cast-smoke.mjs'
       - 'tools/quiver-art-fixtures.mjs'
       - 'tests/fixtures/e2-q181-before-cast.json'
+      - 'tools/browser-laundry-cast-smoke.mjs'
+      - 'tools/laundry-art-fixtures.mjs'
+      - 'tests/fixtures/e2-q183-before-cast.json'
       - 'tools/browser-gunner-cast-smoke.mjs'
       - 'tools/gunner-art-fixtures.mjs'
       - 'tests/fixtures/e2-q182-before-cast.json'
@@ -82,6 +85,18 @@ jobs:
         with:
           name: q182-cast-checkpoints
           path: /tmp/adv-gunner-art-browser
+          if-no-files-found: ignore
+      - name: Verify q183 cast, aid delivery and older saves
+        if: steps.ci.outputs.run == 'true'
+        env:
+          ADV_BROWSER_OUTPUT: /tmp/adv-laundry-art-browser
+        run: node tools/browser-laundry-cast-smoke.mjs
+      - name: Keep q183 cast checkpoints
+        if: always() && steps.ci.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: q183-cast-checkpoints
+          path: /tmp/adv-laundry-art-browser
           if-no-files-found: ignore
       - name: Remember successful inputs
         if: success() && steps.ci.outputs.run == 'true' && github.event_name != 'workflow_dispatch'
