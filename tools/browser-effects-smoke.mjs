@@ -32,7 +32,7 @@ try{
       g.state.members=[actor];g.state.partyFormation=nextFormation(g.state.members,g.state.partyFormation);g.dispatch({type:'travel',dungeon:'kagaribi'});g.startBattle(kill?'wild_waterwheel_beaver':'wild_pair_1',{win:[],lose:[],escape:[]},{battleMode});
       if(kill)g.state.battle.enemies[0].hp=1;
       const marks=[],voices=[],root=document.querySelector('#app');root.dataset.view=layout;
-      const sound=new GameAudio({createAudio:url=>({paused:true,volume:0,pause(){this.paused=true;},addEventListener(){},play(){this.paused=false;voices.push({url,at:performance.now()});return Promise.resolve();}})});sound.configure(true,1,1);
+      const sound=new GameAudio({battleSound:null,createAudio:url=>({paused:true,volume:0,pause(){this.paused=true;},addEventListener(){},play(){this.paused=false;voices.push({url,at:performance.now()});return Promise.resolve();}})});sound.configure(true,1,1);
       const ui={status(){},menu(){},help(){},soundEnabled:()=>true,effectsMode:()=>mode,cancelFeedback:()=>sound.stopEffects()};
       const render=()=>{const m=projectGame(g);m.feedback.startedAt=performance.now();view.render(m);sound.sync(m);return m;};
       const dispatch=intent=>{const ok=g.dispatch(intent);window.last=render();return ok;};
@@ -114,5 +114,38 @@ try{
   await page.evaluate(async()=>{dispatch({type:'battle',action:'skill',skill:'attack',target:'enemy_0'});render();await new Promise(r=>setTimeout(r,950));});
   assert.equal(await page.locator('.fx-overlay').count(),0);
   checks.push('reduced/off/OS reduced motion, classic layout, final blow after enemy removal, and cancellation before impact');
-  assert.deepEqual(errors,[]);await fs.writeFile(path.join(output,'results.json'),JSON.stringify({checks,errors},null,2)+'\n');console.log(JSON.stringify({passed:true,checks,errors},null,2));
+  await page.evaluate(()=>setup());
+  await page.evaluate(async()=>{g.random=()=>0;dispatch({type:'battle',action:'skill',skill:'attack',target:'enemy_0'});await new Promise(r=>setTimeout(r,175));freeze();});
+  assert.ok(await page.locator('.fx-accent-critical.fx-impact-particle').count());assert.ok(await page.locator('.fx-critical').count());await page.screenshot({path:path.join(output,'critical-enhanced.png')});
+  await page.evaluate(()=>setup({actor:'toma'}));
+  await page.evaluate(async()=>{g.state.actors.toma.hp=Math.max(1,g.state.actors.toma.hp-8);render();dispatch({type:'battle',action:'skill',skill:'group_heal'});await new Promise(r=>setTimeout(r,175));freeze();});
+  assert.ok(await page.locator('.fx-accent-heal.fx-impact-particle').count());await page.screenshot({path:path.join(output,'heal-enhanced.png')});
+  await page.evaluate(()=>setup({kill:true}));
+  await page.evaluate(async()=>{dispatch({type:'battle',action:'skill',skill:'attack',target:'enemy_0'});await new Promise(r=>setTimeout(r,335));freeze();});
+  assert.ok(await page.locator('.fx-accent-defeat.fx-impact-particle').count());await page.screenshot({path:path.join(output,'defeat-enhanced.png')});
+  await page.evaluate(()=>view.playback.finish());assert.equal(await page.locator('.fx-impact-ring,.fx-impact-particle').count(),0);
+  for(const mode of ['reduced','off']){
+    await page.evaluate(mode=>setup({mode}),mode);await page.evaluate(async()=>{g.random=()=>0;dispatch({type:'battle',action:'skill',skill:'attack',target:'enemy_0'});await new Promise(r=>setTimeout(r,175));freeze();});
+    assert.equal(await page.locator('.fx-impact-ring,.fx-impact-particle').count(),0);
+  }
+  checks.push('critical sparks and shock ring, healing motes, defeat debris; skip cleans every overlay; reduced/off suppress moving accents');
+  const sounds=await page.evaluate(async()=>{
+    const {BattleSound}=await import('./src/application/battle-sound.js'),{loadContent}=await import('./src/core/loader.js'),data=await loadContent(),results=[];
+    for(const [kind,effects,extra,se] of [
+      ['slash',['strike_slash'],{},'se_slash'],['pierce',['strike_pierce'],{},'se_pierce'],['heavy',['strike_blunt'],{},'se_heavy'],['critical',['strike_slash'],{critical:true},'se_slash'],
+      ['guard',[],{guarded:true},'se_guard'],['heal',[],{damage:0,healing:8},'se_heal'],['fire',['fire_burst'],{},'se_fire'],['ice',['ice_shards'],{},'se_ice'],['lightning',['lightning_arc'],{},'se_lightning'],['defeat',[],{},'se_bump']
+    ]){
+      const c=new OfflineAudioContext(1,44100*2,44100),synth=new BattleSound({createContext:()=>c});synth.configure(true,1);
+      const buffer=await c.decodeAudioData(await (await fetch(data.assets.audio[se])).arrayBuffer()),sample=c.createBufferSource(),gain=c.createGain();sample.buffer=buffer;gain.gain.value=data.sounds[se].gain*(kind==='defeat'?.55:1);sample.connect(gain);gain.connect(c.destination);sample.start();
+      synth.play({phase:kind==='defeat'?'defeat':'impact',effects,targets:[{key:'enemy:enemy_0',damage:12,...extra}]});
+      const rendered=await c.startRendering(),a=rendered.getChannelData(0);let sum=0,peak=0,signature=0;
+      for(let i=0;i<a.length;i++){sum+=a[i]*a[i];peak=Math.max(peak,Math.abs(a[i]));signature+=a[i]*((i%97)-48);}
+      results.push({kind,rms:Math.sqrt(sum/a.length),peak,signature});synth.stop();
+    }
+    return results;
+  });
+  for(const result of sounds){assert.ok(result.rms>.0001,result.kind+' is silent');assert.ok(result.peak<.98,result.kind+' clips: '+result.peak);}
+  assert.equal(new Set(sounds.map(s=>s.signature.toFixed(5))).size,sounds.length);
+  checks.push('real OfflineAudioContext mixes 10 recorded+synthesized SE variants: all audible, distinct and below clipping; speaker listening is not claimed');
+  assert.deepEqual(errors,[]);await fs.writeFile(path.join(output,'results.json'),JSON.stringify({checks,sounds,errors},null,2)+'\n');console.log(JSON.stringify({passed:true,checks,errors},null,2));
 }finally{await browser?.close();server.close();}

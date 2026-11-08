@@ -1,6 +1,7 @@
 // Visual-only player. Timelines never advance the game or call the engine.
 import {strikePieces,strikeAngle} from './battle-effects.js';
 import {feedbackDelay} from '../feedback-timing.js';
+import {playBattleAccent} from './battle-impact.js';
 export function motionFrames(frames,angle=0){const r=angle*Math.PI/180;return frames.map(f=>({offset:f.at,transform:`translate(${(f.x??0)*Math.cos(r)-(f.y??0)*Math.sin(r)}px,${(f.x??0)*Math.sin(r)+(f.y??0)*Math.cos(r)}px) rotate(${f.rotate??0}deg) skew(${f.skewX??0}deg,${f.skewY??0}deg) scale(${f.scaleX??1},${f.scaleY??1})`,opacity:f.opacity??1}));}
 export function spriteFrames(track){return [...Array.from({length:track.frames},(_,i)=>({offset:i/track.frames,backgroundPosition:`${-(i%track.columns)*track.cell}px ${-Math.floor(i/track.columns)*track.cell}px`,opacity:1})),{offset:1,backgroundPosition:`${-((track.frames-1)%track.columns)*track.cell}px ${-Math.floor((track.frames-1)/track.columns)*track.cell}px`,opacity:0}];}
 export class EffectsRenderer {
@@ -100,6 +101,7 @@ export class EffectsRenderer {
     for(const event of model.feedback?.events??[]){
       const play=()=>{
         this.onEvent?.(event);
+        playBattleAccent(this,event,mode);
         const source=event.source?this.anchor(event.source):null;
         for(const target of event.targets){
           if(event.phase==='defeat')this.hide(this.anchor(target).element);
