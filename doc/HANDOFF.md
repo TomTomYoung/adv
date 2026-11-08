@@ -14,7 +14,7 @@
 
 ## 次工程
 
-2026-11-08：[PR #220](https://github.com/TomTomYoung/adv/pull/220)をmaster `552cd406f5378ab1665140a052ba8d4c61153ae0` へ統合した。検証済みのPR先端と統合ツリーは一致し、[公開](https://github.com/TomTomYoung/adv/actions/runs/42460859959)は成功。[統合後の全体CI](https://github.com/TomTomYoung/adv/actions/runs/42460860299)も成功。q184の表示接続・専用8試験を実装し、関連69試験が成功した。`npm run check` は全2,701試験成功・失敗0・スキップ0。Scene／Classicの88画面条件はGitHub CIで検証予定。次工程は出演監査済みq185の実装とする。
+2026-11-08：[PR #220](https://github.com/TomTomYoung/adv/pull/220)をmaster `552cd406f5378ab1665140a052ba8d4c61153ae0` へ統合した。検証済みのPR先端と統合ツリーは一致し、[公開](https://github.com/TomTomYoung/adv/actions/runs/42460859959)は成功。[統合後の全体CI](https://github.com/TomTomYoung/adv/actions/runs/42460860299)も成功。q184の表示接続・専用8試験を実装し、関連69試験が成功した。`npm run check` は全2,701試験成功・失敗0・スキップ0。[PR #221](https://github.com/TomTomYoung/adv/pull/221)の[Oddland CI](https://github.com/TomTomYoung/adv/actions/runs/42461732090)も成功し、88画面条件・3結末・エラー0、PNG88枚の整合と代表8枚の目視を確認した。実装先端 `aef466c42c3f7c64ec02574b1d3e792aaf74f6bc` の全8ワークフロー・9ジョブが成功した。PR #221はこの記録時点でmasterへ未統合。PR #221統合後の次工程は出演監査済みq185の実装とする。
 
 2026-11-05追加指示：詳細ログと実行記録ラッパーは一時停止中です。再開指示までは短い進捗・失敗要点・検証件数・最終結果だけを報告します。[実行ログとGitの再開手順](development/EXECUTION_RECOVERY.md) の停止前の手順を再開扱いにしません。結果未確認の外部更新は対象を再読し、無条件に繰り返しません。ローカルGitは実オブジェクトを使い、日時からコミットを推測で再構成しません。同じブランチ・HEADの作業コピーは再利用し、別の作業は上書きしません。
 

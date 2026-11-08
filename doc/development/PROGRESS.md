@@ -12,7 +12,20 @@
 
 大鍋は没収出発／別鍋を貸す出発でjarl→party、返却先のfinishでparty→cook。別鍋は倉庫出発時store→party、swap出発時party→jarl。食材は共同経路の出発でentry→party、共同厨房へ到着または別鍋を運んで帰着する時にentryへ戻る。直接倉庫へ行く経路では食材を運ばない。検査はagree、共同炊事はjoint_cookingのfinishだけで確定する。全4経路で消費品なし、153G・99XPの報酬を一回だけ得ることを検証した。
 
-専用8試験を含む関連69試験は成功・失敗0・スキップ0。現行10・表示追加前10・旧受注2の22保存点、Scene／Classic × 1440／390pxの88画面条件をOddland CIへ追加した。倉庫では食材がentryにある場合とpartyが持つ場合を別保存点にする。既知のローカルChromiumのsocket作成制限を再試行せず、画面検証はGitHub CIで行う。`npm run check` は全2,701試験成功・失敗0・スキップ0。配布指紋・生成シナリオ・全データと素材参照・設定画面・静的ファイル・文書の検査も成功した。文書生成後は意図した手書き本文を保持し、無関係な表の書式変更は戻した。ブラウザー検査はこの記録時点で未確認。
+専用8試験を含む関連69試験は成功・失敗0・スキップ0。現行10・表示追加前10・旧受注2の22保存点、Scene／Classic × 1440／390pxの88画面条件をOddland CIへ追加した。倉庫では食材がentryにある場合とpartyが持つ場合を別保存点にする。既知のローカルChromiumのsocket作成制限を再試行せず、画面検証はGitHub CIで行う。`npm run check` は全2,701試験成功・失敗0・スキップ0。配布指紋・生成シナリオ・全データと素材参照・設定画面・静的ファイル・文書の検査も成功した。文書生成後は意図した手書き本文を保持し、無関係な表の書式変更は戻した。[Oddland CI](https://github.com/TomTomYoung/adv/actions/runs/42461732090)は実装コミット `aef466c42c3f7c64ec02574b1d3e792aaf74f6bc` で成功した。q184は88画面条件・3結末・エラー0。成果物 `q184-cast-checkpoints`（ID `13609837020`、SHA-256 `a6832c4caaac87b10cb8748d17edc78f39bc90a8e0847c2c4173275877cd6011`）の結果JSONとPNG88枚を照合し、Scene／Classic × 1440／390px各22条件、保存点22種の一致を確認した。代表8枚を目視し、入口のジャルと捕虜たち、共同厨房の3人、倉庫・交換時のジャルだけの表示、返却先の普通食の料理人だけの表示、旧保存と旧受注経路、狭幅の呼称折返しと本文送りを確認した。
+
+目視したPNGは次の8枚（全88枚を目視したという意味ではない）。
+
+- `e2-scene-1440-q184-entry-current.png`
+- `e2-scene-390-q184-invite-current.png`
+- `e2-classic-1440-q184-joint_cooking-current.png`
+- `e2-scene-390-q184-spare-current-party.png`
+- `e2-classic-390-q184-swap-current.png`
+- `e2-scene-1440-q184-parallel-current.png`
+- `e2-classic-390-q184-entry-previous.png`
+- `e2-scene-390-q184-entry-accepted-legacy.png`
+
+実装先端 `aef466c42c3f7c64ec02574b1d3e792aaf74f6bc` の全8ワークフロー・9ジョブが成功した。[全体CI](https://github.com/TomTomYoung/adv/actions/runs/42461732198)、[共通人物表示CI](https://github.com/TomTomYoung/adv/actions/runs/42461732095)も成功。実装と記録は[PR #221](https://github.com/TomTomYoung/adv/pull/221)へまとめ、この記録時点ではmasterへ未統合。全ジョブ完了後の結果追記はこの文書とHANDOFFのみで、重い試験は同一入力の成功結果を再利用する。
 
 次のq185「橋を落とさない理由」は原稿GQ085・初版・全13場面・11旅程・3結末を精読した。ネヴ・自軍・両国の家族・装備を置いた敵兵の4役を候補とし、荷車と舟を人物に変換しない。40Gの支払前帰還、戦闘の勝利・逃走・敗北と再合流、実通過後だけ家族を表示すること、早期封鎖の本文とclosedが立つ出発時点の整合を次工程へ記録した。q185の実装は含めない。監査は55件・411場面、出演根拠あり299・なし112、未精読342場面。空cast468、人物エンティティ133・character接続86、接続済み118役・候補5役。第2版の人物定義は204件（画像あり132・呼称のみ72）。
 
