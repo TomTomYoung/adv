@@ -32,8 +32,8 @@ export class EffectsRenderer {
     const a=element.animate(frames,{duration,iterations:1,easing,fill:'none'});this.animations.add(a);a.finished.catch(()=>{}).finally(()=>{this.animations.delete(a);clean();});
     return a;
   }
-  ghost(anchor){const g=this.layer(anchor.rect,'fx-ghost');const image=document.createElement('img');image.src=anchor.image;image.alt='';const style=anchor.element&&globalThis.getComputedStyle?.(anchor.element);if(style){image.style.objectFit=style.objectFit;image.style.objectPosition=style.objectPosition;image.style.borderRadius=style.borderRadius;}g.element.append(image);return g;}
-  hide(element){if(!element||element.tagName!=='IMG')return ()=>{};let entry=this.hidden.get(element);if(!entry){entry={count:0,visibility:element.style.visibility};this.hidden.set(element,entry);}entry.count++;element.style.visibility='hidden';let done=false;const clean=()=>{if(done)return;done=true;if(--entry.count===0){element.style.visibility=entry.visibility;this.hidden.delete(element);}this.cleanups.delete(clean);};this.cleanups.add(clean);return clean;}
+  ghost(anchor){const g=this.layer(anchor.rect,'fx-ghost');const canvas=anchor.element?.tagName==='CANVAS',image=document.createElement(canvas?'canvas':'img');if(canvas){image.width=anchor.element.width;image.height=anchor.element.height;image.getContext('2d').drawImage(anchor.element,0,0);}else{image.src=anchor.image;image.alt='';}const style=anchor.element&&globalThis.getComputedStyle?.(anchor.element);if(style){image.style.objectFit=style.objectFit;image.style.objectPosition=style.objectPosition;image.style.borderRadius=style.borderRadius;}g.element.append(image);return g;}
+  hide(element){if(!element||!['IMG','CANVAS'].includes(element.tagName))return ()=>{};let entry=this.hidden.get(element);if(!entry){entry={count:0,visibility:element.style.visibility};this.hidden.set(element,entry);}entry.count++;element.style.visibility='hidden';let done=false;const clean=()=>{if(done)return;done=true;if(--entry.count===0){element.style.visibility=entry.visibility;this.hidden.delete(element);}this.cleanups.delete(clean);};this.cleanups.add(clean);return clean;}
   tint(anchor,color,opacity,duration,shade=false){const g=this.layer(anchor.rect);g.element.style.background=shade?`radial-gradient(ellipse at center,transparent 20%,${color} 100%)`:color;this.animate(g.element,[{opacity:0},{opacity,offset:.3},{opacity:0}],duration,g.clean);}
   strike(anchor,track,duration,source){
     const size=Math.max(64,Math.min(180,Math.max(anchor.rect.width,anchor.rect.height)*.95));
@@ -43,13 +43,16 @@ export class EffectsRenderer {
     for(const part of parts){const e=document.createElement('div');e.className='fx-strike-piece';e.style.clipPath=part.shape;e.style.background=part.color;g.element.append(e);this.animate(e,part.frames,duration,()=>{if(--remaining===0)g.clean();});}
   }
   damage(target,mode){
-    if(!(target.damage>0)||mode==='off')return;
+    const tags=[target.missed?'回避':target.guarded?'防御':target.critical?'会心':target.weak?'弱点':target.resisted?'軽減':'',...(target.statusAdded??[]),...(target.statusRemoved??[]).map(s=>`${s}解除`)].filter(Boolean);
+    if(!(target.damage>0||target.healing>0||tags.length)||mode==='off')return;
     const a=this.anchor(target),width=100,height=32;
     // Keep numbers inside the viewport, including the top-row portraits on phones.
     const left=Math.max(0,Math.min((globalThis.innerWidth??Infinity)-width,a.rect.left+a.rect.width/2-width/2));
     const slots=this.numbers.get(target.key)??new Set();let slot=0;while(slots.has(slot))slot++;slots.add(slot);this.numbers.set(target.key,slots);
     const top=Math.max(4,a.rect.top+a.rect.height*.25)+slot*22;
-    const g=this.layer({left,top,width,height},'fx-damage');g.element.textContent=String(target.damage);
+    const g=this.layer({left,top,width,height},'fx-damage'+(target.healing>0?' fx-heal':'')+(target.critical?' fx-critical':''));
+    if(tags.length){const label=document.createElement('small');label.textContent=tags.join('・');g.element.append(label);}
+    if(target.damage>0||target.healing>0){const number=document.createElement('span');number.textContent=target.healing>0?`+${target.healing}`:String(target.damage);g.element.append(number);}
     let cleaned=false;
     const clean=()=>{if(cleaned)return;cleaned=true;g.clean();slots.delete(slot);if(!slots.size&&this.numbers.get(target.key)===slots)this.numbers.delete(target.key);this.cleanups.delete(clean);};this.cleanups.add(clean);
     const reduced=mode==='reduced'||this.media?.matches;
@@ -63,7 +66,7 @@ export class EffectsRenderer {
     if(mode==='reduced'||this.media?.matches){this.tint(anchor,'#dab47a',.1,220);return;}
     for(const track of effect.tracks){
       if(track.kind==='motion'){
-        if(!anchor.image&&target.key.startsWith('actor:')){this.tint(anchor,'#f5b567',.12,duration);continue;}
+        if(!anchor.image&&target.key.startsWith('actor:')){this.tint(anchor,'#f5b567',.12,duration);}
         this.motions.get(target.key)?.();
         const g=anchor.image?this.ghost(anchor):null,restore=g?this.hide(anchor.element):()=>{};
         let animation;
@@ -75,6 +78,14 @@ export class EffectsRenderer {
         const restore=this.hide(anchor.element);let remaining=2;
         const clips=track.axis==='diagonal'?['polygon(0 0,100% 0,0 100%)','polygon(100% 0,100% 100%,0 100%)']:['polygon(0 0,50% 0,50% 100%,0 100%)','polygon(50% 0,100% 0,100% 100%,50% 100%)'];
         for(let i=0;i<2;i++){const g=this.ghost(anchor),sign=i===0?-1:1;g.element.style.clipPath=clips[i];this.animate(g.element,[{transform:'translate(0,0) rotate(0deg)',opacity:1},{transform:`translate(${sign*track.distance}px,${track.axis==='diagonal'?sign*track.distance:0}px) rotate(${sign*track.rotate}deg)`,opacity:0}],duration,()=>{g.clean();if(--remaining===0)restore();});}
+      }else if(track.kind==='projectile'){
+        if(!source)continue;
+        const x=source.rect.left+source.rect.width/2,y=source.rect.top+source.rect.height/2;
+        const dx=anchor.rect.left+anchor.rect.width/2-x,dy=anchor.rect.top+anchor.rect.height/2-y;
+        const g=this.layer({left:x-18,top:y-2,width:36,height:4},'fx-projectile');
+        g.element.style.background=track.color;g.element.style.clipPath='polygon(0 25%,75% 25%,75% 0,100% 50%,75% 100%,75% 75%,0 75%)';
+        const angle=Math.atan2(dy,dx)*180/Math.PI;
+        this.animate(g.element,[{transform:`translate(0,0) rotate(${angle}deg)`,opacity:1},{transform:`translate(${dx}px,${dy}px) rotate(${angle}deg)`,opacity:1}],duration,g.clean);
       }else if(track.kind==='strike'){
         this.strike(anchor,track,duration,source);
       }else if(track.kind==='sprite'){
@@ -88,10 +99,12 @@ export class EffectsRenderer {
     const key=model.feedback?`${model.feedback.session}/${model.feedback.revision}`:null;if(key===this.key)return;this.key=key;
     for(const event of model.feedback?.events??[]){
       const play=()=>{
+        this.onEvent?.(event);
         const source=event.source?this.anchor(event.source):null;
         for(const target of event.targets){
-          for(const id of event.effects){const effect=model.effects[id];if(effect)this.play(effect,target,model.effectAssets,mode,source);}
-          this.damage(target,mode);
+          if(event.phase==='defeat')this.hide(this.anchor(target).element);
+          for(const id of event.effects){const effect=model.effects[id];if(effect&&!target.missed)this.play(effect,target,model.effectAssets,mode,source);}
+          if(!event.phase||event.phase==='impact')this.damage(target,mode);
         }
       };
       const delay=feedbackDelay(model.feedback,event.at);

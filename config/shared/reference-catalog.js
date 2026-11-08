@@ -30526,6 +30526,17 @@ export const referenceData={
       "file": "presentation.json",
       "path": [
         "cues",
+        "pierce",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_strike"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
         "fire",
         "effects",
         0
@@ -30564,6 +30575,17 @@ export const referenceData={
       ],
       "kind": "effects",
       "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "fire",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_cast"
     },
     {
       "file": "presentation.json",
@@ -30612,6 +30634,17 @@ export const referenceData={
       "file": "presentation.json",
       "path": [
         "cues",
+        "ice",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_cast"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
         "lightning",
         "effects",
         0
@@ -30655,6 +30688,17 @@ export const referenceData={
       "file": "presentation.json",
       "path": [
         "cues",
+        "lightning",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_cast"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
         "heal",
         "effects",
         0
@@ -30682,6 +30726,17 @@ export const referenceData={
       ],
       "kind": "effects",
       "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "heal",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_cast"
     },
     {
       "file": "presentation.json",
@@ -30735,6 +30790,17 @@ export const referenceData={
       ],
       "kind": "effects",
       "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "guard",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_cast"
     },
     {
       "file": "presentation.json",
@@ -30835,6 +30901,17 @@ export const referenceData={
       "file": "presentation.json",
       "path": [
         "cues",
+        "mana",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_cast"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
         "encounter",
         "effects",
         0
@@ -30899,6 +30976,17 @@ export const referenceData={
       "file": "presentation.json",
       "path": [
         "cues",
+        "attack",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_strike"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
         "power",
         "effects",
         0
@@ -30937,6 +31025,17 @@ export const referenceData={
       ],
       "kind": "effects",
       "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "power",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_strike"
     },
     {
       "file": "presentation.json",
@@ -30985,6 +31084,17 @@ export const referenceData={
       "file": "presentation.json",
       "path": [
         "cues",
+        "venom",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_strike"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
         "cut",
         "effects",
         0
@@ -31023,6 +31133,17 @@ export const referenceData={
       ],
       "kind": "effects",
       "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "cut",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_strike"
     },
     {
       "file": "presentation.json",
@@ -31071,6 +31192,17 @@ export const referenceData={
       "file": "presentation.json",
       "path": [
         "cues",
+        "roll",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_strike"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
         "drain",
         "effects",
         0
@@ -31114,6 +31246,17 @@ export const referenceData={
       "file": "presentation.json",
       "path": [
         "cues",
+        "drain",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_cast"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
         "cleanse",
         "effects",
         0
@@ -31152,6 +31295,17 @@ export const referenceData={
       ],
       "kind": "effects",
       "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "cleanse",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_cast"
     },
     {
       "file": "presentation.json",
@@ -31236,6 +31390,71 @@ export const referenceData={
       ],
       "kind": "sounds",
       "id": "se_complete"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "bow_attack",
+        "effects",
+        0
+      ],
+      "kind": "effects",
+      "id": "strike_pierce"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "bow_attack",
+        "effects",
+        1
+      ],
+      "kind": "effects",
+      "id": "recoil_pierce"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "bow_attack",
+        "sound"
+      ],
+      "kind": "sounds",
+      "id": "se_pierce"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "bow_attack",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "bow_attack",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_cast"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "bow_attack",
+        "battle",
+        "projectile"
+      ],
+      "kind": "effects",
+      "id": "arrow_flight"
     },
     {
       "file": "presentation.json",
@@ -31856,6 +32075,96 @@ export const referenceData={
       ],
       "kind": "cues",
       "id": "item"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "bindings",
+        "weapons",
+        "sword"
+      ],
+      "kind": "cues",
+      "id": "attack"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "bindings",
+        "weapons",
+        "dagger"
+      ],
+      "kind": "cues",
+      "id": "pierce"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "bindings",
+        "weapons",
+        "axe"
+      ],
+      "kind": "cues",
+      "id": "power"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "bindings",
+        "weapons",
+        "spear"
+      ],
+      "kind": "cues",
+      "id": "pierce"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "bindings",
+        "weapons",
+        "bow"
+      ],
+      "kind": "cues",
+      "id": "bow_attack"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "bindings",
+        "weapons",
+        "fist"
+      ],
+      "kind": "cues",
+      "id": "power"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "bindings",
+        "weapons",
+        "staff"
+      ],
+      "kind": "cues",
+      "id": "power"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "bindings",
+        "weapons",
+        "tool"
+      ],
+      "kind": "cues",
+      "id": "power"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "bindings",
+        "weapons",
+        "instrument"
+      ],
+      "kind": "cues",
+      "id": "power"
     },
     {
       "file": "terrain-content.json",
@@ -43321,6 +43630,15 @@ export const referenceData={
       },
       "enemy_advance": {
         "name": "敵の引きと踏み込み"
+      },
+      "actor_strike": {
+        "name": "味方の踏み込み"
+      },
+      "actor_cast": {
+        "name": "詠唱と支援の発光"
+      },
+      "arrow_flight": {
+        "name": "矢の飛翔"
       }
     },
     "sounds": {
@@ -46296,6 +46614,9 @@ export const referenceData={
       },
       "level_up": {
         "name": "level_up"
+      },
+      "bow_attack": {
+        "name": "bow_attack"
       }
     },
     "eventCues": {
@@ -71076,6 +71397,27 @@ export const referenceData={
         "enemy_advance"
       ]
     },
+    "effects/actor_strike": {
+      "file": "presentation.json",
+      "path": [
+        "effects",
+        "actor_strike"
+      ]
+    },
+    "effects/actor_cast": {
+      "file": "presentation.json",
+      "path": [
+        "effects",
+        "actor_cast"
+      ]
+    },
+    "effects/arrow_flight": {
+      "file": "presentation.json",
+      "path": [
+        "effects",
+        "arrow_flight"
+      ]
+    },
     "cues/step": {
       "file": "presentation.json",
       "path": [
@@ -71347,6 +71689,13 @@ export const referenceData={
       "path": [
         "cues",
         "level_up"
+      ]
+    },
+    "cues/bow_attack": {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "bow_attack"
       ]
     },
     "items/blasting_charge": {

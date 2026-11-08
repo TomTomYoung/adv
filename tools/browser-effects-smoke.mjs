@@ -27,9 +27,9 @@ try{
     const {loadContent}=await import('./src/core/loader.js'),{GameEngine}=await import('./src/core/engine.js'),{projectGame}=await import('./src/application/projection.js');
     const {SceneView}=await import('./src/view/scene-view.js'),{GameView}=await import('./src/view/view.js'),{GameAudio}=await import('./src/application/audio.js');
     const {applyTheme,THEME_DEFAULT}=await import('./src/view/theme.js');applyTheme(THEME_DEFAULT);const data=await loadContent();
-    window.setup=async({actor='ada',mode='full',layout='scene',kill=false}={})=>{
+    window.setup=async({actor='ada',mode='full',layout='scene',kill=false,battleMode='classic'}={})=>{
       window.view?.destroy();window.sound?.stopEffects();const g=new GameEngine(data,42);while(g.state.waiting?.type==='text')g.dispatch({type:'advance'});
-      g.state.members=[actor];g.state.partyFormation=nextFormation(g.state.members,g.state.partyFormation);g.dispatch({type:'travel',dungeon:'kagaribi'});g.startBattle(kill?'wild_waterwheel_beaver':'wild_pair_1',{win:[],lose:[],escape:[]});
+      g.state.members=[actor];g.state.partyFormation=nextFormation(g.state.members,g.state.partyFormation);g.dispatch({type:'travel',dungeon:'kagaribi'});g.startBattle(kill?'wild_waterwheel_beaver':'wild_pair_1',{win:[],lose:[],escape:[]},{battleMode});
       if(kill)g.state.battle.enemies[0].hp=1;
       const marks=[],voices=[],root=document.querySelector('#app');root.dataset.view=layout;
       const sound=new GameAudio({createAudio:url=>({paused:true,volume:0,pause(){this.paused=true;},addEventListener(){},play(){this.paused=false;voices.push({url,at:performance.now()});return Promise.resolve();}})});sound.configure(true,1,1);
@@ -42,7 +42,7 @@ try{
       await document.fonts.ready;await Promise.all([...document.images].map(i=>i.decode().catch(()=>{})));await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
       marks.length=0;voices.length=0;
     };
-    window.freeze=()=>{for(const a of document.getAnimations())a.pause();for(const timer of view.effects.timers)clearTimeout(timer);view.effects.timers.clear();};
+    window.freeze=()=>{clearTimeout(view.playback.active?.timer);for(const a of document.getAnimations())a.pause();for(const timer of view.effects.timers)clearTimeout(timer);view.effects.timers.clear();};
   });
   for(const [skill,actor,pattern] of [['attack','ada','slash'],['power','ada','blunt'],['pierce','luka','pierce']]){
     await page.evaluate(options=>setup(options),{actor});
@@ -56,10 +56,28 @@ try{
       assert.ok(held);assert.equal(held[0],held[1]);
     }
   }
+  for(const battleMode of ['classic','grid','frontline']){
+    for(const layout of ['scene','classic']){
+      await page.evaluate(options=>setup(options),{battleMode,layout});
+      if(battleMode==='frontline')await page.waitForFunction(()=>document.querySelector('.frontline-stage')?.dataset.ready==='true');
+      const observed=await page.evaluate(async()=>{
+        const key='enemy:enemy_0',read=()=>[...document.querySelectorAll('[data-battle-vitals]')].find(n=>n.dataset.battleVitals===key&&n.dataset.vitalsKind==='text').textContent;
+        const before=read(),hp=g.state.battle.enemies[0].hp;
+        dispatch({type:'battle',action:'skill',skill:'attack',target:'enemy_0'});
+        const saved=g.save(),early=read(),active=Boolean(view.playback.active);
+        await new Promise(r=>setTimeout(r,175));
+        const hit=last.feedback.events.find(e=>e.phase==='impact');
+        const impacted=read();view.playback.finish();
+        return {before,early,active,impacted,after:hit.targets[0].hpAfter,hp,unchanged:saved===g.save(),restored:!view.playback.active&&!document.querySelector('#app>[inert]')};
+      });
+      assert.equal(observed.early,observed.before);assert.ok(observed.active);assert.ok(observed.impacted.includes(String(observed.after)));assert.ok(observed.after<observed.hp);assert.ok(observed.unchanged&&observed.restored);
+    }
+  }
+  checks.push('impact-aligned HP and skip without duplicate actions in all three battle modes and both views');
   checks.push('real engine attacks: three distinct physical patterns; sound adapter and damage/impact within 50ms; 50ms heavy hold; animation never changes saved game');
   for(const width of [1280,390]){
     await page.setViewportSize({width,height:856});await page.evaluate(()=>setup());
-    await page.evaluate(async()=>{dispatch({type:'battle',action:'skill',skill:'guard',target:'ada'});const event=last.feedback.events.find(e=>e.source?.key.startsWith('enemy:'));await new Promise(r=>setTimeout(r,event.at+30));freeze();});
+    await page.evaluate(async()=>{dispatch({type:'battle',action:'skill',skill:'guard',target:'ada'});const event=last.feedback.events.find(e=>e.phase==='impact'&&e.source?.key.startsWith('enemy:'));await new Promise(r=>setTimeout(r,event.at+30));freeze();});
     assert.ok(await page.locator('.fx-damage').count());
     const anchored=await page.evaluate(()=>{const a=view.effects.anchor({key:'actor:ada'}),n=document.querySelector('.fx-damage').getBoundingClientRect();return {width:a.rect.width,top:a.rect.top,numberTop:n.top,fallback:Boolean(a.element?.dataset.fxFallback)};});
     assert.ok(anchored.width>0);assert.ok(Math.abs(anchored.numberTop-anchored.top)<100);assert.equal(anchored.fallback,width===390);
@@ -67,6 +85,16 @@ try{
     await page.evaluate(()=>render());assert.equal(await page.locator('.fx-overlay').count(),0);
   }
   checks.push('enemy anticipation and incoming damage in desktop and mobile layouts; hidden phone portraits fall back to visible cards; redraw removes overlays');
+  await page.setViewportSize({width:1280,height:856});
+  await page.evaluate(()=>setup({actor:'nio'}));
+  await page.evaluate(async()=>{
+    const bow=Object.values(g.data.items).find(i=>i.equipmentType==='bow');g.state.actors.nio.equipment.weapon=bow.id;
+    dispatch({type:'battle',action:'skill',skill:'attack',target:'enemy_0'});await new Promise(r=>setTimeout(r,60));freeze();
+  });
+  assert.equal(await page.locator('.fx-projectile').count(),1);await page.screenshot({path:path.join(output,'bow-flight.png')});
+  await page.evaluate(()=>setup({battleMode:'frontline'}));await page.waitForFunction(()=>document.querySelector('.frontline-stage')?.dataset.ready==='true');
+  await page.evaluate(async()=>{dispatch({type:'battle',action:'skill',skill:'attack',target:'enemy_0'});await new Promise(r=>setTimeout(r,175));freeze();});
+  assert.ok(await page.locator('.fx-ghost canvas').count());await page.screenshot({path:path.join(output,'frontline-hit.png')});
   await page.setViewportSize({width:1280,height:856});
   for(const mode of ['reduced','off']){
     await page.evaluate(mode=>setup({mode}),mode);
@@ -81,7 +109,7 @@ try{
   assert.equal(await page.locator('.fx-strike-slash').count(),1);await page.screenshot({path:path.join(output,'classic-hit.png')});
   await page.evaluate(()=>setup({kill:true}));
   await page.evaluate(async()=>{dispatch({type:'battle',action:'skill',skill:'attack',target:'enemy_0'});await new Promise(r=>setTimeout(r,175));freeze();});
-  assert.equal(await page.evaluate(()=>g.state.battle),null);assert.equal(await page.locator('.fx-strike-slash').count(),1);assert.equal(await page.locator('.fx-damage').count(),1);
+  assert.equal(await page.evaluate(()=>g.state.battle),null);assert.ok(await page.evaluate(()=>view.model.battle));assert.equal(await page.locator('.fx-strike-slash').count(),1);assert.equal(await page.locator('.fx-damage').count(),1);
   await page.evaluate(()=>setup());
   await page.evaluate(async()=>{dispatch({type:'battle',action:'skill',skill:'attack',target:'enemy_0'});render();await new Promise(r=>setTimeout(r,950));});
   assert.equal(await page.locator('.fx-overlay').count(),0);

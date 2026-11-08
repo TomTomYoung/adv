@@ -9,19 +9,23 @@ export function describeTarget(engine,key='scene'){
   if(kind==='enemy'){const e=engine.state.battle?.enemies.find(e=>e.instance===id);return {key,image:e?.sprite,label:e?.name};}
   return {key};
 }
-export function emitFeedback(engine,{effects=[],sound=null,targets=['scene'],source,at=engine.feedback.clock,gain=1}){
+export function emitFeedback(engine,{effects=[],sound=null,targets=['scene'],source,at=engine.feedback.clock,gain=1,phase,action}){
   const f=engine.feedback;if(f.events.length>=64)throw Error('一度の演出数が多すぎます');
-  f.events.push({effects:[...effects],sound,targets:targets.map(t=>describeTarget(engine,t)),...(source?{source:describeTarget(engine,source)}:{}),at:Math.min(5000,Math.max(0,at)),gain});
+  f.events.push({effects:[...effects],sound,targets:targets.map(t=>describeTarget(engine,t)),...(source?{source:describeTarget(engine,source)}:{}),...(phase?{phase}:{}),...(action?{action}:{}),at:Math.min(5000,Math.max(0,at)),gain});
 }
 // Battle results are already resolved. This schedules presentation only; no waits or RNG.
-export function playBattleCue(engine,id,source,targets,hostile=false){
+export function playBattleCue(engine,id,source,targets,hostile=false,action){
   const cue=engine.data.presentation?.cues[id];if(!cue)return;
   const start=engine.feedback.clock,impact=start+(cue.battle?.impact??0);
-  if(hostile&&source.key.startsWith('enemy:')&&cue.battle?.anticipation){
-    emitFeedback(engine,{effects:[cue.battle.anticipation],targets:[source],at:start});
+  if(cue.battle?.anticipation){
+    emitFeedback(engine,{effects:[source.key.startsWith('actor:')?(cue.battle.actorAnticipation??'actor_strike'):cue.battle.anticipation],targets:[source],source:targets[0],at:start,phase:'windup',action});
   }
-  emitFeedback(engine,{effects:cue.effects,sound:cue.sound,source,targets,at:impact});
-  engine.feedback.clock=Math.min(5000,impact+(cue.gap??0));
+  if(cue.battle?.projectile)emitFeedback(engine,{effects:[cue.battle.projectile],source,targets,at:start,phase:'flight'});
+  const missed=targets.length>0&&targets.every(t=>t.missed),guarded=targets.length>0&&targets.every(t=>t.guarded&&!(t.healing>0));
+  emitFeedback(engine,{effects:missed?[]:cue.effects,sound:missed?null:guarded?'se_guard':cue.sound,source,targets,at:impact,phase:'impact',action});
+  const defeated=targets.filter(t=>t.defeated);
+  if(defeated.length)emitFeedback(engine,{effects:['fade_out'],sound:'se_bump',gain:.55,targets:defeated,at:impact+160,phase:'defeat'});
+  engine.feedback.clock=Math.min(5000,impact+Math.max(cue.gap??0,defeated.length?420:0));
 }
 export function playCue(engine,id,targets){
   const cue=engine.data.presentation?.cues[id];if(!cue)return;

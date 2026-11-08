@@ -18,20 +18,21 @@ test('view and audio delays share the render origin and never schedule in the pa
 test('one impact carries sound, recoil and the resolved damage; enemy advance precedes its own hit',()=>{
   const g=battle(),before=g.state.battle.enemies[0].hp;
   g.dispatch({type:'battle',action:'skill',skill:'attack',target:'enemy_0'});
-  const [hit,advance,enemyHit]=g.feedback.events;
+  const [windup,hit,advance,enemyHit]=g.feedback.events;
+  assert.equal(windup.phase,"windup");assert.equal(windup.at,0);assert.equal(windup.targets[0].key,"actor:ada");
   assert.equal(hit.at,130);assert.equal(hit.sound,'se_slash');assert.deepEqual(hit.effects,['strike_slash','recoil_slash']);
   assert.equal(hit.targets[0].damage,before-g.state.battle.enemies[0].hp);assert.equal(hit.source.key,'actor:ada');
   assert.deepEqual(advance.effects,['enemy_advance']);assert.equal(enemyHit.at-advance.at,130);
   assert.equal(advance.targets[0].key,enemyHit.source.key);assert.equal(enemyHit.targets[0].key,'actor:ada');assert.ok(enemyHit.targets[0].damage>0);
   const projected=projectGame(g).feedback.events;
-  assert.ok(projected[2].source.image.startsWith('assets/'));projected[0].targets[0].damage=9999;assert.notEqual(hit.targets[0].damage,9999);
+  assert.ok(projected[3].source.image.startsWith('assets/'));projected[1].targets[0].damage=9999;assert.notEqual(hit.targets[0].damage,9999);
 });
 
 test('all-target enemy attacks use one sound and one anticipation with each target damage, healing has no damage number',()=>{
   const g=battle();g.state.members=['ada','sera'];g.state.partyFormation=nextFormation(g.state.members,g.state.partyFormation);g.state.battle.acted=['sera'];
   for(const e of g.state.battle.enemies)e.ai=[{priority:1,skill:'bone_rain',target:'weakest'}];
   g.dispatch({type:'battle',action:'skill',skill:'attack',target:'enemy_0'});
-  const hits=g.feedback.events.filter(e=>e.source?.key.startsWith('enemy:'));
+  const hits=g.feedback.events.filter(e=>e.phase==='impact'&&e.source?.key.startsWith('enemy:'));
   assert.equal(hits.length,2);assert.equal(g.feedback.events.filter(e=>e.effects.includes('enemy_advance')).length,2);
   for(const hit of hits){assert.equal(hit.sound,'se_heavy');assert.equal(hit.targets.length,2);assert.ok(hit.targets.every(t=>t.damage>0));}
   const h=newGame();h.state.members=['toma','dora'];h.state.partyFormation=nextFormation(h.state.members,h.state.partyFormation);h.startBattle('wild_pair_1',{win:[],lose:[],escape:[]});h.dispatch({type:'battle',action:'skill',skill:'group_heal'});
@@ -42,7 +43,7 @@ test('cover redirects the displayed hit to the defender, and overkill preserves 
   const g=battle();g.state.members=['ada','sera'];g.state.partyFormation=nextFormation(g.state.members,g.state.partyFormation);g.state.actors.sera.hp=1;g.state.battle.acted=['sera'];
   g.state.battle.covers=[{target:'actor:sera',sourceActor:'ada',remaining:1}];
   g.dispatch({type:'battle',action:'skill',skill:'guard',target:'ada'});
-  assert.ok(g.feedback.events.filter(e=>e.source?.key.startsWith('enemy:')).every(e=>e.targets[0].key==='actor:ada'));
+  assert.ok(g.feedback.events.filter(e=>e.phase==='impact'&&e.source?.key.startsWith('enemy:')).every(e=>e.targets[0].key==='actor:ada'));
   const h=newGame();h.startBattle('wild_waterwheel_beaver',{win:[],lose:[],escape:[]});h.state.battle.enemies[0].hp=1;
   h.dispatch({type:'battle',action:'skill',skill:'attack',target:'enemy_0'});
   const hit=h.feedback.events.find(e=>e.targets[0]?.damage);assert.ok(hit.targets[0].damage>1);assert.equal(hit.targets[0].image,'monster_waterwheel_beaver');assert.equal(h.state.battle,null);

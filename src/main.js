@@ -32,7 +32,7 @@ function syncSystemPlacement(){
   statusElement.style.setProperty('--scene-status-left',`${left}px`);statusElement.style.setProperty('--scene-status-bottom',`${Math.max(8,innerHeight-r.bottom+12)}px`);statusElement.style.setProperty('--scene-status-width',`${r.width-24}px`);
 }
 function closeButton(){dialog.append(btn(systemControls.parent?'戻る':'閉じる',()=>systemControls.back()));dialog.lastChild.className='modal-close';systemControls.finish();}
-function syncAudio(){sound.configure(settings.sound,settings.volume,settings.seVolume);sound.sync(lastModel);}
+function syncAudio(){sound.configure(settings.sound,settings.volume,settings.seVolume);sound.sync({...lastModel,music:view?.playback.active?view.model.music:lastModel.music});}
 function toggleSound(){
   if(settings.sound&&['blocked','error'].includes(sound.state))sound.retry();
   else{settings.sound=!settings.sound;syncAudio();}
@@ -40,7 +40,7 @@ function toggleSound(){
   if(settings.sound)status('探索・戦闘BGMを再生します。音量は「記録」で調整できます。');
 }
 const presentationClock=new PresentationClock(intent=>dispatch(intent));
-function syncPresentationClock(){presentationClock.sync(lastModel?.presentationWait,dialog.open||document.hidden||editionActionPending||Boolean(editionSession?.busy));}
+function syncPresentationClock(){presentationClock.sync(lastModel?.presentationWait,dialog.open||document.hidden||Boolean(view?.playback.active)||editionActionPending||Boolean(editionSession?.busy));}
 function render(){lastModel=projectGame(engine);lastModel.feedback.startedAt=performance.now();view.render(lastModel);syncSystemPlacement();syncAudio();syncPresentationClock();}
 function dispatch(intent){
   if(editionActionPending||editionSession?.busy)return false;
@@ -109,7 +109,7 @@ function help(){modal('遊び方');for(const paragraph of [
  '8. 各地域の第10依頼は同地域3件完了で解放。最終依頼「百の帰還」は他の99件完了で解放されます。依頼によって結末の数と条件が異なります。'
 ])dialog.append(make('p',paragraph));closeButton();}
 
-const viewUi={menu,help,status,keyHint:exploring=>inputHint(settings.keyBindings.bindings,exploring),modalOpen:()=>dialog.open,layoutChanged:syncSystemPlacement,cancelFeedback:()=>sound.stopEffects(),effectsMode:()=>settings.effects,soundEnabled:()=>settings.sound,soundLabel:()=>sound.label(),sound:toggleSound};
+const viewUi={menu,help,status,feedbackFinished:()=>{syncAudio();syncPresentationClock();},keyHint:exploring=>inputHint(settings.keyBindings.bindings,exploring),modalOpen:()=>dialog.open,layoutChanged:syncSystemPlacement,cancelFeedback:()=>sound.stopEffects(),effectsMode:()=>settings.effects,soundEnabled:()=>settings.sound,soundLabel:()=>sound.label(),sound:toggleSound};
 try{
   const savedSettings=storageRead('settings');if(savedSettings){try{const parsed=JSON.parse(savedSettings);const keys=readKeyConfig(parsed.keyBindings);settings.keyBindings=keys.config;if(keys.recovered)status('保存済みのキー設定が不正なため、初期値へ戻しました。');settings.sound=parsed.sound===true;settings.seVolume=Number.isFinite(parsed.seVolume)?Math.max(0,Math.min(1,parsed.seVolume)):.8;settings.effects=['full','reduced','off'].includes(parsed.effects)?parsed.effects:'full';settings.volume=Number.isFinite(parsed.volume)?Math.max(0,Math.min(1,parsed.volume)):.5;settings.theme=applyTheme(parsed.theme??THEME_DEFAULT);}catch{applyTheme(THEME_DEFAULT);}}else applyTheme(THEME_DEFAULT);
   if(savedSettings){try{settings.viewLayout=normalizeLayout(JSON.parse(savedSettings).viewLayout);}catch{settings.viewLayout='scene';}}

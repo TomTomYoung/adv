@@ -1,3 +1,4 @@
+import {BattlePlayback,battleVitals} from './battle-playback.js';
 import {renderSkillShop,renderSupplyShop} from './expedition-view.js';
 import {frontlineScene,renderFrontlineControls} from './battle-frontline.js';
 import {gridScene,renderGridControls} from './battle-grid.js';
@@ -16,10 +17,10 @@ const button=(text,callback,className='',disabled=false)=>{const b=node('button'
 const heading=(kicker,title)=>{const e=node('div','section-heading');e.append(node('span','eyebrow',kicker),node('h2','',title));return e;};
 const meter=(value,max,className)=>{const e=node('div',`meter ${className}`),fill=node('span');fill.style.width=`${Math.max(0,Math.min(100,value/max*100))}%`;e.append(fill);e.setAttribute('role','meter');e.setAttribute('aria-valuenow',value);e.setAttribute('aria-valuemin',0);e.setAttribute('aria-valuemax',max);return e;};
 export class GameView {
-  constructor(root,dispatch,ui){this.bagActor=null;this.root=root;this.effects=new EffectsRenderer(root);this.castRenderer=new SceneCastRenderer();this.dispatch=dispatch;this.ui=ui;this.tab='location';this.dungeonFilter='all';this.query='';this.filter='open';this.selectedTarget=null;this.selectedAlly=null;}
-  destroy(){this.closeMap({restore:false});this.effects.destroy();this.castRenderer.destroy();}
+  constructor(root,dispatch,ui){this.bagActor=null;this.root=root;this.effects=new EffectsRenderer(root);this.playback=new BattlePlayback(this);this.castRenderer=new SceneCastRenderer();this.dispatch=dispatch;this.ui=ui;this.tab='location';this.dungeonFilter='all';this.query='';this.filter='open';this.selectedTarget=null;this.selectedAlly=null;}
+  destroy(){this.playback.cancel();this.closeMap({restore:false});this.effects.destroy();this.castRenderer.destroy();}
   advanceText(){this.act({type:'advance'});}
-  blocksGameInput(){return Boolean(this.mapOverlay);}
+  blocksGameInput(){return Boolean(this.playback.active||this.mapOverlay);}
   openMap(){
     if(this.mapOverlay||!this.model?.dungeon)return;
     this.mapReturnFocus=captureFocus(this.root);
@@ -52,6 +53,7 @@ export class GameView {
   resumeExploration(){this.tabNavigation=false;if(!this.explorationInput())return false;focusButton(this.explorationDefault());return true;}
   keyHint(){const exploring=this.explorationInput();return this.ui.keyHint?.(exploring)??inputHint(undefined,exploring);}
   inputScope(){
+    if(this.playback.active)return this.playback.active.bar;
     const expanded=this.mapOverlay?.querySelector('.map-dialog');if(expanded)return expanded;
     const inventory=this.root.querySelector('.inventory-choice');if(inventory&&!inventory.classList.contains('shop-recipients'))return inventory;
     const panel=this.root.querySelector('.scene-window');
@@ -75,6 +77,7 @@ export class GameView {
   openCharacter(id){this.profileActor=id;this.profilePage='overview';this.inventoryAction=null;this.tab='profile';this.render(this.model);}
   closePanel(){this.inventoryAction=null;this.tab=this.model.mode==='town'?'location':'explore';this.render(this.model);}
   cancel(){
+    if(this.playback.active){this.playback.finish();return;}
     if(this.mapOverlay){this.closeMap();return;}
     if(this.tab==='party'&&this.frontlineFormationOpen){this.frontlineFormationOpen=false;this.render(this.model);return;}
     if(this.tab==='party'&&this.formationOpen){if(this.formationActor)this.formationActor=null;else this.formationOpen=false;this.render(this.model);return;}
@@ -94,8 +97,9 @@ export class GameView {
     else if(!this.model.busy&&this.model.town?.exit)this.act(this.model.town.exit.intent);
     else if(!this.resumeExploration())focusButton(buttons(this.inputScope())[0]);
   }
-  act(intent){const accepted=this.dispatch(intent);if(accepted===false)this.ui.status(this.model?.notice||'現在はその操作を行えません。条件や隊の状態を確認してください。');}
+  act(intent){if(this.playback.active){this.playback.finish();return;}const accepted=this.dispatch(intent);if(accepted===false)this.ui.status(this.model?.notice||'現在はその操作を行えません。条件や隊の状態を確認してください。');}
   render(model){
+    model=this.playback.resolve(model);if(this.playback.present(model))return;
     this.closeMap({restore:false});
     const snapshot=captureFocus(this.root);this.ui.cancelFeedback?.();this.effects.capture();this.model=model;
     this.root.replaceChildren();
@@ -211,7 +215,7 @@ export class GameView {
     if(m.dungeon){const direction=node('span','compass',({north:'N 北',east:'E 東',south:'S 南',west:'W 西'})[m.dungeon.location.facing]);scene.append(direction);}
     if(m.battle?.frontline)frontlineScene(this,scene,m);
     else if(m.battle?.grid)gridScene(this,scene,m);
-    else if(m.battle){const enemies=node('div','enemy-line');for(const e of m.battle.enemies){if(e.hp<=0)continue;const b=button('',()=>{this.selectedTarget=e.id;this.render(m);},`enemy ${this.selectedTarget===e.id?'selected':''}`);b.setAttribute('aria-label',`${e.name}を狙う、HP${e.hp}/${e.maxHp}`);const image=node('img');image.src=e.sprite;image.alt=e.name;image.dataset.fx=`enemy:${e.id}`;b.append(image,node('span','enemy-name',e.name),meter(e.hp,e.maxHp,'enemy-meter'),node('span','enemy-hp',`${e.hp} / ${e.maxHp}${e.guarded?'・防御中':''}${e.statuses.length?'・'+e.statuses.join('・'):''}${buffLabels(e).length?'・'+buffLabels(e).join(' / '):''}`));enemies.append(b);}scene.append(enemies);}
+    else if(m.battle){const enemies=node('div','enemy-line');for(const e of m.battle.enemies){if(e.hp<=0)continue;const b=button('',()=>{this.selectedTarget=e.id;this.render(m);},`enemy ${this.selectedTarget===e.id?'selected':''}`);b.setAttribute('aria-label',`${e.name}を狙う、HP${e.hp}/${e.maxHp}`);const image=node('img');image.src=e.sprite;image.alt=e.name;image.dataset.fx=`enemy:${e.id}`;b.append(image,node('span','enemy-name',e.name),battleVitals(meter(e.hp,e.maxHp,'enemy-meter'),`enemy:${e.id}`,e,'meter'),battleVitals(node('span','enemy-hp',`${e.hp} / ${e.maxHp}${e.guarded?'・防御中':''}${e.statuses.length?'・'+e.statuses.join('・'):''}${buffLabels(e).length?'・'+buffLabels(e).join(' / '):''}`),`enemy:${e.id}`,e));enemies.append(b);}scene.append(enemies);}
     for(const layer of m.atmosphere??[]){if(!layer.opacity||!layer.lighting&&(this.ui.effectsMode?.()??'full')==='off')continue;const shade=node('div','field-atmosphere');shade.setAttribute('aria-hidden','true');shade.style.opacity=String(layer.opacity);shade.style.background=layer.shade?`radial-gradient(ellipse at center,transparent 20%,${layer.color} 100%)`:layer.color;scene.append(shade);}
     parent.append(scene);if(m.dungeon)requestAnimationFrame(()=>paintDungeon(canvas,m.dungeon,m.battle));
   }
@@ -255,6 +259,12 @@ export class GameView {
     if(turn!==this.battleTurn){this.pendingBattleAction=null;this.battleMenu=null;this.gridChoice=null;this.battleTurn=turn;}
     this.scene(parent,m);if(m.battle.event&&m.dialog){this.dialog(parent,m.dialog);return;}
     const section=node('div','battle-panel'),commands=node('section','battle-commands');commands.setAttribute('aria-label','戦闘コマンド');
+    if(m.battle.grid||m.battle.frontline){
+      const vitals=node('div','battle-enemy-vitals');
+      for(const e of m.battle.enemies.filter(e=>e.hp>0)){
+        const card=node('div');card.append(node('span','',e.name),battleVitals(node('span','',`HP ${e.hp}/${e.maxHp}`),`enemy:${e.id}`,e),battleVitals(meter(e.hp,e.maxHp,'enemy-meter'),`enemy:${e.id}`,e,'meter'));vitals.append(card);
+      }section.append(vitals);
+    }
     commands.append(node('h2','battle-actor',`${m.battle.actorName} の行動`));section.append(commands);
     if(m.battle.preemptive)commands.append(node('p','battle-preemptive',`${m.battle.preemptive.side==='allies'?'味方':'敵'}の先制　残り${m.battle.preemptive.remaining}回`));
     const chooseAction=(action,id,target,name,focus)=>{
@@ -319,7 +329,7 @@ export class GameView {
     for(const entry of [...m.journal].reverse()){const row=node('article','journal-entry');row.append(node('span','eyebrow',entry.type==='evidence'?'手掛かり':'決着'),node('h3','',entry.title),node('p','',entry.text));section.append(row);}parent.append(section);
   }
   sidebar(parent,m){
-    const party=node('section','side-section');party.append(node('span','eyebrow','冒険者の隊'));for(const a of m.party){const row=m.mode==='town'?button('',()=>this.openCharacter(a.id),`party-row ${a.hp<=0?'fallen':''}`):node('div',`party-row ${a.hp<=0?'fallen':''}`);row.dataset.focus=`character:${a.id}`;row.dataset.fxFallback=`actor:${a.id}`;const avatar=this.portrait(a,'actor-symbol actor-thumb');const body=node('div','party-body');body.append(node('div','party-name',`${a.name} Lv.${a.level}　${a.class}${a.statuses.length?' / '+a.statuses.join('・'):''}${buffLabels(a).length?' / '+buffLabels(a).join('・'):''}`),node('div','party-values',`HP ${a.hp}/${a.maxHp}　MP ${a.mp}/${a.maxMp}`),meter(a.hp,a.maxHp,'hp'),meter(a.mp,a.maxMp,'mp'));row.append(avatar,body);party.append(row);}parent.append(party);
+    const party=node('section','side-section');party.append(node('span','eyebrow','冒険者の隊'));for(const a of m.party){const row=m.mode==='town'?button('',()=>this.openCharacter(a.id),`party-row ${a.hp<=0?'fallen':''}`):node('div',`party-row ${a.hp<=0?'fallen':''}`);row.dataset.focus=`character:${a.id}`;row.dataset.fxFallback=`actor:${a.id}`;const avatar=this.portrait(a,'actor-symbol actor-thumb');const body=node('div','party-body');body.append(node('div','party-name',`${a.name} Lv.${a.level}　${a.class}${a.statuses.length?' / '+a.statuses.join('・'):''}${buffLabels(a).length?' / '+buffLabels(a).join('・'):''}`),battleVitals(node('div','party-values',`HP ${a.hp}/${a.maxHp}　MP ${a.mp}/${a.maxMp}`),`actor:${a.id}`,a,'text',true),battleVitals(meter(a.hp,a.maxHp,'hp'),`actor:${a.id}`,a,'meter'),meter(a.mp,a.maxMp,'mp'));row.append(avatar,body);party.append(row);}parent.append(party);
     if(m.dungeon)parent.append(mapSection(m,{onExpand:()=>this.openMap()}));
     if(m.tracked){const tracked=node('section','side-section tracked-note');tracked.append(node('span','eyebrow','メインクエスト'),node('h3','',m.tracked.title),node('p','muted',m.tracked.brief));this.questDestination(tracked,m.tracked);parent.append(tracked);}
     else if(m.mode==='town'){const note=node('section','side-section');note.append(node('span','eyebrow','はじめの依頼'),node('h3','','帰らない灯番'),node('p','muted','組合で依頼を受け、篝火の迷宮へ向かってください。位置はメインクエスト欄に記されます。剣だけでなく、観察で選べる道が増えます。'));parent.append(note);}

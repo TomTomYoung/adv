@@ -14,6 +14,7 @@ try{
   await page.goto(base+'/battle-tester.html');
   const synced=()=>page.waitForFunction(()=>{const s=window.battleTester?.engineSync;return s?.ready&&s.loaded===s.request&&s.loaded>0;});await synced();
   const frame=page.frames().find(f=>f.url().includes('battle-engine-playtest.html'));
+  await frame.selectOption('#effects','off'); // These cases inspect state/layout; timing is covered by browser-effects-smoke.
   await frame.waitForFunction(()=>window.battlePlaytest?.engine.state.battle);
   assert.equal(await frame.evaluate(()=>battlePlaytest.engine.state.battle.manualTurns),undefined);
   assert.equal(await page.evaluate(()=>battleTester.engine.state.battle.manualTurns),true);
