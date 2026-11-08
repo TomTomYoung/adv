@@ -173,7 +173,9 @@ PRの差分はmerge-baseからHEADまでを判定します。直前コミット�
 
 **検査**: `browser-oddland-smoke.mjs` でborder、pilgrimage roads、complete questsを両layout・複数幅で確認する。 `browser-observatory-cast-smoke.mjs` はq181の現行9・表示追加前9・旧受注2の20保存点をScene／Classic × 1440／390pxの80条件で検査する。[専用7試験](../../tests/quiver-cast.test.mjs)は全9場面・8旅程・4経路・3結末、場所別の6役、矢筒の受渡しと報酬の一回性、通達・合意の確定時点、旧待機本文・厳密な移行・不正保存の拒否・q180との共存を確認する。
 
-**出力**: 標準ログ、viewport checkpoint。artifactは `oddland-browser-checkpoints`。q181の結果JSONとPNGは `q181-cast-checkpoints` に分離する。
+`browser-gunner-cast-smoke.mjs` はq182の現行11・表示追加前11・旧受注4の26保存点をScene／Classic × 1440／390pxの104条件で検査する。砲の設置点は司令の合意・避難隊との調整の4状態を含む。[専用8試験](../../tests/gunner-cast.test.mjs)は全8場面・8旅程・12経路・3結末、搬入時だけ動くオル、固定所在の司令、実退避する避難隊、魔石の一回消費・保留時の未消費と受渡し、報酬の一回性、搬入途中を含む旧保存・旧受注経路・不正保存の拒否を確認する。
+
+**出力**: 標準ログ、viewport checkpoint。artifactは `oddland-browser-checkpoints`。q181の結果JSONとPNGは `q181-cast-checkpoints`、q182は `q182-cast-checkpoints` に分離する。
 
 ## 8. SalomeブラウザCI: `.github/workflows/salome-quests.yml`
 

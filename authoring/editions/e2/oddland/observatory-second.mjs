@@ -90,5 +90,11 @@ export function observatorySecondSource(q,{cast=true}={}){
   }
   node('entry').text='古参は矢尻を外した。使者は白い矢筒を掲げ、隊長は古参を臆病だと笑う。敵側にも同じ筒が上がったが、傭兵はまだ弓を構えている。';
  }
+ if(q.number===182&&cast){
+  entity('ol','entry','person');entity('commander','command','person');
+  for(const id of ['ol','commander','evacuees'])x.entities[id].character='q182_'+id;
+  choice('entry','deploy').companions=['ol'];
+  for(const [scene,person] of Object.entries({entry:'ol',gun:'ol',lit:'ol',command_agreed:'commander',evac_agreed:'evacuees',evac_ready:'evacuees',safe:'evacuees'}))node(scene).cast=[{entity:person,display:{x:50}}];
+ }
  return finish();
 }

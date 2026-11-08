@@ -1,0 +1,2265 @@
+{
+  "schemaVersion": 1,
+  "id": "q182",
+  "number": 182,
+  "title": "一発も撃たない砲手",
+  "client": "魔導砲手オル",
+  "brief": "最後の魔石を砲台へ運び、使い道を決めてください。",
+  "region": 9,
+  "type": "scene_graph",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 旧王領の村の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q182_scene",
+      "title": "一発も撃たない砲手：魔導砲手オル",
+      "points": [
+        {
+          "map": "region_9_f1",
+          "x": 4,
+          "y": 1,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q182.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q182.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q182.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q182"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "q182_observatory_entry",
+      "title": "砲を搬入する出発点",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q182.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q182.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q182"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q182.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_artillery",
+          "x": 1,
+          "y": 1
+        }
+      ]
+    },
+    {
+      "id": "q182_observatory_gun",
+      "title": "岩壁を向いた砲の設置点",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "gun",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q182.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q182.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q182"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q182.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_artillery",
+          "x": 9,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "id": "q182_observatory_command",
+      "title": "用途を相談する司令の持場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "command",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q182.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q182.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q182"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q182.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_artillery",
+          "x": 1,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "id": "q182_observatory_evac",
+      "title": "合図を待つ避難隊",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "evac",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q182.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q182.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q182"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q182.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_artillery",
+          "x": 5,
+          "y": 7
+        }
+      ]
+    },
+    {
+      "id": "q182_observatory_safe",
+      "title": "照らされた避難路の出口",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "safe",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q182.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q182.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q182"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q182.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_artillery",
+          "x": 13,
+          "y": 7
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_9_f1",
+      "x": 4,
+      "y": 1,
+      "object": "q182_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "light": {
+      "label": "砲声のない歓声",
+      "text": "砲声はしなかった。岩壁を照らす光に沿って避難が進み、遠くから歓声が返った。",
+      "gold": 153,
+      "xp": 99
+    },
+    "attack": {
+      "label": "攻撃の成果",
+      "text": "包囲敵は退いた。軍事的な成果は出たが、夜間の避難路を照らす別の手段が必要になった。",
+      "gold": 153,
+      "xp": 99
+    },
+    "hold": {
+      "label": "最後の魔石を残す",
+      "text": "魔石は消費しなかった。準備の足りない点を記し、次の判断へ残した。",
+      "gold": 153,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/observatory-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38166a207eb49f89ac578",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "照準は敵城でなく谷の岩壁へ向いている。壁に残る古い反射鏡の跡が、砲台の元の用途を示す。避難者が来ていない段階で点灯しても役立たず、軍が退却を勘づかれる危険もあるため、合図と移動の調整が必要だ。",
+      "fixedPast": "魔導砲手オルは、砲台へ最後の魔石を運んでほしいと頼む。司令は攻撃用と思っているが、オルは砲を照明へ切り替え、夜間避難の道を示すつもりだ。彼は昔の一射で得た名声を捨てたいのでなく、今できる仕事を変えたいのだ。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "魔導砲手オル",
+        "beliefsAndGoals": "魔導砲手オルは、砲台へ最後の魔石を運んでほしいと頼む。司令は攻撃用と思っているが、オルは砲を照明へ切り替え、夜間避難の道を示すつもりだ。彼は昔の一射で得た名声を捨てたいのでなく、今できる仕事を変えたいのだ。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "最後の魔石を砲台へ運び、使い道を決めてください。"
+      }
+    ],
+    "conflict": {
+      "design": "運搬→砲手の計画→司令と相談／避難隊へ連絡→発動。攻撃なら包囲敵との戦闘が有利になる。照明なら準備二条件が必要だ。条件不足は発動保留にでき、魔石を無駄に消費しない。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "gun",
+          "script": "q182.observatory.gun"
+        },
+        {
+          "id": "entry",
+          "script": "q182.observatory.entry"
+        },
+        {
+          "id": "command_agreed",
+          "script": "q182.observatory.command_agreed"
+        },
+        {
+          "id": "evac_agreed",
+          "script": "q182.observatory.evac_agreed"
+        },
+        {
+          "id": "lit",
+          "script": "q182.observatory.lit"
+        },
+        {
+          "id": "evac_ready",
+          "script": "q182.observatory.evac_ready"
+        },
+        {
+          "id": "safe",
+          "script": "q182.observatory.safe"
+        },
+        {
+          "id": "stored",
+          "script": "q182.observatory.stored"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "最後の魔石を砲台へ運び、使い道を決めてください。"
+    },
+    "reveal": {
+      "newInformation": "照準は敵城でなく谷の岩壁へ向いている。壁に残る古い反射鏡の跡が、砲台の元の用途を示す。避難者が来ていない段階で点灯しても役立たず、軍が退却を勘づかれる危険もあるため、合図と移動の調整が必要だ。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q182.scene.entry"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q182.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q182.command",
+        "meaning": "作者原稿の command に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q182.evac",
+        "meaning": "作者原稿の evac に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "gun",
+        "place": "gun",
+        "text": "照準は敵城でなく反射鏡のあった岩壁へ向く。オルは砲を照明に変え、夜の避難路を示したいという。準備不足なら魔石を使わず保留できる。",
+        "options": [
+          {
+            "id": "command",
+            "text": "司令へ用途と軍の危険を説明し、合意する",
+            "to": "command_agreed",
+            "action": "gun_command"
+          },
+          {
+            "id": "evac",
+            "text": "避難隊へ連絡し、点灯の合図を決める",
+            "to": "evac_agreed",
+            "action": "gun_evac"
+          },
+          {
+            "id": "light",
+            "text": "二つの準備を確認して照明を点ける",
+            "to": "lit",
+            "action": "gun_light"
+          },
+          {
+            "id": "attack",
+            "text": "砲を攻撃に使い、包囲敵を退ける",
+            "to": "@attack",
+            "action": "gun_attack"
+          },
+          {
+            "id": "hold",
+            "text": "今は発動せず、魔石を保管する",
+            "to": "stored",
+            "action": "gun_hold"
+          }
+        ]
+      },
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "オルが砲の搬入を待っている。最後の魔石を載せた砲を、岩壁の見える設置点へ運ぶ。",
+        "options": [
+          {
+            "id": "deploy",
+            "text": "砲を設置点へ運ぶ",
+            "to": "gun",
+            "action": "entry_deploy"
+          }
+        ]
+      },
+      {
+        "id": "command_agreed",
+        "place": "command",
+        "text": "司令の持場で用途と軍の危険を説明し、合意を得た。",
+        "options": [
+          {
+            "id": "return",
+            "text": "砲の設置点へ戻る",
+            "to": "gun",
+            "action": "command_agreed_return"
+          }
+        ]
+      },
+      {
+        "id": "evac_agreed",
+        "place": "evac",
+        "text": "避難隊のいる場所へ来て、点灯の合図と進む道を決めた。",
+        "options": [
+          {
+            "id": "return",
+            "text": "砲の設置点へ戻る",
+            "to": "gun",
+            "action": "evac_agreed_return"
+          }
+        ]
+      },
+      {
+        "id": "lit",
+        "place": "gun",
+        "text": "魔石一つ分の力を照明へ使い、岩壁と避難路を照らした。避難隊と合流する。",
+        "options": [
+          {
+            "id": "join",
+            "text": "避難隊の待機地点へ向かう",
+            "to": "evac_ready",
+            "action": "lit_join"
+          }
+        ]
+      },
+      {
+        "id": "evac_ready",
+        "place": "evac",
+        "text": "合図を確認した避難隊と合流した。照らされた道を出口まで案内する。",
+        "options": [
+          {
+            "id": "escort",
+            "text": "避難隊と出口へ向かう",
+            "to": "safe",
+            "action": "evac_ready_escort"
+          }
+        ]
+      },
+      {
+        "id": "safe",
+        "place": "safe",
+        "text": "避難隊が出口へ着いた。砲声を使わずに移動できたことを確かめる。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@light",
+            "action": "safe_finish"
+          }
+        ]
+      },
+      {
+        "id": "stored",
+        "place": "entry",
+        "text": "未使用の魔石を出発点へ持ち帰り、次の判断まで保管する。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@hold",
+            "action": "stored_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "entryScript": "q182.observatory.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "observatory-twenty",
+      "settlement": "oddland_village",
+      "saveRevision": 2,
+      "scope": "観測所20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q182.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q182.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "照準は敵城でなく反射鏡のあった岩壁へ向く。オルは砲を照明に変え、夜の避難路を示したいという。準備不足なら魔石を使わず保留できる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "command",
+              "text": "司令へ用途と軍の危険を説明し、合意する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q182.command"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q182.command",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q182.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "evac",
+              "text": "避難隊へ連絡し、点灯の合図を決める",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q182.evac"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q182.evac",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q182.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "light",
+              "text": "二つの準備を確認して照明を点ける",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q182.command"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q182.evac"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q182.end.light"
+                }
+              ]
+            },
+            {
+              "id": "attack",
+              "text": "砲を攻撃に使い、包囲敵を退ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q182.end.attack"
+                }
+              ]
+            },
+            {
+              "id": "hold",
+              "text": "今は発動せず、魔石を保管する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q182.end.hold"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q182.end.light": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q182.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "砲声はしなかった。岩壁を照らす光に沿って避難が進み、遠くから歓声が返った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q182",
+              "outcome": "light"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q182.end.attack": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q182.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "包囲敵は退いた。軍事的な成果は出たが、夜間の避難路を照らす別の手段が必要になった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q182",
+              "outcome": "attack"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q182.end.hold": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q182.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "魔石は消費しなかった。準備の足りない点を記し、次の判断へ残した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q182",
+              "outcome": "hold"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q182.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q182.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q182.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "light",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "砲声はしなかった。岩壁を照らす光に沿って避難が進み、遠くから歓声が返った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "attack",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "包囲敵は退いた。軍事的な成果は出たが、夜間の避難路を照らす別の手段が必要になった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "hold",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "魔石は消費しなかった。準備の足りない点を記し、次の判断へ残した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q182.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q182.scene.entry"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q182.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q182.observatory.gun": {
+      "storyQuest": "q182",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q182",
+          "scene": "gun"
+        },
+        {
+          "op": "narrate",
+          "text": "照準は敵城でなく反射鏡のあった岩壁へ向く。オルは砲を照明に変え、夜の避難路を示したいという。準備不足なら魔石を使わず保留できる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "command",
+              "text": "司令へ用途と軍の危険を説明し、合意する",
+              "storyAction": {
+                "quest": "q182",
+                "action": "gun_command"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q182.values.command"
+                  },
+                  "right": true
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q182",
+                  "action": "gun_command"
+                }
+              ]
+            },
+            {
+              "id": "evac",
+              "text": "避難隊へ連絡し、点灯の合図を決める",
+              "storyAction": {
+                "quest": "q182",
+                "action": "gun_evac"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q182.values.evac"
+                  },
+                  "right": true
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q182",
+                  "action": "gun_evac"
+                }
+              ]
+            },
+            {
+              "id": "light",
+              "text": "二つの準備を確認して照明を点ける",
+              "storyAction": {
+                "quest": "q182",
+                "action": "gun_light"
+              },
+              "condition": {
+                "op": "and",
+                "args": [
+                  true,
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q182.values.command"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q182.values.evac"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q182",
+                  "action": "gun_light"
+                },
+                {
+                  "op": "jump",
+                  "script": "q182.observatory.lit"
+                }
+              ]
+            },
+            {
+              "id": "attack",
+              "text": "砲を攻撃に使い、包囲敵を退ける",
+              "storyAction": {
+                "quest": "q182",
+                "action": "gun_attack"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q182",
+                  "action": "gun_attack"
+                },
+                {
+                  "op": "jump",
+                  "script": "q182.observatory.end.attack"
+                }
+              ]
+            },
+            {
+              "id": "hold",
+              "text": "今は発動せず、魔石を保管する",
+              "storyAction": {
+                "quest": "q182",
+                "action": "gun_hold"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q182",
+                  "action": "gun_hold"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q182.observatory.entry": {
+      "storyQuest": "q182",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q182",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "オルが砲の搬入を待っている。最後の魔石を載せた砲を、岩壁の見える設置点へ運ぶ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "deploy",
+              "text": "砲を設置点へ運ぶ",
+              "storyAction": {
+                "quest": "q182",
+                "action": "entry_deploy"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q182",
+                  "action": "entry_deploy"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q182.observatory.command_agreed": {
+      "storyQuest": "q182",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q182",
+          "scene": "command_agreed"
+        },
+        {
+          "op": "narrate",
+          "text": "司令の持場で用途と軍の危険を説明し、合意を得た。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "砲の設置点へ戻る",
+              "storyAction": {
+                "quest": "q182",
+                "action": "command_agreed_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q182",
+                  "action": "command_agreed_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q182.observatory.evac_agreed": {
+      "storyQuest": "q182",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q182",
+          "scene": "evac_agreed"
+        },
+        {
+          "op": "narrate",
+          "text": "避難隊のいる場所へ来て、点灯の合図と進む道を決めた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "砲の設置点へ戻る",
+              "storyAction": {
+                "quest": "q182",
+                "action": "evac_agreed_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q182",
+                  "action": "evac_agreed_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q182.observatory.lit": {
+      "storyQuest": "q182",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q182",
+          "scene": "lit"
+        },
+        {
+          "op": "narrate",
+          "text": "魔石一つ分の力を照明へ使い、岩壁と避難路を照らした。避難隊と合流する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "join",
+              "text": "避難隊の待機地点へ向かう",
+              "storyAction": {
+                "quest": "q182",
+                "action": "lit_join"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q182",
+                  "action": "lit_join"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q182.observatory.evac_ready": {
+      "storyQuest": "q182",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q182",
+          "scene": "evac_ready"
+        },
+        {
+          "op": "narrate",
+          "text": "合図を確認した避難隊と合流した。照らされた道を出口まで案内する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "escort",
+              "text": "避難隊と出口へ向かう",
+              "storyAction": {
+                "quest": "q182",
+                "action": "evac_ready_escort"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q182",
+                  "action": "evac_ready_escort"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q182.observatory.safe": {
+      "storyQuest": "q182",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q182",
+          "scene": "safe"
+        },
+        {
+          "op": "narrate",
+          "text": "避難隊が出口へ着いた。砲声を使わずに移動できたことを確かめる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q182",
+                "action": "safe_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q182",
+                  "action": "safe_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q182.observatory.end.light"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q182.observatory.stored": {
+      "storyQuest": "q182",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q182",
+          "scene": "stored"
+        },
+        {
+          "op": "narrate",
+          "text": "未使用の魔石を出発点へ持ち帰り、次の判断まで保管する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q182",
+                "action": "stored_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q182",
+                  "action": "stored_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q182.observatory.end.hold"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q182.observatory.end.light": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "砲声はしなかった。岩壁を照らす光に沿って避難が進み、遠くから歓声が返った。"
+        },
+        {
+          "op": "add",
+          "target": "vars.light",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q182",
+          "outcome": "light"
+        }
+      ]
+    },
+    "q182.observatory.end.attack": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "包囲敵は退いた。軍事的な成果は出たが、夜間の避難路を照らす別の手段が必要になった。"
+        },
+        {
+          "op": "add",
+          "target": "vars.attack",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q182",
+          "outcome": "attack"
+        }
+      ]
+    },
+    "q182.observatory.end.hold": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "魔石は消費しなかった。準備の足りない点を記し、次の判断へ残した。"
+        },
+        {
+          "op": "add",
+          "target": "vars.hold",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q182",
+          "outcome": "hold"
+        }
+      ]
+    },
+    "q182.observatory.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q182"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q182.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q182.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q182.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "light",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "砲声はしなかった。岩壁を照らす光に沿って避難が進み、遠くから歓声が返った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "attack",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "包囲敵は退いた。軍事的な成果は出たが、夜間の避難路を照らす別の手段が必要になった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "hold",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "魔石は消費しなかった。準備の足りない点を記し、次の判断へ残した。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q182"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q182.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "gun",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q182.observatory.gun"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q182.observatory.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "command_agreed",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q182.observatory.command_agreed"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "evac_agreed",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q182.observatory.evac_agreed"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "lit",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q182.observatory.lit"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "evac_ready",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q182.observatory.evac_ready"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "safe",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q182.observatory.safe"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "stored",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q182.observatory.stored"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q182.observatory.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "砲を搬入する出発点",
+      "gun": "岩壁を向いた砲の設置点",
+      "command": "用途を相談する司令の持場",
+      "evac": "合図を待つ避難隊",
+      "safe": "照らされた避難路の出口",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "gun"
+      ],
+      [
+        "transit",
+        "command"
+      ],
+      [
+        "transit",
+        "evac"
+      ],
+      [
+        "transit",
+        "safe"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "gun",
+          "command",
+          "evac",
+          "safe",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "light",
+          "attack",
+          "hold"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "command": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "command"
+      },
+      "evac": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "evac"
+      },
+      "lit": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "lit"
+      },
+      "attacked": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "attacked"
+      },
+      "charge": {
+        "type": "integer",
+        "initial": 1,
+        "min": 0,
+        "max": 1,
+        "meaning": "charge",
+        "container": "crystal"
+      },
+      "spent": {
+        "type": "integer",
+        "initial": 0,
+        "min": 0,
+        "max": 1,
+        "meaning": "spent"
+      },
+      "cannonAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "gun",
+          "command",
+          "evac",
+          "safe",
+          "transit",
+          "party",
+          "crystal",
+          "evacuees"
+        ],
+        "meaning": "cannon の所在または保持者"
+      },
+      "crystalAt": {
+        "type": "enum",
+        "initial": "cannon",
+        "values": [
+          "entry",
+          "gun",
+          "command",
+          "evac",
+          "safe",
+          "transit",
+          "party",
+          "cannon",
+          "evacuees"
+        ],
+        "meaning": "crystal の所在または保持者"
+      },
+      "evacueesAt": {
+        "type": "enum",
+        "initial": "evac",
+        "values": [
+          "entry",
+          "gun",
+          "command",
+          "evac",
+          "safe",
+          "transit"
+        ],
+        "meaning": "evacuees の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "cannon": {
+        "holder": "cannonAt",
+        "kind": "item"
+      },
+      "crystal": {
+        "holder": "crystalAt",
+        "kind": "item"
+      },
+      "evacuees": {
+        "holder": "evacueesAt",
+        "kind": "group"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "照準は敵城でなく谷の岩壁へ向いている。壁に残る古い反射鏡の跡が、砲台の元の用途を示す。避難者が来ていない段階で点灯しても役立たず、軍が退却を勘づかれる危険もあるため、合図と移動の調整が必要だ。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "gun": {
+        "title": "岩壁を向いた砲の設置点",
+        "place": "gun",
+        "cast": [],
+        "requires": true
+      },
+      "entry": {
+        "title": "砲を搬入する出発点",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "command_agreed": {
+        "title": "用途を相談する司令の持場",
+        "place": "command",
+        "cast": [],
+        "requires": true
+      },
+      "evac_agreed": {
+        "title": "合図を待つ避難隊",
+        "place": "evac",
+        "cast": [],
+        "requires": true
+      },
+      "lit": {
+        "title": "岩壁を向いた砲の設置点",
+        "place": "gun",
+        "cast": [],
+        "requires": true
+      },
+      "evac_ready": {
+        "title": "合図を待つ避難隊",
+        "place": "evac",
+        "cast": [],
+        "requires": true
+      },
+      "safe": {
+        "title": "照らされた避難路の出口",
+        "place": "safe",
+        "cast": [],
+        "requires": true
+      },
+      "stored": {
+        "title": "砲を搬入する出発点",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "gun_command": {
+        "from": [
+          "gun"
+        ],
+        "to": "command_agreed",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q182.values.command"
+            },
+            "right": true
+          }
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "command"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "command",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "command",
+          "companions": []
+        },
+        "depart": []
+      },
+      "gun_evac": {
+        "from": [
+          "gun"
+        ],
+        "to": "evac_agreed",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q182.values.evac"
+            },
+            "right": true
+          }
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "evac"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "evac",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "evac",
+          "companions": []
+        },
+        "depart": []
+      },
+      "gun_light": {
+        "from": [
+          "gun"
+        ],
+        "to": "lit",
+        "requires": {
+          "op": "and",
+          "args": [
+            true,
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q182.values.command"
+              },
+              "right": true
+            },
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q182.values.evac"
+              },
+              "right": true
+            }
+          ]
+        },
+        "effects": [
+          {
+            "op": "consume",
+            "key": "charge",
+            "amount": 1,
+            "sink": "spent"
+          },
+          {
+            "op": "set",
+            "key": "lit",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "gun_attack": {
+        "from": [
+          "gun"
+        ],
+        "ending": "attack",
+        "requires": true,
+        "effects": [
+          {
+            "op": "consume",
+            "key": "charge",
+            "amount": 1,
+            "sink": "spent"
+          },
+          {
+            "op": "set",
+            "key": "attacked",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "attack"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "gun_hold": {
+        "from": [
+          "gun"
+        ],
+        "to": "stored",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "crystal",
+            "from": "cannon",
+            "to": "party"
+          }
+        ]
+      },
+      "entry_deploy": {
+        "from": [
+          "entry"
+        ],
+        "to": "gun",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "gun"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "cannon",
+            "from": "party",
+            "to": "gun"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "gun",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "cannon",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      },
+      "command_agreed_return": {
+        "from": [
+          "command_agreed"
+        ],
+        "to": "gun",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "gun"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "gun",
+          "companions": []
+        },
+        "depart": []
+      },
+      "evac_agreed_return": {
+        "from": [
+          "evac_agreed"
+        ],
+        "to": "gun",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "gun"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "gun",
+          "companions": []
+        },
+        "depart": []
+      },
+      "lit_join": {
+        "from": [
+          "lit"
+        ],
+        "to": "evac_ready",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "evac"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "evac",
+          "companions": []
+        },
+        "depart": []
+      },
+      "evac_ready_escort": {
+        "from": [
+          "evac_ready"
+        ],
+        "to": "safe",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "evacuees"
+            ],
+            "path": [
+              "transit",
+              "safe"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "safe",
+          "companions": [
+            "evacuees"
+          ]
+        },
+        "depart": []
+      },
+      "safe_finish": {
+        "from": [
+          "safe"
+        ],
+        "ending": "light",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "light"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "stored_finish": {
+        "from": [
+          "stored"
+        ],
+        "ending": "hold",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "crystal",
+            "from": "party",
+            "to": "entry"
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "hold"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "light": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q182.values.resolution"
+            },
+            "right": "light"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q182.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q182.values.partyAt"
+                },
+                "right": "safe"
+              }
+            ]
+          }
+        ]
+      },
+      "attack": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q182.values.resolution"
+            },
+            "right": "attack"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q182.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q182.values.partyAt"
+                },
+                "right": "gun"
+              }
+            ]
+          }
+        ]
+      },
+      "hold": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q182.values.resolution"
+            },
+            "right": "hold"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q182.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q182.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_artillery",
+        "x": 1,
+        "y": 1
+      },
+      "gun": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_artillery",
+        "x": 9,
+        "y": 3
+      },
+      "command": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_artillery",
+        "x": 1,
+        "y": 3
+      },
+      "evac": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_artillery",
+        "x": 5,
+        "y": 7
+      },
+      "safe": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_artillery",
+        "x": 13,
+        "y": 7
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_village",
+  "receptionLocations": [
+    "royal_board"
+  ]
+}

@@ -55,6 +55,21 @@ export const relocatedCharacters=Object.fromEntries([
 ].map(([id,name,detail,provenance])=>[id,{id,name,role:'礼拝堂の現地の相手',detail,portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,
  provenance:provenance??'2026-10-29の美術設定。固有名・他人物との同一性は追加しない。具体的な外見・年齢感・服装は今回の美術設定。牢・格子・聖像・宝玉・石を人物画へ固定しない。'}]));
 // The group has no specified headcount or spokesperson. Ren is the existing actor.
+relocatedCharacters.q182_ol={
+ id:'q182_ol',name:'魔導砲手オル',role:'砲の搬入を待ち、設置点で照明への転用を提案する砲手',
+ detail:'搬入時だけ出発点から砲の設置点へ同行し、その後は砲のそばに残る。司令への相談・避難・魔石の保管には同行しない。',
+ provenance:'2026-11-08。本文と実所在に基づく呼称表示。同名の告解係とは統合せず、容貌・年齢や軍名を追加しない。専用画は未接続。'
+};
+relocatedCharacters.q182_commander={
+ id:'q182_commander',name:'司令',role:'持場で砲の用途と軍の危険について合意する司令',
+ detail:'用途を相談する持場に所在を固定し、command_agreedだけに表示する。砲の設置点や避難先には同行しない。',
+ provenance:'2026-11-08。本文に基づく呼称表示。氏名・軍位・容貌や他の軍人との同一性を追加しない。専用画は未接続。'
+};
+relocatedCharacters.q182_evacuees={
+ id:'q182_evacuees',name:'避難隊',role:'点灯の合図を取り決め、照らされた道を出口へ進む避難隊',
+ detail:'既存evacueesの待機場所と実退避後の出口だけに表示する。砲の設置点には同行しない。',
+ provenance:'2026-11-08。既存groupの呼称表示。人数・代表者・個人の容貌は追加しない。専用画は未接続。'
+};
 relocatedCharacters.q181_envoy={
  "id": "q181_envoy",
  "name": "使者",
