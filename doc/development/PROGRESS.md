@@ -10,7 +10,20 @@ master `f518b581b6d312ca6906d09c21a7b0145cc1de8a`（PR #218統合済み）を基
 
 魔石charge=1は照明・攻撃だけでspentへ一回消費する。照明はcommandとevacの両条件を要する。保留はcannon→party→entryの受渡しで、stored到着時にはparty、finish後にentryが保持し、未消費のまま残る。12経路で両方の準備順、準備なし・片方・両方からの攻撃／保留、3結末と153G・99XPの一回報酬を確認した。
 
-専用8試験を含む関連54試験は成功・失敗0・スキップ0。現行11・表示追加前11・旧受注4の26保存点を用意し、Scene／Classic × 1440／390pxの104画面条件を既存Oddland CIへ追加した。ローカルの既存Chromiumは `socket() failed: Operation not permitted (1)` で起動できず、再インストールは行っていない。`npm run check` は全2,685試験成功・失敗0・スキップ0。配布指紋・全データと素材参照・生成シナリオ・設定画面・静的ファイル・文書の検査も成功した。文書生成器による無関係な手書き表の書式変更は戻し、カタログとDATA_SNAPSHOTの日付は2026-11-08に揃えた。画面検証はCIで行い、結果を確認後に追記する。
+専用8試験を含む関連54試験は成功・失敗0・スキップ0。現行11・表示追加前11・旧受注4の26保存点を用意し、Scene／Classic × 1440／390pxの104画面条件を既存Oddland CIへ追加した。ローカルの既存Chromiumは `socket() failed: Operation not permitted (1)` で起動できず、再インストールは行っていない。`npm run check` は全2,685試験成功・失敗0・スキップ0。配布指紋・全データと素材参照・生成シナリオ・設定画面・静的ファイル・文書の検査も成功した。文書生成器による無関係な手書き表の書式変更は戻し、カタログとDATA_SNAPSHOTの日付は2026-11-08に揃えた。[Oddland CI](https://github.com/TomTomYoung/adv/actions/runs/42451708267)は実装コミット `e2467b95c82adffa9f4c785ac08ba93d4e8ab417` で成功した。q182は104画面条件・3結末・エラー0。成果物 `q182-cast-checkpoints`（ID `13605464829`、SHA-256 `28c272bae33290b8d9edac54443bf92798acc970ccb81290fd6fe4ed54550e2c`）を取得し、結果JSONとPNG104枚の対応・4つの表示条件を照合した。代表8枚を目視し、オル・司令・避難隊の呼称、保管先の人物非表示、旧保存の本文と旧受注経路、狭幅の本文送りを確認した。
+
+目視したPNGは次の8枚（全104枚を目視したという意味ではない）。
+
+- `e2-scene-1440-q182-entry-current.png`
+- `e2-scene-390-q182-gun-current-11.png`
+- `e2-classic-390-q182-command_agreed-current.png`
+- `e2-classic-1440-q182-evac_ready-current.png`
+- `e2-scene-390-q182-safe-current.png`
+- `e2-scene-1440-q182-stored-current.png`
+- `e2-classic-390-q182-entry-previous.png`
+- `e2-scene-390-q182-entry-accepted-legacy-11.png`
+
+実装コミット `e2467b95c82adffa9f4c785ac08ba93d4e8ab417` の全8ワークフロー・9ジョブが成功した。[全体CI](https://github.com/TomTomYoung/adv/actions/runs/42451708393)、[共通人物表示CI](https://github.com/TomTomYoung/adv/actions/runs/42451708294)も成功。実装と記録は[PR #219](https://github.com/TomTomYoung/adv/pull/219)へまとめ、2026-11-08時点ではmasterへ未統合。検証後の追記はこの文書とHANDOFFのみで、重い検査は同一入力の成功結果を再利用する。
 
 出演監査は753場面中空cast482、人物エンティティ133・character接続83、接続済み112役。精読済み381場面・未精読372場面を維持した。次はq183の原稿と全場面を精読し、洗濯場の兵士・係長・遺族・受付の出演根拠を監査する。q183はこの作業では実装・監査済みとしない。
 
