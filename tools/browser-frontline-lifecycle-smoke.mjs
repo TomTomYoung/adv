@@ -14,7 +14,9 @@ try{
   const page=await browser.newPage({viewport:{width,height:950}});page.on('pageerror',e=>errors.push(e.message));await page.goto(base+'/battle-tester.html');
   const synced=()=>page.waitForFunction(()=>{const s=window.battleTester?.engineSync;return s?.ready&&s.loaded===s.request&&s.loaded>0;});await synced();
   const frame=page.frames().find(f=>f.url().includes('battle-engine-playtest.html'));
-  await frame.selectOption('#effects','off'); // These cases inspect state/layout; timing is covered by browser-effects-smoke.
+  // Embedded playtests intentionally hide their toolbar. Configure the fixture
+  // directly; this suite checks layout/state, while browser-effects-smoke checks timing.
+  await frame.evaluate(()=>{const select=document.querySelector('#effects');select.value='off';select.dispatchEvent(new Event('change',{bubbles:true}));});
   const preset=async name=>{await page.selectOption('#preset',name);await page.click('#apply-preset');await page.click('#start');await synced();};
   const skill=async(id,target)=>{if(!await frame.locator(`[data-focus="skill:${id}"]`).count())await frame.locator('[data-focus="battle-menu:skills"]').click();await frame.locator(`[data-focus="skill:${id}"]`).click();await frame.locator(`[data-focus="front:choice:${target}"]`).click();await frame.locator('[data-focus="front:confirm"]').click();};
   await preset('body_retreat');assert.equal(await page.evaluate(()=>battleTester.engine.state.battle.frontline.rows),1);assert.equal(await frame.evaluate(()=>battlePlaytest.model.battle.frontline.units.filter(u=>u.state==='removed').length),1);assert.match(await page.locator('#event-log').innerText(),/退避/);assert.match(await page.locator('#event-log').innerText(),/3行→1行/);
