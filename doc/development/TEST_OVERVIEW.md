@@ -177,7 +177,9 @@ PRの差分はmerge-baseからHEADまでを判定します。直前コミット�
 
 `browser-laundry-cast-smoke.mjs` はq183の現行8・表示追加前8・旧受注2・糧食不足1の19保存点をScene／Classic × 1440／390pxの76条件で検査する。[専用8試験](../../tests/laundry-cast.test.mjs)は全8場面・8旅程・6経路・3結末、2群の固定所在、援助・訂正と軍服・確認書の受渡し、糧食2つの一回費用と不足時の代替経路、報酬の一回性、旧待機本文・厳密な移行・不正保存の拒否・q182との同時移行を確認する。
 
-**出力**: 標準ログ、viewport checkpoint。artifactは `oddland-browser-checkpoints`。q181の結果JSONとPNGは `q181-cast-checkpoints`、q182は `q182-cast-checkpoints`、q183は `q183-cast-checkpoints` に分離する。
+`browser-pot-cast-smoke.mjs` はq184の現行10・表示追加前10・旧受注2の22保存点をScene／Classic × 1440／390pxの88条件で検査する。倉庫の2経路は食材の所在が異なるため分ける。[専用8試験](../../tests/pot-cast.test.mjs)は全9場面・8旅程・4経路・3結末、4役の実同行と捕虜の出演場面、鍋・別鍋・食材の受渡し、検査と共同炊事の確定時点、報酬の一回性、物語改訂1と旧保存の完全保持、不正所在の拒否、旧受注経路とq183移行との共存を確認する。
+
+**出力**: 標準ログ、viewport checkpoint。artifactは `oddland-browser-checkpoints`。q181の結果JSONとPNGは `q181-cast-checkpoints`、q182は `q182-cast-checkpoints`、q183は `q183-cast-checkpoints`、q184は `q184-cast-checkpoints` に分離する。
 
 ## 8. SalomeブラウザCI: `.github/workflows/salome-quests.yml`
 
