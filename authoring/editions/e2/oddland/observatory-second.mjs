@@ -107,5 +107,13 @@ export function observatorySecondSource(q,{cast=true}={}){
   const scenes={entry:['jarl','prisoners'],joint:['jarl','supervisor'],taken:['cook'],checked:['jarl','supervisor'],invite:['jarl','supervisor','cook'],joint_cooking:['jarl','supervisor','cook'],spare:['jarl'],swap:['jarl'],parallel:['cook']};
   for(const [scene,people] of Object.entries(scenes)){const positions=people.length===3?[20,50,80]:people.length===2?[31,69]:[50];node(scene).cast=people.map((entity,i)=>({entity,display:{x:positions[i]}}));}
  }
+ if(q.number===185&&cast){
+  for(const id of ['nev','troops','families','unarmed'])x.entities[id].character='q185_'+id;
+  node('early').text='橋を閉じて自軍を先に退く方針を決めた。通れなかった組の位置を救援の受付へ届ける。';
+  for(const scene of ['entry','guard','won','crossed','families_done','rent','rented','fetch','board','landed','boat_done','early','early_done']){
+   const people=['nev','troops',...(['guard','won','crossed','fetch','board','landed'].includes(scene)?['families','unarmed']:[])],positions=people.length===4?[14,38,62,86]:[31,69];
+   node(scene).cast=people.map((entity,i)=>({entity,display:{x:positions[i]}}));
+  }
+ }
  return finish();
 }

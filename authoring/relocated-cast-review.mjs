@@ -1,7 +1,7 @@
 // Editorial audit: candidate IDs are local; connected roles cite their game entity.
 // Update a fingerprint only after rereading the changed quest and its evidence.
 export const RELOCATED_CAST_REVIEW={
- reviewedAt:'2026-11-08',
+ reviewedAt:'2026-11-09',
  quests:{
   q031:{
    sourceSha256:'ab2cb40f75d0a430e00077b936b338b23736b74b01034aeaeb9333cda16cecf7',
@@ -4788,37 +4788,41 @@ export const RELOCATED_CAST_REVIEW={
   "next": "q184の全9場面・8旅程・4経路・3結末、鍋・別鍋・食材の受渡し、旧保存と旧受注経路を検証した。次は全13場面を監査したq185の人物表示、戦闘後再開、40Gの支払と封鎖の確定時点を実装・検証する。"
 },
   q185:{
-  "sourceSha256": "9b56d2083968ad90955910e73f9b2a710c344c54a72d7a20a479b0c589794890",
+  "sourceSha256": "a4fbf8c2de0bd7737e80a910cfd08e017858452318bd74339d1cf2827802bdb0",
   "identityNotes": [
     "原稿authoring/reference/volume-09.mdのGQ085、初版q185、現場接続後の全13場面・11旅程・3結末、40G支払と支払前帰還、guard_9の勝利・逃走・敗北を精読した。",
-    "既存nevとtroopsは全13場面の候補。橋守ネヴと人数未確定の自軍を実同行に接続し、指揮官を役職だけから別人として同席させない。",
+    "既存nevとtroopsを全13場面へ接続済み。橋守ネヴと人数未確定の自軍を実同行に接続し、指揮官を役職だけから別人として同席させない。",
     "両国の家族familiesと装備を置いた兵unarmedはguard・won・crossed・fetch・board・landedの6場面。entryでは伝聞であり、封鎖足場や救援受付へ連れ戻さない。",
     "cartsとboatはgroupとして移動する荷車と舟であり、人物の集団名へ変換しない。御者・船頭・貸主・受付係を推測で追加しない。weaponsはnearに置いたままのitem。",
     "原稿の三組という設計と現行の一行としての実移動を混同しない。氏名・人数・国名・個々の家族構成・政治的信条は追加しない。",
     "40Gはrentのpayだけで支払い、boatPaidを立てる。支払前のbackは無料。舟はboard_crossだけ一行と対岸へ動く。",
-    "橋のclosedはfamilies_done／boat_doneのfinish、早期封鎖ではearly_reportの出発時に立つ。early本文を封鎖前の準備段階へ整える場合も、旗の確定時点を動かさない。",
+    "橋のclosedはfamilies_done／boat_doneのfinish、早期封鎖ではearly_reportの出発時に立つ。early本文は封鎖方針を決めた準備段階へ整え、旗の時点と旧保存の待機本文を保つ。",
     "guard_9の逃走・敗北後は勝利経路を使わず、現場へ再合流して早期封鎖と救援引継ぎへ進む。旧保存の待機本文・戦闘状態・報酬・全11旅程を維持する。"
   ],
   "people": {
     "q185_nev": {
       "label": "橋守ネヴ",
-      "status": "candidate",
-      "need": "既存nevの実同行先となる全13場面。"
+      "status": "connected",
+      "need": "既存nevの実同行先となる全13場面。",
+      "entity": "nev"
     },
     "q185_troops": {
       "label": "撤退する自軍",
-      "status": "candidate",
-      "need": "既存troopsの実同行先となる全13場面。人数・指揮官を補わない。"
+      "status": "connected",
+      "need": "既存troopsの実同行先となる全13場面。人数・指揮官を補わない。",
+      "entity": "troops"
     },
     "q185_families": {
       "label": "両国の家族",
-      "status": "candidate",
-      "need": "橋頭・橋を渡った先・別の乗場・舟の到着先の6場面。実移動後だけ表示する。"
+      "status": "connected",
+      "need": "橋頭・橋を渡った先・別の乗場・舟の到着先の6場面。実移動後だけ表示する。",
+      "entity": "families"
     },
     "q185_unarmed": {
       "label": "装備を置いた敵兵",
-      "status": "candidate",
-      "need": "既存unarmedの実所在となる6場面。入口の伝聞では表示しない。"
+      "status": "connected",
+      "need": "既存unarmedの実所在となる6場面。入口の伝聞では表示しない。",
+      "entity": "unarmed"
     }
   },
   "scenes": {
@@ -4950,7 +4954,7 @@ export const RELOCATED_CAST_REVIEW={
         "q185_nev",
         "q185_troops"
       ],
-      "evidence": "橋を閉じ、自軍を先に退く。通れなかった組の位置を救援の受付へ届ける。",
+      "evidence": "橋を閉じて自軍を先に退く方針を決めた。通れなかった組の位置を救援の受付へ届ける。",
       "reason": "ネヴと自軍が操作足場にいる。橋頭で待つ人々を表示しない。封鎖の旗は次の出発時に立つ。",
       "visual": "その場所へ実同行したネヴと自軍。"
     },
@@ -4965,7 +4969,150 @@ export const RELOCATED_CAST_REVIEW={
       "visual": "その場所へ実同行したネヴと自軍。"
     }
   },
-  "next": "既存4役を所在に接続する。40Gの一回支払・無料帰還、橋と舟による実移動、早期封鎖の本文と旗の時点、戦闘後再開・3結末・旧保存を検証する。"
+  "next": "q185の表示・全11旅程・40G支払・無料帰還・3結末・戦闘後再開・旧保存を検証した。次は全13場面を監査したq186の通信士と負傷者・捕虜の表示を接続する。"
+},
+  q186:{
+  "sourceSha256": "934d5d5f1a9e7be6bd23882999e7e9d618ca2fa23c75d025a2ef7b0c3b8ad09e",
+  "identityNotes": [
+    "原稿authoring/reference/volume-09.mdのGQ086、初版q186、現行全13場面・14旅程・3結末を精読した。",
+    "通信士と負傷者2群・捕虜の既存4役を候補とする。ハス、負傷した司令、使者、受付係を推測で追加しない。人物名・人数・国名を補わない。",
+    "代理状はauthority_limitedの出発時にauthority→party、到着時にparty→communicator。通信士本人はparleyから移動しない。",
+    "localAgreedはparley_localまたはlimited_offer_agreeの出発時、limitedは代理権待機への到着時に確定する。文書と合意と正式停戦を混同しない。",
+    "物資は直接合意のgather_escort出発時だけentry→party、到着時にexchangeへ渡す。限定代理状の経路ではentryに残す。",
+    "負傷者oursは陣地から交換場所へ、theirsは交換場所から陣地へ実同行する。捕虜は制圧後のsecuredから陣地へ同行する。双方の人数や出身を固定しない。",
+    "guard_9勝利後はassault_battle_readyから砦へ歩く。敗北は救助先から現場へ戻り再試行可能、逃走は再戦とbackを閉じwithdrawを残す。旧保存の戦闘・待機本文・3結末を保持する。"
+  ],
+  "people": {
+    "q186_communicator": {
+      "label": "若い通信士",
+      "status": "candidate",
+      "need": "parleyとlimited_offerだけ。既存communicatorは砦の前に固定し、代理状を受け取る。"
+    },
+    "q186_ours": {
+      "label": "引き渡す負傷者たち",
+      "status": "candidate",
+      "need": "gatherとexchangeだけ。既存oursの陣地から交換場所への実同行を使う。"
+    },
+    "q186_theirs": {
+      "label": "受け取る負傷者たち",
+      "status": "candidate",
+      "need": "exchangeとlocal_doneだけ。既存theirsの交換場所から陣地への実同行を使う。"
+    },
+    "q186_captives": {
+      "label": "砦の捕虜たち",
+      "status": "candidate",
+      "need": "securedとbattle_doneだけ。制圧後の砦から陣地へ実同行する。"
+    }
+  },
+  "scenes": {
+    "parley": {
+      "decision": "person-evidence",
+      "people": [
+        "q186_communicator"
+      ],
+      "evidence": "時刻だけ違う返書に、同じ誤字がある。対面すると若い通信士は、負傷した司令に代わる権限がないと話した。",
+      "reason": "対面した通信士が権限の不足を説明する。負傷した司令本人は伝聞。",
+      "visual": "実所在と本文の同席根拠に沿う呼称表示。"
+    },
+    "authority": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "待機で双方の食料を使った。臨時の代理状が届いたが、決められるのは今日の負傷者交換までだ。全体の停戦を勝手に成立させられない。",
+      "reason": "代理状を待つ場面。使者や連絡所の担当者は特定されていない。",
+      "visual": "新しい人物表示は追加しない。"
+    },
+    "entry": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "時刻だけを変えた返書を携え、砦の通信士へ対面を求める。",
+      "reason": "返書を携えて対面へ出る。依頼人ハスを本文にない同行者にしない。",
+      "visual": "新しい人物表示は追加しない。"
+    },
+    "limited_offer": {
+      "decision": "person-evidence",
+      "people": [
+        "q186_communicator"
+      ],
+      "evidence": "代理状を通信士と確かめた。今日の負傷者交換に限った合意を作る。",
+      "reason": "固定所在の通信士へ代理状を届け、今日の権限を確かめる。",
+      "visual": "実所在と本文の同席根拠に沿う呼称表示。"
+    },
+    "gather": {
+      "decision": "person-evidence",
+      "people": [
+        "q186_ours"
+      ],
+      "evidence": "陣地へ戻り、交換する負傷者を集めた。代理状が負傷者交換だけに限る場合、物資搬入は行わない。",
+      "reason": "陣地で交換へ連れ出す負傷者を集めた。通信士は同行しない。",
+      "visual": "実所在と本文の同席根拠に沿う呼称表示。"
+    },
+    "exchange": {
+      "decision": "person-evidence",
+      "people": [
+        "q186_ours",
+        "q186_theirs"
+      ],
+      "evidence": "相手側の負傷者と交換場所で会った。こちらの負傷者を引き渡し、受け取った人を陣地へ連れ帰る。",
+      "reason": "引き渡す集団が実到着し、受け取る集団と対面する。",
+      "visual": "実所在と本文の同席根拠に沿う呼称表示。"
+    },
+    "local_done": {
+      "decision": "person-evidence",
+      "people": [
+        "q186_theirs"
+      ],
+      "evidence": "交換した負傷者が陣地へ着いた。今日の小さな合意として記録する。",
+      "reason": "受け取った集団だけが実同行して陣地に着く。引き渡した集団は交換場所に残る。",
+      "visual": "実所在と本文の同席根拠に沿う呼称表示。"
+    },
+    "assault": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "守備隊の持場へ来た。交渉とは分けて戦闘へ進む。",
+      "reason": "守備隊は既存guard_9の戦闘に表示する。戦闘後再開にも残る固定castを追加しない。",
+      "visual": "新しい人物表示は追加しない。"
+    },
+    "secured": {
+      "decision": "person-evidence",
+      "people": [
+        "q186_captives"
+      ],
+      "evidence": "砦へ到達し、捕虜を確認した。戦闘による制圧として報告し、安全な陣地へ案内する。",
+      "reason": "制圧後に捕虜を確認し、護送を始める。",
+      "visual": "実所在と本文の同席根拠に沿う呼称表示。"
+    },
+    "battle_done": {
+      "decision": "person-evidence",
+      "people": [
+        "q186_captives"
+      ],
+      "evidence": "捕虜が陣地へ着いた。戦闘と保護を別に報告する。",
+      "reason": "捕虜が陣地へ実到着する。元からいる負傷者を場所の一致だけで同席させない。",
+      "visual": "実所在と本文の同席根拠に沿う呼称表示。"
+    },
+    "withdrawn": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "砦の前へ戻り、捕虜の安全を求める伝言を残した。正式停戦は成立していない。",
+      "reason": "安全の伝言を残す場面。通信士との対面や捕虜本人の同席は明記されない。",
+      "visual": "新しい人物表示は追加しない。"
+    },
+    "withdraw_report": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "正式停戦を留保したことと、安全を求める伝言を分けて記録する。",
+      "reason": "報告先の受付係を施設名だけから追加しない。",
+      "visual": "新しい人物表示は追加しない。"
+    },
+    "assault_battle_ready": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "戦いに勝利し、先へ進む道が開いた。次の場所まで歩いて確かめる。",
+      "reason": "勝利後の移動準備。敗れた守備隊や未到着の捕虜を表示しない。",
+      "visual": "新しい人物表示は追加しない。"
+    }
+  },
+  "next": "既存4役の所在と実移動をScene／Classicへ接続する。代理状・物資の保持者、限定合意、勝利後移動・敗北再試行・逃走後撤退、3結末と旧保存を維持する。"
 }
  }
 };
