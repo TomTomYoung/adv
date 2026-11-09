@@ -1948,6 +1948,15 @@ export const defaultPresentation = {
       "arc": 0,
       "trail": 0,
       "beam": true
+    },
+    "arrow": {
+      "name": "弓矢の弧と残像",
+      "color": "#f4d49c",
+      "width": 28,
+      "height": 3,
+      "durationMs": 130,
+      "arc": -18,
+      "trail": 3
     }
   },
   "timelines": {

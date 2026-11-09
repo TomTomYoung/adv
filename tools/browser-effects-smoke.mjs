@@ -91,7 +91,7 @@ try{
     const bow=Object.values(g.data.items).find(i=>i.equipmentType==='bow');g.state.actors.nio.equipment.weapon=bow.id;
     dispatch({type:'battle',action:'skill',skill:'attack',target:'enemy_0'});await new Promise(r=>setTimeout(r,60));freeze();
   });
-  assert.equal(await page.locator('.fx-projectile').count(),1);await page.screenshot({path:path.join(output,'bow-flight.png')});
+  assert.equal(await page.locator('.fx-projectile:not(.fx-trail)').count(),1);assert.equal(await page.locator('.fx-trail').count(),3);await page.screenshot({path:path.join(output,'bow-flight.png')});
   await page.evaluate(()=>setup({battleMode:'frontline'}));await page.waitForFunction(()=>document.querySelector('.frontline-stage')?.dataset.ready==='true');
   await page.evaluate(async()=>{dispatch({type:'battle',action:'skill',skill:'attack',target:'enemy_0'});await new Promise(r=>setTimeout(r,175));freeze();});
   assert.ok(await page.locator('.fx-ghost canvas').count());await page.screenshot({path:path.join(output,'frontline-hit.png')});
@@ -166,11 +166,11 @@ try{
   const exported=JSON.parse(await fs.readFile(exportPath,'utf8'));assert.equal(exported.version,1);assert.equal(exported.profiles.heavy.voices[0].gain,.16);
   exported.profiles.heavy.name='読込検証';await page.setInputFiles('#import',{name:'design.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(exported))});await page.waitForFunction(()=>document.querySelector('#preset option[value=heavy]').textContent==='読込検証');
   await page.selectOption('#category','timelines');await page.selectOption('#preset','arc_demo');await page.click('#play');await page.waitForFunction(()=>document.querySelectorAll('.fx-trail').length===5);
-  await page.screenshot({path:path.join(output,'presentation-editor-desktop.png')});await page.click('#stop');assert.equal(await page.locator('.fx-overlay').count(),0);
+  await page.evaluate(()=>scrollTo(0,0));await page.screenshot({fullPage:true,path:path.join(output,'presentation-editor-desktop.png')});await page.click('#stop');assert.equal(await page.locator('.fx-overlay').count(),0);
   await page.selectOption('#preset','beam_demo');await page.click('#play');await page.waitForFunction(()=>document.querySelector('.fx-beam'));await page.click('#stop');await page.waitForTimeout(300);assert.equal(await page.locator('.fx-overlay').count(),0);
   await page.selectOption('#motion','reduced');await page.click('#play');assert.equal(await page.locator('.fx-impact-particle,.fx-trail,.fx-beam').count(),0);await page.click('#stop');
   await page.selectOption('#motion','full');await page.setViewportSize({width:390,height:856});
-  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));await page.screenshot({path:path.join(output,'presentation-editor-mobile.png')});
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));assert.ok(await page.locator('#play').isVisible());assert.ok(await page.locator('#capture-a').isVisible());await page.evaluate(()=>scrollTo(0,0));await page.screenshot({fullPage:true,path:path.join(output,'presentation-editor-mobile.png')});
   const designAudio=await page.evaluate(async()=>{
     const {defaultPresentation}=await import('./src/presentation-presets.js'),{BattleSound}=await import('./src/application/battle-sound.js'),results=[];
     for(const id of Object.keys(defaultPresentation.profiles)){
