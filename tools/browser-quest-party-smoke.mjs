@@ -20,15 +20,21 @@ try{
       const next=page.locator('#app [data-focus="message:next"]:visible');if(await next.count())await next.click();else await page.waitForTimeout(30);
     }throw Error(`choice did not appear: ${id}`);
   };
+  const finish=async expected=>{
+    for(let n=0;n<80;n++){
+      const status=await page.evaluate(()=>questPlaytest.report().status);if(status!=='playing'){assert.equal(status,expected);return;}
+      const next=page.locator('#app [data-focus="message:next"]:visible');if(await next.count())await next.click();else await page.waitForTimeout(30);
+    }throw Error('ending did not finish');
+  };
   for(const party of ['balanced','sustain']){
     await page.selectOption('#party',party);await page.click('#launch');await page.waitForFunction(()=>window.questPlaytest?.trial.engine.state.quests.q101.stage==='active');
     assert.equal(await page.evaluate(()=>questPlaytest.report().status),'playing');
     await choose('wish');await choose('listen');await choose('report');
-    await page.waitForFunction(()=>document.querySelector('#trial-result').dataset.status==='cleared');
+    await finish('cleared');
     const report=await page.evaluate(()=>questPlaytest.report());assert.equal(report.config.party,party);assert.equal(report.config.level,1);assert.equal(report.outcome,'report');assert.ok(report.actions>0);assert.equal(report.rescues,0);
   }
   checks.push('real q101 choices reach the selected ending with two distinct level-one parties');
-  await page.selectOption('#party','explore');await page.click('#launch');await choose('watch');await choose('quiet');await page.waitForFunction(()=>document.querySelector('#trial-result').dataset.status==='other_outcome');
+  await page.selectOption('#party','explore');await page.click('#launch');await choose('watch');await choose('quiet');await finish('other_outcome');
   assert.equal(await page.locator('#trial-history li').count(),3);checks.push('alternative ending stays distinct and completed trials persist for comparison');
   const downloadPromise=page.waitForEvent('download');await page.click('#export-trials');const download=await downloadPromise;await download.saveAs(path.join(output,'results.json'));const exported=JSON.parse(await fs.readFile(path.join(output,'results.json'),'utf8'));assert.equal(exported.history.length,3);assert.equal(exported.current.status,'other_outcome');assert.equal(await page.evaluate(()=>localStorage.getItem('adv-normal-save-sentinel')),'preserve-this');
   await page.click('#restart-trial');assert.equal(await page.evaluate(()=>questPlaytest.report().status),'playing');assert.equal(await page.evaluate(()=>questPlaytest.trial.engine.state.quests.q101.outcome),null);checks.push('JSON export and clean restart preserve the normal save namespace');
@@ -38,4 +44,4 @@ try{
   const state=await page.evaluate(()=>questPlaytest.trial.engine.save());await page.focus('#seed');await page.keyboard.press('ArrowUp');assert.equal(await page.evaluate(()=>questPlaytest.trial.engine.save()),state);await page.selectOption('#effects','off');assert.equal(await page.evaluate(()=>questPlaytest.trial.engine.save()),state);checks.push('mobile controls fit and editing conditions/effects does not advance the run');
   await page.reload();await page.waitForFunction(()=>!document.querySelector('#launch').disabled);assert.equal(await page.locator('#trial-history li').count(),3);checks.push('comparison history survives reload without auto-launching or loading a normal save');
   assert.deepEqual(errors,[]);await fs.writeFile(path.join(output,'summary.json'),JSON.stringify({checks,errors},null,2));console.log(JSON.stringify({checks,errors}));
-}catch(e){await fs.writeFile(path.join(output,'failure.txt'),e.stack+'\n'+errors.join('\n'));throw e;}finally{await browser?.close();await new Promise(r=>server.close(r));}
+}catch(e){const page=browser?.contexts()[0]?.pages()[0];if(page){await page.screenshot({path:path.join(output,'failure.png'),fullPage:true}).catch(()=>{});await fs.writeFile(path.join(output,'state.json'),JSON.stringify(await page.evaluate(()=>({status:document.querySelector('#trial-status')?.textContent,report:window.questPlaytest?.report(),waiting:window.questPlaytest?.trial.engine.state.waiting})).catch(()=>null),null,2));}await fs.writeFile(path.join(output,'failure.txt'),e.stack+'\n'+errors.join('\n'));throw e;}finally{await browser?.close();await new Promise(r=>server.close(r));}
