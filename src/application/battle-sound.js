@@ -59,6 +59,7 @@ export class BattleSound {
     return true;
   }
   playVoice(v,event,priority,pitchScale,gainScale){
+    if(v.gain===0)return;
     const c=this.context,start=c.currentTime+v.atMs/1000,duration=v.durationMs/1000,end=start+duration,finish=c.currentTime+voiceDuration(v)/1000+.008,nodes=[],sources=[];
     const keep=node=>{nodes.push(node);return node;},source=keep(v.wave==='noise'?c.createBufferSource():c.createOscillator());sources.push(source);
     let tail=source;

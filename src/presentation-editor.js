@@ -35,7 +35,7 @@ function previewModel(document,category,id){
 async function waveform(document,model,generation){
   const canvas=$('waveform'),ctx=canvas.getContext('2d');ctx.clearRect(0,0,canvas.width,canvas.height);
   if(!globalThis.OfflineAudioContext){$('wave-status').textContent='この環境は波形表示に対応していません。';return;}
-  const length=Math.max(.5,feedbackDuration(model.feedback,document,effects)/1000+.1),c=new OfflineAudioContext(2,Math.ceil(22050*length),22050),synth=new BattleSound({createContext:()=>c,design:document});synth.configure(true,1);
+  const length=Math.max(.5,feedbackDuration(model.feedback,document,effects)/1000+.1),c=new OfflineAudioContext(2,Math.ceil(44100*length),44100),synth=new BattleSound({createContext:()=>c,design:document});synth.configure(true,1);
   // Suspend the offline clock at event boundaries so priority/cooldown decisions
   // see the same time order as live playback, including long multi-hit timelines.
   const groups=new Map();

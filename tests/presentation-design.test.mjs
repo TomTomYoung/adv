@@ -72,3 +72,17 @@ test('particle curves include gravity, size and fade; curved trajectories land a
   const profile=structuredClone(preset.particles.defeat),a=particleFrames(profile,0,42),b=particleFrames(profile,0,42);assert.deepEqual(a,b);assert.equal(a[0].opacity,0);assert.equal(a.at(-1).opacity,0);assert.ok(a.at(-1).transform.includes('scale(0.2)'));
   assert.deepEqual(trajectoryPoint(300,20,-80,0).x,0);assert.equal(trajectoryPoint(300,20,-80,1).x,300);assert.equal(trajectoryPoint(300,20,-80,1).y,20);assert.equal(trajectoryPoint(300,20,-80,.5).y,-70);
 });
+
+test('recorded alternatives and cooldown use cosmetic state without changing definitions',()=>{
+  const d=clone();d.timelines.samples={name:'samples',tracks:[{kind:'sound',sound:'a',alternates:['b'],atMs:0,target:'target',repeat:4,intervalMs:50,priority:70,cooldownMs:30}]};
+  const sounds={a:{asset:'a',gain:.5},b:{asset:'b',gain:.7}},soundAssets={a:'a.ogg',b:'b.ogg'},settings={sounds,soundAssets,seed:19};assert.deepEqual(validatePresentationDesign(d,{sounds}),[]);
+  const a=timelineEvents(d,'samples',settings),b=timelineEvents(d,'samples',settings);assert.deepEqual(a,b);assert.ok(a.every(e=>['a.ogg','b.ogg'].includes(e.sound.url)));assert.ok(a.every(e=>e.priority===70&&e.cooldownMs===30));
+});
+test('an individually muted voice creates no audible source and custom mixer is installed',()=>{
+  const d=clone();for(const v of d.profiles.heavy.voices)v.gain=0;const c=context(),s=new BattleSound({createContext:()=>c,design:d});s.configure(true,1);s.play({synth:'heavy'});assert.equal(s.voices.size,0);assert.equal(c.nodes.filter(n=>n.started!==undefined).length,0);
+  let applied;new GameAudio({design:d,battleSound:{setDesign:value=>applied=value}});assert.equal(applied,d);
+});
+test('per-track delay is cancellable before any overlay is created',t=>{
+  t.mock.timers.enable({apis:['setTimeout']});const dom=installDOM(),fx=new EffectsRenderer(dom.root);t.after(()=>{fx.destroy();dom.restore();});
+  fx.play({duration:100,tracks:[{kind:'tint',color:'#ffffff',opacity:.1,atMs:300,durationMs:200}]},{key:'scene'},{});assert.equal(fx.timers.size,1);assert.equal(dom.document.body.querySelectorAll('.fx-overlay').length,0);fx.stop();t.mock.timers.tick(500);assert.equal(fx.timers.size,0);assert.equal(dom.document.body.querySelectorAll('.fx-overlay').length,0);
+});

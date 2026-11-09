@@ -6,6 +6,7 @@ import {defaultPresentation} from '../presentation-presets.js';
 import {decorateFeedback,parsePresentationDesign} from '../presentation-design.js';
 export class GameAudio {
   constructor({createAudio=url=>new Audio(url),onChange=()=>{},schedule=(fn,delay)=>setTimeout(fn,delay),cancel=id=>clearTimeout(id),battleSound=new BattleSound(),locate=()=>null,design=defaultPresentation}={}){
+    if(design!==defaultPresentation)battleSound?.setDesign?.(design);
     this.design=design;this.locate=locate;this.effectMeta=new WeakMap();this.lastRecorded=new Map();this.battleSound=battleSound;this.duck=1;this.duckTimers=new Set();
     this.schedule=schedule;this.cancel=cancel;this.effectTimers=new Set();this.effectGains=new WeakMap();this.seVolume=1;this.feedbackKey=null;this.preloaded=new Map();this.createAudio=createAudio;this.onChange=onChange;this.enabled=false;this.volume=.5;this.music=null;this.audio=null;this.pending=null;this.generation=0;this.state='off';this.effectKey=null;this.effects=new Set();
   }
