@@ -1,5 +1,7 @@
 # 灯帰りの迷宮
 
+[クエスト攻略パーティー試遊](quest-party-playtest.html) ／ [想定と操作方法](doc/battle/QUEST_PARTY_PLAYTEST.md)。
+
 [前中後衛のバトルテスター](battle-tester.html) ／ [操作・設定](doc/battle/FRONTLINE_BATTLE.md)。
 
 灯を持ち、仲間を連れ、迷宮から帰る。古典的なダンジョン探索と文章・選択肢のADVを組み合わせたブラウザRPGです。

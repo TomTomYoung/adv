@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>クエスト攻略パーティー試遊 — 灯帰りの迷宮</title>
+<link rel="stylesheet" href="src/view/style.css"><link rel="stylesheet" href="src/view/scene-style.css"><link rel="stylesheet" href="src/view/quest-playtest.css">
+</head>
+<body>
+<header id="quest-lab">
+  <div class="quest-lab-heading"><h1>クエスト攻略パーティー試遊</h1><nav><a href="index.html">本編</a> · <a href="battle-engine-playtest.html">戦闘試遊</a> · <a href="doc/battle/QUEST_PARTY_PLAYTEST.md">使い方・定義形式</a></nav></div>
+  <p>クエスト別の想定レベル・編成で、探索から結末まで実際に操作します。初期想定はクリア保証ではありません。</p>
+  <form id="trial-form">
+    <div class="quest-lab-fields">
+      <label>シナリオ版<select id="edition"><option value="e2">第2版（300件）</option><option value="e1">初版（210件）</option></select></label>
+      <label>依頼を絞り込む<input id="quest-search" type="search" placeholder="ID・依頼名・地域"></label>
+      <label class="quest-lab-wide">クエスト<select id="quest" required></select></label>
+      <label>想定パーティー<select id="party" required></select></label>
+      <label>開始レベル<select id="level" required></select></label>
+      <label>確認する結末<select id="outcome" required></select></label>
+      <label>開始地点<select id="start"><option value="reception">受付から（道中を含む）</option><option value="site">最初の現場から（道中を省略）</option></select></label>
+      <label>戦闘方式<select id="battle-mode"><option value="auto">本編の指定</option><option value="classic">Classic</option><option value="grid">Grid</option><option value="frontline">Frontline</option></select></label>
+      <label>乱数シード<input id="seed" type="number" min="1" max="4294967295" step="1" value="1907" required></label>
+    </div>
+    <p id="plan-note"></p><div id="party-preview" class="quest-lab-members"></div><p id="party-tactic"></p><p id="supplies-preview"></p>
+    <div class="quest-lab-actions"><button id="launch" type="submit" disabled>この条件で開始</button><button id="restart-trial" type="button" disabled>同じ条件でやり直す</button><button id="copy-trial-url" type="button" disabled>条件URLをコピー</button><button id="export-trials" type="button" disabled>結果JSONを保存</button><label>演出<select id="effects"><option value="full">通常</option><option value="reduced">控えめ</option><option value="off">切</option></select></label><button id="sound-toggle" type="button">音：切</button></div>
+  </form>
+  <p id="trial-status" role="status" aria-live="polite">読み込み中…</p>
+  <section id="trial-result" aria-label="試遊結果"><p>未開始</p></section>
+  <details><summary>比較履歴（このブラウザーの直近100件）</summary><div id="trial-history"></div></details>
+</header>
+<main id="app" data-view="scene"><p class="quest-lab-empty">上の条件を選び、開始してください。</p></main>
+<script type="module" src="src/quest-party-playtest.js"></script>
+</body>
+</html>
