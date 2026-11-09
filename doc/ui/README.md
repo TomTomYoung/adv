@@ -30,6 +30,8 @@
 
 [SE_CATALOG.md](SE_CATALOG.md)：効果音の定義、再生条件と音量。
 
+[SOUND_AND_EFFECT_FORMAT.md](SOUND_AND_EFFECT_FORMAT.md)：音符・波形・キーフレーム・命中時刻の記述形式、全12種の追加合成音、戦闘演出の対応と具体例、共通外部形式の未実装案。
+
 [DUNGEON_RENDER_REVIEW.md](../legacy/2026-09-25/DUNGEON_RENDER_REVIEW.md)：水面・床材・装置の描画修正の履歴。現在の表示確認済み範囲とは区別します。
 
 ゲームの判定は[共通仕様](../SPEC.md)、地形・明度は[セルと境界](../dungeons/MAP_CELLS_AND_BOUNDARIES.md)と[フィールド照明](../dungeons/FIELD_LIGHTING.md)、全体の検証と次工程は[進捗](../development/PROGRESS.md)・[引き継ぎ](../HANDOFF.md)を参照してください。
