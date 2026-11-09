@@ -16,14 +16,14 @@
 
 目視したPNGは次の8枚（全88枚を目視したという意味ではない）。
 
-- `e2-scene-1440-q184-entry-current.png`
-- `e2-scene-390-q184-invite-current.png`
-- `e2-classic-1440-q184-joint_cooking-current.png`
-- `e2-scene-390-q184-spare-current-party.png`
-- `e2-classic-390-q184-swap-current.png`
-- `e2-scene-1440-q184-parallel-current.png`
-- `e2-classic-390-q184-entry-previous.png`
-- `e2-scene-390-q184-entry-accepted-legacy.png`
+1. `e2-scene-1440-q184-entry-current.png`
+1. `e2-scene-390-q184-invite-current.png`
+1. `e2-classic-1440-q184-joint_cooking-current.png`
+1. `e2-scene-390-q184-spare-current-party.png`
+1. `e2-classic-390-q184-swap-current.png`
+1. `e2-scene-1440-q184-parallel-current.png`
+1. `e2-classic-390-q184-entry-previous.png`
+1. `e2-scene-390-q184-entry-accepted-legacy.png`
 
 実装先端 `aef466c42c3f7c64ec02574b1d3e792aaf74f6bc` の全8ワークフロー・9ジョブが成功した。[全体CI](https://github.com/TomTomYoung/adv/actions/runs/42461732198)、[共通人物表示CI](https://github.com/TomTomYoung/adv/actions/runs/42461732095)も成功。実装と記録は[PR #221](https://github.com/TomTomYoung/adv/pull/221)へまとめ、この記録時点ではmasterへ未統合。全ジョブ完了後の結果追記はこの文書とHANDOFFのみで、重い試験は同一入力の成功結果を再利用する。
 
@@ -41,14 +41,14 @@
 
 目視したPNGは次の8枚（全76枚を目視したという意味ではない）。
 
-- `e2-scene-1440-q183-entry-current.png`
-- `e2-classic-390-q183-entry-previous.png`
-- `e2-scene-390-q183-support-no-rations.png`
-- `e2-classic-1440-q183-confirmed-current.png`
-- `e2-scene-1440-q183-official-current.png`
-- `e2-classic-390-q183-supported-current.png`
-- `e2-scene-390-q183-reported-current.png`
-- `e2-scene-390-q183-entry-accepted-legacy.png`
+1. `e2-scene-1440-q183-entry-current.png`
+1. `e2-classic-390-q183-entry-previous.png`
+1. `e2-scene-390-q183-support-no-rations.png`
+1. `e2-classic-1440-q183-confirmed-current.png`
+1. `e2-scene-1440-q183-official-current.png`
+1. `e2-classic-390-q183-supported-current.png`
+1. `e2-scene-390-q183-reported-current.png`
+1. `e2-scene-390-q183-entry-accepted-legacy.png`
 
 実装先端 `22ba8b6190e78236dde6570e171a29dbba2783a5` の全8ワークフロー・9ジョブが成功した。[全体CI](https://github.com/TomTomYoung/adv/actions/runs/42454538957)、[共通人物表示CI](https://github.com/TomTomYoung/adv/actions/runs/42454538947)も成功。実装と記録は[PR #220](https://github.com/TomTomYoung/adv/pull/220)へまとめ、この記録時点ではmasterへ未統合。全ジョブ完了後の結果追記はこの文書とHANDOFFのみで、重い試験は同一入力の成功結果を再利用する。
 
@@ -66,14 +66,14 @@ master `f518b581b6d312ca6906d09c21a7b0145cc1de8a`（PR #218統合済み）を基
 
 目視したPNGは次の8枚（全104枚を目視したという意味ではない）。
 
-- `e2-scene-1440-q182-entry-current.png`
-- `e2-scene-390-q182-gun-current-11.png`
-- `e2-classic-390-q182-command_agreed-current.png`
-- `e2-classic-1440-q182-evac_ready-current.png`
-- `e2-scene-390-q182-safe-current.png`
-- `e2-scene-1440-q182-stored-current.png`
-- `e2-classic-390-q182-entry-previous.png`
-- `e2-scene-390-q182-entry-accepted-legacy-11.png`
+1. `e2-scene-1440-q182-entry-current.png`
+1. `e2-scene-390-q182-gun-current-11.png`
+1. `e2-classic-390-q182-command_agreed-current.png`
+1. `e2-classic-1440-q182-evac_ready-current.png`
+1. `e2-scene-390-q182-safe-current.png`
+1. `e2-scene-1440-q182-stored-current.png`
+1. `e2-classic-390-q182-entry-previous.png`
+1. `e2-scene-390-q182-entry-accepted-legacy-11.png`
 
 実装コミット `e2467b95c82adffa9f4c785ac08ba93d4e8ab417` の全8ワークフロー・9ジョブが成功した。[全体CI](https://github.com/TomTomYoung/adv/actions/runs/42451708393)、[共通人物表示CI](https://github.com/TomTomYoung/adv/actions/runs/42451708294)も成功。実装と記録は[PR #219](https://github.com/TomTomYoung/adv/pull/219)へまとめ、2026-11-08時点ではmasterへ未統合。検証後の追記はこの文書とHANDOFFのみで、重い検査は同一入力の成功結果を再利用する。
 
