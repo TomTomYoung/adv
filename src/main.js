@@ -18,7 +18,7 @@ const PREFIX='lantern-archive:v1:';
 const make=(tag,text)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;};
 const btn=(text,fn)=>{const b=make('button',text);b.type='button';b.addEventListener('click',fn);return b;};
 let engine,view,data,lastModel,statusTimer,editionSession,editionActionPending=false,settings={volume:.5,seVolume:.8,effects:'full',sound:false,theme:THEME_DEFAULT,viewLayout:'scene',keyBindings:readKeyConfig().config};
-const sound=new GameAudio({onChange:label=>view?.updateSound(label)});
+const sound=new GameAudio({locate:target=>view?.effects.spatial(target),onChange:label=>view?.updateSound(label)});
 function status(text){statusElement.textContent=text;clearTimeout(statusTimer);statusTimer=setTimeout(()=>{statusElement.textContent='';},9000);}
 function storageRead(key){try{return localStorage.getItem(PREFIX+key);}catch{status('このブラウザでは自動保存を使えません。「記録」からファイルへ書き出してください。');return null;}}
 function storageWrite(key,value){try{localStorage.setItem(PREFIX+key,value);return true;}catch{status('保存できませんでした。保存領域を確認するか、記録ファイルを書き出してください。');return false;}}

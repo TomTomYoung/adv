@@ -1,3 +1,4 @@
+import {validatePresentationDesign} from '../../src/presentation-design.js';
 import {encounterGridProperties,targetingSchema,frontlineTargetingSchema,battleRulesSchema,battleGridPresentationSchema} from './battle-grid-schemas.js';
 import {actionStatusProperties} from './status-schemas.js';
 import {skillLevelProperties,scoutingProperties,preemptiveSchema} from './skill-schemas.js';
@@ -27,7 +28,7 @@ export function createDefinitions(read=browserRead){
   const schema=name=>{if(!cache.has(name))cache.set(name,Promise.resolve(read(`data/schemas/${name}.schema.json`)).catch(error=>{cache.delete(name);throw error;}));return cache.get(name);};
   async function definition(entry){
     const family=entry.family;
-    const direct={quest:'quest-events',dungeon:'dungeon',locations:'locations',cells:'cell-layers-authoring',art:'dungeon-art'};
+    const direct={'battle-presentation':'battle-presentation',quest:'quest-events',dungeon:'dungeon',locations:'locations',cells:'cell-layers-authoring',art:'dungeon-art'};
     if(direct[family])return schema(direct[family]);
     const script=await schema('script'),scripts=script.properties.scripts,defs=script.$defs;
     const map=await schema('map'),mapValues=dict(map);
@@ -54,6 +55,7 @@ export function createDefinitions(read=browserRead){
 export function createValidator(read=browserRead){
   const definition=createDefinitions(read);
   return async(entry,value)=>{
+    if(entry.family==='battle-presentation')return validatePresentationDesign(value,{effects:await read('data/effects.json'),sounds:await read('data/sounds.json')});
     const errors=validateSchema(value,await definition(entry));if(errors.length)return errors;
     const fail=(path,text)=>errors.push(`${pathLabel(path)}: ${text}`);
     function walk(v,path=[]){

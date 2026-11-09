@@ -11,7 +11,7 @@ const $=id=>document.getElementById(id),root=$('app'),embedded=window.parent!==w
 document.body.classList.toggle('embedded',embedded);
 applyTheme(THEME_DEFAULT);
 let engine,view,config,request=0,layout='scene',soundEnabled=false;
-const sound=new GameAudio({onChange:label=>view?.updateSound(label)});
+const sound=new GameAudio({locate:target=>view?.effects.spatial(target),onChange:label=>view?.updateSound(label)});
 function syncSound(model=window.battlePlaytest?.model){if(model){sound.configure(soundEnabled,.5,.8);sound.sync({...model,music:view?.playback.active?view.model.music:model.music});}}
 function reply(type,message){if(embedded)window.parent.postMessage({type:'adv:battle-tester:'+type,request,message},location.origin);}
 function status(message){$('playtest-status').textContent=message;reply('status',message);}

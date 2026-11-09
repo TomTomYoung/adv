@@ -147,6 +147,40 @@ try{
   });
   for(const result of sounds){assert.ok(result.rms>.0001,result.kind+' is silent');assert.ok(result.peak<.98,result.kind+' clips: '+result.peak);}
   assert.equal(new Set(sounds.map(s=>s.signature.toFixed(5))).size,sounds.length);
-  checks.push('real OfflineAudioContext mixes 10 recorded+synthesized SE variants: all audible, distinct and below clipping; speaker listening is not claimed');
+  checks.push('real OfflineAudioContext mixes 10 recorded+synthesized SE variants: all non-silent, distinct and below clipping; speaker listening is not claimed');
+  await page.goto(`http://127.0.0.1:${server.address().port}/battle-presentation-editor.html`);
+  await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('プリセットを選び'));
+  assert.equal(await page.locator('#preset option').count(),19);
+  await page.selectOption('#preset','charge');await page.click('#play');
+  await page.waitForFunction(()=>document.querySelector('#wave-status').textContent.includes('ピーク'));
+  assert.equal(await page.locator('#status').getAttribute('data-error'),'false');await page.click('#stop');
+  await page.selectOption('#preset','heavy');await page.click('#capture-a');
+  await page.getByLabel('音源1の音量',{exact:true}).fill('0.09');await page.getByLabel('音源1の音量',{exact:true}).dispatchEvent('change');
+  assert.equal(JSON.parse(await page.inputValue('#item-json')).voices[0].gain,.09);
+  await page.click('#play-a');assert.equal(JSON.parse(await page.inputValue('#item-json')).voices[0].gain,.09);await page.click('#restore-a');
+  assert.equal(JSON.parse(await page.inputValue('#item-json')).voices[0].gain,.16);
+  await page.locator('summary').click();const original=await page.inputValue('#document-json');
+  await page.fill('#document-json',JSON.stringify({...JSON.parse(original),version:9}));await page.click('#apply-document');assert.equal(await page.locator('#status').getAttribute('data-error'),'true');
+  await page.fill('#document-json',original);await page.click('#apply-document');assert.equal(await page.locator('#status').getAttribute('data-error'),'false');
+  const downloadPromise=page.waitForEvent('download');await page.click('#export');const download=await downloadPromise;const exportPath=path.join(output,'battle-presentation-export.json');await download.saveAs(exportPath);
+  const exported=JSON.parse(await fs.readFile(exportPath,'utf8'));assert.equal(exported.version,1);assert.equal(exported.profiles.heavy.voices[0].gain,.16);
+  exported.profiles.heavy.name='読込検証';await page.setInputFiles('#import',{name:'design.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(exported))});await page.waitForFunction(()=>document.querySelector('#preset option[value=heavy]').textContent==='読込検証');
+  await page.selectOption('#category','timelines');await page.selectOption('#preset','arc_demo');await page.click('#play');await page.waitForFunction(()=>document.querySelectorAll('.fx-trail').length===5);
+  await page.screenshot({path:path.join(output,'presentation-editor-desktop.png')});await page.click('#stop');assert.equal(await page.locator('.fx-overlay').count(),0);
+  await page.selectOption('#preset','beam_demo');await page.click('#play');await page.waitForFunction(()=>document.querySelector('.fx-beam'));await page.click('#stop');await page.waitForTimeout(300);assert.equal(await page.locator('.fx-overlay').count(),0);
+  await page.selectOption('#motion','reduced');await page.click('#play');assert.equal(await page.locator('.fx-impact-particle,.fx-trail,.fx-beam').count(),0);await page.click('#stop');
+  await page.selectOption('#motion','full');await page.setViewportSize({width:390,height:856});
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));await page.screenshot({path:path.join(output,'presentation-editor-mobile.png')});
+  const designAudio=await page.evaluate(async()=>{
+    const {defaultPresentation}=await import('./src/presentation-presets.js'),{BattleSound}=await import('./src/application/battle-sound.js'),results=[];
+    for(const id of Object.keys(defaultPresentation.profiles)){
+      const c=new OfflineAudioContext(2,44100*2,44100),synth=new BattleSound({createContext:()=>c});synth.configure(true,1);synth.play({synth:id,variationSeed:42,spatial:{pan:id==='charge'?-1:0}});const buffer=await c.startRendering();let peak=0,sum=0,right=0,tail=0;
+      for(let ch=0;ch<2;ch++){const a=buffer.getChannelData(ch);for(let i=0;i<a.length;i++){peak=Math.max(peak,Math.abs(a[i]));sum+=a[i]*a[i];if(ch===1)right+=a[i]*a[i];if(i>44100*.66)tail+=a[i]*a[i];}}results.push({id,peak,rms:Math.sqrt(sum/(44100*4)),right,tail});synth.stop();
+    }return results;
+  });
+  for(const r of designAudio){assert.ok(r.rms>.00001,r.id+' is silent');assert.ok(r.peak<.98,r.id+' peak');}
+  assert.ok(designAudio.find(r=>r.id==='charge').right<1e-10);assert.ok(designAudio.find(r=>r.id==='charge').tail>0);
+  checks.push('presentation editor: JSON validation/import/export, A/B snapshots, waveform, arc/trail/beam previews, stop/reduced motion, desktop/mobile layout; 19 synthesized profiles rendered with echo tail and stereo checks');
+  await fs.writeFile(path.join(output,'design-audio.json'),JSON.stringify(designAudio,null,2)+'\n');
   assert.deepEqual(errors,[]);await fs.writeFile(path.join(output,'results.json'),JSON.stringify({checks,sounds,errors},null,2)+'\n');console.log(JSON.stringify({passed:true,checks,errors},null,2));
 }finally{await browser?.close();server.close();}

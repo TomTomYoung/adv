@@ -7,7 +7,7 @@ export async function configReference(folder=root){
  const references=[];
  const used=new Set(),read=async f=>{used.add(f);return JSON.parse(await fs.readFile(path.join(folder,f),'utf8'));};
  const game=await read('data/game.json'),assets=await read('data/assets.json'),names={},maps={},placements=[],eventOwners={},refs=new Set(),scriptOwners={},scripts={},sources={};
- for(const file of (await fs.readdir(path.join(folder,'config'))).filter(f=>f.endsWith('.json')).sort())sources[file]=await read('config/'+file);
+ for(const file of (await fs.readdir(path.join(folder,'config'))).filter(f=>f.endsWith('.json')&&f!=='battle-presentation.json').sort())sources[file]=await read('config/'+file);
  for(const file of (await fs.readdir(path.join(folder,'config/dungeons'))).filter(f=>f.endsWith('.json')).sort())sources['dungeons/'+file]=await read('config/dungeons/'+file);
  for(const [kind,file] of Object.entries(game.files.databases)){
   const value=await read(file);if(kind==='questOrder'||!value||Array.isArray(value)||typeof value!=='object')continue;

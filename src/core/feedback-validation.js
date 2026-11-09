@@ -1,4 +1,5 @@
 import {isRecord} from './expression.js';
+import {defaultPresentation} from '../presentation-presets.js';
 export const colorValid=v=>typeof v==='string'&&/^#[0-9a-f]{6}$/i.test(v);
 const number=(v,min,max)=>Number.isFinite(v)&&v>=min&&v<=max;
 export const layerNameValid=v=>typeof v==='string'&&/^[a-z][a-z0-9_]{0,31}$/.test(v)&&!['constructor','prototype'].includes(v);
@@ -10,6 +11,7 @@ export function validatePresentation(data){
   for(const [id,e] of Object.entries(data.effects??{})){
     if(!number(e.duration,50,5000)||!Array.isArray(e.tracks)||e.tracks.length<1||e.tracks.length>8){fail(id,'時間・トラック数が不正です');continue;}
     for(const t of e.tracks){
+      if(t.atMs!==undefined&&!number(t.atMs,0,5000)||t.durationMs!==undefined&&!number(t.durationMs,50,5000)||(t.atMs??0)+(t.durationMs??e.duration)>5000)fail(id,'トラックの開始時刻・長さが不正です');
       if(t.kind==='motion'){
         if(t.directed!==undefined&&typeof t.directed!=='boolean')fail(id,'方向指定は真偽値です');
         if(!Array.isArray(t.frames)||t.frames.length<2||t.frames.length>32){fail(id,'キーフレーム数が不正です');continue;}
@@ -19,7 +21,7 @@ export function validatePresentation(data){
       }else if(t.kind==='strike'){
         if(!['slash','blunt','pierce'].includes(t.pattern)||!colorValid(t.color))fail(id,'物理攻撃の形・色が不正です');
       }else if(t.kind==='projectile'){
-        if(!colorValid(t.color))fail(id,'飛翔色が不正です');
+        if(!colorValid(t.color))fail(id,'飛翔色が不正です');if(t.path!==undefined&&!Object.hasOwn(defaultPresentation.paths,t.path))fail(id,'飛翔経路が不正です');
       }else if(t.kind==='sprite'){
         ref(data.assets.images,t.asset,id);for(const [k,min,max] of [['frames',2,64],['columns',1,64],['cell',8,512]])if(!Number.isInteger(t[k])||!number(t[k],min,max))fail(id,`コマ指定が不正です: ${k}`);if(!number(t.scale??1,.1,3))fail(id,'拡大率が不正です');
       }else if(t.kind==='split'){if(!['vertical','diagonal'].includes(t.axis)||!number(t.distance,0,100)||!number(t.rotate,-45,45))fail(id,'切断指定が不正です');}

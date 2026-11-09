@@ -1,3 +1,4 @@
+import {validatePresentationDesign} from '../../../src/presentation-design.js';
 import {edgePlacementErrors} from '../../../src/core/edge-layers.js';
 import {cellBindingErrors} from '../../../src/core/cell-behaviors.js';
 import {EditorContext} from './context.js';
@@ -15,6 +16,7 @@ export function checkWorkspace(snapshot,files,base,schemas){
  const maps=context.maps(),cellSource=snapshot.get('cell-layers.json');
  if(cellSource&&(files.includes('cell-layers.json')||files.some(f=>f.startsWith('dungeons/')))){const dungeons={...base.cellDungeons};for(const [file,value] of snapshot)if(file.startsWith('dungeons/'))dungeons[value.id]=value;for(const e of cellBindingErrors(cellSource,dungeons))fail('cell-layers.json',['maps',e.map,'rows',e.y],e.message);}
  for(const file of files){const value=snapshot.get(file);if(!value)continue;
+  if(file==='battle-presentation.json'){for(const message of validatePresentationDesign(value,{sounds:context.names('sounds'),effects:context.names('effects')}))fail(file,[],message);continue;}
   function walk(v,path=[]){if(!v||typeof v!=='object')return;
    if(typeof v.map==='string'&&Number.isInteger(v.x)&&Number.isInteger(v.y)){
     const meta=maps[v.map],map=meta?.owner&&snapshot.has(meta.owner.file)?get(snapshot.get(meta.owner.file),meta.owner.path):null;

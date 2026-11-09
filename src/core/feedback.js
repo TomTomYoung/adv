@@ -1,12 +1,13 @@
 import {clone} from './expression.js';
+import {defaultPresentation} from '../presentation-presets.js';
 let nextSession=0;
 export const freshFeedback=()=>({session:++nextSession,revision:0,events:[],clock:0});
 export function beginFeedback(engine){engine.feedback.revision++;engine.feedback.events=[];engine.feedback.clock=0;}
 export function describeTarget(engine,key='scene'){
   if(typeof key!=='string')return clone(key);
   const [kind,id]=key.split(':');
-  if(kind==='actor'){const a=engine.data.actors[id];return {key,image:a?.portrait,label:a?.name};}
-  if(kind==='enemy'){const e=engine.state.battle?.enemies.find(e=>e.instance===id);return {key,image:e?.sprite,label:e?.name};}
+  if(kind==='actor'){const a=engine.data.actors[id];return {key,image:a?.portrait,label:a?.name,material:a?.impactMaterial??'flesh'};}
+  if(kind==='enemy'){const e=engine.state.battle?.enemies.find(e=>e.instance===id);return {key,image:e?.sprite,label:e?.name,material:engine.data.enemies[e?.id]?.impactMaterial??defaultPresentation.materialSprites[e?.sprite]??'flesh'};}
   return {key};
 }
 export function emitFeedback(engine,{effects=[],sound=null,targets=['scene'],source,at=engine.feedback.clock,gain=1,phase,action}){

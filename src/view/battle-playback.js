@@ -1,4 +1,5 @@
 import {feedbackDelay} from '../feedback-timing.js';
+import {decorateFeedback,feedbackDuration} from '../presentation-design.js';
 
 // Keep the pre-action battlefield on screen while replaying resolved results.
 // This owns DOM/timers only: it never dispatches an action or modifies a model.
@@ -29,7 +30,7 @@ export class BattlePlayback {
     const inert=[...view.root.children].map(node=>[node,node.inert]);for(const [node] of inert)node.inert=true;
     // The stage is inert too; place the controls outside it, above either layout.
     view.root.append(bar);
-    const duration=Math.max(...events.map(e=>e.at+Math.max(240,...e.effects.map(id=>next.effects[id]?.duration??0),e.targets.some(t=>t.damage>0||t.healing>0)?620:0)))+30;
+    const duration=feedbackDuration(decorateFeedback(next.feedback,view.effects.design,{sounds:next.sounds,soundAssets:next.soundAssets}),view.effects.design,next.effects)+30;
     this.active={next,bar,label,inert,timer:setTimeout(()=>this.finish(),feedbackDelay(next.feedback,duration))};
     view.effects.onEvent=event=>{
       if(event.action)label.textContent=event.action;
