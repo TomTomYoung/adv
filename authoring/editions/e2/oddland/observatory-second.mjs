@@ -115,5 +115,10 @@ export function observatorySecondSource(q,{cast=true}={}){
    node(scene).cast=people.map((entity,i)=>({entity,display:{x:positions[i]}}));
   }
  }
+ if(q.number===186&&cast){
+  for(const id of ['communicator','ours','theirs','captives'])x.entities[id].character='q186_'+id;
+  const scenes={parley:['communicator'],limited_offer:['communicator'],gather:['ours'],exchange:['ours','theirs'],local_done:['theirs'],secured:['captives'],battle_done:['captives']};
+  for(const [scene,people] of Object.entries(scenes)){const positions=people.length===2?[31,69]:[50];node(scene).cast=people.map((entity,i)=>({entity,display:{x:positions[i]}}));}
+ }
  return finish();
 }
