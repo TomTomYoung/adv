@@ -55,6 +55,12 @@ export const relocatedCharacters=Object.fromEntries([
 ].map(([id,name,detail,provenance])=>[id,{id,name,role:'礼拝堂の現地の相手',detail,portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,
  provenance:provenance??'2026-10-29の美術設定。固有名・他人物との同一性は追加しない。具体的な外見・年齢感・服装は今回の美術設定。牢・格子・聖像・宝玉・石を人物画へ固定しない。'}]));
 // The group has no specified headcount or spokesperson. Ren is the existing actor.
+for(const [id,name,role,detail] of [
+ ['nev','橋守ネヴ','両国の家族の通過を待つ橋守','既存nevの実同行に沿って全13場面へ表示する。車輪の修理印を知る本人として扱う。'],
+ ['troops','撤退する自軍','橋を封鎖して撤退する自軍','人数未確定の集団。既存troopsの同行先だけに表示し、指揮官を別人として補わない。'],
+ ['families','両国の家族','荷車とともに渡河を待つ両国の家族','橋頭から橋の対岸、または別の乗場と舟の対岸へ実移動した6場面に表示する。封鎖足場や救援受付へ連れ戻さない。'],
+ ['unarmed','装備を置いた敵兵','避難者を守るため装備を置いた敵兵','既存unarmedの実所在となる6場面へ表示する。武器は橋頭に残り、入口の伝聞だけでは同席させない。']
+])relocatedCharacters['q185_'+id]={id:'q185_'+id,name,role,detail,provenance:'2026-11-09。原稿と現場本文に基づく呼称表示。氏名・人数・国名・専用画を追加せず、荷車や舟を人物へ変換しない。'};
 relocatedCharacters.q184_jarl={
  id:'q184_jarl',name:'料理人ジャル',role:'捕虜へ故郷の料理を作ろうとする敵兵の料理人',
  detail:'既存jarlの実同行に沿って隠し厨房・検査場・普通食厨房・倉庫に表示する。大鍋の没収後と返却時は隠し厨房に残る。',

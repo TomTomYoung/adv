@@ -179,7 +179,9 @@ PRの差分はmerge-baseからHEADまでを判定します。直前コミット�
 
 `browser-pot-cast-smoke.mjs` はq184の現行10・表示追加前10・旧受注2の22保存点をScene／Classic × 1440／390pxの88条件で検査する。倉庫の2経路は食材の所在が異なるため分ける。[専用8試験](../../tests/pot-cast.test.mjs)は全9場面・8旅程・4経路・3結末、4役の実同行と捕虜の出演場面、鍋・別鍋・食材の受渡し、検査と共同炊事の確定時点、報酬の一回性、物語改訂1と旧保存の完全保持、不正所在の拒否、旧受注経路とq183移行との共存を確認する。
 
-**出力**: 標準ログ、viewport checkpoint。artifactは `oddland-browser-checkpoints`。q181の結果JSONとPNGは `q181-cast-checkpoints`、q182は `q182-cast-checkpoints`、q183は `q183-cast-checkpoints`、q184は `q184-cast-checkpoints` に分離する。
+`browser-bridge-cast-smoke.mjs` はq185の現行16・表示追加前16・旧受注1の33保存点を両表示・両幅の132条件で検査する。全13場面に加え、逃走・敗北から戻ったguardと39Gで支払えないrentを確認する。4役が同席する狭幅Sceneでは2列の呼称が重ならず、HUDと本文に隠れないことも共通ブラウザ検査で確認する。[専用8試験](../../tests/bridge-cast.test.mjs)は全11旅程・3結末・戦闘中と救助後を含む旧保存の完全保持、40G一回支払・無料帰還、家族・敵兵・舟の実移動と武器の固定所在、封鎖の確定時点、報酬一回性、不正所在の拒否、旧受注の戦闘結果と直接結末を検証する。
+
+**出力**: 標準ログ、viewport checkpoint。artifactは `oddland-browser-checkpoints`。q181の結果JSONとPNGは `q181-cast-checkpoints`、q182は `q182-cast-checkpoints`、q183は `q183-cast-checkpoints`、q184は `q184-cast-checkpoints`、q185は `q185-cast-checkpoints` に分離する。
 
 ## 8. SalomeブラウザCI: `.github/workflows/salome-quests.yml`
 
