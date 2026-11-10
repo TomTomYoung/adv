@@ -4972,10 +4972,10 @@ export const RELOCATED_CAST_REVIEW={
   "next": "q185の表示・全11旅程・40G支払・無料帰還・3結末・戦闘後再開・旧保存を検証した。次は全13場面を監査したq186の通信士と負傷者・捕虜の表示を接続する。"
 },
   q186:{
-  "sourceSha256": "934d5d5f1a9e7be6bd23882999e7e9d618ca2fa23c75d025a2ef7b0c3b8ad09e",
+  "sourceSha256": "ef40dee85396d6d5b9cb44d36ac4e34da5aa52fa61b80813bcf25da7d662229c",
   "identityNotes": [
     "原稿authoring/reference/volume-09.mdのGQ086、初版q186、現行全13場面・14旅程・3結末を精読した。",
-    "通信士と負傷者2群・捕虜の既存4役を候補とする。ハス、負傷した司令、使者、受付係を推測で追加しない。人物名・人数・国名を補わない。",
+    "通信士と負傷者2群・捕虜の既存4役を実所在に沿う7場面へ接続した。ハス、負傷した司令、使者、受付係を推測で追加しない。人物名・人数・国名を補わない。",
     "代理状はauthority_limitedの出発時にauthority→party、到着時にparty→communicator。通信士本人はparleyから移動しない。",
     "localAgreedはparley_localまたはlimited_offer_agreeの出発時、limitedは代理権待機への到着時に確定する。文書と合意と正式停戦を混同しない。",
     "物資は直接合意のgather_escort出発時だけentry→party、到着時にexchangeへ渡す。限定代理状の経路ではentryに残す。",
@@ -4985,22 +4985,26 @@ export const RELOCATED_CAST_REVIEW={
   "people": {
     "q186_communicator": {
       "label": "若い通信士",
-      "status": "candidate",
+      "status": "connected",
+      "entity": "communicator",
       "need": "parleyとlimited_offerだけ。既存communicatorは砦の前に固定し、代理状を受け取る。"
     },
     "q186_ours": {
       "label": "引き渡す負傷者たち",
-      "status": "candidate",
+      "status": "connected",
+      "entity": "ours",
       "need": "gatherとexchangeだけ。既存oursの陣地から交換場所への実同行を使う。"
     },
     "q186_theirs": {
       "label": "受け取る負傷者たち",
-      "status": "candidate",
+      "status": "connected",
+      "entity": "theirs",
       "need": "exchangeとlocal_doneだけ。既存theirsの交換場所から陣地への実同行を使う。"
     },
     "q186_captives": {
       "label": "砦の捕虜たち",
-      "status": "candidate",
+      "status": "connected",
+      "entity": "captives",
       "need": "securedとbattle_doneだけ。制圧後の砦から陣地へ実同行する。"
     }
   },
@@ -5112,7 +5116,7 @@ export const RELOCATED_CAST_REVIEW={
       "visual": "新しい人物表示は追加しない。"
     }
   },
-  "next": "既存4役の所在と実移動をScene／Classicへ接続する。代理状・物資の保持者、限定合意、勝利後移動・敗北再試行・逃走後撤退、3結末と旧保存を維持する。"
+  "next": "既存4役の所在と実移動をScene／Classicへ接続済み。代理状・物資の保持者、限定合意、勝利後移動・敗北再試行・逃走後撤退、3結末と旧保存を維持する。"
 }
  }
 };

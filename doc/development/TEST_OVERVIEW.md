@@ -181,7 +181,9 @@ PRの差分はmerge-baseからHEADまでを判定します。直前コミット�
 
 `browser-bridge-cast-smoke.mjs` はq185の現行16・表示追加前16・旧受注1の33保存点を両表示・両幅の132条件で検査する。全13場面に加え、逃走・敗北から戻ったguardと39Gで支払えないrentを確認する。4役が同席する狭幅Sceneでは2列の呼称が重ならず、HUDと本文に隠れないことも共通ブラウザ検査で確認する。[専用8試験](../../tests/bridge-cast.test.mjs)は全11旅程・3結末・戦闘中と救助後を含む旧保存の完全保持、40G一回支払・無料帰還、家族・敵兵・舟の実移動と武器の固定所在、封鎖の確定時点、報酬一回性、不正所在の拒否、旧受注の戦闘結果と直接結末を検証する。
 
-**出力**: 標準ログ、viewport checkpoint。artifactは `oddland-browser-checkpoints`。q181の結果JSONとPNGは `q181-cast-checkpoints`、q182は `q182-cast-checkpoints`、q183は `q183-cast-checkpoints`、q184は `q184-cast-checkpoints`、q185は `q185-cast-checkpoints` に分離する。
+`browser-truce-cast-smoke.mjs`はq186の現行20・表示追加前20・旧受注2の42保存点をScene／Classic × 1440／390pxの168条件で検査する。直接合意と限定代理状の交換、逃走後に再戦・再交渉が閉じること、敗北後の再戦、全13場面を含む。[専用8試験](../../tests/truce-cast.test.mjs)は全14旅程・3結末、代理状と物資の出発／到着時の受渡し、負傷者と捕虜の実同行、限定合意、旧保存の待機本文・戦闘・旅程・完了状態、旧受注の直接結末、不正保存の原子的拒否を確認する。
+
+**出力**: 標準ログ、viewport checkpoint。artifactは `oddland-browser-checkpoints`。q181の結果JSONとPNGは `q181-cast-checkpoints`、q182は `q182-cast-checkpoints`、q183は `q183-cast-checkpoints`、q184は `q184-cast-checkpoints`、q185は `q185-cast-checkpoints`、q186は `q186-cast-checkpoints` に分離する。
 
 ## 8. SalomeブラウザCI: `.github/workflows/salome-quests.yml`
 

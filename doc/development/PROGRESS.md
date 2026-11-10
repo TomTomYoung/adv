@@ -2,6 +2,33 @@
 
 この文書は実施日・対象コミットごとの検証履歴です。過去の件数・環境制約は当時の記録として保持します。現在の実装範囲は[CURRENT_STATUS](../CURRENT_STATUS.md)、未実装の順序は[HANDOFF](../HANDOFF.md)を参照してください。
 
+## 2026-11-10：戦闘演出との統合とq186の通信士・負傷者・捕虜
+
+PR #222をmaster `301ef4e68be0e634c6f906982d4575f236024f2d`へ統合した。PR #223との競合はruntime.jsonとDATA_SNAPSHOT.jsonの生成値2件で、q185と戦闘演出・攻略パーティー試遊の両方を保持して再生成した。統合ツリー `9c48efdcfee4c8ef788897709f6f38ade90c1259`で`npm run check`の全2,741試験が成功した。PR #223の競合解消先端`c0b11dd8b997dcee83b2b85a8be7d152a391eba3`で全11ワークフロー・12ジョブが成功した。master `bf9cd2f3b965ee345259260576d1f073b47a376c`へ統合済み。統合後のツリーも`9c48efdcfee4c8ef788897709f6f38ade90c1259`で、検証済みツリーとの一致を確認した。統合版q185は132画面条件・3結末・エラー0、PNG132枚との一致と代表4枚の主要部の目視を確認した。[PR #223統合後の公開](https://github.com/TomTomYoung/adv/actions/runs/42837565624)と[全体CI](https://github.com/TomTomYoung/adv/actions/runs/42837568724)は成功した。公開runtime.jsonも統合済みmasterの定義と一致し、攻略パーティー試遊HTMLの取得を確認した。
+
+q186「返事のない停戦」は原稿GQ086、初版、現行全13場面・14旅程・3結末と既存出演監査を照合した。通信士はparley／limited_offer、引き渡す負傷者はgather／exchange、受け取る負傷者はexchange／local_done、捕虜はsecured／battle_doneへ呼称表示する。ハス・負傷した司令・連絡所や受付の担当者を推測で同席させず、新しい氏名・人数・国名・専用画は追加していない。勝利直後の移動準備や安全の伝言では人物を表示しない。
+
+本文・物語改訂1・既存の値域・全行動を保持し、表示追加前のクエストと比較する専用試験で、4つのcharacter参照と7場面のcast以外に変更がないことを確認する。代理状は連絡所出発で隊へ、通信士の前への到着で本人へ渡る。局地合意は負傷者を迎えに出る時点で確定する。直接合意だけ物資を交換場所へ運び、限定代理状では元の陣地に残す。引き渡す負傷者は交換場所に残り、受け取る負傷者と捕虜はそれぞれの経路で陣地へ到着する。
+
+専用8試験は旧保存の待機本文・選択肢・全13場面・全14旅程・戦闘中・救助後・完了後、報酬の一回性、旧受注の2場面・直接結末を検査する。敗北後は再戦と交渉再開が可能、逃走後は再戦とbackを無効にしてwithdrawを残す。現行20・表示追加前20・旧受注2の42保存点を両表示・両幅の168条件で確認するブラウザー検査をOddland CIへ追加した。
+
+`npm run check`は全2,749試験成功・失敗0・スキップ0。専用8試験と出演監査7試験も成功した。[q186のOddland CI](https://github.com/TomTomYoung/adv/actions/runs/42835105029)で168画面条件・3結末・エラー0を確認した。成果物`q186-cast-checkpoints`（ID `13774905884`）の結果JSONとPNG168枚を照合し、両表示・両幅それぞれ42条件、13場面・42保存点の一致を確認した。
+
+代表8枚の主要部を目視し、通信士との対面、限定代理状、交換場所の2群、帰着後に受け取った負傷者だけが残ること、砦へ到着後の捕虜、逃走後の人物非表示と撤退、旧受注の待機本文を確認した。全168枚を目視したという意味ではない。
+
+- `e2-scene-1440-q186-parley-current.png`
+- `e2-classic-390-q186-limited_offer-current-limited.png`
+- `e2-scene-390-q186-exchange-current.png`
+- `e2-classic-1440-q186-exchange-current-limited.png`
+- `e2-scene-390-q186-local_done-previous-limited.png`
+- `e2-scene-1440-q186-secured-current.png`
+- `e2-scene-390-q186-assault-previous-escape.png`
+- `e2-classic-390-q186-authority-accepted-legacy.png`
+
+実装は[PR #224](https://github.com/TomTomYoung/adv/pull/224)、先端`a6faec9ab3ffccd586fd59b4bc7b0efe1cdddb88`。ローカル検証ツリーとGitHub上のツリー`effd100d62bfad0c6708fa7788a41c7904346a64`は一致する。実装先端の全11ワークフロー・12ジョブが成功した。[全体CI](https://github.com/TomTomYoung/adv/actions/runs/42835104462)・[共通人物表示CI](https://github.com/TomTomYoung/adv/actions/runs/42835104360)も成功。結果追記はCURRENT_STATUS／HANDOFF／PROGRESSのみで、成功済みの同一入力を再利用する。
+
+この作業環境でも既存Chromiumの起動が`socket() failed: Operation not permitted (1)`で拒否されたため、ブラウザー表示はGitHub CIで検証する。導入不足とは判断せず、再インストールは行わない。出演監査は空cast448場面、133人物エンティティ中89件のcharacter接続、接続126役・候補1役。精読424場面・未精読329場面は維持し、q187は次工程メモとして原稿GQ087・現行9場面・10旅程・3結末を精読した。カドの実同行、住民の退避先、村長の井戸での所在、将校の任用窓口での対面と契約場面の伝聞の区別、逃走・敗北後の分岐、旧保存への所在追加を次に監査する。出演監査台帳への登録と表示実装は未着手で、今回の監査集計には加えていない。
+
 ## 2026-11-09：q185の橋・人物表示とq186出演監査
 
 [PR #221](https://github.com/TomTomYoung/adv/pull/221)をmaster `842dd9a7756b24f724a577538ef167a797908c3b` へ統合した。統合ツリーは検証済み先端の `36f15ba29ad26298ff3f7bd67a91c044b996e6cd` と一致する。[統合後の全体CI](https://github.com/TomTomYoung/adv/actions/runs/42527829676)と[公開](https://github.com/TomTomYoung/adv/actions/runs/42527828924)も成功した。
