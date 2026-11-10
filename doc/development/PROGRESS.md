@@ -2,6 +2,33 @@
 
 この文書は実施日・対象コミットごとの検証履歴です。過去の件数・環境制約は当時の記録として保持します。現在の実装範囲は[CURRENT_STATUS](../CURRENT_STATUS.md)、未実装の順序は[HANDOFF](../HANDOFF.md)を参照してください。
 
+## 2026-11-09：q185の橋・人物表示とq186出演監査
+
+[PR #221](https://github.com/TomTomYoung/adv/pull/221)をmaster `842dd9a7756b24f724a577538ef167a797908c3b` へ統合した。統合ツリーは検証済み先端の `36f15ba29ad26298ff3f7bd67a91c044b996e6cd` と一致する。[統合後の全体CI](https://github.com/TomTomYoung/adv/actions/runs/42527829676)と[公開](https://github.com/TomTomYoung/adv/actions/runs/42527828924)も成功した。
+
+橋守ネヴと自軍を全13場面へ、両国の家族と装備を置いた敵兵をguard・won・crossed・fetch・board・landedの6場面へ接続した。家族と兵は橋の対岸／舟の対岸に残り、封鎖足場や報告先へ戻さない。武器はnearのまま。荷車と舟は運搬対象として維持し、御者・船頭・指揮官や人数を補わない。
+
+early本文を封鎖方針を決めた準備段階へ変更した。closedは従来どおりfamilies_done／boat_doneのfinish、early_reportの出発時だけ確定する。40Gはrent_payだけ一回支払い、支払前の帰還は無料。物語改訂1・既存の値域・行動・全11旅程・3結末を保持する。表示追加前の正規保存は戦闘中・救助後・移動中・待機本文・完了後も変更なしで復元する。
+
+専用8試験を含む関連62試験が成功・失敗0・スキップ0。現行16・表示追加前16・旧受注1の33保存点、Scene／Classic × 1440／390pxの132画面条件をOddland CIへ追加した。逃走・敗北後は再戦を拒否して早期撤退へ進めること、39Gでは舟を借りられず無料帰還できること、報酬の一回性、旧受注の勝利・逃走・敗北と直接結末を検証する。既知のChromium socket制限の導入試行は繰り返さず、ブラウザ検証はGitHub CIで実施する。`npm run check` は全2,709試験成功・失敗0・スキップ0。配布指紋・生成シナリオ・全データと素材参照・設定画面・静的ファイル・文書の検査も成功した。生成日とDATA_SNAPSHOTの整合を保ち、無関係な手書き表の書式変更は戻した。[PR #222](https://github.com/TomTomYoung/adv/pull/222)へ実装した。
+
+[初回Oddland CI](https://github.com/TomTomYoung/adv/actions/runs/42529028881)のq185検査で、guard・Scene・390pxのネヴと自軍のラベル重なりを検出した。呼称だけの出演が4役以上の狭幅Sceneを2列へ折り返す共通配置を追加し、既存の人物位置指定は広幅で維持する。Classicと人物画を含む場面の配置は従来どおり。修正後の `npm run check` も全2,709試験成功・失敗0・スキップ0。[修正版Oddland CI](https://github.com/TomTomYoung/adv/actions/runs/42530243705)は先端 `772c5aa6e7238495488f40a14ecde4c10164ac71` で成功し、132画面条件・3結末・エラー0を確認した。成果物 `q185-cast-checkpoints`（ID `13637625431`、SHA-256 `3d7b1e9c010cff949b1f957a7e7c868b9ba99917f820e666085ec4c7fe5ce492`）の結果JSONとPNG132枚を照合し、Scene／Classic × 1440／390px各33条件、保存点33種の一致を確認した。代表8枚を目視し、狭幅Sceneの4役が2列で重ならず、HUDと本文に隠れないこと、舟到着後の4役、39Gの支払拒否と無料帰還、逃走・敗北後の再戦拒否と撤退、旧待機本文と旧受注経路を確認した。
+
+目視したPNGは次の8枚（全132枚を目視したという意味ではない）。
+
+1. `e2-scene-1440-q185-entry-current.png`
+1. `e2-scene-390-q185-guard-current.png`
+1. `e2-classic-1440-q185-landed-current.png`
+1. `e2-classic-390-q185-rent-current-insufficient-gold.png`
+1. `e2-scene-390-q185-guard-current-escape.png`
+1. `e2-classic-390-q185-guard-previous-lose.png`
+1. `e2-scene-1440-q185-early-previous.png`
+1. `e2-scene-390-q185-entry-accepted-legacy.png`
+
+実装先端 `772c5aa6e7238495488f40a14ecde4c10164ac71` の全9ワークフロー・10ジョブが成功した。[全体CI](https://github.com/TomTomYoung/adv/actions/runs/42530243589)・[共通人物表示CI](https://github.com/TomTomYoung/adv/actions/runs/42530243694)も成功。結果追記はHANDOFF／PROGRESSだけで、成功済みの同一入力を再利用する。
+
+q186「返事のない停戦」は原稿GQ086と全13場面・14旅程を精読した。通信士はparleyとlimited_offerだけ、負傷者2群と捕虜は既存の実移動に接続する候補とした。代理状の出発時持出し・到着時受渡し、直接合意だけの物資搬入、限定合意と正式停戦の区別、勝利後の実移動・敗北再試行・逃走後の撤退を次工程へ記録した。ハスや司令本人、伝言を残す場面の通信士を推測で同席させない。q186の実装は含まない。
+
 ## 2026-11-08：q184の鍋・人物表示とq185出演監査
 
 [PR #220](https://github.com/TomTomYoung/adv/pull/220)をmaster `552cd406f5378ab1665140a052ba8d4c61153ae0` へ統合した。統合ツリーは検証済み先端の `ffd1209c33233fa04b1ed21713ef05e9a6babb94` と一致。[公開](https://github.com/TomTomYoung/adv/actions/runs/42460859959)は成功し、[統合後の全体CI](https://github.com/TomTomYoung/adv/actions/runs/42460860299)も成功。このmasterを基点にq184「捕虜の鍋」を実装した。

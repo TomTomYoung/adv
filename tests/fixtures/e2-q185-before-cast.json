@@ -1,0 +1,2844 @@
+{
+  "schemaVersion": 1,
+  "id": "q185",
+  "number": 185,
+  "title": "橋を落とさない理由",
+  "client": "撤退軍と橋守ネヴ",
+  "brief": "追手を止める橋の封鎖時刻を決めてください。",
+  "region": 9,
+  "type": "scene_graph",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 旧王領の村の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q185_scene",
+      "title": "橋を落とさない理由：撤退軍と橋守ネヴ",
+      "points": [
+        {
+          "map": "region_9_f1",
+          "x": 8,
+          "y": 1,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q185.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q185.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q185.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q185"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "q185_observatory_entry",
+      "title": "橋を封鎖する操作足場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q185.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q185.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q185"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q185.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_bridge",
+          "x": 1,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "id": "q185_observatory_near",
+      "title": "荷車が通過を待つ橋頭",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "near",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q185.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q185.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q185"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q185.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_bridge",
+          "x": 5,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "id": "q185_observatory_bank",
+      "title": "橋を渡った先の足場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "bank",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q185.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q185.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q185"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q185.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_bridge",
+          "x": 11,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "id": "q185_observatory_dock",
+      "title": "別の渡河の乗場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "dock",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q185.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q185.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q185"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q185.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_bridge",
+          "x": 5,
+          "y": 7
+        }
+      ]
+    },
+    {
+      "id": "q185_observatory_landing",
+      "title": "舟が着く対岸",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "landing",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q185.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q185.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q185"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q185.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_bridge",
+          "x": 11,
+          "y": 7
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_9_f1",
+      "x": 8,
+      "y": 1,
+      "object": "q185_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "families": {
+      "label": "両国の荷車",
+      "text": "両国の家族が渡った。敵兵は装備を置いたまま通り、ネヴは最後の車輪の印を確かめた。",
+      "gold": 153,
+      "xp": 99
+    },
+    "boat": {
+      "label": "別の渡し",
+      "text": "舟で渡す道を用意して橋を閉じた。ネヴは同じ車輪の印を、新しい渡しにも刻んだ。",
+      "gold": 153,
+      "xp": 99
+    },
+    "early": {
+      "label": "部隊を先に退く",
+      "text": "自軍は撤退した。通れなかった組の位置を後続へ渡し、全員を救えたとは報告しなかった。",
+      "gold": 153,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/observatory-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38166a207eb49f89ac578",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "橋守は人の顔より荷車の車輪を見ている。目印は故郷で修理した車輪の印で、言葉や軍服では帰還者を判別できない。最後の荷車に敵兵も混じり、避難者を守るため装備を置いている。",
+      "fixedPast": "撤退軍は、追手を止めるため古い橋の封鎖を命じる。橋守ネヴは最後まで閉鎖を拒み、兵に裏切り者と疑われる。彼が待つのは敵でなく、反対岸へ出稼ぎに行った両国の家族だ。指揮官にも、待つほど部隊を危険にさらす責任がある。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "撤退軍と橋守ネヴ",
+        "beliefsAndGoals": "撤退軍は、追手を止めるため古い橋の封鎖を命じる。橋守ネヴは最後まで閉鎖を拒み、兵に裏切り者と疑われる。彼が待つのは敵でなく、反対岸へ出稼ぎに行った両国の家族だ。指揮官にも、待つほど部隊を危険にさらす責任がある。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "追手を止める橋の封鎖時刻を決めてください。"
+      }
+    ],
+    "conflict": {
+      "design": "橋頭→荷車確認→通過を待つ／即時封鎖／別の渡河を支援→撤退。戦闘で時間を稼ぐ、舟を費用で確保する、最後の組を別隊へ託す代案がある。逃走した場合は自軍撤退へ移り、通せた組だけを記録する。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q185.observatory.entry"
+        },
+        {
+          "id": "guard",
+          "script": "q185.observatory.guard"
+        },
+        {
+          "id": "won",
+          "script": "q185.observatory.won"
+        },
+        {
+          "id": "crossed",
+          "script": "q185.observatory.crossed"
+        },
+        {
+          "id": "families_done",
+          "script": "q185.observatory.families_done"
+        },
+        {
+          "id": "rent",
+          "script": "q185.observatory.rent"
+        },
+        {
+          "id": "rented",
+          "script": "q185.observatory.rented"
+        },
+        {
+          "id": "fetch",
+          "script": "q185.observatory.fetch"
+        },
+        {
+          "id": "board",
+          "script": "q185.observatory.board"
+        },
+        {
+          "id": "landed",
+          "script": "q185.observatory.landed"
+        },
+        {
+          "id": "boat_done",
+          "script": "q185.observatory.boat_done"
+        },
+        {
+          "id": "early",
+          "script": "q185.observatory.early"
+        },
+        {
+          "id": "early_done",
+          "script": "q185.observatory.early_done"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "追手を止める橋の封鎖時刻を決めてください。"
+    },
+    "reveal": {
+      "newInformation": "橋守は人の顔より荷車の車輪を見ている。目印は故郷で修理した車輪の印で、言葉や軍服では帰還者を判別できない。最後の荷車に敵兵も混じり、避難者を守るため装備を置いている。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q185.scene.entry"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q185.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "ネヴが待つのは両国の出稼ぎ家族だ。車輪の修理印で荷車を見分ける。最後の車には、装備を置いた敵兵も混じるという。",
+        "options": [
+          {
+            "id": "hold",
+            "text": "戦って通過の時間を稼ぐ",
+            "to": "guard",
+            "action": "entry_hold"
+          },
+          {
+            "id": "boat",
+            "text": "別の渡河の乗場へ舟を確保しに行く",
+            "to": "rent",
+            "action": "entry_boat"
+          },
+          {
+            "id": "early",
+            "text": "即時封鎖し、自軍を守って残る救援を引き継ぐ",
+            "to": "early",
+            "action": "entry_early"
+          }
+        ]
+      },
+      {
+        "id": "guard",
+        "place": "near",
+        "text": "荷車の待つ橋頭へ来た。追手に対処して通過の時間を稼ぐ。",
+        "options": [
+          {
+            "id": "battle",
+            "text": "追手と戦って時間を稼ぐ",
+            "to": "won",
+            "action": "guard_battle"
+          },
+          {
+            "id": "early",
+            "text": "全員の通過を待たず、封鎖と救援引継ぎへ回る",
+            "to": "early",
+            "action": "guard_early"
+          }
+        ]
+      },
+      {
+        "id": "won",
+        "place": "near",
+        "text": "追手を退けた。家族と荷車、装備を置いた兵を対岸へ案内する。",
+        "options": [
+          {
+            "id": "escort",
+            "text": "待っていた一行と橋を渡る",
+            "to": "crossed",
+            "action": "won_escort"
+          }
+        ]
+      },
+      {
+        "id": "crossed",
+        "place": "bank",
+        "text": "待っていた一行が橋を渡った。ネヴと自軍で操作足場へ戻る。",
+        "options": [
+          {
+            "id": "close",
+            "text": "橋の封鎖足場へ戻る",
+            "to": "families_done",
+            "action": "crossed_close"
+          }
+        ]
+      },
+      {
+        "id": "families_done",
+        "place": "entry",
+        "text": "最後の車輪の印を確認し、橋を閉じる。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@families",
+            "action": "families_done_finish"
+          }
+        ]
+      },
+      {
+        "id": "rent",
+        "place": "dock",
+        "text": "舟の確保には40Gが必要だ。払う前なら操作足場へ戻れる。",
+        "options": [
+          {
+            "id": "pay",
+            "text": "40Gで舟を確保する",
+            "to": "rented",
+            "action": "rent_pay"
+          },
+          {
+            "id": "back",
+            "text": "支払わず操作足場へ戻る",
+            "to": "entry",
+            "action": "rent_back"
+          }
+        ]
+      },
+      {
+        "id": "rented",
+        "place": "dock",
+        "text": "舟を確保した。荷車の待つ橋頭へ戻り、別の渡しへ案内する。",
+        "options": [
+          {
+            "id": "fetch",
+            "text": "橋頭の一行を迎えに行く",
+            "to": "fetch",
+            "action": "rented_fetch"
+          }
+        ]
+      },
+      {
+        "id": "fetch",
+        "place": "near",
+        "text": "待っていた家族と荷車へ別の渡しを知らせた。",
+        "options": [
+          {
+            "id": "board",
+            "text": "一行と別の乗場へ移る",
+            "to": "board",
+            "action": "fetch_board"
+          }
+        ]
+      },
+      {
+        "id": "board",
+        "place": "dock",
+        "text": "一行が乗場へ着いた。確保した舟で対岸へ渡す。",
+        "options": [
+          {
+            "id": "cross",
+            "text": "舟と一行を対岸へ渡す",
+            "to": "landed",
+            "action": "board_cross"
+          }
+        ]
+      },
+      {
+        "id": "landed",
+        "place": "landing",
+        "text": "別の渡しの対岸へ一行が着いた。ネヴと自軍は橋の封鎖へ戻る。",
+        "options": [
+          {
+            "id": "close",
+            "text": "橋の封鎖足場へ戻る",
+            "to": "boat_done",
+            "action": "landed_close"
+          }
+        ]
+      },
+      {
+        "id": "boat_done",
+        "place": "entry",
+        "text": "別の渡河を確かめてから橋を閉じる。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@boat",
+            "action": "boat_done_finish"
+          }
+        ]
+      },
+      {
+        "id": "early",
+        "place": "entry",
+        "text": "橋を閉じ、自軍を先に退く。通れなかった組の位置を救援の受付へ届ける。",
+        "options": [
+          {
+            "id": "report",
+            "text": "自軍と救援の引継ぎへ戻る",
+            "to": "early_done",
+            "action": "early_report"
+          }
+        ]
+      },
+      {
+        "id": "early_done",
+        "place": "report",
+        "text": "残る組の位置を後続へ引き継ぐ。全員が渡ったとは報告しない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@early",
+            "action": "early_done_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q185.scene.entry",
+        "action": "boat",
+        "option": "boat_supplies",
+        "shortage": "q185.scene.entry.boat.shortage",
+        "resume": "q185.scene.entry.boat.resume",
+        "cost": {
+          "gold": 40
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q185.visit"
+    ],
+    "entryScript": "q185.observatory.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "observatory-twenty",
+      "settlement": "oddland_village",
+      "saveRevision": 2,
+      "scope": "観測所20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q185.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q185.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "ネヴが待つのは両国の出稼ぎ家族だ。車輪の修理印で荷車を見分ける。最後の車には、装備を置いた敵兵も混じるという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hold",
+              "text": "戦って通過の時間を稼ぐ",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q185.end.families"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q185.end.early"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q185.end.early"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "boat",
+              "text": "40Gで舟を確保し、別の渡河へ移す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 40
+                  }
+                ]
+              },
+              "requirement": "G 40消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -40
+                },
+                {
+                  "op": "jump",
+                  "script": "q185.end.boat"
+                }
+              ]
+            },
+            {
+              "id": "early",
+              "text": "即時封鎖し、自軍を守って残る救援を引き継ぐ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q185.end.early"
+                }
+              ]
+            },
+            {
+              "id": "boat_supplies",
+              "text": "40Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 40
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 40
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q185.scene.entry.boat.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q185.end.families": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q185.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "両国の家族が渡った。敵兵は装備を置いたまま通り、ネヴは最後の車輪の印を確かめた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q185",
+              "outcome": "families"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q185.end.boat": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q185.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "舟で渡す道を用意して橋を閉じた。ネヴは同じ車輪の印を、新しい渡しにも刻んだ。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q185",
+              "outcome": "boat"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q185.end.early": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q185.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "自軍は撤退した。通れなかった組の位置を後続へ渡し、全員を救えたとは報告しなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q185",
+              "outcome": "early"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q185.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q185"
+          },
+          "cases": [
+            {
+              "equals": "q185.scene.entry.boat.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q185.scene.entry.boat.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q185.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q185.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "families",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "両国の家族が渡った。敵兵は装備を置いたまま通り、ネヴは最後の車輪の印を確かめた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "boat",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "舟で渡す道を用意して橋を閉じた。ネヴは同じ車輪の印を、新しい渡しにも刻んだ。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "early",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "自軍は撤退した。通れなかった組の位置を後続へ渡し、全員を救えたとは報告しなかった。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q185.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q185.scene.entry"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q185.scene.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q185.scene.entry.boat.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q185",
+          "value": "q185.scene.entry.boat.resume"
+        },
+        {
+          "op": "say",
+          "text": "40Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q185.scene.entry.boat.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q185",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "40Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q185.scene.entry"
+        }
+      ]
+    },
+    "q185.observatory.entry": {
+      "storyQuest": "q185",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q185",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "ネヴが待つのは両国の出稼ぎ家族だ。車輪の修理印で荷車を見分ける。最後の車には、装備を置いた敵兵も混じるという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hold",
+              "text": "戦って通過の時間を稼ぐ",
+              "storyAction": {
+                "quest": "q185",
+                "action": "entry_hold"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q185",
+                  "action": "entry_hold"
+                }
+              ]
+            },
+            {
+              "id": "boat",
+              "text": "別の渡河の乗場へ舟を確保しに行く",
+              "storyAction": {
+                "quest": "q185",
+                "action": "entry_boat"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q185",
+                  "action": "entry_boat"
+                }
+              ]
+            },
+            {
+              "id": "early",
+              "text": "即時封鎖し、自軍を守って残る救援を引き継ぐ",
+              "storyAction": {
+                "quest": "q185",
+                "action": "entry_early"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q185",
+                  "action": "entry_early"
+                },
+                {
+                  "op": "jump",
+                  "script": "q185.observatory.early"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q185.observatory.guard": {
+      "storyQuest": "q185",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q185",
+          "scene": "guard"
+        },
+        {
+          "op": "narrate",
+          "text": "荷車の待つ橋頭へ来た。追手に対処して通過の時間を稼ぐ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "battle",
+              "text": "追手と戦って時間を稼ぐ",
+              "storyAction": {
+                "quest": "q185",
+                "action": "guard_battle"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.relocatedBattleResult.q185"
+                      },
+                      "right": "escape"
+                    },
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.relocatedBattleResult.q185"
+                      },
+                      "right": "lose"
+                    }
+                  ]
+                }
+              },
+              "requirement": "戦闘。勝利・撤退・敗北に応じて続きが変わる。",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "set",
+                      "target": "flags.relocatedBattleResult.q185",
+                      "value": "win"
+                    },
+                    {
+                      "op": "story.action",
+                      "quest": "q185",
+                      "action": "guard_battle"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q185.observatory.won"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "set",
+                      "target": "flags.relocatedBattleResult.q185",
+                      "value": "escape"
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "戦いから撤退した。勝利の報告にはせず、同行者と次の行動を相談する。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q185.observatory.guard"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "set",
+                      "target": "flags.relocatedBattleResult.q185",
+                      "value": "lose"
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "救助班に旧王領の村へ運び出された。現場へ戻って同行者と合流し、撤退の結果を報告する。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "early",
+              "text": "全員の通過を待たず、封鎖と救援引継ぎへ回る",
+              "storyAction": {
+                "quest": "q185",
+                "action": "guard_early"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q185",
+                  "action": "guard_early"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q185.observatory.won": {
+      "storyQuest": "q185",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q185",
+          "scene": "won"
+        },
+        {
+          "op": "narrate",
+          "text": "追手を退けた。家族と荷車、装備を置いた兵を対岸へ案内する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "escort",
+              "text": "待っていた一行と橋を渡る",
+              "storyAction": {
+                "quest": "q185",
+                "action": "won_escort"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q185",
+                  "action": "won_escort"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q185.observatory.crossed": {
+      "storyQuest": "q185",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q185",
+          "scene": "crossed"
+        },
+        {
+          "op": "narrate",
+          "text": "待っていた一行が橋を渡った。ネヴと自軍で操作足場へ戻る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "close",
+              "text": "橋の封鎖足場へ戻る",
+              "storyAction": {
+                "quest": "q185",
+                "action": "crossed_close"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q185",
+                  "action": "crossed_close"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q185.observatory.families_done": {
+      "storyQuest": "q185",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q185",
+          "scene": "families_done"
+        },
+        {
+          "op": "narrate",
+          "text": "最後の車輪の印を確認し、橋を閉じる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q185",
+                "action": "families_done_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q185",
+                  "action": "families_done_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q185.observatory.end.families"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q185.observatory.rent": {
+      "storyQuest": "q185",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q185",
+          "scene": "rent"
+        },
+        {
+          "op": "narrate",
+          "text": "舟の確保には40Gが必要だ。払う前なら操作足場へ戻れる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "pay",
+              "text": "40Gで舟を確保する",
+              "storyAction": {
+                "quest": "q185",
+                "action": "rent_pay"
+              },
+              "requirement": "gold 40消費",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q185",
+                  "action": "rent_pay"
+                },
+                {
+                  "op": "jump",
+                  "script": "q185.observatory.rented"
+                }
+              ]
+            },
+            {
+              "id": "back",
+              "text": "支払わず操作足場へ戻る",
+              "storyAction": {
+                "quest": "q185",
+                "action": "rent_back"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q185",
+                  "action": "rent_back"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q185.observatory.rented": {
+      "storyQuest": "q185",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q185",
+          "scene": "rented"
+        },
+        {
+          "op": "narrate",
+          "text": "舟を確保した。荷車の待つ橋頭へ戻り、別の渡しへ案内する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fetch",
+              "text": "橋頭の一行を迎えに行く",
+              "storyAction": {
+                "quest": "q185",
+                "action": "rented_fetch"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q185",
+                  "action": "rented_fetch"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q185.observatory.fetch": {
+      "storyQuest": "q185",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q185",
+          "scene": "fetch"
+        },
+        {
+          "op": "narrate",
+          "text": "待っていた家族と荷車へ別の渡しを知らせた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "board",
+              "text": "一行と別の乗場へ移る",
+              "storyAction": {
+                "quest": "q185",
+                "action": "fetch_board"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q185",
+                  "action": "fetch_board"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q185.observatory.board": {
+      "storyQuest": "q185",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q185",
+          "scene": "board"
+        },
+        {
+          "op": "narrate",
+          "text": "一行が乗場へ着いた。確保した舟で対岸へ渡す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "cross",
+              "text": "舟と一行を対岸へ渡す",
+              "storyAction": {
+                "quest": "q185",
+                "action": "board_cross"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q185",
+                  "action": "board_cross"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q185.observatory.landed": {
+      "storyQuest": "q185",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q185",
+          "scene": "landed"
+        },
+        {
+          "op": "narrate",
+          "text": "別の渡しの対岸へ一行が着いた。ネヴと自軍は橋の封鎖へ戻る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "close",
+              "text": "橋の封鎖足場へ戻る",
+              "storyAction": {
+                "quest": "q185",
+                "action": "landed_close"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q185",
+                  "action": "landed_close"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q185.observatory.boat_done": {
+      "storyQuest": "q185",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q185",
+          "scene": "boat_done"
+        },
+        {
+          "op": "narrate",
+          "text": "別の渡河を確かめてから橋を閉じる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q185",
+                "action": "boat_done_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q185",
+                  "action": "boat_done_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q185.observatory.end.boat"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q185.observatory.early": {
+      "storyQuest": "q185",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q185",
+          "scene": "early"
+        },
+        {
+          "op": "narrate",
+          "text": "橋を閉じ、自軍を先に退く。通れなかった組の位置を救援の受付へ届ける。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "report",
+              "text": "自軍と救援の引継ぎへ戻る",
+              "storyAction": {
+                "quest": "q185",
+                "action": "early_report"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q185",
+                  "action": "early_report"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q185.observatory.early_done": {
+      "storyQuest": "q185",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q185",
+          "scene": "early_done"
+        },
+        {
+          "op": "narrate",
+          "text": "残る組の位置を後続へ引き継ぐ。全員が渡ったとは報告しない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q185",
+                "action": "early_done_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q185",
+                  "action": "early_done_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q185.observatory.end.early"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q185.observatory.end.families": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "両国の家族が渡った。敵兵は装備を置いたまま通り、ネヴは最後の車輪の印を確かめた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.families",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q185",
+          "outcome": "families"
+        }
+      ]
+    },
+    "q185.observatory.end.boat": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "舟で渡す道を用意して橋を閉じた。ネヴは同じ車輪の印を、新しい渡しにも刻んだ。"
+        },
+        {
+          "op": "add",
+          "target": "vars.boat",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q185",
+          "outcome": "boat"
+        }
+      ]
+    },
+    "q185.observatory.end.early": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "自軍は撤退した。通れなかった組の位置を後続へ渡し、全員を救えたとは報告しなかった。"
+        },
+        {
+          "op": "add",
+          "target": "vars.early",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q185",
+          "outcome": "early"
+        }
+      ]
+    },
+    "q185.observatory.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q185"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q185.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q185.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q185.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "families",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "両国の家族が渡った。敵兵は装備を置いたまま通り、ネヴは最後の車輪の印を確かめた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "boat",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "舟で渡す道を用意して橋を閉じた。ネヴは同じ車輪の印を、新しい渡しにも刻んだ。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "early",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "自軍は撤退した。通れなかった組の位置を後続へ渡し、全員を救えたとは報告しなかった。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q185"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q185.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q185.observatory.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "guard",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q185.observatory.guard"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "won",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q185.observatory.won"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "crossed",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q185.observatory.crossed"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "families_done",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q185.observatory.families_done"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "rent",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q185.observatory.rent"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "rented",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q185.observatory.rented"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "fetch",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q185.observatory.fetch"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "board",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q185.observatory.board"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "landed",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q185.observatory.landed"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "boat_done",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q185.observatory.boat_done"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "early",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q185.observatory.early"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "early_done",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q185.observatory.early_done"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q185.observatory.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "橋を封鎖する操作足場",
+      "near": "荷車が通過を待つ橋頭",
+      "bank": "橋を渡った先の足場",
+      "dock": "別の渡河の乗場",
+      "landing": "舟が着く対岸",
+      "report": "残る救援を引き継ぐ受付",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "near"
+      ],
+      [
+        "transit",
+        "bank"
+      ],
+      [
+        "transit",
+        "dock"
+      ],
+      [
+        "transit",
+        "landing"
+      ],
+      [
+        "transit",
+        "report"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "near",
+          "bank",
+          "dock",
+          "landing",
+          "report",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "families",
+          "boat",
+          "early"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "closed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "closed"
+      },
+      "boatPaid": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "boatPaid"
+      },
+      "nevAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "near",
+          "bank",
+          "dock",
+          "landing",
+          "report",
+          "transit"
+        ],
+        "meaning": "nev の所在または保持者"
+      },
+      "troopsAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "near",
+          "bank",
+          "dock",
+          "landing",
+          "report",
+          "transit"
+        ],
+        "meaning": "troops の所在または保持者"
+      },
+      "familiesAt": {
+        "type": "enum",
+        "initial": "near",
+        "values": [
+          "entry",
+          "near",
+          "bank",
+          "dock",
+          "landing",
+          "report",
+          "transit"
+        ],
+        "meaning": "families の所在または保持者"
+      },
+      "cartsAt": {
+        "type": "enum",
+        "initial": "near",
+        "values": [
+          "entry",
+          "near",
+          "bank",
+          "dock",
+          "landing",
+          "report",
+          "transit"
+        ],
+        "meaning": "carts の所在または保持者"
+      },
+      "unarmedAt": {
+        "type": "enum",
+        "initial": "near",
+        "values": [
+          "entry",
+          "near",
+          "bank",
+          "dock",
+          "landing",
+          "report",
+          "transit"
+        ],
+        "meaning": "unarmed の所在または保持者"
+      },
+      "weaponsAt": {
+        "type": "enum",
+        "initial": "near",
+        "values": [
+          "entry",
+          "near",
+          "bank",
+          "dock",
+          "landing",
+          "report",
+          "transit",
+          "party",
+          "nev",
+          "troops",
+          "families",
+          "carts",
+          "unarmed",
+          "boat"
+        ],
+        "meaning": "weapons の所在または保持者"
+      },
+      "boatAt": {
+        "type": "enum",
+        "initial": "dock",
+        "values": [
+          "entry",
+          "near",
+          "bank",
+          "dock",
+          "landing",
+          "report",
+          "transit"
+        ],
+        "meaning": "boat の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "nev": {
+        "holder": "nevAt",
+        "kind": "person"
+      },
+      "troops": {
+        "holder": "troopsAt",
+        "kind": "group"
+      },
+      "families": {
+        "holder": "familiesAt",
+        "kind": "group"
+      },
+      "carts": {
+        "holder": "cartsAt",
+        "kind": "group"
+      },
+      "unarmed": {
+        "holder": "unarmedAt",
+        "kind": "person"
+      },
+      "weapons": {
+        "holder": "weaponsAt",
+        "kind": "item"
+      },
+      "boat": {
+        "holder": "boatAt",
+        "kind": "group"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "橋守は人の顔より荷車の車輪を見ている。目印は故郷で修理した車輪の印で、言葉や軍服では帰還者を判別できない。最後の荷車に敵兵も混じり、避難者を守るため装備を置いている。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "橋を封鎖する操作足場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "guard": {
+        "title": "荷車が通過を待つ橋頭",
+        "place": "near",
+        "cast": [],
+        "requires": true
+      },
+      "won": {
+        "title": "荷車が通過を待つ橋頭",
+        "place": "near",
+        "cast": [],
+        "requires": true
+      },
+      "crossed": {
+        "title": "橋を渡った先の足場",
+        "place": "bank",
+        "cast": [],
+        "requires": true
+      },
+      "families_done": {
+        "title": "橋を封鎖する操作足場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "rent": {
+        "title": "別の渡河の乗場",
+        "place": "dock",
+        "cast": [],
+        "requires": true
+      },
+      "rented": {
+        "title": "別の渡河の乗場",
+        "place": "dock",
+        "cast": [],
+        "requires": true
+      },
+      "fetch": {
+        "title": "荷車が通過を待つ橋頭",
+        "place": "near",
+        "cast": [],
+        "requires": true
+      },
+      "board": {
+        "title": "別の渡河の乗場",
+        "place": "dock",
+        "cast": [],
+        "requires": true
+      },
+      "landed": {
+        "title": "舟が着く対岸",
+        "place": "landing",
+        "cast": [],
+        "requires": true
+      },
+      "boat_done": {
+        "title": "橋を封鎖する操作足場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "early": {
+        "title": "橋を封鎖する操作足場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "early_done": {
+        "title": "残る救援を引き継ぐ受付",
+        "place": "report",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_hold": {
+        "from": [
+          "entry"
+        ],
+        "to": "guard",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "nev",
+              "troops"
+            ],
+            "path": [
+              "transit",
+              "near"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "near",
+          "companions": [
+            "nev",
+            "troops"
+          ]
+        },
+        "depart": []
+      },
+      "entry_boat": {
+        "from": [
+          "entry"
+        ],
+        "to": "rent",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "nev",
+              "troops"
+            ],
+            "path": [
+              "transit",
+              "dock"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "dock",
+          "companions": [
+            "nev",
+            "troops"
+          ]
+        },
+        "depart": []
+      },
+      "entry_early": {
+        "from": [
+          "entry"
+        ],
+        "to": "early",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "guard_battle": {
+        "from": [
+          "guard"
+        ],
+        "to": "won",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.relocatedBattleResult.q185"
+                },
+                "right": "escape"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.relocatedBattleResult.q185"
+                },
+                "right": "lose"
+              }
+            ]
+          }
+        },
+        "effects": [],
+        "once": false
+      },
+      "guard_early": {
+        "from": [
+          "guard"
+        ],
+        "to": "early",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "nev",
+              "troops"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "nev",
+            "troops"
+          ]
+        },
+        "depart": []
+      },
+      "won_escort": {
+        "from": [
+          "won"
+        ],
+        "to": "crossed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "nev",
+              "troops",
+              "families",
+              "carts",
+              "unarmed"
+            ],
+            "path": [
+              "transit",
+              "bank"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "bank",
+          "companions": [
+            "nev",
+            "troops",
+            "families",
+            "carts",
+            "unarmed"
+          ]
+        },
+        "depart": []
+      },
+      "crossed_close": {
+        "from": [
+          "crossed"
+        ],
+        "to": "families_done",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "nev",
+              "troops"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "nev",
+            "troops"
+          ]
+        },
+        "depart": []
+      },
+      "families_done_finish": {
+        "from": [
+          "families_done"
+        ],
+        "ending": "families",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "closed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "families"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "rent_pay": {
+        "from": [
+          "rent"
+        ],
+        "to": "rented",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "boatPaid",
+            "value": true
+          }
+        ],
+        "cost": {
+          "gold": 40
+        },
+        "once": false
+      },
+      "rent_back": {
+        "from": [
+          "rent"
+        ],
+        "to": "entry",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "nev",
+              "troops"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "nev",
+            "troops"
+          ]
+        },
+        "depart": []
+      },
+      "rented_fetch": {
+        "from": [
+          "rented"
+        ],
+        "to": "fetch",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "nev",
+              "troops"
+            ],
+            "path": [
+              "transit",
+              "near"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "near",
+          "companions": [
+            "nev",
+            "troops"
+          ]
+        },
+        "depart": []
+      },
+      "fetch_board": {
+        "from": [
+          "fetch"
+        ],
+        "to": "board",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "nev",
+              "troops",
+              "families",
+              "carts",
+              "unarmed"
+            ],
+            "path": [
+              "transit",
+              "dock"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "dock",
+          "companions": [
+            "nev",
+            "troops",
+            "families",
+            "carts",
+            "unarmed"
+          ]
+        },
+        "depart": []
+      },
+      "board_cross": {
+        "from": [
+          "board"
+        ],
+        "to": "landed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "nev",
+              "troops",
+              "families",
+              "carts",
+              "unarmed",
+              "boat"
+            ],
+            "path": [
+              "transit",
+              "landing"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "landing",
+          "companions": [
+            "nev",
+            "troops",
+            "families",
+            "carts",
+            "unarmed",
+            "boat"
+          ]
+        },
+        "depart": []
+      },
+      "landed_close": {
+        "from": [
+          "landed"
+        ],
+        "to": "boat_done",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "nev",
+              "troops"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "nev",
+            "troops"
+          ]
+        },
+        "depart": []
+      },
+      "boat_done_finish": {
+        "from": [
+          "boat_done"
+        ],
+        "ending": "boat",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "closed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "boat"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "early_report": {
+        "from": [
+          "early"
+        ],
+        "to": "early_done",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "nev",
+              "troops"
+            ],
+            "path": [
+              "transit",
+              "report"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "report",
+          "companions": [
+            "nev",
+            "troops"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "closed",
+            "value": true
+          }
+        ]
+      },
+      "early_done_finish": {
+        "from": [
+          "early_done"
+        ],
+        "ending": "early",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "early"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "families": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q185.values.resolution"
+            },
+            "right": "families"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q185.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q185.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "boat": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q185.values.resolution"
+            },
+            "right": "boat"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q185.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q185.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "early": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q185.values.resolution"
+            },
+            "right": "early"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q185.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q185.values.partyAt"
+                },
+                "right": "report"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_bridge",
+        "x": 1,
+        "y": 3
+      },
+      "near": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_bridge",
+        "x": 5,
+        "y": 3
+      },
+      "bank": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_bridge",
+        "x": 11,
+        "y": 3
+      },
+      "dock": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_bridge",
+        "x": 5,
+        "y": 7
+      },
+      "landing": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_bridge",
+        "x": 11,
+        "y": 7
+      },
+      "report": {
+        "kind": "town",
+        "location": "royal_rescue"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_village",
+  "receptionLocations": [
+    "royal_board"
+  ]
+}

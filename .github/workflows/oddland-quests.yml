@@ -12,6 +12,9 @@ on:
       - 'tools/browser-observatory-cast-smoke.mjs'
       - 'tools/quiver-art-fixtures.mjs'
       - 'tests/fixtures/e2-q181-before-cast.json'
+      - 'tools/browser-bridge-cast-smoke.mjs'
+      - 'tools/bridge-art-fixtures.mjs'
+      - 'tests/fixtures/e2-q185-before-cast.json'
       - 'tools/browser-pot-cast-smoke.mjs'
       - 'tools/pot-art-fixtures.mjs'
       - 'tests/fixtures/e2-q184-before-cast.json'
@@ -112,6 +115,18 @@ jobs:
         with:
           name: q184-cast-checkpoints
           path: /tmp/adv-pot-art-browser
+          if-no-files-found: ignore
+      - name: Verify q185 cast, crossings, battle recovery and older saves
+        if: steps.ci.outputs.run == 'true'
+        env:
+          ADV_BROWSER_OUTPUT: /tmp/adv-bridge-art-browser
+        run: node tools/browser-bridge-cast-smoke.mjs
+      - name: Keep q185 cast checkpoints
+        if: always() && steps.ci.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: q185-cast-checkpoints
+          path: /tmp/adv-bridge-art-browser
           if-no-files-found: ignore
       - name: Remember successful inputs
         if: success() && steps.ci.outputs.run == 'true' && github.event_name != 'workflow_dispatch'
