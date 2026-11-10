@@ -1,0 +1,45 @@
+name: Battle impact feedback
+on:
+  pull_request:
+    paths:
+      - 'src/core/battle.js'
+      - 'src/core/feedback*'
+      - 'src/view/**'
+      - 'src/application/audio.js'
+      - 'src/application/battle-sound.js'
+      - 'src/battle-accent.js'
+      - 'src/presentation-*.js'
+      - 'config/battle-presentation.json'
+      - 'battle-presentation-editor.html'
+      - 'src/main.js'
+      - 'src/battle-engine-playtest.js'
+      - 'config/presentation.json'
+      - 'data/effects.json'
+      - 'data/presentation.json'
+      - 'tools/browser-effects-smoke.mjs'
+      - '.github/workflows/battle-feedback.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: battle-feedback-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --package-lock=false playwright@1.58.2
+      - run: npx playwright install --with-deps chromium --only-shell
+      - run: node tools/browser-effects-smoke.mjs
+        env:
+          ADV_BROWSER_OUTPUT: /tmp/adv-effects-browser
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: battle-feedback
+          path: /tmp/adv-effects-browser
+          retention-days: 7

@@ -14,6 +14,9 @@ try{
   await page.goto(base+'/battle-tester.html');
   const synced=()=>page.waitForFunction(()=>{const s=window.battleTester?.engineSync;return s?.ready&&s.loaded===s.request&&s.loaded>0;});await synced();
   const frame=page.frames().find(f=>f.url().includes('battle-engine-playtest.html'));
+  // Embedded playtests intentionally hide their toolbar. Configure the fixture
+  // directly; this suite checks layout/state, while browser-effects-smoke checks timing.
+  await frame.evaluate(()=>{const select=document.querySelector('#effects');select.value='off';select.dispatchEvent(new Event('change',{bubbles:true}));});
   await frame.waitForFunction(()=>window.battlePlaytest?.engine.state.battle);
   assert.equal(await frame.evaluate(()=>battlePlaytest.engine.state.battle.manualTurns),undefined);
   assert.equal(await page.evaluate(()=>battleTester.engine.state.battle.manualTurns),true);

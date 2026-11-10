@@ -1,10 +1,16 @@
 // Visual-only player. Timelines never advance the game or call the engine.
 import {strikePieces,strikeAngle} from './battle-effects.js';
 import {feedbackDelay} from '../feedback-timing.js';
+import {playBattleAccent,playPath} from './battle-impact.js';
+import {defaultPresentation} from '../presentation-presets.js';
+import {decorateFeedback,parsePresentationDesign} from '../presentation-design.js';
 export function motionFrames(frames,angle=0){const r=angle*Math.PI/180;return frames.map(f=>({offset:f.at,transform:`translate(${(f.x??0)*Math.cos(r)-(f.y??0)*Math.sin(r)}px,${(f.x??0)*Math.sin(r)+(f.y??0)*Math.cos(r)}px) rotate(${f.rotate??0}deg) skew(${f.skewX??0}deg,${f.skewY??0}deg) scale(${f.scaleX??1},${f.scaleY??1})`,opacity:f.opacity??1}));}
 export function spriteFrames(track){return [...Array.from({length:track.frames},(_,i)=>({offset:i/track.frames,backgroundPosition:`${-(i%track.columns)*track.cell}px ${-Math.floor(i/track.columns)*track.cell}px`,opacity:1})),{offset:1,backgroundPosition:`${-((track.frames-1)%track.columns)*track.cell}px ${-Math.floor((track.frames-1)/track.columns)*track.cell}px`,opacity:0}];}
 export class EffectsRenderer {
-  constructor(root){this.root=root;this.key=null;this.cache=new Map();this.hidden=new Map();this.motions=new Map();this.numbers=new Map();this.sheets=new Map();this.timers=new Set();this.animations=new Set();this.cleanups=new Set();this.media=globalThis.matchMedia?.('(prefers-reduced-motion: reduce)');this.mediaChange=()=>this.stop();this.media?.addEventListener('change',this.mediaChange);}
+  constructor(root){this.design=defaultPresentation;this.root=root;this.key=null;this.cache=new Map();this.hidden=new Map();this.motions=new Map();this.numbers=new Map();this.sheets=new Map();this.timers=new Set();this.animations=new Set();this.cleanups=new Set();this.media=globalThis.matchMedia?.('(prefers-reduced-motion: reduce)');this.mediaChange=()=>this.stop();this.media?.addEventListener('change',this.mediaChange);}
+  setDesign(design){const next=parsePresentationDesign(design);this.stop();this.design=next;this.key=null;}
+  spatial(target){const a=this.anchor(target),rect=(this.root.querySelector('.scene-stage')??this.root).getBoundingClientRect();return {pan:Math.max(-1,Math.min(1,2*(a.rect.left+a.rect.width/2-rect.left)/Math.max(1,rect.width)-1)),distance:0};}
+  defer(fn,delay){if(delay<=0){fn();return;}let timer;timer=setTimeout(()=>{this.timers.delete(timer);fn();},delay);this.timers.add(timer);}
   destroy(){this.stop();this.media?.removeEventListener('change',this.mediaChange);}
   stop(){for(const timer of this.timers)clearTimeout(timer);this.timers.clear();for(const a of this.animations)a.cancel();this.animations.clear();for(const f of this.cleanups)f();this.cleanups.clear();}
   capture(){this.stop();this.cache.clear();for(const element of this.root.querySelectorAll('[data-fx]')){const rect=element.getBoundingClientRect();this.cache.set(element.dataset.fx,{rect,image:element.tagName==='IMG'?element.src:null});}}
@@ -32,8 +38,8 @@ export class EffectsRenderer {
     const a=element.animate(frames,{duration,iterations:1,easing,fill:'none'});this.animations.add(a);a.finished.catch(()=>{}).finally(()=>{this.animations.delete(a);clean();});
     return a;
   }
-  ghost(anchor){const g=this.layer(anchor.rect,'fx-ghost');const image=document.createElement('img');image.src=anchor.image;image.alt='';const style=anchor.element&&globalThis.getComputedStyle?.(anchor.element);if(style){image.style.objectFit=style.objectFit;image.style.objectPosition=style.objectPosition;image.style.borderRadius=style.borderRadius;}g.element.append(image);return g;}
-  hide(element){if(!element||element.tagName!=='IMG')return ()=>{};let entry=this.hidden.get(element);if(!entry){entry={count:0,visibility:element.style.visibility};this.hidden.set(element,entry);}entry.count++;element.style.visibility='hidden';let done=false;const clean=()=>{if(done)return;done=true;if(--entry.count===0){element.style.visibility=entry.visibility;this.hidden.delete(element);}this.cleanups.delete(clean);};this.cleanups.add(clean);return clean;}
+  ghost(anchor){const g=this.layer(anchor.rect,'fx-ghost');const canvas=anchor.element?.tagName==='CANVAS',image=document.createElement(canvas?'canvas':'img');if(canvas){image.width=anchor.element.width;image.height=anchor.element.height;image.getContext('2d').drawImage(anchor.element,0,0);}else{image.src=anchor.image;image.alt='';}const style=anchor.element&&globalThis.getComputedStyle?.(anchor.element);if(style){image.style.objectFit=style.objectFit;image.style.objectPosition=style.objectPosition;image.style.borderRadius=style.borderRadius;}g.element.append(image);return g;}
+  hide(element){if(!element||!['IMG','CANVAS'].includes(element.tagName))return ()=>{};let entry=this.hidden.get(element);if(!entry){entry={count:0,visibility:element.style.visibility};this.hidden.set(element,entry);}entry.count++;element.style.visibility='hidden';let done=false;const clean=()=>{if(done)return;done=true;if(--entry.count===0){element.style.visibility=entry.visibility;this.hidden.delete(element);}this.cleanups.delete(clean);};this.cleanups.add(clean);return clean;}
   tint(anchor,color,opacity,duration,shade=false){const g=this.layer(anchor.rect);g.element.style.background=shade?`radial-gradient(ellipse at center,transparent 20%,${color} 100%)`:color;this.animate(g.element,[{opacity:0},{opacity,offset:.3},{opacity:0}],duration,g.clean);}
   strike(anchor,track,duration,source){
     const size=Math.max(64,Math.min(180,Math.max(anchor.rect.width,anchor.rect.height)*.95));
@@ -43,13 +49,16 @@ export class EffectsRenderer {
     for(const part of parts){const e=document.createElement('div');e.className='fx-strike-piece';e.style.clipPath=part.shape;e.style.background=part.color;g.element.append(e);this.animate(e,part.frames,duration,()=>{if(--remaining===0)g.clean();});}
   }
   damage(target,mode){
-    if(!(target.damage>0)||mode==='off')return;
+    const tags=[target.missed?'回避':target.guarded?'防御':target.critical?'会心':target.weak?'弱点':target.resisted?'軽減':'',...(target.statusAdded??[]),...(target.statusRemoved??[]).map(s=>`${s}解除`)].filter(Boolean);
+    if(!(target.damage>0||target.healing>0||tags.length)||mode==='off')return;
     const a=this.anchor(target),width=100,height=32;
     // Keep numbers inside the viewport, including the top-row portraits on phones.
     const left=Math.max(0,Math.min((globalThis.innerWidth??Infinity)-width,a.rect.left+a.rect.width/2-width/2));
     const slots=this.numbers.get(target.key)??new Set();let slot=0;while(slots.has(slot))slot++;slots.add(slot);this.numbers.set(target.key,slots);
     const top=Math.max(4,a.rect.top+a.rect.height*.25)+slot*22;
-    const g=this.layer({left,top,width,height},'fx-damage');g.element.textContent=String(target.damage);
+    const g=this.layer({left,top,width,height},'fx-damage'+(target.healing>0?' fx-heal':'')+(target.critical?' fx-critical':''));
+    if(tags.length){const label=document.createElement('small');label.textContent=tags.join('・');g.element.append(label);}
+    if(target.damage>0||target.healing>0){const number=document.createElement('span');number.textContent=target.healing>0?`+${target.healing}`:String(target.damage);g.element.append(number);}
     let cleaned=false;
     const clean=()=>{if(cleaned)return;cleaned=true;g.clean();slots.delete(slot);if(!slots.size&&this.numbers.get(target.key)===slots)this.numbers.delete(target.key);this.cleanups.delete(clean);};this.cleanups.add(clean);
     const reduced=mode==='reduced'||this.media?.matches;
@@ -62,8 +71,9 @@ export class EffectsRenderer {
     if(mode==='off')return;
     if(mode==='reduced'||this.media?.matches){this.tint(anchor,'#dab47a',.1,220);return;}
     for(const track of effect.tracks){
+      if(track.atMs||track.durationMs){const {atMs=0,durationMs=effect.duration,...body}=track;this.defer(()=>this.play({duration:durationMs,tracks:[body]},target,assets,mode,source),atMs);continue;}
       if(track.kind==='motion'){
-        if(!anchor.image&&target.key.startsWith('actor:')){this.tint(anchor,'#f5b567',.12,duration);continue;}
+        if(!anchor.image&&target.key.startsWith('actor:')){this.tint(anchor,'#f5b567',.12,duration);}
         this.motions.get(target.key)?.();
         const g=anchor.image?this.ghost(anchor):null,restore=g?this.hide(anchor.element):()=>{};
         let animation;
@@ -75,6 +85,15 @@ export class EffectsRenderer {
         const restore=this.hide(anchor.element);let remaining=2;
         const clips=track.axis==='diagonal'?['polygon(0 0,100% 0,0 100%)','polygon(100% 0,100% 100%,0 100%)']:['polygon(0 0,50% 0,50% 100%,0 100%)','polygon(50% 0,100% 0,100% 100%,50% 100%)'];
         for(let i=0;i<2;i++){const g=this.ghost(anchor),sign=i===0?-1:1;g.element.style.clipPath=clips[i];this.animate(g.element,[{transform:'translate(0,0) rotate(0deg)',opacity:1},{transform:`translate(${sign*track.distance}px,${track.axis==='diagonal'?sign*track.distance:0}px) rotate(${sign*track.rotate}deg)`,opacity:0}],duration,()=>{g.clean();if(--remaining===0)restore();});}
+      }else if(track.kind==='projectile'){
+        if(track.path){const profile=this.design.paths[track.path];if(profile)playPath(this,{...profile,durationMs:duration},target,source,mode);continue;}
+        if(!source)continue;
+        const x=source.rect.left+source.rect.width/2,y=source.rect.top+source.rect.height/2;
+        const dx=anchor.rect.left+anchor.rect.width/2-x,dy=anchor.rect.top+anchor.rect.height/2-y;
+        const g=this.layer({left:x-18,top:y-2,width:36,height:4},'fx-projectile');
+        g.element.style.background=track.color;g.element.style.clipPath='polygon(0 25%,75% 25%,75% 0,100% 50%,75% 100%,75% 75%,0 75%)';
+        const angle=Math.atan2(dy,dx)*180/Math.PI;
+        this.animate(g.element,[{transform:`translate(0,0) rotate(${angle}deg)`,opacity:1},{transform:`translate(${dx}px,${dy}px) rotate(${angle}deg)`,opacity:1}],duration,g.clean);
       }else if(track.kind==='strike'){
         this.strike(anchor,track,duration,source);
       }else if(track.kind==='sprite'){
@@ -84,14 +103,19 @@ export class EffectsRenderer {
     }
   }
   present(model,mode='full'){
+    model={...model,feedback:decorateFeedback(model.feedback,this.design,{sounds:model.sounds,soundAssets:model.soundAssets})};
     for(const effect of Object.values(model.effects??{}))for(const track of effect.tracks)if(track.kind==='sprite'){const url=model.effectAssets[track.asset];if(url&&!this.sheets.has(url)){const image=new Image();image.src=url;this.sheets.set(url,image);}}
     const key=model.feedback?`${model.feedback.session}/${model.feedback.revision}`:null;if(key===this.key)return;this.key=key;
     for(const event of model.feedback?.events??[]){
       const play=()=>{
+        if(event.phase!=='presentation')this.onEvent?.(event);
+        playBattleAccent(this,event,mode);
         const source=event.source?this.anchor(event.source):null;
         for(const target of event.targets){
-          for(const id of event.effects){const effect=model.effects[id];if(effect)this.play(effect,target,model.effectAssets,mode,source);}
-          this.damage(target,mode);
+          if(event.path&&this.design.paths[event.path])playPath(this,this.design.paths[event.path],target,source,mode);
+          if(event.phase==='defeat')this.hide(this.anchor(target).element);
+          for(const id of event.effects){const effect=model.effects[id];if(effect&&!target.missed)this.play(effect,target,model.effectAssets,mode,source);}
+          if(!event.phase||event.phase==='impact')this.damage(target,mode);
         }
       };
       const delay=feedbackDelay(model.feedback,event.at);

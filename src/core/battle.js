@@ -109,7 +109,7 @@ export function battleSkillPlan(engine,actorId,skillId,targetId,options={}){
   if(skill.requiresAnalyzed&&targets.some(t=>!b.analyzed.includes(t.instance)))return fail('先にこの敵を魔物解析してください。');
   return {ok:true,skill,targets};
 }
-export function applySkill(engine,source,target,skill,skillId,enemySource=false,itemId=null,checkAccuracy=true,series=null,physicalPower=1){
+export function applySkill(engine,source,target,skill,skillId,enemySource=false,itemId=null,checkAccuracy=true,series=null,physicalPower=1,feedback=null){
   let damageTotal=0,critical=null,wakeChecked=false;
   const b=engine.state.battle,s=engine.state;
   if(isFrontline(s)&&!frontlinePresent(s,target))return 0;
@@ -123,7 +123,7 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
   }
   const offensive=skill.effects.some(e=>['damage','drain_mp','stun','frontline_remove','frontline_knockback'].includes(e.type)||e.type==='status'&&!statusEffectAtLevel(engine.data,e.status,e.level??1)?.beneficial||e.type==='buff'&&(engine.data.buffs[e.buff]?.blocksMovement||engine.data.buffs[e.buff]?.classicAccuracyPenalty>0||Object.values(engine.data.buffs[e.buff]?.stats??{}).some(n=>n<1)||Object.values(engine.data.buffs[e.buff]?.resist??{}).some(n=>n>1)));
   const accuracy=offensive&&checkAccuracy?(series?.snapshot.accuracy??buffAccuracy(engine.data,s.battle,source,statusAccuracy(engine.data,s,source))):1;
-  if(accuracy<1&&engine.random()>=accuracy){if(series)series.didHit=false;(b?.log??s.log).push(`${source.name??engine.data.actors[source.id]?.name}の${skill.name}は${targetName}に当たらなかった。`);return 0;}
+  if(accuracy<1&&engine.random()>=accuracy){if(series)series.didHit=false;if(feedback)feedback.missed=true;(b?.log??s.log).push(`${source.name??engine.data.actors[source.id]?.name}の${skill.name}は${targetName}に当たらなかった。`);return 0;}
   for(const effect of skill.effects){
     if(effect.type==='frontline_remove'){removeFrontline(engine,target);break;}
     if(effect.type==='frontline_knockback'){const loss=knockbackFrontline(engine,target,effect);damageTotal+=loss;if(loss)wakeOnDamage(engine,target);recordDefeated(engine);continue;}
@@ -147,6 +147,7 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
       const guardRate=series?.snapshot.guardRate??guardDamageRate(engine.data,guardLevel(b,target));
       const elementScale=series?.snapshot.resist[effect.element]??(target.resist?.[effect.element]??engine.data.actors[target.id]?.resist?.[effect.element]??1)*buffResistance(engine.data,dungeonBuffs(engine.data,s),unitKey(target),effect.element)*(dungeonEffectActive(engine.data,s,'status','wet')?wetResistance(engine.data,target,effect.element):1);
       const power=(effect.element==='physical'?physicalPower:1)*dungeonDamageScale(engine.data,s,effect.element)*(powers[effect.element==='physical'?'physicalPower':'magicPower']??1)*(powers.elementPower?.[effect.element]??1);
+      if(feedback){feedback.critical=Boolean(critical);feedback.guarded=guardRate<1;feedback.weak=elementScale>1;feedback.resisted=elementScale<1;}
       const taken=series?.snapshot.taken??(target.instance?1:(passives(engine.data,s,target.id).damageTaken??1));
       let damage=guardRate===0?0:Math.max(1,Math.floor(Math.floor(raw)*power*guardRate*elementScale*taken*(critical?CRITICAL_DAMAGE_MULTIPLIER:1)));
       if(series?.basis==='final'){const index=skill.effects.indexOf(effect);series.finalBase[index]??=damage;damage=Math.max(0,Math.floor(series.finalBase[index]*series.factor));}
@@ -208,17 +209,24 @@ function useSkill(engine,source,targets,skill,skillId,enemySource=false,itemId=n
   targets=misfireTargets(engine,source,targets,skill,skillId,itemId);
   if(spatial(engine.state)&&targets.length===1&&!targets[0].instance)targets=[coveredTarget(engine,targets[0],skill)];
   const hit=(target,context)=>{
-    const result=describeTarget(engine,unitKey(target));
-    const damage=applySkill(engine,source,target,skill,skillId,enemySource,itemId,true,context,physicalPower);if(damage>0)result.damage=damage;result.hit=context?.didHit!==false&&skill.effects.some(e=>['damage','stun','drain_mp','frontline_remove','frontline_knockback'].includes(e.type));return result;
-  };
-  const results=isFrontline(engine.state)?resolveFrontlineAttack(engine,source,targets,skill,skillId,{snapshot:target=>damageSnapshot(engine,source,target,enemySource),hit,react:(u,on,attacker)=>frontlineReact(engine,u,on,attacker)}):targets.map(target=>{
-    const result=describeTarget(engine,unitKey(target));
-    const damage=applySkill(engine,source,target,skill,skillId,enemySource,itemId,true,null,physicalPower);
+    const result={...describeTarget(engine,unitKey(target)),hpBefore:target.hp,mpBefore:target.mp};
+    const statuses=[...target.statuses];
+    const damage=applySkill(engine,source,target,skill,skillId,enemySource,itemId,true,context,physicalPower,result);
     if(damage>0)result.damage=damage;
+    result.hpAfter=target.hp;result.mpAfter=target.mp;
+    if(target.hp>result.hpBefore)result.healing=target.hp-result.hpBefore;
+    result.defeated=result.hpBefore>0&&target.hp<=0;
+    result.statusAdded=target.statuses.filter(id=>!statuses.includes(id)).map(id=>engine.data.statuses[id].name);
+    result.statusRemoved=statuses.filter(id=>!target.statuses.includes(id)).map(id=>engine.data.statuses[id].name);
+    result.hit=!result.missed&&context?.didHit!==false&&skill.effects.some(e=>['damage','stun','drain_mp','frontline_remove','frontline_knockback'].includes(e.type));
     return result;
-  });
+  };
+  const results=isFrontline(engine.state)?resolveFrontlineAttack(engine,source,targets,skill,skillId,{snapshot:target=>damageSnapshot(engine,source,target,enemySource),hit,react:(u,on,attacker)=>frontlineReact(engine,u,on,attacker)}):targets.map(target=>hit(target,null));
   const hostile=enemySource&&targets.some(t=>!t.instance)&&skill.effects.some(e=>e.type==='damage');
-  playBattleCue(engine,engine.data.presentation?.bindings.skills[skillId],origin,results,hostile);
+  const bindings=engine.data.presentation?.bindings;
+  const weapon=!enemySource&&skillId==='attack'?engine.data.items[source.equipment?.weapon]?.equipmentType:null;
+  const cue=bindings?.weapons?.[weapon]??bindings?.skills[skillId];
+  playBattleCue(engine,cue,origin,results,hostile,`${sourceName}・${skill.name}`);
   wetAfterSkill(engine,source,skill);return true;
 }
 function coveredTarget(engine,target,skill){

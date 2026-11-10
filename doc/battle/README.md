@@ -43,3 +43,5 @@
 [BALANCE_PLAN.md](BALANCE_PLAN.md)：調整対象、測定条件、旧測定と未実施項目。
 
 [REINFORCEMENTS.md](REINFORCEMENTS.md)：3方式共通の有限増援・配置・手番・報酬・保存と、根留めの移動/命中補正。
+
+[QUEST_PARTY_PLAYTEST.md](QUEST_PARTY_PLAYTEST.md)：全クエストの想定レベル帯・複数編成と、実操作によるクリア確認・結果比較。

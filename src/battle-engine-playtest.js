@@ -1,3 +1,4 @@
+import {GameAudio} from './application/audio.js';
 import {loadContent} from './core/loader.js';
 import {createTesterEngine,testerPreset} from './application/battle-tester-model.js';
 import {projectGame} from './application/projection.js';
@@ -9,7 +10,9 @@ import {applyTheme,THEME_DEFAULT} from './view/theme.js';
 const $=id=>document.getElementById(id),root=$('app'),embedded=window.parent!==window;
 document.body.classList.toggle('embedded',embedded);
 applyTheme(THEME_DEFAULT);
-let engine,view,config,request=0,layout='scene';
+let engine,view,config,request=0,layout='scene',soundEnabled=false;
+const sound=new GameAudio({locate:target=>view?.effects.spatial(target),onChange:label=>view?.updateSound(label)});
+function syncSound(model=window.battlePlaytest?.model){if(model){sound.configure(soundEnabled,.5,.8);sound.sync({...model,music:view?.playback.active?view.model.music:model.music});}}
 function reply(type,message){if(embedded)window.parent.postMessage({type:'adv:battle-tester:'+type,request,message},location.origin);}
 function status(message){$('playtest-status').textContent=message;reply('status',message);}
 const ui={
@@ -17,13 +20,13 @@ const ui={
   menu:()=>status('試遊中です。編成の変更や再戦はバトルテスターの「実エンジンへロード」から行えます。'),
   help:()=>status('本編と同じ戦闘操作です。コマンドと対象を選んで決定。方向キーで選択、Enterで決定、Escで取消。'),
   keyHint:()=> '方向キー 選択 / Enter 決定 / Esc 取消',
-  modalOpen:()=>false,cancelFeedback(){},effectsMode:()=> 'off',soundEnabled:()=>false,
-  soundLabel:()=> '音：切',sound:()=>status('試遊画面では音声を切っています。'),layoutChanged(){},
+  modalOpen:()=>false,cancelFeedback:()=>sound.stopEffects(),effectsMode:()=> $('effects').value,soundEnabled:()=>soundEnabled,
+  feedbackFinished:()=>syncSound(),soundLabel:()=>sound.label(),sound:()=>{if(soundEnabled&&['blocked','error'].includes(sound.state))sound.retry();else{soundEnabled=!soundEnabled;syncSound();}},layoutChanged(){},
 };
 function render(){
   const model=projectGame(engine);
   if(model.battle?.frontline&&config.presentation)model.battle.frontline.presentation=structuredClone(config.presentation);
-  view.render(model);
+  model.feedback.startedAt=performance.now();view.render(model);syncSound(model);
   window.battlePlaytest={engine,view,config,model,dispatch,load,render,layout,request};
 }
 function dispatch(intent){
@@ -45,6 +48,7 @@ function load(next,nextLayout=layout){
     status(message);reply('loaded',message);return true;
   }catch(error){status(error.message);reply('error',error.message);return false;}
 }
+$('effects').addEventListener('change',()=>render());
 $('restart').addEventListener('click',()=>{if(config)load(config);});
 $('layout').addEventListener('change',()=>setLayout($('layout').value));
 document.addEventListener('keydown',event=>{
@@ -53,7 +57,7 @@ document.addEventListener('keydown',event=>{
 });
 let base;
 try{
-  base=await loadContent();
+  base=await loadContent();sound.preload(Object.values(base.sounds).map(s=>base.assets.audio[s.asset]));
   window.addEventListener('message',event=>{
     if(!embedded||event.origin!==location.origin||event.source!==window.parent)return;
     const m=event.data;

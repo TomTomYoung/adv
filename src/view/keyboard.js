@@ -4,6 +4,12 @@ import {DEFAULT_BINDINGS,NAVIGATION_KEYS,eventCode,keyAction} from './key-bindin
 // Idle dungeons use direct movement/inspection; windows use button navigation.
 export function handleGameKey(event,{view,model,dispatch,bindings=DEFAULT_BINDINGS,modalOpen=false,activeElement=document.activeElement}){
   if(event.defaultPrevented||modalOpen||event.ctrlKey||event.metaKey||event.altKey||event.isComposing)return;
+  if(view.playback?.active){
+    const action=keyAction(event,bindings);
+    if(action==='confirm'||action==='cancel'){event.preventDefault();if(!event.repeat)view.playback.finish();}
+    else if(action||event.key==='Tab')event.preventDefault();
+    return;
+  }
   const scope=view.inputScope?.()??view.root;
   const cancel=()=>{event.preventDefault();view.tabNavigation=false;if(!closePicker(view.root))view.cancel?.();};
   if(eventCode(event)==='Escape'){cancel();return;}

@@ -1,0 +1,1100 @@
+{
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "profiles": {
+      "type": "object",
+      "maxProperties": 128,
+      "propertyNames": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_]{0,63}$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "voices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "wave": {
+                  "enum": [
+                    "sine",
+                    "triangle",
+                    "square",
+                    "sawtooth",
+                    "noise"
+                  ]
+                },
+                "atMs": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 5000
+                },
+                "durationMs": {
+                  "type": "number",
+                  "minimum": 10,
+                  "maximum": 5000
+                },
+                "gain": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 0.5
+                },
+                "pitch": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "at": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "value": {
+                        "type": "number",
+                        "minimum": 20,
+                        "maximum": 20000
+                      },
+                      "curve": {
+                        "enum": [
+                          "linear",
+                          "exponential",
+                          "step"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "at",
+                      "value"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "minItems": 2,
+                  "maxItems": 32
+                },
+                "envelope": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "at": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "value": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "curve": {
+                        "enum": [
+                          "linear",
+                          "exponential",
+                          "step"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "at",
+                      "value"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "minItems": 2,
+                  "maxItems": 32
+                },
+                "pan": {
+                  "type": "number",
+                  "minimum": -1,
+                  "maximum": 1
+                },
+                "distance": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "filter": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "enum": [
+                        "lowpass",
+                        "highpass",
+                        "bandpass",
+                        "notch",
+                        "peaking",
+                        "lowshelf",
+                        "highshelf"
+                      ]
+                    },
+                    "frequency": {
+                      "type": "number",
+                      "minimum": 20,
+                      "maximum": 20000
+                    },
+                    "q": {
+                      "type": "number",
+                      "minimum": 0.01,
+                      "maximum": 30
+                    },
+                    "gain": {
+                      "type": "number",
+                      "minimum": -24,
+                      "maximum": 24
+                    },
+                    "cutoff": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "at": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          "value": {
+                            "type": "number",
+                            "minimum": 20,
+                            "maximum": 20000
+                          },
+                          "curve": {
+                            "enum": [
+                              "linear",
+                              "exponential",
+                              "step"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "at",
+                          "value"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "minItems": 2,
+                      "maxItems": 32
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "frequency",
+                    "q"
+                  ],
+                  "additionalProperties": false
+                },
+                "vibrato": {
+                  "type": "object",
+                  "properties": {
+                    "hz": {
+                      "type": "number",
+                      "minimum": 0.1,
+                      "maximum": 40
+                    },
+                    "cents": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1200
+                    }
+                  },
+                  "required": [
+                    "hz",
+                    "cents"
+                  ],
+                  "additionalProperties": false
+                },
+                "echo": {
+                  "type": "object",
+                  "properties": {
+                    "delayMs": {
+                      "type": "number",
+                      "minimum": 10,
+                      "maximum": 1000
+                    },
+                    "gain": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 0.6
+                    },
+                    "taps": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 4
+                    }
+                  },
+                  "required": [
+                    "delayMs",
+                    "gain",
+                    "taps"
+                  ],
+                  "additionalProperties": false
+                },
+                "reverb": {
+                  "type": "object",
+                  "properties": {
+                    "durationMs": {
+                      "type": "number",
+                      "minimum": 20,
+                      "maximum": 1500
+                    },
+                    "mix": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 0.5
+                    }
+                  },
+                  "required": [
+                    "durationMs",
+                    "mix"
+                  ],
+                  "additionalProperties": false
+                },
+                "distortion": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 50
+                }
+              },
+              "required": [
+                "wave",
+                "atMs",
+                "durationMs",
+                "gain",
+                "pitch",
+                "envelope"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1,
+            "maxItems": 12
+          },
+          "priority": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "cooldownMs": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1000
+          },
+          "variation": {
+            "type": "object",
+            "properties": {
+              "cents": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 200
+              },
+              "gain": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 0.3
+              }
+            },
+            "required": [
+              "cents",
+              "gain"
+            ],
+            "additionalProperties": false
+          },
+          "variants": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "wave": {
+                    "enum": [
+                      "sine",
+                      "triangle",
+                      "square",
+                      "sawtooth",
+                      "noise"
+                    ]
+                  },
+                  "atMs": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 5000
+                  },
+                  "durationMs": {
+                    "type": "number",
+                    "minimum": 10,
+                    "maximum": 5000
+                  },
+                  "gain": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 0.5
+                  },
+                  "pitch": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "at": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 1
+                        },
+                        "value": {
+                          "type": "number",
+                          "minimum": 20,
+                          "maximum": 20000
+                        },
+                        "curve": {
+                          "enum": [
+                            "linear",
+                            "exponential",
+                            "step"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "at",
+                        "value"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "minItems": 2,
+                    "maxItems": 32
+                  },
+                  "envelope": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "at": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 1
+                        },
+                        "value": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 1
+                        },
+                        "curve": {
+                          "enum": [
+                            "linear",
+                            "exponential",
+                            "step"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "at",
+                        "value"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "minItems": 2,
+                    "maxItems": 32
+                  },
+                  "pan": {
+                    "type": "number",
+                    "minimum": -1,
+                    "maximum": 1
+                  },
+                  "distance": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 10
+                  },
+                  "filter": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "enum": [
+                          "lowpass",
+                          "highpass",
+                          "bandpass",
+                          "notch",
+                          "peaking",
+                          "lowshelf",
+                          "highshelf"
+                        ]
+                      },
+                      "frequency": {
+                        "type": "number",
+                        "minimum": 20,
+                        "maximum": 20000
+                      },
+                      "q": {
+                        "type": "number",
+                        "minimum": 0.01,
+                        "maximum": 30
+                      },
+                      "gain": {
+                        "type": "number",
+                        "minimum": -24,
+                        "maximum": 24
+                      },
+                      "cutoff": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "at": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 1
+                            },
+                            "value": {
+                              "type": "number",
+                              "minimum": 20,
+                              "maximum": 20000
+                            },
+                            "curve": {
+                              "enum": [
+                                "linear",
+                                "exponential",
+                                "step"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "at",
+                            "value"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "minItems": 2,
+                        "maxItems": 32
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "frequency",
+                      "q"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "vibrato": {
+                    "type": "object",
+                    "properties": {
+                      "hz": {
+                        "type": "number",
+                        "minimum": 0.1,
+                        "maximum": 40
+                      },
+                      "cents": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1200
+                      }
+                    },
+                    "required": [
+                      "hz",
+                      "cents"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "echo": {
+                    "type": "object",
+                    "properties": {
+                      "delayMs": {
+                        "type": "number",
+                        "minimum": 10,
+                        "maximum": 1000
+                      },
+                      "gain": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 0.6
+                      },
+                      "taps": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 4
+                      }
+                    },
+                    "required": [
+                      "delayMs",
+                      "gain",
+                      "taps"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "reverb": {
+                    "type": "object",
+                    "properties": {
+                      "durationMs": {
+                        "type": "number",
+                        "minimum": 20,
+                        "maximum": 1500
+                      },
+                      "mix": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 0.5
+                      }
+                    },
+                    "required": [
+                      "durationMs",
+                      "mix"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "distortion": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 50
+                  }
+                },
+                "required": [
+                  "wave",
+                  "atMs",
+                  "durationMs",
+                  "gain",
+                  "pitch",
+                  "envelope"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1,
+              "maxItems": 12
+            },
+            "minItems": 1,
+            "maxItems": 8
+          }
+        },
+        "required": [
+          "name",
+          "voices",
+          "priority",
+          "cooldownMs"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "particles": {
+      "type": "object",
+      "maxProperties": 128,
+      "propertyNames": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_]{0,63}$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "color": {
+            "type": "string",
+            "pattern": "^#[0-9a-fA-F]{6}$"
+          },
+          "count": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 32
+          },
+          "durationMs": {
+            "type": "number",
+            "minimum": 40,
+            "maximum": 2000
+          },
+          "size": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 40
+          },
+          "speed": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 800
+          },
+          "directionDeg": {
+            "type": "number",
+            "minimum": -360,
+            "maximum": 360
+          },
+          "spreadDeg": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 360
+          },
+          "gravity": {
+            "type": "number",
+            "minimum": -1000,
+            "maximum": 1000
+          },
+          "shape": {
+            "enum": [
+              "spark",
+              "circle",
+              "square"
+            ]
+          },
+          "scale": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "at": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "value": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 4
+                },
+                "curve": {
+                  "enum": [
+                    "linear",
+                    "exponential",
+                    "step"
+                  ]
+                }
+              },
+              "required": [
+                "at",
+                "value"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 2,
+            "maxItems": 32
+          },
+          "alpha": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "at": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "value": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "curve": {
+                  "enum": [
+                    "linear",
+                    "exponential",
+                    "step"
+                  ]
+                }
+              },
+              "required": [
+                "at",
+                "value"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 2,
+            "maxItems": 32
+          },
+          "colors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "at": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "color": {
+                  "type": "string",
+                  "pattern": "^#[0-9a-fA-F]{6}$"
+                }
+              },
+              "required": [
+                "at",
+                "color"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 2,
+            "maxItems": 8
+          },
+          "ring": {
+            "type": "object",
+            "properties": {
+              "durationMs": {
+                "type": "number",
+                "minimum": 40,
+                "maximum": 1000
+              },
+              "from": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 3
+              },
+              "to": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 4
+              },
+              "opacity": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 0.85
+              }
+            },
+            "required": [
+              "durationMs",
+              "from",
+              "to",
+              "opacity"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "name",
+          "color",
+          "count",
+          "durationMs",
+          "size",
+          "speed",
+          "directionDeg",
+          "spreadDeg",
+          "gravity",
+          "shape",
+          "scale",
+          "alpha"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "paths": {
+      "type": "object",
+      "maxProperties": 128,
+      "propertyNames": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_]{0,63}$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "color": {
+            "type": "string",
+            "pattern": "^#[0-9a-fA-F]{6}$"
+          },
+          "width": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 80
+          },
+          "height": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 40
+          },
+          "durationMs": {
+            "type": "number",
+            "minimum": 40,
+            "maximum": 2000
+          },
+          "arc": {
+            "type": "number",
+            "minimum": -400,
+            "maximum": 400
+          },
+          "trail": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 12
+          },
+          "beam": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name",
+          "color",
+          "width",
+          "height",
+          "durationMs",
+          "arc",
+          "trail"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "timelines": {
+      "type": "object",
+      "maxProperties": 128,
+      "propertyNames": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_]{0,63}$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "tracks": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "synth",
+                    "particles",
+                    "path",
+                    "effect",
+                    "sound"
+                  ]
+                },
+                "atMs": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 5000
+                },
+                "target": {
+                  "enum": [
+                    "source",
+                    "target"
+                  ]
+                },
+                "profile": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]{0,63}$"
+                },
+                "effect": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]{0,63}$"
+                },
+                "sound": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]{0,63}$"
+                },
+                "alternates": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9_]{0,63}$"
+                  },
+                  "minItems": 1,
+                  "maxItems": 8
+                },
+                "priority": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "cooldownMs": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1000
+                },
+                "gain": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "repeat": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 8
+                },
+                "intervalMs": {
+                  "type": "number",
+                  "minimum": 20,
+                  "maximum": 2000
+                },
+                "spatial": {
+                  "type": "object",
+                  "properties": {
+                    "pan": {
+                      "type": "number",
+                      "minimum": -1,
+                      "maximum": 1
+                    },
+                    "distance": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 10
+                    },
+                    "panEnd": {
+                      "type": "number",
+                      "minimum": -1,
+                      "maximum": 1
+                    }
+                  },
+                  "required": [],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "kind",
+                "atMs",
+                "target"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1,
+            "maxItems": 32
+          }
+        },
+        "required": [
+          "name",
+          "tracks"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "bindings": {
+      "type": "object",
+      "maxProperties": 128,
+      "propertyNames": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_]{0,63}$"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_]{0,63}$"
+      }
+    },
+    "materials": {
+      "type": "object",
+      "maxProperties": 128,
+      "propertyNames": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_]{0,63}$"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_]{0,63}$"
+      }
+    },
+    "materialSprites": {
+      "type": "object",
+      "maxProperties": 128,
+      "propertyNames": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_]{0,63}$"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_]{0,63}$"
+      }
+    },
+    "mixer": {
+      "type": "object",
+      "properties": {
+        "maxSynthVoices": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 48
+        },
+        "maxRecordedVoices": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16
+        },
+        "duckGain": {
+          "type": "number",
+          "minimum": 0.1,
+          "maximum": 1
+        },
+        "duckHoldMs": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1000
+        },
+        "duckReleaseMs": {
+          "type": "number",
+          "minimum": 20,
+          "maximum": 1500
+        },
+        "duckPriority": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "compressor": {
+          "type": "object",
+          "properties": {
+            "threshold": {
+              "type": "number",
+              "minimum": -40,
+              "maximum": 0
+            },
+            "knee": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 40
+            },
+            "ratio": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 20
+            },
+            "attack": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "release": {
+              "type": "number",
+              "minimum": 0.01,
+              "maximum": 1
+            }
+          },
+          "required": [
+            "threshold",
+            "knee",
+            "ratio",
+            "attack",
+            "release"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "maxSynthVoices",
+        "maxRecordedVoices",
+        "duckGain",
+        "duckHoldMs",
+        "duckReleaseMs",
+        "duckPriority",
+        "compressor"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "version",
+    "profiles",
+    "particles",
+    "paths",
+    "timelines",
+    "bindings",
+    "materials",
+    "materialSprites",
+    "mixer"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

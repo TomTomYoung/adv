@@ -243,3 +243,11 @@ CIやテストの実行量と、ChatGPTの会話へ展開する情報量は別�
 - artifactは必要なものだけ開き、全画像・全JSONを一括展開しない。
 - PNG/WebP等をBase64へ変換して会話やログへ出さない。
 - 詳細な検証結果を永続化する必要がある場合は `doc/development/PROGRESS.md` 等へ記録し、会話には要点だけ返す。
+
+## 戦闘の手応えとHP表示（2026-11-09追加）
+
+`tests/battle-playback.test.mjs` は命中前後のHP表示、演出省略による二重実行防止、終了時の操作復帰、再描画・ロード時の予約取消、武器別の通常攻撃、撃破結果を検査します。出力はNode標準の試験件数と成否です。
+
+`.github/workflows/battle-feedback.yml` は `tools/browser-effects-smoke.mjs` をChromiumで実行します。Scene／Classic表示とClassic／Grid／Frontline戦闘の6組、斬撃・強打・刺突・弓の飛翔、命中音と数字の予約差、PC／390px、撃破、軽減・オフ、取消を検査します。結果JSONと代表PNGを7日間のartifactへ保存します。音声アダプターへの発音指示を検査し、スピーカーの聴感評価は行いません。
+
+`tests/battle-impact.test.mjs` は追加の火花・衝撃波・回復・撃破、命中結果の分類、合成SEの音量・同時発音数・予約取消、BGMの一時減音と復帰を検査します。ブラウザー検査は `OfflineAudioContext` で既存SEと合成音を重ねた10種類を実際に生成し、無音・クリッピング・音色の取り違えを検査します。会心・回復・撃破のPNGと波形測定値を既存artifactへ追加します。
