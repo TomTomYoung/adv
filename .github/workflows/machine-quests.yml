@@ -2,7 +2,6 @@ name: Validate machinery quests in Chromium
 on:
   pull_request:
     paths:
-      - '.github/actions/ubuntu-apt-mirrors/**'
       - 'tools/ci-scope.mjs'
       - '.github/actions/ci-plan/**'
       - '.github/actions/ci-record/**'
@@ -38,6 +37,9 @@ permissions:
 jobs:
   machine-browser:
     runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
@@ -52,15 +54,11 @@ jobs:
         uses: ./.github/actions/ci-plan
         with:
           suite: machine-browser
-      - name: Prepare Ubuntu package mirrors
-        if: steps.ci.outputs.run == 'true'
-        uses: ./.github/actions/ubuntu-apt-mirrors
       - name: Install browser and Japanese fonts
         if: steps.ci.outputs.run == 'true'
         run: |
           npm install --no-save --package-lock=false playwright@1.58.2
-          npx playwright install --with-deps chromium --only-shell
-          sudo apt-get install -y fonts-noto-cjk
+          test -n "$(fc-list :lang=ja)"
       - name: Walk the worker return, ward collection, and three homes in both layouts and widths
         if: steps.ci.outputs.run == 'true'
         run: node tools/browser-machine-smoke.mjs

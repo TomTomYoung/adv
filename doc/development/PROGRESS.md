@@ -16,6 +16,8 @@ PR #224の統合先master `2ab7f80047c1e8c6ccf2469ba3be213711b38a12`を取得し
 
 実装先端`e782759228a55521f061a3b0d6e124a04121ace4`の[通常CI](https://github.com/TomTomYoung/adv/actions/runs/43032911180)は成功。初回の[Oddland CI](https://github.com/TomTomYoung/adv/actions/runs/43032911131)はブラウザー導入中、Ubuntu runnerの`azure.archive.ubuntu.com`名前解決失敗で終了し、q187の画面検証は未実行だった。他のブラウザーjobでも導入失敗が出たため、共通actionでUbuntuの標準配布元とsecurity配布元を指定する。suite・署名鍵・第三者リポジトリ・Playwright版・検査条件は保持する。環境設定という入力の変更によりPRのCIを再検査し、成功済みジョブの手動再実行は行わない。
 
+配布元切替後の`5890d4f732523ac717ec86c987820e261f1f0aca`でも[Oddland CI](https://github.com/TomTomYoung/adv/actions/runs/43034918711)が`archive.ubuntu.com`の名前解決失敗で導入段階に終了した。ミラーの切替actionを取り下げ、ブラウザーjobをPlaywright公式の`mcr.microsoft.com/playwright:v1.58.2-noble`へ切り替える。npm側も既存1.58.2を保持し、コンテナに含まれるChromium・依存関係・日本語フォントを使う。機関廟jobの追加APTフォント導入は共通の日本語フォント確認に揃える。ゲームコードと検査条件は変えず、未実行の画面検査を成功扱いにしない。
+
 ## 2026-11-10：戦闘演出との統合とq186の通信士・負傷者・捕虜
 
 PR #222をmaster `301ef4e68be0e634c6f906982d4575f236024f2d`へ統合した。PR #223との競合はruntime.jsonとDATA_SNAPSHOT.jsonの生成値2件で、q185と戦闘演出・攻略パーティー試遊の両方を保持して再生成した。統合ツリー `9c48efdcfee4c8ef788897709f6f38ade90c1259`で`npm run check`の全2,741試験が成功した。PR #223の競合解消先端`c0b11dd8b997dcee83b2b85a8be7d152a391eba3`で全11ワークフロー・12ジョブが成功した。master `bf9cd2f3b965ee345259260576d1f073b47a376c`へ統合済み。統合後のツリーも`9c48efdcfee4c8ef788897709f6f38ade90c1259`で、検証済みツリーとの一致を確認した。統合版q185は132画面条件・3結末・エラー0、PNG132枚との一致と代表4枚の主要部の目視を確認した。[PR #223統合後の公開](https://github.com/TomTomYoung/adv/actions/runs/42837565624)と[全体CI](https://github.com/TomTomYoung/adv/actions/runs/42837568724)は成功した。公開runtime.jsonも統合済みmasterの定義と一致し、攻略パーティー試遊HTMLの取得を確認した。

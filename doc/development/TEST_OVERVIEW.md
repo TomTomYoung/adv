@@ -20,7 +20,7 @@ PRの差分はmerge-baseからHEADまでを判定します。直前コミット�
 
 参考：[GitHubの差分・paths判定](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow)、[cacheの一致条件とPRごとの範囲](https://docs.github.com/en/actions/reference/workflows-and-actions/dependency-caching)、[actions/cache](https://github.com/actions/cache)。
 
-ブラウザー導入前は[Ubuntu配布元の準備](../../.github/actions/ubuntu-apt-mirrors/action.yml)を共通利用する。2026-11-11にrunner標準のAzure mirrorで名前解決失敗を観測したため、mirrorファイルをUbuntu公式のarchive／security配布元へ切り替える。suite・署名鍵・第三者リポジトリ・Playwright版と検査条件は変えない。
+ブラウザーCIは[Playwright公式コンテナ](https://playwright.dev/docs/docker)の`mcr.microsoft.com/playwright:v1.58.2-noble`を使う。Playwright npmパッケージも1.58.2に固定し、コンテナ内のChromium・OS依存関係・日本語フォントで既存の検査条件を実行する。2026-11-11にrunnerからUbuntuのAzure／標準配布元への名前解決失敗を観測したため、jobごとのAPT導入を廃した。画像タグは[公式一覧](https://mcr.microsoft.com/v2/playwright/tags/list)で確認した。
 
 ## 1. 通常CI: `.github/workflows/ci.yml`
 
