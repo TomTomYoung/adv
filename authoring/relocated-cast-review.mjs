@@ -1,7 +1,7 @@
 // Editorial audit: candidate IDs are local; connected roles cite their game entity.
 // Update a fingerprint only after rereading the changed quest and its evidence.
 export const RELOCATED_CAST_REVIEW={
- reviewedAt:'2026-11-09',
+ reviewedAt:'2026-11-11',
  quests:{
   q031:{
    sourceSha256:'ab2cb40f75d0a430e00077b936b338b23736b74b01034aeaeb9333cda16cecf7',
@@ -5117,6 +5117,131 @@ export const RELOCATED_CAST_REVIEW={
     }
   },
   "next": "既存4役の所在と実移動をScene／Classicへ接続済み。代理状・物資の保持者、限定合意、勝利後移動・敗北再試行・逃走後撤退、3結末と旧保存を維持する。"
+},
+  q187:{
+  "sourceSha256": "ce3f191c89494c091fd5e6cb7a71463f21dc5dadbc13e410aed82467b0b427b5",
+  "identityNotes": [
+    "原稿authoring/reference/volume-09.mdのGQ087、初版q187、現行全9場面・10旅程・3結末を精読した。",
+    "カドは既存kadoの全旅程へ同行する。住民はentry_evacだけで退避先へ同行し、村長はcontractへ固定する。将校はarmyの任用確認だけに表示し、contractの要求やleaveの安堵を現場出演へ変えない。",
+    "住民の人数・氏名・代表者、匿名の国や軍の名称、専用画を追加しない。初版は保持する。",
+    "2026-11-11のユーザー許可に基づき、q187物語改訂1の保存移行は追加しない。改訂2の新規進行・待機・移動・戦闘・完了の保存再開を保証する。",
+    "敗北は救助先から外縁へ戻って再戦、または入口へ帰って避難。逃走後は再戦と入口帰還を閉じ、勝利を前提にしない契約相談を残す。"
+  ],
+  "relatedClients": {},
+  "people": {
+    "q187_kado": {
+      "label": "兵カド",
+      "status": "connected",
+      "entity": "kado",
+      "need": "既存の実同行・固定所在と場面の同席根拠に沿う呼称表示をScene／Classicへ接続済み。"
+    },
+    "q187_residents": {
+      "label": "退避する住民たち",
+      "status": "connected",
+      "entity": "residents",
+      "need": "既存の実同行・固定所在と場面の同席根拠に沿う呼称表示をScene／Classicへ接続済み。"
+    },
+    "q187_mayor": {
+      "label": "村長",
+      "status": "connected",
+      "entity": "mayor",
+      "need": "既存の実同行・固定所在と場面の同席根拠に沿う呼称表示をScene／Classicへ接続済み。"
+    },
+    "q187_officerPerson": {
+      "label": "駐留将校",
+      "status": "connected",
+      "entity": "officerPerson",
+      "need": "既存の実同行・固定所在と場面の同席根拠に沿う呼称表示をScene／Classicへ接続済み。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "person-evidence",
+      "people": [
+        "q187_kado"
+      ],
+      "evidence": "外套の裏に三つの隊章がある。どれも同じ救護所の糸で縫われていた。カドは村を守ったことも、昔は徴発したことも認めた。",
+      "reason": "カド本人の告白と外套を確かめる。住民は所在が同じだけでは同席させない。",
+      "visual": "実所在と本文の同席根拠に沿う呼称表示。"
+    },
+    "contract": {
+      "decision": "person-evidence",
+      "people": [
+        "q187_kado",
+        "q187_mayor"
+      ],
+      "evidence": "村長は働きを頼り、将校は忠誠を求める。国軍なら補給と命令を、村契約なら守る範囲と責任を決める。",
+      "reason": "カドと井戸前に到着して村長へ相談する。将校の要求は伝聞であり本人は任用窓口に残る。",
+      "visual": "実所在と本文の同席根拠に沿う呼称表示。"
+    },
+    "defend": {
+      "decision": "person-evidence",
+      "people": [
+        "q187_kado"
+      ],
+      "evidence": "カドと村の外縁へ来た。逃走した場合も、勝利を前提にせず契約を相談できる。",
+      "reason": "同行したカドと村の外縁に到着する。野盗は戦闘の敵とし、固定出演に追加しない。",
+      "visual": "実所在と本文の同席根拠に沿う呼称表示。"
+    },
+    "evacuated": {
+      "decision": "person-evidence",
+      "people": [
+        "q187_kado",
+        "q187_residents"
+      ],
+      "evidence": "カドと住民を退避先まで案内した。村長のもとへ戻って今後の責任を相談する。",
+      "reason": "カドと住民が実同行して退避先へ到着する。村長は井戸前に残る。",
+      "visual": "実所在と本文の同席根拠に沿う呼称表示。"
+    },
+    "army": {
+      "decision": "person-evidence",
+      "people": [
+        "q187_kado",
+        "q187_officerPerson"
+      ],
+      "evidence": "カドと任用窓口へ来た。補給と命令を受け入れる条件を本人と将校が確認する。",
+      "reason": "カド本人と将校が任用条件を確認する。村長と住民は同行しない。",
+      "visual": "実所在と本文の同席根拠に沿う呼称表示。"
+    },
+    "bridge": {
+      "decision": "person-evidence",
+      "people": [
+        "q187_kado"
+      ],
+      "evidence": "カドと守る橋を確かめた。井戸へ戻り、村長と範囲と費用を署名する。",
+      "reason": "守る範囲をカドと現地確認する。村長は署名先の井戸前に残る。",
+      "visual": "実所在と本文の同席根拠に沿う呼称表示。"
+    },
+    "village_done": {
+      "decision": "person-evidence",
+      "people": [
+        "q187_kado",
+        "q187_mayor"
+      ],
+      "evidence": "橋と井戸を守る範囲、責任、村の費用を取り決める。",
+      "reason": "カドと井戸へ戻り、現地に残る村長と署名する。住民を退避先から連れ戻さない。",
+      "visual": "実所在と本文の同席根拠に沿う呼称表示。"
+    },
+    "left": {
+      "decision": "person-evidence",
+      "people": [
+        "q187_kado"
+      ],
+      "evidence": "カドを村から出る道まで案内した。村は別の人手を探す。",
+      "reason": "カドと村から出る道へ到着する。将校の安堵は結末文であり現地への同行ではない。",
+      "visual": "実所在と本文の同席根拠に沿う呼称表示。"
+    },
+    "defend_battle_ready": {
+      "decision": "person-evidence",
+      "people": [
+        "q187_kado"
+      ],
+      "evidence": "戦いに勝利し、先へ進む道が開いた。次の場所まで歩いて確かめる。",
+      "reason": "共同行動の勝利後もカドは外縁にいる。次のcontinueでカドと井戸へ出発するまで村長を表示しない。",
+      "visual": "実所在と本文の同席根拠に沿う呼称表示。"
+    }
+  },
+  "next": "9場面の表示、全10旅程、敗北後の再戦と入口帰還、逃走後の契約相談、3結末と改訂2保存を検証する。次工程はq188の原稿・全場面の出演監査。"
 }
  }
 };

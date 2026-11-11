@@ -120,5 +120,12 @@ export function observatorySecondSource(q,{cast=true}={}){
   const scenes={parley:['communicator'],limited_offer:['communicator'],gather:['ours'],exchange:['ours','theirs'],local_done:['theirs'],secured:['captives'],battle_done:['captives']};
   for(const [scene,people] of Object.entries(scenes)){const positions=people.length===2?[31,69]:[50];node(scene).cast=people.map((entity,i)=>({entity,display:{x:positions[i]}}));}
  }
+ if(q.number===187&&cast){
+  entity('officerPerson','officer','person');
+  for(const id of ['kado','residents','mayor','officerPerson'])x.entities[id].character='q187_'+id;
+  const scenes={entry:['kado'],contract:['kado','mayor'],defend:['kado'],evacuated:['kado','residents'],army:['kado','officerPerson'],bridge:['kado'],village_done:['kado','mayor'],left:['kado']};
+  for(const [scene,people] of Object.entries(scenes)){const positions=people.length===2?[31,69]:[50];node(scene).cast=people.map((entity,i)=>({entity,display:{x:positions[i]}}));}
+  choice('defend','battle').readyCast=[{entity:'kado',display:{x:50}}];
+ }
  return finish();
 }

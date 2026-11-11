@@ -15,6 +15,9 @@ on:
       - 'tools/browser-bridge-cast-smoke.mjs'
       - 'tools/bridge-art-fixtures.mjs'
       - 'tests/fixtures/e2-q185-before-cast.json'
+      - 'tools/browser-flagless-soldier-cast-smoke.mjs'
+      - 'tools/flagless-soldier-art-fixtures.mjs'
+      - 'tests/fixtures/e2-q187-before-cast.json'
       - 'tools/browser-truce-cast-smoke.mjs'
       - 'tools/truce-art-fixtures.mjs'
       - 'tests/fixtures/e2-q186-before-cast.json'
@@ -143,6 +146,18 @@ jobs:
           name: q186-cast-checkpoints
           path: /tmp/adv-truce-art-browser
           if-no-files-found: ignore
+      - name: Verify q187 cast, evacuation, battle recovery and current saves
+        if: steps.ci.outputs.run == 'true'
+        env:
+          ADV_BROWSER_OUTPUT: /tmp/adv-flagless-soldier-art-browser
+        run: node tools/browser-flagless-soldier-cast-smoke.mjs
+      - name: Keep q187 cast checkpoints
+        if: always() && steps.ci.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: q187-cast-checkpoints
+          path: /tmp/adv-flagless-soldier-art-browser
+          if-no-files-found: error
       - name: Remember successful inputs
         if: success() && steps.ci.outputs.run == 'true' && github.event_name != 'workflow_dispatch'
         uses: ./.github/actions/ci-record

@@ -143,6 +143,8 @@ PRの差分はmerge-baseからHEADまでを判定します。直前コミット�
 
 **検査**: `browser-indoor-smoke.mjs` で全enclosed mapとwater transitionを両layout・複数幅で確認する。
 
+`browser-flagless-soldier-cast-smoke.mjs`はq187の28保存点をScene／Classic × 1440／390pxの112条件で検査する。全9場面、住民の退避有無、勝利・逃走・敗北、3結末、勝利後もカドが残ること、将校が任用窓口だけに表示されること、逃走後に再戦と入口帰還が閉じることを含む。[専用6試験](../../tests/flagless-soldier-cast.test.mjs)は全10旅程・戦闘命令・本文・報酬の保持、固定所在、報酬一回性、改訂2保存の全段階再開と改訂1保存の原子的拒否を確認する。ユーザー許可によるq187の互換切断は、旧保存を移行できたとの検証に数えない。
+
 **出力**: 標準ログ、viewport checkpoint。artifactは `indoor-browser-checkpoints`。
 
 ## 5. 屋外探索ブラウザCI: `.github/workflows/outdoor-exploration.yml`
@@ -153,6 +155,8 @@ PRの差分はmerge-baseからHEADまでを判定します。直前コミット�
 
 **検査**: `browser-outdoor-smoke.mjs` で全outdoor mapを両layout・複数幅で確認する。
 
+`browser-flagless-soldier-cast-smoke.mjs`はq187の28保存点をScene／Classic × 1440／390pxの112条件で検査する。全9場面、住民の退避有無、勝利・逃走・敗北、3結末、勝利後もカドが残ること、将校が任用窓口だけに表示されること、逃走後に再戦と入口帰還が閉じることを含む。[専用6試験](../../tests/flagless-soldier-cast.test.mjs)は全10旅程・戦闘命令・本文・報酬の保持、固定所在、報酬一回性、改訂2保存の全段階再開と改訂1保存の原子的拒否を確認する。ユーザー許可によるq187の互換切断は、旧保存を移行できたとの検証に数えない。
+
 **出力**: 標準ログ、viewport checkpoint。artifactは `outdoor-browser-checkpoints`。
 
 ## 6. 機関廟クエストブラウザCI: `.github/workflows/machine-quests.yml`
@@ -162,6 +166,8 @@ PRの差分はmerge-baseからHEADまでを判定します。直前コミット�
 **目的**: 機関廟系列の現場移動・帰路・施設表示が実ブラウザ上で成立することを確認する。
 
 **検査**: `browser-machine-smoke.mjs` でworker return、ward collection、3 homesを両layout・複数幅で歩行確認する。`browser-machine-cast-smoke.mjs` はq173の現行・表示追加前・旧受注の19保存点をScene／Classic × 1440／390pxの76条件で表示する。`--funeral-only` はq174の現行6・表示追加前6・旧受注1の13保存点を同じ組合せの52条件で表示し、娘の非同行・負傷者の救護先・遺書の受渡し・旧受注表示を検査する。`--hunter-only` はq175の現行10・表示追加前10・戦闘再開10・旧受注1の31保存点を124条件で検査し、戦闘前と報告後の見張りの表示を区別する。[専用6試験](../../tests/hunter-cast.test.mjs)では全場面・全旅程・3結末・報酬の一回性、旧戦闘保存の勝利・逃走・敗北・再挑戦、正面戦の逃走不可と不正保存の拒否を検査する。`--god-sandals-only` はq176の現行8・表示追加前8・旧旅程の到着後2・旧受注2の20保存点を80条件で検査する。[専用7試験](../../tests/god-sandals-cast.test.mjs)は全8旅程・3結末・草鞋の受渡し・神の所在・追加3役の保存移行・旧待機本文の保持と到着後の本文修正・不正保存の拒否・報酬の一回性を検査する。`--mirror-only` はq177の現行9・表示追加前9・旧受注2の20保存点を80条件で検査する。[専用6試験](../../tests/truth-mirror-cast.test.mjs)は表示・所在追加以外の配布定義の一致、全7旅程・4結末・証拠の受渡し時点・暫定告知の未確認・遠隔同意後の設定・旧保存の厳密な移行・不正保存の拒否・報酬の一回性を検査する。`--tomorrow-door-only` はq178の現行9・表示追加前9・旧旅程の到着後3・旧受注3の24保存点を96条件で検査する。[専用7試験](../../tests/tomorrow-door-cast.test.mjs)は本文3箇所と表示・所在追加以外の配布定義の一致、全8旅程・5経路・3結末、不可逆の越境、手紙と髪紐の受渡し時点、旧保存の厳密な移行と待機本文の保持、到着後の修正文、不正保存の拒否、q177との同時移行と報酬の一回性を検査する。`--garden-only` はq179の現行17・表示追加前17・旧旅程到着後3・旧受注2の39保存点を156条件で検査する。[専用7試験](../../tests/garden-cast.test.mjs)は全17場面・15旅程・3結末、三家の6訪問順×8応答組合せを新旧保存で検査し、個別の標の保持者・縄の一回消費・焼却と救援の確定時点・報酬の一回性・不正保存の拒否を確認する。`--last-tale-only` はq180の現行9・表示追加前9・旧旅程到着後6・旧受注2の26保存点を104条件で検査する。[専用7試験](../../tests/last-tale-cast.test.mjs)は全9場面・8旅程・4結末、ムイと聞き手の実所在、本文6箇所の確定前後、台本の受渡し、旧待機本文と到着後の修正文、不正保存の拒否、q179との同時移行と報酬の一回性を検査する。人物の所在、呼称だけの表示、同意前のguest選択の無効化、保存再開、本文送り、画面内のラベル配置を確認する。
+
+`browser-flagless-soldier-cast-smoke.mjs`はq187の28保存点をScene／Classic × 1440／390pxの112条件で検査する。全9場面、住民の退避有無、勝利・逃走・敗北、3結末、勝利後もカドが残ること、将校が任用窓口だけに表示されること、逃走後に再戦と入口帰還が閉じることを含む。[専用6試験](../../tests/flagless-soldier-cast.test.mjs)は全10旅程・戦闘命令・本文・報酬の保持、固定所在、報酬一回性、改訂2保存の全段階再開と改訂1保存の原子的拒否を確認する。ユーザー許可によるq187の互換切断は、旧保存を移行できたとの検証に数えない。
 
 **出力**: 標準ログ、viewport checkpoint。歩行側のartifactは `machine-browser-checkpoints`。q173は結果JSONとPNGを `q173-cast-checkpoints` に保存する。q174は `q174-cast-checkpoints`、q175は `q175-cast-checkpoints`、q176は `q176-cast-checkpoints`、q177は `q177-cast-checkpoints`、q178は `q178-cast-checkpoints`、q179は `q179-cast-checkpoints`、q180は `q180-cast-checkpoints` に分離する。成功時は件数と成功だけを報告し、失敗時だけ該当状態の要点を取得する。
 
@@ -183,7 +189,9 @@ PRの差分はmerge-baseからHEADまでを判定します。直前コミット�
 
 `browser-truce-cast-smoke.mjs`はq186の現行20・表示追加前20・旧受注2の42保存点をScene／Classic × 1440／390pxの168条件で検査する。直接合意と限定代理状の交換、逃走後に再戦・再交渉が閉じること、敗北後の再戦、全13場面を含む。[専用8試験](../../tests/truce-cast.test.mjs)は全14旅程・3結末、代理状と物資の出発／到着時の受渡し、負傷者と捕虜の実同行、限定合意、旧保存の待機本文・戦闘・旅程・完了状態、旧受注の直接結末、不正保存の原子的拒否を確認する。
 
-**出力**: 標準ログ、viewport checkpoint。artifactは `oddland-browser-checkpoints`。q181の結果JSONとPNGは `q181-cast-checkpoints`、q182は `q182-cast-checkpoints`、q183は `q183-cast-checkpoints`、q184は `q184-cast-checkpoints`、q185は `q185-cast-checkpoints`、q186は `q186-cast-checkpoints` に分離する。
+`browser-flagless-soldier-cast-smoke.mjs`はq187の28保存点をScene／Classic × 1440／390pxの112条件で検査する。全9場面、住民の退避有無、勝利・逃走・敗北、3結末、勝利後もカドが残ること、将校が任用窓口だけに表示されること、逃走後に再戦と入口帰還が閉じることを含む。[専用6試験](../../tests/flagless-soldier-cast.test.mjs)は全10旅程・戦闘命令・本文・報酬の保持、固定所在、報酬一回性、改訂2保存の全段階再開と改訂1保存の原子的拒否を確認する。ユーザー許可によるq187の互換切断は、旧保存を移行できたとの検証に数えない。
+
+**出力**: 標準ログ、viewport checkpoint。artifactは `oddland-browser-checkpoints`。q181の結果JSONとPNGは `q181-cast-checkpoints`、q182は `q182-cast-checkpoints`、q183は `q183-cast-checkpoints`、q184は `q184-cast-checkpoints`、q185は `q185-cast-checkpoints`、q186は `q186-cast-checkpoints`、q187は `q187-cast-checkpoints` に分離する。
 
 ## 8. SalomeブラウザCI: `.github/workflows/salome-quests.yml`
 
@@ -192,6 +200,8 @@ PRの差分はmerge-baseからHEADまでを判定します。直前コミット�
 **目的**: サロメへの到達、個人・地域図書館クエスト、帰路が実際のブラウザ操作で成立することを確認する。
 
 **検査**: `browser-salome-smoke.mjs` でSalomeまで歩き、personal/regional library questsを完了し、帰還するまでを両layout・複数幅で確認する。
+
+`browser-flagless-soldier-cast-smoke.mjs`はq187の28保存点をScene／Classic × 1440／390pxの112条件で検査する。全9場面、住民の退避有無、勝利・逃走・敗北、3結末、勝利後もカドが残ること、将校が任用窓口だけに表示されること、逃走後に再戦と入口帰還が閉じることを含む。[専用6試験](../../tests/flagless-soldier-cast.test.mjs)は全10旅程・戦闘命令・本文・報酬の保持、固定所在、報酬一回性、改訂2保存の全段階再開と改訂1保存の原子的拒否を確認する。ユーザー許可によるq187の互換切断は、旧保存を移行できたとの検証に数えない。
 
 **出力**: 標準ログ、viewport checkpoint。artifactは `salome-browser-checkpoints`。
 
