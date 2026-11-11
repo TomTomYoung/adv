@@ -2,6 +2,9 @@ name: Quest party playtest
 on:
   pull_request:
     paths:
+      - 'tools/ci-scope.mjs'
+      - '.github/actions/ci-plan/**'
+      - '.github/actions/ci-record/**'
       - 'playtests/quest-parties.json'
       - 'quest-party-playtest.html'
       - 'src/application/quest-playtest.js'
@@ -24,17 +27,34 @@ jobs:
       options: --ipc=host
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Select checks and reuse identical successful inputs
+        id: ci
+        uses: ./.github/actions/ci-plan
+        with:
+          suite: quest-party-browser
       - run: node --test tests/quest-playtest.test.mjs
+        if: steps.ci.outputs.run == 'true'
       - run: npm install --no-save --package-lock=false playwright@1.58.2
+        if: steps.ci.outputs.run == 'true'
       - run: node tools/browser-quest-party-smoke.mjs
+        if: steps.ci.outputs.run == 'true'
         env:
           ADV_BROWSER_OUTPUT: /tmp/adv-quest-party-browser
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: always() && steps.ci.outputs.run == 'true'
         with:
           name: quest-party-playtest
           path: /tmp/adv-quest-party-browser
           retention-days: 7
+      - name: Remember successful inputs
+        if: success() && steps.ci.outputs.run == 'true' && github.event_name != 'workflow_dispatch'
+        uses: ./.github/actions/ci-record
+        with:
+          key: ${{ steps.ci.outputs.key }}
+          path: ${{ steps.ci.outputs.path }}

@@ -2,6 +2,9 @@ name: Battle impact feedback
 on:
   pull_request:
     paths:
+      - 'tools/ci-scope.mjs'
+      - '.github/actions/ci-plan/**'
+      - '.github/actions/ci-record/**'
       - 'src/core/battle.js'
       - 'src/core/feedback*'
       - 'src/view/**'
@@ -32,16 +35,32 @@ jobs:
       options: --ipc=host
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Select checks and reuse identical successful inputs
+        id: ci
+        uses: ./.github/actions/ci-plan
+        with:
+          suite: battle-feedback-browser
       - run: npm install --no-save --package-lock=false playwright@1.58.2
+        if: steps.ci.outputs.run == 'true'
       - run: node tools/browser-effects-smoke.mjs
+        if: steps.ci.outputs.run == 'true'
         env:
           ADV_BROWSER_OUTPUT: /tmp/adv-effects-browser
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: always() && steps.ci.outputs.run == 'true'
         with:
           name: battle-feedback
           path: /tmp/adv-effects-browser
           retention-days: 7
+      - name: Remember successful inputs
+        if: success() && steps.ci.outputs.run == 'true' && github.event_name != 'workflow_dispatch'
+        uses: ./.github/actions/ci-record
+        with:
+          key: ${{ steps.ci.outputs.key }}
+          path: ${{ steps.ci.outputs.path }}

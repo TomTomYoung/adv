@@ -20,7 +20,7 @@ PRの差分はmerge-baseからHEADまでを判定します。直前コミット�
 
 参考：[GitHubの差分・paths判定](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow)、[cacheの一致条件とPRごとの範囲](https://docs.github.com/en/actions/reference/workflows-and-actions/dependency-caching)、[actions/cache](https://github.com/actions/cache)。
 
-ブラウザーCIは[Playwright公式コンテナ](https://playwright.dev/docs/docker)の`mcr.microsoft.com/playwright:v1.58.2-noble`を使う。Playwright npmパッケージも1.58.2に固定し、コンテナ内のChromium・OS依存関係・日本語フォントで既存の検査条件を実行する。2026-11-11にrunnerからUbuntuのAzure／標準配布元への名前解決失敗を観測したため、jobごとのAPT導入を廃した。画像タグは[公式一覧](https://mcr.microsoft.com/v2/playwright/tags/list)で確認した。
+ブラウザーCIは[Playwright公式コンテナ](https://playwright.dev/docs/docker)の`mcr.microsoft.com/playwright:v1.58.2-noble`を使う。Playwright npmパッケージも1.58.2に固定し、コンテナ内のChromium・OS依存関係・日本語フォントで既存の検査条件を実行する。2026-11-11にrunnerからUbuntuのAzure／標準配布元への名前解決失敗を観測したため、jobごとのAPT導入を廃した。画像タグは[公式一覧](https://mcr.microsoft.com/v2/playwright/tags/list)で確認した。 コンテナとcheckoutの実行ユーザー差は、共通actionでそのjobの`GITHUB_WORKSPACE`だけをGitのsafe.directoryへ登録して扱う。戦闘演出・攻略パーティー試遊も同じCI判定と成功記録を使い、文書検査を維持したまま同一入力を再利用する。
 
 ## 1. 通常CI: `.github/workflows/ci.yml`
 
