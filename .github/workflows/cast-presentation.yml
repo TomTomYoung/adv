@@ -2,6 +2,7 @@ name: Validate cast presentation in Chromium
 on:
   pull_request:
     paths:
+      - '.github/actions/ubuntu-apt-mirrors/**'
       - 'tools/ci-scope.mjs'
       - '.github/actions/ci-plan/**'
       - '.github/actions/ci-record/**'
@@ -135,6 +136,9 @@ jobs:
         uses: ./.github/actions/ci-plan
         with:
           suite: shield-browser
+      - name: Prepare Ubuntu package mirrors
+        if: steps.ci.outputs.run == 'true'
+        uses: ./.github/actions/ubuntu-apt-mirrors
       - name: Install Chromium for q162 to q165
         if: steps.ci.outputs.run == 'true'
         run: |
@@ -206,6 +210,9 @@ jobs:
         uses: ./.github/actions/ci-plan
         with:
           suite: cast-browser
+      - name: Prepare Ubuntu package mirrors
+        if: steps.ci.outputs.run == 'true'
+        uses: ./.github/actions/ubuntu-apt-mirrors
       - name: Install browser test runtime
         if: steps.ci.outputs.run == 'true'
         run: |

@@ -2,6 +2,7 @@ name: Battle impact feedback
 on:
   pull_request:
     paths:
+      - '.github/actions/ubuntu-apt-mirrors/**'
       - 'src/core/battle.js'
       - 'src/core/feedback*'
       - 'src/view/**'
@@ -32,6 +33,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Prepare Ubuntu package mirrors
+        uses: ./.github/actions/ubuntu-apt-mirrors
       - run: npm install --no-save --package-lock=false playwright@1.58.2
       - run: npx playwright install --with-deps chromium --only-shell
       - run: node tools/browser-effects-smoke.mjs

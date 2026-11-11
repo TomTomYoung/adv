@@ -2,6 +2,7 @@ name: Validate Salome access and library quests in Chromium
 on:
   pull_request:
     paths:
+      - '.github/actions/ubuntu-apt-mirrors/**'
       - 'tools/ci-scope.mjs'
       - '.github/actions/ci-plan/**'
       - '.github/actions/ci-record/**'
@@ -36,6 +37,9 @@ jobs:
         uses: ./.github/actions/ci-plan
         with:
           suite: salome-browser
+      - name: Prepare Ubuntu package mirrors
+        if: steps.ci.outputs.run == 'true'
+        uses: ./.github/actions/ubuntu-apt-mirrors
       - name: Install browser and Japanese fonts
         if: steps.ci.outputs.run == 'true'
         run: |

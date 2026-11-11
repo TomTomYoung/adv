@@ -1,0 +1,15 @@
+name: Use Ubuntu archive mirrors
+description: Avoid the unavailable Azure Ubuntu mirror when installing browser dependencies
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: |
+        # GitHub's Ubuntu runner uses mirror+file sources. Keep its suites,
+        # package signing keys and third-party repositories unchanged.
+        if [ -f /etc/apt/apt-mirrors.txt ]; then
+          printf '%s\n' 'https://archive.ubuntu.com/ubuntu/' | sudo tee /etc/apt/apt-mirrors.txt >/dev/null
+        fi
+        if [ -f /etc/apt/apt-mirrors-security.txt ]; then
+          printf '%s\n' 'https://security.ubuntu.com/ubuntu/' | sudo tee /etc/apt/apt-mirrors-security.txt >/dev/null
+        fi

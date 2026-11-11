@@ -20,6 +20,8 @@ PRの差分はmerge-baseからHEADまでを判定します。直前コミット�
 
 参考：[GitHubの差分・paths判定](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow)、[cacheの一致条件とPRごとの範囲](https://docs.github.com/en/actions/reference/workflows-and-actions/dependency-caching)、[actions/cache](https://github.com/actions/cache)。
 
+ブラウザー導入前は[Ubuntu配布元の準備](../../.github/actions/ubuntu-apt-mirrors/action.yml)を共通利用する。2026-11-11にrunner標準のAzure mirrorで名前解決失敗を観測したため、mirrorファイルをUbuntu公式のarchive／security配布元へ切り替える。suite・署名鍵・第三者リポジトリ・Playwright版と検査条件は変えない。
+
 ## 1. 通常CI: `.github/workflows/ci.yml`
 
 ワークフロー名: `Validate dungeon RPG`。masterへのpush、pull request、手動実行で起動します。作業ブランチへのpush単独では起動しません。Node.js 22 / Ubuntu上で実行し、ブラウザは使用しません。

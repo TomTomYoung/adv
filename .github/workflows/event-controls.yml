@@ -2,6 +2,7 @@ name: Validate dungeon and battle controls in Chromium
 on:
   pull_request:
     paths:
+      - '.github/actions/ubuntu-apt-mirrors/**'
       - 'tools/ci-scope.mjs'
       - '.github/actions/ci-plan/**'
       - '.github/actions/ci-record/**'
@@ -62,6 +63,9 @@ jobs:
         uses: ./.github/actions/ci-plan
         with:
           suite: event-controls-browser
+      - name: Prepare Ubuntu package mirrors
+        if: steps.ci.outputs.run == 'true'
+        uses: ./.github/actions/ubuntu-apt-mirrors
       - name: Install browser test runtime
         if: steps.ci.outputs.run == 'true'
         run: |
