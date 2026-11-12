@@ -23,14 +23,14 @@ test('q041 current and previous saves resume all eight scenes and eight journeys
 
 test('q041 collecting only the book leaves the unvisited borrower at home and transfers the book only on finish',()=>{
  for(const legacy of [false,true]){const g=loadQ041(q041Engine({legacy}).save()),v=()=>g.state.stories.q041.values;assert.deepEqual(projectGame(g).dialog.scene.cast,[]);
-  assert.ok(g.dispatch({type:'choose',id:'recover'}));drain(g);assert.equal(v().bookAt,'party');assert.equal(v().borrowerAt,'resident');assert.equal(v().clerkAt,'registry');assert.equal(g.state.stories.q041.knowledge.party?.truth,undefined);
+  assert.ok(g.dispatch({type:'choose',id:'recover'}));drain(g);assert.equal(v().bookAt,'party');assert.equal(v().borrowerAt,'resident');assert.equal(v().clerkAt,'registry');assert.deepEqual(g.state.stories.q041.knowledge.party??[],[]);
   go(g,data.quests.q041.story.worldPlaces.registry);drain(g);assert.equal(v().bookAt,'party');assert.deepEqual(projectGame(g).dialog.scene.cast,[]);assert.equal(v().finished,false);chooseQ041(g,'finish');assert.equal(v().bookAt,'registry');assert.equal(v().registered,false);assert.equal(v().leaseRenewed,false);assert.equal(v().borrowerAt,'resident');
  }
 });
 
 test('q041 returning the book preserves both clerk locations and never escorts the clerk from the room implicitly',()=>{
  for(const legacy of [false,true])for(const invited of [false,true]){const g=loadQ041(q041Engine({legacy}).save()),v=()=>g.state.stories.q041.values;
-  chooseQ041(g,'visit');assert.deepEqual(projectGame(g).dialog.scene.cast.map(c=>c.id),['q041_borrower']);
+  chooseQ041(g,'visit');assert.deepEqual(g.state.stories.q041.knowledge.party,['truth']);assert.deepEqual(projectGame(g).dialog.scene.cast.map(c=>c.id),['q041_borrower']);
   if(invited){chooseQ041(g,'registry');assert.equal(v().borrowerAt,'resident');assert.deepEqual(projectGame(g).dialog.scene.cast.map(c=>c.id),['q041_clerk']);chooseQ041(g,'escort');assert.equal(v().clerkAt,'resident');assert.deepEqual(projectGame(g).dialog.scene.cast.map(c=>c.id),['q041_borrower','q041_clerk']);}
   chooseQ041(g,invited?'temporary':'deadline');assert.equal(v().bookAt,'entry');assert.equal(v().borrowerAt,'entry');assert.equal(v().clerkAt,invited?'resident':'registry');assert.deepEqual(projectGame(g).dialog.scene.cast.map(c=>c.id),['q041_borrower']);
   assert.ok(g.dispatch({type:'choose',id:'return'}));drain(g);assert.equal(v().bookAt,'borrower');assert.equal(v().borrowerAt,'transit');assert.equal(v().leaseRenewed,false);loadQ041(g.save());
