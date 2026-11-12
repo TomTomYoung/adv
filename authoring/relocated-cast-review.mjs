@@ -1,8 +1,86 @@
 // Editorial audit: candidate IDs are local; connected roles cite their game entity.
 // Update a fingerprint only after rereading the changed quest and its evidence.
 export const RELOCATED_CAST_REVIEW={
- reviewedAt:'2026-11-12',
+ reviewedAt:'2026-11-13',
  quests:{
+  q044:{
+  "sourceSha256": "23c6e848a87776e541e3086f7d0a0b4d3d07fbde5efdb1fa93952ab4edf9a18b",
+  "identityNotes": [
+    "原稿authoring/quests.txtの「未来の訃報」、初版q044、現行7場面・8旅程・3結末を精読した。原稿の配達霊戦を現行経路へ追加しない。",
+    "新聞係ユズと訃報に名のある本人は別の役。既存subjectのperson→transit→refugeだけを使い、生活市と宿の4場面へ呼称表示する。氏名・容貌は追加しない。",
+    "避難・署名した申立の提出・原本公開と審査要求は別状態として保持する。本文・全選択・全旅程・報酬・物語改訂1と保存内容を変えない。",
+    "現場接続前に受注した保存の3場面と直接経路を保持し、旧待機本文へ人物表示や新旅程を混入させない。"
+  ],
+  "relatedClients": {},
+  "people": {
+    "q044_subject": {
+      "label": "訃報に名のある本人",
+      "status": "connected",
+      "entity": "subject",
+      "need": "生活市と実到着した避難先だけへ呼称表示する。署名後も本人を宿に残す。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "明日の日付の訃報が届いた。紙に名のある人は、今も市場で働いている。",
+      "reason": "本人は生活市にいて、隊のいる書庫の現場には同席しない。依頼人欄や結末への言及だけからユズや配達霊を追加しない。",
+      "visual": "訃報の原本、執行順・締切・処刑課の印、生活市、本人が選んだ宿、審査窓口を区別する。避難・提出・審査の完了を絵だけで先取りしない。"
+    },
+    "safe": {
+      "decision": "person-evidence",
+      "people": [
+        "q044_subject"
+      ],
+      "evidence": "本人は今夜だけ別の宿へ移ると決めた。紙の裏には異議申立の締切と処刑課の印がある。",
+      "reason": "生活市で本人と会う。既存subjectを表示し、宿への実同行が始まるまではpersonに留める。",
+      "visual": "訃報の原本、執行順・締切・処刑課の印、生活市、本人が選んだ宿、審査窓口を区別する。避難・提出・審査の完了を絵だけで先取りしない。"
+    },
+    "office": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "窓口は予定を予言と呼んでいた。原本を公にすれば、執行前の審査を求められる。",
+      "reason": "窓口の過去の説明はあるが特定担当者の同席は明示されない。本人は生活市または避難先に残り、窓口へ自動同行しない。",
+      "visual": "訃報の原本、執行順・締切・処刑課の印、生活市、本人が選んだ宿、審査窓口を区別する。避難・提出・審査の完了を絵だけで先取りしない。"
+    },
+    "escaped": {
+      "decision": "person-evidence",
+      "people": [
+        "q044_subject"
+      ],
+      "evidence": "本人が選んだ別の宿へ送り届ける。避難を審査の完了とは扱わない。",
+      "reason": "safe_escapeの実到着で本人はrefugeにいる。protectedは既存どおりfinishで確定し、避難だけの完了を審査要求と扱わない。",
+      "visual": "訃報の原本、執行順・締切・処刑課の印、生活市、本人が選んだ宿、審査窓口を区別する。避難・提出・審査の完了を絵だけで先取りしない。"
+    },
+    "protected": {
+      "decision": "person-evidence",
+      "people": [
+        "q044_subject"
+      ],
+      "evidence": "本人を宿へ送り、安全を確かめて署名を受け取った。窓口へ審査を請求する。",
+      "reason": "safe_appealの実到着で本人が宿へ入りprotectedが立つ。次の隊だけの移動で本人を連れ出さず、appealedは窓口への到着時に確定する。",
+      "visual": "訃報の原本、執行順・締切・処刑課の印、生活市、本人が選んだ宿、審査窓口を区別する。避難・提出・審査の完了を絵だけで先取りしない。"
+    },
+    "locate": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "本人がまだ生活市にいるか、既に宿へ避難したかを確かめた。",
+      "reason": "隊は窓口で所在を確認する段階。subjectAtに応じて生活市または宿への選択だけを有効にし、本人をこの場面へ表示しない。",
+      "visual": "訃報の原本、執行順・締切・処刑課の印、生活市、本人が選んだ宿、審査窓口を区別する。避難・提出・審査の完了を絵だけで先取りしない。"
+    },
+    "safe_refuge": {
+      "decision": "person-evidence",
+      "people": [
+        "q044_subject"
+      ],
+      "evidence": "本人は署名した申立の扱いを確かめた。今夜はこの宿に留まる。",
+      "reason": "窓口から宿へ再訪して本人と会う。本人はrefugeに留まり、leaveでは避難の結末、appealでは隊だけが窓口へ戻る。再訪でも複製や市場への巻戻しをしない。",
+      "visual": "訃報の原本、執行順・締切・処刑課の印、生活市、本人が選んだ宿、審査窓口を区別する。避難・提出・審査の完了を絵だけで先取りしない。"
+    }
+  },
+  "next": "本人の4場面と窓口での非表示、実同行と所在による再訪先、避難・申立・審査要求、全8旅程・3結末、新旧保存を検証する。次はq045「白紙の相続」の原稿・全場面の出演監査。"
+},
   q043:{
   "sourceSha256": "94b139194827cb38cd180def557167d034952c517e8adc9f9c1f56be85f5e944",
   "identityNotes": [

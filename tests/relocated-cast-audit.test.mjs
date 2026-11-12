@@ -6,7 +6,8 @@ import {auditRelocatedCast,loadRelocatedCastQuests,relocatedCastFingerprint} fro
 const quests=await loadRelocatedCastQuests();
 test('cast audit distinguishes measured empty casts, reviewed scenes and candidate roles',()=>{
  const report=auditRelocatedCast(quests);
- assert.deepEqual(report.summary,{quests:100,scenes:753,emptyCastScenes:391,personEntities:137,characterLinkedEntities:102,reviewedQuests:63,reviewedScenes:493,noPersonEvidenceScenes:130,personEvidenceScenes:363,candidateRoles:1,connectedRoles:144,unreviewedScenes:260});
+ assert.deepEqual(report.summary,{quests:100,scenes:753,emptyCastScenes:387,personEntities:137,characterLinkedEntities:103,reviewedQuests:64,reviewedScenes:500,noPersonEvidenceScenes:133,personEvidenceScenes:367,candidateRoles:1,connectedRoles:145,unreviewedScenes:253});
+ const obituary=report.quests.find(q=>q.id==='q044');assert.deepEqual(obituary.scenes.filter(s=>s.review.people.length).map(s=>s.id),['safe','escaped','protected','safe_refuge']);
  assert.ok(report.regions.every(r=>r.quests===20));
  assert.equal(report.quests.find(q=>q.id==='q071').scenes[0].review,null);
  assert.deepEqual(report.quests.find(q=>q.id==='q032').scenes.filter(s=>s.review.people.length).map(s=>s.id),['cell','workshop']);
@@ -202,10 +203,10 @@ test('reviews reject unknown, contradictory and orphan candidate roles',()=>{
 test('future character and cast hookups change measured counts without marking unrelated scenes reviewed',()=>{
  const changed=structuredClone(quests),q=changed.find(q=>q.id==='q071'),entity=Object.values(q.story.entities).find(e=>e.kind==='person');
  entity.character='future_owner';Object.values(q.story.scenes)[0].cast=[{entity:'workerPerson'}];
- const report=auditRelocatedCast(changed);
- assert.equal(report.summary.emptyCastScenes,390);
- assert.equal(report.summary.characterLinkedEntities,103);
- assert.equal(report.summary.reviewedScenes,493);
+ const report=auditRelocatedCast(changed),baseline=auditRelocatedCast(quests);
+ assert.equal(report.summary.emptyCastScenes,baseline.summary.emptyCastScenes-1);
+ assert.equal(report.summary.characterLinkedEntities,baseline.summary.characterLinkedEntities+1);
+ assert.equal(report.summary.reviewedScenes,baseline.summary.reviewedScenes);
  assert.equal(report.quests.find(q=>q.id==='q071').review,null);
 });
 

@@ -51,6 +51,8 @@ export function libraryFirstSource(q,{cast=true}={}){
   route('office','warn','locate');add('locate','office','本人がまだ生活市にいるか、既に宿へ避難したかを確かめた。',[opt('market','生活市へ本人を訪ねる','safe',{when:eq(v('subjectAt'),'person')}),opt('refuge','避難先で本人へ原本を示す','safe_refuge',{when:eq(v('subjectAt'),'refuge')})]);
   add('safe_refuge','refuge','本人は署名した申立の扱いを確かめた。今夜はこの宿に留まる。',[opt('leave','避難までで引き受けた仕事を終える','@compromise'),opt('appeal','署名した審査請求を窓口へ届ける','office',{effects:[set('appealed')]})]);
   choice('office','publish').effects=[set('reviewRequested')];choice('entry','destroy').effects=[give('notice','party','discard'),set('destroyed')];
+  x.entities.subject.character='q044_subject';
+  for(const scene of ['safe','escaped','protected','safe_refuge'])node(scene).cast=[{entity:'subject',display:{x:50}}];
  }
  if(q.number===45){
   town('council','相続人の協議室','library_council');town('deposit','財産の保管窓口','library_deposit');entity('draft','entry');entity('heirs','entry','group');node('conference').place='council';choice('entry','cool').effects=[set('unsigned')];
