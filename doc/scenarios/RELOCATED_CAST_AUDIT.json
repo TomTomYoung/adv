@@ -4,16 +4,16 @@
   "summary": {
     "quests": 100,
     "scenes": 753,
-    "emptyCastScenes": 403,
+    "emptyCastScenes": 397,
     "personEntities": 135,
-    "characterLinkedEntities": 98,
-    "reviewedQuests": 60,
-    "reviewedScenes": 470,
-    "noPersonEvidenceScenes": 119,
-    "personEvidenceScenes": 351,
+    "characterLinkedEntities": 100,
+    "reviewedQuests": 61,
+    "reviewedScenes": 478,
+    "noPersonEvidenceScenes": 121,
+    "personEvidenceScenes": 357,
     "candidateRoles": 1,
-    "connectedRoles": 139,
-    "unreviewedScenes": 283
+    "connectedRoles": 141,
+    "unreviewedScenes": 275
   },
   "regions": [
     {
@@ -66,15 +66,15 @@
       "name": "書庫",
       "quests": 20,
       "scenes": 148,
-      "emptyCastScenes": 148,
+      "emptyCastScenes": 142,
       "personEntities": 28,
-      "characterLinkedEntities": 0,
-      "reviewedQuests": 0,
-      "reviewedScenes": 0,
-      "noPersonEvidenceScenes": 0,
-      "personEvidenceScenes": 0,
+      "characterLinkedEntities": 2,
+      "reviewedQuests": 1,
+      "reviewedScenes": 8,
+      "noPersonEvidenceScenes": 2,
+      "personEvidenceScenes": 6,
       "candidateRoles": 0,
-      "connectedRoles": 0
+      "connectedRoles": 2
     },
     {
       "id": 8,
@@ -1518,7 +1518,7 @@
       "region": 5,
       "client": "司書のシフ",
       "source": "authoring/editions/e2/salome/library-first.mjs",
-      "sourceSha256": "42742d442e428abab050567f9c73d8e88dda29cf6a454e1d9065eb8b91011edb",
+      "sourceSha256": "3712616e5c151799da2edb554070b0f07d822833eeb20b3be2e420f07ed96aa3",
       "scenes": [
         {
           "id": "entry",
@@ -1531,7 +1531,13 @@
             "y": 5
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "no-person-evidence",
+            "people": [],
+            "evidence": "貸出印に返却日がなく、書庫の奥の住所が押されている。",
+            "reason": "貸出印と住所を調べる場面。借り手は奥の居室、司書は窓口におり、依頼人欄から人物を同席させない。",
+            "visual": "本のある棚、住所印の居室、返却と居住契約の窓口を区別する。本・住所印・台帳を人物にせず、未完了の受渡しや契約を先取りしない。"
+          }
         },
         {
           "id": "resident",
@@ -1543,8 +1549,23 @@
             "x": 7,
             "y": 1
           },
-          "cast": [],
-          "review": null
+          "cast": [
+            {
+              "entity": "borrower",
+              "display": {
+                "x": 50
+              }
+            }
+          ],
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q041_borrower"
+            ],
+            "evidence": "借り手は棚の間で食事を作っていた。本の返却印は貸出でなく移住許可で、借り手は書庫の奥へ住み移っている。",
+            "reason": "居室で食事を作る借り手本人の発言と動作を確認する。司書はまだ窓口に残る。",
+            "visual": "本のある棚、住所印の居室、返却と居住契約の窓口を区別する。本・住所印・台帳を人物にせず、未完了の受渡しや契約を先取りしない。"
+          }
         },
         {
           "id": "clerk",
@@ -1556,8 +1577,30 @@
             "x": 7,
             "y": 1
           },
-          "cast": [],
-          "review": null
+          "cast": [
+            {
+              "entity": "borrower",
+              "display": {
+                "x": 31
+              }
+            },
+            {
+              "entity": "clerk",
+              "display": {
+                "x": 69
+              }
+            }
+          ],
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q041_borrower",
+              "q041_clerk"
+            ],
+            "evidence": "司書は移住印を貸出として数えていた。借り手は住所を台帳へ載せることに同意した。",
+            "reason": "招聘した司書が居室へ到着し、借り手と台帳への登録を相談する。",
+            "visual": "本のある棚、住所印の居室、返却と居住契約の窓口を区別する。本・住所印・台帳を人物にせず、未完了の受渡しや契約を先取りしない。"
+          }
         },
         {
           "id": "recovered",
@@ -1567,7 +1610,13 @@
             "location": "library_registry"
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "no-person-evidence",
+            "people": [],
+            "evidence": "回収した本を窓口へ渡す。住所の住人は訪ねていない。",
+            "reason": "住人を訪ねず本だけ回収して窓口へ着いた場面。受取人を特定する本文はなく、所在の一致だけで司書を追加しない。借り手は居室に残り、訪問済みにはならない。",
+            "visual": "本のある棚、住所印の居室、返却と居住契約の窓口を区別する。本・住所印・台帳を人物にせず、未完了の受渡しや契約を先取りしない。"
+          }
         },
         {
           "id": "invite",
@@ -1576,8 +1625,23 @@
             "kind": "town",
             "location": "library_registry"
           },
-          "cast": [],
-          "review": null
+          "cast": [
+            {
+              "entity": "clerk",
+              "display": {
+                "x": 50
+              }
+            }
+          ],
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q041_clerk"
+            ],
+            "evidence": "窓口へ居住の意思を伝えた。司書を借り手の部屋へ案内する。",
+            "reason": "居住の意思を窓口へ伝え、実際に同行してもらう司書と出発する場面。借り手は居室で待つ。",
+            "visual": "本のある棚、住所印の居室、返却と居住契約の窓口を区別する。本・住所印・台帳を人物にせず、未完了の受渡しや契約を先取りしない。"
+          }
         },
         {
           "id": "collect",
@@ -1589,8 +1653,23 @@
             "x": 15,
             "y": 5
           },
-          "cast": [],
-          "review": null
+          "cast": [
+            {
+              "entity": "borrower",
+              "display": {
+                "x": 50
+              }
+            }
+          ],
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q041_borrower"
+            ],
+            "evidence": "借り手と期限を決め、本の置き場所へ戻った。本人が本を窓口へ返す。",
+            "reason": "借り手本人が本のある場所まで同行した。直接期限を相談した経路の司書は窓口、招聘後に期限だけ決めた経路の司書は居室に残る。",
+            "visual": "本のある棚、住所印の居室、返却と居住契約の窓口を区別する。本・住所印・台帳を人物にせず、未完了の受渡しや契約を先取りしない。"
+          }
         },
         {
           "id": "returned",
@@ -1599,8 +1678,23 @@
             "kind": "town",
             "location": "library_registry"
           },
-          "cast": [],
-          "review": null
+          "cast": [
+            {
+              "entity": "borrower",
+              "display": {
+                "x": 50
+              }
+            }
+          ],
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q041_borrower"
+            ],
+            "evidence": "本人が本を返した。本の返却を記し、居住する部屋の契約は改めて結ぶ。",
+            "reason": "借り手が本を携えて窓口に到着した場面。司書の所在は経路で異なるが、返却本文だけでは同席させない。本の実受渡しと居住契約の旗はfinishで確定する。",
+            "visual": "本のある棚、住所印の居室、返却と居住契約の窓口を区別する。本・住所印・台帳を人物にせず、未完了の受渡しや契約を先取りしない。"
+          }
         },
         {
           "id": "registered",
@@ -1609,21 +1703,66 @@
             "kind": "town",
             "location": "library_registry"
           },
-          "cast": [],
-          "review": null
+          "cast": [
+            {
+              "entity": "borrower",
+              "display": {
+                "x": 31
+              }
+            },
+            {
+              "entity": "clerk",
+              "display": {
+                "x": 69
+              }
+            }
+          ],
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q041_borrower",
+              "q041_clerk"
+            ],
+            "evidence": "司書と住人が窓口へ到着した。本の貸出と人の居住を別の台帳へ記す。",
+            "reason": "借り手と司書がともに窓口へ実到着し、二種類の台帳を作る。登録の旗はfinishで確定し、本は元の場所に残る。",
+            "visual": "本のある棚、住所印の居室、返却と居住契約の窓口を区別する。本・住所印・台帳を人物にせず、未完了の受渡しや契約を先取りしない。"
+          }
         }
       ],
       "personEntities": [
         {
           "id": "borrower",
-          "character": null
+          "character": "q041_borrower"
         },
         {
           "id": "clerk",
-          "character": null
+          "character": "q041_clerk"
         }
       ],
-      "review": null
+      "review": {
+        "identityNotes": [
+          "原稿authoring/quests.txtの「返却日のない本」、初版q041、現行全8場面・8旅程・3結末を精読した。原稿の戦闘案を現行の本だけの回収経路へ新たに戻さない。",
+          "依頼人欄は司書のシフ。現場の既存clerkには本文の呼称「司書」を用い、別のシフ役や新しい氏名・容貌・専用画を追加しない。",
+          "借り手は居室、司書は窓口から始まる。司書の招聘、借り手自身の返却、二人での登録を区別し、同じ窓口という理由だけで人物を自動表示しない。",
+          "本文・物語改訂1・全旅程・3結末と各報酬を保持する。新旧保存の内容は変更せず、現場接続前の受注経路も保持する。本だけの回収を借り手への訪問や同意へ変換しない。"
+        ],
+        "relatedClients": {},
+        "people": {
+          "q041_borrower": {
+            "label": "書庫に暮らす借り手",
+            "status": "connected",
+            "entity": "borrower",
+            "need": "本人を訪ねる居室、回収と返却、司書との登録の5場面へ呼称表示する。"
+          },
+          "q041_clerk": {
+            "label": "司書",
+            "status": "connected",
+            "entity": "clerk",
+            "need": "招聘する窓口、案内後の居室、二人で帰着した登録の3場面へ呼称表示する。"
+          }
+        },
+        "next": "2役と6場面の表示、全8旅程・4経路・3結末、本の保持者と司書の所在、新旧保存を検証する。次はq042の原稿・全場面の出演監査。"
+      }
     },
     {
       "id": "q042",
