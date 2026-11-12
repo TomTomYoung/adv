@@ -9,6 +9,10 @@ on:
       - 'data/scenario-editions/**'
       - 'data/scenario-editions.json'
       - 'tools/browser-salome-smoke.mjs'
+      - 'tools/browser-borrower-cast-smoke.mjs'
+      - 'tools/borrower-art-fixtures.mjs'
+      - 'tools/character-art-browser.mjs'
+      - 'tests/fixtures/e2-q041-before-cast.json'
       - 'tools/browser-settlement-checkpoint.mjs'
       - 'assets/images/locations/**'
       - 'data/assets.json'
@@ -54,6 +58,16 @@ jobs:
         with:
           name: salome-browser-checkpoints
           path: /tmp/adv-salome-browser
+          if-no-files-found: ignore
+      - name: Check q041 borrower and clerk casts, return routes, and old saves
+        if: steps.ci.outputs.run == 'true'
+        run: node tools/browser-borrower-cast-smoke.mjs
+      - name: Keep q041 cast checkpoints
+        if: always() && steps.ci.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: q041-cast-checkpoints
+          path: /tmp/adv-library-art-browser
           if-no-files-found: ignore
       - name: Remember successful inputs
         if: success() && steps.ci.outputs.run == 'true' && github.event_name != 'workflow_dispatch'

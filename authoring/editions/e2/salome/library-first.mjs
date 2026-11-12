@@ -13,6 +13,10 @@ export function libraryFirstSource(q){
   choice('resident','deadline').companions=['borrower'];choice('clerk','temporary').companions=['borrower'];
   end('returned','registry','本人が本を返した。本の返却を記し、居住する部屋の契約は改めて結ぶ。','compromise',[give('book','borrower','registry'),set('leaseRenewed')]);
   route('clerk','rewrite','registered',{companions:['borrower','clerk']});end('registered','registry','司書と住人が窓口へ到着した。本の貸出と人の居住を別の台帳へ記す。','informed',[set('registered')]);
+  for(const id of ['borrower','clerk'])x.entities[id].character='q041_'+id;
+  // A shared office does not itself establish the clerk's presence in a scene.
+  const casts={resident:['borrower'],clerk:['borrower','clerk'],invite:['clerk'],collect:['borrower'],returned:['borrower'],registered:['borrower','clerk']};
+  for(const [scene,people] of Object.entries(casts)){const positions=people.length===2?[31,69]:[50];node(scene).cast=people.map((entity,i)=>({entity,display:{x:positions[i]}}));}
  }
  if(q.number===42){
   town('clock','書庫の外時計','library_clock');cell('relief','交代者の待つ休息棚',1,7,1);entity('reliefCrew','relief','group');node('shift').place='entry';
