@@ -4,6 +4,8 @@
 
 [PROGRESS.md](PROGRESS.md)：今回実行した検査、過去の実ブラウザ確認、残作業。
 
+[REMAINING_WORK.md](REMAINING_WORK.md)：人物監査・現場接続・素材・深層・地域新作・共通機能・全編検証・明示保留を含む残工程の全体一覧。
+
 [TEST_OVERVIEW.md](TEST_OVERVIEW.md)：CI・Nodeテスト・Chromium browser smokeごとの目的、検査対象、出力、会話へログを持ち込む際の基準。
 
 [CHROMIUM_DEFERRED_2026-11-04.md](CHROMIUM_DEFERRED_2026-11-04.md)：2026-11-05に再開・完了したq161のChromium検証180条件と目視結果、再実行手順、以前の保留・導入失敗の経緯。

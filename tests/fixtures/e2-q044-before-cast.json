@@ -1,0 +1,2602 @@
+{
+  "schemaVersion": 1,
+  "id": "q044",
+  "number": 44,
+  "title": "未来の訃報",
+  "client": "新聞係のユズ",
+  "brief": "明日の死者一覧が届いた。名のある冒険者を救ってください。",
+  "region": 5,
+  "type": "authored_progression",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。 サロメの共同依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q044_clue_a",
+      "title": "未来の訃報：現場の痕跡",
+      "points": [
+        {
+          "map": "region_5_f1",
+          "x": 2,
+          "y": 7,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q044.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q044.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q044"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q044"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "q044_clue_b",
+      "title": "未来の訃報：記録と証言",
+      "points": [
+        {
+          "map": "region_5_f1",
+          "x": 10,
+          "y": 5,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q044.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q044.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q044"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q044"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "q044_decision",
+      "title": "未来の訃報：決着の場",
+      "points": [
+        {
+          "map": "region_5_f1",
+          "x": 10,
+          "y": 11,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q044.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q044.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q044.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q044"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "q044_library_entry",
+      "title": "未来の訃報の現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q044.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q044.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q044"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q044.library.visit",
+      "points": [
+        {
+          "dungeon": "region_5",
+          "map": "region_5_f1",
+          "x": 10,
+          "y": 11
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_5_f1",
+      "x": 2,
+      "y": 7,
+      "object": "q044_clue_a",
+      "role": "clue_a"
+    },
+    {
+      "map": "region_5_f1",
+      "x": 10,
+      "y": 5,
+      "object": "q044_clue_b",
+      "role": "clue_b"
+    },
+    {
+      "map": "region_5_f1",
+      "x": 10,
+      "y": 11,
+      "object": "q044_decision",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "処刑予定書を公開し、執行前の審査を要求する",
+      "text": "一覧は取り消された。救われた者の罪が消えたわけではなく、裁判が始まる。",
+      "gold": 105,
+      "xp": 100
+    },
+    "contract": {
+      "label": "届いた訃報を処分する",
+      "text": "人々は安心した。予定そのものを知らぬまま翌朝を迎える。",
+      "gold": 125,
+      "xp": 75
+    },
+    "compromise": {
+      "label": "避難先へ送り、審査の仕事は引き受けない",
+      "text": "何人かは逃れた。残った者のため、ユズは空いた行も印刷する。",
+      "gold": 68,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/salome/library-first.mjs",
+    "world": {
+      "truth": "訃報は処刑予定の内部書類で、予言に見せて異議申立を諦めさせている。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "訃報は処刑予定の内部書類で、予言に見せて異議申立を諦めさせている。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "明日の死者一覧が届いた。名のある冒険者を救ってください。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "新聞係のユズ",
+        "observation": "明日の死者一覧が届いた。名のある冒険者を救ってください。",
+        "belief": "明日の死者一覧が届いた。名のある冒険者を救ってください。",
+        "goal": "明日の死者一覧が届いた。名のある冒険者を救ってください。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "明日の死者一覧が届いた。名のある冒険者を救ってください。",
+      "progression": "予言への疑いより先に名の載った人を守り、避難と処刑審査を別の目的として進める。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q044.library.entry"
+        },
+        {
+          "id": "safe",
+          "script": "q044.library.safe"
+        },
+        {
+          "id": "office",
+          "script": "q044.library.office"
+        },
+        {
+          "id": "escaped",
+          "script": "q044.library.escaped"
+        },
+        {
+          "id": "protected",
+          "script": "q044.library.protected"
+        },
+        {
+          "id": "locate",
+          "script": "q044.library.locate"
+        },
+        {
+          "id": "safe_refuge",
+          "script": "q044.library.safe_refuge"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "明日の死者一覧が届いた。名のある冒険者を救ってください。",
+      "openQuestion": "未来の訃報の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "referenceSwap",
+      "newInformation": "訃報は処刑予定の内部書類で、予言に見せて異議申立を諦めさせている。",
+      "retroactiveTargets": [
+        "office"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q044.flow.entry"
+      },
+      {
+        "id": "safe",
+        "script": "q044.flow.safe"
+      },
+      {
+        "id": "office",
+        "script": "q044.flow.office"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q044.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q044.protected",
+        "meaning": "各場面に明記した protected の行為・合意の記録",
+        "writer": [
+          "safe"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "予言への疑いより先に名の載った人を守り、避難と処刑審査を別の目的として進める。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "予言への疑いより先に名の載った人を守り、避難と処刑審査を別の目的として進める。",
+    "flowVersion": 2,
+    "entryScript": "q044.library.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "明日の日付の訃報が届いた。紙に名のある人は、今も市場で働いている。",
+        "options": [
+          {
+            "id": "warn",
+            "text": "本人へ紙を見せ、身の安全を確保する",
+            "to": "safe",
+            "action": "entry_warn"
+          },
+          {
+            "id": "office",
+            "text": "紙の発行窓口へ抗議に行く",
+            "to": "office",
+            "action": "entry_office"
+          },
+          {
+            "id": "destroy",
+            "text": "届いた訃報を処分する",
+            "to": "@contract",
+            "action": "entry_destroy"
+          }
+        ]
+      },
+      {
+        "id": "safe",
+        "place": "person",
+        "text": "本人は今夜だけ別の宿へ移ると決めた。紙の裏には異議申立の締切と処刑課の印がある。",
+        "options": [
+          {
+            "id": "escape",
+            "text": "避難先へ送り、審査の仕事は引き受けない",
+            "to": "escaped",
+            "action": "safe_escape"
+          },
+          {
+            "id": "appeal",
+            "text": "本人の署名で審査を請求する",
+            "to": "protected",
+            "action": "safe_appeal"
+          }
+        ]
+      },
+      {
+        "id": "office",
+        "place": "office",
+        "text": "訃報は処刑予定の内部書類で、予言に見せて異議申立を諦めさせている。 窓口は予定を予言と呼んでいた。原本を公にすれば、執行前の審査を求められる。",
+        "options": [
+          {
+            "id": "publish",
+            "text": "処刑予定書を公開し、執行前の審査を要求する",
+            "to": "@informed",
+            "action": "office_publish"
+          },
+          {
+            "id": "warn",
+            "text": "原本を持って名のある人のもとへ戻る",
+            "to": "locate",
+            "action": "office_warn"
+          }
+        ]
+      },
+      {
+        "id": "escaped",
+        "place": "refuge",
+        "text": "本人が選んだ別の宿へ送り届ける。避難を審査の完了とは扱わない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@compromise",
+            "action": "escaped_finish"
+          }
+        ]
+      },
+      {
+        "id": "protected",
+        "place": "refuge",
+        "text": "本人を宿へ送り、安全を確かめて署名を受け取った。窓口へ審査を請求する。",
+        "options": [
+          {
+            "id": "appeal",
+            "text": "署名した申立を窓口へ届ける",
+            "to": "office",
+            "action": "protected_appeal"
+          }
+        ]
+      },
+      {
+        "id": "locate",
+        "place": "office",
+        "text": "本人がまだ生活市にいるか、既に宿へ避難したかを確かめた。",
+        "options": [
+          {
+            "id": "market",
+            "text": "生活市へ本人を訪ねる",
+            "to": "safe",
+            "action": "locate_market"
+          },
+          {
+            "id": "refuge",
+            "text": "避難先で本人へ原本を示す",
+            "to": "safe_refuge",
+            "action": "locate_refuge"
+          }
+        ]
+      },
+      {
+        "id": "safe_refuge",
+        "place": "refuge",
+        "text": "本人は署名した申立の扱いを確かめた。今夜はこの宿に留まる。",
+        "options": [
+          {
+            "id": "leave",
+            "text": "避難までで引き受けた仕事を終える",
+            "to": "@compromise",
+            "action": "safe_refuge_leave"
+          },
+          {
+            "id": "appeal",
+            "text": "署名した審査請求を窓口へ届ける",
+            "to": "office",
+            "action": "safe_refuge_appeal"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "library-first-ten",
+      "settlement": "salome",
+      "saveRevision": 2,
+      "scope": "書庫前半10件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q044.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "死亡時刻は全員同じで、欄外に執行順の小さな番号がある。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q044",
+          "key": "clue_a",
+          "text": "死亡時刻は全員同じで、欄外に執行順の小さな番号がある。"
+        }
+      ]
+    },
+    "q044.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "新聞係のユズ",
+          "text": "紙の透かしは役所専用で、訂正には審査中の印が押されています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q044",
+          "key": "clue_b",
+          "text": "紙の透かしは役所専用で、訂正には審査中の印が押されている。"
+        }
+      ]
+    },
+    "q044.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "未来の訃報\n\n明日の死者一覧が届いた。名のある冒険者を救ってください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "書類を公開し処刑前の審査を要求する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q044.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q044.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "訃報は処刑予定の内部書類で、予言に見せて異議申立を諦めさせている。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "一覧は取り消された。救われた者の罪が消えたわけではなく、裁判が始まる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q044",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "訃報の配達霊を倒し紙を処分する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_5",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "人々は安心した。予定そのものを知らぬまま翌朝を迎える。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q044",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "名のある人へ紙を渡し避難を助ける",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "何人かは逃れた。残った者のため、ユズは空いた行も印刷する。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q044",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q044.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "未来の訃報\n\n明日の死者一覧が届いた。名のある冒険者を救ってください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q044.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q044.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "訃報は処刑予定の内部書類で、予言に見せて異議申立を諦めさせている。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q044.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "書類を公開し処刑前の審査を要求する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q044.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q044.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "一覧は取り消された。救われた者の罪が消えたわけではなく、裁判が始まる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q044",
+                  "outcome": "informed"
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q044.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q044.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "contract",
+              "text": "訃報の配達霊を倒し紙を処分する",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_5",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "人々は安心した。予定そのものを知らぬまま翌朝を迎える。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q044",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "名のある人へ紙を渡し避難を助ける",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "何人かは逃れた。残った者のため、ユズは空いた行も印刷する。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q044",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」新聞係のユズは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられる。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q044.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q044.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q044.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "一覧は取り消された。救われた者の罪が消えたわけではなく、裁判が始まる。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q044.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "人々は安心した。予定そのものを知らぬまま翌朝を迎える。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q044.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "何人かは逃れた。残った者のため、ユズは空いた行も印刷する。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q044.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q044.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q044.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q044.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q044.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q044.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q044.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "明日の日付の訃報が届いた。紙に名のある人は、今も市場で働いている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "warn",
+              "text": "本人へ紙を見せ、身の安全を確保する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q044.flow.safe"
+                }
+              ]
+            },
+            {
+              "id": "office",
+              "text": "紙の発行窓口へ抗議に行く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q044.flow.office"
+                }
+              ]
+            },
+            {
+              "id": "destroy",
+              "text": "届いた訃報を処分する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q044.flow.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q044.flow.safe": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q044.node",
+          "value": "safe"
+        },
+        {
+          "op": "say",
+          "text": "本人は今夜だけ別の宿へ移ると決めた。紙の裏には異議申立の締切と処刑課の印がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "escape",
+              "text": "避難先へ送り、審査の仕事は引き受けない",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q044.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "appeal",
+              "text": "本人の署名で審査を請求する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q044.protected",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q044.flow.office"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q044.flow.office": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q044.node",
+          "value": "office"
+        },
+        {
+          "op": "say",
+          "text": "訃報は処刑予定の内部書類で、予言に見せて異議申立を諦めさせている。 窓口は予定を予言と呼んでいた。原本を公にすれば、執行前の審査を求められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "publish",
+              "text": "処刑予定書を公開し、執行前の審査を要求する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q044.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "warn",
+              "text": "原本を持って名のある人のもとへ戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q044.flow.safe"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q044.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q044.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "一覧は取り消された。救われた者の罪が消えたわけではなく、裁判が始まる。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q044",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q044.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q044.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "人々は安心した。予定そのものを知らぬまま翌朝を迎える。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q044",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q044.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q044.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "何人かは逃れた。残った者のため、ユズは空いた行も印刷する。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q044",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q044.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q044.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q044.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "一覧は取り消された。救われた者の罪が消えたわけではなく、裁判が始まる。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "人々は安心した。予定そのものを知らぬまま翌朝を迎える。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "何人かは逃れた。残った者のため、ユズは空いた行も印刷する。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q044"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q044.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q044.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q044.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "safe",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q044.flow.safe"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "office",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q044.flow.office"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q044.flow.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q044.library.entry": {
+      "storyQuest": "q044",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q044",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "明日の日付の訃報が届いた。紙に名のある人は、今も市場で働いている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "warn",
+              "text": "本人へ紙を見せ、身の安全を確保する",
+              "storyAction": {
+                "quest": "q044",
+                "action": "entry_warn"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q044",
+                  "action": "entry_warn"
+                }
+              ]
+            },
+            {
+              "id": "office",
+              "text": "紙の発行窓口へ抗議に行く",
+              "storyAction": {
+                "quest": "q044",
+                "action": "entry_office"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q044",
+                  "action": "entry_office"
+                }
+              ]
+            },
+            {
+              "id": "destroy",
+              "text": "届いた訃報を処分する",
+              "storyAction": {
+                "quest": "q044",
+                "action": "entry_destroy"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q044",
+                  "action": "entry_destroy"
+                },
+                {
+                  "op": "jump",
+                  "script": "q044.library.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q044.library.safe": {
+      "storyQuest": "q044",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q044",
+          "scene": "safe"
+        },
+        {
+          "op": "narrate",
+          "text": "本人は今夜だけ別の宿へ移ると決めた。紙の裏には異議申立の締切と処刑課の印がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "escape",
+              "text": "避難先へ送り、審査の仕事は引き受けない",
+              "storyAction": {
+                "quest": "q044",
+                "action": "safe_escape"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q044",
+                  "action": "safe_escape"
+                }
+              ]
+            },
+            {
+              "id": "appeal",
+              "text": "本人の署名で審査を請求する",
+              "storyAction": {
+                "quest": "q044",
+                "action": "safe_appeal"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q044",
+                  "action": "safe_appeal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q044.library.office": {
+      "storyQuest": "q044",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q044",
+          "scene": "office"
+        },
+        {
+          "op": "narrate",
+          "text": "訃報は処刑予定の内部書類で、予言に見せて異議申立を諦めさせている。 窓口は予定を予言と呼んでいた。原本を公にすれば、執行前の審査を求められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "publish",
+              "text": "処刑予定書を公開し、執行前の審査を要求する",
+              "storyAction": {
+                "quest": "q044",
+                "action": "office_publish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q044",
+                  "action": "office_publish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q044.library.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "warn",
+              "text": "原本を持って名のある人のもとへ戻る",
+              "storyAction": {
+                "quest": "q044",
+                "action": "office_warn"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q044",
+                  "action": "office_warn"
+                },
+                {
+                  "op": "jump",
+                  "script": "q044.library.locate"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q044.library.escaped": {
+      "storyQuest": "q044",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q044",
+          "scene": "escaped"
+        },
+        {
+          "op": "narrate",
+          "text": "本人が選んだ別の宿へ送り届ける。避難を審査の完了とは扱わない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q044",
+                "action": "escaped_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q044",
+                  "action": "escaped_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q044.library.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q044.library.protected": {
+      "storyQuest": "q044",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q044",
+          "scene": "protected"
+        },
+        {
+          "op": "narrate",
+          "text": "本人を宿へ送り、安全を確かめて署名を受け取った。窓口へ審査を請求する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "appeal",
+              "text": "署名した申立を窓口へ届ける",
+              "storyAction": {
+                "quest": "q044",
+                "action": "protected_appeal"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q044",
+                  "action": "protected_appeal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q044.library.locate": {
+      "storyQuest": "q044",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q044",
+          "scene": "locate"
+        },
+        {
+          "op": "narrate",
+          "text": "本人がまだ生活市にいるか、既に宿へ避難したかを確かめた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "market",
+              "text": "生活市へ本人を訪ねる",
+              "storyAction": {
+                "quest": "q044",
+                "action": "locate_market"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q044.values.subjectAt"
+                },
+                "right": "person"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q044",
+                  "action": "locate_market"
+                }
+              ]
+            },
+            {
+              "id": "refuge",
+              "text": "避難先で本人へ原本を示す",
+              "storyAction": {
+                "quest": "q044",
+                "action": "locate_refuge"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q044.values.subjectAt"
+                },
+                "right": "refuge"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q044",
+                  "action": "locate_refuge"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q044.library.safe_refuge": {
+      "storyQuest": "q044",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q044",
+          "scene": "safe_refuge"
+        },
+        {
+          "op": "narrate",
+          "text": "本人は署名した申立の扱いを確かめた。今夜はこの宿に留まる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "leave",
+              "text": "避難までで引き受けた仕事を終える",
+              "storyAction": {
+                "quest": "q044",
+                "action": "safe_refuge_leave"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q044",
+                  "action": "safe_refuge_leave"
+                },
+                {
+                  "op": "jump",
+                  "script": "q044.library.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "appeal",
+              "text": "署名した審査請求を窓口へ届ける",
+              "storyAction": {
+                "quest": "q044",
+                "action": "safe_refuge_appeal"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q044",
+                  "action": "safe_refuge_appeal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q044.library.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "一覧は取り消された。救われた者の罪が消えたわけではなく、裁判が始まる。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q044",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q044.library.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "人々は安心した。予定そのものを知らぬまま翌朝を迎える。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q044",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q044.library.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "何人かは逃れた。残った者のため、ユズは空いた行も印刷する。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q044",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q044.library.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q044"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q044.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q044.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q044.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "一覧は取り消された。救われた者の罪が消えたわけではなく、裁判が始まる。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "人々は安心した。予定そのものを知らぬまま翌朝を迎える。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "何人かは逃れた。残った者のため、ユズは空いた行も印刷する。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q044"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q044.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q044.library.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "safe",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q044.library.safe"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "office",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q044.library.office"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "escaped",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q044.library.escaped"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "protected",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q044.library.protected"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "locate",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q044.library.locate"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "safe_refuge",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q044.library.safe_refuge"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q044.library.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "未来の訃報の現場",
+      "person": "名のある人のいる生活市",
+      "refuge": "本人が選んだ避難先",
+      "office": "予定書の発行・審査窓口",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "person"
+      ],
+      [
+        "transit",
+        "refuge"
+      ],
+      [
+        "transit",
+        "office"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "person",
+          "refuge",
+          "office",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "destroyed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "destroyed"
+      },
+      "protected": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "protected"
+      },
+      "reviewRequested": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "reviewRequested"
+      },
+      "appealed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "appealed"
+      },
+      "subjectAt": {
+        "type": "enum",
+        "initial": "person",
+        "values": [
+          "entry",
+          "person",
+          "refuge",
+          "office",
+          "transit"
+        ],
+        "meaning": "subject の所在または保持者"
+      },
+      "noticeAt": {
+        "type": "enum",
+        "initial": "party",
+        "values": [
+          "entry",
+          "person",
+          "refuge",
+          "office",
+          "transit",
+          "party",
+          "subject",
+          "discard"
+        ],
+        "meaning": "notice の所在または保持者"
+      },
+      "discardAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "person",
+          "refuge",
+          "office",
+          "transit",
+          "party",
+          "subject",
+          "notice"
+        ],
+        "meaning": "discard の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "subject": {
+        "holder": "subjectAt",
+        "kind": "person"
+      },
+      "notice": {
+        "holder": "noticeAt",
+        "kind": "item"
+      },
+      "discard": {
+        "holder": "discardAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "訃報は処刑予定の内部書類で、予言に見せて異議申立を諦めさせている。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "未来の訃報の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "safe": {
+        "title": "名のある人のいる生活市",
+        "place": "person",
+        "cast": [],
+        "requires": true
+      },
+      "office": {
+        "title": "予定書の発行・審査窓口",
+        "place": "office",
+        "cast": [],
+        "requires": true
+      },
+      "escaped": {
+        "title": "本人が選んだ避難先",
+        "place": "refuge",
+        "cast": [],
+        "requires": true
+      },
+      "protected": {
+        "title": "本人が選んだ避難先",
+        "place": "refuge",
+        "cast": [],
+        "requires": true
+      },
+      "locate": {
+        "title": "予定書の発行・審査窓口",
+        "place": "office",
+        "cast": [],
+        "requires": true
+      },
+      "safe_refuge": {
+        "title": "本人が選んだ避難先",
+        "place": "refuge",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_warn": {
+        "from": [
+          "entry"
+        ],
+        "to": "safe",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "person"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "person",
+          "companions": []
+        },
+        "depart": []
+      },
+      "entry_office": {
+        "from": [
+          "entry"
+        ],
+        "to": "office",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "office"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "office",
+            "requires": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "office",
+          "companions": []
+        },
+        "depart": []
+      },
+      "entry_destroy": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "notice",
+            "from": "party",
+            "to": "discard"
+          },
+          {
+            "op": "set",
+            "key": "destroyed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "safe_escape": {
+        "from": [
+          "safe"
+        ],
+        "to": "escaped",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "subject"
+            ],
+            "path": [
+              "transit",
+              "refuge"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "refuge",
+          "companions": [
+            "subject"
+          ]
+        },
+        "depart": []
+      },
+      "safe_appeal": {
+        "from": [
+          "safe"
+        ],
+        "to": "protected",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "subject"
+            ],
+            "path": [
+              "transit",
+              "refuge"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "protected",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "refuge",
+          "companions": [
+            "subject"
+          ]
+        },
+        "depart": []
+      },
+      "office_publish": {
+        "from": [
+          "office"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "reviewRequested",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "office_warn": {
+        "from": [
+          "office"
+        ],
+        "to": "locate",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "escaped_finish": {
+        "from": [
+          "escaped"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "protected",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "protected_appeal": {
+        "from": [
+          "protected"
+        ],
+        "to": "office",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "office"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "appealed",
+            "value": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "office",
+            "requires": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "office",
+          "companions": []
+        },
+        "depart": []
+      },
+      "locate_market": {
+        "from": [
+          "locate"
+        ],
+        "to": "safe",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q044.values.subjectAt"
+          },
+          "right": "person"
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "person"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "person",
+          "companions": []
+        },
+        "depart": []
+      },
+      "locate_refuge": {
+        "from": [
+          "locate"
+        ],
+        "to": "safe_refuge",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q044.values.subjectAt"
+          },
+          "right": "refuge"
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "refuge"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "refuge",
+          "companions": []
+        },
+        "depart": []
+      },
+      "safe_refuge_leave": {
+        "from": [
+          "safe_refuge"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "safe_refuge_appeal": {
+        "from": [
+          "safe_refuge"
+        ],
+        "to": "office",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "office"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "appealed",
+            "value": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "office",
+            "requires": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "office",
+          "companions": []
+        },
+        "depart": []
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q044.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q044.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q044.values.partyAt"
+                },
+                "right": "office"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q044.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q044.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q044.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q044.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q044.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q044.values.partyAt"
+                },
+                "right": "refuge"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_5",
+        "map": "region_5_f1",
+        "x": 10,
+        "y": 11
+      },
+      "person": {
+        "kind": "town",
+        "location": "library_market"
+      },
+      "refuge": {
+        "kind": "town",
+        "location": "salome_inn"
+      },
+      "office": {
+        "kind": "town",
+        "location": "library_review"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "salome",
+  "receptionLocations": [
+    "salome_board"
+  ]
+}
