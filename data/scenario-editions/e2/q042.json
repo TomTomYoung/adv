@@ -625,7 +625,7 @@
     ],
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -634,7 +634,646 @@
       "saveRevision": 2,
       "scope": "書庫前半10件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "砂時計の残業の現場",
+            "clock": "書庫の外時計",
+            "relief": "交代者の待つ休息棚",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "clock"
+            ],
+            [
+              "transit",
+              "relief"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "clock",
+                "relief",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "informed",
+                "contract",
+                "compromise"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "broken": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "broken"
+            },
+            "shifted": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "shifted"
+            },
+            "outsideChecked": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "outsideChecked"
+            },
+            "hoursRecorded": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "hoursRecorded"
+            },
+            "twoClocks": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "twoClocks"
+            },
+            "reliefCrewAt": {
+              "type": "enum",
+              "initial": "relief",
+              "values": [
+                "entry",
+                "clock",
+                "relief",
+                "transit"
+              ],
+              "meaning": "reliefCrew の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "reliefCrew": {
+              "holder": "reliefCrewAt",
+              "kind": "group"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "管理者が湿った砂を使い、交代時刻を遅らせている。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "砂時計の残業の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "shift": {
+              "title": "砂時計の残業の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "sand": {
+              "title": "砂時計の残業の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "outside": {
+              "title": "書庫の外時計",
+              "place": "clock",
+              "cast": [],
+              "requires": true
+            },
+            "record_clock": {
+              "title": "書庫の外時計",
+              "place": "clock",
+              "cast": [],
+              "requires": true
+            },
+            "relief": {
+              "title": "交代者の待つ休息棚",
+              "place": "relief",
+              "cast": [],
+              "requires": true
+            },
+            "shifted": {
+              "title": "砂時計の残業の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "two_clock": {
+              "title": "書庫の外時計",
+              "place": "clock",
+              "cast": [],
+              "requires": true
+            },
+            "agreed": {
+              "title": "砂時計の残業の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_outside": {
+              "from": [
+                "entry"
+              ],
+              "to": "outside",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "clock"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "clock",
+                "companions": []
+              },
+              "depart": []
+            },
+            "entry_sample": {
+              "from": [
+                "entry"
+              ],
+              "to": "sand",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "observe",
+                  "observer": "party",
+                  "proposition": "truth",
+                  "source": "entry",
+                  "requires": true
+                }
+              ],
+              "once": false
+            },
+            "entry_break": {
+              "from": [
+                "entry"
+              ],
+              "ending": "contract",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "broken",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "contract"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "shift_two": {
+              "from": [
+                "shift"
+              ],
+              "to": "two_clock",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "clock"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "clock",
+                "companions": []
+              },
+              "depart": []
+            },
+            "shift_sand": {
+              "from": [
+                "shift"
+              ],
+              "to": "sand",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "shifted",
+                  "value": true
+                },
+                {
+                  "op": "observe",
+                  "observer": "party",
+                  "proposition": "truth",
+                  "source": "entry",
+                  "requires": true
+                }
+              ],
+              "once": false
+            },
+            "sand_hours": {
+              "from": [
+                "sand"
+              ],
+              "to": "record_clock",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "clock"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "clock",
+                "companions": []
+              },
+              "depart": []
+            },
+            "sand_two": {
+              "from": [
+                "sand"
+              ],
+              "to": "two_clock",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "clock"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "clock",
+                "companions": []
+              },
+              "depart": []
+            },
+            "outside_tell": {
+              "from": [
+                "outside"
+              ],
+              "to": "shift",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "outsideChecked",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "record_clock_call": {
+              "from": [
+                "record_clock"
+              ],
+              "to": "relief",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "relief"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "relief",
+                "companions": []
+              },
+              "depart": []
+            },
+            "relief_escort": {
+              "from": [
+                "relief"
+              ],
+              "to": "shifted",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "reliefCrew"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": [
+                  "reliefCrew"
+                ]
+              },
+              "depart": []
+            },
+            "shifted_finish": {
+              "from": [
+                "shifted"
+              ],
+              "ending": "informed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "hoursRecorded",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "shifted",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "informed"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "two_clock_agree": {
+              "from": [
+                "two_clock"
+              ],
+              "to": "agreed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "agreed_finish": {
+              "from": [
+                "agreed"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "twoClocks",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "informed": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q042.values.resolution"
+                  },
+                  "right": "informed"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q042.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q042.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "contract": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q042.values.resolution"
+                  },
+                  "right": "contract"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q042.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q042.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compromise": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q042.values.resolution"
+                  },
+                  "right": "compromise"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q042.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q042.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_5",
+              "map": "region_5_f1",
+              "x": 17,
+              "y": 3
+            },
+            "clock": {
+              "kind": "town",
+              "location": "library_clock"
+            },
+            "relief": {
+              "kind": "dungeon",
+              "dungeon": "region_5",
+              "map": "region_5_f1",
+              "x": 7,
+              "y": 1
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "craftspersonAt",
+            "value": "entry"
+          },
+          {
+            "key": "managerAt",
+            "value": "entry"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q042.clue_a": {
@@ -2456,6 +3095,22 @@
           "transit"
         ],
         "meaning": "reliefCrew の所在または保持者"
+      },
+      "craftspersonAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry"
+        ],
+        "meaning": "craftsperson の所在または保持者"
+      },
+      "managerAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry"
+        ],
+        "meaning": "manager の所在または保持者"
       }
     },
     "entities": {
@@ -2465,7 +3120,18 @@
       },
       "reliefCrew": {
         "holder": "reliefCrewAt",
-        "kind": "group"
+        "kind": "group",
+        "character": "q042_reliefCrew"
+      },
+      "craftsperson": {
+        "holder": "craftspersonAt",
+        "kind": "person",
+        "character": "q042_craftsperson"
+      },
+      "manager": {
+        "holder": "managerAt",
+        "kind": "person",
+        "character": "q042_manager"
       }
     },
     "propositions": {
@@ -2479,19 +3145,47 @@
       "entry": {
         "title": "砂時計の残業の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "craftsperson",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "shift": {
         "title": "砂時計の残業の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "manager",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "sand": {
         "title": "砂時計の残業の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "manager",
+            "when": {
+              "op": "in",
+              "left": "shift_sand",
+              "right": {
+                "ref": "stories.q042.events"
+              }
+            },
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "outside": {
@@ -2509,13 +3203,33 @@
       "relief": {
         "title": "交代者の待つ休息棚",
         "place": "relief",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "reliefCrew",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "shifted": {
         "title": "砂時計の残業の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "reliefCrew",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "manager",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "two_clock": {
@@ -2527,7 +3241,14 @@
       "agreed": {
         "title": "砂時計の残業の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "manager",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       }
     },
@@ -2991,7 +3712,7 @@
         "y": 1
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "salome",
   "receptionLocations": [

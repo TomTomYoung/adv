@@ -1,6 +1,6 @@
 import {set,give,ref,eq} from '../../../story-kit.mjs';
 import {librarySource} from './library-common.mjs';
-export function libraryFirstSource(q){
+export function libraryFirstSource(q,{cast=true}={}){
  const {x,node,choice,town,cell,entity,opt,add,route,end,v,transfer,finish}=librarySource(q);
  const p=q.locations.find(p=>p.role==='decision');cell('entry',q.title+'の現場',p.map.endsWith('f1')?1:2,p.x,p.y);
  if(q.number===41){
@@ -24,6 +24,15 @@ export function libraryFirstSource(q){
   route('sand','hours','record_clock');add('record_clock','clock','乾いた砂で測った長さを外時計と照合し、超過した労働時間を記録した。交代者を呼びに行く。',[opt('call','休息棚で交代者へ記録を渡す','relief')]);
   add('relief','relief','記録を見た交代者が仕事を引き継ぐ。本人たちと作業室へ戻る。',[opt('escort','交代者を作業室へ案内する','shifted',{companions:['reliefCrew']})]);end('shifted','entry','交代者が作業室へ着いた。超過分の記録を管理者へ渡し、外の鐘も交代の目安にする。','informed',[set('hoursRecorded'),set('shifted')]);
   for(const from of ['shift','sand'])route(from,'two','two_clock');add('two_clock','clock','外時計を確認し、砂時計より早い方を交代時刻にする取り決めを持ち帰る。',[opt('agree','作業室で二時計の契約を結ぶ','agreed')]);end('agreed','entry','作業室で二つの時計を確認する契約を結んだ。外へ出ただけで勤務が終わったことにはしない。','compromise',[set('twoClocks')]);choice('entry','break').effects=[set('broken')];
+  if(cast){
+   entity('craftsperson','entry','person');entity('manager','entry','person');
+   for(const id of ['craftsperson','manager','reliefCrew'])x.entities[id].character='q042_'+id;
+   const casts={entry:['craftsperson'],shift:['manager'],relief:['reliefCrew'],shifted:['reliefCrew','manager'],agreed:['manager']};
+   for(const [scene,people] of Object.entries(casts)){const positions=people.length===2?[31,69]:[50];node(scene).cast=people.map((entity,i)=>({entity,display:{x:positions[i]}}));}
+   // The bag alone does not establish its owner's presence. Only the explicit
+   // test in front of the manager continues that person's appearance here.
+   node('sand').cast=[{entity:'manager',when:{op:'in',left:'shift_sand',right:ref('stories.q042.events')},display:{x:50}}];
+  }
  }
  if(q.number===43){
   cell('valve','保存薬の噴霧弁',1,5,3);town('copy','退避する控えの照合室','library_copy_room');entity('backup','copy');entity('restored','entry');
