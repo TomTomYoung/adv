@@ -1,7 +1,7 @@
 // Editorial audit: candidate IDs are local; connected roles cite their game entity.
 // Update a fingerprint only after rereading the changed quest and its evidence.
 export const RELOCATED_CAST_REVIEW={
- reviewedAt:'2026-11-11',
+ reviewedAt:'2026-11-12',
  quests:{
   q031:{
    sourceSha256:'ab2cb40f75d0a430e00077b936b338b23736b74b01034aeaeb9333cda16cecf7',
@@ -5242,6 +5242,142 @@ export const RELOCATED_CAST_REVIEW={
     }
   },
   "next": "9場面の表示、全10旅程、敗北後の再戦と入口帰還、逃走後の契約相談、3結末と改訂2保存を検証する。次工程はq188の原稿・全場面の出演監査。"
+},
+  q188:{
+  "sourceSha256": "b3650034aadd8a5ad9e40ca46db7768098395363a65e10ecde7c06b17cfa8c40",
+  "identityNotes": [
+    "原稿authoring/reference/volume-09.mdのGQ088、初版q188、現行全10場面・9旅程・4結末を精読した。",
+    "帰還兵ラフは既存soldierの全行程に同行する。妻wifeと弟brotherの個別聞き取り・合流・別居後の所在を保持する。弟は妻の恋人ではなく、妻自身の怪我が棚と席を変えた理由である。",
+    "安全な到着だけで精算するarrived、旧役割old、再分担share、別居apartの4結末を保持し、家庭の仲直りを護衛報酬の条件へ追加しない。",
+    "既存3人の呼称を表示する。妻と弟の氏名・外見、追加の家族・受付係、専用画は追加しない。本文・物語改訂1・全行為と報酬・旧保存・現場接続前の受注経路を維持する。"
+  ],
+  "relatedClients": {},
+  "people": {
+    "q188_soldier": {
+      "label": "帰還兵ラフ",
+      "status": "connected",
+      "need": "既存の実所在と同行に沿う呼称表示をScene／Classicへ接続済み。",
+      "entity": "soldier"
+    },
+    "q188_wife": {
+      "label": "ラフの妻",
+      "status": "connected",
+      "need": "既存の実所在と同行に沿う呼称表示をScene／Classicへ接続済み。",
+      "entity": "wife"
+    },
+    "q188_brother": {
+      "label": "ラフの弟",
+      "status": "connected",
+      "need": "既存の実所在と同行に沿う呼称表示をScene／Classicへ接続済み。",
+      "entity": "brother"
+    }
+  },
+  "scenes": {
+    "family": {
+      "decision": "person-evidence",
+      "people": [
+        "q188_soldier",
+        "q188_wife",
+        "q188_brother"
+      ],
+      "evidence": "家には妻と弟がいる。妻は帰還を喜んだが、席も道具の棚も変わっていた。妻が怪我をしても届く位置に移したのだという。",
+      "reason": "ラフと家へ到着し、帰還を喜ぶ妻と家にいる弟へ会う。妻と弟の同居を恋愛関係へ読み替えない。",
+      "visual": "実所在に沿う人物の呼称表示。棚・席・机と家・別室・奥の部屋・別居先の差分は後続の素材制作候補。"
+    },
+    "work": {
+      "decision": "person-evidence",
+      "people": [
+        "q188_soldier",
+        "q188_brother"
+      ],
+      "evidence": "弟は妻の恋人ではなく、店を支えてきた。昔の役割へそのまま戻すなら、弟の次の仕事を探す負担もある。",
+      "reason": "ラフと弟が奥の部屋へ実同行し、弟が支えてきた店の仕事を聞く。妻は別室に残る。",
+      "visual": "実所在に沿う人物の呼称表示。棚・席・机と家・別室・奥の部屋・別居先の差分は後続の素材制作候補。"
+    },
+    "entry": {
+      "decision": "person-evidence",
+      "people": [
+        "q188_soldier"
+      ],
+      "evidence": "帰還兵を故郷の家まで護衛する。家庭の判断とは別に、安全な到着を確認する。",
+      "reason": "受付からラフ本人を家へ護衛する出発場面。妻と弟は家に残る。受付係は追加しない。",
+      "visual": "実所在に沿う人物の呼称表示。棚・席・机と家・別室・奥の部屋・別居先の差分は後続の素材制作候補。"
+    },
+    "wife": {
+      "decision": "person-evidence",
+      "people": [
+        "q188_soldier",
+        "q188_wife"
+      ],
+      "evidence": "妻と別室へ来た。怪我をしても届くよう、棚と席を変えた理由を聞く。",
+      "reason": "ラフと妻が別室へ実同行し、妻自身の怪我と棚・席を変えた理由を聞く。弟は家に残る。",
+      "visual": "実所在に沿う人物の呼称表示。棚・席・机と家・別室・奥の部屋・別居先の差分は後続の素材制作候補。"
+    },
+    "brother": {
+      "decision": "person-evidence",
+      "people": [
+        "q188_soldier",
+        "q188_brother"
+      ],
+      "evidence": "家に残っていた弟にも、個別に店を支えた事情を聞く。",
+      "reason": "ラフと家へ戻って弟に会う。妻は聞き取りの別室に残り、所在を家へ戻さない。",
+      "visual": "実所在に沿う人物の呼称表示。棚・席・机と家・別室・奥の部屋・別居先の差分は後続の素材制作候補。"
+    },
+    "invite_old": {
+      "decision": "person-evidence",
+      "people": [
+        "q188_soldier",
+        "q188_wife",
+        "q188_brother"
+      ],
+      "evidence": "妻にも相談を伝え、三人で家の仕事を決め直す。",
+      "reason": "ラフと弟が妻のいる別室へ移動し、三人で旧役割と弟の次の仕事を相談する。",
+      "visual": "実所在に沿う人物の呼称表示。棚・席・机と家・別室・奥の部屋・別居先の差分は後続の素材制作候補。"
+    },
+    "agreed_old": {
+      "decision": "person-evidence",
+      "people": [
+        "q188_soldier",
+        "q188_wife",
+        "q188_brother"
+      ],
+      "evidence": "弟の次の仕事を探す負担も含め、昔の役割へ戻す合意を確認する。",
+      "reason": "三人が家へ戻った後、弟の次の仕事の負担を含めて合意を確認する。",
+      "visual": "実所在に沿う人物の呼称表示。棚・席・机と家・別室・奥の部屋・別居先の差分は後続の素材制作候補。"
+    },
+    "invite_share": {
+      "decision": "person-evidence",
+      "people": [
+        "q188_soldier",
+        "q188_wife",
+        "q188_brother"
+      ],
+      "evidence": "妻にも相談を伝え、三人で家の仕事を決め直す。",
+      "reason": "ラフと弟が妻のいる別室へ移動し、三人で仕事の分担を相談する。",
+      "visual": "実所在に沿う人物の呼称表示。棚・席・机と家・別室・奥の部屋・別居先の差分は後続の素材制作候補。"
+    },
+    "agreed_share": {
+      "decision": "person-evidence",
+      "people": [
+        "q188_soldier",
+        "q188_wife",
+        "q188_brother"
+      ],
+      "evidence": "三人で仕事を分け直し、机を一緒に新しい位置へ動かす。",
+      "reason": "三人が家へ戻り、仕事を分担して机を一緒に動かす。",
+      "visual": "実所在に沿う人物の呼称表示。棚・席・机と家・別室・奥の部屋・別居先の差分は後続の素材制作候補。"
+    },
+    "apart": {
+      "decision": "person-evidence",
+      "people": [
+        "q188_soldier"
+      ],
+      "evidence": "本人と別の住まいへ来た。家族との交流を続ける意思を確認する。",
+      "reason": "別の住まいへ実同行するのはラフだけ。妻は別室、弟は奥の部屋に残り、交流の意思を同居や同行に変えない。",
+      "visual": "実所在に沿う人物の呼称表示。棚・席・机と家・別室・奥の部屋・別居先の差分は後続の素材制作候補。"
+    }
+  },
+  "next": "3役の表示、全9旅程・4結末と新旧保存を検証する。次工程はq189の原稿・全場面の出演監査。"
 }
  }
 };
