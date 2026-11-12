@@ -1,6 +1,6 @@
 # 検証結果と残作業
 
-2026-11-12追記：PR #226をmaster `b8dd6f63d4f6bf7239e285342280ed1002e002a9`へ統合した。実装先端の全8ワークフローが成功。q188のCIは22保存点・88画面条件・4結末・エラー0。run 43167643274の成果物ZIPのSHA-256とPNG88枚・結果JSONの一致を確認し、妻との個別会話（Scene 1440px）・家族三人（Scene 390px）・別居先のラフ単独（Classic 390px）を目視した。q189は原稿GQ089・初版・全8場面を監査し、アサ・子供を含む避難者・看守を実所在に沿って7場面へ呼称表示する。資料室には隊だけが移動し、アサは私的使用の2経路だけ避難者と同行する。看守は由来説明・保留・禁止を持場へ申し送る3経路だけ同行する。本文・8旅程・4結末・報酬・歌集の受渡しを保持する。物語改訂1→2では既存の避難者の所在からアサの所在だけを補い、旅程途中の保存も移行する。専用8試験を含む関連54試験成功。`npm run check`は全2,769試験成功・失敗0・スキップ0。生成物・データ・静的参照・文書検査も成功。ローカルChromiumはsocket作成制限で起動不可のため、18保存点・72画面条件のChromium検査はGitHub CIで実施する。次工程はq190の原稿・全場面の出演監査。
+2026-11-12追記：PR #226をmaster `b8dd6f63d4f6bf7239e285342280ed1002e002a9`へ統合した。実装先端の全8ワークフローが成功。q188のCIは22保存点・88画面条件・4結末・エラー0。run 43167643274の成果物ZIPのSHA-256とPNG88枚・結果JSONの一致を確認し、妻との個別会話（Scene 1440px）・家族三人（Scene 390px）・別居先のラフ単独（Classic 390px）を目視した。公開run 43169921322も成功。公開の攻略パーティー試遊を第2版q188・基本4人・Lv9・最初の現場から開始し、帰還兵と家への移動、家族3人の表示、安全到着の結末まで実操作した。153G・99EXPの表示と所持金240G→393Gを確認した。q189は原稿GQ089・初版・全8場面を監査し、アサ・子供を含む避難者・看守を実所在に沿って7場面へ呼称表示する。資料室には隊だけが移動し、アサは私的使用の2経路だけ避難者と同行する。看守は由来説明・保留・禁止を持場へ申し送る3経路だけ同行する。本文・8旅程・4結末・報酬・歌集の受渡しを保持する。物語改訂1→2では既存の避難者の所在からアサの所在だけを補い、旅程途中の保存も移行する。専用8試験を含む関連54試験成功。`npm run check`は全2,769試験成功・失敗0・スキップ0。生成物・データ・静的参照・文書検査も成功。ローカルChromiumはsocket作成制限で起動不可のためGitHub CIで検査した。q189はrun 43170211643で18保存点・72画面条件・4結末・エラー0。成果物ZIPのSHA-256とPNG72枚・結果JSONの一致を確認し、入口の3役（Scene 390px）、旧保存の資料室の人物なし（Scene 1440px）、旧保存の小部屋のアサと避難者（Scene 390px）、看守の持場の単独表示（Classic 390px）を目視した。実装コミット`404d86667578cc63430ca9002c93290f55d5ecbc`の全8ワークフローが成功した。実装と検証は[PR #227](https://github.com/TomTomYoung/adv/pull/227)へまとめた。次工程はq190の原稿・全場面の出演監査。q190は原稿GQ090・初版・現行19場面・17旅程・3結末を精読済み。フウの全行程、住民の避難経路、保管庫で待つ回収班と3区画の同行を区別する。勝利後の準備場面にもフウの所在を保つ必要がある。魔石3個は各回収区画の出発時に隊が持ち、保管庫のfinishで軍へ渡す。三か所の封鎖と保管先確認、逃走・敗北後の避難、旧保存を監査してから人物表示へ接続する。出演監査台帳への登録と表示実装は未着手。
 
 この文書は実施日・対象コミットごとの検証履歴です。過去の件数・環境制約は当時の記録として保持します。現在の実装範囲は[CURRENT_STATUS](../CURRENT_STATUS.md)、未実装の順序は[HANDOFF](../HANDOFF.md)を参照してください。
 
@@ -36,14 +36,14 @@ PR #224の統合先master `2ab7f80047c1e8c6ccf2469ba3be213711b38a12`を取得し
 
 代表8枚の主要部を目視し、勝利直後にカドが残ること、退避先の住民、井戸の村長と住民・将校の非表示、任用窓口の将校、逃走後の再戦・入口帰還の無効化と契約相談、退去時のカドを確認した。全112枚の目視や公開サイト上の表示確認を行ったという意味ではない。
 
-1. `e2-scene-1440-q187-entry-waiting-unfought.png`
-1. `e2-scene-390-q187-defend_battle_ready-waiting-win.png`
-1. `e2-scene-390-q187-evacuated-evacuated-unfought.png`
-1. `e2-classic-1440-q187-contract-evacuated-unfought.png`
-1. `e2-classic-390-q187-army-waiting-escape.png`
-1. `e2-scene-1440-q187-village_done-evacuated-lose.png`
-1. `e2-classic-390-q187-defend-waiting-escape.png`
-1. `e2-scene-390-q187-left-waiting-win.png`
+- `e2-scene-1440-q187-entry-waiting-unfought.png`
+- `e2-scene-390-q187-defend_battle_ready-waiting-win.png`
+- `e2-scene-390-q187-evacuated-evacuated-unfought.png`
+- `e2-classic-1440-q187-contract-evacuated-unfought.png`
+- `e2-classic-390-q187-army-waiting-escape.png`
+- `e2-scene-1440-q187-village_done-evacuated-lose.png`
+- `e2-classic-390-q187-defend-waiting-escape.png`
+- `e2-scene-390-q187-left-waiting-win.png`
 
 検証先端`417ed60b980a38a7bef7b4b0e037a1a1240a48a4`の全11ワークフロー・12ジョブが成功した。[通常CI](https://github.com/TomTomYoung/adv/actions/runs/43037627805)と[共通人物表示CI](https://github.com/TomTomYoung/adv/actions/runs/43037628834)も成功。GitHub上のツリー`1dcf5260ec9fdda422a9f30fe618c6fec364168f`とローカル検証対象は一致する。最終追記はHANDOFF／CURRENT_STATUS／PROGRESS／TEST_OVERVIEWの文書4件だけで、成功済みの同一試験入力を再利用する。文書・リンク検査は継続する。
 
@@ -63,14 +63,14 @@ q186「返事のない停戦」は原稿GQ086、初版、現行全13場面・14�
 
 代表8枚の主要部を目視し、通信士との対面、限定代理状、交換場所の2群、帰着後に受け取った負傷者だけが残ること、砦へ到着後の捕虜、逃走後の人物非表示と撤退、旧受注の待機本文を確認した。全168枚を目視したという意味ではない。
 
-1. `e2-scene-1440-q186-parley-current.png`
-1. `e2-classic-390-q186-limited_offer-current-limited.png`
-1. `e2-scene-390-q186-exchange-current.png`
-1. `e2-classic-1440-q186-exchange-current-limited.png`
-1. `e2-scene-390-q186-local_done-previous-limited.png`
-1. `e2-scene-1440-q186-secured-current.png`
-1. `e2-scene-390-q186-assault-previous-escape.png`
-1. `e2-classic-390-q186-authority-accepted-legacy.png`
+- `e2-scene-1440-q186-parley-current.png`
+- `e2-classic-390-q186-limited_offer-current-limited.png`
+- `e2-scene-390-q186-exchange-current.png`
+- `e2-classic-1440-q186-exchange-current-limited.png`
+- `e2-scene-390-q186-local_done-previous-limited.png`
+- `e2-scene-1440-q186-secured-current.png`
+- `e2-scene-390-q186-assault-previous-escape.png`
+- `e2-classic-390-q186-authority-accepted-legacy.png`
 
 実装は[PR #224](https://github.com/TomTomYoung/adv/pull/224)、先端`a6faec9ab3ffccd586fd59b4bc7b0efe1cdddb88`。ローカル検証ツリーとGitHub上のツリー`effd100d62bfad0c6708fa7788a41c7904346a64`は一致する。実装先端の全11ワークフロー・12ジョブが成功した。[全体CI](https://github.com/TomTomYoung/adv/actions/runs/42835104462)・[共通人物表示CI](https://github.com/TomTomYoung/adv/actions/runs/42835104360)も成功。結果追記はCURRENT_STATUS／HANDOFF／PROGRESSのみで、成功済みの同一入力を再利用する。
 
@@ -117,14 +117,14 @@ q186「返事のない停戦」は原稿GQ086と全13場面・14旅程を精読�
 
 目視したPNGは次の8枚（全88枚を目視したという意味ではない）。
 
-1. `e2-scene-1440-q184-entry-current.png`
-1. `e2-scene-390-q184-invite-current.png`
-1. `e2-classic-1440-q184-joint_cooking-current.png`
-1. `e2-scene-390-q184-spare-current-party.png`
-1. `e2-classic-390-q184-swap-current.png`
-1. `e2-scene-1440-q184-parallel-current.png`
-1. `e2-classic-390-q184-entry-previous.png`
-1. `e2-scene-390-q184-entry-accepted-legacy.png`
+- `e2-scene-1440-q184-entry-current.png`
+- `e2-scene-390-q184-invite-current.png`
+- `e2-classic-1440-q184-joint_cooking-current.png`
+- `e2-scene-390-q184-spare-current-party.png`
+- `e2-classic-390-q184-swap-current.png`
+- `e2-scene-1440-q184-parallel-current.png`
+- `e2-classic-390-q184-entry-previous.png`
+- `e2-scene-390-q184-entry-accepted-legacy.png`
 
 実装先端 `aef466c42c3f7c64ec02574b1d3e792aaf74f6bc` の全8ワークフロー・9ジョブが成功した。[全体CI](https://github.com/TomTomYoung/adv/actions/runs/42461732198)、[共通人物表示CI](https://github.com/TomTomYoung/adv/actions/runs/42461732095)も成功。実装と記録は[PR #221](https://github.com/TomTomYoung/adv/pull/221)へまとめ、この記録時点ではmasterへ未統合。全ジョブ完了後の結果追記はこの文書とHANDOFFのみで、重い試験は同一入力の成功結果を再利用する。
 
@@ -142,14 +142,14 @@ q186「返事のない停戦」は原稿GQ086と全13場面・14旅程を精読�
 
 目視したPNGは次の8枚（全76枚を目視したという意味ではない）。
 
-1. `e2-scene-1440-q183-entry-current.png`
-1. `e2-classic-390-q183-entry-previous.png`
-1. `e2-scene-390-q183-support-no-rations.png`
-1. `e2-classic-1440-q183-confirmed-current.png`
-1. `e2-scene-1440-q183-official-current.png`
-1. `e2-classic-390-q183-supported-current.png`
-1. `e2-scene-390-q183-reported-current.png`
-1. `e2-scene-390-q183-entry-accepted-legacy.png`
+- `e2-scene-1440-q183-entry-current.png`
+- `e2-classic-390-q183-entry-previous.png`
+- `e2-scene-390-q183-support-no-rations.png`
+- `e2-classic-1440-q183-confirmed-current.png`
+- `e2-scene-1440-q183-official-current.png`
+- `e2-classic-390-q183-supported-current.png`
+- `e2-scene-390-q183-reported-current.png`
+- `e2-scene-390-q183-entry-accepted-legacy.png`
 
 実装先端 `22ba8b6190e78236dde6570e171a29dbba2783a5` の全8ワークフロー・9ジョブが成功した。[全体CI](https://github.com/TomTomYoung/adv/actions/runs/42454538957)、[共通人物表示CI](https://github.com/TomTomYoung/adv/actions/runs/42454538947)も成功。実装と記録は[PR #220](https://github.com/TomTomYoung/adv/pull/220)へまとめ、この記録時点ではmasterへ未統合。全ジョブ完了後の結果追記はこの文書とHANDOFFのみで、重い試験は同一入力の成功結果を再利用する。
 
@@ -167,14 +167,14 @@ master `f518b581b6d312ca6906d09c21a7b0145cc1de8a`（PR #218統合済み）を基
 
 目視したPNGは次の8枚（全104枚を目視したという意味ではない）。
 
-1. `e2-scene-1440-q182-entry-current.png`
-1. `e2-scene-390-q182-gun-current-11.png`
-1. `e2-classic-390-q182-command_agreed-current.png`
-1. `e2-classic-1440-q182-evac_ready-current.png`
-1. `e2-scene-390-q182-safe-current.png`
-1. `e2-scene-1440-q182-stored-current.png`
-1. `e2-classic-390-q182-entry-previous.png`
-1. `e2-scene-390-q182-entry-accepted-legacy-11.png`
+- `e2-scene-1440-q182-entry-current.png`
+- `e2-scene-390-q182-gun-current-11.png`
+- `e2-classic-390-q182-command_agreed-current.png`
+- `e2-classic-1440-q182-evac_ready-current.png`
+- `e2-scene-390-q182-safe-current.png`
+- `e2-scene-1440-q182-stored-current.png`
+- `e2-classic-390-q182-entry-previous.png`
+- `e2-scene-390-q182-entry-accepted-legacy-11.png`
 
 実装コミット `e2467b95c82adffa9f4c785ac08ba93d4e8ab417` の全8ワークフロー・9ジョブが成功した。[全体CI](https://github.com/TomTomYoung/adv/actions/runs/42451708393)、[共通人物表示CI](https://github.com/TomTomYoung/adv/actions/runs/42451708294)も成功。実装と記録は[PR #219](https://github.com/TomTomYoung/adv/pull/219)へまとめ、2026-11-08時点ではmasterへ未統合。検証後の追記はこの文書とHANDOFFのみで、重い検査は同一入力の成功結果を再利用する。
 
