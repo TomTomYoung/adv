@@ -59,6 +59,8 @@ export function libraryFirstSource(q,{cast=true}={}){
   choice('draft','gather').companions=['heirs'];choice('draft','gather').depart=[give('draft','entry','party')];
   for(const [from,key] of [['entry','witness'],['draft','hold'],['conference','deposit']])route(from,key,'deposited',{companions:['heirs'],depart:[transfer('draft','entry','party')]});
   end('deposited','deposit','保管窓口で費用を聞き、財産の受領を確かめる。文書は未成立のまま、証人の確認を続ける。','compromise',[give('draft','party','deposit'),set('held')]);choice('conference','minutes').effects=[give('draft','party','council'),set('minutes')];choice('entry','restore').effects=[set('treatedAsFinal')];
+  x.entities.heirs.character='q045_heirs';
+  for(const scene of ['entry','draft','conference','deposited'])node(scene).cast=[{entity:'heirs',display:{x:50}}];
  }
  if(q.number===46){
   cell('rain','雨の年の旧書名札',2,7,1);cell('river','川の暦の旧書名札',2,9,6);cell('ferry','渡し守の記録と三冊',2,13,7);cell('exit','出口札の着く階段',2,1,1);entity('reader','entry','person');

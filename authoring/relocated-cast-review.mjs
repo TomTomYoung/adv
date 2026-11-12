@@ -3,6 +3,24 @@
 export const RELOCATED_CAST_REVIEW={
  reviewedAt:'2026-11-13',
  quests:{
+  q045:{
+   sourceSha256:'49519bd8303e258ccbc397d734b6cf47221a63b0ded5f2ca09c603950b044a87',
+   identityNotes:[
+    '原稿authoring/quests.txtの「白紙の相続」、初版q045、現行4場面・4旅程・5経路・3結末を精読した。原稿の白紙を守る霊との戦闘は現行経路へ追加しない。',
+    '相続人は既存group heirsの一集団として呼称表示する。人数・代表者・氏名・容貌を補わず、代書人サキや探している署名の証人を同席させない。',
+    '4旅程はいずれも相続人の実同行を保つ。原稿の出発時の携行と、議事録または保管の確定時の引渡しを分け、協議の開始を配分への合意と同一視しない。',
+    '本文・物語改訂1・旅程・報酬・保存値を保持する。現場接続前の旧受注3場面と直接経路へ人物表示や追加旅程を混入させない。'
+   ],
+   relatedClients:{},
+   people:{q045_heirs:{label:'相続人たち',status:'connected',entity:'heirs',need:'既存の集団を現場・協議室・保管窓口の4場面へ呼称表示し、実同行と所在に従う。'}},
+   scenes:{
+    entry:{decision:'person-evidence',people:['q045_heirs'],evidence:'相続人は白紙を囲んでいる。',reason:'相続人の集団が現場で白紙を囲む。既存heirsを一つの呼称で表示し、人数や代表者を補わない。',visual:'白紙、火鉢、紙の白い端、集団を分け、筆跡だけで正式な合意があるように見せない。'},
+    draft:{decision:'person-evidence',people:['q045_heirs'],evidence:'端に仮契約用の墨が戻ったが、署名欄は空白のままだ。',reason:'紙を冷やして調べる同じ現場。相続人は退場しておらずheirsAtはentry。協議または保管への同行開始まではここに留まる。',visual:'戻る仮契約用の墨と空白の署名欄を区別する。筆跡の復元を同意や正式な遺言の成立として描かない。'},
+    conference:{decision:'person-evidence',people:['q045_heirs'],evidence:'相続人は配分にまだ合意していない。',reason:'draft_gatherで協議室へ実同行した相続人を表示する。全員の同意はこの紙を成立した遺言と扱わないことだけで、配分への合意ではない。',visual:'相続人の協議と未成立の原稿を分ける。議事録の確定前は原稿を隊が保持し、配分完了を先取りしない。'},
+    deposited:{decision:'person-evidence',people:['q045_heirs'],evidence:'保管窓口で費用を聞き、財産の受領を確かめる。',reason:'現場から直接、冷却後、協議後の3経路すべてで相続人が実同行する。窓口の存在から特定の担当者・サキ・署名の証人を追加しない。heldと原稿の引渡しはfinishで確定する。',visual:'財産の一時保管、未成立の文書、今後の証人確認を分ける。保管への到着を正式な相続成立や証人発見と扱わない。'}
+   },
+   next:'相続人の4場面と実同行、全4旅程・5経路・3結末、原稿の携行と引渡し、新旧保存を検証する。次はq046「迷子の索引」の原稿・全場面の出演監査。'
+  },
   q044:{
   "sourceSha256": "23c6e848a87776e541e3086f7d0a0b4d3d07fbde5efdb1fa93952ab4edf9a18b",
   "identityNotes": [
