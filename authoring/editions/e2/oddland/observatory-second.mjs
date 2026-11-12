@@ -140,5 +140,13 @@ export function observatorySecondSource(q,{cast=true}={}){
   const scenes={entry:['asa','refugees','warden'],explanation:['asa','refugees','warden'],explained:['warden'],private_permission:['asa','refugees','warden'],private_room:['asa','refugees'],hold_record:['warden'],ban_record:['warden']};
   for(const [scene,people] of Object.entries(scenes)){const positions=people.length===3?[20,50,80]:people.length===2?[31,69]:[50];node(scene).cast=people.map((entity,i)=>({entity,display:{x:positions[i]}}));}
  }
+ if(q.number===190&&cast){
+  for(const id of ['fuu','villagers','collectors'])x.entities[id].character='q190_'+id;
+  for(const n of x.nodes){
+   const people=['fuu',...(['entry','evac_ready','evacuated'].includes(n.id)?['villagers']:[]),...(['collectors','collect1','collect2','collect3','collected'].includes(n.id)?['collectors']:[])];
+   const positions=people.length===2?[31,69]:[50];n.cast=people.map((entity,i)=>({entity,display:{x:positions[i]}}));
+  }
+  choice('defend','battle').readyCast=[{entity:'fuu',display:{x:50}}];
+ }
  return finish();
 }

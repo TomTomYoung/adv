@@ -1,0 +1,3896 @@
+{
+  "schemaVersion": 1,
+  "id": "q190",
+  "number": 190,
+  "title": "終戦翌日の魔物",
+  "client": "兵站係フウ",
+  "brief": "終戦翌日の補給村を、骸骨獣から守ってください。",
+  "region": 9,
+  "type": "scene_graph",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 旧王領の村の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q190_scene",
+      "title": "終戦翌日の魔物：兵站係フウ",
+      "points": [
+        {
+          "map": "region_9_f2",
+          "x": 9,
+          "y": 1,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q190.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q190.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q190.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q190"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "q190_observatory_entry",
+      "title": "フウと住民のいる補給村",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q190.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q190.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q190"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q190.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_supply",
+          "x": 1,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "id": "q190_observatory_battle",
+      "title": "骸骨獣を防ぐ村の外縁",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "battle",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q190.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q190.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q190"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q190.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_supply",
+          "x": 9,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "id": "q190_observatory_store",
+      "title": "軍が受入れを確認する保管庫",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "store",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q190.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q190.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q190"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q190.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_supply",
+          "x": 13,
+          "y": 7
+        }
+      ]
+    },
+    {
+      "id": "q190_observatory_refuge",
+      "title": "補給村の避難先",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "refuge",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q190.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q190.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q190"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q190.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_supply",
+          "x": 1,
+          "y": 7
+        }
+      ]
+    },
+    {
+      "id": "q190_observatory_site1",
+      "title": "軍用魔石の第1区画",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "site1",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q190.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q190.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q190"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q190.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_supply",
+          "x": 5,
+          "y": 1
+        }
+      ]
+    },
+    {
+      "id": "q190_observatory_site2",
+      "title": "軍用魔石の第2区画",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "site2",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q190.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q190.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q190"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q190.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_supply",
+          "x": 13,
+          "y": 5
+        }
+      ]
+    },
+    {
+      "id": "q190_observatory_site3",
+      "title": "軍用魔石の第3区画",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "site3",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q190.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q190.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q190"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q190.observatory.visit",
+      "points": [
+        {
+          "dungeon": "observatory_sites",
+          "map": "e2_observatory_supply",
+          "x": 5,
+          "y": 7
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_9_f2",
+      "x": 9,
+      "y": 1,
+      "object": "q190_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "evac": {
+      "label": "村からの避難",
+      "text": "人々は避難した。軍用魔石は残り、再建前に回収する仕事を別に要請した。",
+      "gold": 153,
+      "xp": 99
+    },
+    "only": {
+      "label": "討伐後の戦場",
+      "text": "今の群れは倒した。次の群れが来る余地を明記し、フウは撤収の手紙を読み返した。",
+      "gold": 153,
+      "xp": 99
+    },
+    "collect": {
+      "label": "終戦後の回収",
+      "text": "軍が残って魔石を回収した。フウは帰還日を消し、「片付けてから帰る」と書き足した。",
+      "gold": 153,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/observatory-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38166a207eb49f89ac578",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "魔物は敵国の呪いだけでなく、放置された軍用魔石の残響へ集まっている。旗が下りても戦場に残った物は消えない。戦勝式の遠い花火と、地面の骨の振動を交互に見せる。敵を倒す必要と後片付けの必要を分ける。",
+      "fixedPast": "終戦が決まった翌日、戦場の骸骨獣が補給村を襲う。軍は撤収を急ぎ、冒険者への討伐依頼だけを残そうとする。兵站係フウは、戦争が終われば危険も終わると家族に手紙を書いたばかりだ。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "兵站係フウ",
+        "beliefsAndGoals": "終戦が決まった翌日、戦場の骸骨獣が補給村を襲う。軍は撤収を急ぎ、冒険者への討伐依頼だけを残そうとする。兵站係フウは、戦争が終われば危険も終わると家族に手紙を書いたばかりだ。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "終戦翌日の補給村を、骸骨獣から守ってください。"
+      }
+    ],
+    "conflict": {
+      "design": "襲撃防衛→魔石源の確認→討伐だけ／軍を引き留めて回収／避難を優先。回収は三か所の封鎖と安全な保管先が必要だ。兵が去った後でも冒険者の増援で続けられるが費用が変わる。戦闘撤退なら避難の結末へ接続する。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q190.observatory.entry"
+        },
+        {
+          "id": "cleanup",
+          "script": "q190.observatory.cleanup"
+        },
+        {
+          "id": "defend",
+          "script": "q190.observatory.defend"
+        },
+        {
+          "id": "evac_ready",
+          "script": "q190.observatory.evac_ready"
+        },
+        {
+          "id": "evacuated",
+          "script": "q190.observatory.evacuated"
+        },
+        {
+          "id": "select_site",
+          "script": "q190.observatory.select_site"
+        },
+        {
+          "id": "site1",
+          "script": "q190.observatory.site1"
+        },
+        {
+          "id": "sealed1",
+          "script": "q190.observatory.sealed1"
+        },
+        {
+          "id": "site2",
+          "script": "q190.observatory.site2"
+        },
+        {
+          "id": "sealed2",
+          "script": "q190.observatory.sealed2"
+        },
+        {
+          "id": "site3",
+          "script": "q190.observatory.site3"
+        },
+        {
+          "id": "sealed3",
+          "script": "q190.observatory.sealed3"
+        },
+        {
+          "id": "store_checked",
+          "script": "q190.observatory.store_checked"
+        },
+        {
+          "id": "collectors",
+          "script": "q190.observatory.collectors"
+        },
+        {
+          "id": "collect1",
+          "script": "q190.observatory.collect1"
+        },
+        {
+          "id": "collect2",
+          "script": "q190.observatory.collect2"
+        },
+        {
+          "id": "collect3",
+          "script": "q190.observatory.collect3"
+        },
+        {
+          "id": "collected",
+          "script": "q190.observatory.collected"
+        },
+        {
+          "id": "defend_battle_ready",
+          "script": "q190.observatory.defend_battle_ready"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "終戦翌日の補給村を、骸骨獣から守ってください。"
+    },
+    "reveal": {
+      "newInformation": "魔物は敵国の呪いだけでなく、放置された軍用魔石の残響へ集まっている。旗が下りても戦場に残った物は消えない。戦勝式の遠い花火と、地面の骨の振動を交互に見せる。敵を倒す必要と後片付けの必要を分ける。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q190.scene.entry"
+      },
+      {
+        "id": "cleanup",
+        "script": "q190.scene.cleanup"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q190.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q190.sites",
+        "meaning": "作者原稿の sites に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "entry",
+          "cleanup"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      },
+      {
+        "path": "flags.quest.q190.store",
+        "meaning": "作者原稿の store に対応する選択・発言・行為の履歴",
+        "initial": "未設定。条件の成立とは扱わない",
+        "writer": [
+          "cleanup"
+        ],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "遠くで戦勝の花火が鳴り、地面の骨が振動する。群れは放置された軍用魔石へ集まっていた。",
+        "options": [
+          {
+            "id": "battle",
+            "text": "まず襲撃を防ぎ、後処理を相談する",
+            "to": "defend",
+            "action": "entry_battle"
+          },
+          {
+            "id": "evac",
+            "text": "戦わず村の避難を優先する",
+            "to": "evac_ready",
+            "action": "entry_evac"
+          }
+        ]
+      },
+      {
+        "id": "cleanup",
+        "place": "entry",
+        "text": "群れは倒したが魔石は残る。三か所の封鎖と保管先の確認をすれば回収へ進める。",
+        "options": [
+          {
+            "id": "site",
+            "text": "次の魔石区画を一か所封鎖する",
+            "to": "select_site",
+            "action": "cleanup_site"
+          },
+          {
+            "id": "store",
+            "text": "軍の安全な保管庫と受入れを確認する",
+            "to": "store_checked",
+            "action": "cleanup_store"
+          },
+          {
+            "id": "collect",
+            "text": "封鎖した全区画から回収する",
+            "to": "collectors",
+            "action": "cleanup_collect"
+          },
+          {
+            "id": "only",
+            "text": "今の討伐だけで任務を終える",
+            "to": "@only",
+            "action": "cleanup_only"
+          }
+        ]
+      },
+      {
+        "id": "defend",
+        "place": "battle",
+        "text": "村の外縁へフウと来た。骸骨獣を防ぎ、勝利したら残った魔石の後処理を相談する。",
+        "options": [
+          {
+            "id": "battle",
+            "text": "骸骨獣の襲撃を防ぐ",
+            "to": "defend_battle_ready",
+            "action": "defend_battle"
+          },
+          {
+            "id": "evac",
+            "text": "村へ戻って避難を優先する",
+            "to": "evac_ready",
+            "action": "defend_evac"
+          }
+        ]
+      },
+      {
+        "id": "evac_ready",
+        "place": "entry",
+        "text": "補給村へ戻り、住民を集めた。魔石の回収は残し、避難を先に行う。",
+        "options": [
+          {
+            "id": "escort",
+            "text": "住民とフウを避難先へ案内する",
+            "to": "evacuated",
+            "action": "evac_ready_escort"
+          }
+        ]
+      },
+      {
+        "id": "evacuated",
+        "place": "refuge",
+        "text": "住民が避難先へ着いた。残った軍用魔石の回収を別に要請する。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@evac",
+            "action": "evacuated_finish"
+          }
+        ]
+      },
+      {
+        "id": "select_site",
+        "place": "entry",
+        "text": "地図から、まだ封鎖していない区画を選ぶ。",
+        "options": [
+          {
+            "id": "site1",
+            "text": "第1区画へ向かう",
+            "to": "site1",
+            "action": "select_site_site1"
+          },
+          {
+            "id": "site2",
+            "text": "第2区画へ向かう",
+            "to": "site2",
+            "action": "select_site_site2"
+          },
+          {
+            "id": "site3",
+            "text": "第3区画へ向かう",
+            "to": "site3",
+            "action": "select_site_site3"
+          },
+          {
+            "id": "back",
+            "text": "区画の選択をやめる",
+            "to": "cleanup",
+            "action": "select_site_back"
+          }
+        ]
+      },
+      {
+        "id": "site1",
+        "place": "site1",
+        "text": "第1区画へ来た。軍の地図と現地を照合して封鎖札を掛ける。",
+        "options": [
+          {
+            "id": "seal",
+            "text": "この区画を封鎖する",
+            "to": "sealed1",
+            "action": "site1_seal"
+          }
+        ]
+      },
+      {
+        "id": "sealed1",
+        "place": "site1",
+        "text": "この区画を封鎖した。魔石はまだ現場に残っている。",
+        "options": [
+          {
+            "id": "return",
+            "text": "フウと補給村へ戻る",
+            "to": "cleanup",
+            "action": "sealed1_return"
+          }
+        ]
+      },
+      {
+        "id": "site2",
+        "place": "site2",
+        "text": "第2区画へ来た。軍の地図と現地を照合して封鎖札を掛ける。",
+        "options": [
+          {
+            "id": "seal",
+            "text": "この区画を封鎖する",
+            "to": "sealed2",
+            "action": "site2_seal"
+          }
+        ]
+      },
+      {
+        "id": "sealed2",
+        "place": "site2",
+        "text": "この区画を封鎖した。魔石はまだ現場に残っている。",
+        "options": [
+          {
+            "id": "return",
+            "text": "フウと補給村へ戻る",
+            "to": "cleanup",
+            "action": "sealed2_return"
+          }
+        ]
+      },
+      {
+        "id": "site3",
+        "place": "site3",
+        "text": "第3区画へ来た。軍の地図と現地を照合して封鎖札を掛ける。",
+        "options": [
+          {
+            "id": "seal",
+            "text": "この区画を封鎖する",
+            "to": "sealed3",
+            "action": "site3_seal"
+          }
+        ]
+      },
+      {
+        "id": "sealed3",
+        "place": "site3",
+        "text": "この区画を封鎖した。魔石はまだ現場に残っている。",
+        "options": [
+          {
+            "id": "return",
+            "text": "フウと補給村へ戻る",
+            "to": "cleanup",
+            "action": "sealed3_return"
+          }
+        ]
+      },
+      {
+        "id": "store_checked",
+        "place": "store",
+        "text": "保管庫へ来て、安全な保管先と軍の受入れを確認した。回収を始める前に、三つの区画の封鎖も必要だ。",
+        "options": [
+          {
+            "id": "return",
+            "text": "フウと補給村へ戻る",
+            "to": "cleanup",
+            "action": "store_checked_return"
+          }
+        ]
+      },
+      {
+        "id": "collectors",
+        "place": "store",
+        "text": "三つの封鎖と受入れを確認し、軍の回収班と合流した。",
+        "options": [
+          {
+            "id": "first",
+            "text": "フウと回収班で第1区画へ向かう",
+            "to": "collect1",
+            "action": "collectors_first"
+          }
+        ]
+      },
+      {
+        "id": "collect1",
+        "place": "site1",
+        "text": "封鎖した第1区画で魔石を回収する。",
+        "options": [
+          {
+            "id": "carry",
+            "text": "魔石を持って次の区画へ向かう",
+            "to": "collect2",
+            "action": "collect1_carry"
+          }
+        ]
+      },
+      {
+        "id": "collect2",
+        "place": "site2",
+        "text": "封鎖した第2区画で魔石を回収する。",
+        "options": [
+          {
+            "id": "carry",
+            "text": "魔石を持って次の区画へ向かう",
+            "to": "collect3",
+            "action": "collect2_carry"
+          }
+        ]
+      },
+      {
+        "id": "collect3",
+        "place": "site3",
+        "text": "封鎖した第3区画で魔石を回収する。",
+        "options": [
+          {
+            "id": "carry",
+            "text": "回収した魔石を保管庫へ運ぶ",
+            "to": "collected",
+            "action": "collect3_carry"
+          }
+        ]
+      },
+      {
+        "id": "collected",
+        "place": "store",
+        "text": "回収班と三か所の魔石を保管庫へ運び込んだ。軍の受入れを確認して引き渡す。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@collect",
+            "action": "collected_finish"
+          }
+        ]
+      },
+      {
+        "id": "defend_battle_ready",
+        "place": "battle",
+        "text": "戦いに勝利し、先へ進む道が開いた。次の場所まで歩いて確かめる。",
+        "options": [
+          {
+            "id": "continue",
+            "text": "準備した相手・品物と目的地へ向かう",
+            "to": "cleanup",
+            "action": "defend_battle_ready_continue"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "entryScript": "q190.observatory.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "observatory-twenty",
+      "settlement": "oddland_village",
+      "saveRevision": 2,
+      "scope": "観測所20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q190.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q190.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "遠くで戦勝の花火が鳴り、地面の骨が振動する。群れは放置された軍用魔石へ集まっていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "battle",
+              "text": "まず襲撃を防ぎ、後処理を相談する",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_190",
+                  "on_win": [
+                    {
+                      "op": "set",
+                      "target": "flags.quest.q190.sites",
+                      "value": 0
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q190.scene.cleanup"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q190.end.evac"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q190.end.evac"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "evac",
+              "text": "戦わず村の避難を優先する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q190.end.evac"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q190.scene.cleanup": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q190.node",
+          "value": "cleanup"
+        },
+        {
+          "op": "say",
+          "text": "群れは倒したが魔石は残る。三か所の封鎖と保管先の確認をすれば回収へ進める。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "site",
+              "text": "次の魔石区画を一か所封鎖する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "flags.quest.q190.sites"
+                    },
+                    "right": 3
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q190.sites",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "flags.quest.q190.sites"
+                      },
+                      1
+                    ]
+                  }
+                },
+                {
+                  "op": "say",
+                  "text": "軍の地図の一か所と現地を照合し、その区画へ封鎖札を掛けた。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q190.scene.cleanup"
+                }
+              ]
+            },
+            {
+              "id": "store",
+              "text": "軍の安全な保管庫と受入れを確認する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q190.store"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q190.store",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q190.scene.cleanup"
+                }
+              ]
+            },
+            {
+              "id": "collect",
+              "text": "封鎖した全区画から回収する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "flags.quest.q190.sites"
+                    },
+                    "right": 3
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q190.store"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q190.end.collect"
+                }
+              ]
+            },
+            {
+              "id": "only",
+              "text": "今の討伐だけで任務を終える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q190.end.only"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q190.end.evac": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q190.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "人々は避難した。軍用魔石は残り、再建前に回収する仕事を別に要請した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q190",
+              "outcome": "evac"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q190.end.only": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q190.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "今の群れは倒した。次の群れが来る余地を明記し、フウは撤収の手紙を読み返した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q190",
+              "outcome": "only"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q190.end.collect": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q190.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "軍が残って魔石を回収した。フウは帰還日を消し、「片付けてから帰る」と書き足した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q190",
+              "outcome": "collect"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q190.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q190.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q190.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "evac",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "人々は避難した。軍用魔石は残り、再建前に回収する仕事を別に要請した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "only",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "今の群れは倒した。次の群れが来る余地を明記し、フウは撤収の手紙を読み返した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "collect",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "軍が残って魔石を回収した。フウは帰還日を消し、「片付けてから帰る」と書き足した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q190.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q190.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "cleanup",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q190.scene.cleanup"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q190.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q190.observatory.entry": {
+      "storyQuest": "q190",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q190",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "遠くで戦勝の花火が鳴り、地面の骨が振動する。群れは放置された軍用魔石へ集まっていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "battle",
+              "text": "まず襲撃を防ぎ、後処理を相談する",
+              "storyAction": {
+                "quest": "q190",
+                "action": "entry_battle"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q190",
+                  "action": "entry_battle"
+                }
+              ]
+            },
+            {
+              "id": "evac",
+              "text": "戦わず村の避難を優先する",
+              "storyAction": {
+                "quest": "q190",
+                "action": "entry_evac"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q190",
+                  "action": "entry_evac"
+                },
+                {
+                  "op": "jump",
+                  "script": "q190.observatory.evac_ready"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q190.observatory.cleanup": {
+      "storyQuest": "q190",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q190",
+          "scene": "cleanup"
+        },
+        {
+          "op": "narrate",
+          "text": "群れは倒したが魔石は残る。三か所の封鎖と保管先の確認をすれば回収へ進める。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "site",
+              "text": "次の魔石区画を一か所封鎖する",
+              "storyAction": {
+                "quest": "q190",
+                "action": "cleanup_site"
+              },
+              "condition": {
+                "op": "lt",
+                "left": {
+                  "ref": "stories.q190.values.sites"
+                },
+                "right": 3
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q190",
+                  "action": "cleanup_site"
+                },
+                {
+                  "op": "jump",
+                  "script": "q190.observatory.select_site"
+                }
+              ]
+            },
+            {
+              "id": "store",
+              "text": "軍の安全な保管庫と受入れを確認する",
+              "storyAction": {
+                "quest": "q190",
+                "action": "cleanup_store"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q190.values.store"
+                  },
+                  "right": true
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q190",
+                  "action": "cleanup_store"
+                }
+              ]
+            },
+            {
+              "id": "collect",
+              "text": "封鎖した全区画から回収する",
+              "storyAction": {
+                "quest": "q190",
+                "action": "cleanup_collect"
+              },
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "stories.q190.values.sites"
+                    },
+                    "right": 3
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q190.values.store"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q190",
+                  "action": "cleanup_collect"
+                }
+              ]
+            },
+            {
+              "id": "only",
+              "text": "今の討伐だけで任務を終える",
+              "storyAction": {
+                "quest": "q190",
+                "action": "cleanup_only"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q190",
+                  "action": "cleanup_only"
+                },
+                {
+                  "op": "jump",
+                  "script": "q190.observatory.end.only"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q190.observatory.defend": {
+      "storyQuest": "q190",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q190",
+          "scene": "defend"
+        },
+        {
+          "op": "narrate",
+          "text": "村の外縁へフウと来た。骸骨獣を防ぎ、勝利したら残った魔石の後処理を相談する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "battle",
+              "text": "骸骨獣の襲撃を防ぐ",
+              "storyAction": {
+                "quest": "q190",
+                "action": "defend_battle"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.relocatedBattleResult.q190"
+                      },
+                      "right": "escape"
+                    },
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.relocatedBattleResult.q190"
+                      },
+                      "right": "lose"
+                    }
+                  ]
+                }
+              },
+              "requirement": "戦闘。勝利・撤退・敗北に応じて続きが変わる。",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "story_190",
+                  "on_win": [
+                    {
+                      "op": "set",
+                      "target": "flags.relocatedBattleResult.q190",
+                      "value": "win"
+                    },
+                    {
+                      "op": "story.action",
+                      "quest": "q190",
+                      "action": "defend_battle"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q190.observatory.defend_battle_ready"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "set",
+                      "target": "flags.relocatedBattleResult.q190",
+                      "value": "escape"
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "戦いから撤退した。勝利の報告にはせず、同行者と次の行動を相談する。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q190.observatory.defend"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "set",
+                      "target": "flags.relocatedBattleResult.q190",
+                      "value": "lose"
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "救助班に旧王領の村へ運び出された。現場へ戻って同行者と合流し、撤退の結果を報告する。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "evac",
+              "text": "村へ戻って避難を優先する",
+              "storyAction": {
+                "quest": "q190",
+                "action": "defend_evac"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q190",
+                  "action": "defend_evac"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q190.observatory.evac_ready": {
+      "storyQuest": "q190",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q190",
+          "scene": "evac_ready"
+        },
+        {
+          "op": "narrate",
+          "text": "補給村へ戻り、住民を集めた。魔石の回収は残し、避難を先に行う。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "escort",
+              "text": "住民とフウを避難先へ案内する",
+              "storyAction": {
+                "quest": "q190",
+                "action": "evac_ready_escort"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q190",
+                  "action": "evac_ready_escort"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q190.observatory.evacuated": {
+      "storyQuest": "q190",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q190",
+          "scene": "evacuated"
+        },
+        {
+          "op": "narrate",
+          "text": "住民が避難先へ着いた。残った軍用魔石の回収を別に要請する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q190",
+                "action": "evacuated_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q190",
+                  "action": "evacuated_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q190.observatory.end.evac"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q190.observatory.select_site": {
+      "storyQuest": "q190",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q190",
+          "scene": "select_site"
+        },
+        {
+          "op": "narrate",
+          "text": "地図から、まだ封鎖していない区画を選ぶ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "site1",
+              "text": "第1区画へ向かう",
+              "storyAction": {
+                "quest": "q190",
+                "action": "select_site_site1"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "ref": "stories.q190.values.sealed1"
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q190",
+                  "action": "select_site_site1"
+                }
+              ]
+            },
+            {
+              "id": "site2",
+              "text": "第2区画へ向かう",
+              "storyAction": {
+                "quest": "q190",
+                "action": "select_site_site2"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "ref": "stories.q190.values.sealed2"
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q190",
+                  "action": "select_site_site2"
+                }
+              ]
+            },
+            {
+              "id": "site3",
+              "text": "第3区画へ向かう",
+              "storyAction": {
+                "quest": "q190",
+                "action": "select_site_site3"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "ref": "stories.q190.values.sealed3"
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q190",
+                  "action": "select_site_site3"
+                }
+              ]
+            },
+            {
+              "id": "back",
+              "text": "区画の選択をやめる",
+              "storyAction": {
+                "quest": "q190",
+                "action": "select_site_back"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q190",
+                  "action": "select_site_back"
+                },
+                {
+                  "op": "jump",
+                  "script": "q190.observatory.cleanup"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q190.observatory.site1": {
+      "storyQuest": "q190",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q190",
+          "scene": "site1"
+        },
+        {
+          "op": "narrate",
+          "text": "第1区画へ来た。軍の地図と現地を照合して封鎖札を掛ける。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "seal",
+              "text": "この区画を封鎖する",
+              "storyAction": {
+                "quest": "q190",
+                "action": "site1_seal"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q190",
+                  "action": "site1_seal"
+                },
+                {
+                  "op": "jump",
+                  "script": "q190.observatory.sealed1"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q190.observatory.sealed1": {
+      "storyQuest": "q190",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q190",
+          "scene": "sealed1"
+        },
+        {
+          "op": "narrate",
+          "text": "この区画を封鎖した。魔石はまだ現場に残っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "フウと補給村へ戻る",
+              "storyAction": {
+                "quest": "q190",
+                "action": "sealed1_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q190",
+                  "action": "sealed1_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q190.observatory.site2": {
+      "storyQuest": "q190",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q190",
+          "scene": "site2"
+        },
+        {
+          "op": "narrate",
+          "text": "第2区画へ来た。軍の地図と現地を照合して封鎖札を掛ける。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "seal",
+              "text": "この区画を封鎖する",
+              "storyAction": {
+                "quest": "q190",
+                "action": "site2_seal"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q190",
+                  "action": "site2_seal"
+                },
+                {
+                  "op": "jump",
+                  "script": "q190.observatory.sealed2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q190.observatory.sealed2": {
+      "storyQuest": "q190",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q190",
+          "scene": "sealed2"
+        },
+        {
+          "op": "narrate",
+          "text": "この区画を封鎖した。魔石はまだ現場に残っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "フウと補給村へ戻る",
+              "storyAction": {
+                "quest": "q190",
+                "action": "sealed2_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q190",
+                  "action": "sealed2_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q190.observatory.site3": {
+      "storyQuest": "q190",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q190",
+          "scene": "site3"
+        },
+        {
+          "op": "narrate",
+          "text": "第3区画へ来た。軍の地図と現地を照合して封鎖札を掛ける。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "seal",
+              "text": "この区画を封鎖する",
+              "storyAction": {
+                "quest": "q190",
+                "action": "site3_seal"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q190",
+                  "action": "site3_seal"
+                },
+                {
+                  "op": "jump",
+                  "script": "q190.observatory.sealed3"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q190.observatory.sealed3": {
+      "storyQuest": "q190",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q190",
+          "scene": "sealed3"
+        },
+        {
+          "op": "narrate",
+          "text": "この区画を封鎖した。魔石はまだ現場に残っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "フウと補給村へ戻る",
+              "storyAction": {
+                "quest": "q190",
+                "action": "sealed3_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q190",
+                  "action": "sealed3_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q190.observatory.store_checked": {
+      "storyQuest": "q190",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q190",
+          "scene": "store_checked"
+        },
+        {
+          "op": "narrate",
+          "text": "保管庫へ来て、安全な保管先と軍の受入れを確認した。回収を始める前に、三つの区画の封鎖も必要だ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "フウと補給村へ戻る",
+              "storyAction": {
+                "quest": "q190",
+                "action": "store_checked_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q190",
+                  "action": "store_checked_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q190.observatory.collectors": {
+      "storyQuest": "q190",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q190",
+          "scene": "collectors"
+        },
+        {
+          "op": "narrate",
+          "text": "三つの封鎖と受入れを確認し、軍の回収班と合流した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "first",
+              "text": "フウと回収班で第1区画へ向かう",
+              "storyAction": {
+                "quest": "q190",
+                "action": "collectors_first"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q190",
+                  "action": "collectors_first"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q190.observatory.collect1": {
+      "storyQuest": "q190",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q190",
+          "scene": "collect1"
+        },
+        {
+          "op": "narrate",
+          "text": "封鎖した第1区画で魔石を回収する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "carry",
+              "text": "魔石を持って次の区画へ向かう",
+              "storyAction": {
+                "quest": "q190",
+                "action": "collect1_carry"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q190",
+                  "action": "collect1_carry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q190.observatory.collect2": {
+      "storyQuest": "q190",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q190",
+          "scene": "collect2"
+        },
+        {
+          "op": "narrate",
+          "text": "封鎖した第2区画で魔石を回収する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "carry",
+              "text": "魔石を持って次の区画へ向かう",
+              "storyAction": {
+                "quest": "q190",
+                "action": "collect2_carry"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q190",
+                  "action": "collect2_carry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q190.observatory.collect3": {
+      "storyQuest": "q190",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q190",
+          "scene": "collect3"
+        },
+        {
+          "op": "narrate",
+          "text": "封鎖した第3区画で魔石を回収する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "carry",
+              "text": "回収した魔石を保管庫へ運ぶ",
+              "storyAction": {
+                "quest": "q190",
+                "action": "collect3_carry"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q190",
+                  "action": "collect3_carry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q190.observatory.collected": {
+      "storyQuest": "q190",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q190",
+          "scene": "collected"
+        },
+        {
+          "op": "narrate",
+          "text": "回収班と三か所の魔石を保管庫へ運び込んだ。軍の受入れを確認して引き渡す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q190",
+                "action": "collected_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q190",
+                  "action": "collected_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q190.observatory.end.collect"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q190.observatory.defend_battle_ready": {
+      "storyQuest": "q190",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q190",
+          "scene": "defend_battle_ready"
+        },
+        {
+          "op": "narrate",
+          "text": "戦いに勝利し、先へ進む道が開いた。次の場所まで歩いて確かめる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "continue",
+              "text": "準備した相手・品物と目的地へ向かう",
+              "storyAction": {
+                "quest": "q190",
+                "action": "defend_battle_ready_continue"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q190",
+                  "action": "defend_battle_ready_continue"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q190.observatory.end.evac": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "人々は避難した。軍用魔石は残り、再建前に回収する仕事を別に要請した。"
+        },
+        {
+          "op": "add",
+          "target": "vars.evac",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q190",
+          "outcome": "evac"
+        }
+      ]
+    },
+    "q190.observatory.end.only": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "今の群れは倒した。次の群れが来る余地を明記し、フウは撤収の手紙を読み返した。"
+        },
+        {
+          "op": "add",
+          "target": "vars.only",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q190",
+          "outcome": "only"
+        }
+      ]
+    },
+    "q190.observatory.end.collect": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "軍が残って魔石を回収した。フウは帰還日を消し、「片付けてから帰る」と書き足した。"
+        },
+        {
+          "op": "add",
+          "target": "vars.collect",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q190",
+          "outcome": "collect"
+        }
+      ]
+    },
+    "q190.observatory.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q190"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q190.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q190.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q190.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "evac",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "人々は避難した。軍用魔石は残り、再建前に回収する仕事を別に要請した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "only",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "今の群れは倒した。次の群れが来る余地を明記し、フウは撤収の手紙を読み返した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "collect",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "軍が残って魔石を回収した。フウは帰還日を消し、「片付けてから帰る」と書き足した。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q190"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q190.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q190.observatory.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "cleanup",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q190.observatory.cleanup"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "defend",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q190.observatory.defend"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "evac_ready",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q190.observatory.evac_ready"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "evacuated",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q190.observatory.evacuated"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "select_site",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q190.observatory.select_site"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "site1",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q190.observatory.site1"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "sealed1",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q190.observatory.sealed1"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "site2",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q190.observatory.site2"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "sealed2",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q190.observatory.sealed2"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "site3",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q190.observatory.site3"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "sealed3",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q190.observatory.sealed3"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "store_checked",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q190.observatory.store_checked"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "collectors",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q190.observatory.collectors"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "collect1",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q190.observatory.collect1"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "collect2",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q190.observatory.collect2"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "collect3",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q190.observatory.collect3"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "collected",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q190.observatory.collected"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "defend_battle_ready",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q190.observatory.defend_battle_ready"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q190.observatory.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "フウと住民のいる補給村",
+      "battle": "骸骨獣を防ぐ村の外縁",
+      "store": "軍が受入れを確認する保管庫",
+      "refuge": "補給村の避難先",
+      "site1": "軍用魔石の第1区画",
+      "site2": "軍用魔石の第2区画",
+      "site3": "軍用魔石の第3区画",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "battle"
+      ],
+      [
+        "transit",
+        "store"
+      ],
+      [
+        "transit",
+        "refuge"
+      ],
+      [
+        "transit",
+        "site1"
+      ],
+      [
+        "transit",
+        "site2"
+      ],
+      [
+        "transit",
+        "site3"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "battle",
+          "store",
+          "refuge",
+          "site1",
+          "site2",
+          "site3",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "evac",
+          "only",
+          "collect"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "sealed1": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "sealed1"
+      },
+      "sealed2": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "sealed2"
+      },
+      "sealed3": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "sealed3"
+      },
+      "store": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "store"
+      },
+      "sites": {
+        "type": "integer",
+        "initial": 0,
+        "min": 0,
+        "max": 3,
+        "meaning": "sites"
+      },
+      "fuuAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "battle",
+          "store",
+          "refuge",
+          "site1",
+          "site2",
+          "site3",
+          "transit"
+        ],
+        "meaning": "fuu の所在または保持者"
+      },
+      "villagersAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "battle",
+          "store",
+          "refuge",
+          "site1",
+          "site2",
+          "site3",
+          "transit"
+        ],
+        "meaning": "villagers の所在または保持者"
+      },
+      "collectorsAt": {
+        "type": "enum",
+        "initial": "store",
+        "values": [
+          "entry",
+          "battle",
+          "store",
+          "refuge",
+          "site1",
+          "site2",
+          "site3",
+          "transit"
+        ],
+        "meaning": "collectors の所在または保持者"
+      },
+      "crystal1At": {
+        "type": "enum",
+        "initial": "site1",
+        "values": [
+          "entry",
+          "battle",
+          "store",
+          "refuge",
+          "site1",
+          "site2",
+          "site3",
+          "transit",
+          "party",
+          "fuu",
+          "villagers",
+          "collectors",
+          "crystal2",
+          "crystal3"
+        ],
+        "meaning": "crystal1 の所在または保持者"
+      },
+      "crystal2At": {
+        "type": "enum",
+        "initial": "site2",
+        "values": [
+          "entry",
+          "battle",
+          "store",
+          "refuge",
+          "site1",
+          "site2",
+          "site3",
+          "transit",
+          "party",
+          "fuu",
+          "villagers",
+          "collectors",
+          "crystal1",
+          "crystal3"
+        ],
+        "meaning": "crystal2 の所在または保持者"
+      },
+      "crystal3At": {
+        "type": "enum",
+        "initial": "site3",
+        "values": [
+          "entry",
+          "battle",
+          "store",
+          "refuge",
+          "site1",
+          "site2",
+          "site3",
+          "transit",
+          "party",
+          "fuu",
+          "villagers",
+          "collectors",
+          "crystal1",
+          "crystal2"
+        ],
+        "meaning": "crystal3 の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "fuu": {
+        "holder": "fuuAt",
+        "kind": "person"
+      },
+      "villagers": {
+        "holder": "villagersAt",
+        "kind": "group"
+      },
+      "collectors": {
+        "holder": "collectorsAt",
+        "kind": "group"
+      },
+      "crystal1": {
+        "holder": "crystal1At",
+        "kind": "item"
+      },
+      "crystal2": {
+        "holder": "crystal2At",
+        "kind": "item"
+      },
+      "crystal3": {
+        "holder": "crystal3At",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "魔物は敵国の呪いだけでなく、放置された軍用魔石の残響へ集まっている。旗が下りても戦場に残った物は消えない。戦勝式の遠い花火と、地面の骨の振動を交互に見せる。敵を倒す必要と後片付けの必要を分ける。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "フウと住民のいる補給村",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "cleanup": {
+        "title": "フウと住民のいる補給村",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "defend": {
+        "title": "骸骨獣を防ぐ村の外縁",
+        "place": "battle",
+        "cast": [],
+        "requires": true
+      },
+      "evac_ready": {
+        "title": "フウと住民のいる補給村",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "evacuated": {
+        "title": "補給村の避難先",
+        "place": "refuge",
+        "cast": [],
+        "requires": true
+      },
+      "select_site": {
+        "title": "フウと住民のいる補給村",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "site1": {
+        "title": "軍用魔石の第1区画",
+        "place": "site1",
+        "cast": [],
+        "requires": true
+      },
+      "sealed1": {
+        "title": "軍用魔石の第1区画",
+        "place": "site1",
+        "cast": [],
+        "requires": true
+      },
+      "site2": {
+        "title": "軍用魔石の第2区画",
+        "place": "site2",
+        "cast": [],
+        "requires": true
+      },
+      "sealed2": {
+        "title": "軍用魔石の第2区画",
+        "place": "site2",
+        "cast": [],
+        "requires": true
+      },
+      "site3": {
+        "title": "軍用魔石の第3区画",
+        "place": "site3",
+        "cast": [],
+        "requires": true
+      },
+      "sealed3": {
+        "title": "軍用魔石の第3区画",
+        "place": "site3",
+        "cast": [],
+        "requires": true
+      },
+      "store_checked": {
+        "title": "軍が受入れを確認する保管庫",
+        "place": "store",
+        "cast": [],
+        "requires": true
+      },
+      "collectors": {
+        "title": "軍が受入れを確認する保管庫",
+        "place": "store",
+        "cast": [],
+        "requires": true
+      },
+      "collect1": {
+        "title": "軍用魔石の第1区画",
+        "place": "site1",
+        "cast": [],
+        "requires": true
+      },
+      "collect2": {
+        "title": "軍用魔石の第2区画",
+        "place": "site2",
+        "cast": [],
+        "requires": true
+      },
+      "collect3": {
+        "title": "軍用魔石の第3区画",
+        "place": "site3",
+        "cast": [],
+        "requires": true
+      },
+      "collected": {
+        "title": "軍が受入れを確認する保管庫",
+        "place": "store",
+        "cast": [],
+        "requires": true
+      },
+      "defend_battle_ready": {
+        "title": "骸骨獣を防ぐ村の外縁",
+        "place": "battle",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_battle": {
+        "from": [
+          "entry"
+        ],
+        "to": "defend",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "fuu"
+            ],
+            "path": [
+              "transit",
+              "battle"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "battle",
+          "companions": [
+            "fuu"
+          ]
+        },
+        "depart": []
+      },
+      "entry_evac": {
+        "from": [
+          "entry"
+        ],
+        "to": "evac_ready",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "cleanup_site": {
+        "from": [
+          "cleanup"
+        ],
+        "to": "select_site",
+        "requires": {
+          "op": "lt",
+          "left": {
+            "ref": "stories.q190.values.sites"
+          },
+          "right": 3
+        },
+        "effects": [],
+        "once": false
+      },
+      "cleanup_store": {
+        "from": [
+          "cleanup"
+        ],
+        "to": "store_checked",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q190.values.store"
+            },
+            "right": true
+          }
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "fuu"
+            ],
+            "path": [
+              "transit",
+              "store"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "store",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "store",
+          "companions": [
+            "fuu"
+          ]
+        },
+        "depart": []
+      },
+      "cleanup_collect": {
+        "from": [
+          "cleanup"
+        ],
+        "to": "collectors",
+        "requires": {
+          "op": "and",
+          "args": [
+            {
+              "op": "gte",
+              "left": {
+                "ref": "stories.q190.values.sites"
+              },
+              "right": 3
+            },
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q190.values.store"
+              },
+              "right": true
+            }
+          ]
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "fuu"
+            ],
+            "path": [
+              "transit",
+              "store"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "store",
+          "companions": [
+            "fuu"
+          ]
+        },
+        "depart": []
+      },
+      "cleanup_only": {
+        "from": [
+          "cleanup"
+        ],
+        "ending": "only",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "only"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "defend_battle": {
+        "from": [
+          "defend"
+        ],
+        "to": "defend_battle_ready",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.relocatedBattleResult.q190"
+                },
+                "right": "escape"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.relocatedBattleResult.q190"
+                },
+                "right": "lose"
+              }
+            ]
+          }
+        },
+        "effects": [],
+        "once": false
+      },
+      "defend_evac": {
+        "from": [
+          "defend"
+        ],
+        "to": "evac_ready",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "fuu"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "fuu"
+          ]
+        },
+        "depart": []
+      },
+      "evac_ready_escort": {
+        "from": [
+          "evac_ready"
+        ],
+        "to": "evacuated",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "fuu",
+              "villagers"
+            ],
+            "path": [
+              "transit",
+              "refuge"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "refuge",
+          "companions": [
+            "fuu",
+            "villagers"
+          ]
+        },
+        "depart": []
+      },
+      "evacuated_finish": {
+        "from": [
+          "evacuated"
+        ],
+        "ending": "evac",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "evac"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "select_site_site1": {
+        "from": [
+          "select_site"
+        ],
+        "to": "site1",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "ref": "stories.q190.values.sealed1"
+          }
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "fuu"
+            ],
+            "path": [
+              "transit",
+              "site1"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "site1",
+          "companions": [
+            "fuu"
+          ]
+        },
+        "depart": []
+      },
+      "select_site_site2": {
+        "from": [
+          "select_site"
+        ],
+        "to": "site2",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "ref": "stories.q190.values.sealed2"
+          }
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "fuu"
+            ],
+            "path": [
+              "transit",
+              "site2"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "site2",
+          "companions": [
+            "fuu"
+          ]
+        },
+        "depart": []
+      },
+      "select_site_site3": {
+        "from": [
+          "select_site"
+        ],
+        "to": "site3",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "ref": "stories.q190.values.sealed3"
+          }
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "fuu"
+            ],
+            "path": [
+              "transit",
+              "site3"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "site3",
+          "companions": [
+            "fuu"
+          ]
+        },
+        "depart": []
+      },
+      "select_site_back": {
+        "from": [
+          "select_site"
+        ],
+        "to": "cleanup",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "site1_seal": {
+        "from": [
+          "site1"
+        ],
+        "to": "sealed1",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "sealed1",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "sites",
+            "value": {
+              "op": "add",
+              "args": [
+                {
+                  "ref": "stories.q190.values.sites"
+                },
+                1
+              ]
+            }
+          }
+        ],
+        "once": false
+      },
+      "sealed1_return": {
+        "from": [
+          "sealed1"
+        ],
+        "to": "cleanup",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "fuu"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "fuu"
+          ]
+        },
+        "depart": []
+      },
+      "site2_seal": {
+        "from": [
+          "site2"
+        ],
+        "to": "sealed2",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "sealed2",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "sites",
+            "value": {
+              "op": "add",
+              "args": [
+                {
+                  "ref": "stories.q190.values.sites"
+                },
+                1
+              ]
+            }
+          }
+        ],
+        "once": false
+      },
+      "sealed2_return": {
+        "from": [
+          "sealed2"
+        ],
+        "to": "cleanup",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "fuu"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "fuu"
+          ]
+        },
+        "depart": []
+      },
+      "site3_seal": {
+        "from": [
+          "site3"
+        ],
+        "to": "sealed3",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "sealed3",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "sites",
+            "value": {
+              "op": "add",
+              "args": [
+                {
+                  "ref": "stories.q190.values.sites"
+                },
+                1
+              ]
+            }
+          }
+        ],
+        "once": false
+      },
+      "sealed3_return": {
+        "from": [
+          "sealed3"
+        ],
+        "to": "cleanup",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "fuu"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "fuu"
+          ]
+        },
+        "depart": []
+      },
+      "store_checked_return": {
+        "from": [
+          "store_checked"
+        ],
+        "to": "cleanup",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "fuu"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "fuu"
+          ]
+        },
+        "depart": []
+      },
+      "collectors_first": {
+        "from": [
+          "collectors"
+        ],
+        "to": "collect1",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "fuu",
+              "collectors"
+            ],
+            "path": [
+              "transit",
+              "site1"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "site1",
+          "companions": [
+            "fuu",
+            "collectors"
+          ]
+        },
+        "depart": []
+      },
+      "collect1_carry": {
+        "from": [
+          "collect1"
+        ],
+        "to": "collect2",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "fuu",
+              "collectors"
+            ],
+            "path": [
+              "transit",
+              "site2"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "site2",
+          "companions": [
+            "fuu",
+            "collectors"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "crystal1",
+            "from": "site1",
+            "to": "party"
+          }
+        ]
+      },
+      "collect2_carry": {
+        "from": [
+          "collect2"
+        ],
+        "to": "collect3",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "fuu",
+              "collectors"
+            ],
+            "path": [
+              "transit",
+              "site3"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "site3",
+          "companions": [
+            "fuu",
+            "collectors"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "crystal2",
+            "from": "site2",
+            "to": "party"
+          }
+        ]
+      },
+      "collect3_carry": {
+        "from": [
+          "collect3"
+        ],
+        "to": "collected",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "fuu",
+              "collectors"
+            ],
+            "path": [
+              "transit",
+              "store"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "store",
+          "companions": [
+            "fuu",
+            "collectors"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "crystal3",
+            "from": "site3",
+            "to": "party"
+          }
+        ]
+      },
+      "collected_finish": {
+        "from": [
+          "collected"
+        ],
+        "ending": "collect",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "crystal1",
+            "from": "party",
+            "to": "store"
+          },
+          {
+            "op": "transfer",
+            "entity": "crystal2",
+            "from": "party",
+            "to": "store"
+          },
+          {
+            "op": "transfer",
+            "entity": "crystal3",
+            "from": "party",
+            "to": "store"
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "collect"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "defend_battle_ready_continue": {
+        "from": [
+          "defend_battle_ready"
+        ],
+        "to": "cleanup",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "fuu"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "fuu"
+          ]
+        },
+        "depart": []
+      }
+    },
+    "endings": {
+      "evac": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q190.values.resolution"
+            },
+            "right": "evac"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q190.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q190.values.partyAt"
+                },
+                "right": "refuge"
+              }
+            ]
+          }
+        ]
+      },
+      "only": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q190.values.resolution"
+            },
+            "right": "only"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q190.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q190.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "collect": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q190.values.resolution"
+            },
+            "right": "collect"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q190.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q190.values.partyAt"
+                },
+                "right": "store"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_supply",
+        "x": 1,
+        "y": 3
+      },
+      "battle": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_supply",
+        "x": 9,
+        "y": 3
+      },
+      "store": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_supply",
+        "x": 13,
+        "y": 7
+      },
+      "refuge": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_supply",
+        "x": 1,
+        "y": 7
+      },
+      "site1": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_supply",
+        "x": 5,
+        "y": 1
+      },
+      "site2": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_supply",
+        "x": 13,
+        "y": 5
+      },
+      "site3": {
+        "kind": "dungeon",
+        "dungeon": "observatory_sites",
+        "map": "e2_observatory_supply",
+        "x": 5,
+        "y": 7
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_village",
+  "receptionLocations": [
+    "royal_board"
+  ]
+}
