@@ -49,6 +49,15 @@ export async function buildObservatoryQuests({check=false}={}){
    quest.story.registry.officerPersonAt.values=['officer'];
    quest.story.registry.mayorAt.values=['contract'];
   }
+  if(n===189){
+   const previous=compileRelocatedQuest(first,source(first,{cast:false}),options).story;
+   // Preserve existing item holders and derive Asa's location from her group.
+   for(const [key,entry] of Object.entries(previous.registry))quest.story.registry[key]=structuredClone(entry);
+   quest.story.registry.asaAt.values=['entry','private','transit'];
+   quest.story.revision=2;quest.model.edition.revision=2;
+   quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[{key:'asaAt',value:ref('stories.q189.values.refugeesAt')}]}];
+   quest.story.invariants.push({id:'asa_with_refugees',condition:eq(ref('stories.q189.values.asaAt'),ref('stories.q189.values.refugeesAt')),message:'アサは避難者と同じ場所にいる。'});
+  }
   quests.push(quest);
  }
  const outcomes=quests.reduce((n,q)=>n+Object.keys(q.outcomes).length,0);

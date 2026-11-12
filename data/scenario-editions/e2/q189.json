@@ -489,7 +489,7 @@
     "entryScript": "q189.observatory.visit",
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -498,7 +498,676 @@
       "saveRevision": 2,
       "scope": "観測所20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "最後の一節が聞こえた避難室",
+            "private": "私的に歌うための小部屋",
+            "guard": "確認方法を申し送る看守の持場",
+            "archive": "軍の用途以前の歌集を調べる資料室",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "private"
+            ],
+            [
+              "transit",
+              "guard"
+            ],
+            [
+              "transit",
+              "archive"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "private",
+                "guard",
+                "archive",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "explain",
+                "private",
+                "hold",
+                "ban"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "refugeesAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "private",
+                "guard",
+                "archive",
+                "transit"
+              ],
+              "meaning": "refugees の所在または保持者"
+            },
+            "wardenAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "private",
+                "guard",
+                "archive",
+                "transit"
+              ],
+              "meaning": "warden の所在または保持者"
+            },
+            "songbookAt": {
+              "type": "enum",
+              "initial": "archive",
+              "values": [
+                "entry",
+                "private",
+                "guard",
+                "archive",
+                "transit",
+                "party",
+                "refugees",
+                "warden"
+              ],
+              "meaning": "songbook の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "refugees": {
+              "holder": "refugeesAt",
+              "kind": "group"
+            },
+            "warden": {
+              "holder": "wardenAt",
+              "kind": "person"
+            },
+            "songbook": {
+              "holder": "songbookAt",
+              "kind": "item"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "同じ旋律でも、軍の合図には欠けている終わりの一節がある。最初は看守の記憶も正しく扱い、別の用途が共存すると示す。眠りかけた子どもが歌の続きを言う場面が、公開の証言を要求する前にある。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "最後の一節が聞こえた避難室",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "explain": {
+              "title": "軍の用途以前の歌集を調べる資料室",
+              "place": "archive",
+              "cast": [],
+              "requires": true
+            },
+            "explanation": {
+              "title": "最後の一節が聞こえた避難室",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "explained": {
+              "title": "確認方法を申し送る看守の持場",
+              "place": "guard",
+              "cast": [],
+              "requires": true
+            },
+            "private_permission": {
+              "title": "最後の一節が聞こえた避難室",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "private_room": {
+              "title": "私的に歌うための小部屋",
+              "place": "private",
+              "cast": [],
+              "requires": true
+            },
+            "hold_record": {
+              "title": "確認方法を申し送る看守の持場",
+              "place": "guard",
+              "cast": [],
+              "requires": true
+            },
+            "ban_record": {
+              "title": "確認方法を申し送る看守の持場",
+              "place": "guard",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_book": {
+              "from": [
+                "entry"
+              ],
+              "to": "explain",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "archive"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "archive",
+                "companions": []
+              },
+              "depart": []
+            },
+            "entry_private": {
+              "from": [
+                "entry"
+              ],
+              "to": "private_room",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "refugees"
+                  ],
+                  "path": [
+                    "transit",
+                    "private"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "private",
+                "companions": [
+                  "refugees"
+                ]
+              },
+              "depart": []
+            },
+            "entry_hold": {
+              "from": [
+                "entry"
+              ],
+              "to": "hold_record",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "warden"
+                  ],
+                  "path": [
+                    "transit",
+                    "guard"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "guard",
+                "companions": [
+                  "warden"
+                ]
+              },
+              "depart": []
+            },
+            "entry_ban": {
+              "from": [
+                "entry"
+              ],
+              "to": "ban_record",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "warden"
+                  ],
+                  "path": [
+                    "transit",
+                    "guard"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "guard",
+                "companions": [
+                  "warden"
+                ]
+              },
+              "depart": []
+            },
+            "explain_public": {
+              "from": [
+                "explain"
+              ],
+              "to": "explanation",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "songbook",
+                  "from": "archive",
+                  "to": "party"
+                }
+              ]
+            },
+            "explain_private": {
+              "from": [
+                "explain"
+              ],
+              "to": "private_permission",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "explanation_report": {
+              "from": [
+                "explanation"
+              ],
+              "to": "explained",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "warden"
+                  ],
+                  "path": [
+                    "transit",
+                    "guard"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "guard",
+                "companions": [
+                  "warden"
+                ]
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "songbook",
+                  "from": "party",
+                  "to": "warden"
+                }
+              ]
+            },
+            "explained_finish": {
+              "from": [
+                "explained"
+              ],
+              "ending": "explain",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "explain"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "private_permission_escort": {
+              "from": [
+                "private_permission"
+              ],
+              "to": "private_room",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "refugees"
+                  ],
+                  "path": [
+                    "transit",
+                    "private"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "private",
+                "companions": [
+                  "refugees"
+                ]
+              },
+              "depart": []
+            },
+            "private_room_finish": {
+              "from": [
+                "private_room"
+              ],
+              "ending": "private",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "private"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "hold_record_finish": {
+              "from": [
+                "hold_record"
+              ],
+              "ending": "hold",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "hold"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "ban_record_finish": {
+              "from": [
+                "ban_record"
+              ],
+              "ending": "ban",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "ban"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "explain": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q189.values.resolution"
+                  },
+                  "right": "explain"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q189.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q189.values.partyAt"
+                      },
+                      "right": "guard"
+                    }
+                  ]
+                }
+              ]
+            },
+            "private": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q189.values.resolution"
+                  },
+                  "right": "private"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q189.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q189.values.partyAt"
+                      },
+                      "right": "private"
+                    }
+                  ]
+                }
+              ]
+            },
+            "hold": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q189.values.resolution"
+                  },
+                  "right": "hold"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q189.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q189.values.partyAt"
+                      },
+                      "right": "guard"
+                    }
+                  ]
+                }
+              ]
+            },
+            "ban": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q189.values.resolution"
+                  },
+                  "right": "ban"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q189.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q189.values.partyAt"
+                      },
+                      "right": "guard"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "observatory_sites",
+              "map": "e2_observatory_camp",
+              "x": 3,
+              "y": 7
+            },
+            "private": {
+              "kind": "dungeon",
+              "dungeon": "observatory_sites",
+              "map": "e2_observatory_camp",
+              "x": 13,
+              "y": 7
+            },
+            "guard": {
+              "kind": "dungeon",
+              "dungeon": "observatory_sites",
+              "map": "e2_observatory_camp",
+              "x": 1,
+              "y": 3
+            },
+            "archive": {
+              "kind": "town",
+              "location": "observatory_archive"
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "asaAt",
+            "value": {
+              "ref": "stories.q189.values.refugeesAt"
+            }
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q189.scene.entry": {
@@ -1502,6 +2171,16 @@
           "warden"
         ],
         "meaning": "songbook の所在または保持者"
+      },
+      "asaAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "private",
+          "transit"
+        ],
+        "meaning": "asa の所在または保持者"
       }
     },
     "entities": {
@@ -1511,15 +2190,22 @@
       },
       "refugees": {
         "holder": "refugeesAt",
-        "kind": "group"
+        "kind": "group",
+        "character": "q189_refugees"
       },
       "warden": {
         "holder": "wardenAt",
-        "kind": "person"
+        "kind": "person",
+        "character": "q189_warden"
       },
       "songbook": {
         "holder": "songbookAt",
         "kind": "item"
+      },
+      "asa": {
+        "holder": "asaAt",
+        "kind": "person",
+        "character": "q189_asa"
       }
     },
     "propositions": {
@@ -1528,12 +2214,45 @@
       }
     },
     "initialKnowledge": {},
-    "invariants": [],
+    "invariants": [
+      {
+        "id": "asa_with_refugees",
+        "condition": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q189.values.asaAt"
+          },
+          "right": {
+            "ref": "stories.q189.values.refugeesAt"
+          }
+        },
+        "message": "アサは避難者と同じ場所にいる。"
+      }
+    ],
     "scenes": {
       "entry": {
         "title": "最後の一節が聞こえた避難室",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "asa",
+            "display": {
+              "x": 20
+            }
+          },
+          {
+            "entity": "refugees",
+            "display": {
+              "x": 50
+            }
+          },
+          {
+            "entity": "warden",
+            "display": {
+              "x": 80
+            }
+          }
+        ],
         "requires": true
       },
       "explain": {
@@ -1545,37 +2264,109 @@
       "explanation": {
         "title": "最後の一節が聞こえた避難室",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "asa",
+            "display": {
+              "x": 20
+            }
+          },
+          {
+            "entity": "refugees",
+            "display": {
+              "x": 50
+            }
+          },
+          {
+            "entity": "warden",
+            "display": {
+              "x": 80
+            }
+          }
+        ],
         "requires": true
       },
       "explained": {
         "title": "確認方法を申し送る看守の持場",
         "place": "guard",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "warden",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "private_permission": {
         "title": "最後の一節が聞こえた避難室",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "asa",
+            "display": {
+              "x": 20
+            }
+          },
+          {
+            "entity": "refugees",
+            "display": {
+              "x": 50
+            }
+          },
+          {
+            "entity": "warden",
+            "display": {
+              "x": 80
+            }
+          }
+        ],
         "requires": true
       },
       "private_room": {
         "title": "私的に歌うための小部屋",
         "place": "private",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "asa",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "refugees",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "hold_record": {
         "title": "確認方法を申し送る看守の持場",
         "place": "guard",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "warden",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "ban_record": {
         "title": "確認方法を申し送る看守の持場",
         "place": "guard",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "warden",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       }
     },
@@ -1618,7 +2409,8 @@
             "op": "move",
             "entities": [
               "party",
-              "refugees"
+              "refugees",
+              "asa"
             ],
             "path": [
               "transit",
@@ -1632,7 +2424,8 @@
         "journey": {
           "to": "private",
           "companions": [
-            "refugees"
+            "refugees",
+            "asa"
           ]
         },
         "depart": []
@@ -1826,7 +2619,8 @@
             "op": "move",
             "entities": [
               "party",
-              "refugees"
+              "refugees",
+              "asa"
             ],
             "path": [
               "transit",
@@ -1840,7 +2634,8 @@
         "journey": {
           "to": "private",
           "companions": [
-            "refugees"
+            "refugees",
+            "asa"
           ]
         },
         "depart": []
@@ -2059,7 +2854,7 @@
         "location": "observatory_archive"
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "oddland_village",
   "receptionLocations": [
