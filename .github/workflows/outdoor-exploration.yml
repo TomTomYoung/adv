@@ -18,6 +18,9 @@ permissions:
 jobs:
   outdoor-browser:
     runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
@@ -36,7 +39,6 @@ jobs:
         if: steps.ci.outputs.run == 'true'
         run: |
           npm install --no-save --package-lock=false playwright@1.58.2
-          npx playwright install --with-deps chromium --only-shell
           test -n "$(fc-list :lang=ja)"
       - name: Check every outdoor map in both layouts and widths
         if: steps.ci.outputs.run == 'true'

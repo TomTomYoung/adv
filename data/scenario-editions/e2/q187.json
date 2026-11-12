@@ -714,7 +714,7 @@
     "entryScript": "q187.observatory.visit",
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -1813,16 +1813,17 @@
         "type": "enum",
         "initial": "contract",
         "values": [
-          "entry",
-          "gate",
-          "refuge",
-          "contract",
-          "officer",
-          "bridge",
-          "exit",
-          "transit"
+          "contract"
         ],
         "meaning": "mayor の所在または保持者"
+      },
+      "officerPersonAt": {
+        "type": "enum",
+        "initial": "officer",
+        "values": [
+          "officer"
+        ],
+        "meaning": "officerPerson の所在または保持者"
       }
     },
     "entities": {
@@ -1832,15 +1833,23 @@
       },
       "kado": {
         "holder": "kadoAt",
-        "kind": "person"
+        "kind": "person",
+        "character": "q187_kado"
       },
       "residents": {
         "holder": "residentsAt",
-        "kind": "group"
+        "kind": "group",
+        "character": "q187_residents"
       },
       "mayor": {
         "holder": "mayorAt",
-        "kind": "person"
+        "kind": "person",
+        "character": "q187_mayor"
+      },
+      "officerPerson": {
+        "holder": "officerPersonAt",
+        "kind": "person",
+        "character": "q187_officerPerson"
       }
     },
     "propositions": {
@@ -1854,55 +1863,142 @@
       "entry": {
         "title": "カドが話をする村の入口",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "kado",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "contract": {
         "title": "村長と相談する井戸の前",
         "place": "contract",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "kado",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "mayor",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "defend": {
         "title": "野盗を防ぐ村の外縁",
         "place": "gate",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "kado",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "evacuated": {
         "title": "住民が退避する場所",
         "place": "refuge",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "kado",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "residents",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "army": {
         "title": "将校の任用窓口",
         "place": "officer",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "kado",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "officerPerson",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "bridge": {
         "title": "限定契約で守る橋",
         "place": "bridge",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "kado",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "village_done": {
         "title": "村長と相談する井戸の前",
         "place": "contract",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "kado",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "mayor",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "left": {
         "title": "村から出る道",
         "place": "exit",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "kado",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "defend_battle_ready": {
         "title": "野盗を防ぐ村の外縁",
         "place": "gate",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "kado",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       }
     },
@@ -2449,7 +2545,7 @@
         "y": 1
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "oddland_village",
   "receptionLocations": [

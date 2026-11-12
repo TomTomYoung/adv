@@ -19,7 +19,11 @@ runs:
   steps:
     - id: scope
       shell: bash
-      run: node tools/ci-scope.mjs inspect
+      run: |
+        # Container steps can use a different HOME/UID from checkout's Git setup.
+        # Trust only this job's checked-out workspace, never a wildcard path.
+        git config --global --add safe.directory "$GITHUB_WORKSPACE"
+        node tools/ci-scope.mjs inspect
     - id: key
       shell: bash
       env:

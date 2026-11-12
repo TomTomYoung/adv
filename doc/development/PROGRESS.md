@@ -2,6 +2,41 @@
 
 この文書は実施日・対象コミットごとの検証履歴です。過去の件数・環境制約は当時の記録として保持します。現在の実装範囲は[CURRENT_STATUS](../CURRENT_STATUS.md)、未実装の順序は[HANDOFF](../HANDOFF.md)を参照してください。
 
+## 2026-11-11：q187の人物表示・戦闘後再開・保存改訂2
+
+PR #224の統合先master `2ab7f80047c1e8c6ccf2469ba3be213711b38a12`を取得し、未完了のq187作業ブランチがないことを確認した。公開run 42839399686の最新試行はbuild・deploy・report-build-statusがすべて成功。公開サイト上の実表示はこの確認に含まない。
+
+原稿GQ087と初版、現行9場面・10旅程・3結末を読み、authoring/relocated-cast-review.mjsへ根拠付きで登録してから実装した。兵カドは勝利後の準備を含む全9場面。退避した住民たちはevacuatedだけ。村長はcontractとvillage_done、駐留将校はarmyだけに呼称表示する。住民は退避先に残り、村長・将校は所在を固定する。contractの将校への言及、leaveの安堵、entryの住民との所在一致を出演に変えない。
+
+共通コンパイラにreadyCastの明示指定を加え、q187だけ勝利直後もカドを表示する。本文・全行動・戦闘命令・10旅程・3結末・報酬が表示前定義と変わらないことを比較した。敗北後は村へ救助され、外縁へ戻って再戦または入口へ帰って避難。逃走後は再戦と入口帰還を閉じ、勝利を偽らず契約相談へ進む。
+
+2026-11-11のユーザー許可によりq187物語改訂1の保存移行を省き、改訂2とする。物語開始後の改訂1保存を原子的に拒否し、読み込み先の進行を破壊しない。未開始保存と新規進行、改訂2の待機本文・選択肢・旅程・戦闘・救助後・完了後の保存再開を検査する。初版や他依頼の保存契約は変更しない。表示前fixtureは差分比較と互換切断の試験用であり、移行処理からは参照しない。
+
+専用6試験と出演監査・現場・従来受注経路の関連36試験は成功。統合前の`npm run check`を一度実行し、全2,755試験成功・失敗0・スキップ0。生成物・runtime・データ・設定編集画面・静的参照・文書の検査も成功した。ブラウザーfixtureは28保存点、9場面、3結末。Scene／Classic × 1440／390pxの112条件をOddland CIへ追加した。ローカルChromiumはprocess_singleton_posix.ccのsocket() Operation not permittedで起動不可。再導入せずGitHub CIへ切り替えた。CIの重複防止は既存のPR起動・成功入力再利用をそのまま使う。
+
+実装先端`e782759228a55521f061a3b0d6e124a04121ace4`の[通常CI](https://github.com/TomTomYoung/adv/actions/runs/43032911180)は成功。初回の[Oddland CI](https://github.com/TomTomYoung/adv/actions/runs/43032911131)はブラウザー導入中、Ubuntu runnerの`azure.archive.ubuntu.com`名前解決失敗で終了し、q187の画面検証は未実行だった。他のブラウザーjobでも導入失敗が出たため、共通actionでUbuntuの標準配布元とsecurity配布元を指定する。suite・署名鍵・第三者リポジトリ・Playwright版・検査条件は保持する。環境設定という入力の変更によりPRのCIを再検査し、成功済みジョブの手動再実行は行わない。
+
+配布元切替後の`5890d4f732523ac717ec86c987820e261f1f0aca`でも[Oddland CI](https://github.com/TomTomYoung/adv/actions/runs/43034918711)が`archive.ubuntu.com`の名前解決失敗で導入段階に終了した。ミラーの切替actionを取り下げ、ブラウザーjobをPlaywright公式の`mcr.microsoft.com/playwright:v1.58.2-noble`へ切り替える。npm側も既存1.58.2を保持し、コンテナに含まれるChromium・依存関係・日本語フォントを使う。機関廟jobの追加APTフォント導入は共通の日本語フォント確認に揃える。ゲームコードと検査条件は変えず、未実行の画面検査を成功扱いにしない。
+
+コンテナ導入先端`0f2f351d79596f8ca7170ee1e2465639021835e2`では戦闘演出と攻略パーティー試遊のChromiumジョブが成功した。Oddland等は共通CI判定でGitの`detected dubious ownership`となったため、共通actionで`GITHUB_WORKSPACE`だけをsafe.directoryへ登録する。ワイルドカードや所有権検査全体の解除は行わない。戦闘演出・攻略パーティー試遊の2workflowにも既存のCI判定・成功記録を接続し、同一入力の文書追記でブラウザー試験を重複させない。
+
+検証先端`417ed60b980a38a7bef7b4b0e037a1a1240a48a4`の[Oddland CI](https://github.com/TomTomYoung/adv/actions/runs/43037627898)が成功した。q187は28保存点・全9場面・3結末、Scene／Classic × 1440／390pxの112条件でエラー0。結果JSONの人物ID・選択肢・逃走後の無効選択肢をローカルのfixture期待値と照合し、112枚のPNGのファイル名・寸法・条件の重複なしを確認した。成果物`q187-cast-checkpoints`（ID `13864472288`、SHA-256 `3d119ff71c6a8e25b5b027607c1864902707c30c5dcbf75cdfa63566d2ece238`）のZIP指紋も一致した。
+
+代表8枚の主要部を目視し、勝利直後にカドが残ること、退避先の住民、井戸の村長と住民・将校の非表示、任用窓口の将校、逃走後の再戦・入口帰還の無効化と契約相談、退去時のカドを確認した。全112枚の目視や公開サイト上の表示確認を行ったという意味ではない。
+
+- `e2-scene-1440-q187-entry-waiting-unfought.png`
+- `e2-scene-390-q187-defend_battle_ready-waiting-win.png`
+- `e2-scene-390-q187-evacuated-evacuated-unfought.png`
+- `e2-classic-1440-q187-contract-evacuated-unfought.png`
+- `e2-classic-390-q187-army-waiting-escape.png`
+- `e2-scene-1440-q187-village_done-evacuated-lose.png`
+- `e2-classic-390-q187-defend-waiting-escape.png`
+- `e2-scene-390-q187-left-waiting-win.png`
+
+検証先端`417ed60b980a38a7bef7b4b0e037a1a1240a48a4`の全11ワークフロー・12ジョブが成功した。[通常CI](https://github.com/TomTomYoung/adv/actions/runs/43037627805)と[共通人物表示CI](https://github.com/TomTomYoung/adv/actions/runs/43037628834)も成功。GitHub上のツリー`1dcf5260ec9fdda422a9f30fe618c6fec364168f`とローカル検証対象は一致する。最終追記はHANDOFF／CURRENT_STATUS／PROGRESS／TEST_OVERVIEWの文書4件だけで、成功済みの同一試験入力を再利用する。文書・リンク検査は継続する。
+
+出演監査は57件・433場面、出演根拠あり315・特定人物の同席根拠なし118、未精読320。人物エンティティ134件中92件のcharacter接続、接続済み130役・候補1役、空cast439場面。実装と結果は[PR #225](https://github.com/TomTomYoung/adv/pull/225)へまとめる。masterへの統合と公開反映は未実施。次工程はq188「帰還兵の席」の原稿・全場面の出演監査で、q188は未監査・未実装。
+
 ## 2026-11-10：戦闘演出との統合とq186の通信士・負傷者・捕虜
 
 PR #222をmaster `301ef4e68be0e634c6f906982d4575f236024f2d`へ統合した。PR #223との競合はruntime.jsonとDATA_SNAPSHOT.jsonの生成値2件で、q185と戦闘演出・攻略パーティー試遊の両方を保持して再生成した。統合ツリー `9c48efdcfee4c8ef788897709f6f38ade90c1259`で`npm run check`の全2,741試験が成功した。PR #223の競合解消先端`c0b11dd8b997dcee83b2b85a8be7d152a391eba3`で全11ワークフロー・12ジョブが成功した。master `bf9cd2f3b965ee345259260576d1f073b47a376c`へ統合済み。統合後のツリーも`9c48efdcfee4c8ef788897709f6f38ade90c1259`で、検証済みツリーとの一致を確認した。統合版q185は132画面条件・3結末・エラー0、PNG132枚との一致と代表4枚の主要部の目視を確認した。[PR #223統合後の公開](https://github.com/TomTomYoung/adv/actions/runs/42837565624)と[全体CI](https://github.com/TomTomYoung/adv/actions/runs/42837568724)は成功した。公開runtime.jsonも統合済みmasterの定義と一致し、攻略パーティー試遊HTMLの取得を確認した。

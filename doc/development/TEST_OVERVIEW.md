@@ -1,6 +1,6 @@
 # CI・自動テスト総覧
 
-最終確認日: 2026-11-06。対象: `master` の `.github/workflows/*.yml` と `package.json`。
+最終確認日: 2026-11-11。対象: PR #225の `.github/workflows/*.yml` と `package.json`。
 
 この文書は、advで実行される主要な自動検査について、**何を守るためのテストか、何を実際に検査するか、何を出力するか**をまとめたものです。テスト結果を会話へ持ち込む際の運用は末尾の「会話ログへの持ち込み」を基準にします。
 
@@ -19,6 +19,8 @@ PRの差分はmerge-baseからHEADまでを判定します。直前コミット�
 [判定の6試験](../../tests/ci-scope.test.mjs)は実Gitリポジトリを作り、文書のみ、ゲーム変更後の文書追記、削除・移動・実行属性、原稿・生成監査・JSON・画像・CI設定、比較履歴不足、環境差、成功記録の欠落・不一致、手動強制を検証します。
 
 参考：[GitHubの差分・paths判定](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow)、[cacheの一致条件とPRごとの範囲](https://docs.github.com/en/actions/reference/workflows-and-actions/dependency-caching)、[actions/cache](https://github.com/actions/cache)。
+
+ブラウザーCIは[Playwright公式コンテナ](https://playwright.dev/docs/docker)の`mcr.microsoft.com/playwright:v1.58.2-noble`を使う。Playwright npmパッケージも1.58.2に固定し、コンテナ内のChromium・OS依存関係・日本語フォントで既存の検査条件を実行する。2026-11-11にrunnerからUbuntuのAzure／標準配布元への名前解決失敗を観測したため、jobごとのAPT導入を廃した。画像タグは[公式一覧](https://mcr.microsoft.com/v2/playwright/tags/list)で確認した。 コンテナとcheckoutの実行ユーザー差は、共通actionでそのjobの`GITHUB_WORKSPACE`だけをGitのsafe.directoryへ登録して扱う。戦闘演出・攻略パーティー試遊も同じCI判定と成功記録を使い、文書検査を維持したまま同一入力を再利用する。
 
 ## 1. 通常CI: `.github/workflows/ci.yml`
 
@@ -183,7 +185,9 @@ PRの差分はmerge-baseからHEADまでを判定します。直前コミット�
 
 `browser-truce-cast-smoke.mjs`はq186の現行20・表示追加前20・旧受注2の42保存点をScene／Classic × 1440／390pxの168条件で検査する。直接合意と限定代理状の交換、逃走後に再戦・再交渉が閉じること、敗北後の再戦、全13場面を含む。[専用8試験](../../tests/truce-cast.test.mjs)は全14旅程・3結末、代理状と物資の出発／到着時の受渡し、負傷者と捕虜の実同行、限定合意、旧保存の待機本文・戦闘・旅程・完了状態、旧受注の直接結末、不正保存の原子的拒否を確認する。
 
-**出力**: 標準ログ、viewport checkpoint。artifactは `oddland-browser-checkpoints`。q181の結果JSONとPNGは `q181-cast-checkpoints`、q182は `q182-cast-checkpoints`、q183は `q183-cast-checkpoints`、q184は `q184-cast-checkpoints`、q185は `q185-cast-checkpoints`、q186は `q186-cast-checkpoints` に分離する。
+`browser-flagless-soldier-cast-smoke.mjs`はq187の28保存点をScene／Classic × 1440／390pxの112条件で検査する。全9場面、住民の退避有無、勝利・逃走・敗北、3結末、勝利後もカドが残ること、将校が任用窓口だけに表示されること、逃走後に再戦と入口帰還が閉じることを含む。[専用6試験](../../tests/flagless-soldier-cast.test.mjs)は全10旅程・戦闘命令・本文・報酬の保持、固定所在、報酬一回性、改訂2保存の全段階再開と改訂1保存の原子的拒否を確認する。ユーザー許可によるq187の互換切断は、旧保存を移行できたとの検証に数えない。
+
+**出力**: 標準ログ、viewport checkpoint。artifactは `oddland-browser-checkpoints`。q181の結果JSONとPNGは `q181-cast-checkpoints`、q182は `q182-cast-checkpoints`、q183は `q183-cast-checkpoints`、q184は `q184-cast-checkpoints`、q185は `q185-cast-checkpoints`、q186は `q186-cast-checkpoints`、q187は `q187-cast-checkpoints` に分離する。
 
 ## 8. SalomeブラウザCI: `.github/workflows/salome-quests.yml`
 

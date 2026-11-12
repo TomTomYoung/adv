@@ -43,11 +43,17 @@ export async function buildObservatoryQuests({check=false}={}){
    quest.story.revision=2;quest.model.edition.revision=2;
    quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values}];
   }
+  if(n===187){
+   // The user permits dropping revision-1 q187 saves; do not add a migration.
+   quest.story.revision=2;quest.model.edition.revision=2;
+   quest.story.registry.officerPersonAt.values=['officer'];
+   quest.story.registry.mayorAt.values=['contract'];
+  }
   quests.push(quest);
  }
  const outcomes=quests.reduce((n,q)=>n+Object.keys(q.outcomes).length,0);
  const lines=['# 星欠けの地下観測所・20件の第2版経路','','2026-10-26。q081〜090・q181〜190の既存本文・条件・'+outcomes+'結末・報酬を継承し、観測所と周辺の現場、出張、同行、受渡しを接続した。全文改稿ではない。','',
- '[引き継ぎ](../../../HANDOFF.md) ／ [作業票](../../../dungeons/REGIONAL_RELOCATION_WORK.md) ／ [前半原稿](../../../../authoring/editions/e2/oddland/observatory-first.mjs) ／ [後半原稿](../../../../authoring/editions/e2/oddland/observatory-second.mjs) ／ [生成器](../../../../tools/build-observatory-quests.mjs)','','## 保存・装置・出張の範囲','','保存改訂2を維持する。更新前から受注・完了済みの20件は旧イベント・命令列・費用・報酬を保持し、未受注分から新経路を使う。初版は変更しない。','','観測所の東星／西星による地形変化は従来どおり。q089の暦を読む天球儀の向き、q083の人工太陽、q090の観測蓋と生活灯は依頼内の装置状態として記録し、地形装置や携行灯の燃料を書き換えない。待機・一周期・一時間は選択ごとの物語進行で、現実時間の待機を設けない。q084の上層水路には空気消費と空気室を設け、救助標の回収と本人への到達を別にする。','','後半の出張先は各既存依頼の行為を成立させる場所であり、匿名の国・軍の名称や、共通する一つの戦争の時系列を確定しない。q190の終戦を本編最終盤の侵攻終了へ同定しない。局地休戦や使者の慣習を戦争全体の停戦とせず、家族の和解を護衛報酬の必須条件にしない。','','q185/q190の逃走・敗北は通過未完了／避難へ進む。q186の逃走は交渉留保へ、q187の逃走は勝利を偽らず任用相談へ進む。q186/q187の敗北は元の経路どおり再相談できる。敗北後は村へ救助され、現場へ歩いて戻って同行者と合流してから続ける。','','q182の最後の魔石は依頼専用の数量1として追跡し、照明・攻撃で一度だけ使う。保留では未使用のまま保管する。q183の糧食2個とq185の舟代40Gは現場で支払い、無資源時も別の継続を残す。q190は三か所を個別に封鎖し、受入れを確認した軍の回収班と各区画を巡り、魔石を保管庫へ運んで終える。',''];
+ '[引き継ぎ](../../../HANDOFF.md) ／ [作業票](../../../dungeons/REGIONAL_RELOCATION_WORK.md) ／ [前半原稿](../../../../authoring/editions/e2/oddland/observatory-first.mjs) ／ [後半原稿](../../../../authoring/editions/e2/oddland/observatory-second.mjs) ／ [生成器](../../../../tools/build-observatory-quests.mjs)','','## 保存・装置・出張の範囲','','保存改訂2を維持する。更新前から受注・完了済みの20件は旧イベント・命令列・費用・報酬を保持し、未受注分から新経路を使う。初版は変更しない。2026-11-11の人物表示更新ではq187だけ物語改訂2へ更新し、ユーザーの許可により物語改訂1の保存移行を追加しない。q187の物語開始後に改訂1で作られた保存は読み込みを拒否する。改訂2の待機・移動・戦闘・完了の保存再開は検証する。','','観測所の東星／西星による地形変化は従来どおり。q089の暦を読む天球儀の向き、q083の人工太陽、q090の観測蓋と生活灯は依頼内の装置状態として記録し、地形装置や携行灯の燃料を書き換えない。待機・一周期・一時間は選択ごとの物語進行で、現実時間の待機を設けない。q084の上層水路には空気消費と空気室を設け、救助標の回収と本人への到達を別にする。','','後半の出張先は各既存依頼の行為を成立させる場所であり、匿名の国・軍の名称や、共通する一つの戦争の時系列を確定しない。q190の終戦を本編最終盤の侵攻終了へ同定しない。局地休戦や使者の慣習を戦争全体の停戦とせず、家族の和解を護衛報酬の必須条件にしない。','','q185/q190の逃走・敗北は通過未完了／避難へ進む。q186の逃走は交渉留保へ、q187の逃走は勝利を偽らず任用相談へ進む。q186/q187の敗北は元の経路どおり再相談できる。敗北後は村へ救助され、現場へ歩いて戻って同行者と合流してから続ける。','','q182の最後の魔石は依頼専用の数量1として追跡し、照明・攻撃で一度だけ使う。保留では未使用のまま保管する。q183の糧食2個とq185の舟代40Gは現場で支払い、無資源時も別の継続を残す。q190は三か所を個別に封鎖し、受入れを確認した軍の回収班と各区画を巡り、魔石を保管庫へ運んで終える。',''];
  for(const q of quests){lines.push(`## ${q.id} ${q.title}`,'',q.brief,'');for(const n of q.model.graph){const p=q.story.worldPlaces[n.place];lines.push(`### ${n.id} — ${q.story.places[n.place]}`,'',p.kind==='town'?`現場：\`${p.location}\``:`現場：\`${p.map} (${p.x},${p.y})\``,'',prose(n.text),'');for(const a of n.options)lines.push(`1. ${a.id}：${a.text} → ${a.to}`);lines.push('');}for(const [key,o] of Object.entries(q.outcomes))lines.push(`### 結末 ${key}`,'',o.text,'',`報酬：${o.gold}G、${o.xp}EXP。`,'');}
  const files={...Object.fromEntries(quests.map(q=>['data/scenario-editions/e2/'+q.id+'.json',JSON.stringify(q,null,2)+'\n'])),'doc/scenarios/editions/e2/OBSERVATORY_TWENTY.md':lines.join('\n').trimEnd()+'\n'};
  for(const [file,text] of Object.entries(files)){const target=path.join(root,file);if(check){if(await fs.readFile(target,'utf8').catch(()=>null)!==text)throw Error(file+': observatory generation differs');}else await fs.writeFile(target,text);}

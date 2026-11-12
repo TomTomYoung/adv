@@ -121,6 +121,9 @@ permissions:
 jobs:
   shield-browser:
     runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
@@ -139,7 +142,6 @@ jobs:
         if: steps.ci.outputs.run == 'true'
         run: |
           npm install --no-save --package-lock=false playwright@1.58.2
-          npx playwright install --with-deps chromium --only-shell
           test -n "$(fc-list :lang=ja)"
       - name: Verify q162 saves, groups and portraits
         if: steps.ci.outputs.run == 'true'
@@ -192,6 +194,9 @@ jobs:
   cast-browser:
     # Match the pinned Playwright release; ubuntu-latest may move ahead of its supported OSes.
     runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host
     timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
@@ -210,7 +215,6 @@ jobs:
         if: steps.ci.outputs.run == 'true'
         run: |
           npm install --no-save --package-lock=false playwright@1.58.2
-          npx playwright install --with-deps chromium --only-shell
           test -n "$(fc-list :lang=ja)"
       - name: Verify native cast animations and script waits
         if: steps.ci.outputs.run == 'true'

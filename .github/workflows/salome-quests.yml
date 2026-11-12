@@ -22,6 +22,9 @@ permissions:
 jobs:
   salome-browser:
     runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
@@ -40,8 +43,7 @@ jobs:
         if: steps.ci.outputs.run == 'true'
         run: |
           npm install --no-save --package-lock=false playwright@1.58.2
-          npx playwright install --with-deps chromium --only-shell
-          # Playwright's Linux dependencies include IPA Gothic for Japanese.
+          # The pinned Playwright image includes Japanese font dependencies.
           test -n "$(fc-list :lang=ja)"
       - name: Walk to Salome, complete personal and regional library quests, and return in both layouts and widths
         if: steps.ci.outputs.run == 'true'
