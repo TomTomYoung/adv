@@ -132,5 +132,13 @@ export function observatorySecondSource(q,{cast=true}={}){
   const scenes={entry:['soldier'],family:['soldier','wife','brother'],wife:['soldier','wife'],brother:['soldier','brother'],work:['soldier','brother'],invite_old:['soldier','wife','brother'],agreed_old:['soldier','wife','brother'],invite_share:['soldier','wife','brother'],agreed_share:['soldier','wife','brother'],apart:['soldier']};
   for(const [scene,people] of Object.entries(scenes)){const positions=people.length===3?[20,50,80]:people.length===2?[31,69]:[50];node(scene).cast=people.map((entity,i)=>({entity,display:{x:positions[i]}}));}
  }
+ if(q.number===189&&cast){
+  entity('asa','entry','person');
+  for(const id of ['asa','refugees','warden'])x.entities[id].character='q189_'+id;
+  choice('entry','private').companions=['refugees','asa'];
+  choice('private_permission','escort').companions=['refugees','asa'];
+  const scenes={entry:['asa','refugees','warden'],explanation:['asa','refugees','warden'],explained:['warden'],private_permission:['asa','refugees','warden'],private_room:['asa','refugees'],hold_record:['warden'],ban_record:['warden']};
+  for(const [scene,people] of Object.entries(scenes)){const positions=people.length===3?[20,50,80]:people.length===2?[31,69]:[50];node(scene).cast=people.map((entity,i)=>({entity,display:{x:positions[i]}}));}
+ }
  return finish();
 }
