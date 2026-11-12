@@ -127,5 +127,10 @@ export function observatorySecondSource(q,{cast=true}={}){
   for(const [scene,people] of Object.entries(scenes)){const positions=people.length===2?[31,69]:[50];node(scene).cast=people.map((entity,i)=>({entity,display:{x:positions[i]}}));}
   choice('defend','battle').readyCast=[{entity:'kado',display:{x:50}}];
  }
+ if(q.number===188&&cast){
+  for(const id of ['soldier','wife','brother'])x.entities[id].character='q188_'+id;
+  const scenes={entry:['soldier'],family:['soldier','wife','brother'],wife:['soldier','wife'],brother:['soldier','brother'],work:['soldier','brother'],invite_old:['soldier','wife','brother'],agreed_old:['soldier','wife','brother'],invite_share:['soldier','wife','brother'],agreed_share:['soldier','wife','brother'],apart:['soldier']};
+  for(const [scene,people] of Object.entries(scenes)){const positions=people.length===3?[20,50,80]:people.length===2?[31,69]:[50];node(scene).cast=people.map((entity,i)=>({entity,display:{x:positions[i]}}));}
+ }
  return finish();
 }

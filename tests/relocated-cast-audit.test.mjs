@@ -6,7 +6,7 @@ import {auditRelocatedCast,loadRelocatedCastQuests,relocatedCastFingerprint} fro
 const quests=await loadRelocatedCastQuests();
 test('cast audit distinguishes measured empty casts, reviewed scenes and candidate roles',()=>{
  const report=auditRelocatedCast(quests);
- assert.deepEqual(report.summary,{quests:100,scenes:753,emptyCastScenes:439,personEntities:134,characterLinkedEntities:92,reviewedQuests:57,reviewedScenes:433,noPersonEvidenceScenes:118,personEvidenceScenes:315,candidateRoles:1,connectedRoles:130,unreviewedScenes:320});
+ assert.deepEqual(report.summary,{quests:100,scenes:753,emptyCastScenes:429,personEntities:134,characterLinkedEntities:95,reviewedQuests:58,reviewedScenes:443,noPersonEvidenceScenes:118,personEvidenceScenes:325,candidateRoles:1,connectedRoles:133,unreviewedScenes:310});
  assert.ok(report.regions.every(r=>r.quests===20));
  assert.equal(report.quests.find(q=>q.id==='q071').scenes[0].review,null);
  assert.deepEqual(report.quests.find(q=>q.id==='q032').scenes.filter(s=>s.review.people.length).map(s=>s.id),['cell','workshop']);
@@ -203,9 +203,9 @@ test('future character and cast hookups change measured counts without marking u
  const changed=structuredClone(quests),q=changed.find(q=>q.id==='q071'),entity=Object.values(q.story.entities).find(e=>e.kind==='person');
  entity.character='future_owner';Object.values(q.story.scenes)[0].cast=[{entity:'workerPerson'}];
  const report=auditRelocatedCast(changed);
- assert.equal(report.summary.emptyCastScenes,438);
- assert.equal(report.summary.characterLinkedEntities,93);
- assert.equal(report.summary.reviewedScenes,433);
+ assert.equal(report.summary.emptyCastScenes,428);
+ assert.equal(report.summary.characterLinkedEntities,96);
+ assert.equal(report.summary.reviewedScenes,443);
  assert.equal(report.quests.find(q=>q.id==='q071').review,null);
 });
 
