@@ -9,6 +9,9 @@ on:
       - 'data/scenario-editions/**'
       - 'data/scenario-editions.json'
       - 'tools/browser-salome-smoke.mjs'
+      - 'tools/browser-bookmark-cast-smoke.mjs'
+      - 'tools/bookmark-art-fixtures.mjs'
+      - 'tests/fixtures/e2-q049-before-cast.json'
       - 'tools/browser-proofreader-cast-smoke.mjs'
       - 'tools/proofreader-art-fixtures.mjs'
       - 'tests/fixtures/e2-q048-before-cast.json'
@@ -158,6 +161,16 @@ jobs:
         with:
           name: q048-cast-checkpoints
           path: /tmp/adv-proofreader-art-browser
+          if-no-files-found: ignore
+      - name: Check q049 explorer, sealed document and map copy deliveries, interrupted journeys and old saves
+        if: steps.ci.outputs.run == 'true'
+        run: ADV_BROWSER_OUTPUT=/tmp/adv-bookmark-art-browser node tools/browser-bookmark-cast-smoke.mjs
+      - name: Keep q049 checkpoints
+        if: always() && steps.ci.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: q049-cast-checkpoints
+          path: /tmp/adv-bookmark-art-browser
           if-no-files-found: ignore
       - name: Remember successful inputs
         if: success() && steps.ci.outputs.run == 'true' && github.event_name != 'workflow_dispatch'
