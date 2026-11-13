@@ -531,7 +531,7 @@
     },
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -540,7 +540,781 @@
       "saveRevision": 2,
       "scope": "書庫前半10件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "一頁の戦争の現場",
+            "home": "依頼国の出張記録室",
+            "other": "相手国の交易市記録室",
+            "vault": "二国の共同保管庫",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "home"
+            ],
+            [
+              "transit",
+              "other"
+            ],
+            [
+              "transit",
+              "vault"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "home",
+                "other",
+                "vault",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "informed",
+                "contract",
+                "compromise"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "bothReceived": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "bothReceived"
+            },
+            "bothDelivered": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "bothDelivered"
+            },
+            "pagesAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "home",
+                "other",
+                "vault",
+                "transit",
+                "party",
+                "homeCopy",
+                "otherCopy",
+                "homeRecipient",
+                "otherRecipient"
+              ],
+              "meaning": "pages の所在または保持者"
+            },
+            "homeCopyAt": {
+              "type": "enum",
+              "initial": "vault",
+              "values": [
+                "entry",
+                "home",
+                "other",
+                "vault",
+                "transit",
+                "party",
+                "pages",
+                "otherCopy",
+                "homeRecipient",
+                "otherRecipient"
+              ],
+              "meaning": "homeCopy の所在または保持者"
+            },
+            "otherCopyAt": {
+              "type": "enum",
+              "initial": "vault",
+              "values": [
+                "entry",
+                "home",
+                "other",
+                "vault",
+                "transit",
+                "party",
+                "pages",
+                "homeCopy",
+                "homeRecipient",
+                "otherRecipient"
+              ],
+              "meaning": "otherCopy の所在または保持者"
+            },
+            "homeRecipientAt": {
+              "type": "enum",
+              "initial": "vault",
+              "values": [
+                "entry",
+                "home",
+                "other",
+                "vault",
+                "transit"
+              ],
+              "meaning": "homeRecipient の所在または保持者"
+            },
+            "otherRecipientAt": {
+              "type": "enum",
+              "initial": "vault",
+              "values": [
+                "entry",
+                "home",
+                "other",
+                "vault",
+                "transit"
+              ],
+              "meaning": "otherRecipient の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "pages": {
+              "holder": "pagesAt",
+              "kind": "item"
+            },
+            "homeCopy": {
+              "holder": "homeCopyAt",
+              "kind": "item"
+            },
+            "otherCopy": {
+              "holder": "otherCopyAt",
+              "kind": "item"
+            },
+            "homeRecipient": {
+              "holder": "homeRecipientAt",
+              "kind": "person"
+            },
+            "otherRecipient": {
+              "holder": "otherRecipientAt",
+              "kind": "person"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "同じ戦いを双方が勝利と書き、交換された一頁だけが撤退条件を記している。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "一頁の戦争の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "home": {
+              "title": "依頼国の出張記録室",
+              "place": "home",
+              "cast": [],
+              "requires": true
+            },
+            "other": {
+              "title": "相手国の交易市記録室",
+              "place": "other",
+              "cast": [],
+              "requires": true
+            },
+            "vault": {
+              "title": "二国の共同保管庫",
+              "place": "vault",
+              "cast": [],
+              "requires": true
+            },
+            "returned": {
+              "title": "依頼国の出張記録室",
+              "place": "home",
+              "cast": [],
+              "requires": true
+            },
+            "parallel": {
+              "title": "二国の共同保管庫",
+              "place": "vault",
+              "cast": [],
+              "requires": true
+            },
+            "home_delivered": {
+              "title": "依頼国の出張記録室",
+              "place": "home",
+              "cast": [],
+              "requires": true
+            },
+            "other_delivered": {
+              "title": "相手国の交易市記録室",
+              "place": "other",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_home": {
+              "from": [
+                "entry"
+              ],
+              "to": "home",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "home"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "home",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "pages",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "entry_other": {
+              "from": [
+                "entry"
+              ],
+              "to": "other",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "other"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "observe",
+                  "observer": "party",
+                  "proposition": "truth",
+                  "source": "other",
+                  "requires": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "other",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "pages",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "entry_return": {
+              "from": [
+                "entry"
+              ],
+              "to": "returned",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "home"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "home",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "pages",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "home_other": {
+              "from": [
+                "home"
+              ],
+              "to": "other",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "other"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "observe",
+                  "observer": "party",
+                  "proposition": "truth",
+                  "source": "other",
+                  "requires": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "other",
+                "companions": []
+              },
+              "depart": []
+            },
+            "home_vault": {
+              "from": [
+                "home"
+              ],
+              "to": "vault",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "vault"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "vault",
+                "companions": []
+              },
+              "depart": []
+            },
+            "other_parallel": {
+              "from": [
+                "other"
+              ],
+              "to": "parallel",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "vault"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "vault",
+                "companions": []
+              },
+              "depart": []
+            },
+            "other_vault": {
+              "from": [
+                "other"
+              ],
+              "to": "vault",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "vault"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "vault",
+                "companions": []
+              },
+              "depart": []
+            },
+            "vault_deliver": {
+              "from": [
+                "vault"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "pages",
+                  "from": "party",
+                  "to": "vault"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "homeCopy",
+                  "from": "vault",
+                  "to": "homeRecipient"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "otherCopy",
+                  "from": "vault",
+                  "to": "otherRecipient"
+                },
+                {
+                  "op": "set",
+                  "key": "bothReceived",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "vault_publish": {
+              "from": [
+                "vault"
+              ],
+              "to": "parallel",
+              "requires": true,
+              "effects": [],
+              "once": false
+            },
+            "returned_finish": {
+              "from": [
+                "returned"
+              ],
+              "ending": "contract",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "pages",
+                  "from": "party",
+                  "to": "home"
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "contract"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "parallel_deliver": {
+              "from": [
+                "parallel"
+              ],
+              "to": "home_delivered",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "home"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "homeCopy",
+                  "from": "party",
+                  "to": "home"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "home",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "pages",
+                  "from": "party",
+                  "to": "vault"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "homeCopy",
+                  "from": "vault",
+                  "to": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "otherCopy",
+                  "from": "vault",
+                  "to": "party"
+                }
+              ]
+            },
+            "home_delivered_other": {
+              "from": [
+                "home_delivered"
+              ],
+              "to": "other_delivered",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "other"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "otherCopy",
+                  "from": "party",
+                  "to": "other"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "other",
+                "companions": []
+              },
+              "depart": []
+            },
+            "other_delivered_finish": {
+              "from": [
+                "other_delivered"
+              ],
+              "ending": "informed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "bothDelivered",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "informed"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "informed": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q047.values.resolution"
+                  },
+                  "right": "informed"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q047.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q047.values.partyAt"
+                      },
+                      "right": "other"
+                    }
+                  ]
+                }
+              ]
+            },
+            "contract": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q047.values.resolution"
+                  },
+                  "right": "contract"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q047.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q047.values.partyAt"
+                      },
+                      "right": "home"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compromise": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q047.values.resolution"
+                  },
+                  "right": "compromise"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q047.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q047.values.partyAt"
+                      },
+                      "right": "vault"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_5",
+              "map": "region_5_f2",
+              "x": 13,
+              "y": 7
+            },
+            "home": {
+              "kind": "town",
+              "location": "library_home_record"
+            },
+            "other": {
+              "kind": "town",
+              "location": "library_other_record"
+            },
+            "vault": {
+              "kind": "town",
+              "location": "library_joint"
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "homeClerkAt",
+            "value": "home"
+          },
+          {
+            "key": "otherClerkAt",
+            "value": "other"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q047.clue_a": {
@@ -2107,6 +2881,22 @@
           "transit"
         ],
         "meaning": "otherRecipient の所在または保持者"
+      },
+      "homeClerkAt": {
+        "type": "enum",
+        "initial": "home",
+        "values": [
+          "home"
+        ],
+        "meaning": "homeClerk の所在または保持者"
+      },
+      "otherClerkAt": {
+        "type": "enum",
+        "initial": "other",
+        "values": [
+          "other"
+        ],
+        "meaning": "otherClerk の所在または保持者"
       }
     },
     "entities": {
@@ -2128,11 +2918,23 @@
       },
       "homeRecipient": {
         "holder": "homeRecipientAt",
-        "kind": "person"
+        "kind": "person",
+        "character": "q047_homeRecipient"
       },
       "otherRecipient": {
         "holder": "otherRecipientAt",
-        "kind": "person"
+        "kind": "person",
+        "character": "q047_otherRecipient"
+      },
+      "homeClerk": {
+        "holder": "homeClerkAt",
+        "kind": "person",
+        "character": "q047_homeClerk"
+      },
+      "otherClerk": {
+        "holder": "otherClerkAt",
+        "kind": "person",
+        "character": "q047_otherClerk"
       }
     },
     "propositions": {
@@ -2152,43 +2954,118 @@
       "home": {
         "title": "依頼国の出張記録室",
         "place": "home",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "homeClerk",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "other": {
         "title": "相手国の交易市記録室",
         "place": "other",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "otherClerk",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "vault": {
         "title": "二国の共同保管庫",
         "place": "vault",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "homeRecipient",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "otherRecipient",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "returned": {
         "title": "依頼国の出張記録室",
         "place": "home",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "homeClerk",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "parallel": {
         "title": "二国の共同保管庫",
         "place": "vault",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "homeRecipient",
+            "when": {
+              "op": "in",
+              "left": "vault_publish",
+              "right": {
+                "ref": "stories.q047.events"
+              }
+            },
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "otherRecipient",
+            "when": {
+              "op": "in",
+              "left": "vault_publish",
+              "right": {
+                "ref": "stories.q047.events"
+              }
+            },
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "home_delivered": {
         "title": "依頼国の出張記録室",
         "place": "home",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "homeClerk",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "other_delivered": {
         "title": "相手国の交易市記録室",
         "place": "other",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "otherClerk",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       }
     },
@@ -2722,7 +3599,7 @@
         "location": "library_joint"
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "salome",
   "receptionLocations": [
