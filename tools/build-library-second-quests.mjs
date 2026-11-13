@@ -3,13 +3,27 @@ import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {compileRelocatedQuest} from './compile-relocated-quest.mjs';
 import {librarySecondSource} from '../authoring/editions/e2/salome/library-second.mjs';
+import {ref} from '../authoring/story-kit.mjs';
 const root=path.resolve(import.meta.dirname,'..');
 const prose=text=>typeof text==='string'?text:Array.isArray(text)?text.map(prose).join('\n\n'):`条件に応じて：${prose(text.yes)} ／ ${prose(text.no)}`;
 export async function buildLibrarySecondQuests({check=false}={}){
  const quests=[];
  for(const n of Array.from({length:10},(_,i)=>141+i)){
   const first=JSON.parse(await fs.readFile(path.join(root,`data/quests/q${String(n).padStart(3,'0')}.json`),'utf8')),source=librarySecondSource;
-  quests.push(compileRelocatedQuest(first,source(first),{prefix:'library',eventPrefix:'library',settlement:'salome',settlementName:'サロメ',board:'salome_board',boardName:'サロメの共同依頼所',source:'authoring/editions/e2/salome/library-second.mjs',stage:'library-second-ten',scope:'書庫後半10件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。',preserveAcceptedRoute:true,battle:'boss_5'}));
+  const options={prefix:'library',eventPrefix:'library',settlement:'salome',settlementName:'サロメ',board:'salome_board',boardName:'サロメの共同依頼所',source:'authoring/editions/e2/salome/library-second.mjs',stage:'library-second-ten',scope:'書庫後半10件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。',preserveAcceptedRoute:true,battle:'boss_5'};
+  const quest=compileRelocatedQuest(first,source(first),options);
+  if(n===141){
+   const previous=compileRelocatedQuest(first,source(first,{cast:false}),options).story;
+   for(const [key,entry] of Object.entries(previous.registry))quest.story.registry[key]=structuredClone(entry);
+   quest.story.registry.bandAt.values=['entry','stage'];
+   const arrived={op:'or',args:['entry_silent','score_use_carry','score_new_carry'].map(action=>({op:'in',left:action,right:ref('stories.q141.events')}))};
+   quest.story.revision=2;quest.model.edition.revision=2;
+   quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[
+    {key:'bandAt',value:'entry'},
+    {key:'bandAt',value:'stage',when:arrived}
+   ]}];
+  }
+  quests.push(quest);
  }
  const outcomes=quests.reduce((n,q)=>n+Object.keys(q.outcomes).length,0);
  const lines=['# 灰時計の書庫・後半10件の第2版経路','','2026-10-26。q141〜150の既存本文・条件・32結末・報酬を継承し、現場・同行・保持者・帰路を接続した。全文改稿ではない。','',

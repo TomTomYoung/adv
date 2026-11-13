@@ -6,7 +6,14 @@ import {auditRelocatedCast,loadRelocatedCastQuests,relocatedCastFingerprint} fro
 const quests=await loadRelocatedCastQuests();
 test('cast audit distinguishes measured empty casts, reviewed scenes and candidate roles',()=>{
  const report=auditRelocatedCast(quests);
- assert.deepEqual(report.summary,{"quests":100,"scenes":753,"emptyCastScenes":357,"personEntities":143,"characterLinkedEntities":113,"reviewedQuests":70,"reviewedScenes":541,"noPersonEvidenceScenes":144,"personEvidenceScenes":397,"candidateRoles":1,"connectedRoles":158,"unreviewedScenes":212});
+ assert.deepEqual(report.summary,{"quests":100,"scenes":753,"emptyCastScenes":352,"personEntities":143,"characterLinkedEntities":114,"reviewedQuests":71,"reviewedScenes":548,"noPersonEvidenceScenes":146,"personEvidenceScenes":402,"candidateRoles":1,"connectedRoles":160,"unreviewedScenes":205});
+ const banner=report.quests.find(q=>q.id==='q141');
+ assert.deepEqual(Object.fromEntries(Object.entries(banner.review.people).map(([id,role])=>[id,{status:role.status,entity:role.entity}])),{
+  q141_band:{status:'connected',entity:'band'},q141_sana:{status:'connected',entity:'sana'}
+ });
+ assert.deepEqual(Object.fromEntries(banner.scenes.map(s=>[s.id,s.cast.map(c=>c.entity)])),{
+  entry:['band'],sana:['sana'],score_use:[],performed_use:['band'],score_new:[],performed_new:['band'],performed_silent:['band']
+ });
  const obituary=report.quests.find(q=>q.id==='q044');assert.deepEqual(obituary.scenes.filter(s=>s.review.people.length).map(s=>s.id),['safe','escaped','protected','safe_refuge']);
  assert.ok(report.regions.every(r=>r.quests===20));
  assert.equal(report.quests.find(q=>q.id==='q071').scenes[0].review,null);
