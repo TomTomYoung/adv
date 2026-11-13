@@ -34,6 +34,8 @@
 
 ## 設計と実行
 
+[EGG_KNIGHT_FORESHADOWING.md](EGG_KNIGHT_FORESHADOWING.md)：卵騎士の存在をにおわせる未実装シナリオ候補。街道宿の目撃談と痕跡を通じて示唆し、本人の直接介入は置かない。
+
 [SALOME_100_QUEST_DESIGN.md](SALOME_100_QUEST_DESIGN.md)：サロメの新規100企画。三学・生活・探索・遺物の10群。初期配分は既存40＋新作60、残る40企画は予備です。
 
 [REGIONAL_QUEST_ALLOCATION.md](REGIONAL_QUEST_ALLOCATION.md)：灯帰り・オッドランド・サロメ各100件の条件付き配分と旧保存の互換。個人80件は別枠。[JSON台帳](REGIONAL_QUEST_ALLOCATION.json)に全IDを記載します。
