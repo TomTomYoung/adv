@@ -80,6 +80,15 @@ export function libraryFirstSource(q,{cast=true}={}){
   route('other','parallel','parallel');route('vault','publish','parallel');add('parallel','vault','双方の勝利記述と撤退条件を同じ紙面へ併記した。同じ写しを二つ用意し、各記録係へ運ぶ。',[opt('deliver','原本を共同庫へ置き、写しを依頼国の記録係へ運ぶ','home_delivered',{depart:[give('pages','party','vault'),give('homeCopy','vault','party'),give('otherCopy','vault','party')],effects:[give('homeCopy','party','home')]})]);
   add('home_delivered','home','依頼国の記録係が同じ内容の写しを受け取った。もう一方を交易市へ届ける。',[opt('other','交易市の相手国記録係へ届ける','other_delivered',{effects:[give('otherCopy','party','other')]})]);end('other_delivered','other','相手国の記録係も同じ写しを受け取った。両方の編纂机に同じ記述が届き、それぞれの読み方について対話が始まる。','informed',[set('bothDelivered')]);
   choice('vault','deliver').effects=[give('pages','party','vault'),give('homeCopy','vault','homeRecipient'),give('otherCopy','vault','otherRecipient'),set('bothReceived')];
+  if(cast){
+   entity('homeClerk','home','person');entity('otherClerk','other','person');
+   for(const id of ['homeClerk','otherClerk','homeRecipient','otherRecipient'])x.entities[id].character='q047_'+id;
+   const casts={home:['homeClerk'],other:['otherClerk'],returned:['homeClerk'],vault:['homeRecipient','otherRecipient'],home_delivered:['homeClerk'],other_delivered:['otherClerk']};
+   for(const [scene,people] of Object.entries(casts)){const positions=people.length===2?[31,69]:[50];node(scene).cast=people.map((entity,i)=>({entity,display:{x:positions[i]}}));}
+   // Only a visit to the receiving scene establishes the recipients' presence.
+   // The direct drafting route reaches the same vault without meeting them.
+   node('parallel').cast=['homeRecipient','otherRecipient'].map((entity,i)=>({entity,when:{op:'in',left:'vault_publish',right:ref('stories.q047.events')},display:{x:[31,69][i]}}));
+  }
  }
  if(q.number===48){
   town('morning','翌朝の原稿を受け取る写本室','library_copy_room');town('contract','新規追加を分ける契約窓口','library_registry');node('morning').place='morning';node('final').place='contract';entity('team','morning','group');

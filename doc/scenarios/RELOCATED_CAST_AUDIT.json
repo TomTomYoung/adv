@@ -4,16 +4,16 @@
   "summary": {
     "quests": 100,
     "scenes": 753,
-    "emptyCastScenes": 378,
-    "personEntities": 137,
-    "characterLinkedEntities": 104,
-    "reviewedQuests": 66,
-    "reviewedScenes": 509,
-    "noPersonEvidenceScenes": 133,
-    "personEvidenceScenes": 376,
+    "emptyCastScenes": 371,
+    "personEntities": 139,
+    "characterLinkedEntities": 108,
+    "reviewedQuests": 67,
+    "reviewedScenes": 517,
+    "noPersonEvidenceScenes": 134,
+    "personEvidenceScenes": 383,
     "candidateRoles": 1,
-    "connectedRoles": 147,
-    "unreviewedScenes": 244
+    "connectedRoles": 151,
+    "unreviewedScenes": 236
   },
   "regions": [
     {
@@ -66,15 +66,15 @@
       "name": "書庫",
       "quests": 20,
       "scenes": 148,
-      "emptyCastScenes": 123,
-      "personEntities": 30,
-      "characterLinkedEntities": 6,
-      "reviewedQuests": 6,
-      "reviewedScenes": 39,
-      "noPersonEvidenceScenes": 14,
-      "personEvidenceScenes": 25,
+      "emptyCastScenes": 116,
+      "personEntities": 32,
+      "characterLinkedEntities": 10,
+      "reviewedQuests": 7,
+      "reviewedScenes": 47,
+      "noPersonEvidenceScenes": 15,
+      "personEvidenceScenes": 32,
       "candidateRoles": 0,
-      "connectedRoles": 8
+      "connectedRoles": 12
     },
     {
       "id": 8,
@@ -2674,7 +2674,7 @@
       "region": 5,
       "client": "歴史家のオミ",
       "source": "authoring/editions/e2/salome/library-first.mjs",
-      "sourceSha256": "55d4d0ae118aa4fab6d87c662690858d6f3608711d6130083668e9d564f316f7",
+      "sourceSha256": "9f7ac058729cf62eedf7ea0b4fc06548880ad8d88380b5f2e71ba3f4f605c918",
       "scenes": [
         {
           "id": "entry",
@@ -2687,7 +2687,13 @@
             "y": 7
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "no-person-evidence",
+            "people": [],
+            "evidence": "依頼国は自国の頁だけ戻すよう求めた。",
+            "reason": "依頼内容への言及だけでは依頼人・記録係・受領人の現場同席を示さない。歴史家オミや軍旗の亡霊を追加しない。",
+            "visual": "入れ替わった二頁と史書を分け、出張記録室への返却や写しの作成を先取りしない。"
+          }
         },
         {
           "id": "home",
@@ -2696,8 +2702,23 @@
             "kind": "town",
             "location": "library_home_record"
           },
-          "cast": [],
-          "review": null
+          "cast": [
+            {
+              "entity": "homeClerk",
+              "display": {
+                "x": 50
+              }
+            }
+          ],
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q047_homeClerk"
+            ],
+            "evidence": "記録係は勝利と読んだが、頁の末尾には相手国への撤退条件がある。",
+            "reason": "出張記録室で頁を読む依頼国の記録係。共同庫の受領人とは役割を分け、照会後は記録室に残す。",
+            "visual": "戦史の勝利記述と末尾の撤退条件を分け、相手国の記録係を同席させない。"
+          }
         },
         {
           "id": "other",
@@ -2706,8 +2727,23 @@
             "kind": "town",
             "location": "library_other_record"
           },
-          "cast": [],
-          "review": null
+          "cast": [
+            {
+              "entity": "otherClerk",
+              "display": {
+                "x": 50
+              }
+            }
+          ],
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q047_otherClerk"
+            ],
+            "evidence": "相手国の係は、自国の頁にも勝利とあることを隠さなかった。",
+            "reason": "交易市に滞在する相手国の記録係。直接訪問と依頼国経由の訪問の両方で同じ役を表示する。滞在国から史書の国名を推定しない。",
+            "visual": "二つの勝利記述と撤退条件を分け、照会到着時の知識獲得を併記・配送の完了と混同しない。"
+          }
         },
         {
           "id": "vault",
@@ -2716,8 +2752,30 @@
             "kind": "town",
             "location": "library_joint"
           },
-          "cast": [],
-          "review": null
+          "cast": [
+            {
+              "entity": "homeRecipient",
+              "display": {
+                "x": 31
+              }
+            },
+            {
+              "entity": "otherRecipient",
+              "display": {
+                "x": 69
+              }
+            }
+          ],
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q047_homeRecipient",
+              "q047_otherRecipient"
+            ],
+            "evidence": "双方から受領人が来た。",
+            "reason": "共同庫へ来た二国それぞれの既存受領人。各記録室の記録係と同定せず、3種類の照会経路からの到着で同じ2役を表示する。",
+            "visual": "原本の共同保管と二部の写しを分け、deliverで確定する受領を到着だけで完了済みにしない。"
+          }
         },
         {
           "id": "returned",
@@ -2726,8 +2784,23 @@
             "kind": "town",
             "location": "library_home_record"
           },
-          "cast": [],
-          "review": null
+          "cast": [
+            {
+              "entity": "homeClerk",
+              "display": {
+                "x": 50
+              }
+            }
+          ],
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q047_homeClerk"
+            ],
+            "evidence": "依頼国に都合のよい頁だけを記録係へ戻した。",
+            "reason": "入口から原本を携行して出張記録室へ戻る相手は依頼国の記録係。既存のpagesの引渡しと報酬はfinishで確定する。",
+            "visual": "他方への照会をしていない経路であることを保ち、写しの共同受領や双方への配送を補わない。"
+          }
         },
         {
           "id": "parallel",
@@ -2736,8 +2809,44 @@
             "kind": "town",
             "location": "library_joint"
           },
-          "cast": [],
-          "review": null
+          "cast": [
+            {
+              "entity": "homeRecipient",
+              "when": {
+                "op": "in",
+                "left": "vault_publish",
+                "right": {
+                  "ref": "stories.q047.events"
+                }
+              },
+              "display": {
+                "x": 31
+              }
+            },
+            {
+              "entity": "otherRecipient",
+              "when": {
+                "op": "in",
+                "left": "vault_publish",
+                "right": {
+                  "ref": "stories.q047.events"
+                }
+              },
+              "display": {
+                "x": 69
+              }
+            }
+          ],
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q047_homeRecipient",
+              "q047_otherRecipient"
+            ],
+            "evidence": "同じ写しを二つ用意し、各記録係へ運ぶ。",
+            "reason": "vault_publishで受領人との面会を続けた場合だけ2役を表示する。other_parallelで直接併記した経路は同じ共同庫でも受領人の同席を補わない。各記録係は配送先に残る。",
+            "visual": "併記と二部の写しの作成を、共同庫での受領や記録室への配送完了と分ける。"
+          }
         },
         {
           "id": "home_delivered",
@@ -2746,8 +2855,23 @@
             "kind": "town",
             "location": "library_home_record"
           },
-          "cast": [],
-          "review": null
+          "cast": [
+            {
+              "entity": "homeClerk",
+              "display": {
+                "x": 50
+              }
+            }
+          ],
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q047_homeClerk"
+            ],
+            "evidence": "依頼国の記録係が同じ内容の写しを受け取った。",
+            "reason": "依頼国の記録室へ到着し、最初の写しを受け取る記録係。共同庫の受領人は同行せず、他方の写しは隊がまだ保持する。",
+            "visual": "共同庫に残した原本、依頼国へ到着した写し、隊が保持する相手国の写しを分ける。"
+          }
         },
         {
           "id": "other_delivered",
@@ -2756,21 +2880,80 @@
             "kind": "town",
             "location": "library_other_record"
           },
-          "cast": [],
-          "review": null
+          "cast": [
+            {
+              "entity": "otherClerk",
+              "display": {
+                "x": 50
+              }
+            }
+          ],
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q047_otherClerk"
+            ],
+            "evidence": "相手国の記録係も同じ写しを受け取った。",
+            "reason": "交易市へ実移動してもう一部の写しを受け取る相手国の記録係。到着時に写しを渡し、両方への配送完了と報酬はfinishで確定する。",
+            "visual": "相手国への写しの到着と最終確認を分け、原本の奪い合いの停止だけの結末と混同しない。"
+          }
         }
       ],
       "personEntities": [
         {
           "id": "homeRecipient",
-          "character": null
+          "character": "q047_homeRecipient"
         },
         {
           "id": "otherRecipient",
-          "character": null
+          "character": "q047_otherRecipient"
+        },
+        {
+          "id": "homeClerk",
+          "character": "q047_homeClerk"
+        },
+        {
+          "id": "otherClerk",
+          "character": "q047_otherClerk"
         }
       ],
-      "review": null
+      "review": {
+        "identityNotes": [
+          "原稿authoring/quests.txtの「一頁の戦争」、初版4場面、現行8場面・9旅程・13行動・3結末を精読した。原稿の軍旗の亡霊との戦闘を現行経路へ追加しない。",
+          "各国の記録係と共同庫の二人の受領人は別の役として表示する。歴史家オミの現場同席、氏名・性別・容貌・専用画は補わない。",
+          "サロメの出張記録室とオッドランド交易市の滞在先は実際の訪問先であり、戦史の二国の国名や戦争年代を確定しない。本編最終盤の侵攻へ結び付けない。",
+          "全9旅程は隊だけが移動する。原本の出発時の携行、共同庫での二人の受領、二つの記録室への配送を区別し、本文・既存の旗・保持者・一回報酬を保持する。",
+          "物語改訂1→2では旧保存全体を旧定義で検証してから、記録係のhomeClerkAt=homeとotherClerkAt=otherだけを補う。旧受注4場面と直接結末には追加の人物表示や旅程を混入させない。"
+        ],
+        "relatedClients": {},
+        "people": {
+          "q047_homeClerk": {
+            "label": "依頼国の記録係",
+            "status": "connected",
+            "entity": "homeClerk",
+            "need": "サロメの出張記録室に固定所在を補い、照会・原本返却・写し配送の3場面に呼称表示する。"
+          },
+          "q047_otherClerk": {
+            "label": "相手国の記録係",
+            "status": "connected",
+            "entity": "otherClerk",
+            "need": "交易市の記録室に固定所在を補い、照会・写し配送の2場面に呼称表示する。"
+          },
+          "q047_homeRecipient": {
+            "label": "依頼国の受領人",
+            "status": "connected",
+            "entity": "homeRecipient",
+            "need": "既存homeRecipientを共同庫の受領と、同じ面会から併記へ進んだ場面に呼称表示する。"
+          },
+          "q047_otherRecipient": {
+            "label": "相手国の受領人",
+            "status": "connected",
+            "entity": "otherRecipient",
+            "need": "既存otherRecipientを共同庫の受領と、同じ面会から併記へ進んだ場面に呼称表示する。"
+          }
+        },
+        "next": "記録係と共同庫の受領人の表示、8場面・9旅程・13行動、越境途中の保存、原本と写しの受渡し、3結末と旧受注経路を検証する。次はq048「眠る校正者」の原稿・全場面の出演監査。"
+      }
     },
     {
       "id": "q048",
