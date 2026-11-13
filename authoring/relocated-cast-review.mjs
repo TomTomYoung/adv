@@ -4,7 +4,7 @@ export const RELOCATED_CAST_REVIEW={
  reviewedAt:'2026-11-13',
  quests:{
   q142:{
-    "sourceSha256": "Q142_FINGERPRINT_PENDING",
+    "sourceSha256": "36c54567a83f5bae977207981259151929ed680b38095fc13367bfadda4502e8",
     "identityNotes": [
       "原稿volume-05のGQ042、初版2場面、第2版4場面・3旅程・8行動・3結末を精読。偽物を返して価値を証明する話ではなく、買主の選択とキオによる説明・返金・記名修理を区別する。",
       "キオは最初の鑑定卓から買主との面会へ実同行する。買主は初めから指輪を保持し、修理契約を選ぶ場合のみキオとともに工房へ移る。3旅程のcompanionsと既存の所在を使う。",
