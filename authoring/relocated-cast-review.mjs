@@ -3,6 +3,72 @@
 export const RELOCATED_CAST_REVIEW={
  reviewedAt:'2026-11-13',
  quests:{
+  q142:{
+    "sourceSha256": "36c54567a83f5bae977207981259151929ed680b38095fc13367bfadda4502e8",
+    "identityNotes": [
+      "原稿volume-05のGQ042、初版2場面、第2版4場面・3旅程・8行動・3結末を精読。偽物を返して価値を証明する話ではなく、買主の選択とキオによる説明・返金・記名修理を区別する。",
+      "キオは最初の鑑定卓から買主との面会へ実同行する。買主は初めから指輪を保持し、修理契約を選ぶ場合のみキオとともに工房へ移る。3旅程のcompanionsと既存の所在を使う。",
+      "贈呈前／贈呈後の説明順は既存beforeの条件本文に従い、贈呈前の発言を贈呈後の経路へ混ぜない。入口での拒否と面会後の拒否、返金と修理契約の確定時点を分ける。",
+      "指輪ringAtはbuyerPersonの保持のまま、旅程・物語改訂1・全本文・報酬・旧受注を保持する。外見・買主の氏名・他作品人物との同一性や指輪を盗み返す展開を追加しない。"
+    ],
+    "relatedClients": {},
+    "people": {
+      "q142_kio": {
+        "label": "偽宝石職人キオ",
+        "status": "connected",
+        "entity": "kio",
+        "need": "相談卓・面会・返金・契約の4場面へ既存の所在と同行に沿って表示する。"
+      },
+      "q142_buyer": {
+        "label": "指輪の買主",
+        "status": "connected",
+        "entity": "buyerPerson",
+        "need": "面会・返金・修理契約の3場面へ表示し、最初の相談卓には追加しない。"
+      }
+    },
+    "scenes": {
+      "entry": {
+        "decision": "person-evidence",
+        "people": [
+          "q142_kio"
+        ],
+        "evidence": "キオが鑑定卓へ持参した",
+        "reason": "キオ本人が相談卓へ拓本と見積を持ち込んだ行動が明記される。買主は指輪を持って別の場所にいる。",
+        "visual": "拓本と見積は相談卓で確認し、指輪の現物は買主の保持を維持する。"
+      },
+      "buyer": {
+        "decision": "person-evidence",
+        "people": [
+          "q142_kio",
+          "q142_buyer"
+        ],
+        "evidence": "買主はまず金額を確認した。",
+        "reason": "贈呈前または贈呈後の説明を買主に行う現場。キオは既存の二経路の実同行者。",
+        "visual": "beforeの真偽で本文を分け、買主が自分で指輪の扱いを決める。"
+      },
+      "refunded": {
+        "decision": "person-evidence",
+        "people": [
+          "q142_kio",
+          "q142_buyer"
+        ],
+        "evidence": "キオが買主へ代金を返し",
+        "reason": "返金を行うキオと受領を確認する買主が同席。指輪は買主が持ち続ける。",
+        "visual": "到達時とfinish時の確定を分け、買主の手元の指輪を回収しない。"
+      },
+      "repair_contract": {
+        "decision": "person-evidence",
+        "people": [
+          "q142_kio",
+          "q142_buyer"
+        ],
+        "evidence": "買主とキオが修理工房へ来た。",
+        "reason": "工房への旅程でキオと買主が同行し、二人が署名する。",
+        "visual": "修理札への署名と依頼finishを区別し、第三者の職人を勝手に追加しない。"
+      }
+    },
+    "next": "全4場面のcast、既存3旅程・8行動・3結末、贈呈前後の条件本文、旧保存・旧受注の保存互換と一回報酬を検証する。次工程はq143。"
+  },
   q141:{
     "sourceSha256": "96e2a804d7a5dd65482aa485f8a92f810914f3827513bab3151d8112287aebb4",
     "identityNotes": [

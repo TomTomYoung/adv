@@ -6,13 +6,20 @@ import {auditRelocatedCast,loadRelocatedCastQuests,relocatedCastFingerprint} fro
 const quests=await loadRelocatedCastQuests();
 test('cast audit distinguishes measured empty casts, reviewed scenes and candidate roles',()=>{
  const report=auditRelocatedCast(quests);
- assert.deepEqual(report.summary,{"quests":100,"scenes":753,"emptyCastScenes":352,"personEntities":143,"characterLinkedEntities":114,"reviewedQuests":71,"reviewedScenes":548,"noPersonEvidenceScenes":146,"personEvidenceScenes":402,"candidateRoles":1,"connectedRoles":160,"unreviewedScenes":205});
+ assert.deepEqual(report.summary,{"quests":100,"scenes":753,"emptyCastScenes":348,"personEntities":143,"characterLinkedEntities":116,"reviewedQuests":72,"reviewedScenes":552,"noPersonEvidenceScenes":146,"personEvidenceScenes":406,"candidateRoles":1,"connectedRoles":162,"unreviewedScenes":201});
  const banner=report.quests.find(q=>q.id==='q141');
  assert.deepEqual(Object.fromEntries(Object.entries(banner.review.people).map(([id,role])=>[id,{status:role.status,entity:role.entity}])),{
   q141_band:{status:'connected',entity:'band'},q141_sana:{status:'connected',entity:'sana'}
  });
  assert.deepEqual(Object.fromEntries(banner.scenes.map(s=>[s.id,s.cast.map(c=>c.entity)])),{
   entry:['band'],sana:['sana'],score_use:[],performed_use:['band'],score_new:[],performed_new:['band'],performed_silent:['band']
+ });
+ const jewel=report.quests.find(q=>q.id==='q142');
+ assert.deepEqual(Object.fromEntries(Object.entries(jewel.review.people).map(([id,role])=>[id,{status:role.status,entity:role.entity}])),{
+  q142_kio:{status:'connected',entity:'kio'},q142_buyer:{status:'connected',entity:'buyerPerson'}
+ });
+ assert.deepEqual(Object.fromEntries(jewel.scenes.map(s=>[s.id,s.cast.map(c=>c.entity)])),{
+  entry:['kio'],buyer:['kio','buyerPerson'],refunded:['kio','buyerPerson'],repair_contract:['kio','buyerPerson']
  });
  const obituary=report.quests.find(q=>q.id==='q044');assert.deepEqual(obituary.scenes.filter(s=>s.review.people.length).map(s=>s.id),['safe','escaped','protected','safe_refuge']);
  assert.ok(report.regions.every(r=>r.quests===20));
