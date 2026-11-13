@@ -68,6 +68,8 @@ export function libraryFirstSource(q,{cast=true}={}){
   for(const n of x.nodes)for(const a of n.options)if(!a.to.startsWith('@'))a.companions=['reader'];
   for(const id of ['rain','river','ferry'])route(id,'exit','guided',{companions:['reader'],depart:[set(id+'Exit')]});end('guided','exit','追加した出口札をたどり、読者と階段へ戻った。索引の循環自体は残っている。','compromise');
   choice('rain','river').effects=[set('rainRead')];choice('river','ferry').effects=[set('riverRead')];choice('ferry','link').effects=[set('linked')];choice('entry','straight').effects=[set('straightened')];
+  x.entities.reader.character='q046_reader';
+  for(const scene of ['entry','rain','river','ferry','guided'])node(scene).cast=[{entity:'reader',display:{x:50}}];
  }
  if(q.number===47){
   town('home','依頼国の出張記録室','library_home_record');town('other','相手国の交易市記録室','library_other_record');town('vault','二国の共同保管庫','library_joint');
