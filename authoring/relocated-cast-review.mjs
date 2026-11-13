@@ -4,7 +4,7 @@ export const RELOCATED_CAST_REVIEW={
  reviewedAt:'2026-11-13',
  quests:{
   q141:{
-    "sourceSha256": "Q141_FINGERPRINT_PENDING",
+    "sourceSha256": "96e2a804d7a5dd65482aa485f8a92f810914f3827513bab3151d8112287aebb4",
     "identityNotes": [
       "原稿volume-05のGQ041、初版2場面、第2版7場面・7旅程・10行動・3結末を精読した。楽団長ポルは依頼人だが、現行7場面の本文で同席位置を特定できないため、本人の画像や同行を補わない。",
       "入口で試奏する楽団、洗濯場のサナ、本番会場で演奏する楽団だけを場面に接続する。サナは洗濯場に残り、全旅程のcompanionsは空のまま。楽団は会場の実到着後に独立して移り、旅程の同行者にはしない。",

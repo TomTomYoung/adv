@@ -356,7 +356,7 @@
     "entryScript": "q141.library.visit",
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -365,7 +365,698 @@
       "saveRevision": 2,
       "scope": "書庫後半10件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "音の出ない優勝旗の相談卓",
+            "laundry": "サナが働く洗濯場",
+            "score": "楽譜を整える写本室",
+            "stage": "祭の本番会場",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "laundry"
+            ],
+            [
+              "transit",
+              "score"
+            ],
+            [
+              "transit",
+              "stage"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "laundry",
+                "score",
+                "stage",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "use",
+                "new",
+                "silent"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "performerAgreed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "performerAgreed"
+            },
+            "musicAllowed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "musicAllowed"
+            },
+            "nameAllowed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "nameAllowed"
+            },
+            "performed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "performed"
+            },
+            "sanaAt": {
+              "type": "enum",
+              "initial": "laundry",
+              "values": [
+                "entry",
+                "laundry",
+                "score",
+                "stage",
+                "transit"
+              ],
+              "meaning": "sana の所在または保持者"
+            },
+            "bannerAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "laundry",
+                "score",
+                "stage",
+                "transit",
+                "party",
+                "sana",
+                "scoreSheet"
+              ],
+              "meaning": "banner の所在または保持者"
+            },
+            "scoreSheetAt": {
+              "type": "enum",
+              "initial": "score",
+              "values": [
+                "entry",
+                "laundry",
+                "score",
+                "stage",
+                "transit",
+                "party",
+                "sana",
+                "banner"
+              ],
+              "meaning": "scoreSheet の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "sana": {
+              "holder": "sanaAt",
+              "kind": "person"
+            },
+            "banner": {
+              "holder": "bannerAt",
+              "kind": "item"
+            },
+            "scoreSheet": {
+              "holder": "scoreSheetAt",
+              "kind": "item"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "ポルは自分の指揮が衰えたと思い、若手へ厳しく当たる。旗は演奏の直後でなく、洗濯物を絞る音に微かに揺れる。サナは舞台に上がりたいのではなく、仕事中の歌まで人に採点されたくない。才能発掘を無条件の救済にしない。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "音の出ない優勝旗の相談卓",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "sana": {
+              "title": "サナが働く洗濯場",
+              "place": "laundry",
+              "cast": [],
+              "requires": true
+            },
+            "score_use": {
+              "title": "楽譜を整える写本室",
+              "place": "score",
+              "cast": [],
+              "requires": true
+            },
+            "performed_use": {
+              "title": "祭の本番会場",
+              "place": "stage",
+              "cast": [],
+              "requires": true
+            },
+            "score_new": {
+              "title": "楽譜を整える写本室",
+              "place": "score",
+              "cast": [],
+              "requires": true
+            },
+            "performed_new": {
+              "title": "祭の本番会場",
+              "place": "stage",
+              "cast": [],
+              "requires": true
+            },
+            "performed_silent": {
+              "title": "祭の本番会場",
+              "place": "stage",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_ask": {
+              "from": [
+                "entry"
+              ],
+              "to": "sana",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "laundry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "laundry",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "banner",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "entry_new": {
+              "from": [
+                "entry"
+              ],
+              "to": "score_new",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "score"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "score",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "banner",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "entry_silent": {
+              "from": [
+                "entry"
+              ],
+              "to": "performed_silent",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "stage"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "stage",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "banner",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "sana_use": {
+              "from": [
+                "sana"
+              ],
+              "to": "score_use",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "score"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "score",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "set",
+                  "key": "musicAllowed",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "nameAllowed",
+                  "value": true
+                }
+              ]
+            },
+            "sana_new": {
+              "from": [
+                "sana"
+              ],
+              "to": "score_new",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "score"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "score",
+                "companions": []
+              },
+              "depart": []
+            },
+            "score_use_carry": {
+              "from": [
+                "score_use"
+              ],
+              "to": "performed_use",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "stage"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "stage",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "scoreSheet",
+                  "from": "score",
+                  "to": "party"
+                }
+              ]
+            },
+            "performed_use_finish": {
+              "from": [
+                "performed_use"
+              ],
+              "ending": "use",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "banner",
+                  "from": "party",
+                  "to": "stage"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "scoreSheet",
+                  "from": "party",
+                  "to": "stage"
+                },
+                {
+                  "op": "set",
+                  "key": "performed",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "use"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "score_new_carry": {
+              "from": [
+                "score_new"
+              ],
+              "to": "performed_new",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "stage"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "stage",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "scoreSheet",
+                  "from": "score",
+                  "to": "party"
+                }
+              ]
+            },
+            "performed_new_finish": {
+              "from": [
+                "performed_new"
+              ],
+              "ending": "new",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "banner",
+                  "from": "party",
+                  "to": "stage"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "scoreSheet",
+                  "from": "party",
+                  "to": "stage"
+                },
+                {
+                  "op": "set",
+                  "key": "performed",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "new"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "performed_silent_finish": {
+              "from": [
+                "performed_silent"
+              ],
+              "ending": "silent",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "banner",
+                  "from": "party",
+                  "to": "stage"
+                },
+                {
+                  "op": "set",
+                  "key": "performed",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "silent"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "use": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q141.values.resolution"
+                  },
+                  "right": "use"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q141.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q141.values.partyAt"
+                      },
+                      "right": "stage"
+                    }
+                  ]
+                }
+              ]
+            },
+            "new": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q141.values.resolution"
+                  },
+                  "right": "new"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q141.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q141.values.partyAt"
+                      },
+                      "right": "stage"
+                    }
+                  ]
+                }
+              ]
+            },
+            "silent": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q141.values.resolution"
+                  },
+                  "right": "silent"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q141.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q141.values.partyAt"
+                      },
+                      "right": "stage"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_5",
+              "map": "region_5_f1",
+              "x": 3,
+              "y": 1
+            },
+            "laundry": {
+              "kind": "town",
+              "location": "library_laundry"
+            },
+            "score": {
+              "kind": "town",
+              "location": "library_copy_room"
+            },
+            "stage": {
+              "kind": "town",
+              "location": "library_stage"
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "bandAt",
+            "value": "entry"
+          },
+          {
+            "key": "bandAt",
+            "value": "stage",
+            "when": {
+              "op": "or",
+              "args": [
+                {
+                  "op": "in",
+                  "left": "entry_silent",
+                  "right": {
+                    "ref": "stories.q141.events"
+                  }
+                },
+                {
+                  "op": "in",
+                  "left": "score_use_carry",
+                  "right": {
+                    "ref": "stories.q141.events"
+                  }
+                },
+                {
+                  "op": "in",
+                  "left": "score_new_carry",
+                  "right": {
+                    "ref": "stories.q141.events"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q141.scene.entry": {
@@ -1254,6 +1945,15 @@
           "banner"
         ],
         "meaning": "scoreSheet の所在または保持者"
+      },
+      "bandAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "stage"
+        ],
+        "meaning": "band の所在または保持者"
       }
     },
     "entities": {
@@ -1263,7 +1963,8 @@
       },
       "sana": {
         "holder": "sanaAt",
-        "kind": "person"
+        "kind": "person",
+        "character": "q141_sana"
       },
       "banner": {
         "holder": "bannerAt",
@@ -1272,6 +1973,11 @@
       "scoreSheet": {
         "holder": "scoreSheetAt",
         "kind": "item"
+      },
+      "band": {
+        "holder": "bandAt",
+        "kind": "group",
+        "character": "q141_band"
       }
     },
     "propositions": {
@@ -1285,13 +1991,27 @@
       "entry": {
         "title": "音の出ない優勝旗の相談卓",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "band",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "sana": {
         "title": "サナが働く洗濯場",
         "place": "laundry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "sana",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "score_use": {
@@ -1303,7 +2023,14 @@
       "performed_use": {
         "title": "祭の本番会場",
         "place": "stage",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "band",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "score_new": {
@@ -1315,13 +2042,27 @@
       "performed_new": {
         "title": "祭の本番会場",
         "place": "stage",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "band",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "performed_silent": {
         "title": "祭の本番会場",
         "place": "stage",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "band",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       }
     },
@@ -1412,6 +2153,26 @@
             ],
             "assistant": "party",
             "carrier": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "band"
+            ],
+            "path": [
+              "entry",
+              "transit",
+              "stage"
+            ],
+            "assistant": "party",
+            "carrier": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q141.values.bandAt"
+              },
+              "right": "entry"
+            }
           }
         ],
         "once": false,
@@ -1511,6 +2272,26 @@
             ],
             "assistant": "party",
             "carrier": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "band"
+            ],
+            "path": [
+              "entry",
+              "transit",
+              "stage"
+            ],
+            "assistant": "party",
+            "carrier": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q141.values.bandAt"
+              },
+              "right": "entry"
+            }
           }
         ],
         "once": false,
@@ -1582,6 +2363,26 @@
             ],
             "assistant": "party",
             "carrier": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "band"
+            ],
+            "path": [
+              "entry",
+              "transit",
+              "stage"
+            ],
+            "assistant": "party",
+            "carrier": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q141.values.bandAt"
+              },
+              "right": "entry"
+            }
           }
         ],
         "once": false,
@@ -1783,7 +2584,7 @@
         "location": "library_stage"
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "salome",
   "receptionLocations": [
