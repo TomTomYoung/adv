@@ -6,7 +6,7 @@ import {auditRelocatedCast,loadRelocatedCastQuests,relocatedCastFingerprint} fro
 const quests=await loadRelocatedCastQuests();
 test('cast audit distinguishes measured empty casts, reviewed scenes and candidate roles',()=>{
  const report=auditRelocatedCast(quests);
- assert.deepEqual(report.summary,{"quests":100,"scenes":753,"emptyCastScenes":360,"personEntities":141,"characterLinkedEntities":111,"reviewedQuests":69,"reviewedScenes":530,"noPersonEvidenceScenes":136,"personEvidenceScenes":394,"candidateRoles":1,"connectedRoles":155,"unreviewedScenes":223});
+ assert.deepEqual(report.summary,{"quests":100,"scenes":753,"emptyCastScenes":357,"personEntities":143,"characterLinkedEntities":113,"reviewedQuests":70,"reviewedScenes":541,"noPersonEvidenceScenes":144,"personEvidenceScenes":397,"candidateRoles":1,"connectedRoles":158,"unreviewedScenes":212});
  const obituary=report.quests.find(q=>q.id==='q044');assert.deepEqual(obituary.scenes.filter(s=>s.review.people.length).map(s=>s.id),['safe','escaped','protected','safe_refuge']);
  assert.ok(report.regions.every(r=>r.quests===20));
  assert.equal(report.quests.find(q=>q.id==='q071').scenes[0].review,null);

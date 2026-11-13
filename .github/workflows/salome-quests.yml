@@ -9,6 +9,9 @@ on:
       - 'data/scenario-editions/**'
       - 'data/scenario-editions.json'
       - 'tools/browser-salome-smoke.mjs'
+      - 'tools/browser-final-chapter-cast-smoke.mjs'
+      - 'tools/final-chapter-art-fixtures.mjs'
+      - 'tests/fixtures/e2-q050-before-cast.json'
       - 'tools/browser-bookmark-cast-smoke.mjs'
       - 'tools/bookmark-art-fixtures.mjs'
       - 'tests/fixtures/e2-q049-before-cast.json'
@@ -172,6 +175,17 @@ jobs:
           name: q049-cast-checkpoints
           path: /tmp/adv-bookmark-art-browser
           if-no-files-found: ignore
+      - name: Check q050 librarians, repeated extension requests, original custody and old saves
+        if: steps.ci.outputs.run == 'true'
+        run: ADV_BROWSER_OUTPUT=/tmp/adv-final-chapter-art-browser node tools/browser-final-chapter-cast-smoke.mjs
+      - name: Keep q050 checkpoints
+        if: always() && steps.ci.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: q050-cast-checkpoints
+          path: /tmp/adv-final-chapter-art-browser
+          if-no-files-found: error
+          retention-days: 7
       - name: Remember successful inputs
         if: success() && steps.ci.outputs.run == 'true' && github.event_name != 'workflow_dispatch'
         uses: ./.github/actions/ci-record

@@ -1,0 +1,3194 @@
+{
+  "schemaVersion": 1,
+  "id": "q050",
+  "number": 50,
+  "title": "止まった終章",
+  "client": "記録係のテオ",
+  "brief": "書庫の中央時計を動かすと未完の本が閉じる。何を残すか決めてください。",
+  "region": 5,
+  "type": "authored_progression",
+  "recommendedLevel": 5,
+  "requires": {
+    "op": "gte",
+    "left": {
+      "ref": "vars.region_5"
+    },
+    "right": 3
+  },
+  "unlockHint": "この地域の依頼を3件完了すると受注できる。 サロメの共同依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q050_clue_a",
+      "title": "止まった終章：現場の痕跡",
+      "points": [
+        {
+          "map": "region_5_f2",
+          "x": 6,
+          "y": 3,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q050.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q050.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q050"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q050"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "q050_clue_b",
+      "title": "止まった終章：記録と証言",
+      "points": [
+        {
+          "map": "region_5_f2",
+          "x": 14,
+          "y": 1,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q050.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q050.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q050"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q050"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "q050_decision",
+      "title": "止まった終章：決着の場",
+      "points": [
+        {
+          "map": "region_5_f2",
+          "x": 9,
+          "y": 12,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q050.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q050.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q050.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q050"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "q050_library_entry",
+      "title": "止まった終章の現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q050.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q050.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q050"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q050.library.visit",
+      "points": [
+        {
+          "dungeon": "region_5",
+          "map": "region_5_f2",
+          "x": 9,
+          "y": 12
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_5_f2",
+      "x": 6,
+      "y": 3,
+      "object": "q050_clue_a",
+      "role": "clue_a"
+    },
+    {
+      "map": "region_5_f2",
+      "x": 14,
+      "y": 1,
+      "object": "q050_clue_b",
+      "role": "clue_b"
+    },
+    {
+      "map": "region_5_f2",
+      "x": 9,
+      "y": 12,
+      "object": "q050_decision",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "搬送先と延長した二冊を入口へ掲示する",
+      "text": "時計は動き出した。終わらなかった物語にも、続きを書く机が残る。",
+      "gold": 105,
+      "xp": 100
+    },
+    "contract": {
+      "label": "収蔵時計の針を固定する",
+      "text": "本は閉じなかった。新刊を置く棚がなくなり、床に積まれる。",
+      "gold": 125,
+      "xp": 75
+    },
+    "compromise": {
+      "label": "全冊の写しを確認して予定通り閉架する",
+      "text": "原本は移り、写本が残った。書き手は次の頁を別冊として始める。",
+      "gold": 68,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/salome/library-first.mjs",
+    "world": {
+      "truth": "時計は収蔵期限を示し、閉じた本は破棄でなく別の倉へ移送される。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "時計は収蔵期限を示し、閉じた本は破棄でなく別の倉へ移送される。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "書庫の中央時計を動かすと未完の本が閉じる。何を残すか決めてください。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "記録係のテオ",
+        "observation": "書庫の中央時計を動かすと未完の本が閉じる。何を残すか決めてください。",
+        "belief": "書庫の中央時計を動かすと未完の本が閉じる。何を残すか決めてください。",
+        "goal": "書庫の中央時計を動かすと未完の本が閉じる。何を残すか決めてください。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "書庫の中央時計を動かすと未完の本が閉じる。何を残すか決めてください。",
+      "progression": "閉架作業の中で移送先を追い、延長申請する本と予定通り送る本を分ける。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q050.library.entry"
+        },
+        {
+          "id": "warehouse",
+          "script": "q050.library.warehouse"
+        },
+        {
+          "id": "requests",
+          "script": "q050.library.requests"
+        },
+        {
+          "id": "copies",
+          "script": "q050.library.copies"
+        },
+        {
+          "id": "prepare_copies",
+          "script": "q050.library.prepare_copies"
+        },
+        {
+          "id": "fetch_box",
+          "script": "q050.library.fetch_box"
+        },
+        {
+          "id": "closed",
+          "script": "q050.library.closed"
+        },
+        {
+          "id": "select",
+          "script": "q050.library.select"
+        },
+        {
+          "id": "return_extended",
+          "script": "q050.library.return_extended"
+        },
+        {
+          "id": "delivered",
+          "script": "q050.library.delivered"
+        },
+        {
+          "id": "posted",
+          "script": "q050.library.posted"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "書庫の中央時計を動かすと未完の本が閉じる。何を残すか決めてください。",
+      "openQuestion": "止まった終章の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "frameShift",
+      "newInformation": "時計は収蔵期限を示し、閉じた本は破棄でなく別の倉へ移送される。",
+      "retroactiveTargets": [
+        "warehouse"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q050.flow.entry"
+      },
+      {
+        "id": "warehouse",
+        "script": "q050.flow.warehouse"
+      },
+      {
+        "id": "requests",
+        "script": "q050.flow.requests"
+      },
+      {
+        "id": "copies",
+        "script": "q050.flow.copies"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q050.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "閉架作業の中で移送先を追い、延長申請する本と予定通り送る本を分ける。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "閉架作業の中で移送先を追い、延長申請する本と予定通り送る本を分ける。",
+    "flowVersion": 2,
+    "entryScript": "q050.library.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "終業の鐘が近い。司書は本を閉じ、黒い箱へ入れている。",
+        "options": [
+          {
+            "id": "follow",
+            "text": "一箱目の搬送先を追う",
+            "to": "warehouse",
+            "action": "entry_follow"
+          },
+          {
+            "id": "copy",
+            "text": "予定通り閉架するため、写本班を呼ぶ",
+            "to": "prepare_copies",
+            "action": "entry_copy"
+          },
+          {
+            "id": "stop",
+            "text": "収蔵時計の針を固定する",
+            "to": "@contract",
+            "action": "entry_stop"
+          }
+        ]
+      },
+      {
+        "id": "warehouse",
+        "place": "warehouse",
+        "text": "箱は焼却炉でなく、別棟の棚へ置かれた。時計は収蔵期限を示し、閉じた本は破棄でなく別の倉へ移送される。",
+        "options": [
+          {
+            "id": "extension",
+            "text": "未完の本だけ延長を申請する",
+            "to": "requests",
+            "action": "warehouse_extension"
+          },
+          {
+            "id": "copy",
+            "text": "延長せず、全て写して予定通り送る",
+            "to": "prepare_copies",
+            "action": "warehouse_copy"
+          }
+        ]
+      },
+      {
+        "id": "requests",
+        "place": "requests",
+        "text": "読者は未完の二冊を選び、司書は残る本を搬送札へ載せた。",
+        "options": [
+          {
+            "id": "publish",
+            "text": "搬送先と延長した二冊を入口へ掲示する",
+            "to": "select",
+            "action": "requests_publish"
+          },
+          {
+            "id": "cancel",
+            "text": "延長を取り下げ、写本に切り替える",
+            "to": "prepare_copies",
+            "action": "requests_cancel"
+          }
+        ]
+      },
+      {
+        "id": "copies",
+        "place": "copies",
+        "text": "写本班が分担し、一箱ずつ照合した。原本の移送は、これから別倉の受領棚で確かめる。",
+        "options": [
+          {
+            "id": "close",
+            "text": "全冊の写しを確認して予定通り閉架する",
+            "to": "closed",
+            "action": "copies_close"
+          },
+          {
+            "id": "address",
+            "text": "移送先も公開し、未完の本へ延長を求める",
+            "to": "return_extended",
+            "action": "copies_address"
+          }
+        ]
+      },
+      {
+        "id": "prepare_copies",
+        "place": "entry",
+        "text": "閉架の棚へ戻り、写本班へ渡す原本を確かめた。延長を取り下げた二冊も含めて運ぶ。",
+        "options": [
+          {
+            "id": "carry",
+            "text": "原本を写本室へ運び、一冊ずつ照合する",
+            "to": "fetch_box",
+            "action": "prepare_copies_carry"
+          }
+        ]
+      },
+      {
+        "id": "fetch_box",
+        "place": "warehouse",
+        "text": "別倉の受領棚を確認する。先に着いた箱があれば引き取り、まだなら携行してきた箱と一緒に写本室へ運ぶ。",
+        "options": [
+          {
+            "id": "copy",
+            "text": "原本を写本室へ運んで照合する",
+            "to": "copies",
+            "action": "fetch_box_copy"
+          }
+        ]
+      },
+      {
+        "id": "closed",
+        "place": "warehouse",
+        "text": "全ての原本を別倉へ運び、最後の箱の受領を確かめた。写本は照合室に残る。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@compromise",
+            "action": "closed_finish"
+          }
+        ]
+      },
+      {
+        "id": "select",
+        "place": "entry",
+        "text": "閉架の棚へ戻り、未完の二冊を延長分として分ける。残る本だけを搬送する。",
+        "options": [
+          {
+            "id": "carry",
+            "text": "通常分を別倉へ送り、延長分を残す",
+            "to": "delivered",
+            "action": "select_carry"
+          }
+        ]
+      },
+      {
+        "id": "return_extended",
+        "place": "entry",
+        "text": "原本を閉架の棚へ戻した。未完の二冊を選び直して延長を求める。",
+        "options": [
+          {
+            "id": "request",
+            "text": "窓口で二冊の延長を申請する",
+            "to": "requests",
+            "action": "return_extended_request"
+          }
+        ]
+      },
+      {
+        "id": "delivered",
+        "place": "warehouse",
+        "text": "通常分の受領を確認した。未完の二冊は元の棚で延長し、移送先とともに入口へ掲示する。",
+        "options": [
+          {
+            "id": "post",
+            "text": "書庫受付へ戻り、移送先と二冊を掲示する",
+            "to": "posted",
+            "action": "delivered_post"
+          }
+        ]
+      },
+      {
+        "id": "posted",
+        "place": "notice",
+        "text": "通常分の移送先と、延長して棚に残る二冊を掲示した。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@informed",
+            "action": "posted_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "library-first-ten",
+      "settlement": "salome",
+      "saveRevision": 2,
+      "scope": "書庫前半10件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q050.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "閉じた本の番号は焼却簿でなく搬送簿へ移っている。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q050",
+          "key": "clue_a",
+          "text": "閉じた本の番号は焼却簿でなく搬送簿へ移っている。"
+        }
+      ]
+    },
+    "q050.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "記録係のテオ",
+          "text": "中央台の裏に延長申請があり、未完成者の署名欄があります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q050",
+          "key": "clue_b",
+          "text": "中央台の裏に延長申請があり、未完成者の署名欄がある。"
+        }
+      ]
+    },
+    "q050.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "止まった終章\n\n書庫の中央時計を動かすと未完の本が閉じる。何を残すか決めてください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "搬送先を公開し未完の本へ延長を出す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q050.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q050.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "時計は収蔵期限を示し、閉じた本は破棄でなく別の倉へ移送される。"
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_5",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "時計は動き出した。終わらなかった物語にも、続きを書く机が残る。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q050",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "時計守を倒して針を止め続ける",
+              "requirement": "戦闘あり・逃走不可",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_5",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "本は閉じなかった。新刊を置く棚がなくなり、床に積まれる。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q050",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "全て写してから予定通り閉架する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "原本は移り、写本が残った。書き手は次の頁を別冊として始める。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q050",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q050.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "止まった終章\n\n書庫の中央時計を動かすと未完の本が閉じる。何を残すか決めてください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q050.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q050.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "時計は収蔵期限を示し、閉じた本は破棄でなく別の倉へ移送される。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q050.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "搬送先を公開し未完の本へ延長を出す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q050.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q050.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合・戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_5",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "時計は動き出した。終わらなかった物語にも、続きを書く机が残る。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q050",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q050.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q050.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "contract",
+              "text": "時計守を倒して針を止め続ける",
+              "requirement": "戦闘あり・逃走不可",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_5",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "本は閉じなかった。新刊を置く棚がなくなり、床に積まれる。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q050",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "全て写してから予定通り閉架する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "原本は移り、写本が残った。書き手は次の頁を別冊として始める。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q050",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」記録係のテオは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられる。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q050.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q050.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q050.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "時計は動き出した。終わらなかった物語にも、続きを書く机が残る。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q050.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "本は閉じなかった。新刊を置く棚がなくなり、床に積まれる。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q050.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "原本は移り、写本が残った。書き手は次の頁を別冊として始める。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q050.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q050.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q050.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q050.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q050.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q050.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q050.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "終業の鐘が近い。司書は本を閉じ、黒い箱へ入れている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "follow",
+              "text": "一箱目の搬送先を追う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q050.flow.warehouse"
+                }
+              ]
+            },
+            {
+              "id": "copy",
+              "text": "予定通り閉架するため、写本班を呼ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q050.flow.copies"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "収蔵時計の針を固定する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q050.flow.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q050.flow.warehouse": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q050.node",
+          "value": "warehouse"
+        },
+        {
+          "op": "say",
+          "text": "箱は焼却炉でなく、別棟の棚へ置かれた。時計は収蔵期限を示し、閉じた本は破棄でなく別の倉へ移送される。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "extension",
+              "text": "未完の本だけ延長を申請する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q050.flow.requests"
+                }
+              ]
+            },
+            {
+              "id": "copy",
+              "text": "延長せず、全て写して予定通り送る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q050.flow.copies"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q050.flow.requests": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q050.node",
+          "value": "requests"
+        },
+        {
+          "op": "say",
+          "text": "読者は未完の二冊を選び、司書は残る本を搬送札へ載せた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "publish",
+              "text": "搬送先と延長した二冊を入口へ掲示する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q050.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "cancel",
+              "text": "延長を取り下げ、写本に切り替える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q050.flow.copies"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q050.flow.copies": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q050.node",
+          "value": "copies"
+        },
+        {
+          "op": "say",
+          "text": "写本班が分担し、一箱ずつ照合する。最後の箱にも受領印が返ってきた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "close",
+              "text": "全冊の写しを確認して予定通り閉架する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q050.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "address",
+              "text": "移送先も公開し、未完の本へ延長を求める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q050.flow.requests"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q050.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q050.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "時計は動き出した。終わらなかった物語にも、続きを書く机が残る。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q050",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q050.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q050.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "本は閉じなかった。新刊を置く棚がなくなり、床に積まれる。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q050",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q050.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q050.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "原本は移り、写本が残った。書き手は次の頁を別冊として始める。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q050",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q050.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q050.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q050.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "時計は動き出した。終わらなかった物語にも、続きを書く机が残る。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "本は閉じなかった。新刊を置く棚がなくなり、床に積まれる。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "原本は移り、写本が残った。書き手は次の頁を別冊として始める。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q050"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q050.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q050.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q050.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "warehouse",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q050.flow.warehouse"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "requests",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q050.flow.requests"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "copies",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q050.flow.copies"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q050.flow.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q050.library.entry": {
+      "storyQuest": "q050",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q050",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "終業の鐘が近い。司書は本を閉じ、黒い箱へ入れている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "follow",
+              "text": "一箱目の搬送先を追う",
+              "storyAction": {
+                "quest": "q050",
+                "action": "entry_follow"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q050",
+                  "action": "entry_follow"
+                }
+              ]
+            },
+            {
+              "id": "copy",
+              "text": "予定通り閉架するため、写本班を呼ぶ",
+              "storyAction": {
+                "quest": "q050",
+                "action": "entry_copy"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q050",
+                  "action": "entry_copy"
+                },
+                {
+                  "op": "jump",
+                  "script": "q050.library.prepare_copies"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "収蔵時計の針を固定する",
+              "storyAction": {
+                "quest": "q050",
+                "action": "entry_stop"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q050",
+                  "action": "entry_stop"
+                },
+                {
+                  "op": "jump",
+                  "script": "q050.library.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q050.library.warehouse": {
+      "storyQuest": "q050",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q050",
+          "scene": "warehouse"
+        },
+        {
+          "op": "narrate",
+          "text": "箱は焼却炉でなく、別棟の棚へ置かれた。時計は収蔵期限を示し、閉じた本は破棄でなく別の倉へ移送される。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "extension",
+              "text": "未完の本だけ延長を申請する",
+              "storyAction": {
+                "quest": "q050",
+                "action": "warehouse_extension"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q050",
+                  "action": "warehouse_extension"
+                }
+              ]
+            },
+            {
+              "id": "copy",
+              "text": "延長せず、全て写して予定通り送る",
+              "storyAction": {
+                "quest": "q050",
+                "action": "warehouse_copy"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q050",
+                  "action": "warehouse_copy"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q050.library.requests": {
+      "storyQuest": "q050",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q050",
+          "scene": "requests"
+        },
+        {
+          "op": "narrate",
+          "text": "読者は未完の二冊を選び、司書は残る本を搬送札へ載せた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "publish",
+              "text": "搬送先と延長した二冊を入口へ掲示する",
+              "storyAction": {
+                "quest": "q050",
+                "action": "requests_publish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q050",
+                  "action": "requests_publish"
+                }
+              ]
+            },
+            {
+              "id": "cancel",
+              "text": "延長を取り下げ、写本に切り替える",
+              "storyAction": {
+                "quest": "q050",
+                "action": "requests_cancel"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q050",
+                  "action": "requests_cancel"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q050.library.copies": {
+      "storyQuest": "q050",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q050",
+          "scene": "copies"
+        },
+        {
+          "op": "narrate",
+          "text": "写本班が分担し、一箱ずつ照合した。原本の移送は、これから別倉の受領棚で確かめる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "close",
+              "text": "全冊の写しを確認して予定通り閉架する",
+              "storyAction": {
+                "quest": "q050",
+                "action": "copies_close"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q050",
+                  "action": "copies_close"
+                }
+              ]
+            },
+            {
+              "id": "address",
+              "text": "移送先も公開し、未完の本へ延長を求める",
+              "storyAction": {
+                "quest": "q050",
+                "action": "copies_address"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q050",
+                  "action": "copies_address"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q050.library.prepare_copies": {
+      "storyQuest": "q050",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q050",
+          "scene": "prepare_copies"
+        },
+        {
+          "op": "narrate",
+          "text": "閉架の棚へ戻り、写本班へ渡す原本を確かめた。延長を取り下げた二冊も含めて運ぶ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "carry",
+              "text": "原本を写本室へ運び、一冊ずつ照合する",
+              "storyAction": {
+                "quest": "q050",
+                "action": "prepare_copies_carry"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q050",
+                  "action": "prepare_copies_carry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q050.library.fetch_box": {
+      "storyQuest": "q050",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q050",
+          "scene": "fetch_box"
+        },
+        {
+          "op": "narrate",
+          "text": "別倉の受領棚を確認する。先に着いた箱があれば引き取り、まだなら携行してきた箱と一緒に写本室へ運ぶ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "copy",
+              "text": "原本を写本室へ運んで照合する",
+              "storyAction": {
+                "quest": "q050",
+                "action": "fetch_box_copy"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q050",
+                  "action": "fetch_box_copy"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q050.library.closed": {
+      "storyQuest": "q050",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q050",
+          "scene": "closed"
+        },
+        {
+          "op": "narrate",
+          "text": "全ての原本を別倉へ運び、最後の箱の受領を確かめた。写本は照合室に残る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q050",
+                "action": "closed_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q050",
+                  "action": "closed_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q050.library.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q050.library.select": {
+      "storyQuest": "q050",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q050",
+          "scene": "select"
+        },
+        {
+          "op": "narrate",
+          "text": "閉架の棚へ戻り、未完の二冊を延長分として分ける。残る本だけを搬送する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "carry",
+              "text": "通常分を別倉へ送り、延長分を残す",
+              "storyAction": {
+                "quest": "q050",
+                "action": "select_carry"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q050",
+                  "action": "select_carry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q050.library.return_extended": {
+      "storyQuest": "q050",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q050",
+          "scene": "return_extended"
+        },
+        {
+          "op": "narrate",
+          "text": "原本を閉架の棚へ戻した。未完の二冊を選び直して延長を求める。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "request",
+              "text": "窓口で二冊の延長を申請する",
+              "storyAction": {
+                "quest": "q050",
+                "action": "return_extended_request"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q050",
+                  "action": "return_extended_request"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q050.library.delivered": {
+      "storyQuest": "q050",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q050",
+          "scene": "delivered"
+        },
+        {
+          "op": "narrate",
+          "text": "通常分の受領を確認した。未完の二冊は元の棚で延長し、移送先とともに入口へ掲示する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "post",
+              "text": "書庫受付へ戻り、移送先と二冊を掲示する",
+              "storyAction": {
+                "quest": "q050",
+                "action": "delivered_post"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q050",
+                  "action": "delivered_post"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q050.library.posted": {
+      "storyQuest": "q050",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q050",
+          "scene": "posted"
+        },
+        {
+          "op": "narrate",
+          "text": "通常分の移送先と、延長して棚に残る二冊を掲示した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q050",
+                "action": "posted_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q050",
+                  "action": "posted_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q050.library.end.informed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q050.library.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "時計は動き出した。終わらなかった物語にも、続きを書く机が残る。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q050",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q050.library.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "本は閉じなかった。新刊を置く棚がなくなり、床に積まれる。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q050",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q050.library.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "原本は移り、写本が残った。書き手は次の頁を別冊として始める。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q050",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q050.library.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q050"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q050.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q050.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q050.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "時計は動き出した。終わらなかった物語にも、続きを書く机が残る。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "本は閉じなかった。新刊を置く棚がなくなり、床に積まれる。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "原本は移り、写本が残った。書き手は次の頁を別冊として始める。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q050"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q050.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q050.library.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "warehouse",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q050.library.warehouse"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "requests",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q050.library.requests"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "copies",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q050.library.copies"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "prepare_copies",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q050.library.prepare_copies"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "fetch_box",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q050.library.fetch_box"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "closed",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q050.library.closed"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "select",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q050.library.select"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "return_extended",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q050.library.return_extended"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "delivered",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q050.library.delivered"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "posted",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q050.library.posted"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q050.library.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "止まった終章の現場",
+      "warehouse": "別倉の受領棚",
+      "requests": "延長を申請する窓口",
+      "copies": "写本班の照合室",
+      "notice": "書庫受付の移送先掲示",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "warehouse"
+      ],
+      [
+        "transit",
+        "requests"
+      ],
+      [
+        "transit",
+        "copies"
+      ],
+      [
+        "transit",
+        "notice"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "warehouse",
+          "requests",
+          "copies",
+          "notice",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "clockFixed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "clockFixed"
+      },
+      "copied": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "copied"
+      },
+      "extended": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "extended"
+      },
+      "posted": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "posted"
+      },
+      "firstBoxAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "warehouse",
+          "requests",
+          "copies",
+          "notice",
+          "transit",
+          "party",
+          "otherBooks",
+          "unfinished",
+          "copySet"
+        ],
+        "meaning": "firstBox の所在または保持者"
+      },
+      "otherBooksAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "warehouse",
+          "requests",
+          "copies",
+          "notice",
+          "transit",
+          "party",
+          "firstBox",
+          "unfinished",
+          "copySet"
+        ],
+        "meaning": "otherBooks の所在または保持者"
+      },
+      "unfinishedAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "warehouse",
+          "requests",
+          "copies",
+          "notice",
+          "transit",
+          "party",
+          "firstBox",
+          "otherBooks",
+          "copySet"
+        ],
+        "meaning": "unfinished の所在または保持者"
+      },
+      "copySetAt": {
+        "type": "enum",
+        "initial": "copies",
+        "values": [
+          "entry",
+          "warehouse",
+          "requests",
+          "copies",
+          "notice",
+          "transit",
+          "party",
+          "firstBox",
+          "otherBooks",
+          "unfinished"
+        ],
+        "meaning": "copySet の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "firstBox": {
+        "holder": "firstBoxAt",
+        "kind": "item"
+      },
+      "otherBooks": {
+        "holder": "otherBooksAt",
+        "kind": "item"
+      },
+      "unfinished": {
+        "holder": "unfinishedAt",
+        "kind": "item"
+      },
+      "copySet": {
+        "holder": "copySetAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "時計は収蔵期限を示し、閉じた本は破棄でなく別の倉へ移送される。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "止まった終章の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "warehouse": {
+        "title": "別倉の受領棚",
+        "place": "warehouse",
+        "cast": [],
+        "requires": true
+      },
+      "requests": {
+        "title": "延長を申請する窓口",
+        "place": "requests",
+        "cast": [],
+        "requires": true
+      },
+      "copies": {
+        "title": "写本班の照合室",
+        "place": "copies",
+        "cast": [],
+        "requires": true
+      },
+      "prepare_copies": {
+        "title": "止まった終章の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "fetch_box": {
+        "title": "別倉の受領棚",
+        "place": "warehouse",
+        "cast": [],
+        "requires": true
+      },
+      "closed": {
+        "title": "別倉の受領棚",
+        "place": "warehouse",
+        "cast": [],
+        "requires": true
+      },
+      "select": {
+        "title": "止まった終章の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "return_extended": {
+        "title": "止まった終章の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "delivered": {
+        "title": "別倉の受領棚",
+        "place": "warehouse",
+        "cast": [],
+        "requires": true
+      },
+      "posted": {
+        "title": "書庫受付の移送先掲示",
+        "place": "notice",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_follow": {
+        "from": [
+          "entry"
+        ],
+        "to": "warehouse",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "warehouse"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "firstBox",
+            "from": "party",
+            "to": "warehouse"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "warehouse",
+            "requires": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "warehouse",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "firstBox",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      },
+      "entry_copy": {
+        "from": [
+          "entry"
+        ],
+        "to": "prepare_copies",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "entry_stop": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "clockFixed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "warehouse_extension": {
+        "from": [
+          "warehouse"
+        ],
+        "to": "requests",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "requests"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "requests",
+          "companions": []
+        },
+        "depart": []
+      },
+      "warehouse_copy": {
+        "from": [
+          "warehouse"
+        ],
+        "to": "prepare_copies",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "requests_publish": {
+        "from": [
+          "requests"
+        ],
+        "to": "select",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "requests_cancel": {
+        "from": [
+          "requests"
+        ],
+        "to": "prepare_copies",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "copies_close": {
+        "from": [
+          "copies"
+        ],
+        "to": "closed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "warehouse"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "warehouse",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "firstBox",
+            "from": "copies",
+            "to": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "otherBooks",
+            "from": "copies",
+            "to": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "unfinished",
+            "from": "copies",
+            "to": "party"
+          }
+        ]
+      },
+      "copies_address": {
+        "from": [
+          "copies"
+        ],
+        "to": "return_extended",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "firstBox",
+            "from": "copies",
+            "to": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "otherBooks",
+            "from": "copies",
+            "to": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "unfinished",
+            "from": "copies",
+            "to": "party"
+          }
+        ]
+      },
+      "prepare_copies_carry": {
+        "from": [
+          "prepare_copies"
+        ],
+        "to": "fetch_box",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "warehouse"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "warehouse",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "otherBooks",
+            "from": "entry",
+            "to": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q050.values.otherBooksAt"
+              },
+              "right": "entry"
+            }
+          },
+          {
+            "op": "transfer",
+            "entity": "unfinished",
+            "from": "entry",
+            "to": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q050.values.unfinishedAt"
+              },
+              "right": "entry"
+            }
+          },
+          {
+            "op": "transfer",
+            "entity": "firstBox",
+            "from": "entry",
+            "to": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q050.values.firstBoxAt"
+              },
+              "right": "entry"
+            }
+          }
+        ]
+      },
+      "fetch_box_copy": {
+        "from": [
+          "fetch_box"
+        ],
+        "to": "copies",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "copies"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "firstBox",
+            "from": "party",
+            "to": "copies"
+          },
+          {
+            "op": "transfer",
+            "entity": "otherBooks",
+            "from": "party",
+            "to": "copies"
+          },
+          {
+            "op": "transfer",
+            "entity": "unfinished",
+            "from": "party",
+            "to": "copies"
+          },
+          {
+            "op": "set",
+            "key": "copied",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "copies",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "firstBox",
+            "from": "warehouse",
+            "to": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q050.values.firstBoxAt"
+              },
+              "right": "warehouse"
+            }
+          }
+        ]
+      },
+      "closed_finish": {
+        "from": [
+          "closed"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "firstBox",
+            "from": "party",
+            "to": "warehouse"
+          },
+          {
+            "op": "transfer",
+            "entity": "otherBooks",
+            "from": "party",
+            "to": "warehouse"
+          },
+          {
+            "op": "transfer",
+            "entity": "unfinished",
+            "from": "party",
+            "to": "warehouse"
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "select_carry": {
+        "from": [
+          "select"
+        ],
+        "to": "delivered",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "warehouse"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "otherBooks",
+            "from": "party",
+            "to": "warehouse",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q050.values.otherBooksAt"
+              },
+              "right": "party"
+            }
+          },
+          {
+            "op": "transfer",
+            "entity": "firstBox",
+            "from": "party",
+            "to": "warehouse",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q050.values.firstBoxAt"
+              },
+              "right": "party"
+            }
+          },
+          {
+            "op": "set",
+            "key": "extended",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "warehouse",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "otherBooks",
+            "from": "entry",
+            "to": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q050.values.otherBooksAt"
+              },
+              "right": "entry"
+            }
+          },
+          {
+            "op": "transfer",
+            "entity": "firstBox",
+            "from": "entry",
+            "to": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q050.values.firstBoxAt"
+              },
+              "right": "entry"
+            }
+          }
+        ]
+      },
+      "return_extended_request": {
+        "from": [
+          "return_extended"
+        ],
+        "to": "requests",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "requests"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "requests",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "firstBox",
+            "from": "party",
+            "to": "entry"
+          },
+          {
+            "op": "transfer",
+            "entity": "otherBooks",
+            "from": "party",
+            "to": "entry"
+          },
+          {
+            "op": "transfer",
+            "entity": "unfinished",
+            "from": "party",
+            "to": "entry"
+          }
+        ]
+      },
+      "delivered_post": {
+        "from": [
+          "delivered"
+        ],
+        "to": "posted",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "notice"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "notice",
+          "companions": []
+        },
+        "depart": []
+      },
+      "posted_finish": {
+        "from": [
+          "posted"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "posted",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q050.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q050.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q050.values.partyAt"
+                },
+                "right": "notice"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q050.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q050.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q050.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q050.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q050.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q050.values.partyAt"
+                },
+                "right": "warehouse"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_5",
+        "map": "region_5_f2",
+        "x": 9,
+        "y": 12
+      },
+      "warehouse": {
+        "kind": "town",
+        "location": "library_warehouse"
+      },
+      "requests": {
+        "kind": "town",
+        "location": "library_registry"
+      },
+      "copies": {
+        "kind": "town",
+        "location": "library_copy_room"
+      },
+      "notice": {
+        "kind": "town",
+        "location": "e2_archive"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "salome",
+  "receptionLocations": [
+    "salome_board"
+  ]
+}

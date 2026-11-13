@@ -4,16 +4,16 @@
   "summary": {
     "quests": 100,
     "scenes": 753,
-    "emptyCastScenes": 360,
-    "personEntities": 141,
-    "characterLinkedEntities": 111,
-    "reviewedQuests": 69,
-    "reviewedScenes": 530,
-    "noPersonEvidenceScenes": 136,
-    "personEvidenceScenes": 394,
+    "emptyCastScenes": 357,
+    "personEntities": 143,
+    "characterLinkedEntities": 113,
+    "reviewedQuests": 70,
+    "reviewedScenes": 541,
+    "noPersonEvidenceScenes": 144,
+    "personEvidenceScenes": 397,
     "candidateRoles": 1,
-    "connectedRoles": 155,
-    "unreviewedScenes": 223
+    "connectedRoles": 158,
+    "unreviewedScenes": 212
   },
   "regions": [
     {
@@ -66,15 +66,15 @@
       "name": "書庫",
       "quests": 20,
       "scenes": 148,
-      "emptyCastScenes": 105,
-      "personEntities": 34,
-      "characterLinkedEntities": 13,
-      "reviewedQuests": 9,
-      "reviewedScenes": 60,
-      "noPersonEvidenceScenes": 17,
-      "personEvidenceScenes": 43,
+      "emptyCastScenes": 102,
+      "personEntities": 36,
+      "characterLinkedEntities": 15,
+      "reviewedQuests": 10,
+      "reviewedScenes": 71,
+      "noPersonEvidenceScenes": 25,
+      "personEvidenceScenes": 46,
       "candidateRoles": 0,
-      "connectedRoles": 16
+      "connectedRoles": 19
     },
     {
       "id": 8,
@@ -3387,7 +3387,7 @@
       "region": 5,
       "client": "記録係のテオ",
       "source": "authoring/editions/e2/salome/library-first.mjs",
-      "sourceSha256": "b7d417f25862c709627e836f4182b768238b4124d71a5ff5dc0cb5d49aa4d592",
+      "sourceSha256": "5891f875dafbd304f19d0b3f84bc7d088abceb8947fe26b3e91be8cc29dac0a3",
       "scenes": [
         {
           "id": "entry",
@@ -3399,8 +3399,23 @@
             "x": 9,
             "y": 12
           },
-          "cast": [],
-          "review": null
+          "cast": [
+            {
+              "entity": "librarian",
+              "display": {
+                "x": 50
+              }
+            }
+          ],
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q050_librarian"
+            ],
+            "evidence": "終業の鐘が近い。",
+            "reason": "司書が本を閉じて箱に入れる動作が明記される。依頼人テオや時計守は同席させない。",
+            "visual": "司書の初期所在だけを表示し、時計を止める操作を戦闘へ置換しない。"
+          }
         },
         {
           "id": "warehouse",
@@ -3410,7 +3425,13 @@
             "location": "library_warehouse"
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "no-person-evidence",
+            "people": [],
+            "evidence": "箱は焼却炉でなく、別棟の棚へ置かれた。",
+            "reason": "箱の到着先と搬送制度を確認する場面で、特定の受領担当者の同席は書かれていない。",
+            "visual": "一箱目は実到着時にwarehouseへ移り、他の原本は元の棚に残る。"
+          }
         },
         {
           "id": "requests",
@@ -3419,8 +3440,30 @@
             "kind": "town",
             "location": "library_registry"
           },
-          "cast": [],
-          "review": null
+          "cast": [
+            {
+              "entity": "reader",
+              "display": {
+                "x": 31
+              }
+            },
+            {
+              "entity": "librarian",
+              "display": {
+                "x": 69
+              }
+            }
+          ],
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q050_reader",
+              "q050_librarian"
+            ],
+            "evidence": "読者は未完の二冊を選び、司書は残る本を搬送札へ載せた。",
+            "reason": "二冊を選ぶ読者と搬送札へ記す司書の動作が明記される。司書は初回の実到着時に窓口へ独立して到着し、全旅程の同行者は空のまま。",
+            "visual": "申請と延長確定を分ける。撤回後の再申請でも司書を棚から連れ直さない。"
+          }
         },
         {
           "id": "copies",
@@ -3429,8 +3472,23 @@
             "kind": "town",
             "location": "library_copy_room"
           },
-          "cast": [],
-          "review": null
+          "cast": [
+            {
+              "entity": "copyCrew",
+              "display": {
+                "x": 50
+              }
+            }
+          ],
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q050_copyCrew"
+            ],
+            "evidence": "写本班が分担し、一箱ずつ照合した。",
+            "reason": "写本班が分担して照合する動作が明記される。班の人数は定めない。",
+            "visual": "原本3種類は実到着時に照合室へ渡りcopiedが成立する。写本は照合室に残る。"
+          }
         },
         {
           "id": "prepare_copies",
@@ -3443,7 +3501,13 @@
             "y": 12
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "no-person-evidence",
+            "people": [],
+            "evidence": "閉架の棚へ戻り、写本班へ渡す原本を確かめた。",
+            "reason": "写本班へ渡す原本の確認であり、班の同席は書かれていない。入口と同じ場所でも司書を追加表示しない。",
+            "visual": "未完の二冊を含めて運ぶ。直接写本を選んだ経路に延長撤回を既成事実として追加しない。"
+          }
         },
         {
           "id": "fetch_box",
@@ -3453,7 +3517,13 @@
             "location": "library_warehouse"
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "no-person-evidence",
+            "people": [],
+            "evidence": "別倉の受領棚を確認する。",
+            "reason": "先着した箱を確認する場面。特定の受領担当者や写本班の同席は書かれていない。",
+            "visual": "先着箱は次の出発時に回収し、既に携行している箱を二重取得しない。"
+          }
         },
         {
           "id": "closed",
@@ -3463,7 +3533,13 @@
             "location": "library_warehouse"
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "no-person-evidence",
+            "people": [],
+            "evidence": "全ての原本を携えて別倉へ着いた。",
+            "reason": "原本の受領を確かめる場面で、特定の受領担当者は示されない。写本班は照合室に残る。",
+            "visual": "到着だけでは原本を渡さず、finishで原本3種類の受領と一回報酬を確定する。"
+          }
         },
         {
           "id": "select",
@@ -3476,7 +3552,13 @@
             "y": 12
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "no-person-evidence",
+            "people": [],
+            "evidence": "閉架の棚へ戻り、未完の二冊を延長分として分ける。",
+            "reason": "棚で延長分を分ける作業。申請窓口の読者と司書が同行する根拠はない。",
+            "visual": "未完の二冊をentryに残し、通常分だけを別倉へ運ぶ。"
+          }
         },
         {
           "id": "return_extended",
@@ -3489,7 +3571,13 @@
             "y": 12
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "no-person-evidence",
+            "people": [],
+            "evidence": "原本を携えて閉架の棚へ戻った。",
+            "reason": "原本を携えて棚へ戻る場面で、申請窓口の読者と司書を同席させる根拠はない。",
+            "visual": "到着時はpartyが原本を保持し、次のrequestの出発時にentryへ戻す。"
+          }
         },
         {
           "id": "delivered",
@@ -3499,7 +3587,13 @@
             "location": "library_warehouse"
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "no-person-evidence",
+            "people": [],
+            "evidence": "通常分の受領を確認した。",
+            "reason": "通常分の受領確認と掲示への準備。特定の人物は示されない。",
+            "visual": "通常分の実到着でextendedが成立する。掲示と報酬はまだ確定しない。"
+          }
         },
         {
           "id": "posted",
@@ -3509,11 +3603,56 @@
             "location": "e2_archive"
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "no-person-evidence",
+            "people": [],
+            "evidence": "通常分の移送先と、延長して棚に残る二冊を書庫受付へ掲示する。",
+            "reason": "移送先と二冊の掲示を行う場面。司書・読者・写本班の同席は示されない。",
+            "visual": "掲示場所への到着だけでは完了せず、finishでpostedと報酬を確定する。"
+          }
         }
       ],
-      "personEntities": [],
-      "review": null
+      "personEntities": [
+        {
+          "id": "librarian",
+          "character": "q050_librarian"
+        },
+        {
+          "id": "reader",
+          "character": "q050_reader"
+        }
+      ],
+      "review": {
+        "identityNotes": [
+          "原稿authoring/quests.txtの「止まった終章」、初版4場面、現行11場面・12旅程・16行動・3結末を精読した。記録係テオと時計守の同席・戦闘を補わない。",
+          "司書は入口と延長窓口、読者は延長窓口、写本班は照合室の本文に基づく呼称表示とする。全12旅程の同行者は空のまま、司書の初回窓口到着だけを追加する。",
+          "物語改訂1→2は旧定義で全体を検証後、3役の所在を補う。司書の所在は完了済みのwarehouse_extension・return_extended_requestの履歴から求め、出発だけでは到着扱いにしない。",
+          "原本3種類と写本の所在、先着箱の回収、写本後の延長切替、延長撤回の反復、知識・既存旗・全結末と報酬を保持する。準備・受領・棚への返却・掲示の4本文だけを既存の確定時点へ合わせる。",
+          "人物の氏名・容貌・専用画、同行、時計による現実時間・地形・技能の変更は追加しない。"
+        ],
+        "relatedClients": {},
+        "people": {
+          "q050_librarian": {
+            "label": "閉架を担当する司書",
+            "status": "connected",
+            "entity": "librarian",
+            "need": "入口と申請窓口の動作を表示し、初回の独立した到着だけを記録する。"
+          },
+          "q050_reader": {
+            "label": "未完の二冊を選ぶ読者",
+            "status": "connected",
+            "entity": "reader",
+            "need": "二冊を選ぶ申請場面だけに表示する。"
+          },
+          "q050_copyCrew": {
+            "label": "写本班",
+            "status": "connected",
+            "entity": "copyCrew",
+            "need": "照合室の写本場面だけに集団名を表示する。"
+          }
+        },
+        "next": "3役・3場面の人物表示、新旧保存、原本の運搬・受領、延長撤回の反復と3結末を検証する。次はq141「音の出ない優勝旗」の原稿・全場面の出演監査。"
+      }
     },
     {
       "id": "q061",

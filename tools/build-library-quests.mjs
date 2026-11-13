@@ -34,6 +34,18 @@ export async function buildLibraryQuests({check=false}={}){
     {key:'manuscriptClientAt',value:'contract',when:arrived('morning_freeze')}
    ]}];
   }
+  if(n===50){
+   const previous=compileRelocatedQuest(first,source(first,{cast:false}),options).story;
+   for(const [key,entry] of Object.entries(previous.registry))quest.story.registry[key]=structuredClone(entry);
+   quest.story.registry.librarianAt.values=['entry','requests'];
+   quest.story.registry.readerAt.values=['requests'];quest.story.registry.copyCrewAt.values=['copies'];
+   const arrived={op:'or',args:['warehouse_extension','return_extended_request'].map(action=>({op:'in',left:action,right:ref('stories.q050.events')}))};
+   quest.story.revision=2;quest.model.edition.revision=2;
+   quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[
+    {key:'librarianAt',value:'entry'},{key:'readerAt',value:'requests'},{key:'copyCrewAt',value:'copies'},
+    {key:'librarianAt',value:'requests',when:arrived}
+   ]}];
+  }
   quests.push(quest);
  }
  const outcomes=quests.reduce((n,q)=>n+Object.keys(q.outcomes).length,0);
