@@ -3,6 +3,89 @@
 export const RELOCATED_CAST_REVIEW={
  reviewedAt:'2026-11-13',
  quests:{
+  q146:{
+    "sourceSha256": "Q146_FINGERPRINT_PENDING",
+    "identityNotes": [
+      "原稿・初版・現行6場面・6旅程・9行動・3結末を精読した。退役兵本人と、軍服の刺繍に誓いを結んだ生き残りの同僚たちは別の役であり、人数や固有名を決めない。",
+      "退役兵は相談卓から同僚の酒場・染物工房・保管窓口まで既存の実同行を保つ。同僚groupは酒場に固定し、染め直しの合意だけを持ち帰る経路に同行させない。再会時は酒場で二役が合流する。",
+      "双方の同意bothAgreed、誓約の解除released、染色dyed、再会reunited、外套への裁断cut・tailored、保管storedを別々に保持。軍服uniformは退役兵の保持物であり、保管窓口のfinishでだけstorageへ渡す。",
+      "既存本文・物語改訂1・全旅程・報酬・旧受注を維持し、同僚の不在場面へ一行の言及だけで集団を足さない。軍服に関する超自然的な演出や人物画・人数の新設定を追加しない。"
+    ],
+    "relatedClients": {},
+    "people": {
+      "q146_veteran": {
+        "label": "退役兵",
+        "status": "connected",
+        "entity": "veteran",
+        "need": "全6場面に既存の初期所在と実同行に沿って表示する。"
+      },
+      "q146_colleagues": {
+        "label": "生き残った同僚たち",
+        "status": "connected",
+        "entity": "colleagues",
+        "need": "同僚が実際にいる酒場のfriends・reunionだけにgroupとして表示する。"
+      }
+    },
+    "scenes": {
+      "entry": {
+        "decision": "person-evidence",
+        "people": [
+          "q146_veteran"
+        ],
+        "evidence": "退役兵は軍歴を隠したい",
+        "reason": "本人が軍歴を隠したい意向を示し、既存初期所在がentry。生き残った同僚は酒場にいる。",
+        "visual": "軍服の刺繍と本人の希望を別々に示す。"
+      },
+      "friends": {
+        "decision": "person-evidence",
+        "people": [
+          "q146_veteran",
+          "q146_colleagues"
+        ],
+        "evidence": "同僚は再会を約束できるなら誓約を解く",
+        "reason": "実同行した退役兵と元から酒場にいる同僚が再会を相談する。",
+        "visual": "双方の同意が成立するまで誓約の解除を既成事実にしない。"
+      },
+      "dyed": {
+        "decision": "person-evidence",
+        "people": [
+          "q146_veteran"
+        ],
+        "evidence": "本人と同僚の合意を持って染物工房へ戻った。",
+        "reason": "酒場で確かめた合意を持ち帰るのは隊と退役兵のみ。同僚は酒場に残る。",
+        "visual": "同僚の同意があっても工房への同席・同行は追加しない。"
+      },
+      "reunion": {
+        "decision": "person-evidence",
+        "people": [
+          "q146_veteran",
+          "q146_colleagues"
+        ],
+        "evidence": "同僚と顔を合わせた。",
+        "reason": "退役兵が工房から酒場へ実到着し、そこで待つ同僚と再会する。",
+        "visual": "新しい服と再会の確認。reunitedの最終旗はfinishで確定する。"
+      },
+      "tailored": {
+        "decision": "person-evidence",
+        "people": [
+          "q146_veteran"
+        ],
+        "evidence": "本人の同意を確かめて生地を裁ち",
+        "reason": "相談卓から本人が工房へ同行し、同意の上で外套を仕立てる。同僚は酒場に残る。",
+        "visual": "染め直しの再会と別の経路であり、軍服の形を戻さない。"
+      },
+      "stored": {
+        "decision": "person-evidence",
+        "people": [
+          "q146_veteran"
+        ],
+        "evidence": "本人と保管窓口へ着き",
+        "reason": "entryまたはfriendsから本人が実同行する。軍服の受渡しは到着ではなくfinish時。",
+        "visual": "保管箱と本人だけを表示する。着る日の決定権を保つ。"
+      }
+    },
+    "next": "全6場面・6旅程・9行動・3結末の再開、退役兵の所在と同僚groupの固定所在、誓約・裁断・保管の旗、軍服の保持者と旧受注を検証する。次はq147。"
+  },
   q145:{
     "sourceSha256": "0862f54092cd6a48536649869d21ce81450e06065d05e08b2f56185e4346f328",
     "identityNotes": [
