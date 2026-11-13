@@ -3,6 +3,102 @@
 export const RELOCATED_CAST_REVIEW={
  reviewedAt:'2026-11-13',
  quests:{
+  q048:{
+  "sourceSha256": "bd18fa8832c7946dd1b632a82303eb2f8286337899e3a9230257747064236649",
+  "identityNotes": [
+    "原稿authoring/quests.txtの「眠る校正者」、初版3場面、現行7場面・8旅程・12行動・3結末を精読した。原稿の自動筆の精との戦闘を現行経路へ補わない。",
+    "校正者・原稿の依頼人・既存の交代者teamを3役に分ける。受付の写本師アリと原稿の依頼人の同一性は確定せず、氏名・年齢・性別・容貌・専用画や交代者の人数を追加しない。",
+    "校正者は校正台に残る。依頼人は入口、翌朝の写本室、契約窓口で応対し、本文の時点に沿って独立に所在を更新する。隊の旅程へ同行させない。交代者だけがteam_escortで実同行する。",
+    "再校正は一回だけで、旗repeatedは出発時でなく実到着時。契約窓口への到着時の知識・署名と、校正台のfinishによる封印を区別する。翌朝を現実時間の待機に置き換えない。",
+    "本文・全8旅程・既存の旗と所在・3結末・一回報酬を保持する。物語改訂1→2では旧保存全体を旧定義で検証後、固定校正者と到着済みの行動履歴に基づく依頼人の所在だけを補う。旧受注3場面と直接経路へ新しい人物表示・実移動を混入させない。"
+  ],
+  "relatedClients": {
+    "q043": "写本師のアリ"
+  },
+  "people": {
+    "q048_proofreader": {
+      "label": "校正者",
+      "status": "connected",
+      "entity": "proofreader",
+      "need": "校正台の固定所在を補い、入口の発言場面だけに呼称表示する。"
+    },
+    "q048_manuscriptClient": {
+      "label": "原稿の依頼人",
+      "status": "connected",
+      "entity": "manuscriptClient",
+      "need": "入口・翌朝の写本室・契約窓口の3場面へ独立した所在に従って呼称表示する。"
+    },
+    "q048_team": {
+      "label": "交代の校正者たち",
+      "status": "connected",
+      "entity": "team",
+      "need": "既存teamの合流と実同行後の作業へ呼称表示する。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "person-evidence",
+      "people": [
+        "q048_proofreader",
+        "q048_manuscriptClient"
+      ],
+      "evidence": "校正者は最後の誤字を示す。",
+      "reason": "校正者本人の発言と、新しい紙束を持つ依頼人の同席が明記される。写本師アリとの同一性を確定しない。",
+      "visual": "最後の一字と新しい紙束の対立を保ち、校了や契約終了を先取りしない。"
+    },
+    "morning": {
+      "decision": "person-evidence",
+      "people": [
+        "q048_manuscriptClient"
+      ],
+      "evidence": "依頼人が「終わると修正を頼めない」と筆を隠す。",
+      "reason": "翌朝の写本室で応対する依頼人だけを表示する。再校正の往復中も本人は写本室に残る。",
+      "visual": "初回と一回だけの再校正後を区別し、追加口の閉鎖を先取りしない。"
+    },
+    "final": {
+      "decision": "person-evidence",
+      "people": [
+        "q048_manuscriptClient"
+      ],
+      "evidence": "依頼人が新規追加を別契約に分けると署名した。",
+      "reason": "契約窓口で署名する依頼人。本人の到着を記録し、隊の旅程の同行者には追加しない。",
+      "visual": "署名と校正台での最終稿の封印を別の段階として扱う。"
+    },
+    "again": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "校正台へ戻り、追加された一字を直した。",
+      "reason": "隊が校正台へ戻る場面。本文は追加された一字への作業だけを述べ、校正者の再度の応対や依頼人の同行を明記しない。",
+      "visual": "同じ場所だけを根拠に人物を表示せず、repeatedは実到着時に設定する。"
+    },
+    "sealed": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "新規追加を別契約にした署名を校正台へ戻し、",
+      "reason": "署名した文書を持ち帰る場面であり、依頼人本人の同行ではない。校正者の同席表示も本文に補わない。",
+      "visual": "到着とfinishによる追加口閉鎖・封印・報酬確定を分離する。"
+    },
+    "team": {
+      "decision": "person-evidence",
+      "people": [
+        "q048_team"
+      ],
+      "evidence": "写本室で交代の校正者を集めた。",
+      "reason": "既存group teamと合流する場面。直接・翌朝から・締切撤回後の経路を保ち、依頼人の所在だけで同席を補わない。",
+      "visual": "人数や代表者を補わず、これから校正台へ同行する段階を示す。"
+    },
+    "team_work": {
+      "decision": "person-evidence",
+      "people": [
+        "q048_team"
+      ],
+      "evidence": "交代者が校正台へ到着し、",
+      "reason": "team_escortで実同行した交代者だけを表示する。元の校正者や依頼人は同じ場所への所在だけで同席させない。",
+      "visual": "実到着とfinishでの分担完了・一晩の校了・報酬を区別する。"
+    }
+  },
+  "next": "3役の表示、7場面・8旅程・12行動、再校正一回、独立した依頼人の所在、交代者同行、3結末と新旧保存を検証する。次はq049「忘却の栞」の原稿・全場面の出演監査。"
+},
   q047:{
   "sourceSha256": "9f7ac058729cf62eedf7ea0b4fc06548880ad8d88380b5f2e71ba3f4f605c918",
   "identityNotes": [

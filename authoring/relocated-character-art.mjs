@@ -54,6 +54,11 @@ export const relocatedCharacters=Object.fromEntries([
  ['q035_patient','顔を隠す患者','配膳口の患者側で顔を隠したまま礼を言い、修理人の入室と見学者への公開を区別する匿名の患者。','2026-10-29の美術設定。顔全体を不透明な布で覆う姿を保ち、性別・病名・氏名・具体的な病状を追加しない。服装と布の色は美術上の選択。施療人ネイとは同定しない。皿・病室・修理人・見学者を人物画へ固定しない。']
 ].map(([id,name,detail,provenance])=>[id,{id,name,role:'礼拝堂の現地の相手',detail,portrait:RELOCATED_CHARACTER_ART[id].asset,sprite:RELOCATED_CHARACTER_ART[id].asset,
  provenance:provenance??'2026-10-29の美術設定。固有名・他人物との同一性は追加しない。具体的な外見・年齢感・服装は今回の美術設定。牢・格子・聖像・宝玉・石を人物画へ固定しない。'}]));
+for(const [id,name,role,detail] of [
+ ['proofreader','校正者','自動筆記の契約で手を動かし続け、最後の誤字を示す校正者','校正台に所在を保ち、入口の発言場面へ表示する。再校正や封印、交代者の作業場面へ所在の一致だけで同席させない。'],
+ ['manuscriptClient','原稿の依頼人','新しい紙束を持ち、翌朝の追記と新規追加の契約に応対する依頼人','入口・翌朝の写本室・契約窓口の3場面に表示する。隊の旅程には同行せず、再校正や交代者の案内へ付いて行かない。'],
+ ['team','交代の校正者たち','写本室で集まり、校正台へ同行して分担する校正者たち','既存teamの所在と実同行に従い、合流した写本室と到着後の校正台へ呼称表示する。人数・代表者を確定しない。']
+])relocatedCharacters['q048_'+id]={id:'q048_'+id,name,role,detail,provenance:'2026-11-13。原稿・初版・現行本文と既存の行動に基づく呼称表示。氏名・年齢・性別・容貌・専用画を追加せず、原稿の依頼人と受付の写本師アリの同一性を確定しない。'};
 // The group has no specified headcount or spokesperson. Ren is the existing actor.
 for(const [id,name,role,detail] of [
  ['craftsperson','疲れた職人','砂時計が落ち切らず手を止められない作業室の職人','入口の発言場面だけに表示する。作業室に所在を保ち、外時計や休息棚へ同行させない。'],

@@ -1,0 +1,2507 @@
+{
+  "schemaVersion": 1,
+  "id": "q048",
+  "number": 48,
+  "title": "眠る校正者",
+  "client": "写本師のアリ",
+  "brief": "眠った校正者の手だけが動いている。仕事を止めてよいか調べてください。",
+  "region": 5,
+  "type": "authored_progression",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。 サロメの共同依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q048_clue_a",
+      "title": "眠る校正者：現場の痕跡",
+      "points": [
+        {
+          "map": "region_5_f2",
+          "x": 5,
+          "y": 3,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q048.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q048.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q048"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q048"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "q048_clue_b",
+      "title": "眠る校正者：記録と証言",
+      "points": [
+        {
+          "map": "region_5_f2",
+          "x": 13,
+          "y": 2,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q048.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q048.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q048"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q048"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "q048_decision",
+      "title": "眠る校正者：決着の場",
+      "points": [
+        {
+          "map": "region_5_f2",
+          "x": 15,
+          "y": 5,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q048.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q048.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q048.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q048"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "q048_library_entry",
+      "title": "眠る校正者の現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q048.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q048.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q048"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q048.library.visit",
+      "points": [
+        {
+          "dungeon": "region_5",
+          "map": "region_5_f2",
+          "x": 15,
+          "y": 5
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_5_f2",
+      "x": 5,
+      "y": 3,
+      "object": "q048_clue_a",
+      "role": "clue_a"
+    },
+    {
+      "map": "region_5_f2",
+      "x": 13,
+      "y": 2,
+      "object": "q048_clue_b",
+      "role": "clue_b"
+    },
+    {
+      "map": "region_5_f2",
+      "x": 15,
+      "y": 5,
+      "object": "q048_decision",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "追加口を閉じて最終稿を封印する",
+      "text": "筆は止まり、校正者は眠り直した。次の契約には校了日が入る。",
+      "gold": 105,
+      "xp": 100
+    },
+    "contract": {
+      "label": "自動筆を壊し、筆記契約を断つ",
+      "text": "手は止まった。違約金をめぐる交渉を、アリが引き受ける。",
+      "gold": 125,
+      "xp": 75
+    },
+    "compromise": {
+      "label": "交代の校正者を集め、追加分を上回る",
+      "text": "一晩だけ誤字はゼロになった。最後の一字を直した者は、全員の名を書く。",
+      "gold": 68,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/salome/library-first.mjs",
+    "world": {
+      "truth": "自動筆記の契約は誤字がゼロになるまで続き、依頼人が毎朝誤字を追加している。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "自動筆記の契約は誤字がゼロになるまで続き、依頼人が毎朝誤字を追加している。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "眠った校正者の手だけが動いている。仕事を止めてよいか調べてください。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "写本師のアリ",
+        "observation": "眠った校正者の手だけが動いている。仕事を止めてよいか調べてください。",
+        "belief": "眠った校正者の手だけが動いている。仕事を止めてよいか調べてください。",
+        "goal": "眠った校正者の手だけが動いている。仕事を止めてよいか調べてください。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "眠った校正者の手だけが動いている。仕事を止めてよいか調べてください。",
+      "progression": "校正を終えても翌朝誤字が増える反復を体験し、作業追加を止める契約へ切り替える。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q048.library.entry"
+        },
+        {
+          "id": "morning",
+          "script": "q048.library.morning"
+        },
+        {
+          "id": "final",
+          "script": "q048.library.final"
+        },
+        {
+          "id": "again",
+          "script": "q048.library.again"
+        },
+        {
+          "id": "sealed",
+          "script": "q048.library.sealed"
+        },
+        {
+          "id": "team",
+          "script": "q048.library.team"
+        },
+        {
+          "id": "team_work",
+          "script": "q048.library.team_work"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "眠った校正者の手だけが動いている。仕事を止めてよいか調べてください。",
+      "openQuestion": "眠る校正者の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "valueInvert",
+      "newInformation": "自動筆記の契約は誤字がゼロになるまで続き、依頼人が毎朝誤字を追加している。",
+      "retroactiveTargets": [
+        "final"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q048.flow.entry"
+      },
+      {
+        "id": "morning",
+        "script": "q048.flow.morning"
+      },
+      {
+        "id": "final",
+        "script": "q048.flow.final"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q048.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q048.repeated",
+        "meaning": "各場面に明記した repeated の行為・合意の記録",
+        "writer": [
+          "morning"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "校正を終えても翌朝誤字が増える反復を体験し、作業追加を止める契約へ切り替える。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "校正を終えても翌朝誤字が増える反復を体験し、作業追加を止める契約へ切り替える。",
+    "flowVersion": 2,
+    "entryScript": "q048.library.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "校正者は最後の誤字を示す。「これで眠れる」。依頼人は新しい紙束を持っている。",
+        "options": [
+          {
+            "id": "correct",
+            "text": "最後の一字を校正する",
+            "to": "morning",
+            "action": "entry_correct"
+          },
+          {
+            "id": "break",
+            "text": "自動筆を壊し、筆記契約を断つ",
+            "to": "@contract",
+            "action": "entry_break"
+          },
+          {
+            "id": "team",
+            "text": "交代の校正者を集め、追加分を上回る",
+            "to": "team",
+            "action": "entry_team"
+          }
+        ]
+      },
+      {
+        "id": "morning",
+        "place": "morning",
+        "text": "朝、昨日なかった誤字が同じ場所へ足されていた。依頼人が「終わると修正を頼めない」と筆を隠す。",
+        "options": [
+          {
+            "id": "again",
+            "text": "追加された一字を直して次の朝を待つ",
+            "to": "again",
+            "action": "morning_again"
+          },
+          {
+            "id": "freeze",
+            "text": "依頼人と最終稿の締切を決める",
+            "to": "final",
+            "action": "morning_freeze"
+          },
+          {
+            "id": "team",
+            "text": "追加を受け入れ、交代制で処理する",
+            "to": "team",
+            "action": "morning_team"
+          }
+        ]
+      },
+      {
+        "id": "final",
+        "place": "contract",
+        "text": "自動筆記の契約は誤字がゼロになるまで続き、依頼人が毎朝誤字を追加している。 依頼人が新規追加を別契約に分けると署名した。",
+        "options": [
+          {
+            "id": "seal",
+            "text": "追加口を閉じて最終稿を封印する",
+            "to": "sealed",
+            "action": "final_seal"
+          },
+          {
+            "id": "continue",
+            "text": "締切を取り下げ、交代の校正を続ける",
+            "to": "team",
+            "action": "final_continue"
+          }
+        ]
+      },
+      {
+        "id": "again",
+        "place": "entry",
+        "text": "校正台へ戻り、追加された一字を直した。次の朝の原稿を確かめに行く。",
+        "options": [
+          {
+            "id": "next",
+            "text": "翌朝の原稿を写本室で確認する",
+            "to": "morning",
+            "action": "again_next"
+          }
+        ]
+      },
+      {
+        "id": "sealed",
+        "place": "entry",
+        "text": "新規追加を別契約にした署名を校正台へ戻し、残る誤字を直して最終稿を封印する。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@informed",
+            "action": "sealed_finish"
+          }
+        ]
+      },
+      {
+        "id": "team",
+        "place": "morning",
+        "text": "写本室で交代の校正者を集めた。新しい紙の追加も含めて処理する。",
+        "options": [
+          {
+            "id": "escort",
+            "text": "交代者と校正台へ向かう",
+            "to": "team_work",
+            "action": "team_escort"
+          }
+        ]
+      },
+      {
+        "id": "team_work",
+        "place": "entry",
+        "text": "交代者が校正台へ到着し、分担して一晩の誤字をゼロにする。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@compromise",
+            "action": "team_work_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "library-first-ten",
+      "settlement": "salome",
+      "saveRevision": 2,
+      "scope": "書庫前半10件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q048.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "夜に直った行へ、昼の別筆で同じ誤りが戻されている。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q048",
+          "key": "clue_a",
+          "text": "夜に直った行へ、昼の別筆で同じ誤りが戻されている。"
+        }
+      ]
+    },
+    "q048.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "写本師のアリ",
+          "text": "契約の終了条件には全校了とあり、期限の欄が空白です。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q048",
+          "key": "clue_b",
+          "text": "契約の終了条件には全校了とあり、期限の欄が空白だ。"
+        }
+      ]
+    },
+    "q048.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "眠る校正者\n\n眠った校正者の手だけが動いている。仕事を止めてよいか調べてください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "追加を止め最終稿を封印する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q048.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q048.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "自動筆記の契約は誤字がゼロになるまで続き、依頼人が毎朝誤字を追加している。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "筆は止まり、校正者は眠り直した。次の契約には校了日が入る。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q048",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "自動筆の精を倒して契約を断つ",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_5",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "手は止まった。違約金をめぐる交渉を、アリが引き受ける。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q048",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "交代の校正者を集め追加分を上回る",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "一晩だけ誤字はゼロになった。最後の一字を直した者は、全員の名を書く。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q048",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q048.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "眠る校正者\n\n眠った校正者の手だけが動いている。仕事を止めてよいか調べてください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q048.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q048.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "自動筆記の契約は誤字がゼロになるまで続き、依頼人が毎朝誤字を追加している。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q048.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "追加を止め最終稿を封印する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q048.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q048.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "筆は止まり、校正者は眠り直した。次の契約には校了日が入る。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q048",
+                  "outcome": "informed"
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q048.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q048.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "contract",
+              "text": "自動筆の精を倒して契約を断つ",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_5",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "手は止まった。違約金をめぐる交渉を、アリが引き受ける。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q048",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "交代の校正者を集め追加分を上回る",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "一晩だけ誤字はゼロになった。最後の一字を直した者は、全員の名を書く。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q048",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」写本師のアリは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられる。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q048.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q048.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q048.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "筆は止まり、校正者は眠り直した。次の契約には校了日が入る。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q048.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "手は止まった。違約金をめぐる交渉を、アリが引き受ける。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q048.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "一晩だけ誤字はゼロになった。最後の一字を直した者は、全員の名を書く。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q048.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q048.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q048.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q048.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q048.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q048.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q048.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "校正者は最後の誤字を示す。「これで眠れる」。依頼人は新しい紙束を持っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "correct",
+              "text": "最後の一字を校正する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q048.flow.morning"
+                }
+              ]
+            },
+            {
+              "id": "break",
+              "text": "自動筆を壊し、筆記契約を断つ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q048.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "team",
+              "text": "交代の校正者を集め、追加分を上回る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q048.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q048.flow.morning": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q048.node",
+          "value": "morning"
+        },
+        {
+          "op": "say",
+          "text": "朝、昨日なかった誤字が同じ場所へ足されていた。依頼人が「終わると修正を頼めない」と筆を隠す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "again",
+              "text": "追加された一字を直して次の朝を待つ",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q048.repeated"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q048.repeated",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "翌朝も一字が足された。正確さを上げるだけでは契約が終わらない。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q048.flow.morning"
+                }
+              ]
+            },
+            {
+              "id": "freeze",
+              "text": "依頼人と最終稿の締切を決める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q048.flow.final"
+                }
+              ]
+            },
+            {
+              "id": "team",
+              "text": "追加を受け入れ、交代制で処理する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q048.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q048.flow.final": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q048.node",
+          "value": "final"
+        },
+        {
+          "op": "say",
+          "text": "自動筆記の契約は誤字がゼロになるまで続き、依頼人が毎朝誤字を追加している。 依頼人が新規追加を別契約に分けると署名した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "seal",
+              "text": "追加口を閉じて最終稿を封印する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q048.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "continue",
+              "text": "締切を取り下げ、交代の校正を続ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q048.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q048.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q048.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "筆は止まり、校正者は眠り直した。次の契約には校了日が入る。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q048",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q048.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q048.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "手は止まった。違約金をめぐる交渉を、アリが引き受ける。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q048",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q048.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q048.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "一晩だけ誤字はゼロになった。最後の一字を直した者は、全員の名を書く。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q048",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q048.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q048.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q048.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "筆は止まり、校正者は眠り直した。次の契約には校了日が入る。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "手は止まった。違約金をめぐる交渉を、アリが引き受ける。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "一晩だけ誤字はゼロになった。最後の一字を直した者は、全員の名を書く。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q048"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q048.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q048.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q048.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "morning",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q048.flow.morning"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "final",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q048.flow.final"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q048.flow.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q048.library.entry": {
+      "storyQuest": "q048",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q048",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "校正者は最後の誤字を示す。「これで眠れる」。依頼人は新しい紙束を持っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "correct",
+              "text": "最後の一字を校正する",
+              "storyAction": {
+                "quest": "q048",
+                "action": "entry_correct"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q048",
+                  "action": "entry_correct"
+                }
+              ]
+            },
+            {
+              "id": "break",
+              "text": "自動筆を壊し、筆記契約を断つ",
+              "storyAction": {
+                "quest": "q048",
+                "action": "entry_break"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q048",
+                  "action": "entry_break"
+                },
+                {
+                  "op": "jump",
+                  "script": "q048.library.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "team",
+              "text": "交代の校正者を集め、追加分を上回る",
+              "storyAction": {
+                "quest": "q048",
+                "action": "entry_team"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q048",
+                  "action": "entry_team"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q048.library.morning": {
+      "storyQuest": "q048",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q048",
+          "scene": "morning"
+        },
+        {
+          "op": "narrate",
+          "text": "朝、昨日なかった誤字が同じ場所へ足されていた。依頼人が「終わると修正を頼めない」と筆を隠す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "again",
+              "text": "追加された一字を直して次の朝を待つ",
+              "storyAction": {
+                "quest": "q048",
+                "action": "morning_again"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q048.values.repeated"
+                  },
+                  "right": true
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q048",
+                  "action": "morning_again"
+                }
+              ]
+            },
+            {
+              "id": "freeze",
+              "text": "依頼人と最終稿の締切を決める",
+              "storyAction": {
+                "quest": "q048",
+                "action": "morning_freeze"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q048",
+                  "action": "morning_freeze"
+                }
+              ]
+            },
+            {
+              "id": "team",
+              "text": "追加を受け入れ、交代制で処理する",
+              "storyAction": {
+                "quest": "q048",
+                "action": "morning_team"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q048",
+                  "action": "morning_team"
+                },
+                {
+                  "op": "jump",
+                  "script": "q048.library.team"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q048.library.final": {
+      "storyQuest": "q048",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q048",
+          "scene": "final"
+        },
+        {
+          "op": "narrate",
+          "text": "自動筆記の契約は誤字がゼロになるまで続き、依頼人が毎朝誤字を追加している。 依頼人が新規追加を別契約に分けると署名した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "seal",
+              "text": "追加口を閉じて最終稿を封印する",
+              "storyAction": {
+                "quest": "q048",
+                "action": "final_seal"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q048",
+                  "action": "final_seal"
+                }
+              ]
+            },
+            {
+              "id": "continue",
+              "text": "締切を取り下げ、交代の校正を続ける",
+              "storyAction": {
+                "quest": "q048",
+                "action": "final_continue"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q048",
+                  "action": "final_continue"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q048.library.again": {
+      "storyQuest": "q048",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q048",
+          "scene": "again"
+        },
+        {
+          "op": "narrate",
+          "text": "校正台へ戻り、追加された一字を直した。次の朝の原稿を確かめに行く。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "next",
+              "text": "翌朝の原稿を写本室で確認する",
+              "storyAction": {
+                "quest": "q048",
+                "action": "again_next"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q048",
+                  "action": "again_next"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q048.library.sealed": {
+      "storyQuest": "q048",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q048",
+          "scene": "sealed"
+        },
+        {
+          "op": "narrate",
+          "text": "新規追加を別契約にした署名を校正台へ戻し、残る誤字を直して最終稿を封印する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q048",
+                "action": "sealed_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q048",
+                  "action": "sealed_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q048.library.end.informed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q048.library.team": {
+      "storyQuest": "q048",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q048",
+          "scene": "team"
+        },
+        {
+          "op": "narrate",
+          "text": "写本室で交代の校正者を集めた。新しい紙の追加も含めて処理する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "escort",
+              "text": "交代者と校正台へ向かう",
+              "storyAction": {
+                "quest": "q048",
+                "action": "team_escort"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q048",
+                  "action": "team_escort"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q048.library.team_work": {
+      "storyQuest": "q048",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q048",
+          "scene": "team_work"
+        },
+        {
+          "op": "narrate",
+          "text": "交代者が校正台へ到着し、分担して一晩の誤字をゼロにする。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q048",
+                "action": "team_work_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q048",
+                  "action": "team_work_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q048.library.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q048.library.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "筆は止まり、校正者は眠り直した。次の契約には校了日が入る。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q048",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q048.library.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "手は止まった。違約金をめぐる交渉を、アリが引き受ける。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q048",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q048.library.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "一晩だけ誤字はゼロになった。最後の一字を直した者は、全員の名を書く。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q048",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q048.library.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q048"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q048.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q048.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q048.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "筆は止まり、校正者は眠り直した。次の契約には校了日が入る。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "手は止まった。違約金をめぐる交渉を、アリが引き受ける。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "一晩だけ誤字はゼロになった。最後の一字を直した者は、全員の名を書く。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q048"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q048.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q048.library.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "morning",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q048.library.morning"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "final",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q048.library.final"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "again",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q048.library.again"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "sealed",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q048.library.sealed"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "team",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q048.library.team"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "team_work",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q048.library.team_work"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q048.library.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "眠る校正者の現場",
+      "morning": "翌朝の原稿を受け取る写本室",
+      "contract": "新規追加を分ける契約窓口",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "morning"
+      ],
+      [
+        "transit",
+        "contract"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "morning",
+          "contract",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "broken": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "broken"
+      },
+      "repeated": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "repeated"
+      },
+      "additionsClosed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "additionsClosed"
+      },
+      "sealed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "sealed"
+      },
+      "teamWorked": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "teamWorked"
+      },
+      "teamAt": {
+        "type": "enum",
+        "initial": "morning",
+        "values": [
+          "entry",
+          "morning",
+          "contract",
+          "transit"
+        ],
+        "meaning": "team の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "team": {
+        "holder": "teamAt",
+        "kind": "group"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "自動筆記の契約は誤字がゼロになるまで続き、依頼人が毎朝誤字を追加している。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "眠る校正者の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "morning": {
+        "title": "翌朝の原稿を受け取る写本室",
+        "place": "morning",
+        "cast": [],
+        "requires": true
+      },
+      "final": {
+        "title": "新規追加を分ける契約窓口",
+        "place": "contract",
+        "cast": [],
+        "requires": true
+      },
+      "again": {
+        "title": "眠る校正者の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "sealed": {
+        "title": "眠る校正者の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "team": {
+        "title": "翌朝の原稿を受け取る写本室",
+        "place": "morning",
+        "cast": [],
+        "requires": true
+      },
+      "team_work": {
+        "title": "眠る校正者の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_correct": {
+        "from": [
+          "entry"
+        ],
+        "to": "morning",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "morning"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "morning",
+          "companions": []
+        },
+        "depart": []
+      },
+      "entry_break": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "broken",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "entry_team": {
+        "from": [
+          "entry"
+        ],
+        "to": "team",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "morning"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "morning",
+          "companions": []
+        },
+        "depart": []
+      },
+      "morning_again": {
+        "from": [
+          "morning"
+        ],
+        "to": "again",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q048.values.repeated"
+            },
+            "right": true
+          }
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "repeated",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "morning_freeze": {
+        "from": [
+          "morning"
+        ],
+        "to": "final",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "contract"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "contract",
+            "requires": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "contract",
+          "companions": []
+        },
+        "depart": []
+      },
+      "morning_team": {
+        "from": [
+          "morning"
+        ],
+        "to": "team",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "final_seal": {
+        "from": [
+          "final"
+        ],
+        "to": "sealed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "final_continue": {
+        "from": [
+          "final"
+        ],
+        "to": "team",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "morning"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "morning",
+          "companions": []
+        },
+        "depart": []
+      },
+      "again_next": {
+        "from": [
+          "again"
+        ],
+        "to": "morning",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "morning"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "morning",
+          "companions": []
+        },
+        "depart": []
+      },
+      "sealed_finish": {
+        "from": [
+          "sealed"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "additionsClosed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "sealed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "team_escort": {
+        "from": [
+          "team"
+        ],
+        "to": "team_work",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "team"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "team"
+          ]
+        },
+        "depart": []
+      },
+      "team_work_finish": {
+        "from": [
+          "team_work"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "teamWorked",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q048.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q048.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q048.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q048.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q048.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q048.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q048.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q048.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q048.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_5",
+        "map": "region_5_f2",
+        "x": 15,
+        "y": 5
+      },
+      "morning": {
+        "kind": "town",
+        "location": "library_copy_room"
+      },
+      "contract": {
+        "kind": "town",
+        "location": "library_registry"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "salome",
+  "receptionLocations": [
+    "salome_board"
+  ]
+}

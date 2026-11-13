@@ -519,7 +519,7 @@
     },
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -528,7 +528,639 @@
       "saveRevision": 2,
       "scope": "書庫前半10件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "眠る校正者の現場",
+            "morning": "翌朝の原稿を受け取る写本室",
+            "contract": "新規追加を分ける契約窓口",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "morning"
+            ],
+            [
+              "transit",
+              "contract"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "morning",
+                "contract",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "informed",
+                "contract",
+                "compromise"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "broken": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "broken"
+            },
+            "repeated": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "repeated"
+            },
+            "additionsClosed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "additionsClosed"
+            },
+            "sealed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "sealed"
+            },
+            "teamWorked": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "teamWorked"
+            },
+            "teamAt": {
+              "type": "enum",
+              "initial": "morning",
+              "values": [
+                "entry",
+                "morning",
+                "contract",
+                "transit"
+              ],
+              "meaning": "team の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "team": {
+              "holder": "teamAt",
+              "kind": "group"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "自動筆記の契約は誤字がゼロになるまで続き、依頼人が毎朝誤字を追加している。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "眠る校正者の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "morning": {
+              "title": "翌朝の原稿を受け取る写本室",
+              "place": "morning",
+              "cast": [],
+              "requires": true
+            },
+            "final": {
+              "title": "新規追加を分ける契約窓口",
+              "place": "contract",
+              "cast": [],
+              "requires": true
+            },
+            "again": {
+              "title": "眠る校正者の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "sealed": {
+              "title": "眠る校正者の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "team": {
+              "title": "翌朝の原稿を受け取る写本室",
+              "place": "morning",
+              "cast": [],
+              "requires": true
+            },
+            "team_work": {
+              "title": "眠る校正者の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_correct": {
+              "from": [
+                "entry"
+              ],
+              "to": "morning",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "morning"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "morning",
+                "companions": []
+              },
+              "depart": []
+            },
+            "entry_break": {
+              "from": [
+                "entry"
+              ],
+              "ending": "contract",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "broken",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "contract"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "entry_team": {
+              "from": [
+                "entry"
+              ],
+              "to": "team",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "morning"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "morning",
+                "companions": []
+              },
+              "depart": []
+            },
+            "morning_again": {
+              "from": [
+                "morning"
+              ],
+              "to": "again",
+              "requires": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q048.values.repeated"
+                  },
+                  "right": true
+                }
+              },
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "repeated",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "morning_freeze": {
+              "from": [
+                "morning"
+              ],
+              "to": "final",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "contract"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "observe",
+                  "observer": "party",
+                  "proposition": "truth",
+                  "source": "contract",
+                  "requires": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "contract",
+                "companions": []
+              },
+              "depart": []
+            },
+            "morning_team": {
+              "from": [
+                "morning"
+              ],
+              "to": "team",
+              "requires": true,
+              "effects": [],
+              "once": false
+            },
+            "final_seal": {
+              "from": [
+                "final"
+              ],
+              "to": "sealed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "final_continue": {
+              "from": [
+                "final"
+              ],
+              "to": "team",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "morning"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "morning",
+                "companions": []
+              },
+              "depart": []
+            },
+            "again_next": {
+              "from": [
+                "again"
+              ],
+              "to": "morning",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "morning"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "morning",
+                "companions": []
+              },
+              "depart": []
+            },
+            "sealed_finish": {
+              "from": [
+                "sealed"
+              ],
+              "ending": "informed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "additionsClosed",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "sealed",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "informed"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "team_escort": {
+              "from": [
+                "team"
+              ],
+              "to": "team_work",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "team"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": [
+                  "team"
+                ]
+              },
+              "depart": []
+            },
+            "team_work_finish": {
+              "from": [
+                "team_work"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "teamWorked",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "informed": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q048.values.resolution"
+                  },
+                  "right": "informed"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q048.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q048.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "contract": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q048.values.resolution"
+                  },
+                  "right": "contract"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q048.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q048.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compromise": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q048.values.resolution"
+                  },
+                  "right": "compromise"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q048.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q048.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_5",
+              "map": "region_5_f2",
+              "x": 15,
+              "y": 5
+            },
+            "morning": {
+              "kind": "town",
+              "location": "library_copy_room"
+            },
+            "contract": {
+              "kind": "town",
+              "location": "library_registry"
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "proofreaderAt",
+            "value": "entry"
+          },
+          {
+            "key": "manuscriptClientAt",
+            "value": "entry"
+          },
+          {
+            "key": "manuscriptClientAt",
+            "value": "morning",
+            "when": {
+              "op": "in",
+              "left": "entry_correct",
+              "right": {
+                "ref": "stories.q048.events"
+              }
+            }
+          },
+          {
+            "key": "manuscriptClientAt",
+            "value": "contract",
+            "when": {
+              "op": "in",
+              "left": "morning_freeze",
+              "right": {
+                "ref": "stories.q048.events"
+              }
+            }
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q048.clue_a": {
@@ -1992,6 +2624,24 @@
           "transit"
         ],
         "meaning": "team の所在または保持者"
+      },
+      "proofreaderAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry"
+        ],
+        "meaning": "proofreader の所在または保持者"
+      },
+      "manuscriptClientAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "morning",
+          "contract"
+        ],
+        "meaning": "manuscriptClient の所在または保持者"
       }
     },
     "entities": {
@@ -2001,7 +2651,18 @@
       },
       "team": {
         "holder": "teamAt",
-        "kind": "group"
+        "kind": "group",
+        "character": "q048_team"
+      },
+      "proofreader": {
+        "holder": "proofreaderAt",
+        "kind": "person",
+        "character": "q048_proofreader"
+      },
+      "manuscriptClient": {
+        "holder": "manuscriptClientAt",
+        "kind": "person",
+        "character": "q048_manuscriptClient"
       }
     },
     "propositions": {
@@ -2015,19 +2676,46 @@
       "entry": {
         "title": "眠る校正者の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "proofreader",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "manuscriptClient",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "morning": {
         "title": "翌朝の原稿を受け取る写本室",
         "place": "morning",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "manuscriptClient",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "final": {
         "title": "新規追加を分ける契約窓口",
         "place": "contract",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "manuscriptClient",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "again": {
@@ -2045,13 +2733,27 @@
       "team": {
         "title": "翌朝の原稿を受け取る写本室",
         "place": "morning",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "team",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "team_work": {
         "title": "眠る校正者の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "team",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       }
     },
@@ -2069,6 +2771,19 @@
               "party"
             ],
             "path": [
+              "transit",
+              "morning"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "manuscriptClient"
+            ],
+            "path": [
+              "entry",
               "transit",
               "morning"
             ],
@@ -2189,6 +2904,19 @@
               "party"
             ],
             "path": [
+              "transit",
+              "contract"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "manuscriptClient"
+            ],
+            "path": [
+              "morning",
               "transit",
               "contract"
             ],
@@ -2498,7 +3226,7 @@
         "location": "library_registry"
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "salome",
   "receptionLocations": [

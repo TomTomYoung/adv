@@ -1,4 +1,4 @@
-import {set,give,ref,eq} from '../../../story-kit.mjs';
+import {set,give,ref,eq,move} from '../../../story-kit.mjs';
 import {librarySource} from './library-common.mjs';
 export function libraryFirstSource(q,{cast=true}={}){
  const {x,node,choice,town,cell,entity,opt,add,route,end,v,transfer,finish}=librarySource(q);
@@ -95,6 +95,17 @@ export function libraryFirstSource(q,{cast=true}={}){
   route('morning','again','again');delete choice('morning','again').textAfter;add('again','entry','校正台へ戻り、追加された一字を直した。次の朝の原稿を確かめに行く。',[opt('next','翌朝の原稿を写本室で確認する','morning')]);
   route('final','seal','sealed');end('sealed','entry','新規追加を別契約にした署名を校正台へ戻し、残る誤字を直して最終稿を封印する。','informed',[set('additionsClosed'),set('sealed')]);
   for(const [from,key] of [['entry','team'],['morning','team'],['final','continue']])route(from,key,'team');add('team','morning','写本室で交代の校正者を集めた。新しい紙の追加も含めて処理する。',[opt('escort','交代者と校正台へ向かう','team_work',{companions:['team']})]);end('team_work','entry','交代者が校正台へ到着し、分担して一晩の誤字をゼロにする。','compromise',[set('teamWorked')]);choice('entry','break').effects=[set('broken')];
+  if(cast){
+   entity('proofreader','entry','person');entity('manuscriptClient','entry','person');
+   for(const id of ['proofreader','manuscriptClient','team'])x.entities[id].character='q048_'+id;
+   // These are independent arrivals in the authored next-morning/office scenes,
+   // not companions on the party's journey. Repeating the correction leaves
+   // the client in the copy room; withdrawing the deadline leaves them at the office.
+   (choice('entry','correct').effects??=[]).push(move('manuscriptClient','entry','transit','morning'));
+   (choice('morning','freeze').effects??=[]).push(move('manuscriptClient','morning','transit','contract'));
+   const casts={entry:['proofreader','manuscriptClient'],morning:['manuscriptClient'],final:['manuscriptClient'],team:['team'],team_work:['team']};
+   for(const [scene,people] of Object.entries(casts)){const positions=people.length===2?[31,69]:[50];node(scene).cast=people.map((entity,i)=>({entity,display:{x:positions[i]}}));}
+  }
  }
  if(q.number===49){
   cell('map','壁に残された帰路の見取図',2,7,1);town('registry','封印範囲の修正を受け取る窓口','library_registry');entity('document','entry');entity('mapCopy','map');entity('luu','entry','person');
