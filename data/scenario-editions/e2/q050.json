@@ -490,7 +490,7 @@
       {
         "id": "prepare_copies",
         "place": "entry",
-        "text": "閉架の棚へ戻り、写本班へ渡す原本を確かめた。延長を取り下げた二冊も含めて運ぶ。",
+        "text": "閉架の棚へ戻り、写本班へ渡す原本を確かめた。未完の二冊も含めて運ぶ。",
         "options": [
           {
             "id": "carry",
@@ -516,7 +516,7 @@
       {
         "id": "closed",
         "place": "warehouse",
-        "text": "全ての原本を別倉へ運び、最後の箱の受領を確かめた。写本は照合室に残る。",
+        "text": "全ての原本を携えて別倉へ着いた。最後の箱の受領を確かめる。写本は照合室に残る。",
         "options": [
           {
             "id": "finish",
@@ -542,7 +542,7 @@
       {
         "id": "return_extended",
         "place": "entry",
-        "text": "原本を閉架の棚へ戻した。未完の二冊を選び直して延長を求める。",
+        "text": "原本を携えて閉架の棚へ戻った。棚へ戻して未完の二冊を選び直し、延長を求める。",
         "options": [
           {
             "id": "request",
@@ -568,7 +568,7 @@
       {
         "id": "posted",
         "place": "notice",
-        "text": "通常分の移送先と、延長して棚に残る二冊を掲示した。",
+        "text": "通常分の移送先と、延長して棚に残る二冊を書庫受付へ掲示する。",
         "options": [
           {
             "id": "finish",
@@ -588,7 +588,7 @@
     },
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -597,7 +597,1056 @@
       "saveRevision": 2,
       "scope": "書庫前半10件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "止まった終章の現場",
+            "warehouse": "別倉の受領棚",
+            "requests": "延長を申請する窓口",
+            "copies": "写本班の照合室",
+            "notice": "書庫受付の移送先掲示",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "warehouse"
+            ],
+            [
+              "transit",
+              "requests"
+            ],
+            [
+              "transit",
+              "copies"
+            ],
+            [
+              "transit",
+              "notice"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "warehouse",
+                "requests",
+                "copies",
+                "notice",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "informed",
+                "contract",
+                "compromise"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "clockFixed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "clockFixed"
+            },
+            "copied": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "copied"
+            },
+            "extended": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "extended"
+            },
+            "posted": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "posted"
+            },
+            "firstBoxAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "warehouse",
+                "requests",
+                "copies",
+                "notice",
+                "transit",
+                "party",
+                "otherBooks",
+                "unfinished",
+                "copySet"
+              ],
+              "meaning": "firstBox の所在または保持者"
+            },
+            "otherBooksAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "warehouse",
+                "requests",
+                "copies",
+                "notice",
+                "transit",
+                "party",
+                "firstBox",
+                "unfinished",
+                "copySet"
+              ],
+              "meaning": "otherBooks の所在または保持者"
+            },
+            "unfinishedAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "warehouse",
+                "requests",
+                "copies",
+                "notice",
+                "transit",
+                "party",
+                "firstBox",
+                "otherBooks",
+                "copySet"
+              ],
+              "meaning": "unfinished の所在または保持者"
+            },
+            "copySetAt": {
+              "type": "enum",
+              "initial": "copies",
+              "values": [
+                "entry",
+                "warehouse",
+                "requests",
+                "copies",
+                "notice",
+                "transit",
+                "party",
+                "firstBox",
+                "otherBooks",
+                "unfinished"
+              ],
+              "meaning": "copySet の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "firstBox": {
+              "holder": "firstBoxAt",
+              "kind": "item"
+            },
+            "otherBooks": {
+              "holder": "otherBooksAt",
+              "kind": "item"
+            },
+            "unfinished": {
+              "holder": "unfinishedAt",
+              "kind": "item"
+            },
+            "copySet": {
+              "holder": "copySetAt",
+              "kind": "item"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "時計は収蔵期限を示し、閉じた本は破棄でなく別の倉へ移送される。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "止まった終章の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "warehouse": {
+              "title": "別倉の受領棚",
+              "place": "warehouse",
+              "cast": [],
+              "requires": true
+            },
+            "requests": {
+              "title": "延長を申請する窓口",
+              "place": "requests",
+              "cast": [],
+              "requires": true
+            },
+            "copies": {
+              "title": "写本班の照合室",
+              "place": "copies",
+              "cast": [],
+              "requires": true
+            },
+            "prepare_copies": {
+              "title": "止まった終章の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "fetch_box": {
+              "title": "別倉の受領棚",
+              "place": "warehouse",
+              "cast": [],
+              "requires": true
+            },
+            "closed": {
+              "title": "別倉の受領棚",
+              "place": "warehouse",
+              "cast": [],
+              "requires": true
+            },
+            "select": {
+              "title": "止まった終章の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "return_extended": {
+              "title": "止まった終章の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "delivered": {
+              "title": "別倉の受領棚",
+              "place": "warehouse",
+              "cast": [],
+              "requires": true
+            },
+            "posted": {
+              "title": "書庫受付の移送先掲示",
+              "place": "notice",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_follow": {
+              "from": [
+                "entry"
+              ],
+              "to": "warehouse",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "warehouse"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "firstBox",
+                  "from": "party",
+                  "to": "warehouse"
+                },
+                {
+                  "op": "observe",
+                  "observer": "party",
+                  "proposition": "truth",
+                  "source": "warehouse",
+                  "requires": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "warehouse",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "firstBox",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "entry_copy": {
+              "from": [
+                "entry"
+              ],
+              "to": "prepare_copies",
+              "requires": true,
+              "effects": [],
+              "once": false
+            },
+            "entry_stop": {
+              "from": [
+                "entry"
+              ],
+              "ending": "contract",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "clockFixed",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "contract"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "warehouse_extension": {
+              "from": [
+                "warehouse"
+              ],
+              "to": "requests",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "requests"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "requests",
+                "companions": []
+              },
+              "depart": []
+            },
+            "warehouse_copy": {
+              "from": [
+                "warehouse"
+              ],
+              "to": "prepare_copies",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "requests_publish": {
+              "from": [
+                "requests"
+              ],
+              "to": "select",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "requests_cancel": {
+              "from": [
+                "requests"
+              ],
+              "to": "prepare_copies",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "copies_close": {
+              "from": [
+                "copies"
+              ],
+              "to": "closed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "warehouse"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "warehouse",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "firstBox",
+                  "from": "copies",
+                  "to": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "otherBooks",
+                  "from": "copies",
+                  "to": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "unfinished",
+                  "from": "copies",
+                  "to": "party"
+                }
+              ]
+            },
+            "copies_address": {
+              "from": [
+                "copies"
+              ],
+              "to": "return_extended",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "firstBox",
+                  "from": "copies",
+                  "to": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "otherBooks",
+                  "from": "copies",
+                  "to": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "unfinished",
+                  "from": "copies",
+                  "to": "party"
+                }
+              ]
+            },
+            "prepare_copies_carry": {
+              "from": [
+                "prepare_copies"
+              ],
+              "to": "fetch_box",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "warehouse"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "warehouse",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "otherBooks",
+                  "from": "entry",
+                  "to": "party",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q050.values.otherBooksAt"
+                    },
+                    "right": "entry"
+                  }
+                },
+                {
+                  "op": "transfer",
+                  "entity": "unfinished",
+                  "from": "entry",
+                  "to": "party",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q050.values.unfinishedAt"
+                    },
+                    "right": "entry"
+                  }
+                },
+                {
+                  "op": "transfer",
+                  "entity": "firstBox",
+                  "from": "entry",
+                  "to": "party",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q050.values.firstBoxAt"
+                    },
+                    "right": "entry"
+                  }
+                }
+              ]
+            },
+            "fetch_box_copy": {
+              "from": [
+                "fetch_box"
+              ],
+              "to": "copies",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "copies"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "firstBox",
+                  "from": "party",
+                  "to": "copies"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "otherBooks",
+                  "from": "party",
+                  "to": "copies"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "unfinished",
+                  "from": "party",
+                  "to": "copies"
+                },
+                {
+                  "op": "set",
+                  "key": "copied",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "copies",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "firstBox",
+                  "from": "warehouse",
+                  "to": "party",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q050.values.firstBoxAt"
+                    },
+                    "right": "warehouse"
+                  }
+                }
+              ]
+            },
+            "closed_finish": {
+              "from": [
+                "closed"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "firstBox",
+                  "from": "party",
+                  "to": "warehouse"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "otherBooks",
+                  "from": "party",
+                  "to": "warehouse"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "unfinished",
+                  "from": "party",
+                  "to": "warehouse"
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "select_carry": {
+              "from": [
+                "select"
+              ],
+              "to": "delivered",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "warehouse"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "otherBooks",
+                  "from": "party",
+                  "to": "warehouse",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q050.values.otherBooksAt"
+                    },
+                    "right": "party"
+                  }
+                },
+                {
+                  "op": "transfer",
+                  "entity": "firstBox",
+                  "from": "party",
+                  "to": "warehouse",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q050.values.firstBoxAt"
+                    },
+                    "right": "party"
+                  }
+                },
+                {
+                  "op": "set",
+                  "key": "extended",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "warehouse",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "otherBooks",
+                  "from": "entry",
+                  "to": "party",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q050.values.otherBooksAt"
+                    },
+                    "right": "entry"
+                  }
+                },
+                {
+                  "op": "transfer",
+                  "entity": "firstBox",
+                  "from": "entry",
+                  "to": "party",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q050.values.firstBoxAt"
+                    },
+                    "right": "entry"
+                  }
+                }
+              ]
+            },
+            "return_extended_request": {
+              "from": [
+                "return_extended"
+              ],
+              "to": "requests",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "requests"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "requests",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "firstBox",
+                  "from": "party",
+                  "to": "entry"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "otherBooks",
+                  "from": "party",
+                  "to": "entry"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "unfinished",
+                  "from": "party",
+                  "to": "entry"
+                }
+              ]
+            },
+            "delivered_post": {
+              "from": [
+                "delivered"
+              ],
+              "to": "posted",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "notice"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "notice",
+                "companions": []
+              },
+              "depart": []
+            },
+            "posted_finish": {
+              "from": [
+                "posted"
+              ],
+              "ending": "informed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "posted",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "informed"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "informed": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q050.values.resolution"
+                  },
+                  "right": "informed"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q050.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q050.values.partyAt"
+                      },
+                      "right": "notice"
+                    }
+                  ]
+                }
+              ]
+            },
+            "contract": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q050.values.resolution"
+                  },
+                  "right": "contract"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q050.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q050.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compromise": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q050.values.resolution"
+                  },
+                  "right": "compromise"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q050.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q050.values.partyAt"
+                      },
+                      "right": "warehouse"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_5",
+              "map": "region_5_f2",
+              "x": 9,
+              "y": 12
+            },
+            "warehouse": {
+              "kind": "town",
+              "location": "library_warehouse"
+            },
+            "requests": {
+              "kind": "town",
+              "location": "library_registry"
+            },
+            "copies": {
+              "kind": "town",
+              "location": "library_copy_room"
+            },
+            "notice": {
+              "kind": "town",
+              "location": "e2_archive"
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "librarianAt",
+            "value": "entry"
+          },
+          {
+            "key": "readerAt",
+            "value": "requests"
+          },
+          {
+            "key": "copyCrewAt",
+            "value": "copies"
+          },
+          {
+            "key": "librarianAt",
+            "value": "requests",
+            "when": {
+              "op": "or",
+              "args": [
+                {
+                  "op": "in",
+                  "left": "warehouse_extension",
+                  "right": {
+                    "ref": "stories.q050.events"
+                  }
+                },
+                {
+                  "op": "in",
+                  "left": "return_extended_request",
+                  "right": {
+                    "ref": "stories.q050.events"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q050.clue_a": {
@@ -1694,7 +2743,7 @@
         },
         {
           "op": "narrate",
-          "text": "閉架の棚へ戻り、写本班へ渡す原本を確かめた。延長を取り下げた二冊も含めて運ぶ。"
+          "text": "閉架の棚へ戻り、写本班へ渡す原本を確かめた。未完の二冊も含めて運ぶ。"
         },
         {
           "op": "choice",
@@ -1764,7 +2813,7 @@
         },
         {
           "op": "narrate",
-          "text": "全ての原本を別倉へ運び、最後の箱の受領を確かめた。写本は照合室に残る。"
+          "text": "全ての原本を携えて別倉へ着いた。最後の箱の受領を確かめる。写本は照合室に残る。"
         },
         {
           "op": "choice",
@@ -1838,7 +2887,7 @@
         },
         {
           "op": "narrate",
-          "text": "原本を閉架の棚へ戻した。未完の二冊を選び直して延長を求める。"
+          "text": "原本を携えて閉架の棚へ戻った。棚へ戻して未完の二冊を選び直し、延長を求める。"
         },
         {
           "op": "choice",
@@ -1908,7 +2957,7 @@
         },
         {
           "op": "narrate",
-          "text": "通常分の移送先と、延長して棚に残る二冊を掲示した。"
+          "text": "通常分の移送先と、延長して棚に残る二冊を書庫受付へ掲示する。"
         },
         {
           "op": "choice",
@@ -2331,6 +3380,31 @@
           "unfinished"
         ],
         "meaning": "copySet の所在または保持者"
+      },
+      "librarianAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "requests"
+        ],
+        "meaning": "librarian の所在または保持者"
+      },
+      "readerAt": {
+        "type": "enum",
+        "initial": "requests",
+        "values": [
+          "requests"
+        ],
+        "meaning": "reader の所在または保持者"
+      },
+      "copyCrewAt": {
+        "type": "enum",
+        "initial": "copies",
+        "values": [
+          "copies"
+        ],
+        "meaning": "copyCrew の所在または保持者"
       }
     },
     "entities": {
@@ -2353,6 +3427,21 @@
       "copySet": {
         "holder": "copySetAt",
         "kind": "item"
+      },
+      "librarian": {
+        "holder": "librarianAt",
+        "kind": "person",
+        "character": "q050_librarian"
+      },
+      "reader": {
+        "holder": "readerAt",
+        "kind": "person",
+        "character": "q050_reader"
+      },
+      "copyCrew": {
+        "holder": "copyCrewAt",
+        "kind": "group",
+        "character": "q050_copyCrew"
       }
     },
     "propositions": {
@@ -2366,7 +3455,14 @@
       "entry": {
         "title": "止まった終章の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "librarian",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "warehouse": {
@@ -2378,13 +3474,33 @@
       "requests": {
         "title": "延長を申請する窓口",
         "place": "requests",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "reader",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "librarian",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "copies": {
         "title": "写本班の照合室",
         "place": "copies",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "copyCrew",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "prepare_copies": {
@@ -2530,6 +3646,26 @@
             ],
             "assistant": "party",
             "carrier": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "librarian"
+            ],
+            "path": [
+              "entry",
+              "transit",
+              "requests"
+            ],
+            "assistant": "party",
+            "carrier": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q050.values.librarianAt"
+              },
+              "right": "entry"
+            }
           }
         ],
         "once": false,
@@ -2984,6 +4120,26 @@
             ],
             "assistant": "party",
             "carrier": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "librarian"
+            ],
+            "path": [
+              "entry",
+              "transit",
+              "requests"
+            ],
+            "assistant": "party",
+            "carrier": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q050.values.librarianAt"
+              },
+              "right": "entry"
+            }
           }
         ],
         "once": false,
@@ -3185,7 +4341,7 @@
         "location": "e2_archive"
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "salome",
   "receptionLocations": [

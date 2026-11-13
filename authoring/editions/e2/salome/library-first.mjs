@@ -133,5 +133,20 @@ export function libraryFirstSource(q,{cast=true}={}){
   route('copies','address','return_extended',{depart:[give('firstBox','copies','party'),give('otherBooks','copies','party'),give('unfinished','copies','party')]});add('return_extended','entry','原本を閉架の棚へ戻した。未完の二冊を選び直して延長を求める。',[opt('request','窓口で二冊の延長を申請する','requests',{depart:[give('firstBox','party','entry'),give('otherBooks','party','entry'),give('unfinished','party','entry')]})]);
   add('delivered','warehouse','通常分の受領を確認した。未完の二冊は元の棚で延長し、移送先とともに入口へ掲示する。',[opt('post','書庫受付へ戻り、移送先と二冊を掲示する','posted')]);end('posted','notice','通常分の移送先と、延長して棚に残る二冊を掲示した。','informed',[set('posted')]);choice('entry','stop').effects=[set('clockFixed')];
  }
+ if(q.number===50&&cast){
+  entity('librarian','entry','person');entity('reader','requests','person');entity('copyCrew','copies','group');
+  for(const id of ['librarian','reader','copyCrew'])x.entities[id].character='q050_'+id;
+  // The librarian is present at the application office independently of the
+  // party's transport. Subsequent applications leave them at that office.
+  for(const [from,key] of [['warehouse','extension'],['return_extended','request']])
+   (choice(from,key).effects??=[]).push({...move('librarian','entry','transit','requests'),when:eq(v('librarianAt'),'entry')});
+  const casts={entry:['librarian'],requests:['reader','librarian'],copies:['copyCrew']};
+  for(const [scene,people] of Object.entries(casts)){const positions=people.length===2?[31,69]:[50];node(scene).cast=people.map((entity,i)=>({entity,display:{x:positions[i]}}));}
+  // The corresponding transfers/posting commit in the following action.
+  node('prepare_copies').text='閉架の棚へ戻り、写本班へ渡す原本を確かめた。未完の二冊も含めて運ぶ。';
+  node('closed').text='全ての原本を携えて別倉へ着いた。最後の箱の受領を確かめる。写本は照合室に残る。';
+  node('return_extended').text='原本を携えて閉架の棚へ戻った。棚へ戻して未完の二冊を選び直し、延長を求める。';
+  node('posted').text='通常分の移送先と、延長して棚に残る二冊を書庫受付へ掲示する。';
+ }
  return finish();
 }
