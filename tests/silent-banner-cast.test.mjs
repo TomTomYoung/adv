@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 import {data,ready,start,choose} from './library-helpers.mjs';
 import {projectGame} from '../src/application/projection.js';
 import {compileRelocatedQuest} from '../tools/compile-relocated-quest.mjs';
@@ -10,7 +11,8 @@ const sceneCast=id=>q.story.scenes[id].cast.map(c=>c.entity);
 const options={prefix:'library',eventPrefix:'library',settlement:'salome',settlementName:'サロメ',board:'salome_board',boardName:'サロメの共同依頼所',source:'authoring/editions/e2/salome/library-second.mjs',stage:'library-second-ten',scope:'書庫後半10件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。',preserveAcceptedRoute:true,battle:'boss_5'};
 
 test('q141 changes only two cast roles, real arrival of the ensemble, and story revision',()=>{
- const previous=compileRelocatedQuest(data.previousQuestRoutes.q141??data.quests.q141,librarySecondSource(data.previousQuestRoutes.q141??data.quests.q141,{cast:false}),options);
+ const first=JSON.parse(fs.readFileSync(new URL('../data/quests/q141.json',import.meta.url),'utf8'));
+ const previous=compileRelocatedQuest(first,librarySecondSource(first,{cast:false}),options);
  assert.equal(q.model.edition.revision,2);
  assert.equal(q.story.revision,2);
  assert.deepEqual(q.model.storyUpgrades[0].previous,previous.story);
