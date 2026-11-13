@@ -3,6 +3,7 @@ import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {compileRelocatedQuest} from './compile-relocated-quest.mjs';
 import {libraryFirstSource} from '../authoring/editions/e2/salome/library-first.mjs';
+import {ref} from '../authoring/story-kit.mjs';
 const root=path.resolve(import.meta.dirname,'..');
 const prose=text=>typeof text==='string'?text:Array.isArray(text)?text.map(prose).join('\n\n'):`条件に応じて：${prose(text.yes)} ／ ${prose(text.no)}`;
 export async function buildLibraryQuests({check=false}={}){
@@ -18,6 +19,20 @@ export async function buildLibraryQuests({check=false}={}){
    for(const {key,value} of values)quest.story.registry[key].values=[value];
    quest.story.revision=2;quest.model.edition.revision=2;
    quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values}];
+  }
+  if(n===48){
+   const previous=compileRelocatedQuest(first,source(first,{cast:false}),options).story;
+   for(const [key,entry] of Object.entries(previous.registry))quest.story.registry[key]=structuredClone(entry);
+   quest.story.registry.proofreaderAt.values=['entry'];
+   quest.story.registry.manuscriptClientAt.values=['entry','morning','contract'];
+   const arrived=action=>({op:'in',left:action,right:ref('stories.q048.events')});
+   quest.story.revision=2;quest.model.edition.revision=2;
+   quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[
+    {key:'proofreaderAt',value:'entry'},
+    {key:'manuscriptClientAt',value:'entry'},
+    {key:'manuscriptClientAt',value:'morning',when:arrived('entry_correct')},
+    {key:'manuscriptClientAt',value:'contract',when:arrived('morning_freeze')}
+   ]}];
   }
   quests.push(quest);
  }
