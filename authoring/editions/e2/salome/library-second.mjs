@@ -109,6 +109,13 @@ export function librarySecondSource(q,{cast=true}={}){
   route('mother','wait','collect_letter',{depart:[set('waitingAgreed')]});add('collect_letter','post','約束した次の便が届いた。届いた封書を受け取り、開花の判断を先取りせず母へ運ぶ。',[opt('deliver','次便の封書を母へ届ける','letter',{depart:[give('letterSheet','post','party')],effects:[give('letterSheet','party','motherPerson'),set('letterReceived')]})]);node('letter').place='mother';
   route('letter','open','waited_garden',{companions:['motherPerson'],depart:[set('motherAgreed')]});end('waited_garden','garden','手紙を受け取った母と庭へ戻り、待つ期限が過ぎたことを確かめて覆いを外す。','waited',[set('opened')]);route('letter','half','half_garden',{companions:['motherPerson'],depart:[set('motherAgreed')]});
  }
+ if(q.number===145&&cast){
+  x.entities.motherPerson.character='q145_mother';
+  // Mother stays at home while the party collects the letter or delivers the
+  // drawing. She accompanies only the agreed garden visits.
+  for(const scene of ['mother','letter','now_garden','half_garden','waited_garden'])
+   node(scene).cast=[{entity:'motherPerson',display:{x:50}}];
+ }
  if(q.number===146){
   town('friends','生き残った同僚の集う酒場','salome_inn');town('dyer','染め直しと仕立ての工房','library_tailor');town('storage','軍服を保管する別倉','library_warehouse');
   entity('veteran','entry','person');entity('uniform','veteran');entity('colleagues','friends','group');node('friends').place='friends';choice('entry','friends').companions=['veteran'];
