@@ -1,7 +1,7 @@
-import {set,give,eq} from '../../../story-kit.mjs';
+import {set,give,eq,move} from '../../../story-kit.mjs';
 import {librarySource} from './library-common.mjs';
 
-export function librarySecondSource(q){
+export function librarySecondSource(q,{cast=true}={}){
  const {x,node,choice,town,cell,entity,opt,add,route,end,v,finish}=librarySource(q);
  const p=q.locations.find(p=>p.role==='decision');cell('entry',q.title+'の相談卓',p.map.endsWith('f1')?1:2,p.x,p.y);
  const stage=()=>town('stage','祭の本番会場','library_stage');
@@ -18,6 +18,18 @@ export function librarySecondSource(q){
   end('performed_new','stage','楽団へ新曲の楽譜と旗を渡し、今年の演奏を始めた。','new',[give('banner','party','stage'),give('scoreSheet','party','stage'),set('performed')]);
   route('entry','silent','performed_silent',{depart:[give('banner','entry','party')]});end('performed_silent','stage','旗を会場へ届け、鳴らさないまま演奏を終える。','silent',[give('banner','party','stage'),set('performed')]);
   x.flags.performerAgreed=false;
+ }
+ if(q.number===141&&cast){
+  entity('band','entry','group');
+  x.entities.sana.character='q141_sana';
+  x.entities.band.character='q141_band';
+  // The ensemble performs at the consultation site and then arrives at the
+  // festival independently. The party never gains an ensemble companion.
+  for(const [from,key] of [['entry','silent'],['score_use','carry'],['score_new','carry']])
+   (choice(from,key).effects??=[]).push({...move('band','entry','transit','stage'),when:eq(v('bandAt'),'entry')});
+  for(const id of ['entry','performed_use','performed_new','performed_silent'])
+   node(id).cast=[{entity:'band',display:{x:50}}];
+  node('sana').cast=[{entity:'sana',display:{x:50}}];
  }
  if(q.number===142){
   town('buyer','指輪の買主との面会席','library_buyer');town('repair','名を出す修理工房','library_tailor');
