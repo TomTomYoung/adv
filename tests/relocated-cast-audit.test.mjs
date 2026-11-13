@@ -6,7 +6,7 @@ import {auditRelocatedCast,loadRelocatedCastQuests,relocatedCastFingerprint} fro
 const quests=await loadRelocatedCastQuests();
 test('cast audit distinguishes measured empty casts, reviewed scenes and candidate roles',()=>{
  const report=auditRelocatedCast(quests);
- assert.deepEqual(report.summary,{"quests":100,"scenes":753,"emptyCastScenes":348,"personEntities":143,"characterLinkedEntities":116,"reviewedQuests":72,"reviewedScenes":552,"noPersonEvidenceScenes":146,"personEvidenceScenes":406,"candidateRoles":1,"connectedRoles":162,"unreviewedScenes":201});
+ assert.deepEqual(report.summary,{"quests":100,"scenes":753,"emptyCastScenes":340,"personEntities":143,"characterLinkedEntities":120,"reviewedQuests":73,"reviewedScenes":560,"noPersonEvidenceScenes":146,"personEvidenceScenes":414,"candidateRoles":1,"connectedRoles":166,"unreviewedScenes":193});
  const banner=report.quests.find(q=>q.id==='q141');
  assert.deepEqual(Object.fromEntries(Object.entries(banner.review.people).map(([id,role])=>[id,{status:role.status,entity:role.entity}])),{
   q141_band:{status:'connected',entity:'band'},q141_sana:{status:'connected',entity:'sana'}
@@ -20,6 +20,15 @@ test('cast audit distinguishes measured empty casts, reviewed scenes and candida
  });
  assert.deepEqual(Object.fromEntries(jewel.scenes.map(s=>[s.id,s.cast.map(c=>c.entity)])),{
   entry:['kio'],buyer:['kio','buyerPerson'],refunded:['kio','buyerPerson'],repair_contract:['kio','buyerPerson']
+ });
+ const kitchen=report.quests.find(q=>q.id==='q143');
+ assert.deepEqual(Object.fromEntries(Object.entries(kitchen.review.people).map(([id,role])=>[id,{status:role.status,entity:role.entity}])),{
+  q143_meme:{status:'connected',entity:'meme'},q143_assistant:{status:'connected',entity:'assistant'},
+  q143_spirit:{status:'connected',entity:'spirit'},q143_replacement:{status:'connected',entity:'replacement'}
+ });
+ const crew=['meme','assistant','spirit'],all=[...crew,'replacement'];
+ assert.deepEqual(Object.fromEntries(kitchen.scenes.map(s=>[s.id,s.cast.map(c=>c.entity)])),{
+  entry:crew,roles:crew,hire:all,fire_show:all,plates:crew,taste_show:crew,shift_show:crew,entry_hire_ready:crew
  });
  const obituary=report.quests.find(q=>q.id==='q044');assert.deepEqual(obituary.scenes.filter(s=>s.review.people.length).map(s=>s.id),['safe','escaped','protected','safe_refuge']);
  assert.ok(report.regions.every(r=>r.quests===20));
