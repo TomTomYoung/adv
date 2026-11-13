@@ -4,7 +4,7 @@ export const RELOCATED_CAST_REVIEW={
  reviewedAt:'2026-11-13',
  quests:{
   q146:{
-    "sourceSha256": "Q146_FINGERPRINT_PENDING",
+    "sourceSha256": "8e4d0d79adeb40b3dedd13fa2f0004dbf6c39cd51bb80e70cc6fffe70434067f",
     "identityNotes": [
       "原稿・初版・現行6場面・6旅程・9行動・3結末を精読した。退役兵本人と、軍服の刺繍に誓いを結んだ生き残りの同僚たちは別の役であり、人数や固有名を決めない。",
       "退役兵は相談卓から同僚の酒場・染物工房・保管窓口まで既存の実同行を保つ。同僚groupは酒場に固定し、染め直しの合意だけを持ち帰る経路に同行させない。再会時は酒場で二役が合流する。",
