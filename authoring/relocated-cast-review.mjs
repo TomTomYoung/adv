@@ -3,6 +3,124 @@
 export const RELOCATED_CAST_REVIEW={
  reviewedAt:'2026-11-13',
  quests:{
+  q144:{
+    "sourceSha256": "Q144_FINGERPRINT_PENDING",
+    "identityNotes": [
+      "原稿・初版・現行8場面・6旅程・11行動・3結末を精読した。疑われていた勇者役と衣装を切った衣装係は別であり、悪意による破損と断定しない。",
+      "ジルと衣装係は相談卓から工房・稽古場・会場まで既存の実同行を維持。若手役者は稽古場からだけ同行し、直接引退を選んだ経路のlast_showではyoungActorAtがstageにないため表示しない。",
+      "衣装を切った理由と弁償記録、軽量化して行う演技、知恵比べへの変更、本人が決める引退を別々に扱う。本人同意前にretireAgreedを立てず、実到着・完了を区別する。",
+      "衣装costumeの出発時の携行・公演finishでのジルへの返却、物語改訂1、既存の旗・全結末と報酬、旧受注の経路を保持する。勇者役の氏名・服装や別人との同一性、転倒事故・戦闘を補わない。"
+    ],
+    "relatedClients": {},
+    "people": {
+      "q144_jill": {
+        "label": "悪竜役ジル",
+        "status": "connected",
+        "entity": "jill",
+        "need": "全8場面で既存の初期所在と実同行に沿って表示する。"
+      },
+      "q144_wardrobe": {
+        "label": "衣装係",
+        "status": "connected",
+        "entity": "wardrobe",
+        "need": "全8場面で申告・修理・試演・公演の所在を表示する。"
+      },
+      "q144_youngActor": {
+        "label": "若手役者",
+        "status": "connected",
+        "entity": "youngActor",
+        "need": "稽古場とその後の実同行先だけに表示する。直接引退経路のlast_showでは表示条件を満たさない。"
+      }
+    },
+    "scenes": {
+      "entry": {
+        "decision": "person-evidence",
+        "people": [
+          "q144_jill",
+          "q144_wardrobe"
+        ],
+        "evidence": "衣装係が切ったと名乗り出る。",
+        "reason": "衣装係の申告が明示され、ジルは初期所在entryにいる。若手はまだ稽古場。",
+        "visual": "破れた衣装と衣装係の申告を区別し、勇者役を姿のない段階で追加しない。"
+      },
+      "play": {
+        "decision": "person-evidence",
+        "people": [
+          "q144_jill",
+          "q144_wardrobe",
+          "q144_youngActor"
+        ],
+        "evidence": "若手にも見せ場を渡せる。",
+        "reason": "稽古場に既存youngActorが待機し、ジルと衣装係が修理工房から実到着する。",
+        "visual": "軽量化した衣装と試演。引退はこの場で確定していない。"
+      },
+      "repair": {
+        "decision": "person-evidence",
+        "people": [
+          "q144_jill",
+          "q144_wardrobe"
+        ],
+        "evidence": "衣装係の申告を確認し",
+        "reason": "工房へジルと衣装係が同行する。若手は稽古場のまま。",
+        "visual": "弁償記録と衣装の改修を別の作業として扱う。"
+      },
+      "show_light": {
+        "decision": "person-evidence",
+        "people": [
+          "q144_jill",
+          "q144_wardrobe",
+          "q144_youngActor"
+        ],
+        "evidence": "ジルと若手が会場で息を合わせ",
+        "reason": "ジル・衣装係・若手の3役がplay_lightの旅程で会場へ到着する。",
+        "visual": "二人で公演するが、衣装の返却と完了報酬はfinish時点。"
+      },
+      "show_wit": {
+        "decision": "person-evidence",
+        "people": [
+          "q144_jill",
+          "q144_wardrobe",
+          "q144_youngActor"
+        ],
+        "evidence": "知恵比べへ変えた芝居を演じた。",
+        "reason": "play_witでは若手が同行し、ジルと衣装係も会場へ到着する。",
+        "visual": "危険な転倒に戻さず、出演者だけを表示する。"
+      },
+      "retire_consent": {
+        "decision": "person-evidence",
+        "people": [
+          "q144_jill",
+          "q144_wardrobe"
+        ],
+        "evidence": "ジル本人が今回を最後にしたいと答えた。",
+        "reason": "直接引退を申し出るジルと、初期所在entryに残る衣装係が相談卓にいる。",
+        "visual": "本人同意と引退公演を別の時点にする。若手は稽古場に残る。"
+      },
+      "retire_after_trial": {
+        "decision": "person-evidence",
+        "people": [
+          "q144_jill",
+          "q144_wardrobe",
+          "q144_youngActor"
+        ],
+        "evidence": "試演を終えたジル",
+        "reason": "試演後の決定は稽古場で行われる。若手は最初から稽古場にいる。",
+        "visual": "引退同意はまだ出発時まで確定せず、若手の同席は実在する。"
+      },
+      "last_show": {
+        "decision": "person-evidence",
+        "people": [
+          "q144_jill",
+          "q144_wardrobe",
+          "q144_youngActor"
+        ],
+        "evidence": "ジルは衣装の頭を外し",
+        "reason": "ジルと衣装係は両経路で会場へ到着する。若手は試演後の引退経路でだけ同行するため、youngActorAt=stageの表示条件を設ける。",
+        "visual": "直接引退ではジルと衣装係だけを表示し、試演経由では若手も表示する。衣装の返却はfinishで行う。"
+      }
+    },
+    "next": "8場面・6旅程・11行動・3結末、若手の条件表示、衣装と弁償・同意の確定点、新旧保存、3結末の報酬の一回性を検証する。次はq145。"
+  },
   q143:{
     "sourceSha256": "916d7e57ea6070c9833eb50e59b6fda024b102413b37275c8ddaa99b3f3d3849",
     "identityNotes": [
