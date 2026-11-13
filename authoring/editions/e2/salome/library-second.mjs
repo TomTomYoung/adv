@@ -56,6 +56,22 @@ export function librarySecondSource(q,{cast=true}={}){
   end('taste_show','stage','普通の皿で料理を提供した。精霊は客席で休み、助手は炎が出ないことを客へ説明する。','taste',[give('plates','party','stage'),set('resting'),set('served')]);
   route('roles','agree','shift_show',{companions:crew,depart:[set('rolesAgreed')]});end('shift_show','stage','三人が出店へ着き、合意した休憩と担当を掲示した。精霊の休憩時間から交代制を始める。','shift',[set('resting'),set('served')]);
  }
+ if(q.number===143&&cast){
+  for(const [id,character] of [
+   ['meme','q143_meme'],['assistant','q143_assistant'],
+   ['spirit','q143_spirit'],['replacement','q143_replacement']
+  ])x.entities[id].character=character;
+  // The original spirit stays with the shop during every route; the paid
+  // replacement joins only at the agency and accompanies the festival route.
+  const crew=['meme','assistant','spirit'];
+  const casts={
+   entry:crew,roles:crew,entry_hire_ready:crew,
+   hire:[...crew,'replacement'],fire_show:[...crew,'replacement'],
+   plates:crew,taste_show:crew,shift_show:crew
+  };
+  for(const [scene,people] of Object.entries(casts))
+   node(scene).cast=people.map((entity,i)=>({entity,display:{x:people.length===4?[17,39,61,83][i]:[25,50,75][i]}}));
+ }
  if(q.number===144){
   town('workshop','衣装の修理工房','library_tailor');town('trial','軽い衣装で試演する稽古場','library_rehearsal');stage();
   entity('jill','entry','person');entity('wardrobe','entry','person');entity('costume','entry');entity('youngActor','trial','person');
