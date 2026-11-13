@@ -4,7 +4,7 @@ export const RELOCATED_CAST_REVIEW={
  reviewedAt:'2026-11-13',
  quests:{
   q144:{
-    "sourceSha256": "Q144_FINGERPRINT_PENDING",
+    "sourceSha256": "db6cc6ba6cafec5c9e36ba1004878a83c7d15a66ebf1e1a14f1158ff8bc369ba",
     "identityNotes": [
       "原稿・初版・現行8場面・6旅程・11行動・3結末を精読した。疑われていた勇者役と衣装を切った衣装係は別であり、悪意による破損と断定しない。",
       "ジルと衣装係は相談卓から工房・稽古場・会場まで既存の実同行を維持。若手役者は稽古場からだけ同行し、直接引退を選んだ経路のlast_showではyoungActorAtがstageにないため表示しない。",
