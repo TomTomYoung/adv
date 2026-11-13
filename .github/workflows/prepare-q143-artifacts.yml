@@ -1,0 +1,37 @@
+name: Prepare q143 generated artifacts
+on:
+  push:
+    branches:
+      - feature/library-q143-cast
+    paths:
+      - .github/workflows/prepare-q143-artifacts.yml
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/library-q143-cast
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Rebuild scenario and derived data
+        run: npm run build:catalog
+      - name: Pin q143 review and regenerate cast audit
+        run: |
+          node --input-type=module -e "import fs from 'node:fs'; import {createHash} from 'node:crypto'; const q=JSON.parse(fs.readFileSync('data/scenario-editions/e2/q143.json','utf8')); const hash=createHash('sha256').update(JSON.stringify(q)).digest('hex'); const path='authoring/relocated-cast-review.mjs'; const source=fs.readFileSync(path,'utf8'); if(!source.includes('Q143_FINGERPRINT_PENDING'))throw Error('q143 fingerprint placeholder not found'); fs.writeFileSync(path,source.replace('Q143_FINGERPRINT_PENDING',hash));"
+          node tools/audit-relocated-cast.mjs
+          npm run build:runtime
+      - name: Commit only quest-specific artifacts
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add authoring/relocated-cast-review.mjs data/scenario-editions/e2/q143.json data/scenario-editions/e2/oddland-first-ten.json doc/scenarios/RELOCATED_CAST_AUDIT.json doc/scenarios/RELOCATED_CAST_AUDIT.md doc/development/DATA_SNAPSHOT.json runtime.json
+          git restore .
+          git diff --cached --quiet || git commit -m "build: generate q143 reviewed artifacts"
+          git push
+      - name: Run dedicated q143 and cast audit tests
+        run: node --test tests/fire-dish-cast.test.mjs tests/relocated-cast-audit.test.mjs
