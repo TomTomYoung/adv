@@ -14,11 +14,11 @@ test('cast audit distinguishes measured empty casts, reviewed scenes and candida
  assert.deepEqual(Object.fromEntries(banner.scenes.map(s=>[s.id,s.cast.map(c=>c.entity)])),{
   entry:['band'],sana:['sana'],score_use:[],performed_use:['band'],score_new:[],performed_new:['band'],performed_silent:['band']
  });
- const ring=report.quests.find(q=>q.id==='q142');
- assert.deepEqual(Object.fromEntries(Object.entries(ring.review.people).map(([id,role])=>[id,{status:role.status,entity:role.entity}])),{
+ const jewel=report.quests.find(q=>q.id==='q142');
+ assert.deepEqual(Object.fromEntries(Object.entries(jewel.review.people).map(([id,role])=>[id,{status:role.status,entity:role.entity}])),{
   q142_kio:{status:'connected',entity:'kio'},q142_buyer:{status:'connected',entity:'buyerPerson'}
  });
- assert.deepEqual(Object.fromEntries(ring.scenes.map(s=>[s.id,s.cast.map(c=>c.entity)])),{
+ assert.deepEqual(Object.fromEntries(jewel.scenes.map(s=>[s.id,s.cast.map(c=>c.entity)])),{
   entry:['kio'],buyer:['kio','buyerPerson'],refunded:['kio','buyerPerson'],repair_contract:['kio','buyerPerson']
  });
  const obituary=report.quests.find(q=>q.id==='q044');assert.deepEqual(obituary.scenes.filter(s=>s.review.people.length).map(s=>s.id),['safe','escaped','protected','safe_refuge']);
