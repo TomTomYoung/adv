@@ -113,6 +113,10 @@ export function libraryFirstSource(q,{cast=true}={}){
   for(const [from,key] of [['entry','map'],['scope','leave'],['test','undo']])route(from,key,'map',{companions:['luu']});add('map','map','文書を元の保管場所へ残し、壁の見取図を別紙へ写した。帰路を封じる操作は行わない。',[opt('return','道順の写しを持ち、ルウと窓口へ戻る','returned',{companions:['luu'],depart:[give('mapCopy','map','party')]})]);end('returned','registry','ルウと帰着し、道順の写しを示す。封じた文書は持ち出していない。','compromise',[give('mapCopy','party','registry')]);
   route('test','return','reported',{companions:['luu'],depart:[give('document','entry','party')]});end('reported','registry','別紙の道順で帰着し、機密だけを封じた文書と封印範囲の修正を窓口へ渡す。','informed',[give('document','party','registry'),set('reported')]);choice('entry','burn').effects=[set('burned')];
  }
+ if(q.number===49&&cast){
+  x.entities.luu.character='q049_luu';
+  for(const scene of ['entry','scope','test','map','returned','reported'])node(scene).cast=[{entity:'luu',display:{x:50}}];
+ }
  if(q.number===50){
   town('warehouse','別倉の受領棚','library_warehouse');town('requests','延長を申請する窓口','library_registry');town('copies','写本班の照合室','library_copy_room');town('notice','書庫受付の移送先掲示','e2_archive');
   node('warehouse').place='warehouse';node('requests').place='requests';node('copies').place='copies';entity('firstBox','entry');entity('otherBooks','entry');entity('unfinished','entry');entity('copySet','copies');

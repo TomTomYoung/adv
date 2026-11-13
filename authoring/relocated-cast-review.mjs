@@ -3,6 +3,82 @@
 export const RELOCATED_CAST_REVIEW={
  reviewedAt:'2026-11-13',
  quests:{
+  q049:{
+  "sourceSha256": "871d8d19e936ad1a11443293bb113129d3f635c67b5a4cbf63bf6cfbb550ef3c",
+  "identityNotes": [
+    "原稿authoring/quests.txtの「忘却の栞」、初版3場面、現行6場面・5旅程・10行動・3結末を精読した。原稿の忘却の番人との戦闘を現行経路へ補わない。",
+    "依頼人は探検家のルウ。既存person luuの初期所在と全5旅程の実同行に従い、6場面へ呼称表示する。同名の弟子戦士ルウなどへ統合せず、年齢・性別・容貌・専用画や窓口の特定担当者を追加しない。",
+    "栞の封印は依頼内の機密と道順を扱う。物理的な帰路、操作、習得技能、他の依頼の知識を消さない。別紙化separateMapと壁の見取図の写しmapCopyを同じ保持物にしない。",
+    "文書を置く3経路ではdocumentはentryのまま、写しをmapで携行して窓口のfinishで渡す。封印範囲を修正する経路ではdocumentを出発時に携行し、窓口のfinishで渡してreportedを確定する。帰着だけでは報酬を出さない。",
+    "本文・既存の所在・旗・知識・全旅程・全結末・一回報酬と物語改訂1を保持する。新旧保存の全段階、途中の帰還印・敗北救助、旧受注3場面と5直接経路を検証する。"
+  ],
+  "relatedClients": {},
+  "people": {
+    "q049_luu": {
+      "label": "探検家ルウ",
+      "status": "connected",
+      "entity": "luu",
+      "need": "既存luuの所在と全5旅程の実同行に従い、全6場面へ呼称表示する。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "person-evidence",
+      "people": [
+        "q049_luu"
+      ],
+      "evidence": "栞を挟んだ直後、帰りの道が思い出せなくなった。",
+      "reason": "既存person luuの初期所在がentryで、以後の全旅程に同行する。本文の経験主体を一人に限定せず、同行者の継続した同席を表示する。",
+      "visual": "部屋番号と物理的な帰路を残し、記憶の封印を移動不能へ拡張しない。"
+    },
+    "scope": {
+      "decision": "person-evidence",
+      "people": [
+        "q049_luu"
+      ],
+      "evidence": "道を読み直せた。",
+      "reason": "栞を一時外して同じ現場で確認する場面。既存luuはentryに留まり、離脱する行動はない。",
+      "visual": "封印範囲の知識獲得と、まだ行っていない別紙化を分ける。"
+    },
+    "test": {
+      "decision": "person-evidence",
+      "people": [
+        "q049_luu"
+      ],
+      "evidence": "栞を戻しても別紙の道順は読める。",
+      "reason": "既存luuと同じ現場で別紙の道順を試す場面。ここから文書の携行か、文書を残す経路かを選ぶ。",
+      "visual": "separateMapの成立を窓口への報告・受渡しと同一視しない。"
+    },
+    "map": {
+      "decision": "person-evidence",
+      "people": [
+        "q049_luu"
+      ],
+      "evidence": "文書を元の保管場所へ残し、壁の見取図を別紙へ写した。",
+      "reason": "entry_map・scope_leave・test_undoのいずれもluuが実同行する。出発前の確認や別紙化の有無を保持する。",
+      "visual": "文書はentryに残り、壁の写しは次の出発時に携行する。"
+    },
+    "returned": {
+      "decision": "person-evidence",
+      "people": [
+        "q049_luu"
+      ],
+      "evidence": "ルウと帰着し、道順の写しを示す。",
+      "reason": "map_returnで実同行したルウだけを表示する。本文で特定されない窓口の担当者は補わない。",
+      "visual": "帰着時は写しをpartyが保持し、finishでregistryへ受け渡す。文書は持ち出さない。"
+    },
+    "reported": {
+      "decision": "person-evidence",
+      "people": [
+        "q049_luu"
+      ],
+      "evidence": "別紙の道順で帰着し、機密だけを封じた文書と封印範囲の修正を窓口へ渡す。",
+      "reason": "test_returnでluuが実同行し、隊と同じ窓口へ到着する。本文に特定されない受領担当者を追加しない。",
+      "visual": "到着とfinishによる文書受渡し・reported・報酬を分離する。"
+    }
+  },
+  "next": "ルウの6場面表示、5旅程、2種類の携行と受渡し、帰還印・敗北救助による旅程中断、3結末と新旧保存を検証する。次はq050「止まった終章」の原稿・全場面の出演監査。"
+},
   q048:{
   "sourceSha256": "bd18fa8832c7946dd1b632a82303eb2f8286337899e3a9230257747064236649",
   "identityNotes": [
