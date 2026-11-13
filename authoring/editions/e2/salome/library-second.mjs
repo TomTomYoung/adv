@@ -40,6 +40,11 @@ export function librarySecondSource(q,{cast=true}={}){
   route('buyer','repair','repair_contract',{companions:['kio','buyerPerson']});end('repair_contract','repair','買主とキオが修理工房へ来た。期間と返済額を修理札へ記し、双方が署名した。指輪は買主が持ち続ける。','repair',[set('repairSigned')]);
   for(const from of ['entry','buyer'])choice(from,'refuse').effects=[set('secretExchangeRefused')];
  }
+ if(q.number===142&&cast){
+  for(const [id,character] of [['kio','q142_kio'],['buyerPerson','q142_buyer']])x.entities[id].character=character;
+  const casts={entry:['kio'],buyer:['kio','buyerPerson'],refunded:['kio','buyerPerson'],repair_contract:['kio','buyerPerson']};
+  for(const [scene,people] of Object.entries(casts))node(scene).cast=people.map((entity,i)=>({entity,display:{x:people.length===2?[31,69][i]:50}}));
+ }
  if(q.number===143){
   town('hire','代役精霊の紹介所','library_spirits');town('supply','普通の皿を選ぶ生活市','library_market');stage();
   for(const id of ['meme','assistant','spirit'])entity(id,'entry','person');entity('replacement','hire','person');entity('plates','supply');
