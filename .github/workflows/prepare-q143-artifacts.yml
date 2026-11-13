@@ -24,7 +24,7 @@ jobs:
         run: npm run build:catalog
       - name: Pin q143 review and regenerate cast audit
         run: |
-          node --input-type=module -e "import fs from 'node:fs'; import {createHash} from 'node:crypto'; const q=JSON.parse(fs.readFileSync('data/scenario-editions/e2/q143.json','utf8')); const hash=createHash('sha256').update(JSON.stringify(q)).digest('hex'); const path='authoring/relocated-cast-review.mjs'; const source=fs.readFileSync(path,'utf8'); if(!source.includes('Q143_FINGERPRINT_PENDING'))throw Error('q143 fingerprint placeholder not found'); fs.writeFileSync(path,source.replace('Q143_FINGERPRINT_PENDING',hash));"
+          node --input-type=module -e "import fs from 'node:fs'; import {createHash} from 'node:crypto'; const q=JSON.parse(fs.readFileSync('data/scenario-editions/e2/q143.json','utf8')); const hash=createHash('sha256').update(JSON.stringify(q)).digest('hex'); const path='authoring/relocated-cast-review.mjs'; const source=fs.readFileSync(path,'utf8'); if(source.includes('Q143_FINGERPRINT_PENDING'))fs.writeFileSync(path,source.replace('Q143_FINGERPRINT_PENDING',hash)); else if(!source.includes(hash))throw Error('q143 source fingerprint has changed');"
           node tools/audit-relocated-cast.mjs
           npm run build:runtime
       - name: Commit only quest-specific artifacts
