@@ -4,16 +4,16 @@
   "summary": {
     "quests": 100,
     "scenes": 753,
-    "emptyCastScenes": 383,
+    "emptyCastScenes": 378,
     "personEntities": 137,
-    "characterLinkedEntities": 103,
-    "reviewedQuests": 65,
-    "reviewedScenes": 504,
+    "characterLinkedEntities": 104,
+    "reviewedQuests": 66,
+    "reviewedScenes": 509,
     "noPersonEvidenceScenes": 133,
-    "personEvidenceScenes": 371,
+    "personEvidenceScenes": 376,
     "candidateRoles": 1,
-    "connectedRoles": 146,
-    "unreviewedScenes": 249
+    "connectedRoles": 147,
+    "unreviewedScenes": 244
   },
   "regions": [
     {
@@ -66,15 +66,15 @@
       "name": "書庫",
       "quests": 20,
       "scenes": 148,
-      "emptyCastScenes": 128,
+      "emptyCastScenes": 123,
       "personEntities": 30,
-      "characterLinkedEntities": 5,
-      "reviewedQuests": 5,
-      "reviewedScenes": 34,
+      "characterLinkedEntities": 6,
+      "reviewedQuests": 6,
+      "reviewedScenes": 39,
       "noPersonEvidenceScenes": 14,
-      "personEvidenceScenes": 20,
+      "personEvidenceScenes": 25,
       "candidateRoles": 0,
-      "connectedRoles": 7
+      "connectedRoles": 8
     },
     {
       "id": 8,
@@ -2500,7 +2500,7 @@
       "region": 5,
       "client": "司書のシフ",
       "source": "authoring/editions/e2/salome/library-first.mjs",
-      "sourceSha256": "52bf57161a65f35177e0e14d20e0ac8f04802b6c4ece3bfdd09ee295b8bd0213",
+      "sourceSha256": "6961725d362141cfda10959d2a4ce109f70c957015c0779c3cb6769493755a83",
       "scenes": [
         {
           "id": "entry",
@@ -2512,8 +2512,23 @@
             "x": 11,
             "y": 9
           },
-          "cast": [],
-          "review": null
+          "cast": [
+            {
+              "entity": "reader",
+              "display": {
+                "x": 50
+              }
+            }
+          ],
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q046_reader"
+            ],
+            "evidence": "探す本の索引は「雨の年」へ案内する。",
+            "reason": "原稿の迷子となった読者は既存readerとしてentryに所在し、索引をたどると隊と実同行する。司書シフを入口へ同席させない。",
+            "visual": "入口の索引と読者を分け、三冊の対応表や出口への帰着を先取りしない。"
+          }
         },
         {
           "id": "rain",
@@ -2525,8 +2540,23 @@
             "x": 7,
             "y": 1
           },
-          "cast": [],
-          "review": null
+          "cast": [
+            {
+              "entity": "reader",
+              "display": {
+                "x": 50
+              }
+            }
+          ],
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q046_reader"
+            ],
+            "evidence": "「雨の年」は「川の暦」に改題された、と棚札にある。",
+            "reason": "entry_indexまたはferry_loopで雨の棚へ実同行した同じ読者。初回と再訪で別人を作らず、雨の棚を読んだ旗は次の棚への到着時に確定する。",
+            "visual": "旧書名の札と読者を分け、雨から川へ進む案内と階段への出口札を区別する。"
+          }
         },
         {
           "id": "river",
@@ -2538,8 +2568,23 @@
             "x": 9,
             "y": 6
           },
-          "cast": [],
-          "review": null
+          "cast": [
+            {
+              "entity": "reader",
+              "display": {
+                "x": 50
+              }
+            }
+          ],
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q046_reader"
+            ],
+            "evidence": "「川の暦」の札は「渡し守の記録」を指す。",
+            "reason": "rain_riverで川の棚へ実同行した読者。初回と反復後の所在を同じreaderで保持する。",
+            "visual": "川から渡し守へ向く旧書名札、追加する出口札、読者を分ける。ここでは三冊の対応表は未作成。"
+          }
         },
         {
           "id": "ferry",
@@ -2551,8 +2596,23 @@
             "x": 13,
             "y": 7
           },
-          "cast": [],
-          "review": null
+          "cast": [
+            {
+              "entity": "reader",
+              "display": {
+                "x": 50
+              }
+            }
+          ],
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q046_reader"
+            ],
+            "evidence": "三冊そのものはここに揃っている。",
+            "reason": "river_ferryで渡しの棚へ実同行した読者。ここで循環の原因を知ることと、linkで対応表を作ることは別であり、loopでは再び雨の棚へ同行する。",
+            "visual": "三冊の扉頁・旧書名札・読者を分け、対応表を結ぶ前に循環が解消したように描かない。"
+          }
         },
         {
           "id": "guided",
@@ -2564,17 +2624,49 @@
             "x": 1,
             "y": 1
           },
-          "cast": [],
-          "review": null
+          "cast": [
+            {
+              "entity": "reader",
+              "display": {
+                "x": 50
+              }
+            }
+          ],
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q046_reader"
+            ],
+            "evidence": "追加した出口札をたどり、読者と階段へ戻った。",
+            "reason": "雨・川・渡しのどこからでも、追加した出口札をたどって読者と実際に階段へ戻る。案内到着後も索引の循環は残り、依頼完了と報酬はfinishで確定する。",
+            "visual": "階段へ戻った読者と出口札を表示し、三冊の対応表の完成や目的の本への到達と混同しない。"
+          }
         }
       ],
       "personEntities": [
         {
           "id": "reader",
-          "character": null
+          "character": "q046_reader"
         }
       ],
-      "review": null
+      "review": {
+        "identityNotes": [
+          "原稿authoring/quests.txtの「迷子の索引」、初版4場面、現行5場面・7旅程・3結末を精読した。原稿の索引の番人との戦闘は現行経路へ追加しない。",
+          "既存person readerを一人の読者として呼称表示する。司書シフとは別の役であり、氏名・性別・年齢・容貌・専用画を補わない。",
+          "全7旅程で読者が実同行し、雨・川・渡しの旧書名札を巡って最初の棚へ戻る。途中で出口札だけを足す3経路は読者と階段へ戻るが、索引の循環そのものは直さない。",
+          "本文・物語改訂1・旗の設定時点・旅程・報酬・保存値を保持する。現場接続前の旧受注4場面と直接結末・反復経路には、新しい人物表示や階段までの旅程を混入させない。"
+        ],
+        "relatedClients": {},
+        "people": {
+          "q046_reader": {
+            "label": "索引をたどる読者",
+            "status": "connected",
+            "entity": "reader",
+            "need": "既存readerの所在と実同行に従い、入口・旧書名の三棚・出口の階段へ呼称表示する。"
+          }
+        },
+        "next": "読者の5場面と全7旅程、繰り返しの同行・知識・旗、3か所からの出口と一回報酬、新旧保存を検証する。次はq047「一頁の戦争」の原稿・全場面の出演監査。"
+      }
     },
     {
       "id": "q047",
