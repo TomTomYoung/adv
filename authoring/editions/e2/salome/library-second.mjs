@@ -124,6 +124,15 @@ export function librarySecondSource(q,{cast=true}={}){
   route('entry','coat','tailored',{companions:['veteran'],depart:[set('cutAgreed')]});end('tailored','dyer','本人の同意を確かめて生地を裁ち、外套に仕立てて返した。裏地の旧色を残し、軍服の形へは戻さない。','coat',[set('cut'),set('tailored')]);
   for(const from of ['entry','friends'])route(from,'keep','stored',{companions:['veteran']});end('stored','storage','本人と保管窓口へ着き、軍服を箱へ収めて預けた。着る日を決める権利は本人に残る。','keep',[give('uniform','veteran','storage'),set('stored')]);
  }
+ if(q.number===146&&cast){
+  x.entities.veteran.character='q146_veteran';
+  x.entities.colleagues.character='q146_colleagues';
+  const casts={entry:['veteran'],friends:['veteran','colleagues'],
+   dyed:['veteran'],reunion:['veteran','colleagues'],
+   tailored:['veteran'],stored:['veteran']};
+  for(const [scene,people] of Object.entries(casts))
+   node(scene).cast=people.map((entity,i)=>({entity,display:{x:people.length===2?[31,69][i]:50}}));
+ }
  if(q.number===147){
   x.places.mountain={name:'高台街道の山道側',world:{kind:'dungeon',dungeon:'salome_road',map:'e2_highland_lower',x:13,y:5}};
   x.places.water={name:'サロメの静かな水路沿い',world:{kind:'dungeon',dungeon:'salome_road',map:'e2_salome_canal',x:9,y:3}};
