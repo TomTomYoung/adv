@@ -18,7 +18,7 @@ test('q143 adds four cast references in eight scenes, with no change to source r
  assert.deepEqual(Object.fromEntries(Object.keys(q.story.scenes).map(id=>[id,casts(id)])),{
   entry:crew,roles:crew,hire:all,fire_show:all,plates:crew,taste_show:crew,shift_show:crew,entry_hire_ready:crew
  });
- assert.equal(Object.keys(q.story.actions).length,10);
+ assert.equal(Object.keys(q.story.actions).length,11);
  assert.equal(Object.values(q.story.actions).filter(a=>a.journey).length,6);
  assert.deepEqual(q.story.actions.entry_hire_ready_continue.journey.companions,crew);
  assert.deepEqual(q.story.actions.hire_escort.journey.companions,all);
