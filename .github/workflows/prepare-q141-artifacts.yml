@@ -1,0 +1,36 @@
+name: Prepare q141 generated artifacts
+on:
+  push:
+    branches:
+      - feature/library-q141-cast
+    paths:
+      - .github/workflows/prepare-q141-artifacts.yml
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/library-q141-cast
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Rebuild deterministic quest data, catalogs, and cache
+        run: npm run build:catalog
+      - name: Pin the audited q141 source fingerprint
+        run: |
+          node --input-type=module -e "import fs from 'node:fs'; import {createHash} from 'node:crypto'; const q=JSON.parse(fs.readFileSync('data/scenario-editions/e2/q141.json','utf8')); const hash=createHash('sha256').update(JSON.stringify(q)).digest('hex'); const path='authoring/relocated-cast-review.mjs'; const source=fs.readFileSync(path,'utf8'); if(!source.includes('Q141_FINGERPRINT_PENDING'))throw Error('q141 audit fingerprint placeholder missing'); fs.writeFileSync(path,source.replace('Q141_FINGERPRINT_PENDING',hash));"
+          node tools/audit-relocated-cast.mjs
+          npm run build:runtime
+      - name: Commit generated files to the feature branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet || git commit -m "build: generate q141 artifacts"
+          git push
+      - name: Validate generated implementation
+        run: npm run check
