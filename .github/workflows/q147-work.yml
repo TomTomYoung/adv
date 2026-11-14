@@ -28,7 +28,7 @@ jobs:
           done
           node tools/audit-relocated-cast.mjs
           node tools/build-runtime.mjs
-          git rm -r tools/q147-transfer .github/workflows/q147-work.yml
+          git rm -r tools/q147-transfer
       - name: Validate q147, cast audit, generated content and document references
         run: |
           node --test tests/flower-delivery-cast.test.mjs tests/relocated-cast-audit.test.mjs
@@ -38,6 +38,8 @@ jobs:
           node tools/check-docs.mjs
       - name: Commit verified implementation and generated files
         run: |
+          # Workflow changes are applied separately through the authorized connector.
+          git restore --source=HEAD --staged --worktree .github/workflows/salome-quests.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
