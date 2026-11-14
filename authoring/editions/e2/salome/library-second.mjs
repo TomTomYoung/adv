@@ -85,6 +85,18 @@ export function librarySecondSource(q,{cast=true}={}){
   add('retire_after_trial','trial','試演を終えたジルが、今回を最後にすると決めた。軽い衣装で最後の礼をする。',[opt('stage','本人と最後の公演へ向かう','last_show',{companions:['jill','wardrobe','youngActor'],depart:[set('retireAgreed')]})]);
   end('last_show','stage','会場で最後の公演を終えた。ジルは衣装の頭を外し、自分の顔で観客へ礼をした。','retire',[give('costume','party','jill'),set('performed')]);
  }
+ if(q.number===144&&cast){
+  for(const [entity,character] of [['jill','q144_jill'],['wardrobe','q144_wardrobe'],['youngActor','q144_youngActor']])
+   x.entities[entity].character=character;
+  const pairs=['jill','wardrobe'],trio=[...pairs,'youngActor'];
+  const casts={entry:pairs,repair:pairs,retire_consent:pairs,
+   play:trio,show_light:trio,show_wit:trio,retire_after_trial:trio,last_show:trio};
+  for(const [scene,people] of Object.entries(casts))
+   node(scene).cast=people.map((entity,i)=>({
+    entity,...(scene==='last_show'&&entity==='youngActor'?{when:eq(v('youngActorAt'),'stage')}:{})
+    ,display:{x:people.length===3?[25,50,75][i]:[31,69][i]}
+   }));
+ }
  if(q.number===145){
   town('mother','母が暮らす家','library_garden_home');town('garden','覆いのある師の庭','library_garden');town('post','次の便りを受け取る窓口','library_post');
   entity('motherPerson','mother','person');entity('letterSheet','post');entity('flowerDrawing','garden');
