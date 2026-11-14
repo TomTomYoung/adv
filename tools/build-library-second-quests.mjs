@@ -23,6 +23,14 @@ export async function buildLibrarySecondQuests({check=false}={}){
     {key:'bandAt',value:'stage',when:arrived}
    ]}];
   }
+  if(n===147){
+   const previous=compileRelocatedQuest(first,source(first,{cast:false}),options).story;
+   // Keep every original holder domain, including flowerAt=receiver (a place).
+   for(const [key,entry] of Object.entries(previous.registry))quest.story.registry[key]=structuredClone(entry);
+   quest.story.registry.recipientAt.values=['receiver'];
+   quest.story.revision=2;quest.model.edition.revision=2;
+   quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[{key:'recipientAt',value:'receiver'}]}];
+  }
   quests.push(quest);
  }
  const outcomes=quests.reduce((n,q)=>n+Object.keys(q.outcomes).length,0);

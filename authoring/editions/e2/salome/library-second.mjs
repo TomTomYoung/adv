@@ -146,6 +146,17 @@ export function librarySecondSource(q,{cast=true}={}){
   route('closed','tomorrow','rest',{depart:[set('redeliveryAgreed')],effects:[give('flower','party','rest')]});add('rest','rest','受取人と翌晩への変更を約束し、花を静かな保管室へ預けた。ここで一晩を置き、次の開花を待つ。',[opt('next','翌晩、開き始めた花を再配達する','tomorrow_arrival',{depart:[give('flower','rest','party'),set('overnight'),set('flowerClosed',false)]})]);end('tomorrow_arrival','receiver','翌晩に戻り、受取人が花の開くところを見てから鉢を渡した。','tomorrow',[give('flower','party','receiver'),set('delivered')]);
   route('closed','record','recorded');end('recorded','record','閉じた花を依頼元の窓口へ戻し、速達競技だけを精算した。開花を見せる依頼は未達として記す。','record',[give('flower','party','record'),set('deliveryFailed')]);
  }
+ if(q.number===147&&cast){
+  entity('recipient','receiver','person');
+  x.entities.recipient.character='q147_recipient';
+  for(const scene of ['closed','quiet_arrival','tomorrow_arrival'])
+   node(scene).cast=[{entity:'recipient',display:{x:50}}];
+  // Arrival leaves the flower with the party; the following finish action
+  // transfers it and records the result. Saved pending prose stays intact.
+  node('quiet_arrival').text='花の鉢を携えて受取先へ着いた。受取人の前で花が開くところを確かめてから、鉢を渡す。';
+  node('tomorrow_arrival').text='翌晩に花の鉢を携えて受取先へ戻った。受取人に花の開くところを見てもらい、鉢を渡す。';
+  node('recorded').text='閉じた花を携えて依頼元の窓口へ戻った。速達競技だけを精算し、開花を見せる依頼は未達として記す。';
+ }
  if(q.number===148){
   town('market','秤の置かれた買取台','library_market');town('office','比較実演と返金の審査窓口','library_review');town('storage','回収秤の保管窓口','e2_storage');
   entity('scale','market');entity('coin','market');entity('customer','market','person');entity('egi','market','person');

@@ -6,7 +6,7 @@ import {auditRelocatedCast,loadRelocatedCastQuests,relocatedCastFingerprint} fro
 const quests=await loadRelocatedCastQuests();
 test('cast audit distinguishes measured empty casts, reviewed scenes and candidate roles',()=>{
  const report=auditRelocatedCast(quests);
- assert.deepEqual(report.summary,{"quests":100,"scenes":753,"emptyCastScenes":321,"personEntities":143,"characterLinkedEntities":125,"reviewedQuests":76,"reviewedScenes":582,"noPersonEvidenceScenes":149,"personEvidenceScenes":433,"candidateRoles":1,"connectedRoles":172,"unreviewedScenes":171});
+ assert.deepEqual(report.summary,{"quests":100,"scenes":753,"emptyCastScenes":318,"personEntities":144,"characterLinkedEntities":126,"reviewedQuests":77,"reviewedScenes":592,"noPersonEvidenceScenes":156,"personEvidenceScenes":436,"candidateRoles":1,"connectedRoles":173,"unreviewedScenes":161});
  const banner=report.quests.find(q=>q.id==='q141');
  assert.deepEqual(Object.fromEntries(Object.entries(banner.review.people).map(([id,role])=>[id,{status:role.status,entity:role.entity}])),{
   q141_band:{status:'connected',entity:'band'},q141_sana:{status:'connected',entity:'sana'}
@@ -55,6 +55,10 @@ test('cast audit distinguishes measured empty casts, reviewed scenes and candida
   entry:['veteran'],friends:['veteran','colleagues'],dyed:['veteran'],
   reunion:['veteran','colleagues'],tailored:['veteran'],stored:['veteran']
  });
+ const lateDelivery=report.quests.find(q=>q.id==='q147');
+ assert.deepEqual(Object.keys(lateDelivery.review.people),['q147_recipient']);
+ assert.deepEqual(lateDelivery.scenes.filter(s=>s.cast.length).map(s=>s.id),['closed','quiet_arrival','tomorrow_arrival']);
+ assert.ok(lateDelivery.scenes.filter(s=>s.cast.length).every(s=>s.cast[0].entity==='recipient'));
  const obituary=report.quests.find(q=>q.id==='q044');assert.deepEqual(obituary.scenes.filter(s=>s.review.people.length).map(s=>s.id),['safe','escaped','protected','safe_refuge']);
  assert.ok(report.regions.every(r=>r.quests===20));
  assert.equal(report.quests.find(q=>q.id==='q071').scenes[0].review,null);
