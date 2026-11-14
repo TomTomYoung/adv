@@ -6,7 +6,13 @@ import {auditRelocatedCast,loadRelocatedCastQuests,relocatedCastFingerprint} fro
 const quests=await loadRelocatedCastQuests();
 test('cast audit distinguishes measured empty casts, reviewed scenes and candidate roles',()=>{
  const report=auditRelocatedCast(quests);
- assert.deepEqual(report.summary,{"quests":100,"scenes":753,"emptyCastScenes":318,"personEntities":144,"characterLinkedEntities":126,"reviewedQuests":77,"reviewedScenes":592,"noPersonEvidenceScenes":156,"personEvidenceScenes":436,"candidateRoles":1,"connectedRoles":173,"unreviewedScenes":161});
+ assert.deepEqual(report.summary,{"quests":100,"scenes":753,"emptyCastScenes":313,"personEntities":144,"characterLinkedEntities":128,"reviewedQuests":78,"reviewedScenes":600,"noPersonEvidenceScenes":159,"personEvidenceScenes":441,"candidateRoles":1,"connectedRoles":175,"unreviewedScenes":153});
+ const scaleQuest=report.quests.find(q=>q.id==='q148');
+ assert.deepEqual(Object.keys(scaleQuest.review.people),['q148_egi','q148_customer']);
+ assert.deepEqual(Object.fromEntries(scaleQuest.scenes.map(s=>[s.id,s.cast.map(c=>c.entity)])),{
+  entry:[],denied:['egi','customer'],proof:['egi','customer'],market:['egi','customer'],
+  public_demo:['egi','customer'],private_refund:['egi','customer'],fetch_scale:[],removed:[]
+ });
  const banner=report.quests.find(q=>q.id==='q141');
  assert.deepEqual(Object.fromEntries(Object.entries(banner.review.people).map(([id,role])=>[id,{status:role.status,entity:role.entity}])),{
   q141_band:{status:'connected',entity:'band'},q141_sana:{status:'connected',entity:'sana'}

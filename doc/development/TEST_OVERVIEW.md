@@ -1,5 +1,13 @@
 # CI・自動テスト総覧
 
+## q148の実装・検証（2026-11-14）
+
+専用テストはtests/scale-comparison-cast.test.mjsの12試験。表示追加前の定義はtests/fixtures/e2-q148-before-cast.jsonへそのまま保存した。本文・状態定義・旅程が不変であることも全体比較で検査する。
+
+23保存点と92画面条件はtools/scale-comparison-art-fixtures.mjsとtools/browser-scale-comparison-cast-smoke.mjsで検査する。保管場面で二人が市場に残る経路と審査窓口に残る経路、比較済みと未比較、旧受注を分ける。
+
+通常攻略はtools/measure-scale-comparison.mjsで再現できる。[測定結果](Q148_PLAYTEST_RESULTS.json)は標準Lv5・3編成4経路・seed1907の記録であり、表示fixtureとは別に扱う。
+
 ## q147「一番遅い配達」の追加検査（2026-11-14）
 
 `tests/flower-delivery-cast.test.mjs` は11試験。10場面・9旅程・13行動、現行／改訂1の全4経路、旧受注2場面・直接4経路、30G支払と準備、翌晩の預入・回収、競技精算と配達成否、途中帰還・敗北、保存の原子的拒否、報酬の一回性を検証する。旧配布JSONは `tests/fixtures/e2-q147-before-cast.json` に固定する。
