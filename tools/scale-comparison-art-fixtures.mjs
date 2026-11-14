@@ -72,3 +72,4 @@ export async function scaleComparisonArtFixtures(){
   assert.equal(g.state.quests.q148.outcome,route.outcome);
  }
  return {fixtures,outcomes:[...outcomes]};
+}
