@@ -9,6 +9,9 @@ on:
       - 'data/scenario-editions/**'
       - 'data/scenario-editions.json'
       - 'tools/browser-salome-smoke.mjs'
+      - 'tools/browser-scale-comparison-cast-smoke.mjs'
+      - 'tools/scale-comparison-art-fixtures.mjs'
+      - 'tests/fixtures/e2-q148-before-cast.json'
       - 'tools/browser-flower-delivery-cast-smoke.mjs'
       - 'tools/flower-delivery-art-fixtures.mjs'
       - 'tests/fixtures/e2-q147-before-cast.json'
@@ -40,8 +43,8 @@ on:
       - 'tests/fixtures/e2-q042-before-cast.json'
       - 'tools/browser-borrower-cast-smoke.mjs'
       - 'tools/borrower-art-fixtures.mjs'
-      - 'tools/character-art-browser.mjs'
       - 'tests/fixtures/e2-q041-before-cast.json'
+      - 'tools/character-art-browser.mjs'
       - 'tools/browser-settlement-checkpoint.mjs'
       - 'assets/images/locations/**'
       - 'data/assets.json'
@@ -78,6 +81,17 @@ jobs:
           npm install --no-save --package-lock=false playwright@1.58.2
           # The pinned Playwright image includes Japanese font dependencies.
           test -n "$(fc-list :lang=ja)"
+      - name: Check q148 scale comparison, object custody, repeated accusations and older saves
+        if: steps.ci.outputs.run == 'true'
+        run: ADV_BROWSER_OUTPUT=/tmp/adv-scale-comparison-art-browser node tools/browser-scale-comparison-cast-smoke.mjs
+      - name: Keep q148 checkpoints
+        if: always() && steps.ci.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: q148-cast-checkpoints
+          path: /tmp/adv-scale-comparison-art-browser
+          if-no-files-found: error
+          retention-days: 7
       - name: Check q147 flower delivery, recipient, overnight storage, rental and older saves
         if: steps.ci.outputs.run == 'true'
         run: ADV_BROWSER_OUTPUT=/tmp/adv-flower-delivery-art-browser node tools/browser-flower-delivery-cast-smoke.mjs
