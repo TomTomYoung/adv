@@ -1,0 +1,24 @@
+name: q148 isolated validation
+on:
+  push:
+    branches: [feature/library-q148-cast]
+    paths: [.github/workflows/q148-work.yml]
+permissions:
+  contents: read
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Package exact source snapshot
+        run: |
+          git rev-parse HEAD > "$RUNNER_TEMP/source-commit.txt"
+          tar -czf "$RUNNER_TEMP/adv-source.tgz" --exclude='./.git' --exclude='./assets' .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: q148-source-worktree
+          path: |
+            ${{ runner.temp }}/adv-source.tgz
+            ${{ runner.temp }}/source-commit.txt
+          retention-days: 1
