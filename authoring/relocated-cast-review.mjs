@@ -3,6 +3,101 @@
 export const RELOCATED_CAST_REVIEW={
  reviewedAt:'2026-11-14',
  quests:{
+  q149:{
+    "sourceSha256": "e2b9f51d2c995e79fd879ff8be992baaf25036b0f6ed082f8ac9728ef2259933",
+    "identityNotes": [
+      "原稿volume-05のGQ049・初版2場面・現行7場面・6旅程・11行動・3結末を精読。剣を触る前の性質の説明を保持し、人物の望みをプレイヤーの内心の推測へ拡張しない。",
+      "農夫と収集家の既存personへ接続し、本文で答える鍛冶師を工房に固定して追加する。農夫の既存同行以外を増やさず、武具商や原稿だけの別の客を現行場面へ追加しない。",
+      "40G支払は工房のuser_payで一度確定し、移動と道具の引渡しを別にする。剣はcarry出発から各finishまで隊が保持する。入口・庭・保管窓口の3本文だけを既存の確定時点へ合わせる。",
+      "物語改訂1→2で旧保存全体を旧定義に照合後、smithPersonAt=smithのみ補う。既存の保持者定義域・全行動・報酬・旧受注・表示途中の本文と選択肢を保持する。"
+    ],
+    "relatedClients": {},
+    "people": {
+      "q149_farmer": {
+        "label": "鍬を使いたい農夫",
+        "status": "connected",
+        "entity": "farmer",
+        "need": "競売、工房、支払後の準備、販売へ戻った席、本人の庭に既存所在・同行で表示。"
+      },
+      "q149_collector": {
+        "label": "剣の収集家",
+        "status": "connected",
+        "entity": "collector",
+        "need": "購入意思を確認するsoldのみ。工房や庭へ同行させない。"
+      },
+      "q149_smithPerson": {
+        "label": "剣を作った鍛冶師",
+        "status": "connected",
+        "entity": "smithPerson",
+        "need": "発言する工房と同じ場所の支払済み準備だけ。smithに固定。"
+      }
+    },
+    "scenes": {
+      "entry": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "競売へ運ぶ剣を相談卓で確かめた。",
+        "reason": "相談卓では剣を確かめる。依頼人欄から武具商や鍛冶師の同席を推定しない。剣の携行はcarryの出発時。",
+        "visual": "氏名や外見の補作をせず、実所在と受渡し前後を区別する。"
+      },
+      "user": {
+        "decision": "person-evidence",
+        "people": [
+          "q149_farmer",
+          "q149_smithPerson"
+        ],
+        "evidence": "鍛冶師は製作費の一部を減らし",
+        "reason": "農夫が競売から工房へ実同行し、鍛冶師がその場で費用を答える。鍛冶師は工房に固定する。",
+        "visual": "氏名や外見の補作をせず、実所在と受渡し前後を区別する。"
+      },
+      "auction": {
+        "decision": "person-evidence",
+        "people": [
+          "q149_farmer"
+        ],
+        "evidence": "客が握ると鍬になった。",
+        "reason": "農夫の初期所在auctionと次の実同行を根拠に試持ちの客として表示する。収集家の購入意思は後のsoldで扱う。",
+        "visual": "氏名や外見の補作をせず、実所在と受渡し前後を区別する。"
+      },
+      "sold": {
+        "decision": "person-evidence",
+        "people": [
+          "q149_farmer",
+          "q149_collector"
+        ],
+        "evidence": "収集家の購入意思を確かめて渡す。",
+        "reason": "収集家が購入相手。農夫は直接経路では競売に留まり、工房経由では実同行して競売へ戻る。剣はfinishまで隊の保持。",
+        "visual": "氏名や外見の補作をせず、実所在と受渡し前後を区別する。"
+      },
+      "delivered": {
+        "decision": "person-evidence",
+        "people": [
+          "q149_farmer"
+        ],
+        "evidence": "農夫と庭へ着いた。",
+        "reason": "支払済みの農夫だけが庭へ同行する。鍛冶師が後日道具を測る結末の言及は現場への同席・同行にしない。",
+        "visual": "氏名や外見の補作をせず、実所在と受渡し前後を区別する。"
+      },
+      "withdrawn": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "剣を預かったまま保管窓口へ着いた。",
+        "reason": "隊だけの旅程で保管窓口へ来る。農夫は選択元の競売または工房に残り、剣はfinishまで隊が保持。",
+        "visual": "氏名や外見の補作をせず、実所在と受渡し前後を区別する。"
+      },
+      "user_pay_ready": {
+        "decision": "person-evidence",
+        "people": [
+          "q149_farmer",
+          "q149_smithPerson"
+        ],
+        "evidence": "ここから目的地まで運ぶ。",
+        "reason": "40G支払後も農夫と鍛冶師は工房にいる。自動生成される準備場面へreadyCastで接続し、出発・到着とは別に扱う。",
+        "visual": "氏名や外見の補作をせず、実所在と受渡し前後を区別する。"
+      }
+    },
+    "next": "新旧保存の全7場面・6旅程・11行動、5経路・3結末、40G不足と支払済み再開、途中帰還・敗北、旧受注、原子的拒否と実画面を検証する。次はq150「大道芸人の弟子」。"
+  },
   q148:{
     "sourceSha256": "b08b1c8f80236b3e73a257fa07cf3cf9f0e5834d6ab267bb5f7aa6993e514557",
     "identityNotes": [
