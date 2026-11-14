@@ -168,6 +168,14 @@ export function librarySecondSource(q,{cast=true}={}){
   route('proof','private','private_refund');end('private_refund','market','買取台でこの客の返金を確認する。他の客の被害確定や返金完了を記録へ足さない。','private',[set('oneRefunded')]);
   for(const from of ['market','proof'])route(from,'remove','removed',{depart:[give('scale','market','party')]});route('denied','remove','fetch_scale');add('fetch_scale','market','使用停止の取り決めを持って買取台へ戻った。現物を受け取り、保管先へ運ぶ。',[opt('carry','止めた秤を保管窓口へ運ぶ','removed',{depart:[give('scale','market','party')]})]);end('removed','storage','秤を保管窓口へ渡し、使用停止だけを記録する。過去の被害は未確定として残す。','remove',[give('scale','party','storage'),set('removed')]);
  }
+ if(q.number===148&&cast){
+  x.entities.egi.character='q148_egi';
+  x.entities.customer.character='q148_customer';
+  // Both people follow the existing market/office journeys. Recovering the
+  // scale after an accusation leaves them at the office, not at the market.
+  for(const scene of ['market','proof','denied','public_demo','private_refund'])
+   node(scene).cast=['egi','customer'].map((entity,i)=>({entity,display:{x:[31,69][i]}}));
+ }
  if(q.number===149){
   town('auction','剣の競売と試持ちの席','library_auction');town('smith','製作費を相談する工房','library_tailor');town('farm','鍬を受け取る農夫の庭','library_garden');town('storage','取り下げ品の保管窓口','e2_storage');
   entity('sword','entry');entity('farmer','auction','person');entity('collector','auction','person');

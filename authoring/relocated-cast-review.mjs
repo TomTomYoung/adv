@@ -3,6 +3,104 @@
 export const RELOCATED_CAST_REVIEW={
  reviewedAt:'2026-11-14',
  quests:{
+  q148:{
+    "sourceSha256": "b08b1c8f80236b3e73a257fa07cf3cf9f0e5834d6ab267bb5f7aa6993e514557",
+    "identityNotes": [
+      "原稿volume-05のGQ048、初版3場面、現行8場面・8旅程・13行動・3結末を精読した。エギと客の既存person・所在・同行にだけ呼称表示を接続する。",
+      "市場・比較・私的返金と、実同行で到着する審査窓口の告発・公開実演の5場面に二役を表示する。告発後の秤回収fetch_scaleでは二人はofficeに残る。保管窓口removedにはどの経路でも同行しない。",
+      "比較には同じcoinを使用する。公開経路だけscaleとcoinを出発時に携行し、finishで秤をofficeへ、硬貨をcustomerへ渡す。回収経路は秤だけを携行し、finishでstorageへ渡す。",
+      "proof、demonstrated、refundProcedureStarted、oneRefunded、removedを区別する。公開は返金手続の開始であって全被害者への返金完了ではない。本文・全行動・物語改訂1・保存の定義域・旧受注・報酬は変えない。原稿の第二の被害客・仕入れ元・逃走追跡を現行実装に補わない。"
+    ],
+    "relatedClients": {},
+    "people": {
+      "q148_egi": {
+        "label": "秤師エギ",
+        "status": "connected",
+        "entity": "egi",
+        "need": "市場と審査窓口の既存同行先5場面に表示。秤回収への追加同行はしない。"
+      },
+      "q148_customer": {
+        "label": "買取を受ける客",
+        "status": "connected",
+        "entity": "customer",
+        "need": "エギと同じ既存同行先5場面に表示。客の内心・氏名・外見を追加しない。"
+      }
+    },
+    "scenes": {
+      "entry": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "現物と客を市場で確かめる。",
+        "reason": "相談卓で申立を読む。二人の初期所在はmarketであり同席していない。",
+        "visual": "申立と訪問先を区別する。"
+      },
+      "denied": {
+        "decision": "person-evidence",
+        "people": [
+          "q148_egi",
+          "q148_customer"
+        ],
+        "evidence": "エギは硬貨の違いだと反論した。",
+        "reason": "market_accuseでエギと客が審査窓口へ実同行する。",
+        "visual": "比較前の反論。戻る経路と回収へ切り替える経路で所在が分かれる。"
+      },
+      "proof": {
+        "decision": "person-evidence",
+        "people": [
+          "q148_egi",
+          "q148_customer"
+        ],
+        "evidence": "同じ硬貨でも持主を替えると重さが変わった。",
+        "reason": "市場で同じcoinの載せ手を替える実験。二人はmarketにいる。",
+        "visual": "硬貨の同一性と比較結果を扱い、内心の告白を追加しない。"
+      },
+      "market": {
+        "decision": "person-evidence",
+        "people": [
+          "q148_egi",
+          "q148_customer"
+        ],
+        "evidence": "秤師エギは純度の違いだと言った。",
+        "reason": "エギの発言と客の謝罪が明示される。初回訪問または二人を連れた再訪で到着する。",
+        "visual": "秤と硬貨はmarketにあり、比較前に証明済みとしない。"
+      },
+      "public_demo": {
+        "decision": "person-evidence",
+        "people": [
+          "q148_egi",
+          "q148_customer"
+        ],
+        "evidence": "同じ硬貨を替えずに載せ手だけを替え",
+        "reason": "proof_publicで二人と秤・硬貨を審査窓口へ運ぶ。",
+        "visual": "実到着だけでは受渡し・返金手続開始・報酬を確定せず、finishで確定する。"
+      },
+      "private_refund": {
+        "decision": "person-evidence",
+        "people": [
+          "q148_egi",
+          "q148_customer"
+        ],
+        "evidence": "この客の返金を確認する。",
+        "reason": "市場に留まったエギと客の私的交渉。",
+        "visual": "この客だけの返金と、公開の返金手続を混同しない。"
+      },
+      "fetch_scale": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "買取台へ戻った。",
+        "reason": "denied_removeは隊だけが市場へ戻る。エギと客はofficeに残る。",
+        "visual": "秤はmarketにあり、carryで初めて隊が携行する。"
+      },
+      "removed": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "使用停止だけを記録する。",
+        "reason": "秤だけを保管窓口へ運ぶ。二人は経路に応じmarketまたはofficeに残る。",
+        "visual": "秤の引渡しはfinishで確定。過去の被害や返金完了を補わない。"
+      }
+    },
+    "next": "全8場面・8旅程・13行動の新旧保存、告発と再比較の反復、秤と同じ硬貨の保持者、二人の同行と回収時の不在、3結末の一回報酬を検証する。次はq149「売らない剣」。"
+  },
   q147:{
   "sourceSha256": "b62dd0bfe028989d436c3774b5a90f52dceb63206e4c40e425e2cd20c5ce223a",
   "identityNotes": [
