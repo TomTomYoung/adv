@@ -3,6 +3,135 @@
 export const RELOCATED_CAST_REVIEW={
  reviewedAt:'2026-11-13',
  quests:{
+  q143:{
+    "sourceSha256": "916d7e57ea6070c9833eb50e59b6fda024b102413b37275c8ddaa99b3f3d3849",
+    "identityNotes": [
+      "原稿と初版、現行8場面・6旅程・11行動・3結末を精読した。メメ・助手・元の精霊は相談卓から各経路の実同行で移動する。代役の精霊は紹介所で初めて登場し、代役雇用の経路だけ出店へ同行する。",
+      "代役雇用では40Gの支払を入口の準備で確定し、紹介所への実到着と本番会場への実同行を分ける。支払を省いた代役出現、出店への瞬間移動、元の精霊の休暇取り消しは追加しない。",
+      "普通の皿では生活市からの出発時にplatesを携行し、本番でfinishを選んだときに受渡しを確定する。交代制はrolesAgreedを出発時に設定し、演奏や休憩の報告と依頼完了を同一視しない。",
+      "全員の初期所在、既存の同行・三結末・金額・物語改訂1・受注済み旧経路を保持。匿名の子供・客を固有NPCや戦闘へ変換せず、集団の人数・人物の容貌・専用画を補わない。"
+    ],
+    "relatedClients": {},
+    "people": {
+      "q143_meme": {
+        "label": "料理祭の店主メメ",
+        "status": "connected",
+        "entity": "meme",
+        "need": "相談卓から祭会場まで実同行に合わせて8場面すべてへ表示。"
+      },
+      "q143_assistant": {
+        "label": "料理店の助手",
+        "status": "connected",
+        "entity": "assistant",
+        "need": "店主と同じ現場で、演出と休憩を説明する担当として全8場面へ表示。"
+      },
+      "q143_spirit": {
+        "label": "皿底の精霊",
+        "status": "connected",
+        "entity": "spirit",
+        "need": "炎の演出を休む本人として全8場面へ表示し、どの経路でも同行と休暇を保つ。"
+      },
+      "q143_replacement": {
+        "label": "代役の精霊",
+        "status": "connected",
+        "entity": "replacement",
+        "need": "紹介所と代役使用の本番だけに表示し、通常の皿と交代制には配置しない。"
+      }
+    },
+    "scenes": {
+      "entry": {
+        "decision": "person-evidence",
+        "people": [
+          "q143_meme",
+          "q143_assistant",
+          "q143_spirit"
+        ],
+        "evidence": "今日は休暇がほしいという。",
+        "reason": "冒頭の休暇を求める精霊と、同じ相談卓で各経路へ同行する店主・助手。後者二役は既存の初期所在entryと同行定義に基づく。",
+        "visual": "炎を出していた精霊の意向と、客の食事を見せる。匿名の子供を固有NPCにしない。"
+      },
+      "roles": {
+        "decision": "person-evidence",
+        "people": [
+          "q143_meme",
+          "q143_assistant",
+          "q143_spirit"
+        ],
+        "evidence": "精霊はまとまった休憩が取れるなら引き受ける。",
+        "reason": "三者が交代時間と仕事を相談し、精霊が休憩の条件に答える。",
+        "visual": "休憩を承諾する場面。agreementの確定はagreeを選んだ次の出発時。"
+      },
+      "hire": {
+        "decision": "person-evidence",
+        "people": [
+          "q143_meme",
+          "q143_assistant",
+          "q143_spirit",
+          "q143_replacement"
+        ],
+        "evidence": "代役精霊が支払済みの札を確かめた。",
+        "reason": "紹介所に代役が存在し、メメ・助手・元精霊は既存entry_hire_ready_continueの実同行で到着する。",
+        "visual": "40G支払済みの札と四役。代役はこの場で出店の仲間になる。"
+      },
+      "fire_show": {
+        "decision": "person-evidence",
+        "people": [
+          "q143_meme",
+          "q143_assistant",
+          "q143_spirit",
+          "q143_replacement"
+        ],
+        "evidence": "代役が出店の皿を受け持ち",
+        "reason": "既存hire_escortで四役が実到着する。元の精霊は客席で休む。",
+        "visual": "炎を担当する代役と休む元精霊を区別し、開店の確定をfinishまで遅らせる。"
+      },
+      "plates": {
+        "decision": "person-evidence",
+        "people": [
+          "q143_meme",
+          "q143_assistant",
+          "q143_spirit"
+        ],
+        "evidence": "生活市で普通の皿を受け取った。",
+        "reason": "entry_taste・roles_tasteの両旅程に店の三役が同行して生活市へ到着する。代役の移動経路は存在しない。",
+        "visual": "通常の皿はsupplyに残る。carry出発前に隊の所持品へ入れない。"
+      },
+      "taste_show": {
+        "decision": "person-evidence",
+        "people": [
+          "q143_meme",
+          "q143_assistant",
+          "q143_spirit"
+        ],
+        "evidence": "助手は炎が出ないことを客へ説明する。",
+        "reason": "通常の皿で営業し、元の精霊は休む。店の三役は生活市からの実同行で到着する。",
+        "visual": "皿を保持するのはfinishまで隊。代役と炎の演出をこの経路へ補わない。"
+      },
+      "shift_show": {
+        "decision": "person-evidence",
+        "people": [
+          "q143_meme",
+          "q143_assistant",
+          "q143_spirit"
+        ],
+        "evidence": "三人が出店へ着き",
+        "reason": "三者の役割を決めた後、実際に本番会場へ同行した三役が登場する。",
+        "visual": "交代制は合意した休憩時間から始め、代役雇用の札や通常の皿を追加しない。"
+      },
+      "entry_hire_ready": {
+        "decision": "person-evidence",
+        "people": [
+          "q143_meme",
+          "q143_assistant",
+          "q143_spirit"
+        ],
+        "evidence": "ここから目的地まで運ぶ。",
+        "reason": "40G支払後も現場は相談卓のまま。既存の三役がまだ移動していない。",
+        "visual": "代役は紹介所に残り、支払と実到着を別々に扱う。"
+      }
+    },
+    "next": "4役・全8場面の表示と全6旅程・10行動・3結末の保存、40G支払、通常皿の出発時携行、休暇と交代制、旧受注、帰還・敗北再開を検証する。次工程はq144。"
+  },
   q142:{
     "sourceSha256": "36c54567a83f5bae977207981259151929ed680b38095fc13367bfadda4502e8",
     "identityNotes": [
