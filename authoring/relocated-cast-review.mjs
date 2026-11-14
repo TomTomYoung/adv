@@ -1,8 +1,106 @@
 // Editorial audit: candidate IDs are local; connected roles cite their game entity.
 // Update a fingerprint only after rereading the changed quest and its evidence.
 export const RELOCATED_CAST_REVIEW={
- reviewedAt:'2026-11-13',
+ reviewedAt:'2026-11-14',
  quests:{
+  q147:{
+  "sourceSha256": "b62dd0bfe028989d436c3774b5a90f52dceb63206e4c40e425e2cd20c5ce223a",
+  "identityNotes": [
+    "authoring/reference/volume-05.mdのGQ047「一番遅い配達」、初版2場面、現行10場面・9旅程・13行動・3結末を精読した。",
+    "受取人は引退した舞踊家。受取先のclosed・quiet_arrival・tomorrow_arrivalだけに呼称表示し、全9旅程のcompanionsは空のまま。店主と若い配達人の同席・同行を依頼人欄や原稿の存在だけから追加しない。",
+    "物語改訂1→2は旧保存全体を旧定義で検証後、recipientAt=receiverだけを補う。既存の花の保持者、経路・開閉・支払・合意・翌晩・配達成否の旗と知識を維持する。flowerAt=receiverは場所への引渡しのまま。",
+    "懸架車の30Gは準備時だけ支払い、花は次の出発時に携行する。保管室への実到着で預け、翌晩の出発時に回収して花の閉鎖を解除する。速達記録と開花を見せる依頼の成否を別に扱う。",
+    "引渡し・精算前の3本文をfinishの既存確定点に合わせた。旧保存の待機本文・旧受注の初版経路・全結末・報酬を保持し、衝撃回数や現実時間待機を新設しない。"
+  ],
+  "relatedClients": {},
+  "people": {
+    "q147_recipient": {
+      "label": "引退した舞踊家",
+      "status": "connected",
+      "entity": "recipient",
+      "need": "受取先の3場面へ呼称表示。固定所在を追加し、容貌・氏名・人物画・同行を補わない。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "扱い札には振動を避けるよう書かれている。",
+      "reason": "扱い札と依頼人・受取人の希望を知る場面。希望への言及だけで店主・若い配達人・受取人を相談卓へ同席させない。",
+      "visual": "花はentryに留まる。山道・水路・懸架車の条件を選択前に保持する。"
+    },
+    "closed": {
+      "decision": "person-evidence",
+      "people": [
+        "q147_recipient"
+      ],
+      "evidence": "受取人へ状態を伝える。",
+      "reason": "山道から受取先へ実到着し、舞踊家へ閉じた花の状態を説明する。",
+      "visual": "花はpartyの保持のまま。翌晩の変更と競技だけの精算を分ける。"
+    },
+    "mountain": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "山道を急いだため花が閉じた。",
+      "reason": "山道への実到着で状態が変わる。受取人へはまだ到着していない。",
+      "visual": "flowerClosedの成立は到着時。受取人を山道へ配置しない。"
+    },
+    "water": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "水路沿いを静かに運び、振動を避けた。",
+      "reason": "水路の途中で受取人への訪問はこれから。全旅程の同行者は空。",
+      "visual": "花は開花可能な状態で隊が携行する。"
+    },
+    "car": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "吊り台が衝撃を受け止め、花は閉じていない。",
+      "reason": "懸架車で越えた山道。支払済みであっても受取人は受取先に留まる。",
+      "visual": "30G支払と花の携行・実到着を分け、車を借り直さない。"
+    },
+    "quiet_arrival": {
+      "decision": "person-evidence",
+      "people": [
+        "q147_recipient"
+      ],
+      "evidence": "受取人の前で花が開くところを確かめてから",
+      "reason": "水路または懸架車を経て受取先へ実到着し、舞踊家が花の開くところを見られる。",
+      "visual": "到着時の花の保持者はparty。finishでreceiverへの引渡し・delivered・報酬が確定する。"
+    },
+    "rest": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "花を静かな保管室へ預けた。",
+      "reason": "受取人との約束を持って隊だけが保管室へ移動する。約束への言及を保管室での同席と扱わない。",
+      "visual": "実到着で花をrestへ預ける。翌晩の再配達出発まで花を隊へ戻さない。"
+    },
+    "tomorrow_arrival": {
+      "decision": "person-evidence",
+      "people": [
+        "q147_recipient"
+      ],
+      "evidence": "受取人に花の開くところを見てもらい",
+      "reason": "一晩置いた花を携えて受取先へ戻る。舞踊家はその家に固定し、保管室から同行させない。",
+      "visual": "翌晩と開花可能への復帰は再配達出発時、引渡しはfinish時。"
+    },
+    "recorded": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "依頼元の窓口へ戻った。",
+      "reason": "競技の精算窓口への帰着。店主本人や特定の受付担当者の同席は本文にない。",
+      "visual": "花はfinishでrecordへ渡し、deliveryFailedを確定する。受取人への配達済みにはしない。"
+    },
+    "entry_car_ready": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "ここから目的地まで運ぶ。",
+      "reason": "懸架車代の支払後で、移動前の準備場面。人物の同席を推測しない。",
+      "visual": "carPaidはtrueでもflowerはentry・deliveryModeはpending。出発時に初めて花を携行する。"
+    }
+  },
+  "next": "受取先3場面、10場面・9旅程・13行動・全4経路、30G支払、翌晩の預入・回収、帰還・敗北、新旧保存と旧受注、3結末の一回報酬を検証する。次はq148「贋金より軽い金」。"
+},
   q146:{
     "sourceSha256": "8e4d0d79adeb40b3dedd13fa2f0004dbf6c39cd51bb80e70cc6fffe70434067f",
     "identityNotes": [

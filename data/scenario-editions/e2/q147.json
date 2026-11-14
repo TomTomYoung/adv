@@ -438,7 +438,7 @@
       {
         "id": "quiet_arrival",
         "place": "receiver",
-        "text": "受取人の前で花が開くところを確かめ、鉢を渡した。時刻だけで受領済みにはしない。",
+        "text": "花の鉢を携えて受取先へ着いた。受取人の前で花が開くところを確かめてから、鉢を渡す。",
         "options": [
           {
             "id": "finish",
@@ -464,7 +464,7 @@
       {
         "id": "tomorrow_arrival",
         "place": "receiver",
-        "text": "翌晩に戻り、受取人が花の開くところを見てから鉢を渡した。",
+        "text": "翌晩に花の鉢を携えて受取先へ戻った。受取人に花の開くところを見てもらい、鉢を渡す。",
         "options": [
           {
             "id": "finish",
@@ -477,7 +477,7 @@
       {
         "id": "recorded",
         "place": "record",
-        "text": "閉じた花を依頼元の窓口へ戻し、速達競技だけを精算した。開花を見せる依頼は未達として記す。",
+        "text": "閉じた花を携えて依頼元の窓口へ戻った。速達競技だけを精算し、開花を見せる依頼は未達として記す。",
         "options": [
           {
             "id": "finish",
@@ -526,7 +526,7 @@
     "entryScript": "q147.library.visit",
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -535,7 +535,782 @@
       "saveRevision": 2,
       "scope": "書庫後半10件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "一番遅い配達の相談卓",
+            "mountain": "高台街道の山道側",
+            "water": "サロメの静かな水路沿い",
+            "receiver": "引退した舞踊家の家",
+            "rest": "翌晩まで花を休める保管室",
+            "record": "速達競技の記録受付",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "mountain"
+            ],
+            [
+              "transit",
+              "water"
+            ],
+            [
+              "transit",
+              "receiver"
+            ],
+            [
+              "transit",
+              "rest"
+            ],
+            [
+              "transit",
+              "record"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "mountain",
+                "water",
+                "receiver",
+                "rest",
+                "record",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "quiet",
+                "tomorrow",
+                "record"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "flowerClosed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "flowerClosed"
+            },
+            "carPaid": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "carPaid"
+            },
+            "redeliveryAgreed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "redeliveryAgreed"
+            },
+            "delivered": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "delivered"
+            },
+            "overnight": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "overnight"
+            },
+            "deliveryFailed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "deliveryFailed"
+            },
+            "deliveryMode": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "mountain",
+                "water",
+                "car"
+              ],
+              "meaning": "選んだ運搬経路"
+            },
+            "flowerAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "mountain",
+                "water",
+                "receiver",
+                "rest",
+                "record",
+                "transit",
+                "party"
+              ],
+              "meaning": "flower の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "flower": {
+              "holder": "flowerAt",
+              "kind": "item"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "近道を走るほど花は閉じ、到着が早くても受取条件を満たさない。店主は条件を知りながら宣伝の速さだけを強調している。出発前に花の扱い札を読めるようにし、到着後の隠し減点にはしない。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "一番遅い配達の相談卓",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "closed": {
+              "title": "引退した舞踊家の家",
+              "place": "receiver",
+              "cast": [],
+              "requires": true
+            },
+            "mountain": {
+              "title": "高台街道の山道側",
+              "place": "mountain",
+              "cast": [],
+              "requires": true
+            },
+            "water": {
+              "title": "サロメの静かな水路沿い",
+              "place": "water",
+              "cast": [],
+              "requires": true
+            },
+            "car": {
+              "title": "高台街道の山道側",
+              "place": "mountain",
+              "cast": [],
+              "requires": true
+            },
+            "quiet_arrival": {
+              "title": "引退した舞踊家の家",
+              "place": "receiver",
+              "cast": [],
+              "requires": true
+            },
+            "rest": {
+              "title": "翌晩まで花を休める保管室",
+              "place": "rest",
+              "cast": [],
+              "requires": true
+            },
+            "tomorrow_arrival": {
+              "title": "引退した舞踊家の家",
+              "place": "receiver",
+              "cast": [],
+              "requires": true
+            },
+            "recorded": {
+              "title": "速達競技の記録受付",
+              "place": "record",
+              "cast": [],
+              "requires": true
+            },
+            "entry_car_ready": {
+              "title": "一番遅い配達の相談卓",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_run": {
+              "from": [
+                "entry"
+              ],
+              "to": "mountain",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "mountain"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "flowerClosed",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "mountain",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "flower",
+                  "from": "entry",
+                  "to": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "deliveryMode",
+                  "value": "mountain"
+                }
+              ]
+            },
+            "entry_water": {
+              "from": [
+                "entry"
+              ],
+              "to": "water",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "water"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "water",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "flower",
+                  "from": "entry",
+                  "to": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "deliveryMode",
+                  "value": "water"
+                }
+              ]
+            },
+            "entry_car": {
+              "from": [
+                "entry"
+              ],
+              "to": "entry_car_ready",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "carPaid",
+                  "value": true
+                }
+              ],
+              "cost": {
+                "gold": 30
+              },
+              "once": false
+            },
+            "closed_tomorrow": {
+              "from": [
+                "closed"
+              ],
+              "to": "rest",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "rest"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "flower",
+                  "from": "party",
+                  "to": "rest"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "rest",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "set",
+                  "key": "redeliveryAgreed",
+                  "value": true
+                }
+              ]
+            },
+            "closed_record": {
+              "from": [
+                "closed"
+              ],
+              "to": "recorded",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "record"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "record",
+                "companions": []
+              },
+              "depart": []
+            },
+            "mountain_deliver": {
+              "from": [
+                "mountain"
+              ],
+              "to": "closed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "receiver"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "receiver",
+                "companions": []
+              },
+              "depart": []
+            },
+            "water_deliver": {
+              "from": [
+                "water"
+              ],
+              "to": "quiet_arrival",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "receiver"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "receiver",
+                "companions": []
+              },
+              "depart": []
+            },
+            "car_deliver": {
+              "from": [
+                "car"
+              ],
+              "to": "quiet_arrival",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "receiver"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "receiver",
+                "companions": []
+              },
+              "depart": []
+            },
+            "quiet_arrival_finish": {
+              "from": [
+                "quiet_arrival"
+              ],
+              "ending": "quiet",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "flower",
+                  "from": "party",
+                  "to": "receiver"
+                },
+                {
+                  "op": "set",
+                  "key": "delivered",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "quiet"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "rest_next": {
+              "from": [
+                "rest"
+              ],
+              "to": "tomorrow_arrival",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "receiver"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "receiver",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "flower",
+                  "from": "rest",
+                  "to": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "overnight",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "flowerClosed",
+                  "value": false
+                }
+              ]
+            },
+            "tomorrow_arrival_finish": {
+              "from": [
+                "tomorrow_arrival"
+              ],
+              "ending": "tomorrow",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "flower",
+                  "from": "party",
+                  "to": "receiver"
+                },
+                {
+                  "op": "set",
+                  "key": "delivered",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "tomorrow"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "recorded_finish": {
+              "from": [
+                "recorded"
+              ],
+              "ending": "record",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "flower",
+                  "from": "party",
+                  "to": "record"
+                },
+                {
+                  "op": "set",
+                  "key": "deliveryFailed",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "record"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "entry_car_ready_continue": {
+              "from": [
+                "entry_car_ready"
+              ],
+              "to": "car",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "mountain"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "mountain",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "flower",
+                  "from": "entry",
+                  "to": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "deliveryMode",
+                  "value": "car"
+                }
+              ]
+            }
+          },
+          "endings": {
+            "quiet": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q147.values.resolution"
+                  },
+                  "right": "quiet"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q147.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q147.values.partyAt"
+                      },
+                      "right": "receiver"
+                    }
+                  ]
+                }
+              ]
+            },
+            "tomorrow": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q147.values.resolution"
+                  },
+                  "right": "tomorrow"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q147.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q147.values.partyAt"
+                      },
+                      "right": "receiver"
+                    }
+                  ]
+                }
+              ]
+            },
+            "record": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q147.values.resolution"
+                  },
+                  "right": "record"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q147.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q147.values.partyAt"
+                      },
+                      "right": "record"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_5",
+              "map": "region_5_f2",
+              "x": 4,
+              "y": 1
+            },
+            "mountain": {
+              "kind": "dungeon",
+              "dungeon": "salome_road",
+              "map": "e2_highland_lower",
+              "x": 13,
+              "y": 5
+            },
+            "water": {
+              "kind": "dungeon",
+              "dungeon": "salome_road",
+              "map": "e2_salome_canal",
+              "x": 9,
+              "y": 3
+            },
+            "receiver": {
+              "kind": "town",
+              "location": "library_dancer"
+            },
+            "rest": {
+              "kind": "town",
+              "location": "library_flower_rest"
+            },
+            "record": {
+              "kind": "town",
+              "location": "library_post"
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "recipientAt",
+            "value": "receiver"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q147.scene.entry": {
@@ -1125,7 +1900,7 @@
         },
         {
           "op": "narrate",
-          "text": "受取人の前で花が開くところを確かめ、鉢を渡した。時刻だけで受領済みにはしない。"
+          "text": "花の鉢を携えて受取先へ着いた。受取人の前で花が開くところを確かめてから、鉢を渡す。"
         },
         {
           "op": "choice",
@@ -1199,7 +1974,7 @@
         },
         {
           "op": "narrate",
-          "text": "翌晩に戻り、受取人が花の開くところを見てから鉢を渡した。"
+          "text": "翌晩に花の鉢を携えて受取先へ戻った。受取人に花の開くところを見てもらい、鉢を渡す。"
         },
         {
           "op": "choice",
@@ -1238,7 +2013,7 @@
         },
         {
           "op": "narrate",
-          "text": "閉じた花を依頼元の窓口へ戻し、速達競技だけを精算した。開花を見せる依頼は未達として記す。"
+          "text": "閉じた花を携えて依頼元の窓口へ戻った。速達競技だけを精算し、開花を見せる依頼は未達として記す。"
         },
         {
           "op": "choice",
@@ -1661,6 +2436,14 @@
           "party"
         ],
         "meaning": "flower の所在または保持者"
+      },
+      "recipientAt": {
+        "type": "enum",
+        "initial": "receiver",
+        "values": [
+          "receiver"
+        ],
+        "meaning": "recipient の所在または保持者"
       }
     },
     "entities": {
@@ -1671,6 +2454,11 @@
       "flower": {
         "holder": "flowerAt",
         "kind": "item"
+      },
+      "recipient": {
+        "holder": "recipientAt",
+        "kind": "person",
+        "character": "q147_recipient"
       }
     },
     "propositions": {
@@ -1690,7 +2478,14 @@
       "closed": {
         "title": "引退した舞踊家の家",
         "place": "receiver",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "recipient",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "mountain": {
@@ -1714,7 +2509,14 @@
       "quiet_arrival": {
         "title": "引退した舞踊家の家",
         "place": "receiver",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "recipient",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "rest": {
@@ -1726,7 +2528,14 @@
       "tomorrow_arrival": {
         "title": "引退した舞踊家の家",
         "place": "receiver",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "recipient",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "recorded": {
@@ -2298,7 +3107,7 @@
         "location": "library_post"
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "salome",
   "receptionLocations": [
