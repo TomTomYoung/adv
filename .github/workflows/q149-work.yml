@@ -4,21 +4,49 @@ on:
     branches: [feature/library-q149-cast]
     paths: [.github/workflows/q149-work.yml]
 permissions:
-  contents: read
+  contents: write
 jobs:
   prepare:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
-      - name: Package source worktree
-        run: |
-          git rev-parse HEAD > "$RUNNER_TEMP/source-commit.txt"
-          tar -czf "$RUNNER_TEMP/adv-source.tgz" --exclude='./.git' --exclude='./assets' .
-      - uses: actions/upload-artifact@v4
         with:
-          name: q149-source-worktree
-          path: |
-            ${{ runner.temp }}/adv-source.tgz
-            ${{ runner.temp }}/source-commit.txt
-          retention-days: 1
+          ref: feature/library-q149-cast
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify local source matches and apply audited q149 changes
+        run: |
+          test "$(git hash-object tools/apply-q149-work.mjs)" = b612cf1c6ae62cefb219ba461c6dadacd817e90c
+          test "$(git hash-object tests/unsold-sword-cast.test.mjs)" = ea9cf9eb5c7cbf718c573d0d8446992855d9f80c
+          node tools/apply-q149-work.mjs
+      - name: Validate q149 paths and prior saves
+        run: node --test tests/unsold-sword-cast.test.mjs tests/relocated-cast-audit.test.mjs
+      - name: Reproduce finite normal party trials
+        run: node tools/measure-unsold-sword.mjs doc/development/Q149_PLAYTEST_RESULTS.json
+      - name: Regenerate documents and runtime without unrelated authored formatting
+        run: |
+          cp -a doc "$RUNNER_TEMP/q149-authored-docs"
+          node tools/build-docs.mjs
+          for file in battle/QUEST_PARTY_PLAYTEST.md battle/SALOME_CLASSES_AND_CHARACTERS_DESIGN.md development/CHROMIUM_DEFERRED_2026-11-04.md development/PROGRESS.md development/REMAINING_WORK.md development/TEST_OVERVIEW.md dungeons/ODDLAND_RELOCATION_AUDIT.md dungeons/REGIONAL_RELOCATION_WORK.md scenarios/EGG_KNIGHT_FORESHADOWING.md scenarios/ODDLAND_100_QUEST_DESIGN.md scenarios/REGIONAL_QUEST_ALLOCATION.md scenarios/SALOME_100_QUEST_DESIGN.md ui/SOUND_AND_EFFECT_FORMAT.md; do
+            cp "$RUNNER_TEMP/q149-authored-docs/$file" "doc/$file"
+          done
+          node tools/audit-relocated-cast.mjs
+          node tools/build-runtime.mjs
+          git rm tools/apply-q149-work.mjs
+      - name: Validate generated data and document references
+        run: |
+          node tools/build-scenario-editions.mjs --check
+          node tools/build-runtime.mjs --check
+          node tools/validate.mjs
+          node tools/check-static.mjs
+          node tools/check-docs.mjs
+      - name: Commit verified implementation
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --stat
+          git commit -m "feat(q149): actor locations, atomic save migration and sword handoff verification"
+          git push origin HEAD:feature/library-q149-cast
