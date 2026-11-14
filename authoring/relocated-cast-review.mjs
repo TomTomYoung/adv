@@ -3,6 +3,93 @@
 export const RELOCATED_CAST_REVIEW={
  reviewedAt:'2026-11-13',
  quests:{
+  q145:{
+    "sourceSha256": "0862f54092cd6a48536649869d21ce81450e06065d05e08b2f56185e4346f328",
+    "identityNotes": [
+      "原稿・初版・現行8場面・8旅程・11行動・3結末を精読した。母は娘の帰省に合わせて花を待たせる約束を知らず、隊から説明された後に自分で開花の時期を決める。",
+      "母は母の家で事情を聞き、同意した庭の経路だけ実同行する。次便を待つ経路では本人を自宅に残して隊だけが窓口へ向かい、手紙を携えて戻る。絵と便りの発送でも本人は庭に残る。",
+      "開花希望motherAgreed、待機合意waitingAgreed、一部だけの開花partlyOpened、次便を届けたletterReceivedを混同しない。未到着の手紙を先取りせず、花の絵は庭から出発時に隊が携行し、郵便窓口への実到着で提出する。",
+      "本文・初期所在・全旅程・受渡し・物語改訂1・旧受注・3結末と一回報酬は変更しない。娘や師・庭師ロマを現場へ追加せず、外見・専用画や架空の帰省日を作らない。"
+    ],
+    "relatedClients": {},
+    "people": {
+      "q145_mother": {
+        "label": "帰省する娘を待つ母",
+        "status": "connected",
+        "entity": "motherPerson",
+        "need": "母の家と実同行で到着した庭の5場面にだけ表示。隊だけが訪れる窓口へ移動させない。"
+      }
+    },
+    "scenes": {
+      "entry": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "母は約束を知らなかった。",
+        "reason": "相談卓で依頼の事情を知る。母本人は既存初期所在motherの家にいて、この場への同席は書かれていない。",
+        "visual": "覆いのある庭の情報と、母の不在を分ける。"
+      },
+      "letter": {
+        "decision": "person-evidence",
+        "people": [
+          "q145_mother"
+        ],
+        "evidence": "母は手紙を閉じる。",
+        "reason": "次便を持ち帰って母へ渡す行動の実到着先はmother。本人が手紙を読む。",
+        "visual": "届いた一通を読み、帰省と開花の別々の判断を示す。"
+      },
+      "mother": {
+        "decision": "person-evidence",
+        "people": [
+          "q145_mother"
+        ],
+        "evidence": "本人の希望を聞く。",
+        "reason": "隊が母の家へ訪ねて本人へ説明し、開花の判断を確認する。",
+        "visual": "初回の説明では開花を済ませず、本人の希望を聞く。"
+      },
+      "now_garden": {
+        "decision": "person-evidence",
+        "people": [
+          "q145_mother"
+        ],
+        "evidence": "母と庭へ着き",
+        "reason": "mother_nowで母が庭へ実同行し、希望した範囲の覆いを外す。",
+        "visual": "花の絵をここで作るが、発送窓口へ届けるのは隊だけ。"
+      },
+      "sent": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "母は今日の庭を楽しんでいる。",
+        "reason": "母は庭に残り、隊だけが花の絵と便りを発送窓口へ運ぶ。文中の言及は窓口への同席を示さない。",
+        "visual": "窓口に母を表示せず、到着後の提出とfinish完了を分離する。"
+      },
+      "half_garden": {
+        "decision": "person-evidence",
+        "people": [
+          "q145_mother"
+        ],
+        "evidence": "母と庭へ戻り",
+        "reason": "母が部分開花を希望し、mother_halfまたはletter_halfで実同行する。",
+        "visual": "半分の覆いと残る蕾の判断を本人が管理する。"
+      },
+      "collect_letter": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "次の便が届いた。",
+        "reason": "母は家に留まり、隊だけが発送窓口へ次便を取りに行く。本人も娘も窓口へ来ない。",
+        "visual": "手紙の現物はpostに留まり、次の出発時に携行する。"
+      },
+      "waited_garden": {
+        "decision": "person-evidence",
+        "people": [
+          "q145_mother"
+        ],
+        "evidence": "手紙を受け取った母と庭へ戻り",
+        "reason": "娘の手紙を読んだ母が同意して庭へ実同行する。",
+        "visual": "次便を受けた後の開花と、最初から開花する経路を区別する。"
+      }
+    },
+    "next": "全8場面・8旅程・11行動・3結末の保存、手紙と絵の保持者、次便の待機と同意、母の同行と窓口不在、報酬の一回性を検証する。次工程はq146。"
+  },
   q144:{
     "sourceSha256": "db6cc6ba6cafec5c9e36ba1004878a83c7d15a66ebf1e1a14f1158ff8bc369ba",
     "identityNotes": [
