@@ -4,21 +4,46 @@ on:
     branches: [feature/library-q148-cast]
     paths: [.github/workflows/q148-work.yml]
 permissions:
-  contents: read
+  contents: write
 jobs:
   prepare:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
-      - name: Package exact source snapshot
-        run: |
-          git rev-parse HEAD > "$RUNNER_TEMP/source-commit.txt"
-          tar -czf "$RUNNER_TEMP/adv-source.tgz" --exclude='./.git' --exclude='./assets' .
-      - uses: actions/upload-artifact@v4
         with:
-          name: q148-source-worktree
-          path: |
-            ${{ runner.temp }}/adv-source.tgz
-            ${{ runner.temp }}/source-commit.txt
-          retention-days: 1
+          ref: feature/library-q148-cast
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Apply source-checked q148 authoring and audit
+        run: node tools/apply-q148-work.mjs
+      - name: Verify all q148 branches and previous saves
+        run: node --test tests/scale-comparison-cast.test.mjs tests/relocated-cast-audit.test.mjs
+      - name: Reproduce normal party trials and record results
+        run: |
+          node tools/measure-scale-comparison.mjs doc/development/Q148_PLAYTEST_RESULTS.json
+          node tools/finalize-q148-work.mjs
+      - name: Generate current snapshot while preserving authored documentation
+        run: |
+          cp -a doc "$RUNNER_TEMP/q148-docs"
+          node tools/build-docs.mjs
+          cp doc/development/DATA_SNAPSHOT.json "$RUNNER_TEMP/q148-snapshot.json"
+          cp -a "$RUNNER_TEMP/q148-docs/." doc/
+          cp "$RUNNER_TEMP/q148-snapshot.json" doc/development/DATA_SNAPSHOT.json
+          node tools/build-runtime.mjs
+          git rm tools/apply-q148-work.mjs tools/finalize-q148-work.mjs
+      - name: Validate generation, data, static references and documentation
+        run: |
+          node tools/build-scenario-editions.mjs --check
+          node tools/validate.mjs
+          node tools/check-static.mjs
+          node tools/check-docs.mjs
+      - name: Commit verified implementation
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --stat
+          git commit -m "feat(q148): actual cast locations, unchanged saves and scale custody verification"
+          git push origin HEAD:feature/library-q148-cast
