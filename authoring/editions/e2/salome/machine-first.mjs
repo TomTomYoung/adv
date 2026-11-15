@@ -69,6 +69,12 @@ export function machineFirstSource(q,{cast=true}={}){
   for(const [from,key] of [['entry','share'],['parts','reduce']])route(from,key,'share');add('share','workers','引き受ける作業と人手を相談し、人用の工具を揃えた。部品を補給したという記録は付けない。',[opt('escort','作業者を聖者のいる場所へ案内する','shared',{companions:['workersGroup']})]);end('shared','entry','人が担当の作業を引き受け、聖者の稼働量を下げた。','compromise',[set('workShared')]);
   route('running','translate','translated');add('translated','forms','要求票を部品名と補給先へ翻訳した。次の票が金銭窓口へ行かないよう、原本を部品庫へ届ける。',[opt('deliver','新しい要求票を部品庫へ登録する','registered')]);end('registered','store','部品庫が補給先入りの要求票を受け取った。','informed',[give('requestSheet','party','store'),set('translated')]);
  }
+ if(q.number===75&&cast){
+  x.entities.workersGroup.character='q075_workers';
+  for(const scene of ['share','shared'])node(scene).cast=[{entity:'workersGroup',display:{x:50}}];
+  node('shared').text='作業者が聖者のいる場所へ着き、人用の工具を揃えた。担当を引き継ぎ、聖者の稼働量を下げる。';
+  node('registered').text='補給先を記した要求票を持って部品庫へ着いた。受領と登録を確かめ、次の補給先を共有する。';
+ }
  if(q.number===76){
   cell('control_place','空調信号の操作盤',2,7,1);town('fridge','別回線の薬品冷蔵庫','machine_clinic');town('record','歌の録音保管室','library_copy_room');entity('medicineBox','entry');entity('songRecord','control_place');node('control').place='control_place';node('moved').place='fridge';
   route('entry','medicine','moved',{depart:[give('medicineBox','entry','party')],effects:[give('medicineBox','party','fridge'),set('protected')]});route('control','move','fetch',{when:not(eq(v('protected'),true))});add('fetch','entry','保育室へ戻って薬を受け取った。別の冷蔵庫で受領されるまでは移送を終えていない。',[opt('carry','薬を冷蔵庫へ運ぶ','moved',{depart:[give('medicineBox','entry','party')],effects:[give('medicineBox','party','fridge'),set('protected')]})]);

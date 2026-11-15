@@ -4,16 +4,16 @@
   "summary": {
     "quests": 100,
     "scenes": 753,
-    "emptyCastScenes": 289,
+    "emptyCastScenes": 287,
     "personEntities": 149,
     "characterLinkedEntities": 140,
-    "reviewedQuests": 84,
-    "reviewedScenes": 645,
-    "noPersonEvidenceScenes": 180,
-    "personEvidenceScenes": 465,
+    "reviewedQuests": 85,
+    "reviewedScenes": 652,
+    "noPersonEvidenceScenes": 185,
+    "personEvidenceScenes": 467,
     "candidateRoles": 1,
-    "connectedRoles": 187,
-    "unreviewedScenes": 108
+    "connectedRoles": 188,
+    "unreviewedScenes": 101
   },
   "regions": [
     {
@@ -81,15 +81,15 @@
       "name": "機関廟",
       "quests": 20,
       "scenes": 163,
-      "emptyCastScenes": 73,
+      "emptyCastScenes": 71,
       "personEntities": 27,
       "characterLinkedEntities": 26,
-      "reviewedQuests": 14,
-      "reviewedScenes": 128,
-      "noPersonEvidenceScenes": 37,
-      "personEvidenceScenes": 91,
+      "reviewedQuests": 15,
+      "reviewedScenes": 135,
+      "noPersonEvidenceScenes": 42,
+      "personEvidenceScenes": 93,
       "candidateRoles": 1,
-      "connectedRoles": 32
+      "connectedRoles": 33
     }
   ],
   "quests": [
@@ -5966,7 +5966,7 @@
       "region": 8,
       "client": "修繕組合のセリ",
       "source": "authoring/editions/e2/salome/machine-first.mjs",
-      "sourceSha256": "9cd6ad7cc21adfa7fc1937847b43e9e62cfc35de5e3b5f14b8a654b289aa8f06",
+      "sourceSha256": "ec6bbb34e12bc2e94f5fadc6c73c0fe6fd5dc7b61150527d7bf4a3181462c769",
       "scenes": [
         {
           "id": "entry",
@@ -5979,7 +5979,13 @@
             "y": 13
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "no-person-evidence",
+            "people": [],
+            "evidence": "聖者は給付票を差し出し",
+            "reason": "描写は機械聖者の動作。作業者の初期所在はworkersであり、依頼人セリの同席根拠はない。",
+            "visual": "給付票と欠けた歯車を扱い、人間の作業者を先に配置しない。"
+          }
         },
         {
           "id": "parts",
@@ -5989,7 +5995,13 @@
             "location": "machine_parts"
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "no-person-evidence",
+            "people": [],
+            "evidence": "倉に必要な歯車はあるが",
+            "reason": "要求の誤訳と部品の在庫を照合する場面。受付の人物やセリが同席する記述はない。",
+            "visual": "要求票は隊、歯車は部品庫にある。作業者は作業所に残る。"
+          }
         },
         {
           "id": "running",
@@ -6002,7 +6014,13 @@
             "y": 13
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "no-person-evidence",
+            "people": [],
+            "evidence": "聖者が動いた。",
+            "reason": "隊が歯車を実際に届け、機械が稼働した場面。人間の同行は存在しない。",
+            "visual": "部品補給は済んだが要求票の翻訳登録は未完了。"
+          }
         },
         {
           "id": "share",
@@ -6011,8 +6029,23 @@
             "kind": "town",
             "location": "machine_registry"
           },
-          "cast": [],
-          "review": null
+          "cast": [
+            {
+              "entity": "workersGroup",
+              "display": {
+                "x": 50
+              }
+            }
+          ],
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q075_workers"
+            ],
+            "evidence": "引き受ける作業と人手を相談し",
+            "reason": "既存workersGroupはこの作業所にいて、次の旅程で初めて同行する。相談相手と現地の引継ぎを同時にしない。",
+            "visual": "工具と仕事の分担を相談する作業者の呼称のみを示す。"
+          }
         },
         {
           "id": "shared",
@@ -6024,8 +6057,23 @@
             "x": 7,
             "y": 13
           },
-          "cast": [],
-          "review": null
+          "cast": [
+            {
+              "entity": "workersGroup",
+              "display": {
+                "x": 50
+              }
+            }
+          ],
+          "review": {
+            "decision": "person-evidence",
+            "people": [
+              "q075_workers"
+            ],
+            "evidence": "作業者が聖者のいる場所へ着き",
+            "reason": "share_escortの実同行により現地へ到着した同じgroup。作業引継ぎと完了はfinishで確定する。",
+            "visual": "作業者の到着を表示し、歯車納入済みと取り違えない。"
+          }
         },
         {
           "id": "translated",
@@ -6035,7 +6083,13 @@
             "location": "e2_archive"
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "no-person-evidence",
+            "people": [],
+            "evidence": "原本を部品庫へ届ける。",
+            "reason": "要求票の部品名と補給先を整理する窓口。個別の翻訳者の発言・同席の記述はない。",
+            "visual": "要求票の原本を隊が保持していることと、登録の未完了を区別する。"
+          }
         },
         {
           "id": "registered",
@@ -6045,11 +6099,34 @@
             "location": "machine_parts"
           },
           "cast": [],
-          "review": null
+          "review": {
+            "decision": "no-person-evidence",
+            "people": [],
+            "evidence": "要求票を持って部品庫へ着いた。",
+            "reason": "部品庫への持込みと受領登録を区別する。窓口の担当者は本文で特定されない。",
+            "visual": "原本はfinishまで隊が保持する。登録が済んだ本文を先取りしない。"
+          }
         }
       ],
       "personEntities": [],
-      "review": null
+      "review": {
+        "identityNotes": [
+          "整備側原稿authoring/quests.txtとstructures-4.mjsのQ(75)、初版3場面・現行7場面・7旅程・11行動・4結末を精読。機械聖者が求めた部品補給を賃金と誤訳した問題であり、同番号の別原稿と混同しない。",
+          "既存workersGroupを作業所shareと実同行後のsharedにだけ呼称表示する。依頼人セリとの同一性、作業者の人数・個人像、機械聖者の人物画、部品庫の受付人・翻訳者の新規同席を推測しない。",
+          "要求票requestSheetはentry_gearの出発時に隊が携行し、registeredのfinishで部品庫へ渡す。歯車gearPartはparts_deliverの出発時に携行、実到着時に補給する。作業分担workSharedはsharedのfinishで確定し、部品補給suppliedや登録translatedを代用しない。",
+          "既存の全行動・registry・物語改訂1・4結末・報酬・旧受注を保持する。sharedとregisteredの2本文だけを既存の確定時点へ合わせる。表示途中の旧本文と選択肢はそのまま保持し、保存の書換えは行わない。"
+        ],
+        "relatedClients": {},
+        "people": {
+          "q075_workers": {
+            "label": "修繕の作業者たち",
+            "status": "connected",
+            "entity": "workersGroup",
+            "need": "作業所と実同行後の現地の2場面にgroupとして表示。個人像・専用画は追加しない。"
+          }
+        },
+        "next": "人物の実同行、歯車の実到着時補給、要求票のfinish受渡しと作業分担、全5経路・4結末、新旧保存・旧受注、戦闘敗北後再開を検証する。次はq076「鉄の子守歌」。"
+      }
     },
     {
       "id": "q076",
