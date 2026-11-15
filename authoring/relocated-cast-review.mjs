@@ -3,6 +3,72 @@
 export const RELOCATED_CAST_REVIEW={
  reviewedAt:'2026-11-16',
  quests:{
+  q078:{
+    "sourceSha256": "9ab54cec71fc637968b699dc1da34ae1c49c322775d7262664bd7e0faf849985",
+    "identityNotes": [
+      "整備側原稿authoring/quests.txt・structures-4.mjsのQ(78)、初版2場面・現行5場面を精読した。腕の反応は人格や感情でなく道具位置・距離・握力の作業学習であり、人物の記憶や仲間の能力を変更しない。",
+      "既存userPersonを全5場面に呼称表示する。本人は槌・針の工具台と保管室へ既存4旅程に沿って実同行する。義肢armは本人の保持物のまま。依頼人リンや前使用者を同席者へ追加しない。",
+      "槌と針の習熟は別々のreturnで確定し、両方が揃うまで保存へ進めない。既習作業の再選択を拒否し、どの練習段階でも手動操作へ切り替えられる。全9選択経路と既存3結末を保持する。",
+      "原配置記録oldLayoutは入口からの出発時に隊が携行し、保管室に着いただけでは預入・設定保存を確定しない。savedのfinishで登録する。物語改訂1・全registry・行動・報酬・旧受注と、旧保存の待機本文・選択肢を保持する。"
+    ],
+    "relatedClients": {},
+    "people": {
+      "q078_user": {
+        "label": "義肢の利用者",
+        "status": "connected",
+        "entity": "userPerson",
+        "need": "本人の希望・練習と既存の実同行に沿って全5場面へ呼称表示。新規外見は追加しない。"
+      }
+    },
+    "scenes": {
+      "entry": {
+        "decision": "person-evidence",
+        "people": [
+          "q078_user"
+        ],
+        "evidence": "利用者は自分の作業を覚えさせたい",
+        "reason": "本人が自分の作業を学習させたいと希望する。既存初期所在entryとも一致する。",
+        "visual": "本人と義肢の反応を区別し、写真に映る前使用者を現場へ配置しない。"
+      },
+      "bench": {
+        "decision": "person-evidence",
+        "people": [
+          "q078_user"
+        ],
+        "evidence": "二つの作業を実際の配置で覚え直せる。",
+        "reason": "本人がentry_trainから実同行し、各試行後にも槌作業台へ戻る。独立した二つの習熟を相談する現場。",
+        "visual": "未習熟・片方習熟・両方習熟の選択肢を区別。本人不在で練習が進んだことにしない。"
+      },
+      "hammer_trial": {
+        "decision": "person-evidence",
+        "people": [
+          "q078_user"
+        ],
+        "evidence": "本人が槌を握り",
+        "reason": "利用者本人が実際の距離で槌の補正を試す。槌作業台内なので追加の旅程はない。",
+        "visual": "習熟hammerはreturn操作で確定する。針の習熟を同時に立てない。"
+      },
+      "needle_trial": {
+        "decision": "person-evidence",
+        "people": [
+          "q078_user"
+        ],
+        "evidence": "本人が針を持ち",
+        "reason": "本人が別の工具台まで実同行して針の距離・握力を試す。",
+        "visual": "針の習熟needleは槌作業台への実帰着で確定する。移動中は未確定のまま。"
+      },
+      "saved": {
+        "decision": "person-evidence",
+        "people": [
+          "q078_user"
+        ],
+        "evidence": "本人と二つの練習結果を持って保管室へ来た。",
+        "reason": "二作業を学習した本人が保管室へ同行する。受付職員を推測で追加しない。",
+        "visual": "oldLayoutはfinishまで隊が保持し、savedはまだfalse。登録後だけ新設定と旧記録の保管を確定する。"
+      }
+    },
+    "next": "全9選択経路、新旧保存と旧受注、全4旅程の途中帰還・敗北救助、二種の習熟、本人の実同行と記録の預入、報酬一回性を検証する。次はq079「百回目の試験」。"
+  },
   q077:{
   "sourceSha256": "40d8bb9f38ad93b54d62b91ecc2f2e77a77473344f2b3b222990f5fbd512d9d0",
   "identityNotes": [

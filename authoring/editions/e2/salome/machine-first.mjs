@@ -108,6 +108,12 @@ export function machineFirstSource(q,{cast=true}={}){
   for(const key of ['hammer','needle']){const a=choice('bench',key);a.to=key+'_trial';a.companions=['userPerson'];delete a.set;add(key+'_trial',key==='hammer'?'hammer_place':'needle_place',key==='hammer'?'本人が槌を握り、実際の距離で補正を試す。':'本人が針を持ち、槌とは別の握力と距離を試す。',[opt('return','練習結果を記して相談へ戻る','bench',{effects:[set(key)],...(key==='needle'?{companions:['userPerson']}:{})})]);}
   route('bench','save','saved',{companions:['userPerson']});end('saved','record','本人と二つの練習結果を確認し、新設定を保存した。旧配置は別記録として残す。人物の記憶や仲間の能力は書き換えない。','informed',[give('oldLayout','party','record'),set('saved')]);
  }
+ if(q.number===78&&cast){
+  x.entities.userPerson.character='q078_user';
+  for(const id of ['entry','bench','hammer_trial','needle_trial','saved'])
+   node(id).cast=[{entity:'userPerson',display:{x:50}}];
+  node('saved').text='本人と二つの練習結果を持って保管室へ来た。結果を確認して新設定を保存し、旧配置の記録を別に預ける。人物の記憶や仲間の能力は書き換えない。';
+ }
  if(q.number===79){
   town('archive_place','九十九件の退避記録室','machine_registry');cell('small_furnace','灯を選ぶ代替小炉',2,3,5);entity('recordBoard','entry');entity('backup','archive_place');node('archive').place='archive_place';choice('entry','test').effects=[set('hundredthObserved')];choice('entry','storage').text='再試験を止め、記録板の満杯表示を調べる';
   choice('full','shutdown').depart=[set('shutdown'),give('recordBoard','entry','party')];choice('full','shutdown').effects=[set('backupVerified')];
