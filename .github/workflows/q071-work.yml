@@ -4,21 +4,56 @@ on:
     branches: [feature/machine-q071-cast]
     paths: [.github/workflows/q071-work.yml]
 permissions:
-  contents: read
+  contents: write
 jobs:
   prepare:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
-      - name: Package source worktree
-        run: |
-          git rev-parse HEAD > "$RUNNER_TEMP/source-commit.txt"
-          tar -czf "$RUNNER_TEMP/adv-source.tgz" --exclude='./.git' --exclude='./assets' .
-      - uses: actions/upload-artifact@v4
         with:
-          name: q071-source-worktree
-          path: |
-            ${{ runner.temp }}/adv-source.tgz
-            ${{ runner.temp }}/source-commit.txt
-          retention-days: 1
+          ref: feature/machine-q071-cast
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify exact locally tested sources
+        run: |
+          test "$(git hash-object tools/apply-q071-work.mjs)" = 516c22adc257cb76825fa9a1c5ea9602dcab0ffd
+          test "$(git hash-object tests/gatekeeper-cast.test.mjs)" = a6fdcb784a485e8c20e89cdace0639afb006307b
+          test "$(git hash-object tools/gatekeeper-art-fixtures.mjs)" = 2b86c54dee1bb6fc4b94df29618ba56c3ba64fc6
+          test "$(git hash-object tools/measure-gatekeeper.mjs)" = 45394d70d5a3f7c781b190282e4251d38d7359cd
+          test "$(git hash-object tools/record-q071-work.mjs)" = 891656f067c10ce1f5ebd1f81f609644d2487c0a
+      - name: Apply source-checked authoring and preserve previous quest
+        run: node tools/apply-q071-work.mjs
+      - name: Verify all routes, save phases, battle retry and existing regressions
+        run: |
+          node --test tests/gatekeeper-cast.test.mjs tests/relocated-cast-audit.test.mjs
+          node --test --test-name-pattern=q071 tests/machine.test.mjs tests/machine-compat.test.mjs
+      - name: Reproduce normal party trials and record results
+        run: |
+          node tools/measure-gatekeeper.mjs doc/development/Q071_PLAYTEST_RESULTS.json
+          node tools/record-q071-work.mjs
+      - name: Generate docs and runtime while preserving authored records
+        run: |
+          cp -a doc "$RUNNER_TEMP/q071-authored-docs"
+          node tools/build-docs.mjs
+          for file in battle/QUEST_PARTY_PLAYTEST.md battle/SALOME_CLASSES_AND_CHARACTERS_DESIGN.md development/CHROMIUM_DEFERRED_2026-11-04.md development/PROGRESS.md development/REMAINING_WORK.md development/TEST_OVERVIEW.md dungeons/ODDLAND_RELOCATION_AUDIT.md dungeons/REGIONAL_RELOCATION_WORK.md scenarios/EGG_KNIGHT_FORESHADOWING.md scenarios/ODDLAND_100_QUEST_DESIGN.md scenarios/REGIONAL_QUEST_ALLOCATION.md scenarios/SALOME_100_QUEST_DESIGN.md ui/SOUND_AND_EFFECT_FORMAT.md; do
+            cp "$RUNNER_TEMP/q071-authored-docs/$file" "doc/$file"
+          done
+          node tools/build-runtime.mjs
+          git rm tools/apply-q071-work.mjs tools/record-q071-work.mjs
+      - name: Validate generation, runtime, data, references and documentation
+        run: |
+          node tools/build-scenario-editions.mjs --check
+          node tools/build-runtime.mjs --check
+          node tools/validate.mjs
+          node tools/check-static.mjs
+          node tools/check-docs.mjs
+      - name: Commit verified implementation
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --stat
+          git commit -m "feat(q071): worker display, power and return-stamp timing with save verification"
+          git push origin HEAD:feature/machine-q071-cast
