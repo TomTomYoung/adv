@@ -1,0 +1,2259 @@
+{
+  "schemaVersion": 1,
+  "id": "q077",
+  "number": 77,
+  "title": "聖痕の配線",
+  "client": "機関司祭のイオ",
+  "brief": "壁の聖痕が増えている。巡礼者が触る前に調べてください。",
+  "region": 8,
+  "type": "authored_progression",
+  "recommendedLevel": 8,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。 サロメの共同依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q077_clue_a",
+      "title": "聖痕の配線：現場の痕跡",
+      "points": [
+        {
+          "map": "region_8_f2",
+          "x": 5,
+          "y": 3,
+          "dungeon": "region_8"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q077.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q077.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q077"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q077"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_8"
+    },
+    {
+      "id": "q077_clue_b",
+      "title": "聖痕の配線：記録と証言",
+      "points": [
+        {
+          "map": "region_8_f2",
+          "x": 14,
+          "y": 1,
+          "dungeon": "region_8"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q077.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q077.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q077"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q077"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_8"
+    },
+    {
+      "id": "q077_decision",
+      "title": "聖痕の配線：決着の場",
+      "points": [
+        {
+          "map": "region_8_f2",
+          "x": 8,
+          "y": 13,
+          "dungeon": "region_8"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q077.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q077.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q077.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q077"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_8"
+    },
+    {
+      "id": "q077_machine_entry",
+      "title": "聖痕の配線の現場受付",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q077.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q077.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q077"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q077.machine.visit",
+      "points": [
+        {
+          "dungeon": "region_8",
+          "map": "region_8_f2",
+          "x": 8,
+          "y": 13
+        }
+      ]
+    },
+    {
+      "id": "q077_machine_clinic",
+      "title": "停電した隣の診療室",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "clinic",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q077.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q077.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q077"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q077.machine.visit",
+      "points": [
+        {
+          "dungeon": "region_8",
+          "map": "region_8_f2",
+          "x": 14,
+          "y": 1
+        }
+      ]
+    },
+    {
+      "id": "q077_machine_detour",
+      "title": "柵の外を回る巡礼路",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "detour",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q077.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q077.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q077"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q077.machine.visit",
+      "points": [
+        {
+          "dungeon": "region_8",
+          "map": "region_8_f2",
+          "x": 5,
+          "y": 3
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_8_f2",
+      "x": 5,
+      "y": 3,
+      "object": "q077_clue_a",
+      "role": "clue_a"
+    },
+    {
+      "map": "region_8_f2",
+      "x": 14,
+      "y": 1,
+      "object": "q077_clue_b",
+      "role": "clue_b"
+    },
+    {
+      "map": "region_8_f2",
+      "x": 8,
+      "y": 13,
+      "object": "q077_decision",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "仮灯を診療室へ届けてから配線と壁を直す",
+      "text": "巡礼は延期された。再開時には触れてよい壁が明示される。",
+      "gold": 141,
+      "xp": 124
+    },
+    "contract": {
+      "label": "通電したまま焦げ跡だけを削る",
+      "text": "見た目は戻った。給電を再開すると、別の釘に火花が現れる。",
+      "gold": 161,
+      "xp": 96
+    },
+    "compromise": {
+      "label": "壁を柵で囲み、別の巡礼路へ案内する",
+      "text": "誰も触れずに済んだ。修理依頼の場所も柵の番号で伝えられる。",
+      "gold": 91,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/salome/machine-first.mjs",
+    "world": {
+      "truth": "聖痕は絶縁の傷に沿った放電跡で、壁の補修が配線を傷付けている。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "聖痕は絶縁の傷に沿った放電跡で、壁の補修が配線を傷付けている。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "壁の聖痕が増えている。巡礼者が触る前に調べてください。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "機関司祭のイオ",
+        "observation": "壁の聖痕が増えている。巡礼者が触る前に調べてください。",
+        "belief": "壁の聖痕が増えている。巡礼者が触る前に調べてください。",
+        "goal": "壁の聖痕が増えている。巡礼者が触る前に調べてください。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "壁の聖痕が増えている。巡礼者が触る前に調べてください。",
+      "progression": "放電している壁を直す前に停電の影響を引き受けるか、通路を変更する保守作業。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q077.machine.entry"
+        },
+        {
+          "id": "outage",
+          "script": "q077.machine.outage"
+        },
+        {
+          "id": "delivered",
+          "script": "q077.machine.delivered"
+        },
+        {
+          "id": "repaired",
+          "script": "q077.machine.repaired"
+        },
+        {
+          "id": "detoured",
+          "script": "q077.machine.detoured"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "壁の聖痕が増えている。巡礼者が触る前に調べてください。",
+      "openQuestion": "聖痕の配線の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "identitySplit",
+      "newInformation": "聖痕は絶縁の傷に沿った放電跡で、壁の補修が配線を傷付けている。",
+      "retroactiveTargets": [
+        "outage"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q077.flow.entry"
+      },
+      {
+        "id": "outage",
+        "script": "q077.flow.outage"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q077.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "放電している壁を直す前に停電の影響を引き受けるか、通路を変更する保守作業。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "放電している壁を直す前に停電の影響を引き受けるか、通路を変更する保守作業。",
+    "flowVersion": 2,
+    "entryScript": "q077.machine.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "壁へ触れた巡礼者が手を引いた。焦げ跡は新しい補修釘から伸びている。",
+        "options": [
+          {
+            "id": "cutpower",
+            "text": "給電を停止して壁を開く",
+            "to": "outage",
+            "action": "entry_cutpower"
+          },
+          {
+            "id": "fence",
+            "text": "壁を柵で囲み、別の巡礼路へ案内する",
+            "to": "detoured",
+            "action": "entry_fence"
+          },
+          {
+            "id": "scrape",
+            "text": "通電したまま焦げ跡だけを削る",
+            "to": "@contract",
+            "action": "entry_scrape"
+          }
+        ]
+      },
+      {
+        "id": "outage",
+        "place": "entry",
+        "text": "聖痕は絶縁の傷に沿った放電跡で、壁の補修が配線を傷付けている。 配線は修理できるが、停電で隣の診療室も暗くなった。保守員が仮灯を用意している。",
+        "options": [
+          {
+            "id": "lamps",
+            "text": "仮灯を診療室へ届けてから配線と壁を直す",
+            "to": "delivered",
+            "action": "outage_lamps"
+          },
+          {
+            "id": "restore",
+            "text": "通電を戻し、壁を柵で隔離する",
+            "to": "detoured",
+            "action": "outage_restore"
+          }
+        ]
+      },
+      {
+        "id": "delivered",
+        "place": "clinic",
+        "text": "診療室で仮灯を受け取り、手元が見えることを確かめた。壁の修理はこれから行う。",
+        "options": [
+          {
+            "id": "return",
+            "text": "放電壁へ戻って絶縁と壁を直す",
+            "to": "repaired",
+            "action": "delivered_return"
+          }
+        ]
+      },
+      {
+        "id": "repaired",
+        "place": "entry",
+        "text": "配線を絶縁して壁を閉じ、試験後に通電を戻した。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@informed",
+            "action": "repaired_finish"
+          }
+        ]
+      },
+      {
+        "id": "detoured",
+        "place": "detour",
+        "text": "柵を避ける巡礼路を歩き、入口へ戻る道を確かめて案内札を立てた。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@compromise",
+            "action": "detoured_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "machine-twenty",
+      "settlement": "salome",
+      "saveRevision": 2,
+      "scope": "機関廟20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q077.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "跡は金属釘の位置から伸び、古い漆喰にはない。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q077",
+          "key": "clue_a",
+          "text": "跡は金属釘の位置から伸び、古い漆喰にはない。"
+        }
+      ]
+    },
+    "q077.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "機関司祭のイオ",
+          "text": "補修図と配線図を重ねると、新しい釘が給電路を貫いています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q077",
+          "key": "clue_b",
+          "text": "補修図と配線図を重ねると、新しい釘が給電路を貫いている。"
+        }
+      ]
+    },
+    "q077.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "聖痕の配線\n\n壁の聖痕が増えている。巡礼者が触る前に調べてください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "壁の雷獣を倒し焦げ跡を削る",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_8",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "見た目は戻った。給電を再開すると、別の釘に火花が現れる。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q077",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "給電を止め配線と壁を直す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q077.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q077.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "聖痕は絶縁の傷に沿った放電跡で、壁の補修が配線を傷付けている。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "巡礼は延期された。再開時には触れてよい壁が明示される。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q077",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "壁を柵で囲み別の巡礼路を開く",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "誰も触れずに済んだ。修理依頼の場所も柵の番号で伝えられる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q077",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q077.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "聖痕の配線\n\n壁の聖痕が増えている。巡礼者が触る前に調べてください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q077.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q077.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "聖痕は絶縁の傷に沿った放電跡で、壁の補修が配線を傷付けている。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q077.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "壁の雷獣を倒し焦げ跡を削る",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_8",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "見た目は戻った。給電を再開すると、別の釘に火花が現れる。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q077",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "給電を止め配線と壁を直す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q077.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q077.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "巡礼は延期された。再開時には触れてよい壁が明示される。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q077",
+                  "outcome": "informed"
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q077.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q077.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "compromise",
+              "text": "壁を柵で囲み別の巡礼路を開く",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "誰も触れずに済んだ。修理依頼の場所も柵の番号で伝えられる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q077",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」機関司祭のイオは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられる。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q077.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q077.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q077.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "巡礼は延期された。再開時には触れてよい壁が明示される。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q077.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "見た目は戻った。給電を再開すると、別の釘に火花が現れる。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q077.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "誰も触れずに済んだ。修理依頼の場所も柵の番号で伝えられる。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q077.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q077.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q077.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q077.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q077.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q077.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q077.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "壁へ触れた巡礼者が手を引いた。焦げ跡は新しい補修釘から伸びている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "cutpower",
+              "text": "給電を停止して壁を開く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q077.flow.outage"
+                }
+              ]
+            },
+            {
+              "id": "fence",
+              "text": "壁を柵で囲み、別の巡礼路へ案内する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q077.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "scrape",
+              "text": "通電したまま焦げ跡だけを削る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q077.flow.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q077.flow.outage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q077.node",
+          "value": "outage"
+        },
+        {
+          "op": "say",
+          "text": "聖痕は絶縁の傷に沿った放電跡で、壁の補修が配線を傷付けている。 配線は修理できるが、停電で隣の診療室も暗くなった。保守員が仮灯を用意している。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "lamps",
+              "text": "仮灯を診療室へ届けてから配線と壁を直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q077.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "restore",
+              "text": "通電を戻し、壁を柵で隔離する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q077.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q077.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q077.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "巡礼は延期された。再開時には触れてよい壁が明示される。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q077",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q077.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q077.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "見た目は戻った。給電を再開すると、別の釘に火花が現れる。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q077",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q077.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q077.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "誰も触れずに済んだ。修理依頼の場所も柵の番号で伝えられる。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q077",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q077.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q077.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q077.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "巡礼は延期された。再開時には触れてよい壁が明示される。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "見た目は戻った。給電を再開すると、別の釘に火花が現れる。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "誰も触れずに済んだ。修理依頼の場所も柵の番号で伝えられる。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q077"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q077.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q077.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q077.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "outage",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q077.flow.outage"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q077.flow.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q077.machine.entry": {
+      "storyQuest": "q077",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q077",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "壁へ触れた巡礼者が手を引いた。焦げ跡は新しい補修釘から伸びている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "cutpower",
+              "text": "給電を停止して壁を開く",
+              "storyAction": {
+                "quest": "q077",
+                "action": "entry_cutpower"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q077",
+                  "action": "entry_cutpower"
+                },
+                {
+                  "op": "jump",
+                  "script": "q077.machine.outage"
+                }
+              ]
+            },
+            {
+              "id": "fence",
+              "text": "壁を柵で囲み、別の巡礼路へ案内する",
+              "storyAction": {
+                "quest": "q077",
+                "action": "entry_fence"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q077",
+                  "action": "entry_fence"
+                }
+              ]
+            },
+            {
+              "id": "scrape",
+              "text": "通電したまま焦げ跡だけを削る",
+              "storyAction": {
+                "quest": "q077",
+                "action": "entry_scrape"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q077",
+                  "action": "entry_scrape"
+                },
+                {
+                  "op": "jump",
+                  "script": "q077.machine.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q077.machine.outage": {
+      "storyQuest": "q077",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q077",
+          "scene": "outage"
+        },
+        {
+          "op": "narrate",
+          "text": "聖痕は絶縁の傷に沿った放電跡で、壁の補修が配線を傷付けている。 配線は修理できるが、停電で隣の診療室も暗くなった。保守員が仮灯を用意している。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "lamps",
+              "text": "仮灯を診療室へ届けてから配線と壁を直す",
+              "storyAction": {
+                "quest": "q077",
+                "action": "outage_lamps"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q077",
+                  "action": "outage_lamps"
+                }
+              ]
+            },
+            {
+              "id": "restore",
+              "text": "通電を戻し、壁を柵で隔離する",
+              "storyAction": {
+                "quest": "q077",
+                "action": "outage_restore"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q077",
+                  "action": "outage_restore"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q077.machine.delivered": {
+      "storyQuest": "q077",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q077",
+          "scene": "delivered"
+        },
+        {
+          "op": "narrate",
+          "text": "診療室で仮灯を受け取り、手元が見えることを確かめた。壁の修理はこれから行う。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "放電壁へ戻って絶縁と壁を直す",
+              "storyAction": {
+                "quest": "q077",
+                "action": "delivered_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q077",
+                  "action": "delivered_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q077.machine.repaired": {
+      "storyQuest": "q077",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q077",
+          "scene": "repaired"
+        },
+        {
+          "op": "narrate",
+          "text": "配線を絶縁して壁を閉じ、試験後に通電を戻した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q077",
+                "action": "repaired_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q077",
+                  "action": "repaired_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q077.machine.end.informed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q077.machine.detoured": {
+      "storyQuest": "q077",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q077",
+          "scene": "detoured"
+        },
+        {
+          "op": "narrate",
+          "text": "柵を避ける巡礼路を歩き、入口へ戻る道を確かめて案内札を立てた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q077",
+                "action": "detoured_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q077",
+                  "action": "detoured_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q077.machine.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q077.machine.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "巡礼は延期された。再開時には触れてよい壁が明示される。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q077",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q077.machine.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "見た目は戻った。給電を再開すると、別の釘に火花が現れる。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q077",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q077.machine.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "誰も触れずに済んだ。修理依頼の場所も柵の番号で伝えられる。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q077",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q077.machine.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q077"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q077.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q077.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q077.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "巡礼は延期された。再開時には触れてよい壁が明示される。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "見た目は戻った。給電を再開すると、別の釘に火花が現れる。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "誰も触れずに済んだ。修理依頼の場所も柵の番号で伝えられる。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q077"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q077.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q077.machine.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "outage",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q077.machine.outage"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "delivered",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q077.machine.delivered"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "repaired",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q077.machine.repaired"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "detoured",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q077.machine.detoured"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q077.machine.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "聖痕の配線の現場受付",
+      "clinic": "停電した隣の診療室",
+      "detour": "柵の外を回る巡礼路",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "clinic"
+      ],
+      [
+        "transit",
+        "detour"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "clinic",
+          "detour",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "outage": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "outage"
+      },
+      "fenced": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "fenced"
+      },
+      "cosmeticOnly": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "cosmeticOnly"
+      },
+      "lampsDelivered": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "lampsDelivered"
+      },
+      "repaired": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "repaired"
+      },
+      "detourChecked": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "detourChecked"
+      },
+      "lampsAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "clinic",
+          "detour",
+          "transit",
+          "party"
+        ],
+        "meaning": "lamps の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "lamps": {
+        "holder": "lampsAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "聖痕は絶縁の傷に沿った放電跡で、壁の補修が配線を傷付けている。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "聖痕の配線の現場受付",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "outage": {
+        "title": "聖痕の配線の現場受付",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "delivered": {
+        "title": "停電した隣の診療室",
+        "place": "clinic",
+        "cast": [],
+        "requires": true
+      },
+      "repaired": {
+        "title": "聖痕の配線の現場受付",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "detoured": {
+        "title": "柵の外を回る巡礼路",
+        "place": "detour",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_cutpower": {
+        "from": [
+          "entry"
+        ],
+        "to": "outage",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "outage",
+            "value": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "entry",
+            "requires": true
+          }
+        ],
+        "once": false
+      },
+      "entry_fence": {
+        "from": [
+          "entry"
+        ],
+        "to": "detoured",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "detour"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "detour",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "fenced",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "outage",
+            "value": false
+          }
+        ]
+      },
+      "entry_scrape": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "cosmeticOnly",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "outage_lamps": {
+        "from": [
+          "outage"
+        ],
+        "to": "delivered",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "clinic"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "lamps",
+            "from": "party",
+            "to": "clinic"
+          },
+          {
+            "op": "set",
+            "key": "lampsDelivered",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "clinic",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "lamps",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      },
+      "outage_restore": {
+        "from": [
+          "outage"
+        ],
+        "to": "detoured",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "detour"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "detour",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "fenced",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "outage",
+            "value": false
+          }
+        ]
+      },
+      "delivered_return": {
+        "from": [
+          "delivered"
+        ],
+        "to": "repaired",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "repaired_finish": {
+        "from": [
+          "repaired"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "repaired",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "outage",
+            "value": false
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "detoured_finish": {
+        "from": [
+          "detoured"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "detourChecked",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q077.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q077.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q077.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q077.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q077.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q077.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q077.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q077.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q077.values.partyAt"
+                },
+                "right": "detour"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_8",
+        "map": "region_8_f2",
+        "x": 8,
+        "y": 13
+      },
+      "clinic": {
+        "kind": "dungeon",
+        "dungeon": "region_8",
+        "map": "region_8_f2",
+        "x": 14,
+        "y": 1
+      },
+      "detour": {
+        "kind": "dungeon",
+        "dungeon": "region_8",
+        "map": "region_8_f2",
+        "x": 5,
+        "y": 3
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "salome",
+  "receptionLocations": [
+    "salome_board"
+  ]
+}

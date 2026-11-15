@@ -92,6 +92,16 @@ export function machineFirstSource(q,{cast=true}={}){
   route('outage','lamps','delivered',{depart:[give('lamps','entry','party')],effects:[give('lamps','party','clinic'),set('lampsDelivered')]});add('delivered','clinic','診療室で仮灯を受け取り、手元が見えることを確かめた。壁の修理はこれから行う。',[opt('return','放電壁へ戻って絶縁と壁を直す','repaired')]);end('repaired','entry','配線を絶縁して壁を閉じ、試験後に通電を戻した。','informed',[set('repaired'),set('outage',false)]);
   for(const [from,key] of [['entry','fence'],['outage','restore']])route(from,key,'detoured',{depart:[set('fenced'),set('outage',false)]});end('detoured','detour','柵を避ける巡礼路を歩き、入口へ戻る道を確かめて案内札を立てた。','compromise',[set('detourChecked')]);choice('entry','scrape').effects=[set('cosmeticOnly')];
  }
+
+ if(q.number===77&&cast){
+  for(const [id,character] of [['pilgrimPerson','q077_pilgrim'],['maintainerPerson','q077_maintainer']]){
+   entity(id,'entry','person');x.entities[id].character=character;
+  }
+  node('entry').cast=[{entity:'pilgrimPerson',display:{x:50}}];
+  node('outage').cast=[{entity:'maintainerPerson',display:{x:50}}];
+  node('repaired').text='仮灯が診療室へ届いたことを確認し、給電を止めたまま放電壁へ戻った。ここで配線を絶縁し、壁を閉じて試験を終えてから通電を戻す。';
+  node('detoured').text='壁を柵で隔離し、給電が続く状態で別の巡礼路へ来た。入口へ戻る道を確かめ、案内札を立てて案内を終える。';
+ }
  if(q.number===78){
   town('hammer_place','本人の槌作業台','machine_hammer');town('needle_place','本人の針仕事台','machine_needle');town('record','旧配置と新設定の保管室','machine_registry');entity('userPerson','entry','person');entity('arm','userPerson');entity('oldLayout','entry');
   node('bench').place='hammer_place';choice('entry','train').companions=['userPerson'];choice('entry','train').depart=[give('oldLayout','entry','party')];

@@ -556,3 +556,6 @@ relocatedCharacters.q073_artisan={id:'q073_artisan',name:'腕と支えの職人'
 relocatedCharacters.q074_yua={id:'q074_yua',name:'ユア',role:'鐘番・祈祷書の訂正先',detail:'隊が試験した起動順序を訂正窓口で受け取り、訂正した頁に検証日を記す。冷却盤や炉へ同行しない。',provenance:'2026-11-16。openedの持込み先とinformed結末の本人の動作に基づく呼称表示。容貌・専用画を追加しない。'};
 
 relocatedCharacters.q075_workers={id:'q075_workers',name:'修繕の作業者たち',role:'聖者の仕事を分担する作業者',detail:'作業所で引き受ける仕事と工具を相談し、合意した作業を現地で引き継ぐ。部品の補給や要求票の登録とは別の対応。',provenance:'2026-11-16。整備側原稿と現行本文・既存workersGroupの実同行に基づく呼称表示。個々の氏名・人数・容貌・専用画や依頼人セリとの同一性を追加しない。'};
+
+relocatedCharacters.q077_pilgrim={id:'q077_pilgrim',name:'壁に触れた巡礼者',role:'放電跡の壁に触れた巡礼者',detail:'壁へ触れて手を引く。隊の診療室への運搬や迂回路の確認には同行しない。',provenance:'2026-11-16。原稿と現行entryの動作による呼称表示。氏名・年齢・性別・容貌・専用画を追加しない。'};
+relocatedCharacters.q077_maintainer={id:'q077_maintainer',name:'仮灯を用意する保守員',role:'停電時の代替照明を準備する保守員',detail:'壁前で仮灯を用意する。仮灯を診療室へ運ぶのは隊で、保守員は同行者に追加しない。',provenance:'2026-11-16。現行outageの明示された準備動作に基づく呼称表示。依頼人イオと同一人物とはせず、外見・専用画を補わない。'};
