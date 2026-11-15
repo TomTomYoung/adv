@@ -43,6 +43,14 @@ export function machineFirstSource(q,{cast=true}={}){
   route('support','recover','tested',{depart:[transfer('arm','entry','party'),give('otherArms','entry','party')]});add('tested','load','常設の支えに荷重を掛け、扉が開閉できることを確認した。回収した腕を工房へ納める。',[opt('deliver','腕を工房へ運ぶ','recovered',{depart:[set('loadTested')]})]);end('recovered','smith','支えと扉の試験結果を添えて腕を引き渡した。','informed',[give('arm','party','smith'),give('otherArms','party','smith')]);
   route('entry','take','taken',{depart:[give('arm','entry','party'),give('otherArms','entry','party'),set('evacuationBlocked')]});end('taken','smith','三本を工房へ渡した。避難扉には人が支える番が必要になったと申し送る。通常の石段の帰路は塞がない。','contract',[give('arm','party','smith'),give('otherArms','party','smith')]);
  }
+ if(q.number===73&&cast){
+  entity('artisanPerson','smith','person');x.entities.artisanPerson.character='q073_artisan';
+  for(const scene of ['copy','brace','recovered','taken'])node(scene).cast=[{entity:'artisanPerson',display:{x:50}}];
+  node('returned').text='複製と借りた原品を持って扉へ戻った。原品を元の位置へ据え、返却を確認して依頼を終える。';
+  node('tested').text='腕を回収し、常設の支えの荷重確認位置へ来た。扉が開閉できることを試してから、腕を工房へ運ぶ。';
+  node('recovered').text='支えと扉の試験結果を添え、回収した腕を持って工房へ戻った。職人への引渡しを確認して依頼を終える。';
+  node('taken').text='三本の腕を持って工房へ着いた。職人へ渡す際、避難扉には人が支える番が必要になったと申し送る。通常の石段の帰路は塞がない。';
+ }
  if(q.number===74){
   cell('cooling','冷却を入れる操作盤',1,1,7);cell('furnace_place','試験炉の操作盤',1,10,5);cell('footing','封鎖外の退避足場',1,3,7);town('copy','祈祷書の訂正窓口','library_copy_room');
   node('furnace').place='cooling';node('door').place='furnace_place';node('lock').place='footing';choice('entry','cool').effects=[set('coolingOn')];choice('lock','reset').effects=[set('coolingOn')];choice('furnace','furnace').effects=[set('furnaceOn')];

@@ -514,7 +514,7 @@
       {
         "id": "returned",
         "place": "entry",
-        "text": "複製を持って扉へ戻り、借りた原品を元の位置へ据えた。返却を確認して納品する。",
+        "text": "複製と借りた原品を持って扉へ戻った。原品を元の位置へ据え、返却を確認して依頼を終える。",
         "options": [
           {
             "id": "finish",
@@ -527,7 +527,7 @@
       {
         "id": "tested",
         "place": "load",
-        "text": "常設の支えに荷重を掛け、扉が開閉できることを確認した。回収した腕を工房へ納める。",
+        "text": "腕を回収し、常設の支えの荷重確認位置へ来た。扉が開閉できることを試してから、腕を工房へ運ぶ。",
         "options": [
           {
             "id": "deliver",
@@ -540,7 +540,7 @@
       {
         "id": "recovered",
         "place": "smith",
-        "text": "支えと扉の試験結果を添えて腕を引き渡した。",
+        "text": "支えと扉の試験結果を添え、回収した腕を持って工房へ戻った。職人への引渡しを確認して依頼を終える。",
         "options": [
           {
             "id": "finish",
@@ -553,7 +553,7 @@
       {
         "id": "taken",
         "place": "smith",
-        "text": "三本を工房へ渡した。避難扉には人が支える番が必要になったと申し送る。通常の石段の帰路は塞がない。",
+        "text": "三本の腕を持って工房へ着いた。職人へ渡す際、避難扉には人が支える番が必要になったと申し送る。通常の石段の帰路は塞がない。",
         "options": [
           {
             "id": "finish",
@@ -573,7 +573,7 @@
     },
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -582,7 +582,768 @@
       "saveRevision": 2,
       "scope": "機関廟20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "天使の予備腕の現場受付",
+            "smith": "腕の複製と支えの工房",
+            "load": "避難扉の荷重確認位置",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "smith"
+            ],
+            [
+              "transit",
+              "load"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "smith",
+                "load",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "informed",
+                "contract",
+                "compromise"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "evacuationBlocked": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "evacuationBlocked"
+            },
+            "supported": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "supported"
+            },
+            "returned": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "returned"
+            },
+            "loadTested": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "loadTested"
+            },
+            "armAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "smith",
+                "load",
+                "transit",
+                "party",
+                "otherArms",
+                "copyArm"
+              ],
+              "meaning": "arm の所在または保持者"
+            },
+            "otherArmsAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "smith",
+                "load",
+                "transit",
+                "party",
+                "arm",
+                "copyArm"
+              ],
+              "meaning": "otherArms の所在または保持者"
+            },
+            "copyArmAt": {
+              "type": "enum",
+              "initial": "smith",
+              "values": [
+                "entry",
+                "smith",
+                "load",
+                "transit",
+                "party",
+                "arm",
+                "otherArms"
+              ],
+              "meaning": "copyArm の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "arm": {
+              "holder": "armAt",
+              "kind": "item"
+            },
+            "otherArms": {
+              "holder": "otherArmsAt",
+              "kind": "item"
+            },
+            "copyArm": {
+              "holder": "copyArmAt",
+              "kind": "item"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "腕は非常時に扉を支える補助具で、全部外すと避難路が閉じる。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "天使の予備腕の現場受付",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "support": {
+              "title": "天使の予備腕の現場受付",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "copy": {
+              "title": "腕の複製と支えの工房",
+              "place": "smith",
+              "cast": [],
+              "requires": true
+            },
+            "brace": {
+              "title": "腕の複製と支えの工房",
+              "place": "smith",
+              "cast": [],
+              "requires": true
+            },
+            "returned": {
+              "title": "天使の予備腕の現場受付",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "tested": {
+              "title": "避難扉の荷重確認位置",
+              "place": "load",
+              "cast": [],
+              "requires": true
+            },
+            "recovered": {
+              "title": "腕の複製と支えの工房",
+              "place": "smith",
+              "cast": [],
+              "requires": true
+            },
+            "taken": {
+              "title": "腕の複製と支えの工房",
+              "place": "smith",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_brace": {
+              "from": [
+                "entry"
+              ],
+              "to": "brace",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "smith"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "smith",
+                "companions": []
+              },
+              "depart": []
+            },
+            "entry_borrow": {
+              "from": [
+                "entry"
+              ],
+              "to": "copy",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "smith"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "smith",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "arm",
+                  "from": "entry",
+                  "to": "party",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q073.values.armAt"
+                    },
+                    "right": "entry"
+                  }
+                }
+              ]
+            },
+            "entry_take": {
+              "from": [
+                "entry"
+              ],
+              "to": "taken",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "smith"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "smith",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "arm",
+                  "from": "entry",
+                  "to": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "otherArms",
+                  "from": "entry",
+                  "to": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "evacuationBlocked",
+                  "value": true
+                }
+              ]
+            },
+            "support_recover": {
+              "from": [
+                "support"
+              ],
+              "to": "tested",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "load"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "load",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "arm",
+                  "from": "entry",
+                  "to": "party",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q073.values.armAt"
+                    },
+                    "right": "entry"
+                  }
+                },
+                {
+                  "op": "transfer",
+                  "entity": "otherArms",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "support_one": {
+              "from": [
+                "support"
+              ],
+              "to": "copy",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "smith"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "smith",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "arm",
+                  "from": "entry",
+                  "to": "party",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q073.values.armAt"
+                    },
+                    "right": "entry"
+                  }
+                }
+              ]
+            },
+            "copy_return": {
+              "from": [
+                "copy"
+              ],
+              "to": "returned",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "copyArm",
+                  "from": "smith",
+                  "to": "party"
+                }
+              ]
+            },
+            "copy_support": {
+              "from": [
+                "copy"
+              ],
+              "to": "support",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "supported",
+                  "value": true
+                },
+                {
+                  "op": "observe",
+                  "observer": "party",
+                  "proposition": "truth",
+                  "source": "entry",
+                  "requires": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "brace_carry": {
+              "from": [
+                "brace"
+              ],
+              "to": "support",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "supported",
+                  "value": true
+                },
+                {
+                  "op": "observe",
+                  "observer": "party",
+                  "proposition": "truth",
+                  "source": "entry",
+                  "requires": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "returned_finish": {
+              "from": [
+                "returned"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "arm",
+                  "from": "party",
+                  "to": "entry"
+                },
+                {
+                  "op": "set",
+                  "key": "returned",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "tested_deliver": {
+              "from": [
+                "tested"
+              ],
+              "to": "recovered",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "smith"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "smith",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "set",
+                  "key": "loadTested",
+                  "value": true
+                }
+              ]
+            },
+            "recovered_finish": {
+              "from": [
+                "recovered"
+              ],
+              "ending": "informed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "arm",
+                  "from": "party",
+                  "to": "smith"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "otherArms",
+                  "from": "party",
+                  "to": "smith"
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "informed"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "taken_finish": {
+              "from": [
+                "taken"
+              ],
+              "ending": "contract",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "arm",
+                  "from": "party",
+                  "to": "smith"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "otherArms",
+                  "from": "party",
+                  "to": "smith"
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "contract"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "informed": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q073.values.resolution"
+                  },
+                  "right": "informed"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q073.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q073.values.partyAt"
+                      },
+                      "right": "smith"
+                    }
+                  ]
+                }
+              ]
+            },
+            "contract": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q073.values.resolution"
+                  },
+                  "right": "contract"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q073.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q073.values.partyAt"
+                      },
+                      "right": "smith"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compromise": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q073.values.resolution"
+                  },
+                  "right": "compromise"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q073.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q073.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_8",
+              "map": "region_8_f1",
+              "x": 13,
+              "y": 7
+            },
+            "smith": {
+              "kind": "town",
+              "location": "machine_hammer"
+            },
+            "load": {
+              "kind": "dungeon",
+              "dungeon": "region_8",
+              "map": "region_8_f1",
+              "x": 7,
+              "y": 1
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "artisanPersonAt",
+            "value": "smith"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q073.clue_a": {
@@ -1580,7 +2341,7 @@
         },
         {
           "op": "narrate",
-          "text": "複製を持って扉へ戻り、借りた原品を元の位置へ据えた。返却を確認して納品する。"
+          "text": "複製と借りた原品を持って扉へ戻った。原品を元の位置へ据え、返却を確認して依頼を終える。"
         },
         {
           "op": "choice",
@@ -1619,7 +2380,7 @@
         },
         {
           "op": "narrate",
-          "text": "常設の支えに荷重を掛け、扉が開閉できることを確認した。回収した腕を工房へ納める。"
+          "text": "腕を回収し、常設の支えの荷重確認位置へ来た。扉が開閉できることを試してから、腕を工房へ運ぶ。"
         },
         {
           "op": "choice",
@@ -1654,7 +2415,7 @@
         },
         {
           "op": "narrate",
-          "text": "支えと扉の試験結果を添えて腕を引き渡した。"
+          "text": "支えと扉の試験結果を添え、回収した腕を持って工房へ戻った。職人への引渡しを確認して依頼を終える。"
         },
         {
           "op": "choice",
@@ -1693,7 +2454,7 @@
         },
         {
           "op": "narrate",
-          "text": "三本を工房へ渡した。避難扉には人が支える番が必要になったと申し送る。通常の石段の帰路は塞がない。"
+          "text": "三本の腕を持って工房へ着いた。職人へ渡す際、避難扉には人が支える番が必要になったと申し送る。通常の石段の帰路は塞がない。"
         },
         {
           "op": "choice",
@@ -2051,6 +2812,14 @@
           "otherArms"
         ],
         "meaning": "copyArm の所在または保持者"
+      },
+      "artisanPersonAt": {
+        "type": "enum",
+        "initial": "smith",
+        "values": [
+          "smith"
+        ],
+        "meaning": "artisanPerson の所在または保持者"
       }
     },
     "entities": {
@@ -2069,6 +2838,11 @@
       "copyArm": {
         "holder": "copyArmAt",
         "kind": "item"
+      },
+      "artisanPerson": {
+        "holder": "artisanPersonAt",
+        "kind": "person",
+        "character": "q073_artisan"
       }
     },
     "propositions": {
@@ -2094,13 +2868,27 @@
       "copy": {
         "title": "腕の複製と支えの工房",
         "place": "smith",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "artisanPerson",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "brace": {
         "title": "腕の複製と支えの工房",
         "place": "smith",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "artisanPerson",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "returned": {
@@ -2118,13 +2906,27 @@
       "recovered": {
         "title": "腕の複製と支えの工房",
         "place": "smith",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "artisanPerson",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "taken": {
         "title": "腕の複製と支えの工房",
         "place": "smith",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "artisanPerson",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       }
     },
@@ -2686,7 +3488,7 @@
         "y": 1
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "salome",
   "receptionLocations": [

@@ -160,7 +160,7 @@ test('q073 fixtures retain old waiting prose and cover support state, custody an
  }
  for(const scene of ['returned','tested','recovered','taken']){
   const f=fixtures.find(f=>f.scene===scene&&f.variant.startsWith('previous'));assert.ok(f);
-  assert.equal(projectGame(loadQ073(f.save())).dialog.text,f.expectedText);
+  assert.equal(projectGame(loadQ073(f.save)).dialog.text,f.expectedText);
   assert.equal(f.expectedText,previousQ073.model.graph.find(n=>n.id===scene).text);
   assert.notEqual(f.expectedText,data.quests.q073.model.graph.find(n=>n.id===scene).text);
  }
