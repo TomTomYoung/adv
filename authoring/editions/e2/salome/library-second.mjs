@@ -208,5 +208,15 @@ export function librarySecondSource(q,{cast=true}={}){
   for(const role of ['porter','thief','singer'])choice('contracts',role).effects=[set(role+'Agreed'),set('feesSettled')];
   route('company','agree','tools',{companions:cast,preparation:[set('toolsPaid')]});add('tools','tools','合意した交代制を道具の注文へ添え、支払済みの共有道具を受け取った。道具と三人を会場へ戻す。',[opt('carry','共有道具を運び、三人と一座を始める','formed',{companions:cast,depart:[give('sharedTools','tools','party')]})]);end('formed','stage','三人が会場へ戻り、共有道具を受け取った。固定の裏方を押しつけず、合意した役割で一座を始める。','company',[give('sharedTools','party','stage'),set('companyAgreed'),set('feesSettled')]);
  }
+ if(q.number===150&&cast){
+  const crew=['ritz','porterPerson','thiefPerson','singerPerson'];
+  const visible=()=>crew.map((entity,i)=>({entity,display:{x:[17,39,61,83][i]}}));
+  for(const id of crew)x.entities[id].character='q150_'+id;
+  for(const n of x.nodes)n.cast=visible();
+  choice('company','agree').readyCast=visible();
+  node('settled').text='窓口へ三人と来た。ここで出演料を精算する。公演の中止や弟子不採用を、手伝った仕事の無価値さへ読み替えない。';
+  node('tools').text='合意した交代制を道具の注文へ添え、支払済みの共有道具を工房で確認した。ここで受け取り、道具と三人を会場へ戻す。';
+  node('formed').text='三人が会場へ戻った。共有道具は隊が運んでいる。ここで渡し、固定の裏方を押しつけず、合意した役割で一座を始める。';
+ }
  return finish();
 }
