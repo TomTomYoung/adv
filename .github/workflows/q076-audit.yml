@@ -1,0 +1,47 @@
+name: Validate q076 iron lullaby in Chromium
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'data/**'
+      - 'authoring/editions/e2/salome/machine-first.mjs'
+      - 'tools/build-machine-quests.mjs'
+      - 'tools/browser-iron-lullaby-smoke.mjs'
+      - 'tools/iron-lullaby-art-fixtures.mjs'
+      - 'tools/character-art-browser.mjs'
+      - 'tests/iron-lullaby.test.mjs'
+      - 'tests/fixtures/e2-q076-before-audit.json'
+      - 'assets/images/**'
+      - '.github/workflows/q076-audit.yml'
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+permissions:
+  contents: read
+jobs:
+  q076-browser:
+    runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned browser driver and verify Japanese fonts
+        run: |
+          npm install --no-save --package-lock=false playwright@1.58.2
+          test -n "$(fc-list :lang=ja)"
+      - name: Check empty scenes, medicine protection, recording deposit and old saves
+        run: ADV_BROWSER_OUTPUT=/tmp/adv-iron-lullaby-browser node tools/browser-iron-lullaby-smoke.mjs
+      - name: Keep q076 checkpoints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: q076-audit-checkpoints
+          path: /tmp/adv-iron-lullaby-browser
+          if-no-files-found: error
+          retention-days: 7
