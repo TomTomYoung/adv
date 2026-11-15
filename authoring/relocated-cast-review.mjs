@@ -3,6 +3,72 @@
 export const RELOCATED_CAST_REVIEW={
  reviewedAt:'2026-11-16',
  quests:{
+  q077:{
+  "sourceSha256": "40d8bb9f38ad93b54d62b91ecc2f2e77a77473344f2b3b222990f5fbd512d9d0",
+  "identityNotes": [
+    "整備側原稿authoring/quests.txt・structures-4.mjsのQ(77)、初版2場面・現行5場面・4旅程・8行動・3結末を精読。巡礼者が壁に触れて手を引く動作と、停電後に保守員が仮灯を用意する動作を別の出演根拠として扱う。",
+    "巡礼者をentry、保守員をoutageだけに呼称表示する。どちらも壁前entryの固定所在で、同行者・人物画・依頼人イオとの同一性は追加しない。診療室の受領を新しい医療職員の人物描写に置換せず、前場面の出演を修理場面へ自動的に引き継がない。",
+    "停電outageは壁前でのcutpower、仮灯lampsは出発時携行・診療室への実到着で受領する。repairedのfinishで配線修理と復電を確定し、到着だけで修理済みにしない。迂回は出発時に隔離と通電状態を確定し、detouredのfinishで帰路確認を完了する。",
+    "物語改訂1→2は旧定義で保存全体を検証後、pilgrimPersonAt・maintainerPersonAtのentryだけを補う。既存registry・全行動・報酬・旧受注を保持し、repairedとdetouredの2本文だけを既存確定時点へ合わせる。表示途中の旧本文と選択肢は保持し、焦げ跡を削る非戦闘経路へ架空の戦闘を追加しない。"
+  ],
+  "relatedClients": {},
+  "people": {
+    "q077_pilgrim": {
+      "label": "壁に触れた巡礼者",
+      "status": "connected",
+      "entity": "pilgrimPerson",
+      "need": "壁へ触れて手を引くentryだけに呼称表示。同行や個人の容貌を追加しない。"
+    },
+    "q077_maintainer": {
+      "label": "仮灯を用意する保守員",
+      "status": "connected",
+      "entity": "maintainerPerson",
+      "need": "停電後のoutageだけに呼称表示。仮灯を運ぶのは隊であり、診療室へ同行しない。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "person-evidence",
+      "people": [
+        "q077_pilgrim"
+      ],
+      "evidence": "壁へ触れた巡礼者が手を引いた。",
+      "reason": "壁に触れて手を引く当人の動作が明記される。保守員の出演はまだ描写されていない。",
+      "visual": "巡礼者だけを表示し、通電中の壁の焦げ跡を確認する。"
+    },
+    "outage": {
+      "decision": "person-evidence",
+      "people": [
+        "q077_maintainer"
+      ],
+      "evidence": "保守員が仮灯を用意している。",
+      "reason": "停電の影響を受けた診療室に備え、壁前で保守員が仮灯を用意する。先の巡礼者をこの場面の出演へ持ち越さない。",
+      "visual": "仮灯はまだentryにある。隊がlampsを選んで出発するまで携行・納入を確定しない。"
+    },
+    "delivered": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "壁の修理はこれから行う。",
+      "reason": "仮灯の納入と手元の照明を確認する場面。受領者の個人描写はなく、保守員は同行しない。",
+      "visual": "lampsAt=clinic・lampsDeliveredは実到着時に確定するが、停電と未修理は継続する。"
+    },
+    "repaired": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "給電を止めたまま放電壁へ戻った。",
+      "reason": "隊が配線と壁を修理する準備の場面。保守員や巡礼者の同席は明記されず、固定所在だけから出演を補わない。",
+      "visual": "到着時はrepaired=false・outage=true。finishで絶縁・壁の修理と復電を確定する。"
+    },
+    "detoured": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "別の巡礼路へ来た。",
+      "reason": "隊が隔離した壁を避ける帰路を確認する。巡礼者をこの経路の同行者にしない。",
+      "visual": "fenced=true・outage=falseは出発時に確定し、detourCheckedはfinishまでfalseのまま。"
+    }
+  },
+  "next": "現行・旧保存・旧受注の全4経路、全4旅程の帰還・敗北救助、停電・仮灯の保持者・復電・迂回確認の順序、二役の限定出演と報酬一回性を検証する。次はq078「部品の記憶」。"
+},
   q076:{
   "sourceSha256": "8b2a32b6e36af87ee59a912bb4d13cf17ac0c90e9322e57643dc40cc4c79fe84",
   "identityNotes": [

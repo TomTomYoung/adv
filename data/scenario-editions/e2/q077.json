@@ -531,7 +531,7 @@
       {
         "id": "repaired",
         "place": "entry",
-        "text": "配線を絶縁して壁を閉じ、試験後に通電を戻した。",
+        "text": "仮灯が診療室へ届いたことを確認し、給電を止めたまま放電壁へ戻った。ここで配線を絶縁し、壁を閉じて試験を終えてから通電を戻す。",
         "options": [
           {
             "id": "finish",
@@ -544,7 +544,7 @@
       {
         "id": "detoured",
         "place": "detour",
-        "text": "柵を避ける巡礼路を歩き、入口へ戻る道を確かめて案内札を立てた。",
+        "text": "壁を柵で隔離し、給電が続く状態で別の巡礼路へ来た。入口へ戻る道を確かめ、案内札を立てて案内を終える。",
         "options": [
           {
             "id": "finish",
@@ -564,7 +564,7 @@
     },
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -573,7 +573,538 @@
       "saveRevision": 2,
       "scope": "機関廟20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "聖痕の配線の現場受付",
+            "clinic": "停電した隣の診療室",
+            "detour": "柵の外を回る巡礼路",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "clinic"
+            ],
+            [
+              "transit",
+              "detour"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "clinic",
+                "detour",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "informed",
+                "contract",
+                "compromise"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "outage": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "outage"
+            },
+            "fenced": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "fenced"
+            },
+            "cosmeticOnly": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "cosmeticOnly"
+            },
+            "lampsDelivered": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "lampsDelivered"
+            },
+            "repaired": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "repaired"
+            },
+            "detourChecked": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "detourChecked"
+            },
+            "lampsAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "clinic",
+                "detour",
+                "transit",
+                "party"
+              ],
+              "meaning": "lamps の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "lamps": {
+              "holder": "lampsAt",
+              "kind": "item"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "聖痕は絶縁の傷に沿った放電跡で、壁の補修が配線を傷付けている。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "聖痕の配線の現場受付",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "outage": {
+              "title": "聖痕の配線の現場受付",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "delivered": {
+              "title": "停電した隣の診療室",
+              "place": "clinic",
+              "cast": [],
+              "requires": true
+            },
+            "repaired": {
+              "title": "聖痕の配線の現場受付",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "detoured": {
+              "title": "柵の外を回る巡礼路",
+              "place": "detour",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_cutpower": {
+              "from": [
+                "entry"
+              ],
+              "to": "outage",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "outage",
+                  "value": true
+                },
+                {
+                  "op": "observe",
+                  "observer": "party",
+                  "proposition": "truth",
+                  "source": "entry",
+                  "requires": true
+                }
+              ],
+              "once": false
+            },
+            "entry_fence": {
+              "from": [
+                "entry"
+              ],
+              "to": "detoured",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "detour"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "detour",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "set",
+                  "key": "fenced",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "outage",
+                  "value": false
+                }
+              ]
+            },
+            "entry_scrape": {
+              "from": [
+                "entry"
+              ],
+              "ending": "contract",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "cosmeticOnly",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "contract"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "outage_lamps": {
+              "from": [
+                "outage"
+              ],
+              "to": "delivered",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "clinic"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "lamps",
+                  "from": "party",
+                  "to": "clinic"
+                },
+                {
+                  "op": "set",
+                  "key": "lampsDelivered",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "clinic",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "lamps",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "outage_restore": {
+              "from": [
+                "outage"
+              ],
+              "to": "detoured",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "detour"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "detour",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "set",
+                  "key": "fenced",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "outage",
+                  "value": false
+                }
+              ]
+            },
+            "delivered_return": {
+              "from": [
+                "delivered"
+              ],
+              "to": "repaired",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "repaired_finish": {
+              "from": [
+                "repaired"
+              ],
+              "ending": "informed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "repaired",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "outage",
+                  "value": false
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "informed"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "detoured_finish": {
+              "from": [
+                "detoured"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "detourChecked",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "informed": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q077.values.resolution"
+                  },
+                  "right": "informed"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q077.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q077.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "contract": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q077.values.resolution"
+                  },
+                  "right": "contract"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q077.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q077.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compromise": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q077.values.resolution"
+                  },
+                  "right": "compromise"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q077.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q077.values.partyAt"
+                      },
+                      "right": "detour"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_8",
+              "map": "region_8_f2",
+              "x": 8,
+              "y": 13
+            },
+            "clinic": {
+              "kind": "dungeon",
+              "dungeon": "region_8",
+              "map": "region_8_f2",
+              "x": 14,
+              "y": 1
+            },
+            "detour": {
+              "kind": "dungeon",
+              "dungeon": "region_8",
+              "map": "region_8_f2",
+              "x": 5,
+              "y": 3
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "pilgrimPersonAt",
+            "value": "entry"
+          },
+          {
+            "key": "maintainerPersonAt",
+            "value": "entry"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q077.clue_a": {
@@ -1479,7 +2010,7 @@
         },
         {
           "op": "narrate",
-          "text": "配線を絶縁して壁を閉じ、試験後に通電を戻した。"
+          "text": "仮灯が診療室へ届いたことを確認し、給電を止めたまま放電壁へ戻った。ここで配線を絶縁し、壁を閉じて試験を終えてから通電を戻す。"
         },
         {
           "op": "choice",
@@ -1518,7 +2049,7 @@
         },
         {
           "op": "narrate",
-          "text": "柵を避ける巡礼路を歩き、入口へ戻る道を確かめて案内札を立てた。"
+          "text": "壁を柵で隔離し、給電が続く状態で別の巡礼路へ来た。入口へ戻る道を確かめ、案内札を立てて案内を終える。"
         },
         {
           "op": "choice",
@@ -1829,6 +2360,22 @@
           "party"
         ],
         "meaning": "lamps の所在または保持者"
+      },
+      "pilgrimPersonAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry"
+        ],
+        "meaning": "pilgrimPerson の所在または保持者"
+      },
+      "maintainerPersonAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry"
+        ],
+        "meaning": "maintainerPerson の所在または保持者"
       }
     },
     "entities": {
@@ -1839,6 +2386,16 @@
       "lamps": {
         "holder": "lampsAt",
         "kind": "item"
+      },
+      "pilgrimPerson": {
+        "holder": "pilgrimPersonAt",
+        "kind": "person",
+        "character": "q077_pilgrim"
+      },
+      "maintainerPerson": {
+        "holder": "maintainerPersonAt",
+        "kind": "person",
+        "character": "q077_maintainer"
       }
     },
     "propositions": {
@@ -1852,13 +2409,27 @@
       "entry": {
         "title": "聖痕の配線の現場受付",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "pilgrimPerson",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "outage": {
         "title": "聖痕の配線の現場受付",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "maintainerPerson",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "delivered": {
@@ -2250,7 +2821,7 @@
         "y": 3
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "salome",
   "receptionLocations": [
