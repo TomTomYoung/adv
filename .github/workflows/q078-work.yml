@@ -4,21 +4,58 @@ on:
     branches: [feature/machine-q078-cast]
     paths: [.github/workflows/q078-work.yml]
 permissions:
-  contents: read
+  contents: write
 jobs:
   prepare:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
-      - name: Package source worktree
-        run: |
-          git rev-parse HEAD > "$RUNNER_TEMP/source-commit.txt"
-          tar -czf "$RUNNER_TEMP/adv-source.tgz" --exclude='./.git' --exclude='./assets' .
-      - uses: actions/upload-artifact@v4
         with:
-          name: q078-source-worktree
-          path: |
-            ${{ runner.temp }}/adv-source.tgz
-            ${{ runner.temp }}/source-commit.txt
-          retention-days: 1
+          ref: feature/machine-q078-cast
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify exact locally tested sources
+        run: |
+          sha256sum --check <<'CHECKSUMS'
+          fa8b004c0b8fc4614b0a9ba296f111ffcfac6dc942bc706c5b2f9395a60276cd  tools/apply-q078-work.mjs
+          910fc27bbadd5e595001fdf57dc954a98a5dd01c4a29a255314573ebaa91b78e  tools/record-q078-work.mjs
+          2ac4c269b22bbb0707b08d6208c7e40cccc070f5a7003b5077609b1a22e61993  tests/parts-memory-cast.test.mjs
+          56145509fd1dc1fe12146244fd9c51e212f4f051a40760a08b0c180e1e71f1ca  tools/parts-memory-art-fixtures.mjs
+          cecb921f23a5e639d611ccf4c68ff44963824588c5663107883becb2ff875d89  tools/browser-parts-memory-cast-smoke.mjs
+          9dbffc673c511d8bc5a45c718613de79ddea74d1e16af224849007ea4a2578a3  tools/measure-parts-memory.mjs
+          CHECKSUMS
+      - name: Apply source-checked cast and preserve previous definition
+        run: node tools/apply-q078-work.mjs
+      - name: Verify all learning routes, save phases, interruptions and machine regressions
+        run: node --test tests/parts-memory-cast.test.mjs tests/relocated-cast-audit.test.mjs tests/machine.test.mjs
+      - name: Reproduce all nine normal party trials and record results
+        run: |
+          node tools/measure-parts-memory.mjs doc/development/Q078_PLAYTEST_RESULTS.json
+          node tools/record-q078-work.mjs
+      - name: Generate documents and runtime while preserving authored records
+        run: |
+          cp -a doc "$RUNNER_TEMP/q078-authored-docs"
+          node tools/build-docs.mjs
+          for file in battle/QUEST_PARTY_PLAYTEST.md battle/SALOME_CLASSES_AND_CHARACTERS_DESIGN.md development/CHROMIUM_DEFERRED_2026-11-04.md development/PROGRESS.md development/REMAINING_WORK.md development/TEST_OVERVIEW.md dungeons/ODDLAND_RELOCATION_AUDIT.md dungeons/REGIONAL_RELOCATION_WORK.md scenarios/EGG_KNIGHT_FORESHADOWING.md scenarios/ODDLAND_100_QUEST_DESIGN.md scenarios/REGIONAL_QUEST_ALLOCATION.md scenarios/SALOME_100_QUEST_DESIGN.md ui/SOUND_AND_EFFECT_FORMAT.md; do
+            cp "$RUNNER_TEMP/q078-authored-docs/$file" "doc/$file"
+          done
+          node tools/audit-relocated-cast.mjs
+          node tools/build-runtime.mjs
+      - name: Validate generated content, distribution hashes, assets, references and documentation
+        run: |
+          node tools/build-scenario-editions.mjs --check
+          node tools/build-runtime.mjs --check
+          node tools/validate.mjs
+          node tools/check-static.mjs
+          node tools/check-docs.mjs
+      - name: Commit verified implementation
+        run: |
+          git rm tools/apply-q078-work.mjs tools/record-q078-work.mjs
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --stat
+          git commit -m "feat(q078): user escort display, independent learning and record custody checks"
+          git push origin HEAD:feature/machine-q078-cast
