@@ -1,8 +1,180 @@
 // Editorial audit: candidate IDs are local; connected roles cite their game entity.
 // Update a fingerprint only after rereading the changed quest and its evidence.
 export const RELOCATED_CAST_REVIEW={
- reviewedAt:'2026-11-14',
+ reviewedAt:'2026-11-15',
  quests:{
+  q150:{
+  "sourceSha256": "ec758faec67d591124985e8e2b87b3c2037f35006915b84ad0ef1bb89a047bbe",
+  "identityNotes": [
+    "原稿volume-05のGQ050・初版6場面・現行11場面・10旅程・23行動・5結末を精読した。仕込まれた試験ではなく本当の舞台故障であり、練習したかどうかで事故場面の条件本文が分かれる。",
+    "リッツと荷役・スリ・歌手の既存personを全11場面へ接続する。全10旅程に既にある四人の同行を保持し、支払後の自動生成準備場面にはreadyCastを用いる。人物の氏名・年齢・容貌・専用画を補わない。",
+    "働きを見たこと、個別の弟子入り同意、出演料精算、一座の合意と共有道具の引渡しを別々に扱う。40Gはcompany_agreeで一回支払う。共有道具は工房出発時に隊が受け取り、formed_finishで会場へ渡す。精算・道具に関する3本文だけを既存の確定時点に合わせる。",
+    "財布は最初は会場に落ちており、audience_thiefの出発時だけwalletOwnerへ返る。留め具修理でthiefが真になってもwalletReturnedを真にしない。持主は会場に固定し、選択肢での言及だけを根拠に全場面のcastへ追加しない。",
+    "四人は既存entityなので状態追加・保存移行は不要。物語改訂1・既存の保持者定義域・全行動・5結末と報酬・旧受注を保持する。旧保存内の表示途中の本文・選択肢も保持する。"
+  ],
+  "relatedClients": {},
+  "people": {
+    "q150_ritz": {
+      "label": "曲芸師 リッツ",
+      "status": "connected",
+      "entity": "ritz",
+      "need": "既存の初期所在と四人の実同行に従い、支払後準備を含む全11場面へ呼称表示する。"
+    },
+    "q150_porterPerson": {
+      "label": "弟子候補の荷役 荷役",
+      "status": "connected",
+      "entity": "porterPerson",
+      "need": "既存の初期所在と四人の実同行に従い、支払後準備を含む全11場面へ呼称表示する。"
+    },
+    "q150_thiefPerson": {
+      "label": "弟子候補のスリ スリ",
+      "status": "connected",
+      "entity": "thiefPerson",
+      "need": "既存の初期所在と四人の実同行に従い、支払後準備を含む全11場面へ呼称表示する。"
+    },
+    "q150_singerPerson": {
+      "label": "弟子候補の歌手 歌手",
+      "status": "connected",
+      "entity": "singerPerson",
+      "need": "既存の初期所在と四人の実同行に従い、支払後準備を含む全11場面へ呼称表示する。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "person-evidence",
+      "people": [
+        "q150_ritz",
+        "q150_porterPerson",
+        "q150_thiefPerson",
+        "q150_singerPerson"
+      ],
+      "evidence": "荷役、スリ、歌手の三人が来た。",
+      "reason": "リッツと候補者三人が揃い、既存の初期所在も全員entry。",
+      "visual": "特技をまだ見ていない段階。誰かを既に採用したように表示しない。"
+    },
+    "practice": {
+      "decision": "person-evidence",
+      "people": [
+        "q150_ritz",
+        "q150_porterPerson",
+        "q150_thiefPerson",
+        "q150_singerPerson"
+      ],
+      "evidence": "荷役の組立、スリの細かな手仕事、歌手の歌",
+      "reason": "四人が稽古場へ実同行する。",
+      "visual": "見せてもらった仕事と弟子入りへの同意を区別する。"
+    },
+    "accident": {
+      "decision": "person-evidence",
+      "people": [
+        "q150_ritz",
+        "q150_porterPerson",
+        "q150_thiefPerson",
+        "q150_singerPerson"
+      ],
+      "evidence": "候補者はそれぞれ、自分ならできる仕事を申し出る。",
+      "reason": "練習の有無で本文が変わるが、四人はいずれの入口からも会場へ実同行している。",
+      "visual": "preparedに従って既知の得意分野と、その場での申し出を分ける。"
+    },
+    "repair": {
+      "decision": "person-evidence",
+      "people": [
+        "q150_ritz",
+        "q150_porterPerson",
+        "q150_thiefPerson",
+        "q150_singerPerson"
+      ],
+      "evidence": "荷役は支えを、スリは小さな留め具の修理を申し出た。",
+      "reason": "歌手が客を支え、残る候補者が作業を提案する。リッツも会場に残る。",
+      "visual": "歌だけでは修理を済ませたことにしない。"
+    },
+    "audience": {
+      "decision": "person-evidence",
+      "people": [
+        "q150_ritz",
+        "q150_porterPerson",
+        "q150_thiefPerson",
+        "q150_singerPerson"
+      ],
+      "evidence": "候補者は自分の仕事として出演したいという。",
+      "reason": "修理の担当者だけでなく四人が引き続き舞台にいる。",
+      "visual": "財布の返却を選ぶ前はwalletがstageにあり、返却済み表示を先取りしない。"
+    },
+    "contracts": {
+      "decision": "person-evidence",
+      "people": [
+        "q150_ritz",
+        "q150_porterPerson",
+        "q150_thiefPerson",
+        "q150_singerPerson"
+      ],
+      "evidence": "手伝った事実と弟子になる意思を別に聞いてほしい",
+      "reason": "四人が会場から窓口へ同行し、候補者の同意を確かめる。",
+      "visual": "個別採用は働きを見た候補者だけ。財布の持主を同行させない。"
+    },
+    "company": {
+      "decision": "person-evidence",
+      "people": [
+        "q150_ritz",
+        "q150_porterPerson",
+        "q150_thiefPerson",
+        "q150_singerPerson"
+      ],
+      "evidence": "三人は芸と裏方を固定せず交代できる条件で同意した。",
+      "reason": "四人は同じ窓口で交代制と道具費を相談する。",
+      "visual": "40G支払前。作業への同意と一座成立の最終確定は別。"
+    },
+    "settled": {
+      "decision": "person-evidence",
+      "people": [
+        "q150_ritz",
+        "q150_porterPerson",
+        "q150_thiefPerson",
+        "q150_singerPerson"
+      ],
+      "evidence": "窓口へ三人と来た。ここで出演料を精算する。",
+      "reason": "中止・不採用・一座辞退のいずれでも四人が窓口にいる。",
+      "visual": "feesSettledはfinishで確定。弟子を採らないことを無報酬にしない。"
+    },
+    "tools": {
+      "decision": "person-evidence",
+      "people": [
+        "q150_ritz",
+        "q150_porterPerson",
+        "q150_thiefPerson",
+        "q150_singerPerson"
+      ],
+      "evidence": "支払済みの共有道具を工房で確認した。",
+      "reason": "四人が窓口から実同行する。支払済みでも道具は工房にある。",
+      "visual": "carry出発時に初めてsharedToolsAtがpartyになる。"
+    },
+    "formed": {
+      "decision": "person-evidence",
+      "people": [
+        "q150_ritz",
+        "q150_porterPerson",
+        "q150_thiefPerson",
+        "q150_singerPerson"
+      ],
+      "evidence": "三人が会場へ戻った。共有道具は隊が運んでいる。",
+      "reason": "四人が共有道具を運んで会場へ戻る。",
+      "visual": "道具の受渡し・companyAgreed・feesSettledはfinishで確定。"
+    },
+    "company_agree_ready": {
+      "decision": "person-evidence",
+      "people": [
+        "q150_ritz",
+        "q150_porterPerson",
+        "q150_thiefPerson",
+        "q150_singerPerson"
+      ],
+      "evidence": "ここから目的地まで運ぶ。",
+      "reason": "40G支払後も四人は窓口にいる。自動生成準備場面にreadyCastを接続する。",
+      "visual": "支払だけで道具の所持者を変えず、一座成立の報酬も与えない。"
+    }
+  },
+  "next": "全11場面・10旅程・23行動の新旧保存、練習有無・役割別資格・個別同意と出演料、一座の40G不足と支払済み再開、財布返却・道具の保持者、途中帰還・敗北、旧受注と実画面を検証する。書庫20件の監査後はq071「止まれない門番」の精読・実装へ進む。"
+},
   q149:{
     "sourceSha256": "e2b9f51d2c995e79fd879ff8be992baaf25036b0f6ed082f8ac9728ef2259933",
     "identityNotes": [

@@ -1,5 +1,7 @@
 # CI・自動テスト総覧
 
+q150専用13試験と監査7試験。新旧94経路、11場面・10旅程・23行動、旧受注94経路、途中帰還・敗北、同意・出演料・40G・財布・共有道具を検証する。tools/browser-troupe-apprentice-cast-smoke.mjsは42保存点×4表示条件＝168条件。通常攻略はtools/measure-troupe-apprentice.mjsとQ150_PLAYTEST_RESULTS.jsonの標準Lv5・3編成7経路。
+
 ## q149追記（2026-11-14）
 
 q149はtests/unsold-sword-cast.test.mjsの10試験で全7場面・6旅程・11行動の新旧保存、5経路、40G不足、帰還・敗北、旧受注、不正保存の原子的拒否を検証する。tools/browser-unsold-sword-cast-smoke.mjsは20保存点・80画面条件。tools/measure-unsold-sword.mjsは標準Lv5・3編成5経路を再現する。表示fixtureと通常攻略を混同しない。
