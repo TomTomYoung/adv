@@ -3,6 +3,71 @@
 export const RELOCATED_CAST_REVIEW={
  reviewedAt:'2026-11-15',
  quests:{
+  q072:{
+  "sourceSha256": "ac07fae869cd6f0958578d48e712004ff0b5c75bfd5004adf0a15d9693df6f37",
+  "identityNotes": [
+    "整備側原稿authoring/quests.txtとstructures-4.mjsのQ(72)、初版3場面・現行5場面・6旅程・9行動・3結末を精読した。参照原稿の同番号だけで別題を出典にしない。",
+    "職人と祈祷師はoilで明示的に発言する二役として油工房に固定する。依頼人イオと祈祷師の同一性は断定せず、全旅程の同行者を空のまま維持する。",
+    "温める処置heatedと下層用油への交換oilChanged、儀式と合否の分離ritualSeparated、現用油の封止discardedを分ける。再相談の往復で油を重複取得しない。現用油と下層用油の保持者は別に保存する。",
+    "二役の所在を物語改訂1から2へ補い、旧registryの既存定義域を保存する。先に温めた場合に見本が入口に残って交換相談が選べない既存不具合を修復し、entry_heatの出発時に見本を携行する。旧保存はentry_heatの履歴または移動中を検証してから、entryに残った見本だけpartyへ補正する。entry・changed・discardedの3本文を受渡し前へ修正し、entry_heatの携行以外の既存行動・報酬・旧受注と保存中の待機本文は保持する。"
+  ],
+  "relatedClients": {},
+  "people": {
+    "q072_artisan": {
+      "label": "油工房の職人",
+      "status": "connected",
+      "entity": "artisanPerson",
+      "need": "油工房oilの発言場面だけへ呼称表示する。"
+    },
+    "q072_priest": {
+      "label": "工房で話す祈祷師",
+      "status": "connected",
+      "entity": "priestPerson",
+      "need": "油工房oilの発言場面だけへ呼称表示し、他の場所へ同行させない。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "寒い下層のものだけ震える。",
+      "reason": "機械の比較観察で、依頼人や職人の同席は書かれていない。",
+      "visual": "温度差の情報と特定人物の同席を混同しない。"
+    },
+    "warm": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "祈祷は追加していない。",
+      "reason": "機械を温めた結果の観察で、工房の二人が移動する記述はない。",
+      "visual": "暖房の処置と交換・儀式を別に表示する。"
+    },
+    "oil": {
+      "decision": "person-evidence",
+      "people": [
+        "q072_artisan",
+        "q072_priest"
+      ],
+      "evidence": "職人は下層用の油を用意した。祈祷師は儀式も続けたいと話す。",
+      "reason": "用意した職人と希望を話す祈祷師が工房に実在する。",
+      "visual": "二役のみ表示し、下層用油はseparate出発まで工房が保持する。"
+    },
+    "changed": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "下層用の油を持って冷えた試験台へ戻った。",
+      "reason": "隊だけが工房から移動した。職人・祈祷師の同行根拠はない。",
+      "visual": "到着時は隊が油を保持し、交換と記録はfinishで確定する。"
+    },
+    "discarded": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "現用油を持って回収槽へ着いた。",
+      "reason": "隊だけが現用油を運ぶ。鐘当番や依頼人の同席を推測で補わない。",
+      "visual": "現用油はfinishまで隊の保持物で、携行燃料と混ぜない。"
+    }
+  },
+  "next": "全5場面・6旅程・9行動の新旧保存、再相談の反復、油の保持者、帰還・敗北再開、全3結末と旧受注を検証する。次はq073。"
+},
   q071:{
   "sourceSha256": "368a71299f83f651a830d5d636a4e2f49128aad9a9d82f92f66cfea951f37717",
   "identityNotes": [

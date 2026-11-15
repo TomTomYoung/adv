@@ -24,6 +24,16 @@ export function machineFirstSource(q,{cast=true}={}){
   route('oil','separate','changed',{depart:[give('coldOil','oilshop','party')]});end('changed','cold','下層用の油を機械へ納め、同じ温度で動作を試す。祈祷の記録と整備の合否を分けて記した。','informed',[give('coldOil','party','cold'),set('oilChanged'),set('ritualSeparated')]);
   route('oil','heat','warm',{effects:[set('heated')]});route('entry','discard','discarded',{depart:[give('oilSample','entry','party')]});end('discarded','discard','現用油を回収槽へ封止した。携行油へは混ぜず、再稼働までの手動の鐘当番を確認する。','contract',[give('oilSample','party','discard'),set('discarded')]);
  }
+ if(q.number===72&&cast){
+  for(const [id,character] of [['artisanPerson','q072_artisan'],['priestPerson','q072_priest']]){
+   entity(id,'oilshop','person');x.entities[id].character=character;
+  }
+  node('entry').text+=' 温める試験へ向かう際も、現用油の見本は持っていく。';
+  choice('entry','heat').depart=[give('oilSample','entry','party')];
+  node('oil').cast=[{entity:'artisanPerson',display:{x:31}},{entity:'priestPerson',display:{x:69}}];
+  node('changed').text='下層用の油を持って冷えた試験台へ戻った。交換して同じ温度で動作を試し、祈祷の記録と整備の合否を分けて記す。';
+  node('discarded').text='現用油を持って回収槽へ着いた。携行油へは混ぜず、槽へ封止して再稼働までの手動の鐘当番を確認する。';
+ }
  if(q.number===73){
   town('smith','腕の複製と支えの工房','machine_hammer');cell('load','避難扉の荷重確認位置',1,7,1);entity('arm','entry');entity('otherArms','entry');entity('copyArm','smith');
   route('entry','brace','brace');add('brace','smith','扉の荷重に合う支えを用意した。腕を外す前に扉へ戻る。',[opt('carry','支えを扉へ運び、荷重を受け替える','support',{effects:[set('supported')]})]);

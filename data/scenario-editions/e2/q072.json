@@ -478,7 +478,7 @@
       {
         "id": "entry",
         "place": "entry",
-        "text": "同じ祈祷を受けた機械でも、寒い下層のものだけ震える。",
+        "text": "同じ祈祷を受けた機械でも、寒い下層のものだけ震える。 温める試験へ向かう際も、現用油の見本は持っていく。",
         "options": [
           {
             "id": "heat",
@@ -541,7 +541,7 @@
       {
         "id": "changed",
         "place": "cold",
-        "text": "下層用の油を機械へ納め、同じ温度で動作を試す。祈祷の記録と整備の合否を分けて記した。",
+        "text": "下層用の油を持って冷えた試験台へ戻った。交換して同じ温度で動作を試し、祈祷の記録と整備の合否を分けて記す。",
         "options": [
           {
             "id": "finish",
@@ -554,7 +554,7 @@
       {
         "id": "discarded",
         "place": "discard",
-        "text": "現用油を回収槽へ封止した。携行油へは混ぜず、再稼働までの手動の鐘当番を確認する。",
+        "text": "現用油を持って回収槽へ着いた。携行油へは混ぜず、槽へ封止して再稼働までの手動の鐘当番を確認する。",
         "options": [
           {
             "id": "finish",
@@ -600,7 +600,7 @@
     ],
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -609,7 +609,670 @@
       "saveRevision": 2,
       "scope": "機関廟20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "油の洗礼の現場受付",
+            "cold": "下層の冷えた試験台",
+            "oilshop": "適温油を調合する工房",
+            "discard": "回収油の封止槽",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "cold"
+            ],
+            [
+              "transit",
+              "oilshop"
+            ],
+            [
+              "transit",
+              "discard"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "cold",
+                "oilshop",
+                "discard",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "informed",
+                "contract",
+                "compromise"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "heated": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "heated"
+            },
+            "oilChanged": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "oilChanged"
+            },
+            "ritualSeparated": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "ritualSeparated"
+            },
+            "discarded": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "discarded"
+            },
+            "oilSampleAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "cold",
+                "oilshop",
+                "discard",
+                "transit",
+                "party",
+                "coldOil"
+              ],
+              "meaning": "oilSample の所在または保持者"
+            },
+            "coldOilAt": {
+              "type": "enum",
+              "initial": "oilshop",
+              "values": [
+                "entry",
+                "cold",
+                "oilshop",
+                "discard",
+                "transit",
+                "party",
+                "oilSample"
+              ],
+              "meaning": "coldOil の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "oilSample": {
+              "holder": "oilSampleAt",
+              "kind": "item"
+            },
+            "coldOil": {
+              "holder": "coldOilAt",
+              "kind": "item"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "油の粘度が寒い下層に合わず、祈祷の有無と故障は関係していない。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "油の洗礼の現場受付",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "warm": {
+              "title": "下層の冷えた試験台",
+              "place": "cold",
+              "cast": [],
+              "requires": true
+            },
+            "oil": {
+              "title": "適温油を調合する工房",
+              "place": "oilshop",
+              "cast": [],
+              "requires": true
+            },
+            "changed": {
+              "title": "下層の冷えた試験台",
+              "place": "cold",
+              "cast": [],
+              "requires": true
+            },
+            "discarded": {
+              "title": "回収油の封止槽",
+              "place": "discard",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_heat": {
+              "from": [
+                "entry"
+              ],
+              "to": "warm",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "cold"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "heated",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "cold",
+                "companions": []
+              },
+              "depart": []
+            },
+            "entry_oil": {
+              "from": [
+                "entry"
+              ],
+              "to": "oil",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "oilshop"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "observe",
+                  "observer": "party",
+                  "proposition": "truth",
+                  "source": "oilshop",
+                  "requires": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "oilshop",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "oilSample",
+                  "from": "entry",
+                  "to": "party",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q072.values.oilSampleAt"
+                    },
+                    "right": "entry"
+                  }
+                }
+              ]
+            },
+            "entry_discard": {
+              "from": [
+                "entry"
+              ],
+              "to": "discarded",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "discard"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "discard",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "oilSample",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "warm_keep": {
+              "from": [
+                "warm"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "warm_change": {
+              "from": [
+                "warm"
+              ],
+              "to": "oil",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "oilshop"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "observe",
+                  "observer": "party",
+                  "proposition": "truth",
+                  "source": "oilshop",
+                  "requires": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "oilshop",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "oilSample",
+                  "from": "entry",
+                  "to": "party",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q072.values.oilSampleAt"
+                    },
+                    "right": "entry"
+                  }
+                }
+              ]
+            },
+            "oil_separate": {
+              "from": [
+                "oil"
+              ],
+              "to": "changed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "cold"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "cold",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "coldOil",
+                  "from": "oilshop",
+                  "to": "party"
+                }
+              ]
+            },
+            "oil_heat": {
+              "from": [
+                "oil"
+              ],
+              "to": "warm",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "cold"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "heated",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "cold",
+                "companions": []
+              },
+              "depart": []
+            },
+            "changed_finish": {
+              "from": [
+                "changed"
+              ],
+              "ending": "informed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "coldOil",
+                  "from": "party",
+                  "to": "cold"
+                },
+                {
+                  "op": "set",
+                  "key": "oilChanged",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "ritualSeparated",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "informed"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "discarded_finish": {
+              "from": [
+                "discarded"
+              ],
+              "ending": "contract",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "oilSample",
+                  "from": "party",
+                  "to": "discard"
+                },
+                {
+                  "op": "set",
+                  "key": "discarded",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "contract"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "informed": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q072.values.resolution"
+                  },
+                  "right": "informed"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q072.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q072.values.partyAt"
+                      },
+                      "right": "cold"
+                    }
+                  ]
+                }
+              ]
+            },
+            "contract": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q072.values.resolution"
+                  },
+                  "right": "contract"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q072.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q072.values.partyAt"
+                      },
+                      "right": "discard"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compromise": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q072.values.resolution"
+                  },
+                  "right": "compromise"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q072.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q072.values.partyAt"
+                      },
+                      "right": "cold"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_8",
+              "map": "region_8_f1",
+              "x": 11,
+              "y": 9
+            },
+            "cold": {
+              "kind": "dungeon",
+              "dungeon": "region_8",
+              "map": "region_8_f2",
+              "x": 3,
+              "y": 5
+            },
+            "oilshop": {
+              "kind": "town",
+              "location": "machine_parts"
+            },
+            "discard": {
+              "kind": "dungeon",
+              "dungeon": "region_8",
+              "map": "region_8_f1",
+              "x": 13,
+              "y": 2
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "artisanPersonAt",
+            "value": "oilshop"
+          },
+          {
+            "key": "priestPersonAt",
+            "value": "oilshop"
+          },
+          {
+            "key": "oilSampleAt",
+            "value": "party",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q072.values.oilSampleAt"
+                  },
+                  "right": "entry"
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "in",
+                      "left": "entry_heat",
+                      "right": {
+                        "ref": "stories.q072.events"
+                      }
+                    },
+                    {
+                      "op": "and",
+                      "args": [
+                        {
+                          "op": "eq",
+                          "left": {
+                            "ref": "journey.quest"
+                          },
+                          "right": "q072"
+                        },
+                        {
+                          "op": "eq",
+                          "left": {
+                            "ref": "journey.action"
+                          },
+                          "right": "entry_heat"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q072.clue_a": {
@@ -1725,7 +2388,7 @@
         },
         {
           "op": "narrate",
-          "text": "同じ祈祷を受けた機械でも、寒い下層のものだけ震える。"
+          "text": "同じ祈祷を受けた機械でも、寒い下層のものだけ震える。 温める試験へ向かう際も、現用油の見本は持っていく。"
         },
         {
           "op": "choice",
@@ -1898,7 +2561,7 @@
         },
         {
           "op": "narrate",
-          "text": "下層用の油を機械へ納め、同じ温度で動作を試す。祈祷の記録と整備の合否を分けて記した。"
+          "text": "下層用の油を持って冷えた試験台へ戻った。交換して同じ温度で動作を試し、祈祷の記録と整備の合否を分けて記す。"
         },
         {
           "op": "choice",
@@ -1937,7 +2600,7 @@
         },
         {
           "op": "narrate",
-          "text": "現用油を回収槽へ封止した。携行油へは混ぜず、再稼働までの手動の鐘当番を確認する。"
+          "text": "現用油を持って回収槽へ着いた。携行油へは混ぜず、槽へ封止して再稼働までの手動の鐘当番を確認する。"
         },
         {
           "op": "choice",
@@ -2260,6 +2923,22 @@
           "oilSample"
         ],
         "meaning": "coldOil の所在または保持者"
+      },
+      "artisanPersonAt": {
+        "type": "enum",
+        "initial": "oilshop",
+        "values": [
+          "oilshop"
+        ],
+        "meaning": "artisanPerson の所在または保持者"
+      },
+      "priestPersonAt": {
+        "type": "enum",
+        "initial": "oilshop",
+        "values": [
+          "oilshop"
+        ],
+        "meaning": "priestPerson の所在または保持者"
       }
     },
     "entities": {
@@ -2274,6 +2953,16 @@
       "coldOil": {
         "holder": "coldOilAt",
         "kind": "item"
+      },
+      "artisanPerson": {
+        "holder": "artisanPersonAt",
+        "kind": "person",
+        "character": "q072_artisan"
+      },
+      "priestPerson": {
+        "holder": "priestPersonAt",
+        "kind": "person",
+        "character": "q072_priest"
       }
     },
     "propositions": {
@@ -2299,7 +2988,20 @@
       "oil": {
         "title": "適温油を調合する工房",
         "place": "oilshop",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "artisanPerson",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "priestPerson",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "changed": {
@@ -2346,7 +3048,14 @@
           "to": "cold",
           "companions": []
         },
-        "depart": []
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "oilSample",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
       },
       "entry_oil": {
         "from": [
@@ -2754,7 +3463,7 @@
         "y": 2
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "salome",
   "receptionLocations": [
