@@ -543,3 +543,5 @@ relocatedCharacters.q150_ritz={"id":"q150_ritz","name":"リッツ","role":"曲�
 relocatedCharacters.q150_porterPerson={"id":"q150_porterPerson","name":"荷役","role":"弟子候補の荷役","detail":"客席と舞台の支えの修理を担当する。働きと弟子入りの同意は別に扱う。","provenance":"2026-11-15。GQ050と現行場面の発言・所在・実同行による呼称表示。専用画や未知の氏名・年齢・容貌は追加しない。"};
 relocatedCharacters.q150_thiefPerson={"id":"q150_thiefPerson","name":"スリ","role":"弟子候補のスリ","detail":"細かな留め具の修理と、落ちた財布を持主へ返す芸を行える。修理だけで財布を返した扱いにしない。","provenance":"2026-11-15。GQ050と現行場面の発言・所在・実同行による呼称表示。専用画や未知の氏名・年齢・容貌は追加しない。"};
 relocatedCharacters.q150_singerPerson={"id":"q150_singerPerson","name":"歌手","role":"弟子候補の歌手","detail":"歌で待つ客を支え、次の演目につなぐ。出演と弟子入りの意志は別に確かめる。","provenance":"2026-11-15。GQ050と現行場面の発言・所在・実同行による呼称表示。専用画や未知の氏名・年齢・容貌は追加しない。"};
+
+relocatedCharacters.q071_worker={id:'q071_worker',name:'現役の整備人',role:'門番が帰還を待つ現役の作業者',detail:'作業室で呼ばれ、本人が門番の前まで戻って帰還印を押す。退職者の記録とは別に在室状況を確かめる。',provenance:'2026-11-15。整備側原稿と現行本文・既存実同行に基づく呼称表示。依頼人フウとの同一性、氏名・年齢・容貌・専用画を追加しない。'};

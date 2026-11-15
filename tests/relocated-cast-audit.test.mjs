@@ -6,7 +6,7 @@ import {auditRelocatedCast,loadRelocatedCastQuests,relocatedCastFingerprint} fro
 const quests=await loadRelocatedCastQuests();
 test('cast audit distinguishes measured empty casts, reviewed scenes and candidate roles',()=>{
  const report=auditRelocatedCast(quests);
- assert.deepEqual(report.summary,{"quests":100,"scenes":753,"emptyCastScenes":297,"personEntities":145,"characterLinkedEntities":135,"reviewedQuests":80,"reviewedScenes":618,"noPersonEvidenceScenes":161,"personEvidenceScenes":457,"candidateRoles":1,"connectedRoles":182,"unreviewedScenes":135});
+ assert.deepEqual(report.summary,{"quests":100,"scenes":753,"emptyCastScenes":295,"personEntities":145,"characterLinkedEntities":136,"reviewedQuests":81,"reviewedScenes":625,"noPersonEvidenceScenes":166,"personEvidenceScenes":459,"candidateRoles":1,"connectedRoles":183,"unreviewedScenes":128});
  const scaleQuest=report.quests.find(q=>q.id==='q148');
  assert.deepEqual(Object.keys(scaleQuest.review.people),['q148_egi','q148_customer']);
  assert.deepEqual(Object.fromEntries(scaleQuest.scenes.map(s=>[s.id,s.cast.map(c=>c.entity)])),{
@@ -67,7 +67,10 @@ test('cast audit distinguishes measured empty casts, reviewed scenes and candida
  assert.ok(lateDelivery.scenes.filter(s=>s.cast.length).every(s=>s.cast[0].entity==='recipient'));
  const obituary=report.quests.find(q=>q.id==='q044');assert.deepEqual(obituary.scenes.filter(s=>s.review.people.length).map(s=>s.id),['safe','escaped','protected','safe_refuge']);
  assert.ok(report.regions.every(r=>r.quests===20));
- assert.equal(report.quests.find(q=>q.id==='q071').scenes[0].review,null);
+ assert.equal(report.quests.find(q=>q.id==='q072').scenes[0].review,null);
+ const gate=report.quests.find(q=>q.id==='q071');
+ assert.deepEqual(gate.scenes.filter(s=>s.cast.length).map(s=>s.id),['call','returned']);
+ assert.equal(gate.review.people.q071_worker.entity,'workerPerson');
  assert.deepEqual(report.quests.find(q=>q.id==='q032').scenes.filter(s=>s.review.people.length).map(s=>s.id),['cell','workshop']);
  const aid=report.quests.find(q=>q.id==='q165');
  assert.deepEqual(Object.fromEntries(Object.entries(aid.review.people).map(([id,role])=>[id,{status:role.status,entity:role.entity}])),{
@@ -259,13 +262,15 @@ test('reviews reject unknown, contradictory and orphan candidate roles',()=>{
 });
 
 test('future character and cast hookups change measured counts without marking unrelated scenes reviewed',()=>{
- const changed=structuredClone(quests),q=changed.find(q=>q.id==='q071'),entity=Object.values(q.story.entities).find(e=>e.kind==='person');
- entity.character='future_owner';Object.values(q.story.scenes)[0].cast=[{entity:'workerPerson'}];
+ const changed=structuredClone(quests),q=changed.find(q=>!RELOCATED_CAST_REVIEW.quests[q.id]&&Object.values(q.story.entities).some(e=>e.kind==='person'&&!e.character));
+ assert.ok(q,'an unreviewed person must remain for this fixture');
+ const [entityId,entity]=Object.entries(q.story.entities).find(([,e])=>e.kind==='person'&&!e.character);
+ entity.character='future_owner';Object.values(q.story.scenes)[0].cast=[{entity:entityId}];
  const report=auditRelocatedCast(changed),baseline=auditRelocatedCast(quests);
  assert.equal(report.summary.emptyCastScenes,baseline.summary.emptyCastScenes-1);
  assert.equal(report.summary.characterLinkedEntities,baseline.summary.characterLinkedEntities+1);
  assert.equal(report.summary.reviewedScenes,baseline.summary.reviewedScenes);
- assert.equal(report.quests.find(q=>q.id==='q071').review,null);
+ assert.equal(report.quests.find(row=>row.id===q.id).review,null);
 });
 
 test('a missing reviewed quest fails instead of reducing the denominator',()=>{
