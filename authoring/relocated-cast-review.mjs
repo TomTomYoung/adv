@@ -3,6 +3,81 @@
 export const RELOCATED_CAST_REVIEW={
  reviewedAt:'2026-11-15',
  quests:{
+  q071:{
+  "sourceSha256": "368a71299f83f651a830d5d636a4e2f49128aad9a9d82f92f66cfea951f37717",
+  "identityNotes": [
+    "整備側原稿authoring/quests.txt、structures-4.mjsのQ(71)、初版2場面と現行7場面・7旅程・10行動・3結末を精読した。参照原稿volume-08のGQ071は別題なので同じ番号だけで出典を混同しない。",
+    "現役の整備人workerPersonは作業室にいて、callで呼ばれ、call_escortの実同行で門番の前へ帰る。依頼人フウと同一人物とは断定しない。門番は機械であり、人間の人物画や別のNPCを追加しない。",
+    "退職者の返却記録returnRecordの出発時携行・到着時照合、現役の整備人の呼出し・実帰還・本人の帰還印stampを分ける。帰還印はreturned_finishまで整備人が保持する。",
+    "電源盤への到着だけではtemporaryOffは立たず、cut_repairの出発時に一時遮断し、repaired_finishで補修と電源復帰を確定する。returned・cut・repairedの3本文だけを既存の処理時点へ合わせる。",
+    "戦闘で門番を止める解体経路は勝利時だけ確定し、この戦闘では逃走できず、敗北後は再戦可能な既存経路を維持する。物語改訂1、全状態定義、本文以外の行動・報酬・旧受注と保存途中の文章を保持する。"
+  ],
+  "relatedClients": {},
+  "people": {
+    "q071_worker": {
+      "label": "現役の整備人",
+      "status": "connected",
+      "entity": "workerPerson",
+      "need": "作業室callと実帰還後returnedの2場面だけに呼称表示する。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "門番は「未帰還二名」と繰り返す。",
+      "reason": "門番機械の表示を読む場面。現役の整備人は作業室で、フウの現場同席は記述されていない。",
+      "visual": "門番の表示と人物不在を分け、機械を人間の役へ置換しない。"
+    },
+    "worker": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "整備人はまだ中にいる。",
+      "reason": "退職記録を照合した門番の前。現役の整備人は未帰還のまま作業室にいる。",
+      "visual": "未帰還一名の表示だけを根拠に本人を門前へ出さない。"
+    },
+    "record": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "現役の整備人の番号は別に残す。",
+      "reason": "返却記録を窓口で照合する。特定の窓口係・フウ・整備人の同席は書かれていない。",
+      "visual": "記録の照合と現役本人の帰還を別々に扱う。"
+    },
+    "call": {
+      "decision": "person-evidence",
+      "people": [
+        "q071_worker"
+      ],
+      "evidence": "整備人を作業室で呼んだ。",
+      "reason": "既存workerPersonの初期所在worker_roomで本人を呼ぶ。本人の帰還印はまだ本人が持つ。",
+      "visual": "本人と帰還印を確認し、門番への到着を先取りしない。"
+    },
+    "returned": {
+      "decision": "person-evidence",
+      "people": [
+        "q071_worker"
+      ],
+      "evidence": "整備人が門番の前へ戻った。",
+      "reason": "call_escortの実同行で本人が門番前へ到着する。帰還印はfinishで押す。",
+      "visual": "到着した本人だけを表示し、押印・完了・報酬をfinishまで確定しない。"
+    },
+    "cut": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "外部電源盤へ来た。",
+      "reason": "隊だけが電源盤へ来る。整備人は作業室に残っている。",
+      "visual": "停電はrepair出発時。到着文で遮断済みと表現しない。"
+    },
+    "repaired": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "外部電源を切ったまま門番の前へ戻った。",
+      "reason": "一時停止中の機械へ隊だけが戻る。整備人は呼び出していないので同席しない。",
+      "visual": "補修・復帰はfinishで確定し、未帰還番号は消さない。"
+    }
+  },
+  "next": "全7場面・7旅程・10行動の保存再開、帰還印・返却記録の保持者、一時停電と補修、戦闘の勝利・逃走不可・敗北と再戦、旧受注、全3結末・実画面を検証する。次はq072「油の洗礼」。"
+},
   q150:{
   "sourceSha256": "ec758faec67d591124985e8e2b87b3c2037f35006915b84ad0ef1bb89a047bbe",
   "identityNotes": [

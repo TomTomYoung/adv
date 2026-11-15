@@ -1,5 +1,9 @@
 # CI・自動テスト総覧
 
+## 2026-11-15 q071「止まれない門番」
+
+q071はtests/gatekeeper-cast.test.mjsの専用11試験と既存出演監査7試験。tools/gatekeeper-art-fixtures.mjsは22保存点を作り、.github/workflows/q071-cast.ymlでScene/Classic×1440/390pxの88画面を確認する。通常攻略はtools/measure-gatekeeper.mjsとQ071_PLAYTEST_RESULTS.jsonで標準Lv8・3編成4経路を再現する。
+
 q150専用13試験と監査7試験。新旧94経路、11場面・10旅程・23行動、旧受注94経路、途中帰還・敗北、同意・出演料・40G・財布・共有道具を検証する。tools/browser-troupe-apprentice-cast-smoke.mjsは42保存点×4表示条件＝168条件。通常攻略はtools/measure-troupe-apprentice.mjsとQ150_PLAYTEST_RESULTS.jsonの標準Lv5・3編成7経路。
 
 ## q149追記（2026-11-14）

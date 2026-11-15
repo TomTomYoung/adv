@@ -1,6 +1,6 @@
 import {set,give,eq,not} from '../../../story-kit.mjs';
 import {machineSource} from './machine-common.mjs';
-export function machineFirstSource(q){
+export function machineFirstSource(q,{cast=true}={}){
  const {x,node,choice,town,cell,entity,opt,add,route,end,v,transfer,finish}=machineSource(q);
  if(q.number===71){
   town('record','退職者の返却記録窓口','machine_registry');cell('worker_room','整備人の作業室',1,5,11);cell('power','門番の外部電源盤',1,12,3);
@@ -9,6 +9,13 @@ export function machineFirstSource(q){
   route('worker','call','call');add('call','worker_room','整備人を作業室で呼んだ。まだ帰還印は押されていない。',[opt('escort','本人と門番の前へ戻る','returned',{companions:['workerPerson']})]);end('returned','entry','整備人が門番の前へ戻り、自分の帰還印を押した。退職記録と実際の退出を別々に確かめて門番を休ませる。','informed',[give('stamp','workerPerson','entry'),set('returned')]);
   for(const [from,key] of [['entry','power'],['worker','temporary']])route(from,key,'cut');add('cut','power','外部電源を短時間切った。未帰還の番号を消す処理は行わない。',[opt('repair','停止中の門番へ戻って補修する','repaired',{depart:[set('temporaryOff')]})]);end('repaired','entry','停止中に補修を済ませ、電源を戻す。番号の問題は残る。','compromise',[set('temporaryOff',false),set('repaired')]);
   choice('entry','dismantle').effects=[set('dismantled')];
+ }
+ if(q.number===71&&cast){
+  x.entities.workerPerson.character='q071_worker';
+  for(const id of ['call','returned'])node(id).cast=[{entity:'workerPerson',display:{x:50}}];
+  node('returned').text='整備人が門番の前へ戻った。本人の帰還印はまだ押されていない。退職記録と実際の退出を確かめ、本人の押印で門番を休ませる。';
+  node('cut').text='外部電源盤へ来た。補修へ向かう前に電源を短時間切る。未帰還の番号は消さない。';
+  node('repaired').text='外部電源を切ったまま門番の前へ戻った。停止中に補修し、終わってから電源を戻す。番号の問題は残る。';
  }
  if(q.number===72){
   cell('cold','下層の冷えた試験台',2,3,5);town('oilshop','適温油を調合する工房','machine_parts');cell('discard','回収油の封止槽',1,13,2);
