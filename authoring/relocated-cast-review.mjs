@@ -3,6 +3,91 @@
 export const RELOCATED_CAST_REVIEW={
  reviewedAt:'2026-11-15',
  quests:{
+  q073:{
+  "sourceSha256": "2137a7c21687d52ca14a5c0e49606a667b90cbaee84e0cc06e1b2028b4f43d3f",
+  "identityNotes": [
+    "整備側原稿authoring/quests.txt・structures-4.mjsのQ(73)、初版3場面・現行8場面・9旅程・12行動・3結末を精読した。番号が同じ別原稿を出典にせず、依頼人リンと工房の職人を推測で同定しない。",
+    "職人は複製と支えの工房smithに固定し、copy・brace・recovered・takenの4場面だけに表示する。全9旅程の同行者は空のまま、扉・荷重試験位置へ人物を足さない。",
+    "支えの設置supportedは扉への実到着、荷重試験loadTestedはtestedから工房へ出発するときに確定する。原品arm・残る腕otherArms・複製copyArmの保持者を区別する。原品の返却と工房への引渡しはfinishでだけ確定する。",
+    "物語改訂1→2は旧定義で保存全体を検証してからartisanPersonAt=smithだけを補う。既存の保持者定義域・全行動・報酬・旧受注を維持し、表示途中の旧本文・選択肢は保持する。returned・tested・recovered・takenの4本文だけを既存処理の確定時点へ合わせる。"
+  ],
+  "relatedClients": {},
+  "people": {
+    "q073_artisan": {
+      "label": "腕と支えの職人",
+      "status": "connected",
+      "entity": "artisanPerson",
+      "need": "複製製作・支えの準備・二つの工房引渡しの4場面だけへ固定所在の呼称を表示する。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "一本を緩めると扉が少し下がった。",
+      "reason": "避難扉と三本の腕を確かめる場面。工房の職人や依頼人が同席する根拠はない。",
+      "visual": "原品と残る二本はentryにあり、まだ回収していない。"
+    },
+    "support": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "支えが荷重を受けた。",
+      "reason": "隊が扉で支えを据えた段階。職人は工房に残る。",
+      "visual": "supportedと未実施の荷重試験を区別する。"
+    },
+    "copy": {
+      "decision": "person-evidence",
+      "people": [
+        "q073_artisan"
+      ],
+      "evidence": "職人が借りた腕の複製を作った。",
+      "reason": "職人本人が工房で複製を製作する。借りた原品は隊の保持のまま。",
+      "visual": "複製はcopy_returnの出発時に受け取る。原品返却を先取りしない。"
+    },
+    "brace": {
+      "decision": "person-evidence",
+      "people": [
+        "q073_artisan"
+      ],
+      "evidence": "扉の荷重に合う支えを用意した。",
+      "reason": "腕の複製と支えを製作する同じ工房で準備する。職人の工房固定を使い、扉へ同行させない。",
+      "visual": "支えの準備と扉への到着後の設置を別に扱う。"
+    },
+    "returned": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "複製と借りた原品を持って扉へ戻った。",
+      "reason": "扉へ戻るのは隊だけ。原品返却に職人の同席は必要なく、同行もない。",
+      "visual": "finish前は原品・複製を隊が保持し、原品だけが返却される。"
+    },
+    "tested": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "常設の支えの荷重確認位置へ来た。",
+      "reason": "荷重確認へ来るのは隊のみ。職人は工房に固定する。",
+      "visual": "荷重を試してdeliverを選ぶまでloadTestedはfalse。"
+    },
+    "recovered": {
+      "decision": "person-evidence",
+      "people": [
+        "q073_artisan"
+      ],
+      "evidence": "職人への引渡しを確認して依頼を終える。",
+      "reason": "試験結果と回収品を工房の職人に渡す場面。",
+      "visual": "実到着だけでは腕を渡さず、finish時にsmithへ引き渡す。"
+    },
+    "taken": {
+      "decision": "person-evidence",
+      "people": [
+        "q073_artisan"
+      ],
+      "evidence": "職人へ渡す際、",
+      "reason": "支えを用意せず回収した三本を工房の職人に渡す場面。",
+      "visual": "避難扉の支障を申し送り、通常の石段の帰路は変更しない。"
+    }
+  },
+  "next": "新旧保存・原品と複製の保持者・反復相談・全旅程の中断・3結末と一回報酬を検証する。次工程はq074「祈祷の順番」。"
+},
   q072:{
   "sourceSha256": "ac07fae869cd6f0958578d48e712004ff0b5c75bfd5004adf0a15d9693df6f37",
   "identityNotes": [
