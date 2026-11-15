@@ -1,0 +1,1911 @@
+{
+  "schemaVersion": 1,
+  "id": "q149",
+  "number": 149,
+  "title": "売らない剣",
+  "client": "武具商と鍛冶師",
+  "brief": "競売へ運ぶ剣の護衛と取引の立会いをお願いする。",
+  "region": 5,
+  "type": "scene_graph",
+  "recommendedLevel": 5,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。場面内の移動は文章と選択で進む。 サロメの共同依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q149_scene",
+      "title": "売らない剣：武具商と鍛冶師",
+      "points": [
+        {
+          "map": "region_5_f2",
+          "x": 6,
+          "y": 1,
+          "dungeon": "region_5"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q149.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q149.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q149.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q149"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_5"
+    },
+    {
+      "id": "q149_library_entry",
+      "title": "売らない剣の相談卓",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q149.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q149.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q149"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q149.library.visit",
+      "points": [
+        {
+          "dungeon": "region_5",
+          "map": "region_5_f2",
+          "x": 6,
+          "y": 1
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_5_f2",
+      "x": 6,
+      "y": 1,
+      "object": "q149_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "collector": {
+      "label": "展示される剣",
+      "text": "性質を知った収集家が買った。使われる頻度は少なくても、説明を省いた詐欺にはしなかった。",
+      "gold": 105,
+      "xp": 75
+    },
+    "user": {
+      "label": "使われる刃",
+      "text": "剣は農夫の鍬になった。鍛冶師は飾った刃でなく、使って減った先端を測りに来た。",
+      "gold": 105,
+      "xp": 75
+    },
+    "withdraw": {
+      "label": "貸し出す余地",
+      "text": "競売は取り下げた。武具商は損を精算し、鍛冶師と貸出の費用を考え始めた。",
+      "gold": 105,
+      "xp": 75
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/salome/library-second.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b381a39bfadc8f9711c51f",
+    "revision": "game-scenario-1.0",
+    "world": {
+      "truth": "願望の暴露は客を傷つけ得るため、試持ちの性質を説明してから触れさせる。鍛冶師が欲しかったのは最強の剣ではなく、自分の作るものが本当に使われることだ。武具商は損失を避けるため、触れずに買う富豪へ売ろうとする。",
+      "fixedPast": "武具商が、名剣を競売へ運ぶ護衛を募る。鍛冶師は売却に同意しているが、剣は所有者の希望する姿へ変わるため、誰も買えない。競り人が握ると鍬、別の客では裁縫針になり、武器としての値段が付かなくなる。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "武具商と鍛冶師",
+        "beliefsAndGoals": "武具商が、名剣を競売へ運ぶ護衛を募る。鍛冶師は売却に同意しているが、剣は所有者の希望する姿へ変わるため、誰も買えない。競り人が握ると鍬、別の客では裁縫針になり、武器としての値段が付かなくなる。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "競売へ運ぶ剣の護衛と取引の立会いをお願いする。"
+      }
+    ],
+    "conflict": {
+      "design": "運搬→競売の試持ち→収集家へ販売／使い手を探す／売却撤回。使い手への譲渡には製作費をどこで負担するか合意する。高額販売も詐欺でない説明済みの取引として可能だ。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q149.library.entry"
+        },
+        {
+          "id": "user",
+          "script": "q149.library.user"
+        },
+        {
+          "id": "auction",
+          "script": "q149.library.auction"
+        },
+        {
+          "id": "sold",
+          "script": "q149.library.sold"
+        },
+        {
+          "id": "delivered",
+          "script": "q149.library.delivered"
+        },
+        {
+          "id": "withdrawn",
+          "script": "q149.library.withdrawn"
+        },
+        {
+          "id": "user_pay_ready",
+          "script": "q149.library.user_pay_ready"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "競売へ運ぶ剣の護衛と取引の立会いをお願いする。"
+    },
+    "reveal": {
+      "newInformation": "願望の暴露は客を傷つけ得るため、試持ちの性質を説明してから触れさせる。鍛冶師が欲しかったのは最強の剣ではなく、自分の作るものが本当に使われることだ。武具商は損失を避けるため、触れずに買う富豪へ売ろうとする。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q149.scene.entry"
+      },
+      {
+        "id": "user",
+        "script": "q149.scene.user"
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "flags.quest.q149.node",
+        "meaning": "中断時の再開場面",
+        "initial": "entry",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存データ内に保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "競売へ運ぶ剣を相談卓で受け取った。試持ちの性質は、客が触れる前に会場で説明する。",
+        "options": [
+          {
+            "id": "carry",
+            "text": "預かった剣を競売の席へ運ぶ",
+            "to": "auction",
+            "action": "entry_carry"
+          }
+        ]
+      },
+      {
+        "id": "user",
+        "place": "smith",
+        "text": "農夫は鍬として使いたい。鍛冶師は製作費の一部を減らし、残り40Gなら譲ると答えた。使われることが望みだった。",
+        "options": [
+          {
+            "id": "pay",
+            "text": "残り40Gを負担し、農夫への譲渡を取り持つ",
+            "to": "user_pay_ready",
+            "action": "user_pay"
+          },
+          {
+            "id": "collector",
+            "text": "費用を負担せず、説明済みの販売へ戻る",
+            "to": "sold",
+            "action": "user_collector"
+          },
+          {
+            "id": "withdraw",
+            "text": "今回は売らない",
+            "to": "withdrawn",
+            "action": "user_withdraw"
+          }
+        ]
+      },
+      {
+        "id": "auction",
+        "place": "auction",
+        "text": "剣は望む道具へ変わる。試持ちは願望を人前へ見せる可能性があると、触る前に説明した。客が握ると鍬になった。 試持ちを終えた客から品物を受け取り、購入先が決まるまで隊が預かる。",
+        "options": [
+          {
+            "id": "collector",
+            "text": "性質を説明したうえで収集家へ売る",
+            "to": "sold",
+            "action": "auction_collector"
+          },
+          {
+            "id": "user",
+            "text": "道具を使いたい人と製作費を相談する",
+            "to": "user",
+            "action": "auction_user"
+          },
+          {
+            "id": "withdraw",
+            "text": "売却を撤回し、貸出制を考える",
+            "to": "withdrawn",
+            "action": "auction_withdraw"
+          }
+        ]
+      },
+      {
+        "id": "sold",
+        "place": "auction",
+        "text": "競売の席へ剣を持ち、性質を知った収集家の購入意思を確かめて渡す。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@collector",
+            "action": "sold_finish"
+          }
+        ]
+      },
+      {
+        "id": "delivered",
+        "place": "farm",
+        "text": "農夫と庭へ着き、製作費の支払を確かめて道具を渡した。農夫が鍬として使い始める。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@user",
+            "action": "delivered_finish"
+          }
+        ]
+      },
+      {
+        "id": "withdrawn",
+        "place": "storage",
+        "text": "競売の取下げを届け、剣を保管窓口へ返した。損失を精算し、貸出費用の相談を残す。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@withdraw",
+            "action": "withdrawn_finish"
+          }
+        ]
+      },
+      {
+        "id": "user_pay_ready",
+        "place": "smith",
+        "text": "必要な道具を使って準備を整えた。ここから目的地まで運ぶ。",
+        "options": [
+          {
+            "id": "continue",
+            "text": "準備した相手・品物と目的地へ向かう",
+            "to": "delivered",
+            "action": "user_pay_ready_continue"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q149.scene.user",
+        "action": "pay",
+        "option": "pay_supplies",
+        "shortage": "q149.scene.user.pay.shortage",
+        "resume": "q149.scene.user.pay.resume",
+        "cost": {
+          "gold": 40
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q149.visit"
+    ],
+    "entryScript": "q149.library.visit",
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "library-second-ten",
+      "settlement": "salome",
+      "saveRevision": 2,
+      "scope": "書庫後半10件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q149.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q149.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "剣は望む道具へ変わる。試持ちは願望を人前へ見せる可能性があると、触る前に説明した。客が握ると鍬になった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "collector",
+              "text": "性質を説明したうえで収集家へ売る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q149.end.collector"
+                }
+              ]
+            },
+            {
+              "id": "user",
+              "text": "道具を使いたい人と製作費を相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q149.scene.user"
+                }
+              ]
+            },
+            {
+              "id": "withdraw",
+              "text": "売却を撤回し、貸出制を考える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q149.end.withdraw"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q149.scene.user": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q149.node",
+          "value": "user"
+        },
+        {
+          "op": "say",
+          "text": "農夫は鍬として使いたい。鍛冶師は製作費の一部を減らし、残り40Gなら譲ると答えた。使われることが望みだった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "pay",
+              "text": "残り40Gを負担し、農夫への譲渡を取り持つ",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 40
+                  }
+                ]
+              },
+              "requirement": "G 40消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -40
+                },
+                {
+                  "op": "jump",
+                  "script": "q149.end.user"
+                }
+              ]
+            },
+            {
+              "id": "collector",
+              "text": "費用を負担せず、説明済みの販売へ戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q149.end.collector"
+                }
+              ]
+            },
+            {
+              "id": "withdraw",
+              "text": "今回は売らない",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q149.end.withdraw"
+                }
+              ]
+            },
+            {
+              "id": "pay_supplies",
+              "text": "40Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 40
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 40
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q149.scene.user.pay.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q149.end.collector": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q149.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "性質を知った収集家が買った。使われる頻度は少なくても、説明を省いた詐欺にはしなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q149",
+              "outcome": "collector"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q149.end.user": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q149.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "剣は農夫の鍬になった。鍛冶師は飾った刃でなく、使って減った先端を測りに来た。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q149",
+              "outcome": "user"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q149.end.withdraw": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q149.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "競売は取り下げた。武具商は損を精算し、鍛冶師と貸出の費用を考え始めた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q149",
+              "outcome": "withdraw"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q149.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q149"
+          },
+          "cases": [
+            {
+              "equals": "q149.scene.user.pay.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q149.scene.user.pay.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q149.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q149.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "collector",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "性質を知った収集家が買った。使われる頻度は少なくても、説明を省いた詐欺にはしなかった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "user",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "剣は農夫の鍬になった。鍛冶師は飾った刃でなく、使って減った先端を測りに来た。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "withdraw",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "競売は取り下げた。武具商は損を精算し、鍛冶師と貸出の費用を考え始めた。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q149.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q149.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "user",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q149.scene.user"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q149.scene.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q149.scene.user.pay.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q149",
+          "value": "q149.scene.user.pay.resume"
+        },
+        {
+          "op": "say",
+          "text": "40Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q149.scene.user.pay.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q149",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "40Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q149.scene.user"
+        }
+      ]
+    },
+    "q149.library.entry": {
+      "storyQuest": "q149",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q149",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "競売へ運ぶ剣を相談卓で受け取った。試持ちの性質は、客が触れる前に会場で説明する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "carry",
+              "text": "預かった剣を競売の席へ運ぶ",
+              "storyAction": {
+                "quest": "q149",
+                "action": "entry_carry"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q149",
+                  "action": "entry_carry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q149.library.user": {
+      "storyQuest": "q149",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q149",
+          "scene": "user"
+        },
+        {
+          "op": "narrate",
+          "text": "農夫は鍬として使いたい。鍛冶師は製作費の一部を減らし、残り40Gなら譲ると答えた。使われることが望みだった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "pay",
+              "text": "残り40Gを負担し、農夫への譲渡を取り持つ",
+              "storyAction": {
+                "quest": "q149",
+                "action": "user_pay"
+              },
+              "requirement": "gold 40消費",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q149",
+                  "action": "user_pay"
+                },
+                {
+                  "op": "jump",
+                  "script": "q149.library.user_pay_ready"
+                }
+              ]
+            },
+            {
+              "id": "collector",
+              "text": "費用を負担せず、説明済みの販売へ戻る",
+              "storyAction": {
+                "quest": "q149",
+                "action": "user_collector"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q149",
+                  "action": "user_collector"
+                }
+              ]
+            },
+            {
+              "id": "withdraw",
+              "text": "今回は売らない",
+              "storyAction": {
+                "quest": "q149",
+                "action": "user_withdraw"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q149",
+                  "action": "user_withdraw"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q149.library.auction": {
+      "storyQuest": "q149",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q149",
+          "scene": "auction"
+        },
+        {
+          "op": "narrate",
+          "text": "剣は望む道具へ変わる。試持ちは願望を人前へ見せる可能性があると、触る前に説明した。客が握ると鍬になった。 試持ちを終えた客から品物を受け取り、購入先が決まるまで隊が預かる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "collector",
+              "text": "性質を説明したうえで収集家へ売る",
+              "storyAction": {
+                "quest": "q149",
+                "action": "auction_collector"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q149",
+                  "action": "auction_collector"
+                },
+                {
+                  "op": "jump",
+                  "script": "q149.library.sold"
+                }
+              ]
+            },
+            {
+              "id": "user",
+              "text": "道具を使いたい人と製作費を相談する",
+              "storyAction": {
+                "quest": "q149",
+                "action": "auction_user"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q149",
+                  "action": "auction_user"
+                }
+              ]
+            },
+            {
+              "id": "withdraw",
+              "text": "売却を撤回し、貸出制を考える",
+              "storyAction": {
+                "quest": "q149",
+                "action": "auction_withdraw"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q149",
+                  "action": "auction_withdraw"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q149.library.sold": {
+      "storyQuest": "q149",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q149",
+          "scene": "sold"
+        },
+        {
+          "op": "narrate",
+          "text": "競売の席へ剣を持ち、性質を知った収集家の購入意思を確かめて渡す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q149",
+                "action": "sold_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q149",
+                  "action": "sold_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q149.library.end.collector"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q149.library.delivered": {
+      "storyQuest": "q149",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q149",
+          "scene": "delivered"
+        },
+        {
+          "op": "narrate",
+          "text": "農夫と庭へ着き、製作費の支払を確かめて道具を渡した。農夫が鍬として使い始める。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q149",
+                "action": "delivered_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q149",
+                  "action": "delivered_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q149.library.end.user"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q149.library.withdrawn": {
+      "storyQuest": "q149",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q149",
+          "scene": "withdrawn"
+        },
+        {
+          "op": "narrate",
+          "text": "競売の取下げを届け、剣を保管窓口へ返した。損失を精算し、貸出費用の相談を残す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q149",
+                "action": "withdrawn_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q149",
+                  "action": "withdrawn_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q149.library.end.withdraw"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q149.library.user_pay_ready": {
+      "storyQuest": "q149",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q149",
+          "scene": "user_pay_ready"
+        },
+        {
+          "op": "narrate",
+          "text": "必要な道具を使って準備を整えた。ここから目的地まで運ぶ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "continue",
+              "text": "準備した相手・品物と目的地へ向かう",
+              "storyAction": {
+                "quest": "q149",
+                "action": "user_pay_ready_continue"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q149",
+                  "action": "user_pay_ready_continue"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q149.library.end.collector": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "性質を知った収集家が買った。使われる頻度は少なくても、説明を省いた詐欺にはしなかった。"
+        },
+        {
+          "op": "add",
+          "target": "vars.collector",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q149",
+          "outcome": "collector"
+        }
+      ]
+    },
+    "q149.library.end.user": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "剣は農夫の鍬になった。鍛冶師は飾った刃でなく、使って減った先端を測りに来た。"
+        },
+        {
+          "op": "add",
+          "target": "vars.user",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q149",
+          "outcome": "user"
+        }
+      ]
+    },
+    "q149.library.end.withdraw": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "競売は取り下げた。武具商は損を精算し、鍛冶師と貸出の費用を考え始めた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.withdraw",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q149",
+          "outcome": "withdraw"
+        }
+      ]
+    },
+    "q149.library.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q149"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q149.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q149.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q149.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "collector",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "性質を知った収集家が買った。使われる頻度は少なくても、説明を省いた詐欺にはしなかった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "user",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "剣は農夫の鍬になった。鍛冶師は飾った刃でなく、使って減った先端を測りに来た。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "withdraw",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "競売は取り下げた。武具商は損を精算し、鍛冶師と貸出の費用を考え始めた。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q149"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q149.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q149.library.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "user",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q149.library.user"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "auction",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q149.library.auction"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "sold",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q149.library.sold"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "delivered",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q149.library.delivered"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "withdrawn",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q149.library.withdrawn"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "user_pay_ready",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q149.library.user_pay_ready"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q149.library.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "売らない剣の相談卓",
+      "auction": "剣の競売と試持ちの席",
+      "smith": "製作費を相談する工房",
+      "farm": "鍬を受け取る農夫の庭",
+      "storage": "取り下げ品の保管窓口",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "auction"
+      ],
+      [
+        "transit",
+        "smith"
+      ],
+      [
+        "transit",
+        "farm"
+      ],
+      [
+        "transit",
+        "storage"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "auction",
+          "smith",
+          "farm",
+          "storage",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "collector",
+          "user",
+          "withdraw"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "costPaid": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "costPaid"
+      },
+      "sold": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "sold"
+      },
+      "delivered": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "delivered"
+      },
+      "withdrawn": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "withdrawn"
+      },
+      "swordAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "auction",
+          "smith",
+          "farm",
+          "storage",
+          "transit",
+          "party",
+          "farmer",
+          "collector"
+        ],
+        "meaning": "sword の所在または保持者"
+      },
+      "farmerAt": {
+        "type": "enum",
+        "initial": "auction",
+        "values": [
+          "entry",
+          "auction",
+          "smith",
+          "farm",
+          "storage",
+          "transit"
+        ],
+        "meaning": "farmer の所在または保持者"
+      },
+      "collectorAt": {
+        "type": "enum",
+        "initial": "auction",
+        "values": [
+          "entry",
+          "auction",
+          "smith",
+          "farm",
+          "storage",
+          "transit"
+        ],
+        "meaning": "collector の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "sword": {
+        "holder": "swordAt",
+        "kind": "item"
+      },
+      "farmer": {
+        "holder": "farmerAt",
+        "kind": "person"
+      },
+      "collector": {
+        "holder": "collectorAt",
+        "kind": "person"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "願望の暴露は客を傷つけ得るため、試持ちの性質を説明してから触れさせる。鍛冶師が欲しかったのは最強の剣ではなく、自分の作るものが本当に使われることだ。武具商は損失を避けるため、触れずに買う富豪へ売ろうとする。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "売らない剣の相談卓",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "user": {
+        "title": "製作費を相談する工房",
+        "place": "smith",
+        "cast": [],
+        "requires": true
+      },
+      "auction": {
+        "title": "剣の競売と試持ちの席",
+        "place": "auction",
+        "cast": [],
+        "requires": true
+      },
+      "sold": {
+        "title": "剣の競売と試持ちの席",
+        "place": "auction",
+        "cast": [],
+        "requires": true
+      },
+      "delivered": {
+        "title": "鍬を受け取る農夫の庭",
+        "place": "farm",
+        "cast": [],
+        "requires": true
+      },
+      "withdrawn": {
+        "title": "取り下げ品の保管窓口",
+        "place": "storage",
+        "cast": [],
+        "requires": true
+      },
+      "user_pay_ready": {
+        "title": "製作費を相談する工房",
+        "place": "smith",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_carry": {
+        "from": [
+          "entry"
+        ],
+        "to": "auction",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "auction"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "auction",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "sword",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      },
+      "user_pay": {
+        "from": [
+          "user"
+        ],
+        "to": "user_pay_ready",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "costPaid",
+            "value": true
+          }
+        ],
+        "cost": {
+          "gold": 40
+        },
+        "once": false
+      },
+      "user_collector": {
+        "from": [
+          "user"
+        ],
+        "to": "sold",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "farmer"
+            ],
+            "path": [
+              "transit",
+              "auction"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "auction",
+          "companions": [
+            "farmer"
+          ]
+        },
+        "depart": []
+      },
+      "user_withdraw": {
+        "from": [
+          "user"
+        ],
+        "to": "withdrawn",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "storage"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "storage",
+          "companions": []
+        },
+        "depart": []
+      },
+      "auction_collector": {
+        "from": [
+          "auction"
+        ],
+        "to": "sold",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "auction_user": {
+        "from": [
+          "auction"
+        ],
+        "to": "user",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "farmer"
+            ],
+            "path": [
+              "transit",
+              "smith"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "smith",
+          "companions": [
+            "farmer"
+          ]
+        },
+        "depart": []
+      },
+      "auction_withdraw": {
+        "from": [
+          "auction"
+        ],
+        "to": "withdrawn",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "storage"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "storage",
+          "companions": []
+        },
+        "depart": []
+      },
+      "sold_finish": {
+        "from": [
+          "sold"
+        ],
+        "ending": "collector",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "sword",
+            "from": "party",
+            "to": "collector"
+          },
+          {
+            "op": "set",
+            "key": "sold",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "collector"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "delivered_finish": {
+        "from": [
+          "delivered"
+        ],
+        "ending": "user",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "sword",
+            "from": "party",
+            "to": "farmer"
+          },
+          {
+            "op": "set",
+            "key": "delivered",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "user"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "withdrawn_finish": {
+        "from": [
+          "withdrawn"
+        ],
+        "ending": "withdraw",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "sword",
+            "from": "party",
+            "to": "storage"
+          },
+          {
+            "op": "set",
+            "key": "withdrawn",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "withdraw"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "user_pay_ready_continue": {
+        "from": [
+          "user_pay_ready"
+        ],
+        "to": "delivered",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "farmer"
+            ],
+            "path": [
+              "transit",
+              "farm"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "farm",
+          "companions": [
+            "farmer"
+          ]
+        },
+        "depart": []
+      }
+    },
+    "endings": {
+      "collector": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q149.values.resolution"
+            },
+            "right": "collector"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q149.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q149.values.partyAt"
+                },
+                "right": "auction"
+              }
+            ]
+          }
+        ]
+      },
+      "user": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q149.values.resolution"
+            },
+            "right": "user"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q149.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q149.values.partyAt"
+                },
+                "right": "farm"
+              }
+            ]
+          }
+        ]
+      },
+      "withdraw": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q149.values.resolution"
+            },
+            "right": "withdraw"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q149.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q149.values.partyAt"
+                },
+                "right": "storage"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_5",
+        "map": "region_5_f2",
+        "x": 6,
+        "y": 1
+      },
+      "auction": {
+        "kind": "town",
+        "location": "library_auction"
+      },
+      "smith": {
+        "kind": "town",
+        "location": "library_tailor"
+      },
+      "farm": {
+        "kind": "town",
+        "location": "library_garden"
+      },
+      "storage": {
+        "kind": "town",
+        "location": "e2_storage"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "salome",
+  "receptionLocations": [
+    "salome_board"
+  ]
+}

@@ -1,0 +1,48 @@
+name: Validate q149 sword delivery in Chromium
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'data/**'
+      - 'authoring/editions/e2/salome/library-second.mjs'
+      - 'authoring/relocated-character-art.mjs'
+      - 'tools/build-library-second-quests.mjs'
+      - 'tools/browser-unsold-sword-cast-smoke.mjs'
+      - 'tools/unsold-sword-art-fixtures.mjs'
+      - 'tools/character-art-browser.mjs'
+      - 'tests/unsold-sword-cast.test.mjs'
+      - 'tests/fixtures/e2-q149-before-cast.json'
+      - 'assets/images/**'
+      - '.github/workflows/q149-cast.yml'
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+permissions:
+  contents: read
+jobs:
+  q149-browser:
+    runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned browser driver and verify Japanese fonts
+        run: |
+          npm install --no-save --package-lock=false playwright@1.58.2
+          test -n "$(fc-list :lang=ja)"
+      - name: Check sword custody, farmer and smith, payments and older saves
+        run: ADV_BROWSER_OUTPUT=/tmp/adv-unsold-sword-art-browser node tools/browser-unsold-sword-cast-smoke.mjs
+      - name: Keep q149 checkpoints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: q149-cast-checkpoints
+          path: /tmp/adv-unsold-sword-art-browser
+          if-no-files-found: error
+          retention-days: 7

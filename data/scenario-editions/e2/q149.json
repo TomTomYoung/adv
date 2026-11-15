@@ -239,7 +239,7 @@
       {
         "id": "entry",
         "place": "entry",
-        "text": "競売へ運ぶ剣を相談卓で受け取った。試持ちの性質は、客が触れる前に会場で説明する。",
+        "text": "競売へ運ぶ剣を相談卓で確かめた。試持ちの性質は、客が触れる前に会場で説明する。",
         "options": [
           {
             "id": "carry",
@@ -315,7 +315,7 @@
       {
         "id": "delivered",
         "place": "farm",
-        "text": "農夫と庭へ着き、製作費の支払を確かめて道具を渡した。農夫が鍬として使い始める。",
+        "text": "農夫と庭へ着いた。製作費の支払を確かめ、隊が預かる道具を渡す。農夫は鍬として使うつもりだ。",
         "options": [
           {
             "id": "finish",
@@ -328,7 +328,7 @@
       {
         "id": "withdrawn",
         "place": "storage",
-        "text": "競売の取下げを届け、剣を保管窓口へ返した。損失を精算し、貸出費用の相談を残す。",
+        "text": "剣を預かったまま保管窓口へ着いた。競売の取下げを届けて返却し、損失を精算する。貸出費用の相談はその後に残る。",
         "options": [
           {
             "id": "finish",
@@ -377,7 +377,7 @@
     "entryScript": "q149.library.visit",
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -386,7 +386,636 @@
       "saveRevision": 2,
       "scope": "書庫後半10件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "売らない剣の相談卓",
+            "auction": "剣の競売と試持ちの席",
+            "smith": "製作費を相談する工房",
+            "farm": "鍬を受け取る農夫の庭",
+            "storage": "取り下げ品の保管窓口",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "auction"
+            ],
+            [
+              "transit",
+              "smith"
+            ],
+            [
+              "transit",
+              "farm"
+            ],
+            [
+              "transit",
+              "storage"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "auction",
+                "smith",
+                "farm",
+                "storage",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "collector",
+                "user",
+                "withdraw"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "costPaid": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "costPaid"
+            },
+            "sold": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "sold"
+            },
+            "delivered": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "delivered"
+            },
+            "withdrawn": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "withdrawn"
+            },
+            "swordAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "auction",
+                "smith",
+                "farm",
+                "storage",
+                "transit",
+                "party",
+                "farmer",
+                "collector"
+              ],
+              "meaning": "sword の所在または保持者"
+            },
+            "farmerAt": {
+              "type": "enum",
+              "initial": "auction",
+              "values": [
+                "entry",
+                "auction",
+                "smith",
+                "farm",
+                "storage",
+                "transit"
+              ],
+              "meaning": "farmer の所在または保持者"
+            },
+            "collectorAt": {
+              "type": "enum",
+              "initial": "auction",
+              "values": [
+                "entry",
+                "auction",
+                "smith",
+                "farm",
+                "storage",
+                "transit"
+              ],
+              "meaning": "collector の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "sword": {
+              "holder": "swordAt",
+              "kind": "item"
+            },
+            "farmer": {
+              "holder": "farmerAt",
+              "kind": "person"
+            },
+            "collector": {
+              "holder": "collectorAt",
+              "kind": "person"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "願望の暴露は客を傷つけ得るため、試持ちの性質を説明してから触れさせる。鍛冶師が欲しかったのは最強の剣ではなく、自分の作るものが本当に使われることだ。武具商は損失を避けるため、触れずに買う富豪へ売ろうとする。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "売らない剣の相談卓",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "user": {
+              "title": "製作費を相談する工房",
+              "place": "smith",
+              "cast": [],
+              "requires": true
+            },
+            "auction": {
+              "title": "剣の競売と試持ちの席",
+              "place": "auction",
+              "cast": [],
+              "requires": true
+            },
+            "sold": {
+              "title": "剣の競売と試持ちの席",
+              "place": "auction",
+              "cast": [],
+              "requires": true
+            },
+            "delivered": {
+              "title": "鍬を受け取る農夫の庭",
+              "place": "farm",
+              "cast": [],
+              "requires": true
+            },
+            "withdrawn": {
+              "title": "取り下げ品の保管窓口",
+              "place": "storage",
+              "cast": [],
+              "requires": true
+            },
+            "user_pay_ready": {
+              "title": "製作費を相談する工房",
+              "place": "smith",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_carry": {
+              "from": [
+                "entry"
+              ],
+              "to": "auction",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "auction"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "auction",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "sword",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "user_pay": {
+              "from": [
+                "user"
+              ],
+              "to": "user_pay_ready",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "costPaid",
+                  "value": true
+                }
+              ],
+              "cost": {
+                "gold": 40
+              },
+              "once": false
+            },
+            "user_collector": {
+              "from": [
+                "user"
+              ],
+              "to": "sold",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "farmer"
+                  ],
+                  "path": [
+                    "transit",
+                    "auction"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "auction",
+                "companions": [
+                  "farmer"
+                ]
+              },
+              "depart": []
+            },
+            "user_withdraw": {
+              "from": [
+                "user"
+              ],
+              "to": "withdrawn",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "storage"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "storage",
+                "companions": []
+              },
+              "depart": []
+            },
+            "auction_collector": {
+              "from": [
+                "auction"
+              ],
+              "to": "sold",
+              "requires": true,
+              "effects": [],
+              "once": false
+            },
+            "auction_user": {
+              "from": [
+                "auction"
+              ],
+              "to": "user",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "farmer"
+                  ],
+                  "path": [
+                    "transit",
+                    "smith"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "smith",
+                "companions": [
+                  "farmer"
+                ]
+              },
+              "depart": []
+            },
+            "auction_withdraw": {
+              "from": [
+                "auction"
+              ],
+              "to": "withdrawn",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "storage"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "storage",
+                "companions": []
+              },
+              "depart": []
+            },
+            "sold_finish": {
+              "from": [
+                "sold"
+              ],
+              "ending": "collector",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "sword",
+                  "from": "party",
+                  "to": "collector"
+                },
+                {
+                  "op": "set",
+                  "key": "sold",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "collector"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "delivered_finish": {
+              "from": [
+                "delivered"
+              ],
+              "ending": "user",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "sword",
+                  "from": "party",
+                  "to": "farmer"
+                },
+                {
+                  "op": "set",
+                  "key": "delivered",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "user"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "withdrawn_finish": {
+              "from": [
+                "withdrawn"
+              ],
+              "ending": "withdraw",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "sword",
+                  "from": "party",
+                  "to": "storage"
+                },
+                {
+                  "op": "set",
+                  "key": "withdrawn",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "withdraw"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "user_pay_ready_continue": {
+              "from": [
+                "user_pay_ready"
+              ],
+              "to": "delivered",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "farmer"
+                  ],
+                  "path": [
+                    "transit",
+                    "farm"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "farm",
+                "companions": [
+                  "farmer"
+                ]
+              },
+              "depart": []
+            }
+          },
+          "endings": {
+            "collector": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q149.values.resolution"
+                  },
+                  "right": "collector"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q149.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q149.values.partyAt"
+                      },
+                      "right": "auction"
+                    }
+                  ]
+                }
+              ]
+            },
+            "user": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q149.values.resolution"
+                  },
+                  "right": "user"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q149.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q149.values.partyAt"
+                      },
+                      "right": "farm"
+                    }
+                  ]
+                }
+              ]
+            },
+            "withdraw": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q149.values.resolution"
+                  },
+                  "right": "withdraw"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q149.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q149.values.partyAt"
+                      },
+                      "right": "storage"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_5",
+              "map": "region_5_f2",
+              "x": 6,
+              "y": 1
+            },
+            "auction": {
+              "kind": "town",
+              "location": "library_auction"
+            },
+            "smith": {
+              "kind": "town",
+              "location": "library_tailor"
+            },
+            "farm": {
+              "kind": "town",
+              "location": "library_garden"
+            },
+            "storage": {
+              "kind": "town",
+              "location": "e2_storage"
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "smithPersonAt",
+            "value": "smith"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q149.scene.entry": {
@@ -760,7 +1389,7 @@
         },
         {
           "op": "narrate",
-          "text": "競売へ運ぶ剣を相談卓で受け取った。試持ちの性質は、客が触れる前に会場で説明する。"
+          "text": "競売へ運ぶ剣を相談卓で確かめた。試持ちの性質は、客が触れる前に会場で説明する。"
         },
         {
           "op": "choice",
@@ -976,7 +1605,7 @@
         },
         {
           "op": "narrate",
-          "text": "農夫と庭へ着き、製作費の支払を確かめて道具を渡した。農夫が鍬として使い始める。"
+          "text": "農夫と庭へ着いた。製作費の支払を確かめ、隊が預かる道具を渡す。農夫は鍬として使うつもりだ。"
         },
         {
           "op": "choice",
@@ -1015,7 +1644,7 @@
         },
         {
           "op": "narrate",
-          "text": "競売の取下げを届け、剣を保管窓口へ返した。損失を精算し、貸出費用の相談を残す。"
+          "text": "剣を預かったまま保管窓口へ着いた。競売の取下げを届けて返却し、損失を精算する。貸出費用の相談はその後に残る。"
         },
         {
           "op": "choice",
@@ -1411,6 +2040,14 @@
           "transit"
         ],
         "meaning": "collector の所在または保持者"
+      },
+      "smithPersonAt": {
+        "type": "enum",
+        "initial": "smith",
+        "values": [
+          "smith"
+        ],
+        "meaning": "smithPerson の所在または保持者"
       }
     },
     "entities": {
@@ -1424,11 +2061,18 @@
       },
       "farmer": {
         "holder": "farmerAt",
-        "kind": "person"
+        "kind": "person",
+        "character": "q149_farmer"
       },
       "collector": {
         "holder": "collectorAt",
-        "kind": "person"
+        "kind": "person",
+        "character": "q149_collector"
+      },
+      "smithPerson": {
+        "holder": "smithPersonAt",
+        "kind": "person",
+        "character": "q149_smithPerson"
       }
     },
     "propositions": {
@@ -1448,25 +2092,65 @@
       "user": {
         "title": "製作費を相談する工房",
         "place": "smith",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "farmer",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "smithPerson",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "auction": {
         "title": "剣の競売と試持ちの席",
         "place": "auction",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "farmer",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "sold": {
         "title": "剣の競売と試持ちの席",
         "place": "auction",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "farmer",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "collector",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       },
       "delivered": {
         "title": "鍬を受け取る農夫の庭",
         "place": "farm",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "farmer",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "withdrawn": {
@@ -1478,7 +2162,20 @@
       "user_pay_ready": {
         "title": "製作費を相談する工房",
         "place": "smith",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "farmer",
+            "display": {
+              "x": 31
+            }
+          },
+          {
+            "entity": "smithPerson",
+            "display": {
+              "x": 69
+            }
+          }
+        ],
         "requires": true
       }
     },
@@ -1902,7 +2599,7 @@
         "location": "e2_storage"
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "salome",
   "receptionLocations": [

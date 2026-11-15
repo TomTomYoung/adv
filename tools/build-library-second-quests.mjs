@@ -31,6 +31,14 @@ export async function buildLibrarySecondQuests({check=false}={}){
    quest.story.revision=2;quest.model.edition.revision=2;
    quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[{key:'recipientAt',value:'receiver'}]}];
   }
+  if(n===149){
+   const previous=compileRelocatedQuest(first,source(first,{cast:false}),options).story;
+   // The added person must not broaden the old sword/actor holder domains.
+   for(const [key,entry] of Object.entries(previous.registry))quest.story.registry[key]=structuredClone(entry);
+   quest.story.registry.smithPersonAt.values=['smith'];
+   quest.story.revision=2;quest.model.edition.revision=2;
+   quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[{key:'smithPersonAt',value:'smith'}]}];
+  }
   quests.push(quest);
  }
  const outcomes=quests.reduce((n,q)=>n+Object.keys(q.outcomes).length,0);

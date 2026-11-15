@@ -184,6 +184,17 @@ export function librarySecondSource(q,{cast=true}={}){
   route('user','pay','delivered',{companions:['farmer'],preparation:[set('costPaid')]});end('delivered','farm','農夫と庭へ着き、製作費の支払を確かめて道具を渡した。農夫が鍬として使い始める。','user',[give('sword','party','farmer'),set('delivered')]);
   for(const from of ['auction','user'])route(from,'withdraw','withdrawn');end('withdrawn','storage','競売の取下げを届け、剣を保管窓口へ返した。損失を精算し、貸出費用の相談を残す。','withdraw',[give('sword','party','storage'),set('withdrawn')]);
  }
+ if(q.number===149&&cast){
+  entity('smithPerson','smith','person');
+  for(const id of ['farmer','collector','smithPerson'])x.entities[id].character='q149_'+id;
+  const casts={auction:['farmer'],user:['farmer','smithPerson'],sold:['farmer','collector'],delivered:['farmer']};
+  const display=people=>people.map((entity,i)=>({entity,display:{x:people.length===2?[31,69][i]:50}}));
+  for(const [scene,people] of Object.entries(casts))node(scene).cast=display(people);
+  choice('user','pay').readyCast=display(['farmer','smithPerson']);
+  node('entry').text='競売へ運ぶ剣を相談卓で確かめた。試持ちの性質は、客が触れる前に会場で説明する。';
+  node('delivered').text='農夫と庭へ着いた。製作費の支払を確かめ、隊が預かる道具を渡す。農夫は鍬として使うつもりだ。';
+  node('withdrawn').text='剣を預かったまま保管窓口へ着いた。競売の取下げを届けて返却し、損失を精算する。貸出費用の相談はその後に残る。';
+ }
  if(q.number===150){
   town('practice','三人の仕事を見る稽古場','library_rehearsal');stage();town('contracts','出演料と弟子入りの相談窓口','library_registry');town('tools','共有道具の受取工房','library_tailor');
   const cast=['ritz','porterPerson','thiefPerson','singerPerson'];for(const id of cast)entity(id,'entry','person');entity('sharedTools','tools');entity('walletOwner','stage','person');entity('wallet','stage');
