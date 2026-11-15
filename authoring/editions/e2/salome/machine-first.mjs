@@ -80,6 +80,13 @@ export function machineFirstSource(q,{cast=true}={}){
   route('entry','medicine','moved',{depart:[give('medicineBox','entry','party')],effects:[give('medicineBox','party','fridge'),set('protected')]});route('control','move','fetch',{when:not(eq(v('protected'),true))});add('fetch','entry','保育室へ戻って薬を受け取った。別の冷蔵庫で受領されるまでは移送を終えていない。',[opt('carry','薬を冷蔵庫へ運ぶ','moved',{depart:[give('medicineBox','entry','party')],effects:[give('medicineBox','party','fridge'),set('protected')]})]);
   route('moved','stop','stopped');end('stopped','entry','薬の移送記録を確認して、人形の歌を止めた。','compromise',[set('stopped')]);route('control','rewire','recorded',{depart:[set('separateCircuit'),give('songRecord','control_place','party')]});end('recorded','record','空調を別回線へ移した試験記録と、歌の録音を預けた。','informed',[give('songRecord','party','record'),set('protected'),set('recorded')]);choice('entry','off').effects=[set('stopped'),set('medicineLost')];
  }
+ if(q.number===76&&cast){
+  // The nursery is explicitly unoccupied. Do not infer an offstage cast from
+  // the client or ending text; keep medication receipt and song storage distinct.
+  node('fetch').text='保育室へ戻った。薬は棚にあり、ここから携行して別回線の冷蔵庫へ運ぶ。受領されるまでは移送を終えていない。';
+  node('stopped').text='薬の移送記録を持って保育室へ戻った。別回線の冷蔵庫での受領を確かめてから、人形の歌を止める。';
+  node('recorded').text='空調を別回線へ移した試験記録と歌の録音を持って、保管室へ着いた。録音はまだ隊が保持しており、預けてから依頼を終える。';
+ }
  if(q.number===77){
   cell('clinic','停電した隣の診療室',2,14,1);cell('detour','柵の外を回る巡礼路',2,5,3);entity('lamps','entry');choice('entry','cutpower').effects=[set('outage')];
   route('outage','lamps','delivered',{depart:[give('lamps','entry','party')],effects:[give('lamps','party','clinic'),set('lampsDelivered')]});add('delivered','clinic','診療室で仮灯を受け取り、手元が見えることを確かめた。壁の修理はこれから行う。',[opt('return','放電壁へ戻って絶縁と壁を直す','repaired')]);end('repaired','entry','配線を絶縁して壁を閉じ、試験後に通電を戻した。','informed',[set('repaired'),set('outage',false)]);
