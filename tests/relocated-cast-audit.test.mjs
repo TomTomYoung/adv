@@ -6,7 +6,7 @@ import {auditRelocatedCast,loadRelocatedCastQuests,relocatedCastFingerprint} fro
 const quests=await loadRelocatedCastQuests();
 test('cast audit distinguishes measured empty casts, reviewed scenes and candidate roles',()=>{
  const report=auditRelocatedCast(quests);
- assert.deepEqual(report.summary,{"quests":100,"scenes":753,"emptyCastScenes":295,"personEntities":145,"characterLinkedEntities":136,"reviewedQuests":81,"reviewedScenes":625,"noPersonEvidenceScenes":166,"personEvidenceScenes":459,"candidateRoles":1,"connectedRoles":183,"unreviewedScenes":128});
+ assert.deepEqual(report.summary,{"quests":100,"scenes":753,"emptyCastScenes":294,"personEntities":147,"characterLinkedEntities":138,"reviewedQuests":82,"reviewedScenes":630,"noPersonEvidenceScenes":170,"personEvidenceScenes":460,"candidateRoles":1,"connectedRoles":185,"unreviewedScenes":123});
  const scaleQuest=report.quests.find(q=>q.id==='q148');
  assert.deepEqual(Object.keys(scaleQuest.review.people),['q148_egi','q148_customer']);
  assert.deepEqual(Object.fromEntries(scaleQuest.scenes.map(s=>[s.id,s.cast.map(c=>c.entity)])),{
@@ -67,7 +67,8 @@ test('cast audit distinguishes measured empty casts, reviewed scenes and candida
  assert.ok(lateDelivery.scenes.filter(s=>s.cast.length).every(s=>s.cast[0].entity==='recipient'));
  const obituary=report.quests.find(q=>q.id==='q044');assert.deepEqual(obituary.scenes.filter(s=>s.review.people.length).map(s=>s.id),['safe','escaped','protected','safe_refuge']);
  assert.ok(report.regions.every(r=>r.quests===20));
- assert.equal(report.quests.find(q=>q.id==='q072').scenes[0].review,null);
+ assert.ok(report.quests.some(q=>!q.review&&q.scenes.every(s=>s.review===null)));
+ const oil=report.quests.find(q=>q.id==='q072');assert.deepEqual(oil.scenes.filter(s=>s.cast.length).map(s=>s.id),['oil']);assert.equal(oil.scenes.find(s=>s.id==='oil').cast.length,2);
  const gate=report.quests.find(q=>q.id==='q071');
  assert.deepEqual(gate.scenes.filter(s=>s.cast.length).map(s=>s.id),['call','returned']);
  assert.equal(gate.review.people.q071_worker.entity,'workerPerson');

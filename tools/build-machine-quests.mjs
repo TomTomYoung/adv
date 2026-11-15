@@ -13,6 +13,19 @@ export async function buildMachineQuests({check=false}={}){
   const first=JSON.parse(await fs.readFile(path.join(root,`data/quests/q${String(n).padStart(3,'0')}.json`),'utf8')),source=n<100?machineFirstSource:machineSecondSource;
   const options={prefix:'machine',eventPrefix:'machine',settlement:'salome',settlementName:'サロメ',board:'salome_board',boardName:'サロメの共同依頼所',source:'authoring/editions/e2/salome/'+(n<100?'machine-first':'machine-second')+'.mjs',stage:'machine-twenty',scope:'機関廟20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。',preserveAcceptedRoute:true,battle:'boss_8'};
   const quest=compileRelocatedQuest(first,source(first),options);
+  if(n===72){
+   const previous=compileRelocatedQuest(first,source(first,{cast:false}),options).story;
+   for(const [key,entry] of Object.entries(previous.registry))quest.story.registry[key]=structuredClone(entry);
+   for(const key of ['artisanPersonAt','priestPersonAt'])quest.story.registry[key].values=['oilshop'];
+   quest.story.revision=2;quest.model.edition.revision=2;
+   quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[
+    {key:'artisanPersonAt',value:'oilshop'},{key:'priestPersonAt',value:'oilshop'},
+    {key:'oilSampleAt',value:'party',when:and(eq(ref('stories.q072.values.oilSampleAt'),'entry'),{op:'or',args:[
+     {op:'in',left:'entry_heat',right:ref('stories.q072.events')},
+     and(eq(ref('journey.quest'),'q072'),eq(ref('journey.action'),'entry_heat'))
+    ]})}
+   ]}];
+  }
   if(n===171)quest.story.scenes.watch_ward_ready.cast=[{entity:'dai',display:{x:50}}];
   if(n===172){
    quest.story.scenes.well_seal_ready.cast=[{entity:'lui',display:{x:50}}];

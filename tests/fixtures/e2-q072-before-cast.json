@@ -1,0 +1,2763 @@
+{
+  "schemaVersion": 1,
+  "id": "q072",
+  "number": 72,
+  "title": "油の洗礼",
+  "client": "機関司祭のイオ",
+  "brief": "新しい洗礼油で機械が震える。聖別が足りないのか調べてください。",
+  "region": 8,
+  "type": "authored_progression",
+  "recommendedLevel": 8,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。 サロメの共同依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q072_clue_a",
+      "title": "油の洗礼：現場の痕跡",
+      "points": [
+        {
+          "map": "region_8_f1",
+          "x": 3,
+          "y": 5,
+          "dungeon": "region_8"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q072.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q072.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q072"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q072"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_8"
+    },
+    {
+      "id": "q072_clue_b",
+      "title": "油の洗礼：記録と証言",
+      "points": [
+        {
+          "map": "region_8_f1",
+          "x": 13,
+          "y": 2,
+          "dungeon": "region_8"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q072.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q072.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q072"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q072"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_8"
+    },
+    {
+      "id": "q072_decision",
+      "title": "油の洗礼：決着の場",
+      "points": [
+        {
+          "map": "region_8_f1",
+          "x": 11,
+          "y": 9,
+          "dungeon": "region_8"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q072.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q072.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q072.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q072"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_8"
+    },
+    {
+      "id": "q072_machine_entry",
+      "title": "油の洗礼の現場受付",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q072.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q072.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q072"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q072.machine.visit",
+      "points": [
+        {
+          "dungeon": "region_8",
+          "map": "region_8_f1",
+          "x": 11,
+          "y": 9
+        }
+      ]
+    },
+    {
+      "id": "q072_machine_cold",
+      "title": "下層の冷えた試験台",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "cold",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q072.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q072.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q072"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q072.machine.visit",
+      "points": [
+        {
+          "dungeon": "region_8",
+          "map": "region_8_f2",
+          "x": 3,
+          "y": 5
+        }
+      ]
+    },
+    {
+      "id": "q072_machine_discard",
+      "title": "回収油の封止槽",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "discard",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q072.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q072.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q072"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q072.machine.visit",
+      "points": [
+        {
+          "dungeon": "region_8",
+          "map": "region_8_f1",
+          "x": 13,
+          "y": 2
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_8_f1",
+      "x": 3,
+      "y": 5,
+      "object": "q072_clue_a",
+      "role": "clue_a"
+    },
+    {
+      "map": "region_8_f1",
+      "x": 13,
+      "y": 2,
+      "object": "q072_clue_b",
+      "role": "clue_b"
+    },
+    {
+      "map": "region_8_f1",
+      "x": 11,
+      "y": 9,
+      "object": "q072_decision",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "下層用油へ交換し、儀式を保守の合否から分ける",
+      "text": "機械は静まった。司祭は祝福と整備の記録を別々に付ける。",
+      "gold": 141,
+      "xp": 124
+    },
+    "contract": {
+      "label": "今ある油を全て廃棄する",
+      "text": "危険は止まった。再稼働まで、手で鐘を鳴らす日が続く。",
+      "gold": 161,
+      "xp": 96
+    },
+    "compromise": {
+      "label": "暖房を維持し、今の油を使い続ける",
+      "text": "当座は動いた。燃料代を見た司祭が、次の発注を変える。",
+      "gold": 91,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/salome/machine-first.mjs",
+    "world": {
+      "truth": "油の粘度が寒い下層に合わず、祈祷の有無と故障は関係していない。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "油の粘度が寒い下層に合わず、祈祷の有無と故障は関係していない。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "新しい洗礼油で機械が震える。聖別が足りないのか調べてください。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "機関司祭のイオ",
+        "observation": "新しい洗礼油で機械が震える。聖別が足りないのか調べてください。",
+        "belief": "新しい洗礼油で機械が震える。聖別が足りないのか調べてください。",
+        "goal": "新しい洗礼油で機械が震える。聖別が足りないのか調べてください。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "新しい洗礼油で機械が震える。聖別が足りないのか調べてください。",
+      "progression": "同じ油を温度別に試す作業と、儀礼の扱いを決める相談を独立させる。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q072.machine.entry"
+        },
+        {
+          "id": "warm",
+          "script": "q072.machine.warm"
+        },
+        {
+          "id": "oil",
+          "script": "q072.machine.oil"
+        },
+        {
+          "id": "changed",
+          "script": "q072.machine.changed"
+        },
+        {
+          "id": "discarded",
+          "script": "q072.machine.discarded"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "新しい洗礼油で機械が震える。聖別が足りないのか調べてください。",
+      "openQuestion": "油の洗礼の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "evidenceRecode",
+      "newInformation": "油の粘度が寒い下層に合わず、祈祷の有無と故障は関係していない。",
+      "retroactiveTargets": [
+        "oil"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q072.flow.entry"
+      },
+      {
+        "id": "warm",
+        "script": "q072.flow.warm"
+      },
+      {
+        "id": "oil",
+        "script": "q072.flow.oil"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q072.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "同じ油を温度別に試す作業と、儀礼の扱いを決める相談を独立させる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "同じ油を温度別に試す作業と、儀礼の扱いを決める相談を独立させる。",
+    "flowVersion": 2,
+    "entryScript": "q072.machine.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "同じ祈祷を受けた機械でも、寒い下層のものだけ震える。",
+        "options": [
+          {
+            "id": "heat",
+            "text": "震える機械の部屋を温める",
+            "to": "warm",
+            "action": "entry_heat"
+          },
+          {
+            "id": "oil",
+            "text": "油の適温表示を持って職人へ行く",
+            "to": "oil",
+            "action": "entry_oil"
+          },
+          {
+            "id": "discard",
+            "text": "今ある油を全て廃棄する",
+            "to": "discarded",
+            "action": "entry_discard"
+          }
+        ]
+      },
+      {
+        "id": "warm",
+        "place": "cold",
+        "text": "部屋が温まると機械が動き出した。祈祷は追加していない。",
+        "options": [
+          {
+            "id": "keep",
+            "text": "暖房を維持し、今の油を使い続ける",
+            "to": "@compromise",
+            "action": "warm_keep"
+          },
+          {
+            "id": "change",
+            "text": "寒さに合う油へ替える相談をする",
+            "to": "oil",
+            "action": "warm_change"
+          }
+        ]
+      },
+      {
+        "id": "oil",
+        "place": "oilshop",
+        "text": "油の粘度が寒い下層に合わず、祈祷の有無と故障は関係していない。 職人は下層用の油を用意した。祈祷師は儀式も続けたいと話す。",
+        "options": [
+          {
+            "id": "separate",
+            "text": "下層用油へ交換し、儀式を保守の合否から分ける",
+            "to": "changed",
+            "action": "oil_separate"
+          },
+          {
+            "id": "heat",
+            "text": "油の交換を見送り、部屋を温めて運用する",
+            "to": "warm",
+            "action": "oil_heat"
+          }
+        ]
+      },
+      {
+        "id": "changed",
+        "place": "cold",
+        "text": "下層用の油を機械へ納め、同じ温度で動作を試す。祈祷の記録と整備の合否を分けて記した。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@informed",
+            "action": "changed_finish"
+          }
+        ]
+      },
+      {
+        "id": "discarded",
+        "place": "discard",
+        "text": "現用油を回収槽へ封止した。携行油へは混ぜず、再稼働までの手動の鐘当番を確認する。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@contract",
+            "action": "discarded_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "interruptionRoutes": [
+      {
+        "from": "q072.decision",
+        "action": "informed",
+        "option": "informed_supplies",
+        "shortage": "q072.decision.informed.shortage",
+        "resume": "q072.decision.informed.resume",
+        "cost": {
+          "rope": 1
+        }
+      },
+      {
+        "from": "q072.review",
+        "action": "informed",
+        "option": "informed_supplies",
+        "shortage": "q072.review.informed.shortage",
+        "resume": "q072.review.informed.resume",
+        "cost": {
+          "rope": 1
+        }
+      }
+    ],
+    "interruptionEntries": [
+      "q072.visit",
+      "q072.flow.visit"
+    ],
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "machine-twenty",
+      "settlement": "salome",
+      "saveRevision": 2,
+      "scope": "機関廟20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q072.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "上層では同じ油で動き、下層だけ軸が重くなっている。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q072",
+          "key": "clue_a",
+          "text": "上層では同じ油で動き、下層だけ軸が重くなっている。"
+        }
+      ]
+    },
+    "q072.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "機関司祭のイオ",
+          "text": "納入票の推奨温度は地上の工場用で、下層の温度を下回りません。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q072",
+          "key": "clue_b",
+          "text": "納入票の推奨温度は地上の工場用で、下層の温度を下回らない。"
+        }
+      ]
+    },
+    "q072.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "油の洗礼\n\n新しい洗礼油で機械が震える。聖別が足りないのか調べてください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "下層用の油へ替え儀式は別に続ける",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q072.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q072.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "rope"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・補修用の縄1本（消費）・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "油の粘度が寒い下層に合わず、祈祷の有無と故障は関係していない。"
+                },
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_8",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "機械は静まった。司祭は祝福と整備の記録を別々に付ける。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q072",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "震える機械獣を倒し油を全て捨てる",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_8",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "危険は止まった。再稼働まで、手で鐘を鳴らす日が続く。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q072",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "部屋を温めて今ある油を使う",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "当座は動いた。燃料代を見た司祭が、次の発注を変える。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q072",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            },
+            {
+              "id": "informed_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q072.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q072.evidence"
+                    },
+                    "right": "clue_b"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "rope",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q072.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q072.evidence"
+                    },
+                    "right": "clue_b"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "rope",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q072.decision.informed.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q072.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "油の洗礼\n\n新しい洗礼油で機械が震える。聖別が足りないのか調べてください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q072.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q072.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "油の粘度が寒い下層に合わず、祈祷の有無と故障は関係していない。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q072.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "下層用の油へ替え儀式は別に続ける",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q072.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q072.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "has_item",
+                    "item": "rope"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合・縄1本（勝利して作業を確定した時に消費）・戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_8",
+                  "on_win": [
+                    {
+                      "op": "item.take",
+                      "item": "rope",
+                      "count": 1
+                    },
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "機械は静まった。司祭は祝福と整備の記録を別々に付ける。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q072",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q072.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q072.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "contract",
+              "text": "震える機械獣を倒し油を全て捨てる",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_8",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "危険は止まった。再稼働まで、手で鐘を鳴らす日が続く。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q072",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "部屋を温めて今ある油を使う",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "当座は動いた。燃料代を見た司祭が、次の発注を変える。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q072",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」機関司祭のイオは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられる。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q072.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            },
+            {
+              "id": "informed_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q072.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q072.evidence"
+                    },
+                    "right": "clue_b"
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "rope",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q072.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q072.evidence"
+                        },
+                        "right": "clue_b"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "and",
+                    "args": [
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q072.evidence"
+                        },
+                        "right": "clue_a"
+                      },
+                      {
+                        "op": "contains",
+                        "left": {
+                          "ref": "quests.q072.evidence"
+                        },
+                        "right": "clue_b"
+                      },
+                      {
+                        "op": "not",
+                        "arg": {
+                          "op": "has_item",
+                          "item": "rope",
+                          "count": 1
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q072.review.informed.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q072.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q072.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "機械は静まった。司祭は祝福と整備の記録を別々に付ける。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q072.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "危険は止まった。再稼働まで、手で鐘を鳴らす日が続く。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q072.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "当座は動いた。燃料代を見た司祭が、次の発注を変える。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q072.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q072.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q072"
+          },
+          "cases": [
+            {
+              "equals": "q072.decision.informed.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q072.decision.informed.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q072.review.informed.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q072.review.informed.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q072.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q072.aftermath"
+                }
+              ],
+              "else": [
+                {
+                  "op": "jump",
+                  "script": "q072.review"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q072.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q072.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "同じ祈祷を受けた機械でも、寒い下層のものだけ震える。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "heat",
+              "text": "震える機械の部屋を温める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q072.flow.warm"
+                }
+              ]
+            },
+            {
+              "id": "oil",
+              "text": "油の適温表示を持って職人へ行く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q072.flow.oil"
+                }
+              ]
+            },
+            {
+              "id": "discard",
+              "text": "今ある油を全て廃棄する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q072.flow.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q072.flow.warm": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q072.node",
+          "value": "warm"
+        },
+        {
+          "op": "say",
+          "text": "部屋が温まると機械が動き出した。祈祷は追加していない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "keep",
+              "text": "暖房を維持し、今の油を使い続ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q072.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "change",
+              "text": "寒さに合う油へ替える相談をする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q072.flow.oil"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q072.flow.oil": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q072.node",
+          "value": "oil"
+        },
+        {
+          "op": "say",
+          "text": "油の粘度が寒い下層に合わず、祈祷の有無と故障は関係していない。 職人は下層用の油を用意した。祈祷師は儀式も続けたいと話す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "separate",
+              "text": "下層用油へ交換し、儀式を保守の合否から分ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q072.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "heat",
+              "text": "油の交換を見送り、部屋を温めて運用する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q072.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q072.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q072.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "機械は静まった。司祭は祝福と整備の記録を別々に付ける。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q072",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q072.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q072.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "危険は止まった。再稼働まで、手で鐘を鳴らす日が続く。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q072",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q072.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q072.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "当座は動いた。燃料代を見た司祭が、次の発注を変える。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q072",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q072.flow.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q072"
+          },
+          "cases": [
+            {
+              "equals": "q072.decision.informed.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q072.decision.informed.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q072.review.informed.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q072.review.informed.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q072.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q072.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "機械は静まった。司祭は祝福と整備の記録を別々に付ける。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "危険は止まった。再稼働まで、手で鐘を鳴らす日が続く。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "当座は動いた。燃料代を見た司祭が、次の発注を変える。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.legacyQuestRoutes.q072"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "jump",
+                      "script": "q072.visit"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "flags.flow.q072.node"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q072.flow.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "warm",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q072.flow.warm"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "oil",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q072.flow.oil"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
+                        {
+                          "op": "jump",
+                          "script": "q072.flow.entry"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q072.decision.informed.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q072",
+          "value": "q072.decision.informed.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q072.decision.informed.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q072",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q072.decision"
+        }
+      ]
+    },
+    "q072.review.informed.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q072",
+          "value": "q072.review.informed.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q072.review.informed.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q072",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q072.review"
+        }
+      ]
+    },
+    "q072.machine.entry": {
+      "storyQuest": "q072",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q072",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "同じ祈祷を受けた機械でも、寒い下層のものだけ震える。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "heat",
+              "text": "震える機械の部屋を温める",
+              "storyAction": {
+                "quest": "q072",
+                "action": "entry_heat"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q072",
+                  "action": "entry_heat"
+                }
+              ]
+            },
+            {
+              "id": "oil",
+              "text": "油の適温表示を持って職人へ行く",
+              "storyAction": {
+                "quest": "q072",
+                "action": "entry_oil"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q072",
+                  "action": "entry_oil"
+                }
+              ]
+            },
+            {
+              "id": "discard",
+              "text": "今ある油を全て廃棄する",
+              "storyAction": {
+                "quest": "q072",
+                "action": "entry_discard"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q072",
+                  "action": "entry_discard"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q072.machine.warm": {
+      "storyQuest": "q072",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q072",
+          "scene": "warm"
+        },
+        {
+          "op": "narrate",
+          "text": "部屋が温まると機械が動き出した。祈祷は追加していない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "keep",
+              "text": "暖房を維持し、今の油を使い続ける",
+              "storyAction": {
+                "quest": "q072",
+                "action": "warm_keep"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q072",
+                  "action": "warm_keep"
+                },
+                {
+                  "op": "jump",
+                  "script": "q072.machine.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "change",
+              "text": "寒さに合う油へ替える相談をする",
+              "storyAction": {
+                "quest": "q072",
+                "action": "warm_change"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q072",
+                  "action": "warm_change"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q072.machine.oil": {
+      "storyQuest": "q072",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q072",
+          "scene": "oil"
+        },
+        {
+          "op": "narrate",
+          "text": "油の粘度が寒い下層に合わず、祈祷の有無と故障は関係していない。 職人は下層用の油を用意した。祈祷師は儀式も続けたいと話す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "separate",
+              "text": "下層用油へ交換し、儀式を保守の合否から分ける",
+              "storyAction": {
+                "quest": "q072",
+                "action": "oil_separate"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q072",
+                  "action": "oil_separate"
+                }
+              ]
+            },
+            {
+              "id": "heat",
+              "text": "油の交換を見送り、部屋を温めて運用する",
+              "storyAction": {
+                "quest": "q072",
+                "action": "oil_heat"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q072",
+                  "action": "oil_heat"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q072.machine.changed": {
+      "storyQuest": "q072",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q072",
+          "scene": "changed"
+        },
+        {
+          "op": "narrate",
+          "text": "下層用の油を機械へ納め、同じ温度で動作を試す。祈祷の記録と整備の合否を分けて記した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q072",
+                "action": "changed_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q072",
+                  "action": "changed_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q072.machine.end.informed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q072.machine.discarded": {
+      "storyQuest": "q072",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q072",
+          "scene": "discarded"
+        },
+        {
+          "op": "narrate",
+          "text": "現用油を回収槽へ封止した。携行油へは混ぜず、再稼働までの手動の鐘当番を確認する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q072",
+                "action": "discarded_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q072",
+                  "action": "discarded_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q072.machine.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q072.machine.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "機械は静まった。司祭は祝福と整備の記録を別々に付ける。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q072",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q072.machine.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "危険は止まった。再稼働まで、手で鐘を鳴らす日が続く。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q072",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q072.machine.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "当座は動いた。燃料代を見た司祭が、次の発注を変える。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q072",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q072.machine.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q072"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q072.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q072.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q072.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "機械は静まった。司祭は祝福と整備の記録を別々に付ける。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "危険は止まった。再稼働まで、手で鐘を鳴らす日が続く。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "当座は動いた。燃料代を見た司祭が、次の発注を変える。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q072"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q072.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q072.machine.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "warm",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q072.machine.warm"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "oil",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q072.machine.oil"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "changed",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q072.machine.changed"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "discarded",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q072.machine.discarded"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q072.machine.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "油の洗礼の現場受付",
+      "cold": "下層の冷えた試験台",
+      "oilshop": "適温油を調合する工房",
+      "discard": "回収油の封止槽",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "cold"
+      ],
+      [
+        "transit",
+        "oilshop"
+      ],
+      [
+        "transit",
+        "discard"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "cold",
+          "oilshop",
+          "discard",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "heated": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "heated"
+      },
+      "oilChanged": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "oilChanged"
+      },
+      "ritualSeparated": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "ritualSeparated"
+      },
+      "discarded": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "discarded"
+      },
+      "oilSampleAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "cold",
+          "oilshop",
+          "discard",
+          "transit",
+          "party",
+          "coldOil"
+        ],
+        "meaning": "oilSample の所在または保持者"
+      },
+      "coldOilAt": {
+        "type": "enum",
+        "initial": "oilshop",
+        "values": [
+          "entry",
+          "cold",
+          "oilshop",
+          "discard",
+          "transit",
+          "party",
+          "oilSample"
+        ],
+        "meaning": "coldOil の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "oilSample": {
+        "holder": "oilSampleAt",
+        "kind": "item"
+      },
+      "coldOil": {
+        "holder": "coldOilAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "油の粘度が寒い下層に合わず、祈祷の有無と故障は関係していない。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "油の洗礼の現場受付",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "warm": {
+        "title": "下層の冷えた試験台",
+        "place": "cold",
+        "cast": [],
+        "requires": true
+      },
+      "oil": {
+        "title": "適温油を調合する工房",
+        "place": "oilshop",
+        "cast": [],
+        "requires": true
+      },
+      "changed": {
+        "title": "下層の冷えた試験台",
+        "place": "cold",
+        "cast": [],
+        "requires": true
+      },
+      "discarded": {
+        "title": "回収油の封止槽",
+        "place": "discard",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_heat": {
+        "from": [
+          "entry"
+        ],
+        "to": "warm",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "cold"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "heated",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "cold",
+          "companions": []
+        },
+        "depart": []
+      },
+      "entry_oil": {
+        "from": [
+          "entry"
+        ],
+        "to": "oil",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "oilshop"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "oilshop",
+            "requires": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "oilshop",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "oilSample",
+            "from": "entry",
+            "to": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q072.values.oilSampleAt"
+              },
+              "right": "entry"
+            }
+          }
+        ]
+      },
+      "entry_discard": {
+        "from": [
+          "entry"
+        ],
+        "to": "discarded",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "discard"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "discard",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "oilSample",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      },
+      "warm_keep": {
+        "from": [
+          "warm"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "warm_change": {
+        "from": [
+          "warm"
+        ],
+        "to": "oil",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "oilshop"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "oilshop",
+            "requires": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "oilshop",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "oilSample",
+            "from": "entry",
+            "to": "party",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q072.values.oilSampleAt"
+              },
+              "right": "entry"
+            }
+          }
+        ]
+      },
+      "oil_separate": {
+        "from": [
+          "oil"
+        ],
+        "to": "changed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "cold"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "cold",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "coldOil",
+            "from": "oilshop",
+            "to": "party"
+          }
+        ]
+      },
+      "oil_heat": {
+        "from": [
+          "oil"
+        ],
+        "to": "warm",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "cold"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "heated",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "cold",
+          "companions": []
+        },
+        "depart": []
+      },
+      "changed_finish": {
+        "from": [
+          "changed"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "coldOil",
+            "from": "party",
+            "to": "cold"
+          },
+          {
+            "op": "set",
+            "key": "oilChanged",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "ritualSeparated",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "discarded_finish": {
+        "from": [
+          "discarded"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "oilSample",
+            "from": "party",
+            "to": "discard"
+          },
+          {
+            "op": "set",
+            "key": "discarded",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q072.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q072.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q072.values.partyAt"
+                },
+                "right": "cold"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q072.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q072.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q072.values.partyAt"
+                },
+                "right": "discard"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q072.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q072.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q072.values.partyAt"
+                },
+                "right": "cold"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_8",
+        "map": "region_8_f1",
+        "x": 11,
+        "y": 9
+      },
+      "cold": {
+        "kind": "dungeon",
+        "dungeon": "region_8",
+        "map": "region_8_f2",
+        "x": 3,
+        "y": 5
+      },
+      "oilshop": {
+        "kind": "town",
+        "location": "machine_parts"
+      },
+      "discard": {
+        "kind": "dungeon",
+        "dungeon": "region_8",
+        "map": "region_8_f1",
+        "x": 13,
+        "y": 2
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "salome",
+  "receptionLocations": [
+    "salome_board"
+  ]
+}

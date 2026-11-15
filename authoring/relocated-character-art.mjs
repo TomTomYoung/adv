@@ -545,3 +545,8 @@ relocatedCharacters.q150_thiefPerson={"id":"q150_thiefPerson","name":"スリ","r
 relocatedCharacters.q150_singerPerson={"id":"q150_singerPerson","name":"歌手","role":"弟子候補の歌手","detail":"歌で待つ客を支え、次の演目につなぐ。出演と弟子入りの意志は別に確かめる。","provenance":"2026-11-15。GQ050と現行場面の発言・所在・実同行による呼称表示。専用画や未知の氏名・年齢・容貌は追加しない。"};
 
 relocatedCharacters.q071_worker={id:'q071_worker',name:'現役の整備人',role:'門番が帰還を待つ現役の作業者',detail:'作業室で呼ばれ、本人が門番の前まで戻って帰還印を押す。退職者の記録とは別に在室状況を確かめる。',provenance:'2026-11-15。整備側原稿と現行本文・既存実同行に基づく呼称表示。依頼人フウとの同一性、氏名・年齢・容貌・専用画を追加しない。'};
+
+for(const [id,name,role] of [
+ ['artisan','油工房の職人','下層の温度に適した油を用意する職人'],
+ ['priest','工房で話す祈祷師','儀式を続けたいという希望を工房で伝える祈祷師']
+])relocatedCharacters['q072_'+id]={id:'q072_'+id,name,role,detail:'油の工房oilshopに固定し、温める試験台や交換・封止の現場へ同行させない。',provenance:'2026-11-15。整備側原稿と現行oilの明示的な発言に基づく呼称表示。依頼人イオとの同一性・氏名・容貌・専用画を追加しない。'};
