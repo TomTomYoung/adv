@@ -4,21 +4,70 @@ on:
     branches: [feature/machine-q073-cast]
     paths: [.github/workflows/q073-work.yml]
 permissions:
-  contents: read
+  contents: write
 jobs:
   prepare:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
-      - name: Package exact source snapshot
-        run: |
-          git rev-parse HEAD > "$RUNNER_TEMP/source-commit.txt"
-          tar -czf "$RUNNER_TEMP/adv-source.tgz" --exclude='./.git' --exclude='./assets' .
-      - uses: actions/upload-artifact@v4
         with:
-          name: q073-source-worktree
-          path: |
-            ${{ runner.temp }}/adv-source.tgz
-            ${{ runner.temp }}/source-commit.txt
-          retention-days: 1
+          ref: feature/machine-q073-cast
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify exact locally tested sources
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          // Repair one identified transcription error before checking the original bytes.
+          const path='tests/spare-arm-cast.test.mjs',source=fs.readFileSync(path,'utf8');
+          assert.equal(source.split('loadQ073(f.save())').length,2);
+          fs.writeFileSync(path,source.replace('loadQ073(f.save())','loadQ073(f.save)'));
+          const hashes={
+            'tools/apply-q073-work.mjs':'bd13997a14fd49bb5748d489daa22778f8f575aec3e33ef5bc38e19801870766',
+            'tests/spare-arm-cast.test.mjs':'221f0941797768c08925ecee70df4c4a4832c26b6363b86b66448ac63285f4de',
+            'tools/spare-arm-art-fixtures.mjs':'325042fb62dd4c1c7e4e635b2a17a5580a0af8591d957e897a2e48dc6d6d3d2d',
+            'tools/measure-spare-arm.mjs':'fb21987e788d49df278d16c1ee89a033054d2fc0c1ee09c8db62a5588192f28c',
+            'tools/record-q073-work.mjs':'8200cff56ac58ec1617f182a94ef5ac9ea2ccb05d00e7cc1ee016e5ccb957b51',
+            'tools/browser-spare-arm-cast-smoke.mjs':'1c5c055d1f58032720e89b02646088b4a3dd07da186fa6b7e8c693bc564c667a'
+          };
+          for(const [p,h] of Object.entries(hashes))assert.equal(createHash('sha256').update(fs.readFileSync(p)).digest('hex'),h,p);
+          JS
+      - name: Apply source-checked authoring and preserve previous quest
+        run: node tools/apply-q073-work.mjs
+      - name: Verify current and previous saves, all bounded routes and existing regressions
+        run: |
+          node --test tests/spare-arm-cast.test.mjs tests/relocated-cast-audit.test.mjs
+          node --test --test-name-pattern='q073' tests/machine.test.mjs
+      - name: Reproduce five normal party trials and record verified results
+        run: |
+          node tools/measure-spare-arm.mjs doc/development/Q073_PLAYTEST_RESULTS.json
+          node tools/record-q073-work.mjs
+      - name: Generate snapshot and runtime while preserving authored documentation
+        run: |
+          cp -a doc "$RUNNER_TEMP/q073-docs"
+          node tools/build-docs.mjs
+          cp doc/development/DATA_SNAPSHOT.json "$RUNNER_TEMP/q073-snapshot.json"
+          cp -a "$RUNNER_TEMP/q073-docs/." doc/
+          cp "$RUNNER_TEMP/q073-snapshot.json" doc/development/DATA_SNAPSHOT.json
+          node tools/audit-relocated-cast.mjs
+          node tools/build-runtime.mjs
+          git rm tools/apply-q073-work.mjs tools/record-q073-work.mjs
+      - name: Validate generated content, distribution hashes, references and docs
+        run: |
+          node tools/build-scenario-editions.mjs --check
+          node tools/build-runtime.mjs --check
+          node tools/validate.mjs
+          node tools/check-static.mjs
+          node tools/check-docs.mjs
+      - name: Commit verified implementation
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --stat
+          git commit -m "feat(q073): fixed artisan, atomic previous-save migration and arm handoff verification"
+          git push origin HEAD:feature/machine-q073-cast
