@@ -559,3 +559,5 @@ relocatedCharacters.q075_workers={id:'q075_workers',name:'修繕の作業者た�
 
 relocatedCharacters.q077_pilgrim={id:'q077_pilgrim',name:'壁に触れた巡礼者',role:'放電跡の壁に触れた巡礼者',detail:'壁へ触れて手を引く。隊の診療室への運搬や迂回路の確認には同行しない。',provenance:'2026-11-16。原稿と現行entryの動作による呼称表示。氏名・年齢・性別・容貌・専用画を追加しない。'};
 relocatedCharacters.q077_maintainer={id:'q077_maintainer',name:'仮灯を用意する保守員',role:'停電時の代替照明を準備する保守員',detail:'壁前で仮灯を用意する。仮灯を診療室へ運ぶのは隊で、保守員は同行者に追加しない。',provenance:'2026-11-16。現行outageの明示された準備動作に基づく呼称表示。依頼人イオと同一人物とはせず、外見・専用画を補わない。'};
+
+relocatedCharacters.q078_user={id:'q078_user',name:'義肢の利用者',role:'自分の工具配置を義肢に学習させる本人',detail:'槌と針の距離・握力を別々に練習する。隊と工具台や保管室へ実際に同行し、旧配置の記録と新設定を分けて扱う。',provenance:'2026-11-16。整備側原稿と既存userPersonの所在・実同行に基づく呼称表示。依頼人リンとの同一性、氏名・性別・年齢・容貌・専用画を追加しない。'};
