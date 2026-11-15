@@ -4,21 +4,58 @@ on:
     branches: [feature/machine-q079-audit]
     paths: [.github/workflows/q079-work.yml]
 permissions:
-  contents: read
+  contents: write
 jobs:
   prepare:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
-      - name: Package exact worktree
-        run: |
-          git rev-parse HEAD > "$RUNNER_TEMP/source-commit.txt"
-          tar -czf "$RUNNER_TEMP/adv-source.tgz" --exclude='./.git' --exclude='./assets' .
-      - uses: actions/upload-artifact@v4
         with:
-          name: q079-source-worktree
-          path: |
-            ${{ runner.temp }}/adv-source.tgz
-            ${{ runner.temp }}/source-commit.txt
-          retention-days: 1
+          ref: feature/machine-q079-audit
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify exact locally tested sources
+        run: |
+          cat <<'HASHES' | sha256sum --check
+          efb13d61582b5e1012600dd5aec2a51d9956bca426ebb9d2d6e7734d8e190d51  tools/apply-q079-work.mjs
+          a4a48308e8a097c40f9567ffd5a43739a45310be570d23082b8223bfa72be6e2  tools/record-q079-work.mjs
+          9dd8b70679576aafd148f3e71ee66edc1b8b20ef584fa4e464500cb697ac1768  tools/restart-ledger-art-fixtures.mjs
+          5ba6f19c3718037ae2d07c81f00fe6f210bf4c5e0e269220efba346aeadbdc7a  tools/browser-restart-ledger-smoke.mjs
+          98656e3fafd6c2063ddcf2adbc72066aa905fe3aa22290525c4ee03785bc759c  tools/measure-restart-ledger.mjs
+          f0265369d02e42f1175e16fcc2759d1576d5c431ac7a3bc803fc06cf1d8fbbd4  tests/restart-ledger.test.mjs
+          HASHES
+      - name: Apply checked authoring and preserve previous definition
+        run: node tools/apply-q079-work.mjs
+      - name: Verify routes, saves, custody, battle recovery and machine regressions
+        run: node --test tests/restart-ledger.test.mjs tests/relocated-cast-audit.test.mjs tests/machine.test.mjs
+      - name: Reproduce seven normal party trials and record results
+        run: |
+          node tools/measure-restart-ledger.mjs doc/development/Q079_PLAYTEST_RESULTS.json
+          node tools/record-q079-work.mjs
+      - name: Generate runtime and audit while preserving authored documents
+        run: |
+          cp -a doc "$RUNNER_TEMP/q079-authored-docs"
+          node tools/build-docs.mjs
+          for file in battle/QUEST_PARTY_PLAYTEST.md battle/SALOME_CLASSES_AND_CHARACTERS_DESIGN.md development/CHROMIUM_DEFERRED_2026-11-04.md development/PROGRESS.md development/REMAINING_WORK.md development/TEST_OVERVIEW.md dungeons/ODDLAND_RELOCATION_AUDIT.md dungeons/REGIONAL_RELOCATION_WORK.md scenarios/EGG_KNIGHT_FORESHADOWING.md scenarios/ODDLAND_100_QUEST_DESIGN.md scenarios/REGIONAL_QUEST_ALLOCATION.md scenarios/SALOME_100_QUEST_DESIGN.md ui/SOUND_AND_EFFECT_FORMAT.md; do
+            cp "$RUNNER_TEMP/q079-authored-docs/$file" "doc/$file"
+          done
+          node tools/audit-relocated-cast.mjs
+          node tools/build-runtime.mjs
+          git rm tools/apply-q079-work.mjs tools/record-q079-work.mjs
+      - name: Validate generated data, assets, distribution and documentation
+        run: |
+          node tools/build-scenario-editions.mjs --check
+          node tools/build-runtime.mjs --check
+          node tools/validate.mjs
+          node tools/check-static.mjs
+          node tools/check-docs.mjs
+      - name: Commit verified implementation
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --stat
+          git commit -m "feat(q079): audit absent cast and verify record custody and restart timing"
+          git push origin HEAD:feature/machine-q079-audit
