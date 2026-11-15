@@ -4,21 +4,61 @@ on:
     branches: [feature/machine-q077-cast]
     paths: [.github/workflows/q077-work.yml]
 permissions:
-  contents: read
+  contents: write
 jobs:
   prepare:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-      - name: Package source worktree
-        run: |
-          git rev-parse HEAD > "$RUNNER_TEMP/source-commit.txt"
-          tar -czf "$RUNNER_TEMP/adv-source.tgz" --exclude='./.git' --exclude='./assets' .
-      - uses: actions/upload-artifact@v4
         with:
-          name: q077-source-worktree
-          path: |
-            ${{ runner.temp }}/adv-source.tgz
-            ${{ runner.temp }}/source-commit.txt
-          retention-days: 1
+          ref: feature/machine-q077-cast
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify exact locally tested sources
+        run: |
+          sha256sum -c <<'CHECKSUMS'
+          6888ab0062d469b55196c8258498cbd3596f68d848d54b4d2ef9c4c0ec0382b2  tools/apply-q077-work.mjs
+          7ed65a4caa09b8db4ba89968c13b5d0fcac933915f98cfe962212d5fb7a803a9  tools/finalize-q077-work.mjs
+          050421c6633837f2092704002a38f7df1fb8d98a57ee5823d466552e93bdc104  tools/stigmata-wiring-art-fixtures.mjs
+          74645e8da827245892206acb09ced8e9ed7891f83b75af33fa407d013908db03  tests/stigmata-wiring-cast.test.mjs
+          cd6b9018947f40b7352067361baa9a66c389957ac8c737aa933f74fbe98c4c64  tools/measure-stigmata-wiring.mjs
+          1bcc10611d57d84e93a59e506c118f1a6fa3aa4128b108019fe5c44c8dec4839  tools/browser-stigmata-wiring-cast-smoke.mjs
+          CHECKSUMS
+      - name: Apply checked authoring and retain exact previous definition
+        run: |
+          node tools/apply-q077-work.mjs
+          node tools/build-scenario-editions.mjs
+          node tools/audit-relocated-cast.mjs
+      - name: Validate routes, saves, custody, interruptions and existing machine regressions
+        run: node --test tests/stigmata-wiring-cast.test.mjs tests/relocated-cast-audit.test.mjs tests/machine.test.mjs
+      - name: Reproduce all four normal party trials and record results
+        run: |
+          node tools/measure-stigmata-wiring.mjs doc/development/Q077_PLAYTEST_RESULTS.json
+          node tools/finalize-q077-work.mjs
+          git rm tools/apply-q077-work.mjs tools/finalize-q077-work.mjs
+      - name: Generate docs and runtime while preserving authored records
+        run: |
+          cp -a doc "$RUNNER_TEMP/q077-authored-docs"
+          node tools/build-docs.mjs
+          for file in battle/QUEST_PARTY_PLAYTEST.md battle/SALOME_CLASSES_AND_CHARACTERS_DESIGN.md development/CHROMIUM_DEFERRED_2026-11-04.md development/PROGRESS.md development/REMAINING_WORK.md development/TEST_OVERVIEW.md dungeons/ODDLAND_RELOCATION_AUDIT.md dungeons/REGIONAL_RELOCATION_WORK.md scenarios/EGG_KNIGHT_FORESHADOWING.md scenarios/ODDLAND_100_QUEST_DESIGN.md scenarios/REGIONAL_QUEST_ALLOCATION.md scenarios/SALOME_100_QUEST_DESIGN.md ui/SOUND_AND_EFFECT_FORMAT.md; do
+            cp "$RUNNER_TEMP/q077-authored-docs/$file" "doc/$file"
+          done
+          node tools/audit-relocated-cast.mjs
+          node tools/build-runtime.mjs
+      - name: Validate generated content, distribution, data, assets and documentation
+        run: |
+          node tools/build-scenario-editions.mjs --check
+          npm run check:runtime
+          node tools/validate.mjs
+          node tools/check-static.mjs
+          node tools/check-docs.mjs
+      - name: Commit verified implementation
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --stat
+          git commit -m "feat(q077): fixed actors, atomic save migration and lamp delivery verification"
+          git push origin HEAD:feature/machine-q077-cast
