@@ -1,0 +1,48 @@
+name: Validate q074 prayer order in Chromium
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'data/**'
+      - 'authoring/editions/e2/salome/machine-first.mjs'
+      - 'authoring/relocated-character-art.mjs'
+      - 'tools/build-machine-quests.mjs'
+      - 'tools/browser-prayer-order-cast-smoke.mjs'
+      - 'tools/prayer-order-art-fixtures.mjs'
+      - 'tools/character-art-browser.mjs'
+      - 'tests/prayer-order-cast.test.mjs'
+      - 'tests/fixtures/e2-q074-before-cast.json'
+      - 'assets/images/**'
+      - '.github/workflows/q074-cast.yml'
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+permissions:
+  contents: read
+jobs:
+  q074-browser:
+    runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned browser driver and verify Japanese fonts
+        run: |
+          npm install --no-save --package-lock=false playwright@1.58.2
+          test -n "$(fc-list :lang=ja)"
+      - name: Check fixed Yua, cooling, ignition, manual shutdown, defeat restart and older saves
+        run: ADV_BROWSER_OUTPUT=/tmp/adv-prayer-order-art-browser node tools/browser-prayer-order-cast-smoke.mjs
+      - name: Keep q074 checkpoints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: q074-cast-checkpoints
+          path: /tmp/adv-prayer-order-art-browser
+          if-no-files-found: error
+          retention-days: 7

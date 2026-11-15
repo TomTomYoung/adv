@@ -57,6 +57,13 @@ export function machineFirstSource(q,{cast=true}={}){
   route('door','correct','opened');add('opened','entry','冷却、炉の順で起動した灯を確かめ、扉を開いた。試験結果を写本室へ運ぶ。',[opt('correct','ユアへ検証済みの順序を届ける','corrected',{depart:[set('doorOpened')]})]);end('corrected','copy','写本の一節目を試験結果に合わせて訂正し、検証日を記した。','informed',[set('corrected')]);
   for(const [from,key] of [['entry','manual'],['lock','manual'],['furnace','manual'],['door','stop']])route(from,key,'manual');end('manual','entry','炉の停止を確かめ、手動で扉を開く。訂正を決めたことにはしない。','compromise',[set('furnaceOn',false),set('manualOpened')]);
  }
+ if(q.number===74&&cast){
+  entity('yuaPerson','copy','person');x.entities.yuaPerson.character='q074_yua';
+  node('corrected').cast=[{entity:'yuaPerson',display:{x:50}}];
+  node('opened').text='冷却、炉の順で起動した灯を確かめ、扉の前へ戻った。扉を開いてから、試験結果を写本室へ運ぶ。';
+  node('corrected').text='検証した起動順序をユアへ持ち込んだ。写本の一節目を試験結果に合わせて訂正し、検証日を記して依頼を終える。';
+  node('manual').text='扉の前で手動操作に移る。炉の停止を確かめて手動で扉を開く。祈祷書の訂正は行わない。';
+ }
  if(q.number===75){
   town('store','給付票と歯車を照合する部品庫','machine_parts');town('workers','修繕の移管を相談する作業所','machine_registry');town('forms','要求票の翻訳窓口','e2_archive');entity('gearPart','store');entity('requestSheet','entry');entity('workersGroup','workers','group');node('parts').place='store';choice('entry','gear').depart=[give('requestSheet','entry','party')];choice('parts','deliver').depart=[give('gearPart','store','party')];choice('parts','deliver').effects=[give('gearPart','party','entry'),set('supplied')];
   for(const [from,key] of [['entry','share'],['parts','reduce']])route(from,key,'share');add('share','workers','引き受ける作業と人手を相談し、人用の工具を揃えた。部品を補給したという記録は付けない。',[opt('escort','作業者を聖者のいる場所へ案内する','shared',{companions:['workersGroup']})]);end('shared','entry','人が担当の作業を引き受け、聖者の稼働量を下げた。','compromise',[set('workShared')]);
