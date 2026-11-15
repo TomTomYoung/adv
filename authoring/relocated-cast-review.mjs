@@ -1,8 +1,80 @@
 // Editorial audit: candidate IDs are local; connected roles cite their game entity.
 // Update a fingerprint only after rereading the changed quest and its evidence.
 export const RELOCATED_CAST_REVIEW={
- reviewedAt:'2026-11-15',
+ reviewedAt:'2026-11-16',
  quests:{
+  q074:{
+  "sourceSha256": "59cdccb0e6b60aec13521fc354ac17a85a473800dc825031ce13d6a73f9877c0",
+  "identityNotes": [
+    "整備側原稿authoring/quests.txt・structures-4.mjsのQ(74)、初版4場面・現行7場面・9旅程・13行動・3結末を精読した。祈祷書の誤写を設備の起動順として検証する話であり、同番号の別原稿を出典にしない。",
+    "ユアはopenedの選択肢で検証結果の持込み先として明示され、informed結末で訂正頁に検証日を記す。祈祷書の訂正窓口copyのcorrectedだけへ固定所在の呼称表示を接続し、現場の操作盤や退避足場への同席・同行を追加しない。",
+    "冷却coolingOnと炉furnaceOnは各操作位置への実到着で確定する。誤順序の試験は炉が自動停止しており、failedTrialは既存の再試験到着時の記録として保持する。doorOpenedはopenedから訂正窓口へ出発時、correctedは窓口でfinish時、手動経路の炉停止とmanualOpenedはmanualのfinish時に確定する。",
+    "物語改訂1→2では旧定義で保存全体を検証後、yuaPersonAt=copyだけを追加する。既存registry・全行動・戦闘・報酬・旧受注を維持する。opened・corrected・manualの3本文だけを既存処理時点へ合わせ、表示途中の旧本文と選択肢は保持する。"
+  ],
+  "relatedClients": {},
+  "people": {
+    "q074_yua": {
+      "label": "鐘番のユア",
+      "status": "connected",
+      "entity": "yuaPerson",
+      "need": "検証結果を持ち込む訂正窓口の1場面だけへ表示する。人物の容貌・専用画や現場同行を追加しない。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "古い操作盤には冷却が最初に彫られている。",
+      "reason": "祈祷書と操作盤を比較する現場。ユアがこの場にいる記述はなく、訂正窓口に固定する。",
+      "visual": "新旧の手順だけを示す。初期状態は冷却・炉とも未起動。"
+    },
+    "lock": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "試験盤なので炉は自動停止した。",
+      "reason": "封鎖外の退避足場へ来るのは隊だけ。依頼人や別の作業者を足さない。",
+      "visual": "誤った順序による封鎖と自動停止を区別し、安全な足場からやり直す。"
+    },
+    "furnace": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "冷却灯が点いた。",
+      "reason": "冷却操作盤で隊が冷却を確認する場面。ユアは訂正窓口に残る。",
+      "visual": "冷却だけが起動し、炉は次の操作で起動する。再試験の記録を別に保つ。"
+    },
+    "door": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "扉の封鎖灯が消えた。",
+      "reason": "試験炉の操作盤で順序を検証する場面。封鎖灯が消えたことだけで扉の実開放や写本の訂正を確定しない。",
+      "visual": "冷却と炉の点灯、まだ開いていない扉を区別する。"
+    },
+    "opened": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "冷却、炉の順で起動した灯を確かめ、扉の前へ戻った。",
+      "reason": "隊が扉へ戻った段階。ユアへ検証結果を持ち込むのは次の旅程。",
+      "visual": "出発時に開扉を確認してdoorOpenedが立つ。到着だけでは開扉済みにしない。"
+    },
+    "corrected": {
+      "decision": "person-evidence",
+      "people": [
+        "q074_yua"
+      ],
+      "evidence": "検証した起動順序をユアへ持ち込んだ。",
+      "reason": "openedの持込み先とinformed結末の訂正者がともにユアと明示される。訂正窓口の1場面だけへ接続する。",
+      "visual": "訂正内容と検証日を確認し、finishを選ぶまでcorrectedはfalse。"
+    },
+    "manual": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "炉の停止を確かめて手動で扉を開く。",
+      "reason": "手動操作の現場は扉の前。ユアは訂正窓口のままで、手動解決を文書訂正と混同しない。",
+      "visual": "炉が起動済みの経路もあり、finishで炉停止と手動開扉を確定する。"
+    }
+  },
+  "next": "新旧保存・全9経路・全旅程の中断・強行戦闘の敗北再戦・冷却と炉と開扉と訂正の確定時点・3結末と一回報酬を検証する。次工程はq075「無給の聖者」。"
+},
   q073:{
   "sourceSha256": "2137a7c21687d52ca14a5c0e49606a667b90cbaee84e0cc06e1b2028b4f43d3f",
   "identityNotes": [

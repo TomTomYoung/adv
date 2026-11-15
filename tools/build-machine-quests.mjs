@@ -33,6 +33,13 @@ export async function buildMachineQuests({check=false}={}){
    quest.story.revision=2;quest.model.edition.revision=2;
    quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[{key:'artisanPersonAt',value:'smith'}]}];
   }
+  if(n===74){
+   const previous=compileRelocatedQuest(first,source(first,{cast:false}),options).story;
+   for(const [key,entry] of Object.entries(previous.registry))quest.story.registry[key]=structuredClone(entry);
+   quest.story.registry.yuaPersonAt.values=['copy'];
+   quest.story.revision=2;quest.model.edition.revision=2;
+   quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[{key:'yuaPersonAt',value:'copy'}]}];
+  }
   if(n===171)quest.story.scenes.watch_ward_ready.cast=[{entity:'dai',display:{x:50}}];
   if(n===172){
    quest.story.scenes.well_seal_ready.cast=[{entity:'lui',display:{x:50}}];

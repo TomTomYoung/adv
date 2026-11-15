@@ -639,7 +639,7 @@
       {
         "id": "opened",
         "place": "entry",
-        "text": "冷却、炉の順で起動した灯を確かめ、扉を開いた。試験結果を写本室へ運ぶ。",
+        "text": "冷却、炉の順で起動した灯を確かめ、扉の前へ戻った。扉を開いてから、試験結果を写本室へ運ぶ。",
         "options": [
           {
             "id": "correct",
@@ -652,7 +652,7 @@
       {
         "id": "corrected",
         "place": "copy",
-        "text": "写本の一節目を試験結果に合わせて訂正し、検証日を記した。",
+        "text": "検証した起動順序をユアへ持ち込んだ。写本の一節目を試験結果に合わせて訂正し、検証日を記して依頼を終える。",
         "options": [
           {
             "id": "finish",
@@ -665,7 +665,7 @@
       {
         "id": "manual",
         "place": "entry",
-        "text": "炉の停止を確かめ、手動で扉を開く。訂正を決めたことにはしない。",
+        "text": "扉の前で手動操作に移る。炉の停止を確かめて手動で扉を開く。祈祷書の訂正は行わない。",
         "options": [
           {
             "id": "finish",
@@ -685,7 +685,7 @@
     },
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -694,7 +694,663 @@
       "saveRevision": 2,
       "scope": "機関廟20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "祈祷の順番の現場受付",
+            "cooling": "冷却を入れる操作盤",
+            "furnace_place": "試験炉の操作盤",
+            "footing": "封鎖外の退避足場",
+            "copy": "祈祷書の訂正窓口",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "cooling"
+            ],
+            [
+              "transit",
+              "furnace_place"
+            ],
+            [
+              "transit",
+              "footing"
+            ],
+            [
+              "transit",
+              "copy"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "cooling",
+                "furnace_place",
+                "footing",
+                "copy",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "informed",
+                "contract",
+                "compromise"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "coolingOn": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "coolingOn"
+            },
+            "failedTrial": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "failedTrial"
+            },
+            "furnaceOn": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "furnaceOn"
+            },
+            "doorOpened": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "doorOpened"
+            },
+            "corrected": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "corrected"
+            },
+            "manualOpened": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "manualOpened"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "祈祷は起動手順の口伝で、冷却より先に炉を開く句が写し間違えられている。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "祈祷の順番の現場受付",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "lock": {
+              "title": "封鎖外の退避足場",
+              "place": "footing",
+              "cast": [],
+              "requires": true
+            },
+            "furnace": {
+              "title": "冷却を入れる操作盤",
+              "place": "cooling",
+              "cast": [],
+              "requires": true
+            },
+            "door": {
+              "title": "試験炉の操作盤",
+              "place": "furnace_place",
+              "cast": [],
+              "requires": true
+            },
+            "opened": {
+              "title": "祈祷の順番の現場受付",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "corrected": {
+              "title": "祈祷書の訂正窓口",
+              "place": "copy",
+              "cast": [],
+              "requires": true
+            },
+            "manual": {
+              "title": "祈祷の順番の現場受付",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_cool": {
+              "from": [
+                "entry"
+              ],
+              "to": "furnace",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "cooling"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "coolingOn",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "cooling",
+                "companions": []
+              },
+              "depart": []
+            },
+            "entry_heat": {
+              "from": [
+                "entry"
+              ],
+              "to": "lock",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "footing"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "footing",
+                "companions": []
+              },
+              "depart": []
+            },
+            "entry_force": {
+              "from": [
+                "entry"
+              ],
+              "ending": "contract",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "contract"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "entry_manual": {
+              "from": [
+                "entry"
+              ],
+              "to": "manual",
+              "requires": true,
+              "effects": [],
+              "once": false
+            },
+            "lock_reset": {
+              "from": [
+                "lock"
+              ],
+              "to": "furnace",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "cooling"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "coolingOn",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "failedTrial",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "cooling",
+                "companions": []
+              },
+              "depart": []
+            },
+            "lock_manual": {
+              "from": [
+                "lock"
+              ],
+              "to": "manual",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "furnace_furnace": {
+              "from": [
+                "furnace"
+              ],
+              "to": "door",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "furnace_place"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "furnaceOn",
+                  "value": true
+                },
+                {
+                  "op": "observe",
+                  "observer": "party",
+                  "proposition": "truth",
+                  "source": "furnace_place",
+                  "requires": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "furnace_place",
+                "companions": []
+              },
+              "depart": []
+            },
+            "furnace_manual": {
+              "from": [
+                "furnace"
+              ],
+              "to": "manual",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "door_correct": {
+              "from": [
+                "door"
+              ],
+              "to": "opened",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "door_stop": {
+              "from": [
+                "door"
+              ],
+              "to": "manual",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "opened_correct": {
+              "from": [
+                "opened"
+              ],
+              "to": "corrected",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "copy"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "copy",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "set",
+                  "key": "doorOpened",
+                  "value": true
+                }
+              ]
+            },
+            "corrected_finish": {
+              "from": [
+                "corrected"
+              ],
+              "ending": "informed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "corrected",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "informed"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "manual_finish": {
+              "from": [
+                "manual"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "furnaceOn",
+                  "value": false
+                },
+                {
+                  "op": "set",
+                  "key": "manualOpened",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "informed": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q074.values.resolution"
+                  },
+                  "right": "informed"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q074.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q074.values.partyAt"
+                      },
+                      "right": "copy"
+                    }
+                  ]
+                }
+              ]
+            },
+            "contract": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q074.values.resolution"
+                  },
+                  "right": "contract"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q074.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q074.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compromise": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q074.values.resolution"
+                  },
+                  "right": "compromise"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q074.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q074.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_8",
+              "map": "region_8_f1",
+              "x": 15,
+              "y": 5
+            },
+            "cooling": {
+              "kind": "dungeon",
+              "dungeon": "region_8",
+              "map": "region_8_f1",
+              "x": 1,
+              "y": 7
+            },
+            "furnace_place": {
+              "kind": "dungeon",
+              "dungeon": "region_8",
+              "map": "region_8_f1",
+              "x": 10,
+              "y": 5
+            },
+            "footing": {
+              "kind": "dungeon",
+              "dungeon": "region_8",
+              "map": "region_8_f1",
+              "x": 3,
+              "y": 7
+            },
+            "copy": {
+              "kind": "town",
+              "location": "library_copy_room"
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "yuaPersonAt",
+            "value": "copy"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q074.clue_a": {
@@ -1837,7 +2493,7 @@
         },
         {
           "op": "narrate",
-          "text": "冷却、炉の順で起動した灯を確かめ、扉を開いた。試験結果を写本室へ運ぶ。"
+          "text": "冷却、炉の順で起動した灯を確かめ、扉の前へ戻った。扉を開いてから、試験結果を写本室へ運ぶ。"
         },
         {
           "op": "choice",
@@ -1872,7 +2528,7 @@
         },
         {
           "op": "narrate",
-          "text": "写本の一節目を試験結果に合わせて訂正し、検証日を記した。"
+          "text": "検証した起動順序をユアへ持ち込んだ。写本の一節目を試験結果に合わせて訂正し、検証日を記して依頼を終える。"
         },
         {
           "op": "choice",
@@ -1911,7 +2567,7 @@
         },
         {
           "op": "narrate",
-          "text": "炉の停止を確かめ、手動で扉を開く。訂正を決めたことにはしない。"
+          "text": "扉の前で手動操作に移る。炉の停止を確かめて手動で扉を開く。祈祷書の訂正は行わない。"
         },
         {
           "op": "choice",
@@ -2240,12 +2896,25 @@
         "type": "boolean",
         "initial": false,
         "meaning": "manualOpened"
+      },
+      "yuaPersonAt": {
+        "type": "enum",
+        "initial": "copy",
+        "values": [
+          "copy"
+        ],
+        "meaning": "yuaPerson の所在または保持者"
       }
     },
     "entities": {
       "party": {
         "holder": "partyAt",
         "kind": "group"
+      },
+      "yuaPerson": {
+        "holder": "yuaPersonAt",
+        "kind": "person",
+        "character": "q074_yua"
       }
     },
     "propositions": {
@@ -2289,7 +2958,14 @@
       "corrected": {
         "title": "祈祷書の訂正窓口",
         "place": "copy",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "yuaPerson",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "manual": {
@@ -2790,7 +3466,7 @@
         "location": "library_copy_room"
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "salome",
   "receptionLocations": [

@@ -552,3 +552,5 @@ for(const [id,name,role] of [
 ])relocatedCharacters['q072_'+id]={id:'q072_'+id,name,role,detail:'油の工房oilshopに固定し、温める試験台や交換・封止の現場へ同行させない。',provenance:'2026-11-15。整備側原稿と現行oilの明示的な発言に基づく呼称表示。依頼人イオとの同一性・氏名・容貌・専用画を追加しない。'};
 
 relocatedCharacters.q073_artisan={id:'q073_artisan',name:'腕と支えの職人',role:'複製と支えを製作する工房の職人',detail:'工房で借りた腕の複製と扉の支えを製作し、回収品の引渡しに立ち会う。避難扉や荷重試験の位置へは同行しない。',provenance:'2026-11-15。整備側原稿・初版・第2版の職人の動作と工房の所在に基づく呼称表示。依頼人リンとの同一性、容貌、専用画は追加しない。'};
+
+relocatedCharacters.q074_yua={id:'q074_yua',name:'ユア',role:'鐘番・祈祷書の訂正先',detail:'隊が試験した起動順序を訂正窓口で受け取り、訂正した頁に検証日を記す。冷却盤や炉へ同行しない。',provenance:'2026-11-16。openedの持込み先とinformed結末の本人の動作に基づく呼称表示。容貌・専用画を追加しない。'};
