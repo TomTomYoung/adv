@@ -4,21 +4,61 @@ on:
     branches: [feature/observatory-q085-cast]
     paths: [.github/workflows/q085-work.yml]
 permissions:
-  contents: read
+  contents: write
 jobs:
   prepare:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
-      - name: Package source worktree
-        run: |
-          git rev-parse HEAD > "$RUNNER_TEMP/source-commit.txt"
-          tar -czf "$RUNNER_TEMP/adv-source.tgz" --exclude='./.git' --exclude='./assets' .
-      - uses: actions/upload-artifact@v4
         with:
-          name: q085-source-worktree
-          path: |
-            ${{ runner.temp }}/adv-source.tgz
-            ${{ runner.temp }}/source-commit.txt
-          retention-days: 1
+          ref: feature/observatory-q085-cast
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify exact locally tested source bytes
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const hashes={
+           'tools/q085-transfer/apply.mjs':'5f2604c3722a4e31ee08de0d3442eefc26b73ec0b9c3ad91b12064a548350475',
+           'tools/q085-transfer/record.mjs':'344e5d86f6697cff526a20c2b16a4bd1a3a979353be6445d0e53f08fc4814165',
+           'tests/return-compass-cast.test.mjs':'f1aac62834f9129c6809b0c5f976e94c9eef304ca67aaa02f26d8af9e218302b',
+           'tools/return-compass-art-fixtures.mjs':'87018278abf160bf7f950236b8669a774b6810b1f0bf89c3f6777ede7fb1044d',
+           'tools/measure-return-compass.mjs':'b296c121193ee3acfb59714b73d808c1a30bc1d729cc240590bd311c7616b189',
+           'tools/browser-return-compass-cast-smoke.mjs':'a2651dce8b0b8ab07fa9cf1c9a8af34e58a434dea668ed333e615fbc2513dbd3',
+           '.github/workflows/q085-cast.yml':'3cebad9a5ae4273ea8e930fc71ad0dc6eec19acbf78b55deb9208c8fb07be131'
+          };
+          for(const [p,h] of Object.entries(hashes))assert.equal(createHash('sha256').update(fs.readFileSync(p)).digest('hex'),h,p);
+          console.log('Seven tested source files verified.');
+          JS
+      - name: Apply audited cast and preserve exact previous definition
+        run: node tools/q085-transfer/apply.mjs
+      - name: Check bounded and repeated routes, custody, old saves and observatory regressions
+        run: node --test tests/return-compass-cast.test.mjs tests/relocated-cast-audit.test.mjs tests/observatory*.test.mjs
+      - name: Reproduce nine ordinary party trials
+        run: node tools/measure-return-compass.mjs doc/development/Q085_PLAYTEST_RESULTS.json
+      - name: Generate documents and runtime while preserving authored records
+        run: |
+          node tools/build-docs.mjs
+          git restore -- doc/battle/QUEST_PARTY_PLAYTEST.md doc/battle/SALOME_CLASSES_AND_CHARACTERS_DESIGN.md doc/development/CHROMIUM_DEFERRED_2026-11-04.md doc/development/PROGRESS.md doc/development/REMAINING_WORK.md doc/development/TEST_OVERVIEW.md doc/dungeons/ODDLAND_RELOCATION_AUDIT.md doc/dungeons/REGIONAL_RELOCATION_WORK.md doc/scenarios/EGG_KNIGHT_FORESHADOWING.md doc/scenarios/ODDLAND_100_QUEST_DESIGN.md doc/scenarios/REGIONAL_QUEST_ALLOCATION.md doc/scenarios/SALOME_100_QUEST_DESIGN.md doc/ui/SOUND_AND_EFFECT_FORMAT.md
+          node tools/q085-transfer/record.mjs
+          node tools/audit-relocated-cast.mjs
+          node tools/build-runtime.mjs
+          git rm -r tools/q085-transfer
+      - name: Validate generated content, assets, references and documentation
+        run: |
+          node tools/build-scenario-editions.mjs --check
+          node tools/build-runtime.mjs --check
+          node tools/validate.mjs
+          node tools/check-config-editors.mjs
+          node tools/check-static.mjs
+          node tools/check-docs.mjs
+      - name: Commit verified implementation
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --stat
+          git commit -m "feat(q085): real escorts, repeatable marker custody and compatible saves"
+          git push origin HEAD:feature/observatory-q085-cast
