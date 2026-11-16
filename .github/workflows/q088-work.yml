@@ -4,21 +4,59 @@ on:
     branches: [feature/observatory-q088-audit]
     paths: [.github/workflows/q088-work.yml]
 permissions:
-  contents: read
+  contents: write
 jobs:
   prepare:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
-      - name: Package exact source worktree
-        run: |
-          git rev-parse HEAD > "$RUNNER_TEMP/source-commit.txt"
-          tar -czf "$RUNNER_TEMP/adv-source.tgz" --exclude='./.git' --exclude='./assets' .
-      - uses: actions/upload-artifact@v4
         with:
-          name: q088-source-worktree
-          path: |
-            ${{ runner.temp }}/adv-source.tgz
-            ${{ runner.temp }}/source-commit.txt
-          retention-days: 1
+          ref: feature/observatory-q088-audit
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify exact locally tested source bytes
+        run: |
+          sha256sum --check <<'HASHES'
+          20917834660506a6d007a09026d45a9b31241d18efe400cf9a7f5ef384b590c3  tools/apply-q088-audit.mjs
+          8948e72c437fe1daf8971d1e207b89345f50bf4e17ad15ee5c3f6287f7d4a007  tools/observation-window-art-fixtures.mjs
+          b24448c3dfc64cfac7808e7411017b27ef254c9d517e1ac0d42523f127e502ba  tests/observation-window-cast.test.mjs
+          4d8f262dfc3ac937b9c7eb92add8205ed9173ea6375a515b6d60e88090544428  tools/measure-observation-window.mjs
+          529114d6393991d241973e6ddd3c4c220fb6346eefabcabab67df01adc37e1f8  tools/browser-observation-window-cast-smoke.mjs
+          8c98e16feace2cfcc077ee09f75fa4629efd28a15b76027fa4d8ef27a1053a9b  tools/write-q088-progress.mjs
+          8c3e9a399fe9d3a7a9c5699ab189124fc43f082804acb1e41fdfb1827f787ead  .github/workflows/q088-cast.yml
+          HASHES
+      - name: Apply audited cast and preserve exact previous quest
+        run: node tools/apply-q088-audit.mjs
+      - name: Check all routes, panel custody, real escorts and interruption recovery
+        run: node --test tests/observation-window-cast.test.mjs tests/relocated-cast-audit.test.mjs tests/observatory.test.mjs tests/observatory-sites.test.mjs tests/observatory-compat.test.mjs
+      - name: Reproduce five ordinary party trials
+        run: node tools/measure-observation-window.mjs doc/development/Q088_PLAYTEST_RESULTS.json
+      - name: Generate documents and runtime while preserving authored records
+        run: |
+          node tools/write-q088-progress.mjs
+          cp -a doc "$RUNNER_TEMP/q088-authored-docs"
+          node tools/build-docs.mjs
+          for file in battle/QUEST_PARTY_PLAYTEST.md battle/SALOME_CLASSES_AND_CHARACTERS_DESIGN.md development/CHROMIUM_DEFERRED_2026-11-04.md development/PROGRESS.md development/REMAINING_WORK.md development/TEST_OVERVIEW.md dungeons/ODDLAND_RELOCATION_AUDIT.md dungeons/REGIONAL_RELOCATION_WORK.md scenarios/EGG_KNIGHT_FORESHADOWING.md scenarios/ODDLAND_100_QUEST_DESIGN.md scenarios/REGIONAL_QUEST_ALLOCATION.md scenarios/SALOME_100_QUEST_DESIGN.md ui/SOUND_AND_EFFECT_FORMAT.md; do
+            cp "$RUNNER_TEMP/q088-authored-docs/$file" "doc/$file"
+          done
+          node tools/audit-relocated-cast.mjs
+          node tools/build-runtime.mjs
+          git rm tools/apply-q088-audit.mjs tools/write-q088-progress.mjs
+      - name: Validate generated content, assets, references and documentation
+        run: |
+          node tools/build-scenario-editions.mjs --check
+          node tools/build-runtime.mjs --check
+          node tools/validate.mjs
+          node tools/check-config-editors.mjs
+          node tools/check-static.mjs
+          node tools/check-docs.mjs
+      - name: Commit verified implementation
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --stat
+          git commit -m "feat(q088): audited specialists, panel custody and old-save verification"
+          git push origin HEAD:feature/observatory-q088-audit
