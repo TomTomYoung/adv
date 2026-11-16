@@ -1,0 +1,48 @@
+name: Validate q087 wish ticket in Chromium
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'data/**'
+      - 'authoring/editions/e2/oddland/observatory-first.mjs'
+      - 'authoring/relocated-character-art.mjs'
+      - 'tools/build-observatory-quests.mjs'
+      - 'tools/browser-wish-ticket-cast-smoke.mjs'
+      - 'tools/wish-ticket-art-fixtures.mjs'
+      - 'tools/character-art-browser.mjs'
+      - 'tests/wish-ticket-cast.test.mjs'
+      - 'tests/fixtures/e2-q087-before-cast.json'
+      - 'assets/images/**'
+      - '.github/workflows/q087-cast.yml'
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+permissions:
+  contents: read
+jobs:
+  q087-browser:
+    runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned browser driver and verify Japanese fonts
+        run: |
+          npm install --no-save --package-lock=false playwright@1.58.2
+          test -n "$(fc-list :lang=ja)"
+      - name: Check Haku escort, receipt versus action, notebook records, desk completion and old saves
+        run: ADV_BROWSER_OUTPUT=/tmp/adv-wish-ticket-art-browser node tools/browser-wish-ticket-cast-smoke.mjs
+      - name: Keep q087 checkpoints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: q087-cast-checkpoints
+          path: /tmp/adv-wish-ticket-art-browser
+          if-no-files-found: error
+          retention-days: 7
