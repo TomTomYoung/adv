@@ -1,0 +1,68 @@
+name: Prepare q090 mobile label correction
+on:
+  push:
+    branches: [feature/observatory-q090-audit]
+    paths: [.github/workflows/q090-layout-fix.yml]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/observatory-q090-audit
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Widen three-role positions and regenerate audited quest
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          const digest=q=>createHash('sha256').update(JSON.stringify(q)).digest('hex');
+          const quest='data/scenario-editions/e2/q090.json',before=digest(JSON.parse(fs.readFileSync(quest,'utf8')));
+          const source='authoring/editions/e2/oddland/observatory-first.mjs',text=fs.readFileSync(source,'utf8'),needle='people.length===3?[23,50,77][i]';
+          if(text.split(needle).length!==2)throw Error('q090 positions changed');
+          fs.writeFileSync(source,text.replace(needle,'people.length===3?[17,50,83][i]'));
+          const test='tests/sky-return-cast.test.mjs',tests=fs.readFileSync(test,'utf8'),anchor=" assert.deepEqual(q.story.registry,previousQ090.story.registry);";
+          if(tests.split(anchor).length!==2)throw Error('q090 test anchor changed');
+          fs.writeFileSync(test,tests.replace(anchor," assert.deepEqual(q.story.scenes.overrun.cast.map(c=>c.display.x),[17,50,83]);\n"+anchor));
+          execFileSync(process.execPath,['tools/build-scenario-editions.mjs'],{stdio:'inherit'});
+          const after=digest(JSON.parse(fs.readFileSync(quest,'utf8'))),review='authoring/relocated-cast-review.mjs',reviews=fs.readFileSync(review,'utf8');
+          if(reviews.split(before).length!==2)throw Error('q090 audit fingerprint changed');
+          fs.writeFileSync(review,reviews.replace(before,after));
+          execFileSync(process.execPath,['tools/audit-relocated-cast.mjs'],{stdio:'inherit'});
+          const note='初回Chromium検査は390pxのoverrunで観覧者と保守員の呼称が約9px重なり失敗した。三者の横位置を23/50/77から17/50/83へ広げ、位置の回帰条件を専用試験へ追加した。重なり検査を緩和せず、全140画面条件を再実行する。失敗成果物は成功件数に含めない。';
+          for(const file of ['doc/HANDOFF.md','doc/CURRENT_STATUS.md','doc/development/PROGRESS.md','doc/development/REMAINING_WORK.md','doc/development/TEST_OVERVIEW.md']){
+            const text=fs.readFileSync(file,'utf8'),heading='## q090 空を返す日 — 2026-11-17\n';
+            if(text.split(heading).length!==2||text.includes(note))throw Error('q090 record anchor changed: '+file);
+            fs.writeFileSync(file,text.replace(heading,heading+'\n'+note+'\n'));
+          }
+          const expected={
+            'authoring/editions/e2/oddland/observatory-first.mjs':'171f964f1f760061d5f25120beff77dd57cd2ba7dd8893269656ae3ccb41ec51',
+            'tests/sky-return-cast.test.mjs':'75118b3ebbacb0ad8b921a139b1badc169ce2034f739c6d547975592287f8c84',
+            'authoring/relocated-cast-review.mjs':'52b5f4ed0cfd15737de65e8f2bc08b18e9cdbe5d3245c3d6f168848693015935',
+            'data/scenario-editions/e2/q090.json':'b27ef35dcc3166039b5c7eae10c95f14ae5a4fb95d03879995d362a577cf4269'
+          };
+          for(const [file,wanted] of Object.entries(expected))if(createHash('sha256').update(fs.readFileSync(file)).digest('hex')!==wanted)throw Error('Output differs from locally tested fix: '+file);
+          JS
+      - name: Repeat state tests and validate generated content
+        run: |
+          node --test tests/sky-return-cast.test.mjs tests/relocated-cast-audit.test.mjs tests/observatory*.test.mjs
+          node tools/build-runtime.mjs
+          node tools/build-runtime.mjs --check
+          node tools/build-scenario-editions.mjs --check
+          node tools/validate.mjs
+          node tools/check-static.mjs
+          node tools/check-docs.mjs
+      - name: Commit corrected positions and generated files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --stat
+          git commit -m "fix(q090): separate visitor and maintenance labels at mobile width"
+          git push origin HEAD:feature/observatory-q090-audit
