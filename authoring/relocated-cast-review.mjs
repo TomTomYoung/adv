@@ -3,6 +3,95 @@
 export const RELOCATED_CAST_REVIEW={
  reviewedAt:'2026-11-16',
  quests:{
+  q080:{
+  "sourceSha256": "2d259566e96aeb47ae6a60455ed8396e4cc11dec5959c6d965c8a4053621af43",
+  "identityNotes": [
+    "整備側原稿authoring/quests.txt・structures-4.mjsのQ(80)、初版2場面・現行7場面を精読した。三者の代表は個別の承認窓口で役割と条件を確認する。依頼人セリとの同一性や氏名・容貌を追加しない。",
+    "整備・利用・保護の代表をmaintenance_signed・users_signed・guardians_signedにだけ呼称表示する。固定所在はそれぞれの窓口。全8旅程の同行者は空のまま。councilの説明だけから三者を中枢へ同席させず、鍵の破棄と復帰に人物を追加しない。",
+    "受注条件は機関廟3件完了。各署名は各窓口から中枢へ戻る出発時に確定し、到着だけでは未署名。全三署名を得るまでrestoreを許さず、再署名を拒否し、途中保留では既存署名を保持する。",
+    "単独支配鍵は破棄台へ向かう出発時に隊が携行し、帰路の出発時に破棄台へ渡して破砕を記録する。中枢へ戻っただけでは共同管理を確定せず、restoredのfinishで確定する。強行戦勝利時の鍵取得と単独支配は別経路。",
+    "物語改訂1→2は旧定義で保存全体を検証後、三役の固定所在だけを補う。既存registry・行動・結末・報酬・旧受注と表示途中の本文・選択肢を保持する。三つの署名場面とrestoredの本文を既存の確定時点へ合わせる。"
+  ],
+  "relatedClients": {},
+  "people": {
+    "q080_maintenance": {
+      "label": "整備者の代表",
+      "status": "connected",
+      "entity": "maintenancePerson",
+      "need": "既存の署名条件を述べる個別窓口にのみ呼称表示。中枢と破棄台には同行しない。"
+    },
+    "q080_users": {
+      "label": "利用者の代表",
+      "status": "connected",
+      "entity": "usersPerson",
+      "need": "既存の署名条件を述べる個別窓口にのみ呼称表示。中枢と破棄台には同行しない。"
+    },
+    "q080_guardians": {
+      "label": "保護者の代表",
+      "status": "connected",
+      "entity": "guardiansPerson",
+      "need": "既存の署名条件を述べる個別窓口にのみ呼称表示。中枢と破棄台には同行しない。"
+    }
+  },
+  "scenes": {
+    "entry": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "玉座の下には三つの端子があり",
+      "reason": "中枢の構造を観察する場面。セリや三者代表の同席は指定されていない。",
+      "visual": "単独承認の短絡と三つの端子を区別する。"
+    },
+    "council": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "各代表が、自分の責任を確認してから署名する。",
+      "reason": "三者承認の手順を提示する中枢。現行旅程では個別窓口へ訪問して署名を持ち帰り、代表自身は同行しない。",
+      "visual": "署名の組合せと選択可否を表示し、代表の瞬間移動を作らない。"
+    },
+    "maintenance_signed": {
+      "decision": "person-evidence",
+      "people": [
+        "q080_maintenance"
+      ],
+      "evidence": "代表は、故障時に一人でも停止を請求できることを署名の条件に挙げる。",
+      "reason": "整備者が自分の停止権と点検責任を署名の条件として述べる個別窓口。",
+      "visual": "署名はreturn出発時。到着だけで承認済みにしない。"
+    },
+    "users_signed": {
+      "decision": "person-evidence",
+      "people": [
+        "q080_users"
+      ],
+      "evidence": "代表は、夜の空調を勝手に切られないことを署名の条件に挙げる。",
+      "reason": "利用者が稼働時間に関する条件を確認する相談窓口。",
+      "visual": "利用者本人をこの窓口に留め、隊が署名を持ち帰る。"
+    },
+    "guardians_signed": {
+      "decision": "person-evidence",
+      "people": [
+        "q080_guardians"
+      ],
+      "evidence": "代表は、避難路が閉じる命令を承認しないことを署名の条件に挙げる。",
+      "reason": "保護者が避難路の保護を承認の条件として述べる場所。",
+      "visual": "保護者の確認と署名済み状態を区別する。"
+    },
+    "destroy": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "単独で承認を飛ばす鍵だけを破棄する。",
+      "reason": "隊が三者の署名を照合して単独支配鍵を破棄する場所。代表の同行はない。",
+      "visual": "到着時は隊が鍵を保持し、return出発時に破棄する。"
+    },
+    "restored": {
+      "decision": "no-person-evidence",
+      "people": [],
+      "evidence": "単独で承認を飛ばす鍵を破棄して、中枢へ戻った。",
+      "reason": "隊が中枢へ戻って共同管理を確定する場面。結末で鍵を配るセリを作業中の同席者とは断定しない。",
+      "visual": "鍵破砕は済んでいるが、共同管理と依頼完了はfinishで確定する。"
+    }
+  },
+  "next": "三者の署名順と途中保留を含む24経路、現行・旧保存・旧受注、固定所在、管理鍵、強行戦敗北後の切替と報酬一回性を検証する。次はq081「落ちてこない星」。q171の妻は別途未接続候補1役として保持する。"
+},
   q079:{
   "sourceSha256": "571ac2d7da28023608dae0f7cdd4a6abd907ef3a10d9a20cd2cdb3d779209fbb",
   "identityNotes": [

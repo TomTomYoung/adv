@@ -1,0 +1,3077 @@
+{
+  "schemaVersion": 1,
+  "id": "q080",
+  "number": 80,
+  "title": "鉄胎の継承",
+  "client": "修繕組合のセリ",
+  "brief": "廟の中枢が後継者を求めている。人間か機械かを選ぶよう命じられた。",
+  "region": 8,
+  "type": "authored_progression",
+  "recommendedLevel": 8,
+  "requires": {
+    "op": "gte",
+    "left": {
+      "ref": "vars.region_8"
+    },
+    "right": 3
+  },
+  "unlockHint": "この地域の依頼を3件完了すると受注できる。 サロメの共同依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q080_clue_a",
+      "title": "鉄胎の継承：現場の痕跡",
+      "points": [
+        {
+          "map": "region_8_f2",
+          "x": 4,
+          "y": 5,
+          "dungeon": "region_8"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q080.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q080.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q080"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q080"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_8"
+    },
+    {
+      "id": "q080_clue_b",
+      "title": "鉄胎の継承：記録と証言",
+      "points": [
+        {
+          "map": "region_8_f2",
+          "x": 5,
+          "y": 11,
+          "dungeon": "region_8"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q080.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q080.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q080"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q080"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_8"
+    },
+    {
+      "id": "q080_decision",
+      "title": "鉄胎の継承：決着の場",
+      "points": [
+        {
+          "map": "region_8_f2",
+          "x": 15,
+          "y": 5,
+          "dungeon": "region_8"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q080.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q080.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q080.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q080"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_8"
+    },
+    {
+      "id": "region_8",
+      "title": "動力の届く範囲",
+      "dungeon": "region_8",
+      "points": [
+        {
+          "map": "region_8_f1",
+          "x": 1,
+          "y": 2,
+          "dungeon": "region_8"
+        }
+      ],
+      "trigger": "action",
+      "script": "dungeon.scene.region_8.v1",
+      "condition": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q080.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      },
+      "requirement": "関連する依頼を受けると調査できる。",
+      "note": {
+        "text": "門扉系統への通電を確認した。動力を分配する操作と、中枢の命令を承認する署名は異なる手続きとして調べる。",
+        "when": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.dungeonNotes.region_8"
+          },
+          "right": true
+        }
+      },
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          null,
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q080"
+              },
+              "right": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "q080_machine_entry",
+      "title": "鉄胎の継承の現場受付",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q080.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q080.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q080"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q080.machine.visit",
+      "points": [
+        {
+          "dungeon": "region_8",
+          "map": "region_8_f2",
+          "x": 15,
+          "y": 5
+        }
+      ]
+    },
+    {
+      "id": "q080_machine_guardians_place",
+      "title": "避難路を確かめる保護者席",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "guardians_place",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q080.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q080.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q080"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q080.machine.visit",
+      "points": [
+        {
+          "dungeon": "region_8",
+          "map": "region_8_f1",
+          "x": 7,
+          "y": 1
+        }
+      ]
+    },
+    {
+      "id": "q080_machine_destroy",
+      "title": "単独支配鍵の破棄台",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "destroy",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q080.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q080.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q080"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q080.machine.visit",
+      "points": [
+        {
+          "dungeon": "region_8",
+          "map": "region_8_f2",
+          "x": 4,
+          "y": 5
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_8_f2",
+      "x": 4,
+      "y": 5,
+      "object": "q080_clue_a",
+      "role": "clue_a"
+    },
+    {
+      "map": "region_8_f2",
+      "x": 5,
+      "y": 11,
+      "object": "q080_clue_b",
+      "role": "clue_b"
+    },
+    {
+      "map": "region_8_f2",
+      "x": 15,
+      "y": 5,
+      "object": "q080_decision",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "三つの署名を接続し、短絡を外す",
+      "text": "廟の返事は少し遅くなった。セリは誰も一人で炉を動かせない鍵を配る。",
+      "gold": 141,
+      "xp": 124
+    },
+    "contract": {
+      "label": "中枢守護機を倒し、命令を隊へ統一する",
+      "text": "廟は素早く応えた。何を止めるかも、あなたの署名を待つ。",
+      "gold": 161,
+      "xp": 96
+    },
+    "compromise": {
+      "label": "灯と空調だけ残し、後継選定を延期する",
+      "text": "灯と空調は続いた。後継者の席には、議題の札だけが置かれる。",
+      "gold": 91,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/salome/machine-first.mjs",
+    "world": {
+      "truth": "中枢は単独の支配者でなく、複数の署名で命令を確定する構造を持っている。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "中枢は単独の支配者でなく、複数の署名で命令を確定する構造を持っている。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "廟の中枢が後継者を求めている。人間か機械かを選ぶよう命じられた。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "修繕組合のセリ",
+        "observation": "廟の中枢が後継者を求めている。人間か機械かを選ぶよう命じられた。",
+        "belief": "廟の中枢が後継者を求めている。人間か機械かを選ぶよう命じられた。",
+        "goal": "廟の中枢が後継者を求めている。人間か機械かを選ぶよう命じられた。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "廟の中枢が後継者を求めている。人間か機械かを選ぶよう命じられた。",
+      "progression": "三者の承認を任意順で集め、単独支配の鍵を壊す提案に各役割が応答する。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q080.machine.entry"
+        },
+        {
+          "id": "council",
+          "script": "q080.machine.council"
+        },
+        {
+          "id": "maintenance_signed",
+          "script": "q080.machine.maintenance_signed"
+        },
+        {
+          "id": "users_signed",
+          "script": "q080.machine.users_signed"
+        },
+        {
+          "id": "guardians_signed",
+          "script": "q080.machine.guardians_signed"
+        },
+        {
+          "id": "destroy",
+          "script": "q080.machine.destroy"
+        },
+        {
+          "id": "restored",
+          "script": "q080.machine.restored"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "廟の中枢が後継者を求めている。人間か機械かを選ぶよう命じられた。",
+      "openQuestion": "鉄胎の継承の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "frameShift",
+      "newInformation": "中枢は単独の支配者でなく、複数の署名で命令を確定する構造を持っている。",
+      "retroactiveTargets": [
+        "council"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q080.flow.entry"
+      },
+      {
+        "id": "council",
+        "script": "q080.flow.council"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q080.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q080.maintenance",
+        "meaning": "各場面に明記した maintenance の行為・合意の記録",
+        "writer": [
+          "council"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q080.users",
+        "meaning": "各場面に明記した users の行為・合意の記録",
+        "writer": [
+          "council"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      },
+      {
+        "path": "flags.flow.q080.guardians",
+        "meaning": "各場面に明記した guardians の行為・合意の記録",
+        "writer": [
+          "council"
+        ],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "三者の承認を任意順で集め、単独支配の鍵を壊す提案に各役割が応答する。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "三者の承認を任意順で集め、単独支配の鍵を壊す提案に各役割が応答する。",
+    "flowVersion": 2,
+    "entryScript": "q080.machine.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "中枢は後継者を一人求める。しかし玉座の下には三つの端子があり、一つだけ短絡されている。",
+        "options": [
+          {
+            "id": "council",
+            "text": "創設時の三者承認を提案する",
+            "to": "council",
+            "action": "entry_council"
+          },
+          {
+            "id": "rule",
+            "text": "中枢守護機を倒し、命令を隊へ統一する",
+            "to": "@contract",
+            "action": "entry_rule"
+          },
+          {
+            "id": "minimum",
+            "text": "灯と空調だけ残し、後継選定を延期する",
+            "to": "@compromise",
+            "action": "entry_minimum"
+          }
+        ]
+      },
+      {
+        "id": "council",
+        "place": "entry",
+        "text": "中枢は単独の支配者でなく、複数の署名で命令を確定する構造を持っている。 整備・利用・保護の各代表が、自分の責任を確認してから署名する。",
+        "options": [
+          {
+            "id": "maintenance",
+            "text": "整備者へ停止権と点検の責任を渡す",
+            "to": "maintenance_signed",
+            "action": "council_maintenance"
+          },
+          {
+            "id": "users",
+            "text": "利用者へ稼働時間を協議する席を渡す",
+            "to": "users_signed",
+            "action": "council_users"
+          },
+          {
+            "id": "guardians",
+            "text": "保護者へ避難路の確認を任せる",
+            "to": "guardians_signed",
+            "action": "council_guardians"
+          },
+          {
+            "id": "restore",
+            "text": "三つの署名を接続し、短絡を外す",
+            "to": "destroy",
+            "action": "council_restore"
+          },
+          {
+            "id": "defer",
+            "text": "署名の済んだ条件を保管し、選定を延期する",
+            "to": "@compromise",
+            "action": "council_defer"
+          }
+        ]
+      },
+      {
+        "id": "maintenance_signed",
+        "place": "maintenance_place",
+        "text": "整備者は故障時に一人でも停止を請求できる条件で署名した。",
+        "options": [
+          {
+            "id": "return",
+            "text": "署名した条件を中枢へ持ち帰る",
+            "to": "council",
+            "action": "maintenance_signed_return"
+          }
+        ]
+      },
+      {
+        "id": "users_signed",
+        "place": "users_place",
+        "text": "利用者は夜の空調を勝手に切られない条件で署名した。",
+        "options": [
+          {
+            "id": "return",
+            "text": "署名した条件を中枢へ持ち帰る",
+            "to": "council",
+            "action": "users_signed_return"
+          }
+        ]
+      },
+      {
+        "id": "guardians_signed",
+        "place": "guardians_place",
+        "text": "保護者は避難路が閉じる命令を承認しない条件で署名した。",
+        "options": [
+          {
+            "id": "return",
+            "text": "署名した条件を中枢へ持ち帰る",
+            "to": "council",
+            "action": "guardians_signed_return"
+          }
+        ]
+      },
+      {
+        "id": "destroy",
+        "place": "destroy",
+        "text": "三者の署名と役割を照合した。単独で承認を飛ばす鍵だけを破棄する。",
+        "options": [
+          {
+            "id": "return",
+            "text": "短絡鍵を破棄し、中枢へ戻る",
+            "to": "restored",
+            "action": "destroy_return"
+          }
+        ]
+      },
+      {
+        "id": "restored",
+        "place": "entry",
+        "text": "三つの端子へ署名を接続して短絡を外した。整備・利用・保護の役割を持つ鍵をそれぞれ渡す。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@informed",
+            "action": "restored_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "machine-twenty",
+      "settlement": "salome",
+      "saveRevision": 2,
+      "scope": "機関廟20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q080.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "玉座の下に三つの入力端子があり、一つだけ短絡されている。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q080",
+          "key": "clue_a",
+          "text": "玉座の下に三つの入力端子があり、一つだけ短絡されている。"
+        }
+      ]
+    },
+    "q080.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "修繕組合のセリ",
+          "text": "創設記録には整備・利用・保護の三者承認が載っています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q080",
+          "key": "clue_b",
+          "text": "創設記録には整備・利用・保護の三者承認が載っている。"
+        }
+      ]
+    },
+    "q080.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "鉄胎の継承\n\n廟の中枢が後継者を求めている。人間か機械かを選ぶよう命じられた。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "三者承認を戻して共同運営にする",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q080.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q080.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "中枢は単独の支配者でなく、複数の署名で命令を確定する構造を持っている。"
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_8",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "廟の返事は少し遅くなった。セリは誰も一人で炉を動かせない鍵を配る。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q080",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "中枢守護機を倒し冒険者の命令へ統一する",
+              "requirement": "戦闘あり・逃走不可",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_8",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "廟は素早く応えた。何を止めるかも、あなたの署名を待つ。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q080",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "最小機能だけ残し後継選定を延期する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "灯と空調は続いた。後継者の席には、議題の札だけが置かれる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q080",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q080.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "鉄胎の継承\n\n廟の中枢が後継者を求めている。人間か機械かを選ぶよう命じられた。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q080.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q080.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "中枢は単独の支配者でなく、複数の署名で命令を確定する構造を持っている。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q080.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "三者承認を戻して共同運営にする",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q080.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q080.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合・戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_8",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "廟の返事は少し遅くなった。セリは誰も一人で炉を動かせない鍵を配る。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q080",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q080.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q080.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "contract",
+              "text": "中枢守護機を倒し冒険者の命令へ統一する",
+              "requirement": "戦闘あり・逃走不可",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_8",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "廟は素早く応えた。何を止めるかも、あなたの署名を待つ。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q080",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "最小機能だけ残し後継選定を延期する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "灯と空調は続いた。後継者の席には、議題の札だけが置かれる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q080",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」修繕組合のセリは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられる。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q080.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q080.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q080.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "廟の返事は少し遅くなった。セリは誰も一人で炉を動かせない鍵を配る。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q080.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "廟は素早く応えた。何を止めるかも、あなたの署名を待つ。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q080.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "灯と空調は続いた。後継者の席には、議題の札だけが置かれる。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q080.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q080.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q080.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q080.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q080.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q080.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q080.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "中枢は後継者を一人求める。しかし玉座の下には三つの端子があり、一つだけ短絡されている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "council",
+              "text": "創設時の三者承認を提案する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q080.flow.council"
+                }
+              ]
+            },
+            {
+              "id": "rule",
+              "text": "中枢守護機を倒し、命令を隊へ統一する",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_8",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q080.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "minimum",
+              "text": "灯と空調だけ残し、後継選定を延期する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q080.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q080.flow.council": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q080.node",
+          "value": "council"
+        },
+        {
+          "op": "say",
+          "text": "中枢は単独の支配者でなく、複数の署名で命令を確定する構造を持っている。 整備・利用・保護の各代表が、自分の責任を確認してから署名する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "maintenance",
+              "text": "整備者へ停止権と点検の責任を渡す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q080.maintenance"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q080.maintenance",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "整備者は故障時に一人でも停止を請求できる条件で署名した。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q080.flow.council"
+                }
+              ]
+            },
+            {
+              "id": "users",
+              "text": "利用者へ稼働時間を協議する席を渡す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q080.users"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q080.users",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "利用者は夜の空調を勝手に切られない条件で署名した。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q080.flow.council"
+                }
+              ]
+            },
+            {
+              "id": "guardians",
+              "text": "保護者へ避難路の確認を任せる",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q080.guardians"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q080.guardians",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "保護者は避難路が閉じる命令を承認しない条件で署名した。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q080.flow.council"
+                }
+              ]
+            },
+            {
+              "id": "restore",
+              "text": "三つの署名を接続し、短絡を外す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q080.maintenance"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q080.users"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.flow.q080.guardians"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に「整備者へ停止権と点検の責任を渡す」・先に「利用者へ稼働時間を協議する席を渡す」・先に「保護者へ避難路の確認を任せる」",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q080.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "defer",
+              "text": "署名の済んだ条件を保管し、選定を延期する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q080.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q080.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q080.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "廟の返事は少し遅くなった。セリは誰も一人で炉を動かせない鍵を配る。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q080",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q080.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q080.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "廟は素早く応えた。何を止めるかも、あなたの署名を待つ。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q080",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q080.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q080.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "灯と空調は続いた。後継者の席には、議題の札だけが置かれる。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q080",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q080.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q080.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q080.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "廟の返事は少し遅くなった。セリは誰も一人で炉を動かせない鍵を配る。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "廟は素早く応えた。何を止めるかも、あなたの署名を待つ。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "灯と空調は続いた。後継者の席には、議題の札だけが置かれる。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q080"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q080.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q080.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q080.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "council",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q080.flow.council"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q080.flow.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "dungeon.scene.region_8.v1": {
+      "dungeonScene": "region_8",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "門扉系統の配電盤から配管をたどる。中枢への命令を考える前に、一つの系統へ動力を送った影響を確かめる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "contains",
+            "left": {
+              "ref": "dungeons.persistent.region_8.systems.power.circuits"
+            },
+            "right": "circuit_1_0"
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "門扉系統へ動力が送られている。同じ系統に属する設備にも電力が届くため、門だけを見て操作を決めることはできない。中枢の署名条件は、別途その記録を読む必要がある。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.region_8"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.region_8",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "門扉系統に動力は送られていない。配電盤の操作で起動する設備を確認し、番兵への対応も済ませてから調査を続けよう。"
+            }
+          ]
+        }
+      ]
+    },
+    "q080.machine.entry": {
+      "storyQuest": "q080",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q080",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "中枢は後継者を一人求める。しかし玉座の下には三つの端子があり、一つだけ短絡されている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "council",
+              "text": "創設時の三者承認を提案する",
+              "storyAction": {
+                "quest": "q080",
+                "action": "entry_council"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q080",
+                  "action": "entry_council"
+                },
+                {
+                  "op": "jump",
+                  "script": "q080.machine.council"
+                }
+              ]
+            },
+            {
+              "id": "rule",
+              "text": "中枢守護機を倒し、命令を隊へ統一する",
+              "storyAction": {
+                "quest": "q080",
+                "action": "entry_rule"
+              },
+              "requirement": "戦闘。作業・報酬は勝利後に確定する。",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_8",
+                  "on_win": [
+                    {
+                      "op": "story.action",
+                      "quest": "q080",
+                      "action": "entry_rule"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q080.machine.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "narrate",
+                      "text": "戦いを切り上げた。作業は確定していない。現場で再開できる。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q080.machine.entry"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "narrate",
+                      "text": "救助班にサロメへ運び出された。現場へ戻れば直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "minimum",
+              "text": "灯と空調だけ残し、後継選定を延期する",
+              "storyAction": {
+                "quest": "q080",
+                "action": "entry_minimum"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q080",
+                  "action": "entry_minimum"
+                },
+                {
+                  "op": "jump",
+                  "script": "q080.machine.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q080.machine.council": {
+      "storyQuest": "q080",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q080",
+          "scene": "council"
+        },
+        {
+          "op": "narrate",
+          "text": "中枢は単独の支配者でなく、複数の署名で命令を確定する構造を持っている。 整備・利用・保護の各代表が、自分の責任を確認してから署名する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "maintenance",
+              "text": "整備者へ停止権と点検の責任を渡す",
+              "storyAction": {
+                "quest": "q080",
+                "action": "council_maintenance"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q080.values.maintenance"
+                  },
+                  "right": true
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q080",
+                  "action": "council_maintenance"
+                }
+              ]
+            },
+            {
+              "id": "users",
+              "text": "利用者へ稼働時間を協議する席を渡す",
+              "storyAction": {
+                "quest": "q080",
+                "action": "council_users"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q080.values.users"
+                  },
+                  "right": true
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q080",
+                  "action": "council_users"
+                }
+              ]
+            },
+            {
+              "id": "guardians",
+              "text": "保護者へ避難路の確認を任せる",
+              "storyAction": {
+                "quest": "q080",
+                "action": "council_guardians"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q080.values.guardians"
+                  },
+                  "right": true
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q080",
+                  "action": "council_guardians"
+                }
+              ]
+            },
+            {
+              "id": "restore",
+              "text": "三つの署名を接続し、短絡を外す",
+              "storyAction": {
+                "quest": "q080",
+                "action": "council_restore"
+              },
+              "condition": {
+                "op": "and",
+                "args": [
+                  true,
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q080.values.maintenance"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q080.values.users"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q080.values.guardians"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q080",
+                  "action": "council_restore"
+                }
+              ]
+            },
+            {
+              "id": "defer",
+              "text": "署名の済んだ条件を保管し、選定を延期する",
+              "storyAction": {
+                "quest": "q080",
+                "action": "council_defer"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q080",
+                  "action": "council_defer"
+                },
+                {
+                  "op": "jump",
+                  "script": "q080.machine.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q080.machine.maintenance_signed": {
+      "storyQuest": "q080",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q080",
+          "scene": "maintenance_signed"
+        },
+        {
+          "op": "narrate",
+          "text": "整備者は故障時に一人でも停止を請求できる条件で署名した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "署名した条件を中枢へ持ち帰る",
+              "storyAction": {
+                "quest": "q080",
+                "action": "maintenance_signed_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q080",
+                  "action": "maintenance_signed_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q080.machine.users_signed": {
+      "storyQuest": "q080",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q080",
+          "scene": "users_signed"
+        },
+        {
+          "op": "narrate",
+          "text": "利用者は夜の空調を勝手に切られない条件で署名した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "署名した条件を中枢へ持ち帰る",
+              "storyAction": {
+                "quest": "q080",
+                "action": "users_signed_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q080",
+                  "action": "users_signed_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q080.machine.guardians_signed": {
+      "storyQuest": "q080",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q080",
+          "scene": "guardians_signed"
+        },
+        {
+          "op": "narrate",
+          "text": "保護者は避難路が閉じる命令を承認しない条件で署名した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "署名した条件を中枢へ持ち帰る",
+              "storyAction": {
+                "quest": "q080",
+                "action": "guardians_signed_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q080",
+                  "action": "guardians_signed_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q080.machine.destroy": {
+      "storyQuest": "q080",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q080",
+          "scene": "destroy"
+        },
+        {
+          "op": "narrate",
+          "text": "三者の署名と役割を照合した。単独で承認を飛ばす鍵だけを破棄する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "短絡鍵を破棄し、中枢へ戻る",
+              "storyAction": {
+                "quest": "q080",
+                "action": "destroy_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q080",
+                  "action": "destroy_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q080.machine.restored": {
+      "storyQuest": "q080",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q080",
+          "scene": "restored"
+        },
+        {
+          "op": "narrate",
+          "text": "三つの端子へ署名を接続して短絡を外した。整備・利用・保護の役割を持つ鍵をそれぞれ渡す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q080",
+                "action": "restored_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q080",
+                  "action": "restored_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q080.machine.end.informed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q080.machine.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "廟の返事は少し遅くなった。セリは誰も一人で炉を動かせない鍵を配る。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q080",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q080.machine.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "廟は素早く応えた。何を止めるかも、あなたの署名を待つ。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q080",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q080.machine.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "灯と空調は続いた。後継者の席には、議題の札だけが置かれる。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q080",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q080.machine.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q080"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q080.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q080.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q080.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "廟の返事は少し遅くなった。セリは誰も一人で炉を動かせない鍵を配る。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "廟は素早く応えた。何を止めるかも、あなたの署名を待つ。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "灯と空調は続いた。後継者の席には、議題の札だけが置かれる。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q080"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q080.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q080.machine.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "council",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q080.machine.council"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "maintenance_signed",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q080.machine.maintenance_signed"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "users_signed",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q080.machine.users_signed"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "guardians_signed",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q080.machine.guardians_signed"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "destroy",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q080.machine.destroy"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "restored",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q080.machine.restored"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q080.machine.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "鉄胎の継承の現場受付",
+      "maintenance_place": "整備者の承認窓口",
+      "users_place": "利用者の稼働時間相談",
+      "guardians_place": "避難路を確かめる保護者席",
+      "destroy": "単独支配鍵の破棄台",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "maintenance_place"
+      ],
+      [
+        "transit",
+        "users_place"
+      ],
+      [
+        "transit",
+        "guardians_place"
+      ],
+      [
+        "transit",
+        "destroy"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "maintenance_place",
+          "users_place",
+          "guardians_place",
+          "destroy",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "singleControl": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "singleControl"
+      },
+      "maintenance": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "maintenance"
+      },
+      "users": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "users"
+      },
+      "guardians": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "guardians"
+      },
+      "singleKeyDestroyed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "singleKeyDestroyed"
+      },
+      "sharedControl": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "sharedControl"
+      },
+      "singleKeyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "maintenance_place",
+          "users_place",
+          "guardians_place",
+          "destroy",
+          "transit",
+          "party"
+        ],
+        "meaning": "singleKey の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "singleKey": {
+        "holder": "singleKeyAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "中枢は単独の支配者でなく、複数の署名で命令を確定する構造を持っている。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "鉄胎の継承の現場受付",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "council": {
+        "title": "鉄胎の継承の現場受付",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "maintenance_signed": {
+        "title": "整備者の承認窓口",
+        "place": "maintenance_place",
+        "cast": [],
+        "requires": true
+      },
+      "users_signed": {
+        "title": "利用者の稼働時間相談",
+        "place": "users_place",
+        "cast": [],
+        "requires": true
+      },
+      "guardians_signed": {
+        "title": "避難路を確かめる保護者席",
+        "place": "guardians_place",
+        "cast": [],
+        "requires": true
+      },
+      "destroy": {
+        "title": "単独支配鍵の破棄台",
+        "place": "destroy",
+        "cast": [],
+        "requires": true
+      },
+      "restored": {
+        "title": "鉄胎の継承の現場受付",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_council": {
+        "from": [
+          "entry"
+        ],
+        "to": "council",
+        "requires": true,
+        "effects": [
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "entry",
+            "requires": true
+          }
+        ],
+        "once": false
+      },
+      "entry_rule": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "singleKey",
+            "from": "entry",
+            "to": "party"
+          },
+          {
+            "op": "set",
+            "key": "singleControl",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "entry_minimum": {
+        "from": [
+          "entry"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "council_maintenance": {
+        "from": [
+          "council"
+        ],
+        "to": "maintenance_signed",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q080.values.maintenance"
+            },
+            "right": true
+          }
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "maintenance_place"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "maintenance_place",
+          "companions": []
+        },
+        "depart": []
+      },
+      "council_users": {
+        "from": [
+          "council"
+        ],
+        "to": "users_signed",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q080.values.users"
+            },
+            "right": true
+          }
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "users_place"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "users_place",
+          "companions": []
+        },
+        "depart": []
+      },
+      "council_guardians": {
+        "from": [
+          "council"
+        ],
+        "to": "guardians_signed",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q080.values.guardians"
+            },
+            "right": true
+          }
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "guardians_place"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "guardians_place",
+          "companions": []
+        },
+        "depart": []
+      },
+      "council_restore": {
+        "from": [
+          "council"
+        ],
+        "to": "destroy",
+        "requires": {
+          "op": "and",
+          "args": [
+            true,
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q080.values.maintenance"
+              },
+              "right": true
+            },
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q080.values.users"
+              },
+              "right": true
+            },
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q080.values.guardians"
+              },
+              "right": true
+            }
+          ]
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "destroy"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "destroy",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "singleKey",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      },
+      "council_defer": {
+        "from": [
+          "council"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "maintenance_signed_return": {
+        "from": [
+          "maintenance_signed"
+        ],
+        "to": "council",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "entry",
+            "requires": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "maintenance",
+            "value": true
+          }
+        ]
+      },
+      "users_signed_return": {
+        "from": [
+          "users_signed"
+        ],
+        "to": "council",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "entry",
+            "requires": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "users",
+            "value": true
+          }
+        ]
+      },
+      "guardians_signed_return": {
+        "from": [
+          "guardians_signed"
+        ],
+        "to": "council",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "entry",
+            "requires": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "guardians",
+            "value": true
+          }
+        ]
+      },
+      "destroy_return": {
+        "from": [
+          "destroy"
+        ],
+        "to": "restored",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "singleKey",
+            "from": "party",
+            "to": "destroy"
+          },
+          {
+            "op": "set",
+            "key": "singleKeyDestroyed",
+            "value": true
+          }
+        ]
+      },
+      "restored_finish": {
+        "from": [
+          "restored"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "sharedControl",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q080.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q080.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q080.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q080.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q080.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q080.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q080.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q080.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q080.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_8",
+        "map": "region_8_f2",
+        "x": 15,
+        "y": 5
+      },
+      "maintenance_place": {
+        "kind": "town",
+        "location": "machine_registry"
+      },
+      "users_place": {
+        "kind": "town",
+        "location": "salome_inn"
+      },
+      "guardians_place": {
+        "kind": "dungeon",
+        "dungeon": "region_8",
+        "map": "region_8_f1",
+        "x": 7,
+        "y": 1
+      },
+      "destroy": {
+        "kind": "dungeon",
+        "dungeon": "region_8",
+        "map": "region_8_f2",
+        "x": 4,
+        "y": 5
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "salome",
+  "receptionLocations": [
+    "salome_board"
+  ]
+}

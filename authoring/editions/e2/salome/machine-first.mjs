@@ -130,5 +130,18 @@ export function machineFirstSource(q,{cast=true}={}){
   choice('entry','rule').effects=[give('singleKey','entry','party'),set('singleControl')];
   route('council','restore','destroy',{depart:[give('singleKey','entry','party')]});add('destroy','destroy','三者の署名と役割を照合した。単独で承認を飛ばす鍵だけを破棄する。',[opt('return','短絡鍵を破棄し、中枢へ戻る','restored',{depart:[give('singleKey','party','destroy'),set('singleKeyDestroyed')]})]);end('restored','entry','三つの端子へ署名を接続して短絡を外した。整備・利用・保護の役割を持つ鍵をそれぞれ渡す。','informed',[set('sharedControl')]);
  }
+ if(q.number===80&&cast){
+  // Representatives stay at their own approval desks; the party brings back
+  // their signed terms. Neither a signature nor arrival teleports a person.
+  for(const key of ['maintenance','users','guardians']){
+   entity(key+'Person',key+'_place','person');
+   x.entities[key+'Person'].character='q080_'+key;
+   node(key+'_signed').cast=[{entity:key+'Person',display:{x:50}}];
+  }
+  node('maintenance_signed').text='整備者の承認窓口へ来た。代表は、故障時に一人でも停止を請求できることを署名の条件に挙げる。条件を確認して署名を受け、中枢へ持ち帰る。';
+  node('users_signed').text='利用者の相談窓口へ来た。代表は、夜の空調を勝手に切られないことを署名の条件に挙げる。条件を確認して署名を受け、中枢へ持ち帰る。';
+  node('guardians_signed').text='避難路を確かめる保護者席へ来た。代表は、避難路が閉じる命令を承認しないことを署名の条件に挙げる。条件を確認して署名を受け、中枢へ持ち帰る。';
+  node('restored').text='単独で承認を飛ばす鍵を破棄して、中枢へ戻った。三つの端子へ署名を接続して短絡を外し、整備・利用・保護の役割を分けた共同管理を確定する。';
+ }
  return finish();
 }

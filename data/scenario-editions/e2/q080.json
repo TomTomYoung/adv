@@ -629,7 +629,7 @@
       {
         "id": "maintenance_signed",
         "place": "maintenance_place",
-        "text": "整備者は故障時に一人でも停止を請求できる条件で署名した。",
+        "text": "整備者の承認窓口へ来た。代表は、故障時に一人でも停止を請求できることを署名の条件に挙げる。条件を確認して署名を受け、中枢へ持ち帰る。",
         "options": [
           {
             "id": "return",
@@ -642,7 +642,7 @@
       {
         "id": "users_signed",
         "place": "users_place",
-        "text": "利用者は夜の空調を勝手に切られない条件で署名した。",
+        "text": "利用者の相談窓口へ来た。代表は、夜の空調を勝手に切られないことを署名の条件に挙げる。条件を確認して署名を受け、中枢へ持ち帰る。",
         "options": [
           {
             "id": "return",
@@ -655,7 +655,7 @@
       {
         "id": "guardians_signed",
         "place": "guardians_place",
-        "text": "保護者は避難路が閉じる命令を承認しない条件で署名した。",
+        "text": "避難路を確かめる保護者席へ来た。代表は、避難路が閉じる命令を承認しないことを署名の条件に挙げる。条件を確認して署名を受け、中枢へ持ち帰る。",
         "options": [
           {
             "id": "return",
@@ -681,7 +681,7 @@
       {
         "id": "restored",
         "place": "entry",
-        "text": "三つの端子へ署名を接続して短絡を外した。整備・利用・保護の役割を持つ鍵をそれぞれ渡す。",
+        "text": "単独で承認を飛ばす鍵を破棄して、中枢へ戻った。三つの端子へ署名を接続して短絡を外し、整備・利用・保護の役割を分けた共同管理を確定する。",
         "options": [
           {
             "id": "finish",
@@ -701,7 +701,7 @@
     },
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -710,7 +710,766 @@
       "saveRevision": 2,
       "scope": "機関廟20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "鉄胎の継承の現場受付",
+            "maintenance_place": "整備者の承認窓口",
+            "users_place": "利用者の稼働時間相談",
+            "guardians_place": "避難路を確かめる保護者席",
+            "destroy": "単独支配鍵の破棄台",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "maintenance_place"
+            ],
+            [
+              "transit",
+              "users_place"
+            ],
+            [
+              "transit",
+              "guardians_place"
+            ],
+            [
+              "transit",
+              "destroy"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "maintenance_place",
+                "users_place",
+                "guardians_place",
+                "destroy",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "informed",
+                "contract",
+                "compromise"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "singleControl": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "singleControl"
+            },
+            "maintenance": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "maintenance"
+            },
+            "users": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "users"
+            },
+            "guardians": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "guardians"
+            },
+            "singleKeyDestroyed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "singleKeyDestroyed"
+            },
+            "sharedControl": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "sharedControl"
+            },
+            "singleKeyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "maintenance_place",
+                "users_place",
+                "guardians_place",
+                "destroy",
+                "transit",
+                "party"
+              ],
+              "meaning": "singleKey の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "singleKey": {
+              "holder": "singleKeyAt",
+              "kind": "item"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "中枢は単独の支配者でなく、複数の署名で命令を確定する構造を持っている。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "鉄胎の継承の現場受付",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "council": {
+              "title": "鉄胎の継承の現場受付",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "maintenance_signed": {
+              "title": "整備者の承認窓口",
+              "place": "maintenance_place",
+              "cast": [],
+              "requires": true
+            },
+            "users_signed": {
+              "title": "利用者の稼働時間相談",
+              "place": "users_place",
+              "cast": [],
+              "requires": true
+            },
+            "guardians_signed": {
+              "title": "避難路を確かめる保護者席",
+              "place": "guardians_place",
+              "cast": [],
+              "requires": true
+            },
+            "destroy": {
+              "title": "単独支配鍵の破棄台",
+              "place": "destroy",
+              "cast": [],
+              "requires": true
+            },
+            "restored": {
+              "title": "鉄胎の継承の現場受付",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_council": {
+              "from": [
+                "entry"
+              ],
+              "to": "council",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "observe",
+                  "observer": "party",
+                  "proposition": "truth",
+                  "source": "entry",
+                  "requires": true
+                }
+              ],
+              "once": false
+            },
+            "entry_rule": {
+              "from": [
+                "entry"
+              ],
+              "ending": "contract",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "singleKey",
+                  "from": "entry",
+                  "to": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "singleControl",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "contract"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "entry_minimum": {
+              "from": [
+                "entry"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "council_maintenance": {
+              "from": [
+                "council"
+              ],
+              "to": "maintenance_signed",
+              "requires": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q080.values.maintenance"
+                  },
+                  "right": true
+                }
+              },
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "maintenance_place"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "maintenance_place",
+                "companions": []
+              },
+              "depart": []
+            },
+            "council_users": {
+              "from": [
+                "council"
+              ],
+              "to": "users_signed",
+              "requires": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q080.values.users"
+                  },
+                  "right": true
+                }
+              },
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "users_place"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "users_place",
+                "companions": []
+              },
+              "depart": []
+            },
+            "council_guardians": {
+              "from": [
+                "council"
+              ],
+              "to": "guardians_signed",
+              "requires": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q080.values.guardians"
+                  },
+                  "right": true
+                }
+              },
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "guardians_place"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "guardians_place",
+                "companions": []
+              },
+              "depart": []
+            },
+            "council_restore": {
+              "from": [
+                "council"
+              ],
+              "to": "destroy",
+              "requires": {
+                "op": "and",
+                "args": [
+                  true,
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q080.values.maintenance"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q080.values.users"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q080.values.guardians"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "destroy"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "destroy",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "singleKey",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "council_defer": {
+              "from": [
+                "council"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "maintenance_signed_return": {
+              "from": [
+                "maintenance_signed"
+              ],
+              "to": "council",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "observe",
+                  "observer": "party",
+                  "proposition": "truth",
+                  "source": "entry",
+                  "requires": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "set",
+                  "key": "maintenance",
+                  "value": true
+                }
+              ]
+            },
+            "users_signed_return": {
+              "from": [
+                "users_signed"
+              ],
+              "to": "council",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "observe",
+                  "observer": "party",
+                  "proposition": "truth",
+                  "source": "entry",
+                  "requires": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "set",
+                  "key": "users",
+                  "value": true
+                }
+              ]
+            },
+            "guardians_signed_return": {
+              "from": [
+                "guardians_signed"
+              ],
+              "to": "council",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "observe",
+                  "observer": "party",
+                  "proposition": "truth",
+                  "source": "entry",
+                  "requires": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "set",
+                  "key": "guardians",
+                  "value": true
+                }
+              ]
+            },
+            "destroy_return": {
+              "from": [
+                "destroy"
+              ],
+              "to": "restored",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "singleKey",
+                  "from": "party",
+                  "to": "destroy"
+                },
+                {
+                  "op": "set",
+                  "key": "singleKeyDestroyed",
+                  "value": true
+                }
+              ]
+            },
+            "restored_finish": {
+              "from": [
+                "restored"
+              ],
+              "ending": "informed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "sharedControl",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "informed"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "informed": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q080.values.resolution"
+                  },
+                  "right": "informed"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q080.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q080.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "contract": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q080.values.resolution"
+                  },
+                  "right": "contract"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q080.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q080.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compromise": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q080.values.resolution"
+                  },
+                  "right": "compromise"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q080.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q080.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_8",
+              "map": "region_8_f2",
+              "x": 15,
+              "y": 5
+            },
+            "maintenance_place": {
+              "kind": "town",
+              "location": "machine_registry"
+            },
+            "users_place": {
+              "kind": "town",
+              "location": "salome_inn"
+            },
+            "guardians_place": {
+              "kind": "dungeon",
+              "dungeon": "region_8",
+              "map": "region_8_f1",
+              "x": 7,
+              "y": 1
+            },
+            "destroy": {
+              "kind": "dungeon",
+              "dungeon": "region_8",
+              "map": "region_8_f2",
+              "x": 4,
+              "y": 5
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "maintenancePersonAt",
+            "value": "maintenance_place"
+          },
+          {
+            "key": "usersPersonAt",
+            "value": "users_place"
+          },
+          {
+            "key": "guardiansPersonAt",
+            "value": "guardians_place"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q080.clue_a": {
@@ -1954,7 +2713,7 @@
         },
         {
           "op": "narrate",
-          "text": "整備者は故障時に一人でも停止を請求できる条件で署名した。"
+          "text": "整備者の承認窓口へ来た。代表は、故障時に一人でも停止を請求できることを署名の条件に挙げる。条件を確認して署名を受け、中枢へ持ち帰る。"
         },
         {
           "op": "choice",
@@ -1989,7 +2748,7 @@
         },
         {
           "op": "narrate",
-          "text": "利用者は夜の空調を勝手に切られない条件で署名した。"
+          "text": "利用者の相談窓口へ来た。代表は、夜の空調を勝手に切られないことを署名の条件に挙げる。条件を確認して署名を受け、中枢へ持ち帰る。"
         },
         {
           "op": "choice",
@@ -2024,7 +2783,7 @@
         },
         {
           "op": "narrate",
-          "text": "保護者は避難路が閉じる命令を承認しない条件で署名した。"
+          "text": "避難路を確かめる保護者席へ来た。代表は、避難路が閉じる命令を承認しないことを署名の条件に挙げる。条件を確認して署名を受け、中枢へ持ち帰る。"
         },
         {
           "op": "choice",
@@ -2094,7 +2853,7 @@
         },
         {
           "op": "narrate",
-          "text": "三つの端子へ署名を接続して短絡を外した。整備・利用・保護の役割を持つ鍵をそれぞれ渡す。"
+          "text": "単独で承認を飛ばす鍵を破棄して、中枢へ戻った。三つの端子へ署名を接続して短絡を外し、整備・利用・保護の役割を分けた共同管理を確定する。"
         },
         {
           "op": "choice",
@@ -2437,6 +3196,30 @@
           "party"
         ],
         "meaning": "singleKey の所在または保持者"
+      },
+      "maintenancePersonAt": {
+        "type": "enum",
+        "initial": "maintenance_place",
+        "values": [
+          "maintenance_place"
+        ],
+        "meaning": "maintenancePerson の所在または保持者"
+      },
+      "usersPersonAt": {
+        "type": "enum",
+        "initial": "users_place",
+        "values": [
+          "users_place"
+        ],
+        "meaning": "usersPerson の所在または保持者"
+      },
+      "guardiansPersonAt": {
+        "type": "enum",
+        "initial": "guardians_place",
+        "values": [
+          "guardians_place"
+        ],
+        "meaning": "guardiansPerson の所在または保持者"
       }
     },
     "entities": {
@@ -2447,6 +3230,21 @@
       "singleKey": {
         "holder": "singleKeyAt",
         "kind": "item"
+      },
+      "maintenancePerson": {
+        "holder": "maintenancePersonAt",
+        "kind": "person",
+        "character": "q080_maintenance"
+      },
+      "usersPerson": {
+        "holder": "usersPersonAt",
+        "kind": "person",
+        "character": "q080_users"
+      },
+      "guardiansPerson": {
+        "holder": "guardiansPersonAt",
+        "kind": "person",
+        "character": "q080_guardians"
       }
     },
     "propositions": {
@@ -2472,19 +3270,40 @@
       "maintenance_signed": {
         "title": "整備者の承認窓口",
         "place": "maintenance_place",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "maintenancePerson",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "users_signed": {
         "title": "利用者の稼働時間相談",
         "place": "users_place",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "usersPerson",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "guardians_signed": {
         "title": "避難路を確かめる保護者席",
         "place": "guardians_place",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "guardiansPerson",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "destroy": {
@@ -3068,7 +3887,7 @@
         "y": 5
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "salome",
   "receptionLocations": [
