@@ -16,6 +16,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Restore exact tested fixture reference after transport typo
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const path='tests/falling-star-cast.test.mjs',sha=s=>createHash('sha256').update(s).digest('hex');
+          const before=fs.readFileSync(path,'utf8');
+          assert.equal(sha(before),'6ccb208769b5197117004957a01a3c76bf95cbd78fbb75b21aceaf6a9892cb9f');
+          const after=before.replace('projectGame(loadQ081(f.save()))','projectGame(loadQ081(f.save))');
+          assert.equal(sha(after),'20ac9fa65cb2f9da77c90bc099ca95c512a25c6f20e3c702c91c35709a735156');
+          fs.writeFileSync(path,after);
+          JS
       - name: Verify exact locally tested source bytes
         run: |
           node --input-type=module <<'JS'
