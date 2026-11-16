@@ -20,6 +20,14 @@ export async function buildObservatoryQuests({check=false}={}){
    quest.story.revision=2;quest.model.edition.revision=2;
    quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[{key:'evacuatedGroupAt',value:'refuge'}]}];
   }
+  if(n===82){
+   const previous=compileRelocatedQuest(first,source(first,{cast:false}),options).story;
+   // Preserve every existing holder domain, including customer and bottle.
+   for(const [key,entry] of Object.entries(previous.registry))quest.story.registry[key]=structuredClone(entry);
+   quest.story.registry.elPersonAt.values=['entry'];
+   quest.story.revision=2;quest.model.edition.revision=2;
+   quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[{key:'elPersonAt',value:'entry'}]}];
+  }
   if(n===181){
    const previous=compileRelocatedQuest(first,source(first,{cast:false}),options).story;
    quest.story.registry.quiverAt.values=structuredClone(previous.registry.quiverAt.values);
