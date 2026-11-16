@@ -115,6 +115,6 @@ test('q081 malformed current and old saves reject atomically before adding the r
 test('q081 browser fixtures cover group limits, both postponements, rescue, old waiting text and accepted routes',async()=>{
  const {fixtures,outcomes}=await fallingStarArtFixtures();assert.equal(fixtures.length,16);assert.equal(outcomes.length,3);assert.equal(new Set(fixtures.map(f=>f.scene+'/'+f.variant)).size,fixtures.length);
  for(const gen of ['current','previous']){const rows=fixtures.filter(f=>f.variant.startsWith(gen));assert.equal(new Set(rows.map(f=>f.scene)).size,5);assert.equal(rows.filter(f=>f.scene==='observed').length,2);assert.ok(rows.some(f=>f.scene==='correction'&&f.variant===gen+'-rescued'));}
- for(const scene of ['posted','observed']){const f=fixtures.find(f=>f.scene===scene&&f.variant.startsWith('previous'));assert.ok(f);assert.equal(projectGame(loadQ081(f.save())).dialog.text,f.expectedText);assert.equal(f.expectedText,previousQ081.model.graph.find(n=>n.id===scene).text);assert.notEqual(f.expectedText,data.quests.q081.model.graph.find(n=>n.id===scene).text);}
+ for(const scene of ['posted','observed']){const f=fixtures.find(f=>f.scene===scene&&f.variant.startsWith('previous'));assert.ok(f);assert.equal(projectGame(loadQ081(f.save)).dialog.text,f.expectedText);assert.equal(f.expectedText,previousQ081.model.graph.find(n=>n.id===scene).text);assert.notEqual(f.expectedText,data.quests.q081.model.graph.find(n=>n.id===scene).text);}
  assert.equal(fixtures.filter(f=>f.absentStoryScene).length,2);
 });
