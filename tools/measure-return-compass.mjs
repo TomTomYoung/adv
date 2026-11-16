@@ -30,6 +30,6 @@ export async function measureReturnCompass(){
  return rows;
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href){
- const rows=await measureReturnCompass();if(process.argv[2])await fs.writeFileSync(process.argv[2],JSON.stringify(rows,null,2)+'\n');
+ const rows=await measureReturnCompass();if(process.argv[2])await fs.writeFile(process.argv[2],JSON.stringify(rows,null,2)+'\n');
  console.log(JSON.stringify(rows.map(r=>({party:r.config.party,route:r.route,outcome:r.outcome,status:r.status,steps:r.steps,records:r.records,gold:r.gold,rescues:r.rescues}))));
 }
