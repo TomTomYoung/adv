@@ -4,21 +4,65 @@ on:
     branches: [feature/observatory-q086-audit]
     paths: [.github/workflows/q086-work.yml]
 permissions:
-  contents: read
+  contents: write
 jobs:
   prepare:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
-      - name: Package source worktree
-        run: |
-          git rev-parse HEAD > "$RUNNER_TEMP/source-commit.txt"
-          tar -czf "$RUNNER_TEMP/adv-source.tgz" --exclude='./.git' --exclude='./assets' .
-      - uses: actions/upload-artifact@v4
         with:
-          name: q086-source-worktree
-          path: |
-            ${{ runner.temp }}/adv-source.tgz
-            ${{ runner.temp }}/source-commit.txt
-          retention-days: 1
+          ref: feature/observatory-q086-audit
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify original files and exact tested source bytes
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const hashes={
+           'authoring/editions/e2/oddland/observatory-first.mjs':'bacada7e981e4cbf675d2281c6b4889b6318f79c72246121ef3546644ccae75a',
+           'authoring/relocated-cast-review.mjs':'d417688cf208ea3b2906f7f29f27d2f0a6fa5e021c37a7251f0e411b9bebd46e',
+           'tests/relocated-cast-audit.test.mjs':'5b907d66817b45ac4a9e76467375b7d137e575164e4fff21514376892c055b98',
+           'data/scenario-editions/e2/q086.json':'a2a98389531554bdf97da8cf74193a73754cbb40d6e38c0bb446698a2dcda806',
+           'tools/q086-transfer/apply.mjs':'127ef73e396c4bbf143edab3ceb7c205e5d9609b224c661bad671961fdccbd26',
+           'tools/q086-transfer/record.mjs':'d5277a451e0fa543ca2f2e951a86914ab43b63d8dea425ce36e615b0bcabba2e',
+           'tests/century-observer-cast.test.mjs':'82f6bacef0f8a9c54f13f874f394de7b0474f9e10b012b14ad9683bea7d54dfc',
+           'tools/century-observer-art-fixtures.mjs':'42160fab28f9ae62764515aaa2e2cdd981755e601979f133a52fc706c73ca4a7',
+           'tools/measure-century-observer.mjs':'802cef366f05fd8f370329d41d264db4046358489c4c7685f8abd2041740be1a',
+           'tools/browser-century-observer-cast-smoke.mjs':'f0772ddfb01db2585349de96ba54dfdccbb2833e92a79316d8c945667ef6c572',
+           '.github/workflows/q086-cast.yml':'fbe2f5cebacc0a5198d2a36725929d4514ffb7c71bb52eceef8ccb5a1c51f542'
+          };
+          for(const [p,h] of Object.entries(hashes))assert.equal(createHash('sha256').update(fs.readFileSync(p)).digest('hex'),h,p);
+          console.log('Original files and locally tested source bytes match.');
+          JS
+      - name: Apply empty-cast audit and preserve exact previous quest
+        run: node tools/q086-transfer/apply.mjs
+      - name: Validate paths, custody, old saves, interruptions and observatory regressions
+        run: node --test tests/century-observer-cast.test.mjs tests/relocated-cast-audit.test.mjs tests/observatory*.test.mjs
+      - name: Reproduce five ordinary party trials
+        run: node tools/measure-century-observer.mjs doc/development/Q086_PLAYTEST_RESULTS.json
+      - name: Generate documents and runtime while preserving authored records
+        run: |
+          node tools/build-docs.mjs
+          git restore -- doc/battle/QUEST_PARTY_PLAYTEST.md doc/battle/SALOME_CLASSES_AND_CHARACTERS_DESIGN.md doc/development/CHROMIUM_DEFERRED_2026-11-04.md doc/development/PROGRESS.md doc/development/REMAINING_WORK.md doc/development/TEST_OVERVIEW.md doc/dungeons/ODDLAND_RELOCATION_AUDIT.md doc/dungeons/REGIONAL_RELOCATION_WORK.md doc/scenarios/EGG_KNIGHT_FORESHADOWING.md doc/scenarios/ODDLAND_100_QUEST_DESIGN.md doc/scenarios/REGIONAL_QUEST_ALLOCATION.md doc/scenarios/SALOME_100_QUEST_DESIGN.md doc/ui/SOUND_AND_EFFECT_FORMAT.md
+          node tools/q086-transfer/record.mjs
+          node tools/audit-relocated-cast.mjs
+          node tools/build-runtime.mjs
+          git rm -r tools/q086-transfer
+      - name: Validate generated content, assets, references and documentation
+        run: |
+          node tools/build-scenario-editions.mjs --check
+          node tools/build-runtime.mjs --check
+          node tools/validate.mjs
+          node tools/check-config-editors.mjs
+          node tools/check-static.mjs
+          node tools/check-docs.mjs
+      - name: Commit verified implementation
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --stat
+          git commit -m "feat(q086): unattended observer audit and precise archive handoff"
+          git push origin HEAD:feature/observatory-q086-audit
