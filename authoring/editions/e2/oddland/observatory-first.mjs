@@ -90,6 +90,11 @@ export function observatoryFirstSource(q,{cast=true}={}){
   route('mapping','table','mapped',{depart:[give('reports','entry','party')]});end('mapped','archive','旧報告を資料室へ運び、新旧の対応表とともに保存する。','informed',[give('reports','party','archive')]);
   for(const [from,key] of [['entry','old'],['mail','manual'],['mapping','daily']])route(from,key,'annotate');add('annotate','entry','観測器の報告を旧暦と区別して受け取り、日ごとの注記を付ける。',[opt('save','注記した報告を資料室へ運ぶ','annotated',{depart:[give('reports','entry','party')]})]);end('annotated','archive','旧暦の注記を付けた報告を保存した。新旧の一括対応表は作っていない。','compromise',[give('reports','party','archive')]);choice('entry','discard').effects=[set('discarded')];
  }
+ if(q.number===86&&cast){
+  // The observer is an automatic instrument. No person is present in these scenes.
+  node('mapped').text='旧報告を新旧の対応表とともに資料室へ運んだ。報告はまだ隊が保持しており、これから保存先への引渡しを確認する。';
+  node('annotated').text='旧暦の注記を付けた報告を資料室へ運んだ。新旧の一括対応表は作っていない。報告は隊が保持しており、ここで保存を確認する。';
+ }
  if(q.number===87){
   cell('sky','流星を眺める上映席',2,13,5);town('home','片付ける机のあるハクの家','observatory_haku');entity('haku','entry','person');entity('notebook','party');entity('desk','home');entity('clutter','desk');entity('shelf','home');choice('entry','test').effects=[set('ticketIssued')];choice('ticket','wording').effects=[set('wordingFixed')];choice('entry','break').effects=[set('broken')];
   for(const [from,key] of [['entry','notebook'],['ticket','record'],['firststep','write']])route(from,key,'written',{companions:['haku'],depart:[set('written')]});end('written','sky','ハクと上映席へ来た。手帳に残した願いと、本人が実行したことを区別して読み返す。','compromise');

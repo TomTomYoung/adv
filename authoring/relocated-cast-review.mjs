@@ -3,6 +3,69 @@
 export const RELOCATED_CAST_REVIEW={
  reviewedAt:'2026-11-16',
  quests:{
+  q086:{
+    "sourceSha256": "4fef0729e556c1c9df3fefbf35d97da6ccdd56c0890a7e19510aad2024b461e1",
+    "identityNotes": [
+      "原稿authoring/quests.txt・structures-5.mjsのQ(86)、初版3場面・現行7場面・5旅程・11行動を精読。自動観測器を人物と取り違えず、全場面のcastを空のまま監査登録する。依頼人シオ、通信係、修理人、保存係は追加しない。",
+      "通知はentry_reply出発時に隊が携行し、通信箱への到着時にreceiverへ投入する。投入だけではreceiverFixedは成立せず、mail_repairで受領歯車を修理する。修理後の報告確認でtruthを知る。",
+      "旧報告は対応表または日別注記の経路で資料室へ出発するときに携行し、到着後のfinishでarchiveへ渡す。対応表と日別注記、修理の有無と報告の保存を分ける。破棄はdiscardedで記録し、架空の護衛戦を追加しない。",
+      "物語改訂1・全registry・全行動・報酬・旧受注を維持し、移行処理は追加しない。資料室の2本文以外の配布JSON全体が旧版と一致し、旧保存の待機本文と選択肢も維持する。"
+    ],
+    "relatedClients": {},
+    "people": {},
+    "scenes": {
+      "entry": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "今夜しかない星の並びが描かれている。",
+        "reason": "日付と星の並びを示す報告を読む場面。書いた機械や依頼人の言及は人物の同席ではない。",
+        "visual": "人物呼称・人物画を追加せず、通知・報告・機構と処理の確定時点を区別する。"
+      },
+      "mail": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "受領用の歯車が欠け",
+        "reason": "通信箱・受領歯車・通知が対象。receiverはitemであり、人の受付係にしない。",
+        "visual": "人物呼称・人物画を追加せず、通知・報告・機構と処理の確定時点を区別する。"
+      },
+      "mapping": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "長命な人ではなく",
+        "reason": "観測者が自動観測器であると明示される。人の観測者、修理人、シオを推測で置かない。",
+        "visual": "人物呼称・人物画を追加せず、通知・報告・機構と処理の確定時点を区別する。"
+      },
+      "repaired": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "受領歯車を直し",
+        "reason": "mail_repairで修理を実行済み。修理担当者の存在は記述されていない。",
+        "visual": "人物呼称・人物画を追加せず、通知・報告・機構と処理の確定時点を区別する。"
+      },
+      "mapped": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "報告はまだ隊が保持しており",
+        "reason": "資料室へ持参した報告と対応表が対象。保存係の同席根拠はない。保存はfinishで確定する。",
+        "visual": "人物呼称・人物画を追加せず、通知・報告・機構と処理の確定時点を区別する。"
+      },
+      "annotate": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "日ごとの注記を付ける。",
+        "reason": "日別注記を行う隊の作業場面。将来の当番への言及で人物を追加しない。",
+        "visual": "人物呼称・人物画を追加せず、通知・報告・機構と処理の確定時点を区別する。"
+      },
+      "annotated": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "ここで保存を確認する。",
+        "reason": "注記した旧報告の預入前。資料室の受付役を補わない。対応表との違いを保持する。",
+        "visual": "人物呼称・人物画を追加せず、通知・報告・機構と処理の確定時点を区別する。"
+      }
+    },
+    "next": "通知投入と修理、対応表と日別注記、報告の携行とfinish保存、全5経路・全旅程の新旧保存と中断再開を検証する。次はq087「願いを消す流星」。"
+  },
   q085:{
     "sourceSha256": "87895ecbcc740c376dd09b2ac9a344a6b0e94f7c253d1be43da5a1e1bf40a9b4",
     "identityNotes": [

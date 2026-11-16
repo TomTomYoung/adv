@@ -1,0 +1,48 @@
+name: Validate q086 century observer in Chromium
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'data/**'
+      - 'authoring/editions/e2/oddland/observatory-first.mjs'
+      - 'authoring/relocated-character-art.mjs'
+      - 'tools/build-observatory-quests.mjs'
+      - 'tools/browser-century-observer-cast-smoke.mjs'
+      - 'tools/century-observer-art-fixtures.mjs'
+      - 'tools/character-art-browser.mjs'
+      - 'tests/century-observer-cast.test.mjs'
+      - 'tests/fixtures/e2-q086-before-cast.json'
+      - 'assets/images/**'
+      - '.github/workflows/q086-cast.yml'
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+permissions:
+  contents: read
+jobs:
+  q086-browser:
+    runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned browser driver and verify Japanese fonts
+        run: |
+          npm install --no-save --package-lock=false playwright@1.58.2
+          test -n "$(fc-list :lang=ja)"
+      - name: Check unmanned observer, notification delivery, receiver repair, archival custody and old saves
+        run: ADV_BROWSER_OUTPUT=/tmp/adv-century-observer-art-browser node tools/browser-century-observer-cast-smoke.mjs
+      - name: Keep q086 checkpoints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: q086-cast-checkpoints
+          path: /tmp/adv-century-observer-art-browser
+          if-no-files-found: error
+          retention-days: 7
