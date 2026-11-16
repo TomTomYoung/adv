@@ -561,3 +561,10 @@ relocatedCharacters.q077_pilgrim={id:'q077_pilgrim',name:'壁に触れた巡礼�
 relocatedCharacters.q077_maintainer={id:'q077_maintainer',name:'仮灯を用意する保守員',role:'停電時の代替照明を準備する保守員',detail:'壁前で仮灯を用意する。仮灯を診療室へ運ぶのは隊で、保守員は同行者に追加しない。',provenance:'2026-11-16。現行outageの明示された準備動作に基づく呼称表示。依頼人イオと同一人物とはせず、外見・専用画を補わない。'};
 
 relocatedCharacters.q078_user={id:'q078_user',name:'義肢の利用者',role:'自分の工具配置を義肢に学習させる本人',detail:'槌と針の距離・握力を別々に練習する。隊と工具台や保管室へ実際に同行し、旧配置の記録と新設定を分けて扱う。',provenance:'2026-11-16。整備側原稿と既存userPersonの所在・実同行に基づく呼称表示。依頼人リンとの同一性、氏名・性別・年齢・容貌・専用画を追加しない。'};
+
+// q080 representatives are roles, not inferred named clients or portraits.
+for(const [id,name,role,detail] of [
+ ['maintenance','整備者の代表','停止権と点検を担う承認者','故障時に一人でも停止を請求できる条件を整備者の承認窓口で確認する。'],
+ ['users','利用者の代表','稼働時間を協議する承認者','夜の空調を勝手に切られない条件を利用者の相談窓口で確認する。'],
+ ['guardians','保護者の代表','避難路の保護を担う承認者','避難路が閉じる命令を承認しない条件を保護者席で確認する。']
+])relocatedCharacters['q080_'+id]={id:'q080_'+id,name,role,detail,provenance:'2026-11-16。原稿と現行の三者署名の発言に基づく呼称表示。代表は各窓口に留まり、セリとの同一性・氏名・容貌・専用画を追加しない。'};
