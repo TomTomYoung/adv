@@ -1,0 +1,2365 @@
+{
+  "schemaVersion": 1,
+  "id": "q079",
+  "number": 79,
+  "title": "九十九回の再起動",
+  "client": "鐘番のユア",
+  "brief": "中央炉が再起動を繰り返す。百回目までに原因を探してください。",
+  "region": 8,
+  "type": "authored_progression",
+  "recommendedLevel": 8,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。 サロメの共同依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q079_clue_a",
+      "title": "九十九回の再起動：現場の痕跡",
+      "points": [
+        {
+          "map": "region_8_f2",
+          "x": 3,
+          "y": 5,
+          "dungeon": "region_8"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q079.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q079.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q079"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q079"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_8"
+    },
+    {
+      "id": "q079_clue_b",
+      "title": "九十九回の再起動：記録と証言",
+      "points": [
+        {
+          "map": "region_8_f2",
+          "x": 9,
+          "y": 6,
+          "dungeon": "region_8"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q079.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q079.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q079"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q079"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_8"
+    },
+    {
+      "id": "q079_decision",
+      "title": "九十九回の再起動：決着の場",
+      "points": [
+        {
+          "map": "region_8_f2",
+          "x": 15,
+          "y": 6,
+          "dungeon": "region_8"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q079.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q079.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q079.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q079"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_8"
+    },
+    {
+      "id": "q079_machine_entry",
+      "title": "九十九回の再起動の現場受付",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q079.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q079.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q079"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q079.machine.visit",
+      "points": [
+        {
+          "dungeon": "region_8",
+          "map": "region_8_f2",
+          "x": 15,
+          "y": 6
+        }
+      ]
+    },
+    {
+      "id": "q079_machine_small_furnace",
+      "title": "灯を選ぶ代替小炉",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "small_furnace",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q079.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q079.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q079"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q079.machine.visit",
+      "points": [
+        {
+          "dungeon": "region_8",
+          "map": "region_8_f2",
+          "x": 3,
+          "y": 5
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_8_f2",
+      "x": 3,
+      "y": 5,
+      "object": "q079_clue_a",
+      "role": "clue_a"
+    },
+    {
+      "map": "region_8_f2",
+      "x": 9,
+      "y": 6,
+      "object": "q079_clue_b",
+      "role": "clue_b"
+    },
+    {
+      "map": "region_8_f2",
+      "x": 15,
+      "y": 6,
+      "object": "q079_decision",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "保存領域を空け、試験終了の保存まで再起動する",
+      "text": "炉は稼働へ移った。ユアは合格より先に、記録が残ったかを確認する。",
+      "gold": 141,
+      "xp": 124
+    },
+    "contract": {
+      "label": "再起動の番機を倒し、安全試験を飛ばす",
+      "text": "炉は動いた。次の異常も検出できるか、誰にも保証できない。",
+      "gold": 161,
+      "xp": 96
+    },
+    "compromise": {
+      "label": "中央炉を停止し、代替の小炉を使う",
+      "text": "出力は足りない。必要な灯を選び、記録板の交換を待つ。",
+      "gold": 91,
+      "xp": 93
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/salome/machine-first.mjs",
+    "world": {
+      "truth": "安全試験の終了記録を保存する板が満杯で、合格しても未試験へ戻る。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "安全試験の終了記録を保存する板が満杯で、合格しても未試験へ戻る。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "中央炉が再起動を繰り返す。百回目までに原因を探してください。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "鐘番のユア",
+        "observation": "中央炉が再起動を繰り返す。百回目までに原因を探してください。",
+        "belief": "中央炉が再起動を繰り返す。百回目までに原因を探してください。",
+        "goal": "中央炉が再起動を繰り返す。百回目までに原因を探してください。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "中央炉が再起動を繰り返す。百回目までに原因を探してください。",
+      "progression": "百回目の試験で保存失敗を再現し、停止した炉から記録を退避して再起動する。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q079.machine.entry"
+        },
+        {
+          "id": "full",
+          "script": "q079.machine.full"
+        },
+        {
+          "id": "archive",
+          "script": "q079.machine.archive"
+        },
+        {
+          "id": "restarted",
+          "script": "q079.machine.restarted"
+        },
+        {
+          "id": "small",
+          "script": "q079.machine.small"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "中央炉が再起動を繰り返す。百回目までに原因を探してください。",
+      "openQuestion": "九十九回の再起動の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "observerSwap",
+      "newInformation": "安全試験の終了記録を保存する板が満杯で、合格しても未試験へ戻る。",
+      "retroactiveTargets": [
+        "full"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q079.flow.entry"
+      },
+      {
+        "id": "full",
+        "script": "q079.flow.full"
+      },
+      {
+        "id": "archive",
+        "script": "q079.flow.archive"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q079.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "百回目の試験で保存失敗を再現し、停止した炉から記録を退避して再起動する。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "百回目の試験で保存失敗を再現し、停止した炉から記録を退避して再起動する。",
+    "flowVersion": 2,
+    "entryScript": "q079.machine.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "九十九回目も各試験は合格したが、終了灯が点かない。次の一回で確認できる。",
+        "options": [
+          {
+            "id": "test",
+            "text": "百回目を見届け、最後の保存灯を観察する",
+            "to": "full",
+            "action": "entry_test"
+          },
+          {
+            "id": "storage",
+            "text": "再試験を止め、記録板の満杯表示を調べる",
+            "to": "full",
+            "action": "entry_storage"
+          },
+          {
+            "id": "bypass",
+            "text": "再起動の番機を倒し、安全試験を飛ばす",
+            "to": "@contract",
+            "action": "entry_bypass"
+          }
+        ]
+      },
+      {
+        "id": "full",
+        "place": "entry",
+        "text": "安全試験の終了記録を保存する板が満杯で、合格しても未試験へ戻る。 合格記録で板が満杯だ。炉を停止しないまま板を外すことはできない。",
+        "options": [
+          {
+            "id": "shutdown",
+            "text": "炉を停止して板の内容を退避する",
+            "to": "archive",
+            "action": "full_shutdown"
+          },
+          {
+            "id": "small",
+            "text": "中央炉を停止し、代替の小炉を使う",
+            "to": "small",
+            "action": "full_small"
+          }
+        ]
+      },
+      {
+        "id": "archive",
+        "place": "archive_place",
+        "text": "退避先で九十九件の読み取りを確認した。元の板を空けても合格の履歴は失われない。",
+        "options": [
+          {
+            "id": "clear",
+            "text": "保存領域を空け、試験終了の保存まで再起動する",
+            "to": "restarted",
+            "action": "archive_clear"
+          },
+          {
+            "id": "replace",
+            "text": "元の板は保管し、小炉で交換を待つ",
+            "to": "small",
+            "action": "archive_replace"
+          }
+        ]
+      },
+      {
+        "id": "restarted",
+        "place": "entry",
+        "text": "退避先の九十九件の読取りを確かめた後で板を戻し、終了記録が残るところまで再起動した。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@informed",
+            "action": "restarted_finish"
+          }
+        ]
+      },
+      {
+        "id": "small",
+        "place": "small_furnace",
+        "text": "中央炉を止めたまま、必要な灯だけを小炉へつないだ。記録板の交換を待つ。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@compromise",
+            "action": "small_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "machine-twenty",
+      "settlement": "salome",
+      "saveRevision": 2,
+      "scope": "機関廟20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q079.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "各試験の数値は正常で、最後の記録灯だけ毎回点かない。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q079",
+          "key": "clue_a",
+          "text": "各試験の数値は正常で、最後の記録灯だけ毎回点かない。"
+        }
+      ]
+    },
+    "q079.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "鐘番のユア",
+          "text": "記録板には同じ合格が九十九回分あり、空き領域がありません。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q079",
+          "key": "clue_b",
+          "text": "記録板には同じ合格が九十九回分あり、空き領域がない。"
+        }
+      ]
+    },
+    "q079.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "九十九回の再起動\n\n中央炉が再起動を繰り返す。百回目までに原因を探してください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "再起動の番機を倒し安全試験を飛ばす",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_8",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "炉は動いた。次の異常も検出できるか、誰にも保証できない。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q079",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "記録を退避し保存領域を空ける",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q079.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q079.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "安全試験の終了記録を保存する板が満杯で、合格しても未試験へ戻る。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "炉は稼働へ移った。ユアは合格より先に、記録が残ったかを確認する。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q079",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "炉を停止し代替の小炉を使う",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "出力は足りない。必要な灯を選び、記録板の交換を待つ。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q079",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q079.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "九十九回の再起動\n\n中央炉が再起動を繰り返す。百回目までに原因を探してください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q079.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q079.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "安全試験の終了記録を保存する板が満杯で、合格しても未試験へ戻る。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q079.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "再起動の番機を倒し安全試験を飛ばす",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_8",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "炉は動いた。次の異常も検出できるか、誰にも保証できない。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q079",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "記録を退避し保存領域を空ける",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q079.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q079.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "炉は稼働へ移った。ユアは合格より先に、記録が残ったかを確認する。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q079",
+                  "outcome": "informed"
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q079.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q079.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "compromise",
+              "text": "炉を停止し代替の小炉を使う",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "出力は足りない。必要な灯を選び、記録板の交換を待つ。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q079",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」鐘番のユアは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられる。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q079.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q079.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q079.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "炉は稼働へ移った。ユアは合格より先に、記録が残ったかを確認する。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q079.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "炉は動いた。次の異常も検出できるか、誰にも保証できない。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q079.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "出力は足りない。必要な灯を選び、記録板の交換を待つ。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q079.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q079.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q079.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q079.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q079.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q079.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q079.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "九十九回目も各試験は合格したが、終了灯が点かない。次の一回で確認できる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "test",
+              "text": "百回目を見届け、最後の保存灯を観察する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q079.flow.full"
+                }
+              ]
+            },
+            {
+              "id": "storage",
+              "text": "再試験を止め、記録板を取り出す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q079.flow.full"
+                }
+              ]
+            },
+            {
+              "id": "bypass",
+              "text": "再起動の番機を倒し、安全試験を飛ばす",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_8",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q079.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q079.flow.full": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q079.node",
+          "value": "full"
+        },
+        {
+          "op": "say",
+          "text": "安全試験の終了記録を保存する板が満杯で、合格しても未試験へ戻る。 合格記録で板が満杯だ。炉を停止しないまま板を外すことはできない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "shutdown",
+              "text": "炉を停止して板の内容を退避する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q079.flow.archive"
+                }
+              ]
+            },
+            {
+              "id": "small",
+              "text": "中央炉を停止し、代替の小炉を使う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q079.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q079.flow.archive": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q079.node",
+          "value": "archive"
+        },
+        {
+          "op": "say",
+          "text": "退避先で九十九件の読み取りを確認した。元の板を空けても合格の履歴は失われない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "clear",
+              "text": "保存領域を空け、試験終了の保存まで再起動する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q079.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "replace",
+              "text": "元の板は保管し、小炉で交換を待つ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q079.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q079.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q079.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "炉は稼働へ移った。ユアは合格より先に、記録が残ったかを確認する。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q079",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q079.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q079.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "炉は動いた。次の異常も検出できるか、誰にも保証できない。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q079",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q079.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q079.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "出力は足りない。必要な灯を選び、記録板の交換を待つ。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q079",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q079.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q079.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q079.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "炉は稼働へ移った。ユアは合格より先に、記録が残ったかを確認する。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "炉は動いた。次の異常も検出できるか、誰にも保証できない。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "出力は足りない。必要な灯を選び、記録板の交換を待つ。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q079"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q079.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q079.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q079.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "full",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q079.flow.full"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "archive",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q079.flow.archive"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q079.flow.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q079.machine.entry": {
+      "storyQuest": "q079",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q079",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "九十九回目も各試験は合格したが、終了灯が点かない。次の一回で確認できる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "test",
+              "text": "百回目を見届け、最後の保存灯を観察する",
+              "storyAction": {
+                "quest": "q079",
+                "action": "entry_test"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q079",
+                  "action": "entry_test"
+                },
+                {
+                  "op": "jump",
+                  "script": "q079.machine.full"
+                }
+              ]
+            },
+            {
+              "id": "storage",
+              "text": "再試験を止め、記録板の満杯表示を調べる",
+              "storyAction": {
+                "quest": "q079",
+                "action": "entry_storage"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q079",
+                  "action": "entry_storage"
+                },
+                {
+                  "op": "jump",
+                  "script": "q079.machine.full"
+                }
+              ]
+            },
+            {
+              "id": "bypass",
+              "text": "再起動の番機を倒し、安全試験を飛ばす",
+              "storyAction": {
+                "quest": "q079",
+                "action": "entry_bypass"
+              },
+              "requirement": "戦闘。作業・報酬は勝利後に確定する。",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_8",
+                  "on_win": [
+                    {
+                      "op": "story.action",
+                      "quest": "q079",
+                      "action": "entry_bypass"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q079.machine.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "narrate",
+                      "text": "戦いを切り上げた。作業は確定していない。現場で再開できる。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q079.machine.entry"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "narrate",
+                      "text": "救助班にサロメへ運び出された。現場へ戻れば直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q079.machine.full": {
+      "storyQuest": "q079",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q079",
+          "scene": "full"
+        },
+        {
+          "op": "narrate",
+          "text": "安全試験の終了記録を保存する板が満杯で、合格しても未試験へ戻る。 合格記録で板が満杯だ。炉を停止しないまま板を外すことはできない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "shutdown",
+              "text": "炉を停止して板の内容を退避する",
+              "storyAction": {
+                "quest": "q079",
+                "action": "full_shutdown"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q079",
+                  "action": "full_shutdown"
+                }
+              ]
+            },
+            {
+              "id": "small",
+              "text": "中央炉を停止し、代替の小炉を使う",
+              "storyAction": {
+                "quest": "q079",
+                "action": "full_small"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q079",
+                  "action": "full_small"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q079.machine.archive": {
+      "storyQuest": "q079",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q079",
+          "scene": "archive"
+        },
+        {
+          "op": "narrate",
+          "text": "退避先で九十九件の読み取りを確認した。元の板を空けても合格の履歴は失われない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "clear",
+              "text": "保存領域を空け、試験終了の保存まで再起動する",
+              "storyAction": {
+                "quest": "q079",
+                "action": "archive_clear"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q079",
+                  "action": "archive_clear"
+                }
+              ]
+            },
+            {
+              "id": "replace",
+              "text": "元の板は保管し、小炉で交換を待つ",
+              "storyAction": {
+                "quest": "q079",
+                "action": "archive_replace"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q079",
+                  "action": "archive_replace"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q079.machine.restarted": {
+      "storyQuest": "q079",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q079",
+          "scene": "restarted"
+        },
+        {
+          "op": "narrate",
+          "text": "退避先の九十九件の読取りを確かめた後で板を戻し、終了記録が残るところまで再起動した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q079",
+                "action": "restarted_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q079",
+                  "action": "restarted_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q079.machine.end.informed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q079.machine.small": {
+      "storyQuest": "q079",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q079",
+          "scene": "small"
+        },
+        {
+          "op": "narrate",
+          "text": "中央炉を止めたまま、必要な灯だけを小炉へつないだ。記録板の交換を待つ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q079",
+                "action": "small_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q079",
+                  "action": "small_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q079.machine.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q079.machine.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "炉は稼働へ移った。ユアは合格より先に、記録が残ったかを確認する。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q079",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q079.machine.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "炉は動いた。次の異常も検出できるか、誰にも保証できない。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q079",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q079.machine.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "出力は足りない。必要な灯を選び、記録板の交換を待つ。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q079",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q079.machine.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q079"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q079.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q079.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q079.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "炉は稼働へ移った。ユアは合格より先に、記録が残ったかを確認する。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "炉は動いた。次の異常も検出できるか、誰にも保証できない。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "出力は足りない。必要な灯を選び、記録板の交換を待つ。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q079"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q079.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q079.machine.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "full",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q079.machine.full"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "archive",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q079.machine.archive"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "restarted",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q079.machine.restarted"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "small",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q079.machine.small"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q079.machine.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "九十九回の再起動の現場受付",
+      "archive_place": "九十九件の退避記録室",
+      "small_furnace": "灯を選ぶ代替小炉",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "archive_place"
+      ],
+      [
+        "transit",
+        "small_furnace"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "archive_place",
+          "small_furnace",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "hundredthObserved": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "hundredthObserved"
+      },
+      "bypassed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "bypassed"
+      },
+      "backupVerified": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "backupVerified"
+      },
+      "shutdown": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "shutdown"
+      },
+      "cleared": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "cleared"
+      },
+      "saved": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "saved"
+      },
+      "smallRunning": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "smallRunning"
+      },
+      "recordBoardAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "archive_place",
+          "small_furnace",
+          "transit",
+          "party",
+          "backup"
+        ],
+        "meaning": "recordBoard の所在または保持者"
+      },
+      "backupAt": {
+        "type": "enum",
+        "initial": "archive_place",
+        "values": [
+          "entry",
+          "archive_place",
+          "small_furnace",
+          "transit",
+          "party",
+          "recordBoard"
+        ],
+        "meaning": "backup の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "recordBoard": {
+        "holder": "recordBoardAt",
+        "kind": "item"
+      },
+      "backup": {
+        "holder": "backupAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "安全試験の終了記録を保存する板が満杯で、合格しても未試験へ戻る。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "九十九回の再起動の現場受付",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "full": {
+        "title": "九十九回の再起動の現場受付",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "archive": {
+        "title": "九十九件の退避記録室",
+        "place": "archive_place",
+        "cast": [],
+        "requires": true
+      },
+      "restarted": {
+        "title": "九十九回の再起動の現場受付",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "small": {
+        "title": "灯を選ぶ代替小炉",
+        "place": "small_furnace",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_test": {
+        "from": [
+          "entry"
+        ],
+        "to": "full",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "hundredthObserved",
+            "value": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "entry",
+            "requires": true
+          }
+        ],
+        "once": false
+      },
+      "entry_storage": {
+        "from": [
+          "entry"
+        ],
+        "to": "full",
+        "requires": true,
+        "effects": [
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "entry",
+            "requires": true
+          }
+        ],
+        "once": false
+      },
+      "entry_bypass": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "bypassed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "full_shutdown": {
+        "from": [
+          "full"
+        ],
+        "to": "archive",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "archive_place"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "backupVerified",
+            "value": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "archive_place",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "shutdown",
+            "value": true
+          },
+          {
+            "op": "transfer",
+            "entity": "recordBoard",
+            "from": "entry",
+            "to": "party"
+          }
+        ]
+      },
+      "full_small": {
+        "from": [
+          "full"
+        ],
+        "to": "small",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "small_furnace"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "small_furnace",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "shutdown",
+            "value": true
+          }
+        ]
+      },
+      "archive_clear": {
+        "from": [
+          "archive"
+        ],
+        "to": "restarted",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "cleared",
+            "value": true
+          }
+        ]
+      },
+      "archive_replace": {
+        "from": [
+          "archive"
+        ],
+        "to": "small",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "small_furnace"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "small_furnace",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "recordBoard",
+            "from": "party",
+            "to": "archive_place"
+          }
+        ]
+      },
+      "restarted_finish": {
+        "from": [
+          "restarted"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "recordBoard",
+            "from": "party",
+            "to": "entry"
+          },
+          {
+            "op": "set",
+            "key": "saved",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "shutdown",
+            "value": false
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "small_finish": {
+        "from": [
+          "small"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "smallRunning",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q079.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q079.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q079.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q079.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q079.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q079.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q079.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q079.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q079.values.partyAt"
+                },
+                "right": "small_furnace"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_8",
+        "map": "region_8_f2",
+        "x": 15,
+        "y": 6
+      },
+      "archive_place": {
+        "kind": "town",
+        "location": "machine_registry"
+      },
+      "small_furnace": {
+        "kind": "dungeon",
+        "dungeon": "region_8",
+        "map": "region_8_f2",
+        "x": 3,
+        "y": 5
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "salome",
+  "receptionLocations": [
+    "salome_board"
+  ]
+}
