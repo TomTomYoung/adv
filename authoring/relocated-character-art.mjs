@@ -570,3 +570,8 @@ for(const [id,name,role,detail] of [
 ])relocatedCharacters['q080_'+id]={id:'q080_'+id,name,role,detail,provenance:'2026-11-16。原稿と現行の三者署名の発言に基づく呼称表示。代表は各窓口に留まり、セリとの同一性・氏名・容貌・専用画を追加しない。'};
 
 relocatedCharacters.q081_evacuated={id:'q081_evacuated',name:'高台の避難者たち',role:'星の落下予報を受けて避難した人々',detail:'高台で天井の上映と実際の天気の違いを聞く。告知所や再観測の場所へは同行しない。',provenance:'2026-11-16。correctionの説明相手とrefugeの既存場所名に基づく集団の呼称表示。人数・氏名・容貌・専用画、依頼人シオや結末の子供との同一性は追加しない。'};
+
+for(const [id,name,role,detail] of [
+ ['el','エル','星瓶を扱う商人','適温で光が戻ることを確かめ、永久の星という売り札を外す。地上の店への同行は追加しない。'],
+ ['customer','瓶を受け取る客','地上の店で瓶の説明を聞く客','適温と寿命の説明、または光を使い切った状態の説明を受けて瓶を受け取る。地下の試験には同席しない。']
+])relocatedCharacters['q082_'+id]={id:'q082_'+id,name,role,detail,provenance:'2026-11-16。原稿と現行場面の動作・既存の所在に基づく呼称表示。氏名のない客の個人像・人数・専用画を追加せず、返品の結末の客を現在の受取人と同定しない。'};

@@ -23,6 +23,16 @@ export function observatoryFirstSource(q,{cast=true}={}){
   choice('temperature','normal').effects=[set('normal')];route('label','instructions','sold',{depart:[give('bottle','entry','party')]});end('sold','vendor','適温、光の寿命、再充填の方法を書いた札を瓶に添えて渡す。','informed',[give('bottle','party','customer')]);
   for(const [from,key] of [['entry','refund'],['temperature','refund'],['spent','refund'],['label','return']])route(from,key,'returned',{depart:[give('bottle','entry','party')]});end('returned','vendor','瓶を地上の店へ運んだ。仕組みと、試験で光を使い切った場合はその状態も説明して返品を受け付ける。','compromise',[give('bottle','party','vendor')]);
  }
+ if(q.number===82&&cast){
+  entity('elPerson','entry','person');
+  x.entities.elPerson.character='q082_el';
+  x.entities.customer.character='q082_customer';
+  node('label').cast=[{entity:'elPerson',display:{x:50}}];
+  for(const scene of ['sold_spent','sold'])node(scene).cast=[{entity:'customer',display:{x:50}}];
+  node('sold_spent').text='光を使い切った瓶を地上の店へ運んだ。瓶は隊が保持している。状態を客へ説明し、ここで引渡しを確認する。';
+  node('sold').text='適温、光の寿命、再充填の方法を書いた札とともに瓶を地上の店へ運んだ。瓶は隊が保持しており、これから客への引渡しを確認する。';
+  node('returned').text='瓶を地上の店へ運んだ。仕組みと試験後の状態を説明し、これから返品を確認する。瓶は確認が済むまで隊が保持する。';
+ }
  if(q.number===83){
   cell('scaffold','保守足場を引き戻す操作点',1,7,3);cell('control','人工太陽の回転制御',1,5,1);town('calendar','過去の日食を注記する暦の窓口','observatory_calendar');node('scaffold').place='scaffold';
   route('entry','stop','stopped');end('stopped','control','回転制御の前で人工太陽を止める。昼夜も止まるので、以後の消灯は手動になる。','contract',[set('stopped')]);

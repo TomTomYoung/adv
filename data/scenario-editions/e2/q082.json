@@ -491,7 +491,7 @@
       {
         "id": "sold_spent",
         "place": "vendor",
-        "text": "光を使い切ったことを説明し、客へ瓶を渡す。",
+        "text": "光を使い切った瓶を地上の店へ運んだ。瓶は隊が保持している。状態を客へ説明し、ここで引渡しを確認する。",
         "options": [
           {
             "id": "finish",
@@ -504,7 +504,7 @@
       {
         "id": "sold",
         "place": "vendor",
-        "text": "適温、光の寿命、再充填の方法を書いた札を瓶に添えて渡す。",
+        "text": "適温、光の寿命、再充填の方法を書いた札とともに瓶を地上の店へ運んだ。瓶は隊が保持しており、これから客への引渡しを確認する。",
         "options": [
           {
             "id": "finish",
@@ -517,7 +517,7 @@
       {
         "id": "returned",
         "place": "vendor",
-        "text": "瓶を地上の店へ運んだ。仕組みと、試験で光を使い切った場合はその状態も説明して返品を受け付ける。",
+        "text": "瓶を地上の店へ運んだ。仕組みと試験後の状態を説明し、これから返品を確認する。瓶は確認が済むまで隊が保持する。",
         "options": [
           {
             "id": "finish",
@@ -563,7 +563,7 @@
     ],
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -572,7 +572,658 @@
       "saveRevision": 2,
       "scope": "観測所20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "星売りの空瓶の現場",
+            "vendor": "星瓶の店の引渡し台",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "vendor"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "vendor",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "informed",
+                "contract",
+                "compromise"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "spent": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "spent"
+            },
+            "normal": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "normal"
+            },
+            "bottleAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "vendor",
+                "transit",
+                "party",
+                "customer"
+              ],
+              "meaning": "bottle の所在または保持者"
+            },
+            "customerAt": {
+              "type": "enum",
+              "initial": "vendor",
+              "values": [
+                "entry",
+                "vendor",
+                "transit"
+              ],
+              "meaning": "customer の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "bottle": {
+              "holder": "bottleAt",
+              "kind": "item"
+            },
+            "customer": {
+              "holder": "customerAt",
+              "kind": "person"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "瓶の蓄光材は温度で放光し、寒い地下では光を蓄えたまま暗くなる。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "星売りの空瓶の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "temperature": {
+              "title": "星売りの空瓶の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "spent": {
+              "title": "星売りの空瓶の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "label": {
+              "title": "星売りの空瓶の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "heated": {
+              "title": "星売りの空瓶の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "sold_spent": {
+              "title": "星瓶の店の引渡し台",
+              "place": "vendor",
+              "cast": [],
+              "requires": true
+            },
+            "sold": {
+              "title": "星瓶の店の引渡し台",
+              "place": "vendor",
+              "cast": [],
+              "requires": true
+            },
+            "returned": {
+              "title": "星瓶の店の引渡し台",
+              "place": "vendor",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_hand": {
+              "from": [
+                "entry"
+              ],
+              "to": "temperature",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "observe",
+                  "observer": "party",
+                  "proposition": "truth",
+                  "source": "entry",
+                  "requires": true
+                }
+              ],
+              "once": false
+            },
+            "entry_heat": {
+              "from": [
+                "entry"
+              ],
+              "to": "heated",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "spent",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "entry_refund": {
+              "from": [
+                "entry"
+              ],
+              "to": "returned",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "vendor"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "vendor",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "bottle",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "temperature_normal": {
+              "from": [
+                "temperature"
+              ],
+              "to": "label",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "normal",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "temperature_high": {
+              "from": [
+                "temperature"
+              ],
+              "to": "spent",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "spent",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "temperature_refund": {
+              "from": [
+                "temperature"
+              ],
+              "to": "returned",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "vendor"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "vendor",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "bottle",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "spent_sell": {
+              "from": [
+                "spent"
+              ],
+              "to": "sold_spent",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "vendor"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "vendor",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "bottle",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "spent_refund": {
+              "from": [
+                "spent"
+              ],
+              "to": "returned",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "vendor"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "vendor",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "bottle",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "label_instructions": {
+              "from": [
+                "label"
+              ],
+              "to": "sold",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "vendor"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "vendor",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "bottle",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "label_return": {
+              "from": [
+                "label"
+              ],
+              "to": "returned",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "vendor"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "vendor",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "bottle",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "heated_carry": {
+              "from": [
+                "heated"
+              ],
+              "to": "sold_spent",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "vendor"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "vendor",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "bottle",
+                  "from": "entry",
+                  "to": "party"
+                }
+              ]
+            },
+            "sold_spent_finish": {
+              "from": [
+                "sold_spent"
+              ],
+              "ending": "contract",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "bottle",
+                  "from": "party",
+                  "to": "customer"
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "contract"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "sold_finish": {
+              "from": [
+                "sold"
+              ],
+              "ending": "informed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "bottle",
+                  "from": "party",
+                  "to": "customer"
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "informed"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "returned_finish": {
+              "from": [
+                "returned"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "bottle",
+                  "from": "party",
+                  "to": "vendor"
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "informed": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q082.values.resolution"
+                  },
+                  "right": "informed"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q082.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q082.values.partyAt"
+                      },
+                      "right": "vendor"
+                    }
+                  ]
+                }
+              ]
+            },
+            "contract": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q082.values.resolution"
+                  },
+                  "right": "contract"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q082.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q082.values.partyAt"
+                      },
+                      "right": "vendor"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compromise": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q082.values.resolution"
+                  },
+                  "right": "compromise"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q082.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q082.values.partyAt"
+                      },
+                      "right": "vendor"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_9",
+              "map": "region_9_f1",
+              "x": 13,
+              "y": 7
+            },
+            "vendor": {
+              "kind": "town",
+              "location": "observatory_vendor"
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "elPersonAt",
+            "value": "entry"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q082.clue_a": {
@@ -2035,7 +2686,7 @@
         },
         {
           "op": "narrate",
-          "text": "光を使い切ったことを説明し、客へ瓶を渡す。"
+          "text": "光を使い切った瓶を地上の店へ運んだ。瓶は隊が保持している。状態を客へ説明し、ここで引渡しを確認する。"
         },
         {
           "op": "choice",
@@ -2074,7 +2725,7 @@
         },
         {
           "op": "narrate",
-          "text": "適温、光の寿命、再充填の方法を書いた札を瓶に添えて渡す。"
+          "text": "適温、光の寿命、再充填の方法を書いた札とともに瓶を地上の店へ運んだ。瓶は隊が保持しており、これから客への引渡しを確認する。"
         },
         {
           "op": "choice",
@@ -2113,7 +2764,7 @@
         },
         {
           "op": "narrate",
-          "text": "瓶を地上の店へ運んだ。仕組みと、試験で光を使い切った場合はその状態も説明して返品を受け付ける。"
+          "text": "瓶を地上の店へ運んだ。仕組みと試験後の状態を説明し、これから返品を確認する。瓶は確認が済むまで隊が保持する。"
         },
         {
           "op": "choice",
@@ -2435,6 +3086,14 @@
           "transit"
         ],
         "meaning": "customer の所在または保持者"
+      },
+      "elPersonAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry"
+        ],
+        "meaning": "elPerson の所在または保持者"
       }
     },
     "entities": {
@@ -2448,7 +3107,13 @@
       },
       "customer": {
         "holder": "customerAt",
-        "kind": "person"
+        "kind": "person",
+        "character": "q082_customer"
+      },
+      "elPerson": {
+        "holder": "elPersonAt",
+        "kind": "person",
+        "character": "q082_el"
       }
     },
     "propositions": {
@@ -2480,7 +3145,14 @@
       "label": {
         "title": "星売りの空瓶の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "elPerson",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "heated": {
@@ -2492,13 +3164,27 @@
       "sold_spent": {
         "title": "星瓶の店の引渡し台",
         "place": "vendor",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "customer",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "sold": {
         "title": "星瓶の店の引渡し台",
         "place": "vendor",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "customer",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "returned": {
@@ -2996,7 +3682,7 @@
         "location": "observatory_vendor"
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "oddland_village",
   "receptionLocations": [

@@ -3,6 +3,96 @@
 export const RELOCATED_CAST_REVIEW={
  reviewedAt:'2026-11-16',
  quests:{
+  q082:{
+    "sourceSha256": "f8daed04e3552379d6859f8ccf722b45ec0fb92341e1730271aba6164c12ae1a",
+    "identityNotes": [
+      "原稿authoring/quests.txt・structures-5.mjsのQ(82)、初版4場面・現行8場面を精読。温度に応じて放光する材質の設定と蓄えを使い切る不可逆な状態を区別し、星や人格として扱わない。",
+      "エルが売り札を外すlabelだけへ本人を表示し、entryの固定所在を追加する。既存customerは地上vendorに留まり、sold・sold_spentだけへ表示する。全7旅程の同行者は空のまま。返品の結末に出る複数の客を、現在の引渡し相手へ同定しない。",
+      "瓶は出発時にentryからpartyへ移り、地上への実到着では隊の保持を続ける。販売finishでcustomer、返品finishでvendorへ渡す。spentは強い加熱の操作時、normalは適温を選んだ操作時に確定し、返品や移動で消さない。",
+      "物語改訂1→2は旧定義で保存全体を検証後、elPersonAt=entryだけを追加する。既存registry・14行動・3結末・報酬・旧受注を維持し、販売2場面と返品1場面の本文だけを完了操作前へ明確化する。表示途中の旧本文・選択肢は保持する。",
+      "原稿に残る光喰いという旧表現から戦闘を追加しない。現行と旧受注の各7経路は全て依頼内では非戦闘で、通常探索の遭遇とは区別する。"
+    ],
+    "relatedClients": {},
+    "people": {
+      "q082_el": {
+        "label": "商人エル",
+        "status": "connected",
+        "entity": "elPerson",
+        "need": "売り札を外すlabelだけ。初期の試験や地上へ同席を推測しない。"
+      },
+      "q082_customer": {
+        "label": "瓶を受け取る客",
+        "status": "connected",
+        "entity": "customer",
+        "need": "地上の販売2場面だけ。返品先の担当者や結末の別の客へ読み替えない。"
+      }
+    },
+    "scenes": {
+      "entry": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "掌を当てた瓶の側面だけ細く光る。",
+        "reason": "瓶の調査のみ。エルが依頼人であることからこの場への同席を推測しない。",
+        "visual": "開封と発光の原因を区別する。"
+      },
+      "temperature": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "展示箱のつまみは低・適温・高の三段",
+        "reason": "材質と展示箱の調査であり、第三者の動作・発言はない。",
+        "visual": "適温と高温を別の選択として保つ。"
+      },
+      "spent": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "温度を戻しても今夜の光は戻らない。",
+        "reason": "使い切った蓄光を調べる場面。客は地上にいる。",
+        "visual": "販売か返品を選んでも消費済みの光は回復しない。"
+      },
+      "label": {
+        "decision": "person-evidence",
+        "people": [
+          "q082_el"
+        ],
+        "evidence": "エルは「永久の星」という売り札を外した。",
+        "reason": "本人が売り札を外す動作が明示されている。",
+        "visual": "エルの動作と、まだ行われていない地上での引渡しを分ける。"
+      },
+      "heated": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "一瞬明るくなって蓄えを使い切った。",
+        "reason": "直接加熱した結果の確認。売る相手はこの場には同席していない。",
+        "visual": "試験で光が尽きても瓶はentryにある。"
+      },
+      "sold_spent": {
+        "decision": "person-evidence",
+        "people": [
+          "q082_customer"
+        ],
+        "evidence": "状態を客へ説明し",
+        "reason": "既存customerはvendorで受領待ち。地下のエルは同行していない。",
+        "visual": "光が尽きた説明後もfinishまで瓶は隊が保持する。"
+      },
+      "sold": {
+        "decision": "person-evidence",
+        "people": [
+          "q082_customer"
+        ],
+        "evidence": "これから客への引渡しを確認する。",
+        "reason": "既存customerへ注意書き付きの瓶を渡す現場。エルを追加しない。",
+        "visual": "適温と寿命の札、引渡し前の瓶を区別する。"
+      },
+      "returned": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "これから返品を確認する。",
+        "reason": "隊が店へ返す場面。返品担当の固有人物や、販売時と同じ客の同席は書かれていない。",
+        "visual": "瓶はfinishまで隊にあり、その後vendorへ戻る。"
+      }
+    },
+    "next": "8場面・7旅程・14行動・3結末と7経路、新旧保存、瓶の保持者とspent/normal、固定所在、帰還・敗北再開を検証する。次はq083「地底の日食」。"
+  },
   q081:{
     "sourceSha256": "6c9bb244a54c0e4b1a2ae3c645537621dafb83de0bb7c39ca75c49ae4953a84d",
     "identityNotes": [
