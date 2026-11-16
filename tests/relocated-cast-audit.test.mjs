@@ -6,7 +6,7 @@ import {auditRelocatedCast,loadRelocatedCastQuests,relocatedCastFingerprint} fro
 const quests=await loadRelocatedCastQuests();
 test('cast audit distinguishes measured empty casts, reviewed scenes and candidate roles',()=>{
  const report=auditRelocatedCast(quests);
- assert.deepEqual(report.summary,{"quests":100,"scenes":753,"emptyCastScenes":265,"personEntities":157,"characterLinkedEntities":150,"reviewedQuests":94,"reviewedScenes":709,"noPersonEvidenceScenes":220,"personEvidenceScenes":489,"candidateRoles":1,"connectedRoles":202,"unreviewedScenes":44});
+ assert.deepEqual(report.summary,{"quests":100,"scenes":753,"emptyCastScenes":260,"personEntities":157,"characterLinkedEntities":152,"reviewedQuests":95,"reviewedScenes":716,"noPersonEvidenceScenes":222,"personEvidenceScenes":494,"candidateRoles":1,"connectedRoles":204,"unreviewedScenes":37});
  const scaleQuest=report.quests.find(q=>q.id==='q148');
  assert.deepEqual(Object.keys(scaleQuest.review.people),['q148_egi','q148_customer']);
  assert.deepEqual(Object.fromEntries(scaleQuest.scenes.map(s=>[s.id,s.cast.map(c=>c.entity)])),{
