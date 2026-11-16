@@ -4,21 +4,65 @@ on:
     branches: [feature/observatory-q082-cast]
     paths: [.github/workflows/q082-work.yml]
 permissions:
-  contents: read
+  contents: write
 jobs:
   prepare:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
-      - name: Package source worktree
-        run: |
-          git rev-parse HEAD > "$RUNNER_TEMP/source-commit.txt"
-          tar -czf "$RUNNER_TEMP/adv-source.tgz" --exclude='./.git' --exclude='./assets' .
-      - uses: actions/upload-artifact@v4
         with:
-          name: q082-source-worktree
-          path: |
-            ${{ runner.temp }}/adv-source.tgz
-            ${{ runner.temp }}/source-commit.txt
-          retention-days: 1
+          ref: feature/observatory-q082-cast
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify exact locally tested source bytes
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const hashes={
+           'tests/star-bottle-cast.test.mjs':'030a1dbc330c82b3f8cb0c5683f5acc3486a0067b57cfcc2705ab217d45581ab',
+           'tools/star-bottle-art-fixtures.mjs':'6ba6319bb854961d9e3aa0584b28dffc180653e635e03f62bd3dd2a8fcb47ea7',
+           'tools/measure-star-bottle.mjs':'3947682eee3cbdd33768c2430ea580d201d28e4cc38a36b52e18c029619b76a3',
+           'tools/browser-star-bottle-cast-smoke.mjs':'7823c393e5539a2c4b15e3b26bb73f80612dadf7e95a6aacc5fccbad3f64d25d',
+           '.github/workflows/q082-cast.yml':'39bd77f838a5abef02903237bdf140181229821a38c1ff8e30388ab106042d72',
+           'tools/q082-transfer/apply.mjs':'961459a067d2b63bc053bc0479b190ce48712bc29694ebee39265c76a542995a',
+           'tools/q082-transfer/record.mjs':'81decfc4205505d1b86874ee3b639dec5af4c871dd9f8abd265dab19cacab6ca'
+          };
+          for(const [p,h] of Object.entries(hashes))assert.equal(createHash('sha256').update(fs.readFileSync(p)).digest('hex'),h,p);
+          console.log('Verified seven source files');
+          JS
+      - name: Apply checked cast and preserve exact previous definition
+        run: node tools/q082-transfer/apply.mjs
+      - name: Verify all routes, custody, old saves, interruptions and observatory regressions
+        run: node --test tests/star-bottle-cast.test.mjs tests/relocated-cast-audit.test.mjs tests/observatory*.test.mjs
+      - name: Reproduce all seven normal party trials and record results
+        run: |
+          node tools/measure-star-bottle.mjs doc/development/Q082_PLAYTEST_RESULTS.json
+          node tools/q082-transfer/record.mjs
+      - name: Generate documents and runtime while preserving authored records
+        run: |
+          cp -a doc "$RUNNER_TEMP/q082-authored-docs"
+          node tools/build-docs.mjs
+          for file in battle/QUEST_PARTY_PLAYTEST.md battle/SALOME_CLASSES_AND_CHARACTERS_DESIGN.md development/CHROMIUM_DEFERRED_2026-11-04.md development/PROGRESS.md development/REMAINING_WORK.md development/TEST_OVERVIEW.md dungeons/ODDLAND_RELOCATION_AUDIT.md dungeons/REGIONAL_RELOCATION_WORK.md scenarios/EGG_KNIGHT_FORESHADOWING.md scenarios/ODDLAND_100_QUEST_DESIGN.md scenarios/REGIONAL_QUEST_ALLOCATION.md scenarios/SALOME_100_QUEST_DESIGN.md ui/SOUND_AND_EFFECT_FORMAT.md; do
+            cp "$RUNNER_TEMP/q082-authored-docs/$file" "doc/$file"
+          done
+          node tools/audit-relocated-cast.mjs
+          node tools/build-runtime.mjs
+          git rm -r tools/q082-transfer
+      - name: Validate generated data, assets, distribution and documentation
+        run: |
+          node tools/build-scenario-editions.mjs --check
+          node tools/build-runtime.mjs --check
+          node tools/validate.mjs
+          node tools/check-config-editors.mjs
+          node tools/check-static.mjs
+          node tools/check-docs.mjs
+      - name: Commit verified implementation
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --stat
+          git commit -m "feat(q082): fixed cast, preserved bottle custody and save compatibility"
+          git push origin HEAD:feature/observatory-q082-cast
