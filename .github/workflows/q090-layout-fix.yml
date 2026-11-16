@@ -52,6 +52,11 @@ jobs:
       - name: Repeat state tests and validate generated content
         run: |
           node --test tests/sky-return-cast.test.mjs tests/relocated-cast-audit.test.mjs tests/observatory*.test.mjs
+          cp -a doc "$RUNNER_TEMP/q090-fixed-docs"
+          node tools/build-docs.mjs
+          cp doc/development/DATA_SNAPSHOT.json "$RUNNER_TEMP/q090-fixed-snapshot.json"
+          cp -a "$RUNNER_TEMP/q090-fixed-docs/." doc/
+          cp "$RUNNER_TEMP/q090-fixed-snapshot.json" doc/development/DATA_SNAPSHOT.json
           node tools/build-runtime.mjs
           node tools/build-runtime.mjs --check
           node tools/build-scenario-editions.mjs --check
