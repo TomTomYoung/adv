@@ -120,6 +120,10 @@ export function machineFirstSource(q,{cast=true}={}){
   route('archive','clear','restarted',{depart:[set('cleared')]});end('restarted','entry','退避先の九十九件の読取りを確かめた後で板を戻し、終了記録が残るところまで再起動した。','informed',[give('recordBoard','party','entry'),set('saved'),set('shutdown',false)]);
   route('full','small','small',{depart:[set('shutdown')]});route('archive','replace','small',{depart:[give('recordBoard','party','archive_place')]});end('small','small_furnace','中央炉を止めたまま、必要な灯だけを小炉へつないだ。記録板の交換を待つ。','compromise',[set('smallRunning')]);choice('entry','bypass').effects=[set('bypassed')];
  }
+ if(q.number===79&&cast){
+  node("restarted").text="九十九件の退避記録を確認し、保存領域を空けた記録板を持って停止中の炉へ戻った。板を据えて再起動し、試験終了の記録が残ることを確認して依頼を終える。";
+  node("small").text="中央炉を止めたまま代替小炉へ来た。必要な灯を選んで接続し、小炉の稼働を確かめる。中央炉の記録板の交換はまだ終わっていない。";
+ }
  if(q.number===80){
   town('maintenance_place','整備者の承認窓口','machine_registry');town('users_place','利用者の稼働時間相談','salome_inn');cell('guardians_place','避難路を確かめる保護者席',1,7,1);cell('destroy','単独支配鍵の破棄台',2,4,5);entity('singleKey','entry');
   for(const key of ['maintenance','users','guardians']){const a=choice('council',key);a.to=key+'_signed';delete a.set;const text=a.textAfter;delete a.textAfter;add(key+'_signed',key+'_place',text,[opt('return','署名した条件を中枢へ持ち帰る','council',{depart:[set(key)]})]);}
