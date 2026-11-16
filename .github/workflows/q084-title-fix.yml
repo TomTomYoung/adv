@@ -1,0 +1,38 @@
+name: Correct q084 next-quest title
+on:
+  push:
+    branches: [feature/observatory-q084-cast]
+    paths: [.github/workflows/q084-title-fix.yml]
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/observatory-q084-cast
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Correct only the next-quest title and regenerate audit
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const p='authoring/relocated-cast-review.mjs',s=fs.readFileSync(p,'utf8');
+          const wrong='次はq085「北を向かない羅針盤」の既存原稿と経路を確認する。';
+          const title=JSON.parse(fs.readFileSync('data/quests/q085.json','utf8')).title;
+          assert.equal(title,'方位のない羅針盤');assert.equal(s.split(wrong).length,2);
+          fs.writeFileSync(p,s.replace(wrong,'次はq085「'+title+'」の既存原稿と経路を確認する。'));
+          JS
+          node tools/audit-relocated-cast.mjs
+          node --test tests/relocated-cast-audit.test.mjs
+          git diff --exit-code -- data src runtime.json
+      - name: Commit documentation correction only
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add authoring/relocated-cast-review.mjs doc/scenarios/RELOCATED_CAST_AUDIT.json doc/scenarios/RELOCATED_CAST_AUDIT.md
+          git commit -m "docs(q084): use q085 canonical title in the audit handoff"
+          git push origin HEAD:feature/observatory-q084-cast
