@@ -3,6 +3,98 @@
 export const RELOCATED_CAST_REVIEW={
  reviewedAt:'2026-11-16',
  quests:{
+  q085:{
+    "sourceSha256": "87895ecbcc740c376dd09b2ac9a344a6b0e94f7c253d1be43da5a1e1bf40a9b4",
+    "identityNotes": [
+      "原稿authoring/quests.txt・structures-5.mjsのQ(85)、初版4場面・現行7場面・7旅程・11行動を精読した。反復可能なため無限の選択列を全列挙とは呼ばない。",
+      "既存guideとnextGuideだけを実同行先の5場面に表示する。冒頭の荷袋の所有者をどちらかへ同定せず、markerの選択肢による将来の役割だけで二人を表示しない。ルウを追加しない。",
+      "標は荷袋bagから隊へ取り出し、入口へ置くwalkの出発時だけexitへ移る。回収場所への到着だけで拾わず、leader出発時にexit→party→guide、実到着時にnextGuideへ渡す。先導者試験から入口へ戻る際はnextGuide→partyを出発時に行う。",
+      "帰還標が入口にある状態とfixed=trueの最終登録を分ける。fixedはfinishだけで確定する。磁化では帰還機能を失う別結末を保持し、架空の戦闘を加えない。",
+      "物語改訂1、既存registry・全行動・報酬・旧受注を維持する。人物のcharacterとcast、設置前と登録前の2本文以外の配布JSONが旧版と一致する。旧保存にある待機本文と選択肢も保持する。"
+    ],
+    "relatedClients": {},
+    "people": {
+      "q085_guide": {
+        "label": "先導役",
+        "status": "connected",
+        "entity": "guide",
+        "need": "既存の7旅程に沿い、実同行先5場面だけに呼称表示。"
+      },
+      "q085_nextGuide": {
+        "label": "交代する先導役",
+        "status": "connected",
+        "entity": "nextGuide",
+        "need": "同じ実同行先5場面へ表示。標の受取と人物の同行を混同しない。"
+      }
+    },
+    "scenes": {
+      "entry": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "羅針盤が隊員の荷袋へ向く。",
+        "reason": "荷袋の所有者は既存の先導役のどちらかと明示されない。針と荷袋の挙動を調べる場面。",
+        "visual": "ルウや所有者を新規の人物として補わない。"
+      },
+      "marker": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "動く先導者へ渡すかを試せる。",
+        "reason": "先導者への受渡しはまだ選択前。役割の候補を特定人物の実出演へ読み替えない。",
+        "visual": "取り出した標の保持者は隊であり、先導者にまだ渡していない。"
+      },
+      "entrance": {
+        "decision": "person-evidence",
+        "people": [
+          "q085_guide",
+          "q085_nextGuide"
+        ],
+        "evidence": "角を曲がっても針は入口へ向く。",
+        "reason": "place_marker_walkの既存実同行で二人が曲がり角へ到着して針を確認する。",
+        "visual": "標はexitに置いたまま。二人はcornerにいる。"
+      },
+      "leader": {
+        "decision": "person-evidence",
+        "people": [
+          "q085_guide",
+          "q085_nextGuide"
+        ],
+        "evidence": "標を次の隊員へ渡すと針が向きを変えた。",
+        "reason": "標の最初の受取人と交代する隊員の二人が明示され、既存の旅程で実到着している。",
+        "visual": "実到着時に標がguideからnextGuideへ渡る。"
+      },
+      "place_marker": {
+        "decision": "person-evidence",
+        "people": [
+          "q085_guide",
+          "q085_nextGuide"
+        ],
+        "evidence": "先導役の二人と入口へ着いた。",
+        "reason": "markerまたはleaderから二人が既存旅程で入口へ到着する。",
+        "visual": "到着時点では標はparty。walk出発時にexitへ設置する。"
+      },
+      "recover_marker": {
+        "decision": "person-evidence",
+        "people": [
+          "q085_guide",
+          "q085_nextGuide"
+        ],
+        "evidence": "入口へ戻り、置いてあった帰還標を確かめた。",
+        "reason": "entrance_leaderで二人が入口へ実同行した。確認だけでは標を回収していない。",
+        "visual": "leader出発時に回収・先導役への受渡し、corner到着時に交代する。"
+      },
+      "fixed": {
+        "decision": "person-evidence",
+        "people": [
+          "q085_guide",
+          "q085_nextGuide"
+        ],
+        "evidence": "先導役の二人と入口へ戻った。",
+        "reason": "entrance_exitで二人が実同行する。標は先に入口へ置かれている。",
+        "visual": "fixedと依頼完了はfinishだけで確定する。"
+      }
+    },
+    "next": "反復の有限状態探索、保存再開、設置と回収・二人の実同行、帰還と敗北救助、報酬の一回性、Scene/Classicを確認する。次はq086「百年前の観測者」。"
+  },
   q084:{
     "sourceSha256": "3aa6e89410ad958d66f37e3c9be74f98db2792d622b8f4a48a0c5da9e0eefcc5",
     "identityNotes": [

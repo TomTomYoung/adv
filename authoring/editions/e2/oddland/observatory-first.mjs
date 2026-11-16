@@ -77,6 +77,13 @@ export function observatoryFirstSource(q,{cast=true}={}){
   route('entrance','leader','recover_marker',{companions});add('recover_marker','exit','入口へ戻り、置いてあった帰還標を確かめた。今度は動く先導者に持ってもらう。',[opt('leader','標を拾って先導者へ渡し、角で交代を試す','leader',{companions,depart:[give('marker','exit','party'),give('marker','party','guide')],effects:[give('marker','guide','nextGuide')]})]);
   route('leader','entrance','place_marker',{companions,depart:[give('marker','nextGuide','party')]});route('entrance','exit','fixed',{companions});end('fixed','exit','入口へ戻り、標を固定して脱出用具として登録する。','informed',[set('fixed')]);
  }
+ if(q.number===85&&cast){
+  x.entities.guide.character='q085_guide';x.entities.nextGuide.character='q085_nextGuide';
+  for(const scene of ['entrance','leader','place_marker','recover_marker','fixed'])
+   node(scene).cast=['guide','nextGuide'].map((entity,i)=>({entity,display:{x:[31,69][i]}}));
+  node('place_marker').text='先導役の二人と入口へ着いた。帰還標はまだ隊が保持している。標をここに置いてから、二人と曲がり角へ進んで針を試す。';
+  node('fixed').text='先導役の二人と入口へ戻った。置いた帰還標はここにある。これから標の固定を確認し、脱出用具として登録する。';
+ }
  if(q.number===86){
   cell('mail','受領歯車の欠けた通信箱',2,11,5);town('archive','旧報告と対応表の保存先','observatory_archive');entity('notice','entry');entity('receiver','mail');entity('reports','entry');node('mail').place='mail';
   choice('entry','reply').depart=[give('notice','entry','party')];choice('entry','reply').effects=[give('notice','party','receiver')];route('mail','repair','repaired',{effects:[set('receiverFixed')]});add('repaired','mail','通信箱の受領歯車を直し、暦改定通知を読み込ませた。観測器の新しい報告を確かめに戻る。',[opt('verify','観測器へ戻って新しい日付を確かめる','mapping')]);
