@@ -140,5 +140,13 @@ export function observatoryFirstSource(q,{cast=true}={}){
   route('open','longer','exhausted',{effects:[set('backup',false),set('exhausted')]});add('exhausted','sky','観測を延長し、蓄電が尽きて生活灯が消えた。保守員のいる制御台へ戻る。',[opt('return','観覧者と制御台へ戻る','overrun',{companions:all})]);end('overrun','entry','保守員が制御台で蓋を閉じる。次回は終了役を別に置くことを申し送る。','overrun',[set('lidOpen',false),set('restored')]);
   for(const [from,key] of [['entry','surface'],['schedule','trip']])route(from,key,'assemble',{companions:['mao']});add('assemble','entry','地下の生活灯を保ったまま、地上へ向かう列を集めた。',[opt('escort','マオと列を地上の観測台へ案内する','surface',{companions:all})]);end('surface','surface','皆が地上の観測台へ到着した。地下の給電を変えず、本当の空を見る。','compromise');choice('entry','full').effects=[set('lidOpen'),set('fullPower')];
  }
+ if(q.number===90&&cast){
+  for(const entity of ['mao','visitors','maintenance'])x.entities[entity].character='q090_'+entity;
+  const castByScene={entry:['mao'],schedule:['mao'],reserve:['mao'],opened:['mao','visitors'],open:['mao','visitors'],close:['mao','visitors'],exhausted:['mao','visitors'],overrun:['mao','visitors','maintenance'],assemble:['mao','visitors'],surface:['mao','visitors']};
+  for(const [scene,people] of Object.entries(castByScene))node(scene).cast=people.map((entity,i)=>({entity,display:{x:people.length===3?[23,50,77][i]:people.length===2?[32,68][i]:50}}));
+  node('reserve').text='マオと蓋の制御台へ戻った。一時間で閉じる役を決め、これから生活灯を蓄電器へ切り替えて観測蓋を開く。';
+  node('close').text='マオと観覧者が制御台へ戻った。蓋はまだ開いており、生活灯は蓄電器で点いている。ここで蓋の閉鎖と通常電源への復帰を確認する。';
+  node('overrun').text='マオと観覧者が制御台へ戻った。蓄電が尽きて生活灯は消えたままで、保守員と蓋の閉鎖・給電の復帰をここで確認する。';
+ }
  return finish();
 }
