@@ -425,7 +425,7 @@
       {
         "id": "posted",
         "place": "notice",
-        "text": "上映と天気の告知を別々に掲示する。",
+        "text": "告知所へ着いた。上映と実際の天気を分けた訂正を、ここで掲示する。",
         "options": [
           {
             "id": "finish",
@@ -438,7 +438,7 @@
       {
         "id": "observed",
         "place": "sky",
-        "text": "地上へ出て空を観測し、延期した盤の記録と並べる。",
+        "text": "地上の観測台へ着いた。実際の空と延期した盤の記録を、これから照合する。",
         "options": [
           {
             "id": "finish",
@@ -458,7 +458,7 @@
     },
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -467,7 +467,466 @@
       "saveRevision": 2,
       "scope": "観測所20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "落ちてこない星の現場",
+            "refuge": "避難した人の待つ高台",
+            "notice": "上映と天気の告知所",
+            "sky": "実際の空を観測する地上台",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "refuge"
+            ],
+            [
+              "transit",
+              "notice"
+            ],
+            [
+              "transit",
+              "sky"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "refuge",
+                "notice",
+                "sky",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "informed",
+                "contract",
+                "compromise"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "delayed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "delayed"
+            },
+            "destroyed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "destroyed"
+            },
+            "corrected": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "corrected"
+            },
+            "observed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "observed"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "予報は地上の空でなく、天井に投影する星図の落下演出の予定だ。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "落ちてこない星の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "show": {
+              "title": "落ちてこない星の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "correction": {
+              "title": "避難した人の待つ高台",
+              "place": "refuge",
+              "cast": [],
+              "requires": true
+            },
+            "posted": {
+              "title": "上映と天気の告知所",
+              "place": "notice",
+              "cast": [],
+              "requires": true
+            },
+            "observed": {
+              "title": "実際の空を観測する地上台",
+              "place": "sky",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_project": {
+              "from": [
+                "entry"
+              ],
+              "to": "show",
+              "requires": true,
+              "effects": [],
+              "once": false
+            },
+            "entry_delay": {
+              "from": [
+                "entry"
+              ],
+              "to": "observed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "sky"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "sky",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "set",
+                  "key": "delayed",
+                  "value": true
+                }
+              ]
+            },
+            "entry_destroy": {
+              "from": [
+                "entry"
+              ],
+              "ending": "contract",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "destroyed",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "contract"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "show_correct": {
+              "from": [
+                "show"
+              ],
+              "to": "correction",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "refuge"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "refuge",
+                "companions": []
+              },
+              "depart": []
+            },
+            "show_postpone": {
+              "from": [
+                "show"
+              ],
+              "to": "observed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "sky"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "sky",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "set",
+                  "key": "delayed",
+                  "value": true
+                }
+              ]
+            },
+            "correction_post": {
+              "from": [
+                "correction"
+              ],
+              "to": "posted",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "notice"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "notice",
+                "companions": []
+              },
+              "depart": []
+            },
+            "posted_finish": {
+              "from": [
+                "posted"
+              ],
+              "ending": "informed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "corrected",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "informed"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "observed_finish": {
+              "from": [
+                "observed"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "observed",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "informed": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q081.values.resolution"
+                  },
+                  "right": "informed"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q081.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q081.values.partyAt"
+                      },
+                      "right": "notice"
+                    }
+                  ]
+                }
+              ]
+            },
+            "contract": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q081.values.resolution"
+                  },
+                  "right": "contract"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q081.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q081.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compromise": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q081.values.resolution"
+                  },
+                  "right": "compromise"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q081.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q081.values.partyAt"
+                      },
+                      "right": "sky"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_9",
+              "map": "region_9_f1",
+              "x": 11,
+              "y": 9
+            },
+            "refuge": {
+              "kind": "town",
+              "location": "royal_refuge"
+            },
+            "notice": {
+              "kind": "town",
+              "location": "observatory_notice"
+            },
+            "sky": {
+              "kind": "town",
+              "location": "observatory_platform"
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "evacuatedGroupAt",
+            "value": "refuge"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q081.clue_a": {
@@ -1373,7 +1832,7 @@
         },
         {
           "op": "narrate",
-          "text": "上映と天気の告知を別々に掲示する。"
+          "text": "告知所へ着いた。上映と実際の天気を分けた訂正を、ここで掲示する。"
         },
         {
           "op": "choice",
@@ -1412,7 +1871,7 @@
         },
         {
           "op": "narrate",
-          "text": "地上へ出て空を観測し、延期した盤の記録と並べる。"
+          "text": "地上の観測台へ着いた。実際の空と延期した盤の記録を、これから照合する。"
         },
         {
           "op": "choice",
@@ -1707,12 +2166,25 @@
         "type": "boolean",
         "initial": false,
         "meaning": "observed"
+      },
+      "evacuatedGroupAt": {
+        "type": "enum",
+        "initial": "refuge",
+        "values": [
+          "refuge"
+        ],
+        "meaning": "evacuatedGroup の所在または保持者"
       }
     },
     "entities": {
       "party": {
         "holder": "partyAt",
         "kind": "group"
+      },
+      "evacuatedGroup": {
+        "holder": "evacuatedGroupAt",
+        "kind": "group",
+        "character": "q081_evacuated"
       }
     },
     "propositions": {
@@ -1738,7 +2210,14 @@
       "correction": {
         "title": "避難した人の待つ高台",
         "place": "refuge",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "evacuatedGroup",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "posted": {
@@ -2076,7 +2555,7 @@
         "location": "observatory_platform"
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "oddland_village",
   "receptionLocations": [

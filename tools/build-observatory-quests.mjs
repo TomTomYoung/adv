@@ -13,6 +13,13 @@ export async function buildObservatoryQuests({check=false}={}){
   const first=JSON.parse(await fs.readFile(path.join(root,`data/quests/q${String(n).padStart(3,'0')}.json`),'utf8')),source=n<100?observatoryFirstSource:observatorySecondSource;
   const options={prefix:'observatory',eventPrefix:'observatory',settlement:'oddland_village',settlementName:'旧王領の村',board:'royal_board',boardName:'旧王領の村の依頼所',source:`authoring/editions/e2/oddland/observatory-${n<100?'first':'second'}.mjs`,stage:'observatory-twenty',scope:'観測所20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。',preserveAcceptedRoute:true,battle:'boss_9'};
   const quest=compileRelocatedQuest(first,source(first),options);
+  if(n===81){
+   const previous=compileRelocatedQuest(first,source(first,{cast:false}),options).story;
+   for(const [key,entry] of Object.entries(previous.registry))quest.story.registry[key]=structuredClone(entry);
+   quest.story.registry.evacuatedGroupAt.values=['refuge'];
+   quest.story.revision=2;quest.model.edition.revision=2;
+   quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[{key:'evacuatedGroupAt',value:'refuge'}]}];
+  }
   if(n===181){
    const previous=compileRelocatedQuest(first,source(first,{cast:false}),options).story;
    quest.story.registry.quiverAt.values=structuredClone(previous.registry.quiverAt.values);

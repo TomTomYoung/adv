@@ -1,13 +1,20 @@
 import {set,give,ref,eq} from '../../../story-kit.mjs';
 import {observatorySource} from './observatory-common.mjs';
 
-export function observatoryFirstSource(q){
+export function observatoryFirstSource(q,{cast=true}={}){
  const {x,node,choice,town,cell,field,entity,opt,add,route,end,v,transfer,finish}=observatorySource(q);
  const p=q.locations.find(p=>p.role==='decision');cell('entry',q.title+'の現場',p.map.endsWith('f1')?1:2,p.x,p.y);
  if(q.number===81){
   town('refuge','避難した人の待つ高台','royal_refuge');town('notice','上映と天気の告知所','observatory_notice');town('sky','実際の空を観測する地上台','observatory_platform');
   route('show','correct','correction');add('correction','refuge','避難先へ来て、天井の上映と実際の天気の違いを伝えた。次は告知所の表示を分ける。',[opt('post','告知所へ訂正を掲示しに行く','posted')]);end('posted','notice','上映と天気の告知を別々に掲示する。','informed',[set('corrected')]);
   for(const [from,key] of [['entry','delay'],['show','postpone']])route(from,key,'observed',{depart:[set('delayed')]});end('observed','sky','地上へ出て空を観測し、延期した盤の記録と並べる。','compromise',[set('observed')]);choice('entry','destroy').effects=[set('destroyed')];
+ }
+ if(q.number===81&&cast){
+  entity('evacuatedGroup','refuge','group');
+  x.entities.evacuatedGroup.character='q081_evacuated';
+  node('correction').cast=[{entity:'evacuatedGroup',display:{x:50}}];
+  node('posted').text='告知所へ着いた。上映と実際の天気を分けた訂正を、ここで掲示する。';
+  node('observed').text='地上の観測台へ着いた。実際の空と延期した盤の記録を、これから照合する。';
  }
  if(q.number===82){
   town('vendor','星瓶の店の引渡し台','observatory_vendor');entity('bottle','entry');entity('customer','vendor','person');
