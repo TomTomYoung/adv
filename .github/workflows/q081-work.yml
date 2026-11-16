@@ -4,21 +4,64 @@ on:
     branches: [feature/observatory-q081-audit]
     paths: [.github/workflows/q081-work.yml]
 permissions:
-  contents: read
+  contents: write
 jobs:
   prepare:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
-      - name: Package source worktree
-        run: |
-          git rev-parse HEAD > "$RUNNER_TEMP/source-commit.txt"
-          tar -czf "$RUNNER_TEMP/adv-source.tgz" --exclude='./.git' --exclude='./assets' .
-      - uses: actions/upload-artifact@v4
         with:
-          name: q081-source-worktree
-          path: |
-            ${{ runner.temp }}/adv-source.tgz
-            ${{ runner.temp }}/source-commit.txt
-          retention-days: 1
+          ref: feature/observatory-q081-audit
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify exact locally tested source bytes
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const hashes={
+           'tests/falling-star-cast.test.mjs':'20ac9fa65cb2f9da77c90bc099ca95c512a25c6f20e3c702c91c35709a735156',
+           'tools/falling-star-art-fixtures.mjs':'2fc66de7ff00fe636c2c17b6e5ca56fffbeff5d3af5bbaca25f8401567dc569d',
+           'tools/measure-falling-star.mjs':'36c69b9e27400f75244110f1d99b24d3318d08192a00699cbeb42c0487d773a7',
+           'tools/browser-falling-star-cast-smoke.mjs':'e8298b75f0b5c651b09dbb1b62ba3e43c84217a08f4b2cef7d9a33a92b890512',
+           '.github/workflows/q081-cast.yml':'072a0edb3a1cb4ed59cb4b5d065ab0f1a53f4f9f1cea518514df7bd50221beff',
+           'tools/q081-transfer/apply.mjs':'6520a938351d9fa44b94df3f18a78538fe9a094694c64a88670b987bcba049d9',
+           'tools/q081-transfer/record.mjs':'0a780f76163c4802462aa35f3255623397b9533f881c60d3eb1b4108ad184c71'
+          };
+          for(const [p,h] of Object.entries(hashes))assert.equal(createHash('sha256').update(fs.readFileSync(p)).digest('hex'),h,p);
+          console.log('Verified seven source files');
+          JS
+      - name: Apply source-checked cast and preserve the previous definition
+        run: node tools/q081-transfer/apply.mjs
+      - name: Verify all routes, save phases, interruption recovery and observatory regressions
+        run: node --test tests/falling-star-cast.test.mjs tests/relocated-cast-audit.test.mjs tests/observatory.test.mjs tests/observatory-compat.test.mjs tests/observatory-sites.test.mjs
+      - name: Reproduce four normal party trials and record verified behavior
+        run: |
+          node tools/measure-falling-star.mjs doc/development/Q081_PLAYTEST_RESULTS.json
+          node tools/q081-transfer/record.mjs
+      - name: Generate documents and runtime while preserving authored records
+        run: |
+          cp -a doc "$RUNNER_TEMP/q081-authored-docs"
+          node tools/build-docs.mjs
+          for file in battle/QUEST_PARTY_PLAYTEST.md battle/SALOME_CLASSES_AND_CHARACTERS_DESIGN.md development/CHROMIUM_DEFERRED_2026-11-04.md development/PROGRESS.md development/REMAINING_WORK.md development/TEST_OVERVIEW.md dungeons/ODDLAND_RELOCATION_AUDIT.md dungeons/REGIONAL_RELOCATION_WORK.md scenarios/EGG_KNIGHT_FORESHADOWING.md scenarios/ODDLAND_100_QUEST_DESIGN.md scenarios/REGIONAL_QUEST_ALLOCATION.md scenarios/SALOME_100_QUEST_DESIGN.md ui/SOUND_AND_EFFECT_FORMAT.md; do
+            cp "$RUNNER_TEMP/q081-authored-docs/$file" "doc/$file"
+          done
+          node tools/audit-relocated-cast.mjs
+          node tools/build-runtime.mjs
+      - name: Validate generated content, distribution, assets, references and documentation
+        run: |
+          node tools/build-scenario-editions.mjs --check
+          node tools/build-runtime.mjs --check
+          node tools/validate.mjs
+          node tools/check-static.mjs
+          node tools/check-docs.mjs
+      - name: Commit verified implementation
+        run: |
+          git rm -r tools/q081-transfer
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --stat
+          git commit -m "feat(q081): fixed refuge cast, atomic old-save migration and correction timing"
+          git push origin HEAD:feature/observatory-q081-audit
