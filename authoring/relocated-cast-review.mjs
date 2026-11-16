@@ -4,7 +4,7 @@ export const RELOCATED_CAST_REVIEW={
  reviewedAt:'2026-11-17',
  quests:{
   q090:{
-    "sourceSha256": "6e2d75e2375addec4a7c158dd0f2250e83b9637b4f2ab95c5ec472445fb3618c",
+    "sourceSha256": "df43aab0e8fc21d6e7503ab13a776918e85aba4f40af9cb0976fbfc6cf415056",
     "identityNotes": [
       "原稿authoring/quests.txt・structures-5.mjsのQ(90)、初版3場面・現行10場面・7旅程・14行動・4結末を精読した。マオと観覧者の実同行、制御台に残る保守員を区別し、専用画・人数・容貌を補わない。",
       "観測蓋lidOpen、予備給電backup、全電力fullPower、蓄電枯渇exhausted、給電復帰restoredを分ける。点検や制御台への帰還だけでは開閉・給電切替を確定しない。",

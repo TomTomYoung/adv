@@ -8,6 +8,7 @@ const noPowerChange=v=>{for(const key of ['lidOpen','backup','exhausted','restor
 
 test('q090 changes only three character references, ten scene casts and three pending-operation sentences',()=>{
  const q=structuredClone(data.quests.q090);assert.equal(q.story.revision,1);assert.equal(q.model.edition.revision,1);assert.equal(q.model.storyUpgrades,undefined);
+ assert.deepEqual(q.story.scenes.overrun.cast.map(c=>c.display.x),[17,50,83]);
  assert.deepEqual(q.story.registry,previousQ090.story.registry);assert.deepEqual(q.story.actions,previousQ090.story.actions);
  for(const id of ['mao','visitors','maintenance']){assert.equal(q.story.entities[id].character,'q090_'+id);delete q.story.entities[id].character;for(const key of ['portrait','sprite'])assert.equal(data.characters['q090_'+id][key],undefined);}
  for(const [id,s] of Object.entries(q.story.scenes)){assert.deepEqual(s.cast.map(c=>'q090_'+c.entity),q090Cast(id));s.cast=[];}

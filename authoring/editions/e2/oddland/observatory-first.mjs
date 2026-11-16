@@ -143,7 +143,7 @@ export function observatoryFirstSource(q,{cast=true}={}){
  if(q.number===90&&cast){
   for(const entity of ['mao','visitors','maintenance'])x.entities[entity].character='q090_'+entity;
   const castByScene={entry:['mao'],schedule:['mao'],reserve:['mao'],opened:['mao','visitors'],open:['mao','visitors'],close:['mao','visitors'],exhausted:['mao','visitors'],overrun:['mao','visitors','maintenance'],assemble:['mao','visitors'],surface:['mao','visitors']};
-  for(const [scene,people] of Object.entries(castByScene))node(scene).cast=people.map((entity,i)=>({entity,display:{x:people.length===3?[23,50,77][i]:people.length===2?[32,68][i]:50}}));
+  for(const [scene,people] of Object.entries(castByScene))node(scene).cast=people.map((entity,i)=>({entity,display:{x:people.length===3?[17,50,83][i]:people.length===2?[32,68][i]:50}}));
   node('reserve').text='マオと蓋の制御台へ戻った。一時間で閉じる役を決め、これから生活灯を蓄電器へ切り替えて観測蓋を開く。';
   node('close').text='マオと観覧者が制御台へ戻った。蓋はまだ開いており、生活灯は蓄電器で点いている。ここで蓋の閉鎖と通常電源への復帰を確認する。';
   node('overrun').text='マオと観覧者が制御台へ戻った。蓄電が尽きて生活灯は消えたままで、保守員と蓋の閉鎖・給電の復帰をここで確認する。';
