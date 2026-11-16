@@ -118,7 +118,7 @@ export const RELOCATED_CAST_REVIEW={
         "visual": "次室の遭難者は表示せず、最終引継ぎはfinish。"
       }
     },
-    "next": "実画面・全体CIの最終結果をPRへ記録する。次はq085「北を向かない羅針盤」の既存原稿と経路を確認する。"
+    "next": "実画面・全体CIの最終結果をPRへ記録する。次はq085「方位のない羅針盤」の既存原稿と経路を確認する。"
   },
   q083:{
     "sourceSha256": "5d296e0dd131a844c321cf557443e29455cf43a5bf192b8b3f3c05d90eb93b01",
