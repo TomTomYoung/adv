@@ -125,6 +125,13 @@ export function observatoryFirstSource(q,{cast=true}={}){
   for(const key of ['wedding','wages']){route('dates',key,key+'_agreed');add(key+'_agreed',key,key==='wedding'?'婚礼の当事者と集会所で話し、代わりの日を決めた。':'工房の支払窓口で、賃金の支払日を移す合意を得た。',[opt('return','天球儀へ戻る','dates')]);}
   choice('dates','switch').effects=[set('switched')];for(const [from,key] of [['entry','two'],['dates','keep']])route(from,key,'dual');end('dual','calendar','暦の窓口へ来て二つの暦を併記する。飛ぶ月への急な切替はしない。','compromise');
  }
+ if(q.number===89&&cast){
+  entity('weddingParties','wedding','group');entity('payrollParties','wages','group');
+  x.entities.weddingParties.character='q089_weddingParties';x.entities.payrollParties.character='q089_payrollParties';
+  node('wedding_agreed').cast=[{entity:'weddingParties',display:{x:50}}];
+  node('wages_agreed').cast=[{entity:'payrollParties',display:{x:50}}];
+  node('dual').text='暦の窓口へ着いた。現行暦と天球儀の暦を急に切り替えず、ここで二つの暦の併記を確認する。';
+ }
  if(q.number===90){
   cell('battery','封印された蓄電器',2,11,5);cell('sky','蓋の下の観測席',2,9,11);town('surface','地上の観測行の到着先','observatory_platform');node('schedule').place='battery';node('open').place='sky';entity('mao','entry','person');entity('visitors','entry','group');entity('maintenance','entry','group');const all=['mao','visitors'];
   choice('entry','battery').companions=['mao'];route('schedule','hour','reserve',{companions:['mao']});add('reserve','entry','マオと蓋の制御台へ戻った。一時間で閉じる役を決め、生活灯を蓄電器へ切り替える。',[opt('start','生活灯の切替と観測蓋の開放を行う','opened',{effects:[set('backup'),set('lidOpen')]})]);

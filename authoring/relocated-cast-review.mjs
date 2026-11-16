@@ -1,8 +1,74 @@
 // Editorial audit: candidate IDs are local; connected roles cite their game entity.
 // Update a fingerprint only after rereading the changed quest and its evidence.
 export const RELOCATED_CAST_REVIEW={
- reviewedAt:'2026-11-16',
+ reviewedAt:'2026-11-17',
  quests:{
+  q089:{
+    "sourceSha256": "6601c98d4d6d16db4e202827b46b24657be225bd9f448db11ed4a84990202e4e",
+    "identityNotes": [
+      "原稿authoring/quests.txt・structures-5.mjsのQ(89)、初版2場面・現行5場面・6旅程・10行動を精読した。婚礼の当事者と工房の支払日の相談相手をそれぞれ合意の現場だけへ表示し、依頼人ツキや別の窓口担当者を補わない。",
+      "婚礼と給与日の合意は相談先への実到着時に個別に確定する。出発時・移動中には未合意のまま。合意済みの同じ相談は再選択できず、両方を確認した後だけswitchが有効になる。窓口からの帰路も実移動する。",
+      "天球儀を南へ戻すsouth、歯車を削るground、暦を切り替えるswitchedを分ける。両合意の前後・片方だけでも二暦併用へ進めるが、暦の窓口への到着ではfinished=falseを保ち、finishで結果を確定する。",
+      "旧保存を旧定義で全体検証後、二つの固定所在だけを補う。既存registry、全行動・結末・報酬・旧受注を維持する。人物追加と移行定義とdualの1本文を除いた配布JSONは旧版と一致し、旧保存の待機本文・選択肢も保持する。原稿の旧表現から戦闘を追加しない。"
+    ],
+    "relatedClients": {},
+    "people": {
+      "q089_weddingParties": {
+        "label": "婚礼の当事者たち",
+        "status": "connected",
+        "entity": "weddingParties",
+        "need": "婚礼の相談と日程合意を行う集会所だけで表示する。"
+      },
+      "q089_payrollParties": {
+        "label": "支払日の相談相手",
+        "status": "connected",
+        "entity": "payrollParties",
+        "need": "工房の支払窓口で合意する相手だけを表示する。人数・個人役職は確定しない。"
+      }
+    },
+    "scenes": {
+      "entry": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "持ち手の摩耗も南側にある。",
+        "reason": "装置の字と摩耗を確認する場面。依頼人ツキが同席する本文はない。",
+        "visual": "字を見る向きと台の操作を分ける。"
+      },
+      "dates": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "婚礼と賃金支払が、その月へ予定されている。",
+        "reason": "予定への言及だけで当事者が装置の前に来ているとは判断しない。",
+        "visual": "二つの相談の完了状態とswitchの条件を区別する。"
+      },
+      "wedding_agreed": {
+        "decision": "person-evidence",
+        "people": [
+          "q089_weddingParties"
+        ],
+        "evidence": "婚礼の当事者と集会所で話し",
+        "reason": "集会所で本人たちと代わりの日を決める。合意は実到着時に確定済みであり、帰路では同行しない。",
+        "visual": "婚礼の合意を給与日の合意へ代用しない。"
+      },
+      "wages_agreed": {
+        "decision": "person-evidence",
+        "people": [
+          "q089_payrollParties"
+        ],
+        "evidence": "工房の支払窓口で、賃金の支払日を移す合意を得た。",
+        "reason": "工房で合意を得る相談相手を集団呼称として表示する。人数・固有名・個別の職位は補わない。",
+        "visual": "給与日の合意だけで婚礼日や暦全体を変更しない。"
+      },
+      "dual": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "ここで二つの暦の併記を確認する。",
+        "reason": "窓口の実操作前であり、結末で二欄を作るツキをこの待機場面に推測で配置しない。",
+        "visual": "到着時とfinishでの併用確定を分ける。"
+      }
+    },
+    "next": "q090「空を返す日」の出演監査。q089の9条件付き経路・保存移行・固定所在・途中帰還と敗北救助・通常編成・実画面の結果はPRに記録する。"
+  },
   q088:{
     "sourceSha256": "12a79228746f3899e01fcdefbded1778b98ab17a40b0349d7174f0d025901396",
     "identityNotes": [

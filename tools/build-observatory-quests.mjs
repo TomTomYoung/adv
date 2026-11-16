@@ -44,6 +44,14 @@ export async function buildObservatoryQuests({check=false}={}){
    quest.story.revision=2;quest.model.edition.revision=2;
    quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[{key:'familyGroupAt',value:'family'}]}];
   }
+  if(n===89){
+   const previous=compileRelocatedQuest(first,source(first,{cast:false}),options).story;
+   for(const [key,entry] of Object.entries(previous.registry))quest.story.registry[key]=structuredClone(entry);
+   const values=[{key:'weddingPartiesAt',value:'wedding'},{key:'payrollPartiesAt',value:'wages'}];
+   for(const {key,value} of values)quest.story.registry[key].values=[value];
+   quest.story.revision=2;quest.model.edition.revision=2;
+   quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values}];
+  }
   if(n===181){
    const previous=compileRelocatedQuest(first,source(first,{cast:false}),options).story;
    quest.story.registry.quiverAt.values=structuredClone(previous.registry.quiverAt.values);

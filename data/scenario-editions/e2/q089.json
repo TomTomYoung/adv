@@ -470,7 +470,7 @@
       {
         "id": "dual",
         "place": "calendar",
-        "text": "暦の窓口へ来て二つの暦を併記する。飛ぶ月への急な切替はしない。",
+        "text": "暦の窓口へ着いた。現行暦と天球儀の暦を急に切り替えず、ここで二つの暦の併記を確認する。",
         "options": [
           {
             "id": "finish",
@@ -490,7 +490,7 @@
     },
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -499,7 +499,586 @@
       "saveRevision": 2,
       "scope": "観測所20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "逆さまの天球儀の現場",
+            "wedding": "婚礼の日を相談する集会所",
+            "wages": "支払日を相談する工房",
+            "calendar": "二つの暦を記す窓口",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "wedding"
+            ],
+            [
+              "transit",
+              "wages"
+            ],
+            [
+              "transit",
+              "calendar"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "wedding",
+                "wages",
+                "calendar",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "informed",
+                "contract",
+                "compromise"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "south": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "south"
+            },
+            "ground": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "ground"
+            },
+            "wedding": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "wedding"
+            },
+            "wages": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "wages"
+            },
+            "switched": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "switched"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "天球儀は南側から読む仕様で、北向きに移された後に補正が重ねられている。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "逆さまの天球儀の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "dates": {
+              "title": "逆さまの天球儀の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "wedding_agreed": {
+              "title": "婚礼の日を相談する集会所",
+              "place": "wedding",
+              "cast": [],
+              "requires": true
+            },
+            "wages_agreed": {
+              "title": "支払日を相談する工房",
+              "place": "wages",
+              "cast": [],
+              "requires": true
+            },
+            "dual": {
+              "title": "二つの暦を記す窓口",
+              "place": "calendar",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_turn": {
+              "from": [
+                "entry"
+              ],
+              "to": "dates",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "south",
+                  "value": true
+                },
+                {
+                  "op": "observe",
+                  "observer": "party",
+                  "proposition": "truth",
+                  "source": "entry",
+                  "requires": true
+                }
+              ],
+              "once": false
+            },
+            "entry_two": {
+              "from": [
+                "entry"
+              ],
+              "to": "dual",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "calendar"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "calendar",
+                "companions": []
+              },
+              "depart": []
+            },
+            "entry_gears": {
+              "from": [
+                "entry"
+              ],
+              "ending": "contract",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "ground",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "contract"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "dates_wedding": {
+              "from": [
+                "dates"
+              ],
+              "to": "wedding_agreed",
+              "requires": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q089.values.wedding"
+                  },
+                  "right": true
+                }
+              },
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "wedding"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "wedding",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "wedding",
+                "companions": []
+              },
+              "depart": []
+            },
+            "dates_wages": {
+              "from": [
+                "dates"
+              ],
+              "to": "wages_agreed",
+              "requires": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q089.values.wages"
+                  },
+                  "right": true
+                }
+              },
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "wages"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "wages",
+                  "value": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "wages",
+                "companions": []
+              },
+              "depart": []
+            },
+            "dates_switch": {
+              "from": [
+                "dates"
+              ],
+              "ending": "informed",
+              "requires": {
+                "op": "and",
+                "args": [
+                  true,
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q089.values.wedding"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q089.values.wages"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "switched",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "informed"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "dates_keep": {
+              "from": [
+                "dates"
+              ],
+              "to": "dual",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "calendar"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "calendar",
+                "companions": []
+              },
+              "depart": []
+            },
+            "wedding_agreed_return": {
+              "from": [
+                "wedding_agreed"
+              ],
+              "to": "dates",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "observe",
+                  "observer": "party",
+                  "proposition": "truth",
+                  "source": "entry",
+                  "requires": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "wages_agreed_return": {
+              "from": [
+                "wages_agreed"
+              ],
+              "to": "dates",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "entry"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "observe",
+                  "observer": "party",
+                  "proposition": "truth",
+                  "source": "entry",
+                  "requires": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "entry",
+                "companions": []
+              },
+              "depart": []
+            },
+            "dual_finish": {
+              "from": [
+                "dual"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "informed": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q089.values.resolution"
+                  },
+                  "right": "informed"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q089.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q089.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "contract": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q089.values.resolution"
+                  },
+                  "right": "contract"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q089.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q089.values.partyAt"
+                      },
+                      "right": "entry"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compromise": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q089.values.resolution"
+                  },
+                  "right": "compromise"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q089.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q089.values.partyAt"
+                      },
+                      "right": "calendar"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_9",
+              "map": "region_9_f2",
+              "x": 8,
+              "y": 13
+            },
+            "wedding": {
+              "kind": "town",
+              "location": "royal_hall"
+            },
+            "wages": {
+              "kind": "town",
+              "location": "observatory_workshop"
+            },
+            "calendar": {
+              "kind": "town",
+              "location": "observatory_calendar"
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "weddingPartiesAt",
+            "value": "wedding"
+          },
+          {
+            "key": "payrollPartiesAt",
+            "value": "wages"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q089.clue_a": {
@@ -1597,7 +2176,7 @@
         },
         {
           "op": "narrate",
-          "text": "暦の窓口へ来て二つの暦を併記する。飛ぶ月への急な切替はしない。"
+          "text": "暦の窓口へ着いた。現行暦と天球儀の暦を急に切り替えず、ここで二つの暦の併記を確認する。"
         },
         {
           "op": "choice",
@@ -1897,12 +2476,38 @@
         "type": "boolean",
         "initial": false,
         "meaning": "switched"
+      },
+      "weddingPartiesAt": {
+        "type": "enum",
+        "initial": "wedding",
+        "values": [
+          "wedding"
+        ],
+        "meaning": "weddingParties の所在または保持者"
+      },
+      "payrollPartiesAt": {
+        "type": "enum",
+        "initial": "wages",
+        "values": [
+          "wages"
+        ],
+        "meaning": "payrollParties の所在または保持者"
       }
     },
     "entities": {
       "party": {
         "holder": "partyAt",
         "kind": "group"
+      },
+      "weddingParties": {
+        "holder": "weddingPartiesAt",
+        "kind": "group",
+        "character": "q089_weddingParties"
+      },
+      "payrollParties": {
+        "holder": "payrollPartiesAt",
+        "kind": "group",
+        "character": "q089_payrollParties"
       }
     },
     "propositions": {
@@ -1928,13 +2533,27 @@
       "wedding_agreed": {
         "title": "婚礼の日を相談する集会所",
         "place": "wedding",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "weddingParties",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "wages_agreed": {
         "title": "支払日を相談する工房",
         "place": "wages",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "payrollParties",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "dual": {
@@ -2377,7 +2996,7 @@
         "location": "observatory_calendar"
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "oddland_village",
   "receptionLocations": [
