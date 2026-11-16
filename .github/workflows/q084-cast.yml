@@ -1,0 +1,48 @@
+name: Validate q084 return signal in Chromium
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'data/**'
+      - 'authoring/editions/e2/oddland/observatory-first.mjs'
+      - 'authoring/relocated-character-art.mjs'
+      - 'tools/build-observatory-quests.mjs'
+      - 'tools/browser-return-signal-cast-smoke.mjs'
+      - 'tools/return-signal-art-fixtures.mjs'
+      - 'tools/character-art-browser.mjs'
+      - 'tests/return-signal-cast.test.mjs'
+      - 'tests/fixtures/e2-q084-before-cast.json'
+      - 'assets/images/**'
+      - '.github/workflows/q084-cast.yml'
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+permissions:
+  contents: read
+jobs:
+  q084-browser:
+    runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned browser driver and verify Japanese fonts
+        run: |
+          npm install --no-save --package-lock=false playwright@1.58.2
+          test -n "$(fc-list :lang=ja)"
+      - name: Check chart handover, family and survivors, real rescue escort, transmitter custody and old saves
+        run: ADV_BROWSER_OUTPUT=/tmp/adv-return-signal-art-browser node tools/browser-return-signal-cast-smoke.mjs
+      - name: Keep q084 checkpoints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: q084-cast-checkpoints
+          path: /tmp/adv-return-signal-art-browser
+          if-no-files-found: error
+          retention-days: 7

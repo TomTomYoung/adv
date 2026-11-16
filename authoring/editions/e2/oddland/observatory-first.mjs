@@ -57,6 +57,17 @@ export function observatoryFirstSource(q,{cast=true}={}){
   route('beacon','handoff','handoff');end('handoff','rescue','救助標は現場に残し、矢印の向きと場所を専門隊へ引き継ぐ。','compromise');
   route('crossing','call','call_report');choice('crossing','call').text='現在地を専門隊へ届け、現場で到着を待つ';add('call_report','rescue','詰所へ現在地を届けた。専門隊と上層の空気室へ戻る。',[opt('escort','専門隊と空気室へ戻る','expert_arrived',{companions:['specialists']})]);end('expert_arrived','crossing','専門隊が担架の跡のある空気室へ着き、ここから先を引き受けた。','compromise');
  }
+ if(q.number===84&&cast){
+  entity('familyGroup','family','group');
+  for(const [entity,character] of [['familyGroup','q084_family'],['stretcherParty','q084_survivors'],['specialists','q084_specialists']])x.entities[entity].character=character;
+  for(const scene of ['route_check','handoff','call_report','expert_arrived'])node(scene).cast=[{entity:'specialists',display:{x:50}}];
+  node('reached').cast=[{entity:'stretcherParty',display:{x:50}}];
+  node('recovered').cast=[{entity:'familyGroup',display:{x:50}}];
+  node('recovered').text='反復する発信機を家族の待つ家へ運んだ。機械は隊が保持しており、本人の行方はまだ分からないと伝えて、ここで引渡しを確認する。';
+  node('reached').text='返事を確かめながら次の空気室へ進み、担架の一行のそばへ着いた。本人たちの状態と合流の結果を、ここで確認する。';
+  node('handoff').text='専門隊の詰所へ着いた。救助標は現場に残してある。矢印の向きと場所を示し、ここから先の捜索の引継ぎを確認する。';
+  node('expert_arrived').text='専門隊が担架の跡のある空気室へ着いた。ここから先の捜索を引き継ぐ内容を、その場で確認する。';
+ }
  if(q.number===85){
   cell('exit','帰還標を据える入口',1,1,1);cell('corner','針を試す曲がり角',1,7,3);entity('bag','party');entity('marker','bag');entity('compass','party');entity('guide','entry','person');entity('nextGuide','entry','person');const companions=['guide','nextGuide'];
   choice('entry','bag').effects=[give('marker','bag','party')];choice('entry','north').effects=[set('magnetized')];
