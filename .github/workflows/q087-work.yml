@@ -4,21 +4,61 @@ on:
     branches: [feature/observatory-q087-audit]
     paths: [.github/workflows/q087-work.yml]
 permissions:
-  contents: read
+  contents: write
 jobs:
   prepare:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
-      - name: Export exact source
-        run: |
-          git rev-parse HEAD > "$RUNNER_TEMP/source-commit.txt"
-          tar -czf "$RUNNER_TEMP/adv-source.tgz" --exclude='./.git' --exclude='./assets' .
-      - uses: actions/upload-artifact@v4
         with:
-          name: q087-source-worktree
-          path: |
-            ${{ runner.temp }}/adv-source.tgz
-            ${{ runner.temp }}/source-commit.txt
-          retention-days: 1
+          ref: feature/observatory-q087-audit
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify exact locally tested source bytes
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const hashes={
+           'tools/q087-transfer/apply.mjs':'b1b3f0c4f8fa1fec8dd141c0fde958bc55c48c58860eef218f4e7ecbfeb2e648',
+           'tools/q087-transfer/record.mjs':'ebce1e1167131b1e498a80ec84cb01a459183bf0f93db5989333f1d378bd0be2',
+           'tools/measure-wish-ticket.mjs':'b99d61fdd896fb1bfb3e12deb8a444019776ab2d8362ebf9210124907216e390',
+           'tools/browser-wish-ticket-cast-smoke.mjs':'17892ce34c9a3e35c1151d84378c76de995ed1441b0e557905ef2ffd2c028974',
+           'tools/wish-ticket-art-fixtures.mjs':'ffd4e81483e4bbe21627a35c684b0a813e7faddd47decb20ba7cefc974e819db',
+           'tests/wish-ticket-cast.test.mjs':'5ba602b817d873874ab67b819b4a10dfd71af10891fb8ba543bcd02e5e75feae',
+           '.github/workflows/q087-cast.yml':'31885025aedd976b3dbcb02ea35cecdc01de81b98e0ef66b875835e6934f7850'
+          };
+          for(const [p,h] of Object.entries(hashes))assert.equal(createHash('sha256').update(fs.readFileSync(p)).digest('hex'),h,p);
+          console.log('Seven tested source files match exactly.');
+          JS
+      - name: Apply audited cast and preserve original quest bytes
+        run: node tools/q087-transfer/apply.mjs
+      - name: Validate all paths, receipts, execution, save phases and interruption recovery
+        run: node --test tests/wish-ticket-cast.test.mjs tests/relocated-cast-audit.test.mjs tests/observatory*.test.mjs
+      - name: Reproduce five ordinary party trials
+        run: node tools/measure-wish-ticket.mjs doc/development/Q087_PLAYTEST_RESULTS.json
+      - name: Generate documents and runtime while preserving authored records
+        run: |
+          node tools/build-docs.mjs
+          git restore -- doc/battle/QUEST_PARTY_PLAYTEST.md doc/battle/SALOME_CLASSES_AND_CHARACTERS_DESIGN.md doc/development/CHROMIUM_DEFERRED_2026-11-04.md doc/development/PROGRESS.md doc/development/REMAINING_WORK.md doc/development/TEST_OVERVIEW.md doc/dungeons/ODDLAND_RELOCATION_AUDIT.md doc/dungeons/REGIONAL_RELOCATION_WORK.md doc/scenarios/EGG_KNIGHT_FORESHADOWING.md doc/scenarios/ODDLAND_100_QUEST_DESIGN.md doc/scenarios/REGIONAL_QUEST_ALLOCATION.md doc/scenarios/SALOME_100_QUEST_DESIGN.md doc/ui/SOUND_AND_EFFECT_FORMAT.md
+          node tools/q087-transfer/record.mjs
+          node tools/audit-relocated-cast.mjs
+          node tools/build-runtime.mjs
+          git rm -r tools/q087-transfer
+      - name: Validate generated content, assets, references and documentation
+        run: |
+          node tools/build-scenario-editions.mjs --check
+          node tools/build-runtime.mjs --check
+          node tools/validate.mjs
+          node tools/check-config-editors.mjs
+          node tools/check-static.mjs
+          node tools/check-docs.mjs
+      - name: Commit verified implementation
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --stat
+          git commit -m "feat(q087): Haku escort and distinct wish receipt, record and execution"
+          git push origin HEAD:feature/observatory-q087-audit
