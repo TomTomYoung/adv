@@ -1,0 +1,2799 @@
+{
+  "schemaVersion": 1,
+  "id": "q088",
+  "number": 88,
+  "title": "観測窓の亀裂",
+  "client": "保守員のイチ",
+  "brief": "観測窓が割れ始めた。塞ぐと最後の観測ができない。",
+  "region": 9,
+  "type": "authored_progression",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。 旧王領の村の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q088_clue_a",
+      "title": "観測窓の亀裂：現場の痕跡",
+      "points": [
+        {
+          "map": "region_9_f2",
+          "x": 1,
+          "y": 8,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q088.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q088.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q088"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q088"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "q088_clue_b",
+      "title": "観測窓の亀裂：記録と証言",
+      "points": [
+        {
+          "map": "region_9_f2",
+          "x": 10,
+          "y": 5,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q088.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q088.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q088"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q088"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "q088_decision",
+      "title": "観測窓の亀裂：決着の場",
+      "points": [
+        {
+          "map": "region_9_f2",
+          "x": 17,
+          "y": 3,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q088.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q088.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q088.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q088"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "q088_observatory_entry",
+      "title": "観測窓の亀裂の現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q088.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q088.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q088"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q088.observatory.visit",
+      "points": [
+        {
+          "dungeon": "region_9",
+          "map": "region_9_f2",
+          "x": 17,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "id": "q088_observatory_scope",
+      "title": "交換後の窓を使う観測位置",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "scope",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q088.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q088.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q088"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q088.observatory.visit",
+      "points": [
+        {
+          "dungeon": "region_9",
+          "map": "region_9_f2",
+          "x": 17,
+          "y": 9
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_9_f2",
+      "x": 1,
+      "y": 8,
+      "object": "q088_clue_a",
+      "role": "clue_a"
+    },
+    {
+      "map": "region_9_f2",
+      "x": 10,
+      "y": 5,
+      "object": "q088_clue_b",
+      "role": "clue_b"
+    },
+    {
+      "map": "region_9_f2",
+      "x": 17,
+      "y": 3,
+      "object": "q088_decision",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "最後の観測を行い、割れた板を教材として残す",
+      "text": "最後の観測も安全に終えた。イチは割れた板を教材に残す。",
+      "gold": 153,
+      "xp": 132
+    },
+    "contract": {
+      "label": "窓の全面を金属板で塞ぐ",
+      "text": "危険への不安はなくなった。観測期は過ぎ、次の機会を待つ。",
+      "gold": 173,
+      "xp": 103
+    },
+    "compromise": {
+      "label": "観測を中止し、窓全体を専門点検へ回す",
+      "text": "慎重すぎるとの声も出た。点検記録は次の判断材料になる。",
+      "gold": 99,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/observatory-first.mjs",
+    "world": {
+      "truth": "亀裂は外窓でなく交換式の測定目盛にあり、耐圧窓自体は無傷だ。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "亀裂は外窓でなく交換式の測定目盛にあり、耐圧窓自体は無傷だ。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "観測窓が割れ始めた。塞ぐと最後の観測ができない。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "保守員のイチ",
+        "observation": "観測窓が割れ始めた。塞ぐと最後の観測ができない。",
+        "belief": "観測窓が割れ始めた。塞ぐと最後の観測ができない。",
+        "goal": "観測窓が割れ始めた。塞ぐと最後の観測ができない。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "観測窓が割れ始めた。塞ぐと最後の観測ができない。",
+      "progression": "観測期限の前に亀裂の層を見分け、部分交換の試験が済めば観測へ戻れる。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q088.observatory.entry"
+        },
+        {
+          "id": "panel",
+          "script": "q088.observatory.panel"
+        },
+        {
+          "id": "observe",
+          "script": "q088.observatory.observe"
+        },
+        {
+          "id": "spare",
+          "script": "q088.observatory.spare"
+        },
+        {
+          "id": "install",
+          "script": "q088.observatory.install"
+        },
+        {
+          "id": "checked",
+          "script": "q088.observatory.checked"
+        },
+        {
+          "id": "lesson",
+          "script": "q088.observatory.lesson"
+        },
+        {
+          "id": "experts",
+          "script": "q088.observatory.experts"
+        },
+        {
+          "id": "inspected",
+          "script": "q088.observatory.inspected"
+        },
+        {
+          "id": "cancelled",
+          "script": "q088.observatory.cancelled"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "観測窓が割れ始めた。塞ぐと最後の観測ができない。",
+      "openQuestion": "観測窓の亀裂の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "valueInvert",
+      "newInformation": "亀裂は外窓でなく交換式の測定目盛にあり、耐圧窓自体は無傷だ。",
+      "retroactiveTargets": [
+        "panel"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q088.flow.entry"
+      },
+      {
+        "id": "panel",
+        "script": "q088.flow.panel"
+      },
+      {
+        "id": "observe",
+        "script": "q088.flow.observe"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q088.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "観測期限の前に亀裂の層を見分け、部分交換の試験が済めば観測へ戻れる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "観測期限の前に亀裂の層を見分け、部分交換の試験が済めば観測へ戻れる。",
+    "flowVersion": 2,
+    "entryScript": "q088.observatory.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "星が見える時間は今夜だけ。亀裂は目盛線を横切るが、背面の反射は切れていない。",
+        "options": [
+          {
+            "id": "layers",
+            "text": "側面から板の層を確認する",
+            "to": "panel",
+            "action": "entry_layers"
+          },
+          {
+            "id": "inspection",
+            "text": "観測を中止し、窓全体を専門点検へ回す",
+            "to": "experts",
+            "action": "entry_inspection"
+          },
+          {
+            "id": "metal",
+            "text": "窓の全面を金属板で塞ぐ",
+            "to": "@contract",
+            "action": "entry_metal"
+          }
+        ]
+      },
+      {
+        "id": "panel",
+        "place": "entry",
+        "text": "亀裂は外窓でなく交換式の測定目盛にあり、耐圧窓自体は無傷だ。 外した測定板の奥に、無傷の耐圧窓が残った。",
+        "options": [
+          {
+            "id": "replace",
+            "text": "測定板だけ交換し、密閉と目盛を点検する",
+            "to": "spare",
+            "action": "panel_replace"
+          },
+          {
+            "id": "expert",
+            "text": "自分たちでは判断せず、窓全体を専門点検する",
+            "to": "experts",
+            "action": "panel_expert"
+          }
+        ]
+      },
+      {
+        "id": "observe",
+        "place": "scope",
+        "text": "点検が終わり、まだ観測の時間が残っている。",
+        "options": [
+          {
+            "id": "sky",
+            "text": "最後の観測を行い、割れた板を教材として残す",
+            "to": "lesson",
+            "action": "observe_sky"
+          },
+          {
+            "id": "cancel",
+            "text": "点検済みでも今夜の観測を見送る",
+            "to": "cancelled",
+            "action": "observe_cancel"
+          }
+        ]
+      },
+      {
+        "id": "spare",
+        "place": "workshop",
+        "text": "工房で交換用の測定板を受け取る。耐圧窓は現場に残っている。",
+        "options": [
+          {
+            "id": "carry",
+            "text": "新しい測定板を窓へ運ぶ",
+            "to": "install",
+            "action": "spare_carry"
+          }
+        ]
+      },
+      {
+        "id": "install",
+        "place": "entry",
+        "text": "交換用の測定板を窓へ運んだ。ここで取付け、密閉と目盛を点検する。",
+        "options": [
+          {
+            "id": "test",
+            "text": "測定板を交換して点検する",
+            "to": "checked",
+            "action": "install_test"
+          }
+        ]
+      },
+      {
+        "id": "checked",
+        "place": "entry",
+        "text": "密閉と目盛の点検が済んだ。観測位置へ移る。",
+        "options": [
+          {
+            "id": "observe",
+            "text": "観測位置へ向かう",
+            "to": "observe",
+            "action": "checked_observe"
+          }
+        ]
+      },
+      {
+        "id": "lesson",
+        "place": "archive",
+        "text": "観測を終え、割れた測定板を資料室へ運んだ。次の点検の教材として残す。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@informed",
+            "action": "lesson_finish"
+          }
+        ]
+      },
+      {
+        "id": "experts",
+        "place": "workshop",
+        "text": "工房へ窓全体の点検を依頼した。専門の班と窓へ戻る。",
+        "options": [
+          {
+            "id": "escort",
+            "text": "点検班と窓へ戻る",
+            "to": "inspected",
+            "action": "experts_escort"
+          }
+        ]
+      },
+      {
+        "id": "inspected",
+        "place": "entry",
+        "text": "専門の点検班が窓へ到着した。今夜の観測を中止し、点検の記録を残す。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@compromise",
+            "action": "inspected_finish"
+          }
+        ]
+      },
+      {
+        "id": "cancelled",
+        "place": "entry",
+        "text": "窓へ戻り、点検の記録を保管する。今夜の観測は見送る。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@compromise",
+            "action": "cancelled_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "observatory-twenty",
+      "settlement": "oddland_village",
+      "saveRevision": 2,
+      "scope": "観測所20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q088.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "亀裂は目盛線の層で止まり、背面の反射は連続している。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q088",
+          "key": "clue_a",
+          "text": "亀裂は目盛線の層で止まり、背面の反射は連続している。"
+        }
+      ]
+    },
+    "q088.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "保守員のイチ",
+          "text": "断面図には測定板と耐圧窓が別部品として記されています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q088",
+          "key": "clue_b",
+          "text": "断面図には測定板と耐圧窓が別部品として記されている。"
+        }
+      ]
+    },
+    "q088.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "観測窓の亀裂\n\n観測窓が割れ始めた。塞ぐと最後の観測ができない。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "測定板だけ交換して観測を続ける",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q088.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q088.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "亀裂は外窓でなく交換式の測定目盛にあり、耐圧窓自体は無傷だ。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "最後の観測も安全に終えた。イチは割れた板を教材に残す。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q088",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "窓の星獣を倒し全面を金属で塞ぐ",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "危険への不安はなくなった。観測期は過ぎ、次の機会を待つ。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q088",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "観測を中止し窓全体を専門点検へ回す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "慎重すぎるとの声も出た。点検記録は次の判断材料になる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q088",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q088.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "観測窓の亀裂\n\n観測窓が割れ始めた。塞ぐと最後の観測ができない。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q088.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q088.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "亀裂は外窓でなく交換式の測定目盛にあり、耐圧窓自体は無傷だ。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q088.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "測定板だけ交換して観測を続ける",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q088.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q088.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "最後の観測も安全に終えた。イチは割れた板を教材に残す。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q088",
+                  "outcome": "informed"
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q088.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q088.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "contract",
+              "text": "窓の星獣を倒し全面を金属で塞ぐ",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "危険への不安はなくなった。観測期は過ぎ、次の機会を待つ。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q088",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "観測を中止し窓全体を専門点検へ回す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "慎重すぎるとの声も出た。点検記録は次の判断材料になる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q088",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」保守員のイチは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられる。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q088.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q088.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q088.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "最後の観測も安全に終えた。イチは割れた板を教材に残す。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q088.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "危険への不安はなくなった。観測期は過ぎ、次の機会を待つ。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q088.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "慎重すぎるとの声も出た。点検記録は次の判断材料になる。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q088.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q088.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q088.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q088.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q088.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q088.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q088.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "星が見える時間は今夜だけ。亀裂は目盛線を横切るが、背面の反射は切れていない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "layers",
+              "text": "側面から板の層を確認する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q088.flow.panel"
+                }
+              ]
+            },
+            {
+              "id": "inspection",
+              "text": "観測を中止し、窓全体を専門点検へ回す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q088.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "metal",
+              "text": "窓の全面を金属板で塞ぐ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q088.flow.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q088.flow.panel": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q088.node",
+          "value": "panel"
+        },
+        {
+          "op": "say",
+          "text": "亀裂は外窓でなく交換式の測定目盛にあり、耐圧窓自体は無傷だ。 外した測定板の奥に、無傷の耐圧窓が残った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "replace",
+              "text": "測定板だけ交換し、密閉と目盛を点検する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q088.flow.observe"
+                }
+              ]
+            },
+            {
+              "id": "expert",
+              "text": "自分たちでは判断せず、窓全体を専門点検する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q088.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q088.flow.observe": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q088.node",
+          "value": "observe"
+        },
+        {
+          "op": "say",
+          "text": "点検が終わり、まだ観測の時間が残っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sky",
+              "text": "最後の観測を行い、割れた板を教材として残す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q088.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "cancel",
+              "text": "点検済みでも今夜の観測を見送る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q088.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q088.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q088.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "最後の観測も安全に終えた。イチは割れた板を教材に残す。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q088",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q088.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q088.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "危険への不安はなくなった。観測期は過ぎ、次の機会を待つ。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q088",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q088.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q088.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "慎重すぎるとの声も出た。点検記録は次の判断材料になる。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q088",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q088.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q088.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q088.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "最後の観測も安全に終えた。イチは割れた板を教材に残す。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "危険への不安はなくなった。観測期は過ぎ、次の機会を待つ。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "慎重すぎるとの声も出た。点検記録は次の判断材料になる。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q088"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q088.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q088.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q088.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "panel",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q088.flow.panel"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "observe",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q088.flow.observe"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q088.flow.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q088.observatory.entry": {
+      "storyQuest": "q088",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q088",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "星が見える時間は今夜だけ。亀裂は目盛線を横切るが、背面の反射は切れていない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "layers",
+              "text": "側面から板の層を確認する",
+              "storyAction": {
+                "quest": "q088",
+                "action": "entry_layers"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q088",
+                  "action": "entry_layers"
+                },
+                {
+                  "op": "jump",
+                  "script": "q088.observatory.panel"
+                }
+              ]
+            },
+            {
+              "id": "inspection",
+              "text": "観測を中止し、窓全体を専門点検へ回す",
+              "storyAction": {
+                "quest": "q088",
+                "action": "entry_inspection"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q088",
+                  "action": "entry_inspection"
+                }
+              ]
+            },
+            {
+              "id": "metal",
+              "text": "窓の全面を金属板で塞ぐ",
+              "storyAction": {
+                "quest": "q088",
+                "action": "entry_metal"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q088",
+                  "action": "entry_metal"
+                },
+                {
+                  "op": "jump",
+                  "script": "q088.observatory.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q088.observatory.panel": {
+      "storyQuest": "q088",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q088",
+          "scene": "panel"
+        },
+        {
+          "op": "narrate",
+          "text": "亀裂は外窓でなく交換式の測定目盛にあり、耐圧窓自体は無傷だ。 外した測定板の奥に、無傷の耐圧窓が残った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "replace",
+              "text": "測定板だけ交換し、密閉と目盛を点検する",
+              "storyAction": {
+                "quest": "q088",
+                "action": "panel_replace"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q088",
+                  "action": "panel_replace"
+                }
+              ]
+            },
+            {
+              "id": "expert",
+              "text": "自分たちでは判断せず、窓全体を専門点検する",
+              "storyAction": {
+                "quest": "q088",
+                "action": "panel_expert"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q088",
+                  "action": "panel_expert"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q088.observatory.observe": {
+      "storyQuest": "q088",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q088",
+          "scene": "observe"
+        },
+        {
+          "op": "narrate",
+          "text": "点検が終わり、まだ観測の時間が残っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sky",
+              "text": "最後の観測を行い、割れた板を教材として残す",
+              "storyAction": {
+                "quest": "q088",
+                "action": "observe_sky"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q088",
+                  "action": "observe_sky"
+                }
+              ]
+            },
+            {
+              "id": "cancel",
+              "text": "点検済みでも今夜の観測を見送る",
+              "storyAction": {
+                "quest": "q088",
+                "action": "observe_cancel"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q088",
+                  "action": "observe_cancel"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q088.observatory.spare": {
+      "storyQuest": "q088",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q088",
+          "scene": "spare"
+        },
+        {
+          "op": "narrate",
+          "text": "工房で交換用の測定板を受け取る。耐圧窓は現場に残っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "carry",
+              "text": "新しい測定板を窓へ運ぶ",
+              "storyAction": {
+                "quest": "q088",
+                "action": "spare_carry"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q088",
+                  "action": "spare_carry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q088.observatory.install": {
+      "storyQuest": "q088",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q088",
+          "scene": "install"
+        },
+        {
+          "op": "narrate",
+          "text": "交換用の測定板を窓へ運んだ。ここで取付け、密閉と目盛を点検する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "test",
+              "text": "測定板を交換して点検する",
+              "storyAction": {
+                "quest": "q088",
+                "action": "install_test"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q088",
+                  "action": "install_test"
+                },
+                {
+                  "op": "jump",
+                  "script": "q088.observatory.checked"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q088.observatory.checked": {
+      "storyQuest": "q088",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q088",
+          "scene": "checked"
+        },
+        {
+          "op": "narrate",
+          "text": "密閉と目盛の点検が済んだ。観測位置へ移る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "observe",
+              "text": "観測位置へ向かう",
+              "storyAction": {
+                "quest": "q088",
+                "action": "checked_observe"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q088",
+                  "action": "checked_observe"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q088.observatory.lesson": {
+      "storyQuest": "q088",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q088",
+          "scene": "lesson"
+        },
+        {
+          "op": "narrate",
+          "text": "観測を終え、割れた測定板を資料室へ運んだ。次の点検の教材として残す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q088",
+                "action": "lesson_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q088",
+                  "action": "lesson_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q088.observatory.end.informed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q088.observatory.experts": {
+      "storyQuest": "q088",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q088",
+          "scene": "experts"
+        },
+        {
+          "op": "narrate",
+          "text": "工房へ窓全体の点検を依頼した。専門の班と窓へ戻る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "escort",
+              "text": "点検班と窓へ戻る",
+              "storyAction": {
+                "quest": "q088",
+                "action": "experts_escort"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q088",
+                  "action": "experts_escort"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q088.observatory.inspected": {
+      "storyQuest": "q088",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q088",
+          "scene": "inspected"
+        },
+        {
+          "op": "narrate",
+          "text": "専門の点検班が窓へ到着した。今夜の観測を中止し、点検の記録を残す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q088",
+                "action": "inspected_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q088",
+                  "action": "inspected_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q088.observatory.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q088.observatory.cancelled": {
+      "storyQuest": "q088",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q088",
+          "scene": "cancelled"
+        },
+        {
+          "op": "narrate",
+          "text": "窓へ戻り、点検の記録を保管する。今夜の観測は見送る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q088",
+                "action": "cancelled_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q088",
+                  "action": "cancelled_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q088.observatory.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q088.observatory.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "最後の観測も安全に終えた。イチは割れた板を教材に残す。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q088",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q088.observatory.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "危険への不安はなくなった。観測期は過ぎ、次の機会を待つ。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q088",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q088.observatory.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "慎重すぎるとの声も出た。点検記録は次の判断材料になる。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q088",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q088.observatory.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q088"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q088.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q088.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q088.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "最後の観測も安全に終えた。イチは割れた板を教材に残す。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "危険への不安はなくなった。観測期は過ぎ、次の機会を待つ。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "慎重すぎるとの声も出た。点検記録は次の判断材料になる。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q088"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q088.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q088.observatory.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "panel",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q088.observatory.panel"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "observe",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q088.observatory.observe"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "spare",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q088.observatory.spare"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "install",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q088.observatory.install"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "checked",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q088.observatory.checked"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "lesson",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q088.observatory.lesson"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "experts",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q088.observatory.experts"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "inspected",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q088.observatory.inspected"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "cancelled",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q088.observatory.cancelled"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q088.observatory.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "観測窓の亀裂の現場",
+      "workshop": "測定板と点検班の工房",
+      "archive": "割れた板の教材の保存先",
+      "scope": "交換後の窓を使う観測位置",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "workshop"
+      ],
+      [
+        "transit",
+        "archive"
+      ],
+      [
+        "transit",
+        "scope"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "workshop",
+          "archive",
+          "scope",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "covered": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "covered"
+      },
+      "observed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "observed"
+      },
+      "checked": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "checked"
+      },
+      "windowAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "workshop",
+          "archive",
+          "scope",
+          "transit",
+          "party",
+          "cracked",
+          "spare",
+          "experts"
+        ],
+        "meaning": "window の所在または保持者"
+      },
+      "crackedAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "workshop",
+          "archive",
+          "scope",
+          "transit",
+          "party",
+          "window",
+          "spare",
+          "experts"
+        ],
+        "meaning": "cracked の所在または保持者"
+      },
+      "spareAt": {
+        "type": "enum",
+        "initial": "workshop",
+        "values": [
+          "entry",
+          "workshop",
+          "archive",
+          "scope",
+          "transit",
+          "party",
+          "window",
+          "cracked",
+          "experts"
+        ],
+        "meaning": "spare の所在または保持者"
+      },
+      "expertsAt": {
+        "type": "enum",
+        "initial": "workshop",
+        "values": [
+          "entry",
+          "workshop",
+          "archive",
+          "scope",
+          "transit"
+        ],
+        "meaning": "experts の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "window": {
+        "holder": "windowAt",
+        "kind": "item"
+      },
+      "cracked": {
+        "holder": "crackedAt",
+        "kind": "item"
+      },
+      "spare": {
+        "holder": "spareAt",
+        "kind": "item"
+      },
+      "experts": {
+        "holder": "expertsAt",
+        "kind": "group"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "亀裂は外窓でなく交換式の測定目盛にあり、耐圧窓自体は無傷だ。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "観測窓の亀裂の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "panel": {
+        "title": "観測窓の亀裂の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "observe": {
+        "title": "交換後の窓を使う観測位置",
+        "place": "scope",
+        "cast": [],
+        "requires": true
+      },
+      "spare": {
+        "title": "測定板と点検班の工房",
+        "place": "workshop",
+        "cast": [],
+        "requires": true
+      },
+      "install": {
+        "title": "観測窓の亀裂の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "checked": {
+        "title": "観測窓の亀裂の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "lesson": {
+        "title": "割れた板の教材の保存先",
+        "place": "archive",
+        "cast": [],
+        "requires": true
+      },
+      "experts": {
+        "title": "測定板と点検班の工房",
+        "place": "workshop",
+        "cast": [],
+        "requires": true
+      },
+      "inspected": {
+        "title": "観測窓の亀裂の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "cancelled": {
+        "title": "観測窓の亀裂の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_layers": {
+        "from": [
+          "entry"
+        ],
+        "to": "panel",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "cracked",
+            "from": "entry",
+            "to": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "entry",
+            "requires": true
+          }
+        ],
+        "once": false
+      },
+      "entry_inspection": {
+        "from": [
+          "entry"
+        ],
+        "to": "experts",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "workshop"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "workshop",
+          "companions": []
+        },
+        "depart": []
+      },
+      "entry_metal": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "covered",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "panel_replace": {
+        "from": [
+          "panel"
+        ],
+        "to": "spare",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "workshop"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "workshop",
+          "companions": []
+        },
+        "depart": []
+      },
+      "panel_expert": {
+        "from": [
+          "panel"
+        ],
+        "to": "experts",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "workshop"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "workshop",
+          "companions": []
+        },
+        "depart": []
+      },
+      "observe_sky": {
+        "from": [
+          "observe"
+        ],
+        "to": "lesson",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "archive"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "archive",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "observed",
+            "value": true
+          }
+        ]
+      },
+      "observe_cancel": {
+        "from": [
+          "observe"
+        ],
+        "to": "cancelled",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": []
+      },
+      "spare_carry": {
+        "from": [
+          "spare"
+        ],
+        "to": "install",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "spare",
+            "from": "workshop",
+            "to": "party"
+          }
+        ]
+      },
+      "install_test": {
+        "from": [
+          "install"
+        ],
+        "to": "checked",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "spare",
+            "from": "party",
+            "to": "window"
+          },
+          {
+            "op": "set",
+            "key": "checked",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "checked_observe": {
+        "from": [
+          "checked"
+        ],
+        "to": "observe",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "scope"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "scope",
+          "companions": []
+        },
+        "depart": []
+      },
+      "lesson_finish": {
+        "from": [
+          "lesson"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "cracked",
+            "from": "party",
+            "to": "archive"
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "experts_escort": {
+        "from": [
+          "experts"
+        ],
+        "to": "inspected",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "experts"
+            ],
+            "path": [
+              "transit",
+              "entry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "entry",
+          "companions": [
+            "experts"
+          ]
+        },
+        "depart": []
+      },
+      "inspected_finish": {
+        "from": [
+          "inspected"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "checked",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "cancelled_finish": {
+        "from": [
+          "cancelled"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q088.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q088.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q088.values.partyAt"
+                },
+                "right": "archive"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q088.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q088.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q088.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q088.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q088.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q088.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_9",
+        "map": "region_9_f2",
+        "x": 17,
+        "y": 3
+      },
+      "workshop": {
+        "kind": "town",
+        "location": "observatory_workshop"
+      },
+      "archive": {
+        "kind": "town",
+        "location": "observatory_archive"
+      },
+      "scope": {
+        "kind": "dungeon",
+        "dungeon": "region_9",
+        "map": "region_9_f2",
+        "x": 17,
+        "y": 9
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_village",
+  "receptionLocations": [
+    "royal_board"
+  ]
+}

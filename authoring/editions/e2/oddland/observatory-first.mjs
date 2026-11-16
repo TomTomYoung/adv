@@ -113,6 +113,13 @@ export function observatoryFirstSource(q,{cast=true}={}){
   for(const [from,key] of [['entry','inspection'],['panel','expert']])route(from,key,'experts');add('experts','workshop','工房へ窓全体の点検を依頼した。専門の班と窓へ戻る。',[opt('escort','点検班と窓へ戻る','inspected',{companions:['experts']})]);end('inspected','entry','専門の点検班が窓へ到着した。今夜の観測を中止し、点検の記録を残す。','compromise',[set('checked')]);
   route('observe','cancel','cancelled');end('cancelled','entry','窓へ戻り、点検の記録を保管する。今夜の観測は見送る。','compromise');choice('entry','metal').effects=[set('covered')];
  }
+ if(q.number===88&&cast){
+  x.entities.experts.character='q088_experts';
+  for(const scene of ['experts','inspected'])node(scene).cast=[{entity:'experts',display:{x:50}}];
+  node('spare').text='工房へ着き、交換用の測定板を確認した。板は出発時に受け取って運ぶ。耐圧窓は現場に残っている。';
+  node('lesson').text='観測を終え、割れた測定板を資料室へ運んだ。板はまだ隊が保持しており、ここで教材としての預入を確認する。';
+  node('inspected').text='専門の点検班と窓へ戻った。今夜の観測は行わず、ここで班の点検結果を確認して記録する。';
+ }
  if(q.number===89){
   town('wedding','婚礼の日を相談する集会所','royal_hall');town('wages','支払日を相談する工房','observatory_workshop');town('calendar','二つの暦を記す窓口','observatory_calendar');choice('entry','turn').effects=[set('south')];choice('entry','gears').effects=[set('ground')];
   for(const key of ['wedding','wages']){route('dates',key,key+'_agreed');add(key+'_agreed',key,key==='wedding'?'婚礼の当事者と集会所で話し、代わりの日を決めた。':'工房の支払窓口で、賃金の支払日を移す合意を得た。',[opt('return','天球儀へ戻る','dates')]);}
