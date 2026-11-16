@@ -36,6 +36,14 @@ export async function buildObservatoryQuests({check=false}={}){
    quest.story.revision=2;quest.model.edition.revision=2;
    quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values}];
   }
+  if(n===84){
+   const previous=compileRelocatedQuest(first,source(first,{cast:false}),options).story;
+   // The new family role must not expand existing item-holder domains.
+   for(const [key,entry] of Object.entries(previous.registry))quest.story.registry[key]=structuredClone(entry);
+   quest.story.registry.familyGroupAt.values=['family'];
+   quest.story.revision=2;quest.model.edition.revision=2;
+   quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[{key:'familyGroupAt',value:'family'}]}];
+  }
   if(n===181){
    const previous=compileRelocatedQuest(first,source(first,{cast:false}),options).story;
    quest.story.registry.quiverAt.values=structuredClone(previous.registry.quiverAt.values);

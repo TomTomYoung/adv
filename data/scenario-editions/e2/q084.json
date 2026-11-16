@@ -631,7 +631,7 @@
       {
         "id": "recovered",
         "place": "family",
-        "text": "反復する発信機を家族へ渡し、本人の行方はまだ分からないと伝える。",
+        "text": "反復する発信機を家族の待つ家へ運んだ。機械は隊が保持しており、本人の行方はまだ分からないと伝えて、ここで引渡しを確認する。",
         "options": [
           {
             "id": "finish",
@@ -657,7 +657,7 @@
       {
         "id": "reached",
         "place": "survivors",
-        "text": "返事を確かめながら次の空気室へ進み、担架の一行と合流した。",
+        "text": "返事を確かめながら次の空気室へ進み、担架の一行のそばへ着いた。本人たちの状態と合流の結果を、ここで確認する。",
         "options": [
           {
             "id": "finish",
@@ -670,7 +670,7 @@
       {
         "id": "handoff",
         "place": "rescue",
-        "text": "救助標は現場に残し、矢印の向きと場所を専門隊へ引き継ぐ。",
+        "text": "専門隊の詰所へ着いた。救助標は現場に残してある。矢印の向きと場所を示し、ここから先の捜索の引継ぎを確認する。",
         "options": [
           {
             "id": "finish",
@@ -696,7 +696,7 @@
       {
         "id": "expert_arrived",
         "place": "crossing",
-        "text": "専門隊が担架の跡のある空気室へ着き、ここから先を引き受けた。",
+        "text": "専門隊が担架の跡のある空気室へ着いた。ここから先の捜索を引き継ぐ内容を、その場で確認する。",
         "options": [
           {
             "id": "finish",
@@ -716,7 +716,7 @@
     },
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -725,7 +725,751 @@
       "saveRevision": 2,
       "scope": "観測所20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "帰還信号の現場",
+            "beacon": "反復する救助標と矢印",
+            "crossing": "担架の跡がある上層の空気室",
+            "survivors": "返事をする一行の空気室",
+            "rescue": "専門隊の引継ぎ詰所",
+            "family": "発信機を待つ家",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "beacon"
+            ],
+            [
+              "transit",
+              "crossing"
+            ],
+            [
+              "transit",
+              "survivors"
+            ],
+            [
+              "transit",
+              "rescue"
+            ],
+            [
+              "transit",
+              "family"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "beacon",
+                "crossing",
+                "survivors",
+                "rescue",
+                "family",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "informed",
+                "contract",
+                "compromise"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "reached": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "reached"
+            },
+            "beaconDeviceAt": {
+              "type": "enum",
+              "initial": "beacon",
+              "values": [
+                "entry",
+                "beacon",
+                "crossing",
+                "survivors",
+                "rescue",
+                "family",
+                "transit",
+                "party",
+                "stretcherParty",
+                "specialists",
+                "chartCopy"
+              ],
+              "meaning": "beaconDevice の所在または保持者"
+            },
+            "stretcherPartyAt": {
+              "type": "enum",
+              "initial": "survivors",
+              "values": [
+                "entry",
+                "beacon",
+                "crossing",
+                "survivors",
+                "rescue",
+                "family",
+                "transit"
+              ],
+              "meaning": "stretcherParty の所在または保持者"
+            },
+            "specialistsAt": {
+              "type": "enum",
+              "initial": "rescue",
+              "values": [
+                "entry",
+                "beacon",
+                "crossing",
+                "survivors",
+                "rescue",
+                "family",
+                "transit"
+              ],
+              "meaning": "specialists の所在または保持者"
+            },
+            "chartCopyAt": {
+              "type": "enum",
+              "initial": "rescue",
+              "values": [
+                "entry",
+                "beacon",
+                "crossing",
+                "survivors",
+                "rescue",
+                "family",
+                "transit",
+                "party",
+                "beaconDevice",
+                "stretcherParty",
+                "specialists"
+              ],
+              "meaning": "chartCopy の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "beaconDevice": {
+              "holder": "beaconDeviceAt",
+              "kind": "item"
+            },
+            "stretcherParty": {
+              "holder": "stretcherPartyAt",
+              "kind": "group"
+            },
+            "specialists": {
+              "holder": "specialistsAt",
+              "kind": "group"
+            },
+            "chartCopy": {
+              "holder": "chartCopyAt",
+              "kind": "item"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "信号は隊が残した救助標の反復で、遭難者は発信後に別ルートへ移動している。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "帰還信号の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "beacon": {
+              "title": "反復する救助標と矢印",
+              "place": "beacon",
+              "cast": [],
+              "requires": true
+            },
+            "crossing": {
+              "title": "担架の跡がある上層の空気室",
+              "place": "crossing",
+              "cast": [],
+              "requires": true
+            },
+            "recovery": {
+              "title": "反復する救助標と矢印",
+              "place": "beacon",
+              "cast": [],
+              "requires": true
+            },
+            "recovered": {
+              "title": "発信機を待つ家",
+              "place": "family",
+              "cast": [],
+              "requires": true
+            },
+            "route_check": {
+              "title": "専門隊の引継ぎ詰所",
+              "place": "rescue",
+              "cast": [],
+              "requires": true
+            },
+            "reached": {
+              "title": "返事をする一行の空気室",
+              "place": "survivors",
+              "cast": [],
+              "requires": true
+            },
+            "handoff": {
+              "title": "専門隊の引継ぎ詰所",
+              "place": "rescue",
+              "cast": [],
+              "requires": true
+            },
+            "call_report": {
+              "title": "専門隊の引継ぎ詰所",
+              "place": "rescue",
+              "cast": [],
+              "requires": true
+            },
+            "expert_arrived": {
+              "title": "担架の跡がある上層の空気室",
+              "place": "crossing",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_source": {
+              "from": [
+                "entry"
+              ],
+              "to": "beacon",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "beacon"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "beacon",
+                "companions": []
+              },
+              "depart": []
+            },
+            "entry_recover": {
+              "from": [
+                "entry"
+              ],
+              "to": "recovery",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "beacon"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "beacon",
+                "companions": []
+              },
+              "depart": []
+            },
+            "beacon_trail": {
+              "from": [
+                "beacon"
+              ],
+              "to": "route_check",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "rescue"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "rescue",
+                "companions": []
+              },
+              "depart": []
+            },
+            "beacon_handoff": {
+              "from": [
+                "beacon"
+              ],
+              "to": "handoff",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "rescue"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "rescue",
+                "companions": []
+              },
+              "depart": []
+            },
+            "crossing_reach": {
+              "from": [
+                "crossing"
+              ],
+              "to": "reached",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "survivors"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "survivors",
+                "companions": []
+              },
+              "depart": []
+            },
+            "crossing_call": {
+              "from": [
+                "crossing"
+              ],
+              "to": "call_report",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "rescue"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "rescue",
+                "companions": []
+              },
+              "depart": []
+            },
+            "recovery_carry": {
+              "from": [
+                "recovery"
+              ],
+              "to": "recovered",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "family"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "family",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "beaconDevice",
+                  "from": "beacon",
+                  "to": "party"
+                }
+              ]
+            },
+            "recovered_finish": {
+              "from": [
+                "recovered"
+              ],
+              "ending": "contract",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "transfer",
+                  "entity": "beaconDevice",
+                  "from": "party",
+                  "to": "family"
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "contract"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "route_check_follow": {
+              "from": [
+                "route_check"
+              ],
+              "to": "crossing",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "crossing"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "crossing",
+                "companions": []
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "chartCopy",
+                  "from": "rescue",
+                  "to": "party",
+                  "when": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "quests.q061.outcome"
+                    },
+                    "right": "informed"
+                  }
+                }
+              ]
+            },
+            "reached_finish": {
+              "from": [
+                "reached"
+              ],
+              "ending": "informed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "reached",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "informed"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "handoff_finish": {
+              "from": [
+                "handoff"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "call_report_escort": {
+              "from": [
+                "call_report"
+              ],
+              "to": "expert_arrived",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "specialists"
+                  ],
+                  "path": [
+                    "transit",
+                    "crossing"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "crossing",
+                "companions": [
+                  "specialists"
+                ]
+              },
+              "depart": []
+            },
+            "expert_arrived_finish": {
+              "from": [
+                "expert_arrived"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "informed": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q084.values.resolution"
+                  },
+                  "right": "informed"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q084.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q084.values.partyAt"
+                      },
+                      "right": "survivors"
+                    }
+                  ]
+                }
+              ]
+            },
+            "contract": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q084.values.resolution"
+                  },
+                  "right": "contract"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q084.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q084.values.partyAt"
+                      },
+                      "right": "family"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compromise": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q084.values.resolution"
+                  },
+                  "right": "compromise"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q084.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q084.values.partyAt"
+                      },
+                      "right": "rescue"
+                    },
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q084.values.partyAt"
+                      },
+                      "right": "crossing"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_9",
+              "map": "region_9_f1",
+              "x": 9,
+              "y": 11
+            },
+            "beacon": {
+              "kind": "dungeon",
+              "dungeon": "region_9",
+              "map": "region_9_f1",
+              "x": 3,
+              "y": 13
+            },
+            "crossing": {
+              "kind": "dungeon",
+              "dungeon": "observatory_rescue",
+              "map": "e2_observatory_rescue",
+              "x": 7,
+              "y": 3
+            },
+            "survivors": {
+              "kind": "dungeon",
+              "dungeon": "observatory_rescue",
+              "map": "e2_observatory_rescue",
+              "x": 13,
+              "y": 7
+            },
+            "rescue": {
+              "kind": "town",
+              "location": "royal_rescue"
+            },
+            "family": {
+              "kind": "town",
+              "location": "observatory_family"
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "familyGroupAt",
+            "value": "family"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q084.clue_a": {
@@ -1740,7 +2484,7 @@
         },
         {
           "op": "narrate",
-          "text": "反復する発信機を家族へ渡し、本人の行方はまだ分からないと伝える。"
+          "text": "反復する発信機を家族の待つ家へ運んだ。機械は隊が保持しており、本人の行方はまだ分からないと伝えて、ここで引渡しを確認する。"
         },
         {
           "op": "choice",
@@ -1814,7 +2558,7 @@
         },
         {
           "op": "narrate",
-          "text": "返事を確かめながら次の空気室へ進み、担架の一行と合流した。"
+          "text": "返事を確かめながら次の空気室へ進み、担架の一行のそばへ着いた。本人たちの状態と合流の結果を、ここで確認する。"
         },
         {
           "op": "choice",
@@ -1853,7 +2597,7 @@
         },
         {
           "op": "narrate",
-          "text": "救助標は現場に残し、矢印の向きと場所を専門隊へ引き継ぐ。"
+          "text": "専門隊の詰所へ着いた。救助標は現場に残してある。矢印の向きと場所を示し、ここから先の捜索の引継ぎを確認する。"
         },
         {
           "op": "choice",
@@ -1927,7 +2671,7 @@
         },
         {
           "op": "narrate",
-          "text": "専門隊が担架の跡のある空気室へ着き、ここから先を引き受けた。"
+          "text": "専門隊が担架の跡のある空気室へ着いた。ここから先の捜索を引き継ぐ内容を、その場で確認する。"
         },
         {
           "op": "choice",
@@ -2328,6 +3072,14 @@
           "specialists"
         ],
         "meaning": "chartCopy の所在または保持者"
+      },
+      "familyGroupAt": {
+        "type": "enum",
+        "initial": "family",
+        "values": [
+          "family"
+        ],
+        "meaning": "familyGroup の所在または保持者"
       }
     },
     "entities": {
@@ -2341,15 +3093,22 @@
       },
       "stretcherParty": {
         "holder": "stretcherPartyAt",
-        "kind": "group"
+        "kind": "group",
+        "character": "q084_survivors"
       },
       "specialists": {
         "holder": "specialistsAt",
-        "kind": "group"
+        "kind": "group",
+        "character": "q084_specialists"
       },
       "chartCopy": {
         "holder": "chartCopyAt",
         "kind": "item"
+      },
+      "familyGroup": {
+        "holder": "familyGroupAt",
+        "kind": "group",
+        "character": "q084_family"
       }
     },
     "propositions": {
@@ -2387,37 +3146,79 @@
       "recovered": {
         "title": "発信機を待つ家",
         "place": "family",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "familyGroup",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "route_check": {
         "title": "専門隊の引継ぎ詰所",
         "place": "rescue",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "specialists",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "reached": {
         "title": "返事をする一行の空気室",
         "place": "survivors",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "stretcherParty",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "handoff": {
         "title": "専門隊の引継ぎ詰所",
         "place": "rescue",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "specialists",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "call_report": {
         "title": "専門隊の引継ぎ詰所",
         "place": "rescue",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "specialists",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "expert_arrived": {
         "title": "担架の跡がある上層の空気室",
         "place": "crossing",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "specialists",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       }
     },
@@ -2921,7 +3722,7 @@
         "location": "observatory_family"
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "oddland_village",
   "receptionLocations": [

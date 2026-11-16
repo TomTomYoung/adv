@@ -3,6 +3,123 @@
 export const RELOCATED_CAST_REVIEW={
  reviewedAt:'2026-11-16',
  quests:{
+  q084:{
+    "sourceSha256": "3aa6e89410ad958d66f37e3c9be74f98db2792d622b8f4a48a0c5da9e0eefcc5",
+    "identityNotes": [
+      "原稿authoring/quests.txt・structures-5.mjsのQ(84)、初版3場面・現行10場面を精読。反復信号の発信機と、標を残して先へ移動した生存者たちは別である。",
+      "家族はrecovered、一行はreached、専門隊はroute_check・handoff・call_report・expert_arrivedだけへ集団呼称を表示する。遠い返事のcrossingや発信地点へ姿を追加せず、氏名・人数・専用画像を補わない。",
+      "専門隊だけがcall_report_escortで実同行する。家族と遭難者はそれぞれ既存の所在に留まる。前者を依頼人マオと同定せず、q090のマオとも結び付けない。",
+      "q061の実際の図の引渡し完了によりinformedとなった場合だけ、route_check_follow出発時に写しを借りる。受注済みや別結末は条件を満たさない。条件本文・空気消費・空気室を保持する。",
+      "物語改訂1→2は旧定義で全保存を検証後、familyGroupAt=familyだけ補う。既存registry・13行動・9旅程・3結末・報酬を維持し、発信機の家族への保持者は場所familyのままとする。",
+      "到着と確定を分けるためrecovered・reached・handoff・expert_arrivedの本文4箇所を明確化し、旧保存に含まれる表示途中の文章と選択肢を保持する。原稿の旧戦闘表現から新たな戦闘を加えない。"
+    ],
+    "relatedClients": {},
+    "people": {
+      "q084_family": {
+        "label": "遭難者の家族",
+        "status": "connected",
+        "entity": "familyGroup",
+        "need": "発信機を受け取る家のrecoveredだけ。本人発見を意味しない。"
+      },
+      "q084_survivors": {
+        "label": "担架の一行",
+        "status": "connected",
+        "entity": "stretcherParty",
+        "need": "実際に着いたreachedだけ。遠くの返事を聞くcrossingには表示しない。"
+      },
+      "q084_specialists": {
+        "label": "専門の救助隊",
+        "status": "connected",
+        "entity": "specialists",
+        "need": "詰所の3場面と既存の同行で戻ったexpert_arrivedだけ。"
+      }
+    },
+    "scenes": {
+      "entry": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "雑音まで繰り返している。",
+        "reason": "信号を受ける現場。依頼人マオや家族の同席は本文にない。",
+        "visual": "信号の反復は人がこの場所にいる証拠ではない。"
+      },
+      "beacon": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "脇には担架の跡と、新しい矢印",
+        "reason": "発信地点には救助標と移動跡がある。本人や専門隊は同席していない。",
+        "visual": "機械の発見を遭難者の発見と区別する。"
+      },
+      "crossing": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "遠くから生きた人の返事がある。",
+        "reason": "声の主は次の空気室の一行。遠くの返事を同席と解釈しない。",
+        "visual": "q061での実際の図の引渡しの有無による条件本文を保つ。"
+      },
+      "recovery": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "本人を見つけたことにはしない。",
+        "reason": "発信地点の機械を確認する場面。持出しはcarry出発時。",
+        "visual": "発信機はまだbeaconにあり、本人は別室。"
+      },
+      "recovered": {
+        "decision": "person-evidence",
+        "people": [
+          "q084_family"
+        ],
+        "evidence": "家族の待つ家へ運んだ。",
+        "reason": "引渡し先の家族だけを表示する。マオの固有名や人数は追加しない。",
+        "visual": "発信機はfinishまでpartyの保持で、本人の行方は未確認。"
+      },
+      "route_check": {
+        "decision": "person-evidence",
+        "people": [
+          "q084_specialists"
+        ],
+        "evidence": "救助標の矢印を詰所へ伝え",
+        "reason": "既存specialistsは詰所に固定待機しており、経路確認を受ける相手。",
+        "visual": "図の写しはq061のinformed成立後、follow出発時だけ借りる。"
+      },
+      "reached": {
+        "decision": "person-evidence",
+        "people": [
+          "q084_survivors"
+        ],
+        "evidence": "担架の一行のそばへ着いた。",
+        "reason": "既存stretcherPartyのいる空気室へ実到着した場面。",
+        "visual": "そばへの到着とreachedの完了確認を分ける。"
+      },
+      "handoff": {
+        "decision": "person-evidence",
+        "people": [
+          "q084_specialists"
+        ],
+        "evidence": "専門隊の詰所へ着いた。",
+        "reason": "詰所の専門隊が引継ぎ先。救助標は発信地点に残す。",
+        "visual": "到着だけではcompromiseを確定しない。"
+      },
+      "call_report": {
+        "decision": "person-evidence",
+        "people": [
+          "q084_specialists"
+        ],
+        "evidence": "専門隊と上層の空気室へ戻る。",
+        "reason": "詰所の専門隊とこれから同行する場面。",
+        "visual": "escort出発前の専門隊はrescue、出発後transit、実到着後crossing。"
+      },
+      "expert_arrived": {
+        "decision": "person-evidence",
+        "people": [
+          "q084_specialists"
+        ],
+        "evidence": "専門隊が担架の跡のある空気室へ着いた。",
+        "reason": "既存call_report_escortの実同行で到着した専門隊のみ表示する。",
+        "visual": "次室の遭難者は表示せず、最終引継ぎはfinish。"
+      }
+    },
+    "next": "実画面・全体CIの最終結果をPRへ記録する。次はq085「北を向かない羅針盤」の既存原稿と経路を確認する。"
+  },
   q083:{
     "sourceSha256": "5d296e0dd131a844c321cf557443e29455cf43a5bf192b8b3f3c05d90eb93b01",
     "identityNotes": [
