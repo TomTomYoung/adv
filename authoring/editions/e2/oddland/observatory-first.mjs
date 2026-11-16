@@ -100,6 +100,11 @@ export function observatoryFirstSource(q,{cast=true}={}){
   for(const [from,key] of [['entry','notebook'],['ticket','record'],['firststep','write']])route(from,key,'written',{companions:['haku'],depart:[set('written')]});end('written','sky','ハクと上映席へ来た。手帳に残した願いと、本人が実行したことを区別して読み返す。','compromise');
   route('firststep','act','desk',{companions:['haku']});end('desk','home','ハクと家の机へ戻った。願いを読み返し、最初の一つを棚へ片付ける。','informed',[give('clutter','desk','shelf'),set('firstStep')]);
  }
+ if(q.number===87&&cast){
+  x.entities.haku.character='q087_haku';
+  for(const scene of ['entry','ticket','firststep','written','desk'])node(scene).cast=[{entity:'haku',display:{x:50}}];
+  node('desk').text='ハクと家の机へ戻った。願いを読み返し、これから最初の一つを棚へ片付ける。最初の一つはまだ机にあり、ここで実行を確認する。';
+ }
  if(q.number===88){
   town('workshop','測定板と点検班の工房','observatory_workshop');town('archive','割れた板の教材の保存先','observatory_archive');cell('scope','交換後の窓を使う観測位置',2,17,9);entity('window','entry');entity('cracked','entry');entity('spare','workshop');entity('experts','workshop','group');node('observe').place='scope';choice('entry','layers').effects=[give('cracked','entry','party')];
   route('panel','replace','spare');add('spare','workshop','工房で交換用の測定板を受け取る。耐圧窓は現場に残っている。',[opt('carry','新しい測定板を窓へ運ぶ','install',{depart:[give('spare','workshop','party')]})]);

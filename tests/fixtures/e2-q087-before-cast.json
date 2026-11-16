@@ -1,0 +1,2349 @@
+{
+  "schemaVersion": 1,
+  "id": "q087",
+  "number": 87,
+  "title": "願いを消す流星",
+  "client": "見習いのハク",
+  "brief": "流星へ願った人が願いを忘れる。観測室を調べてください。",
+  "region": 9,
+  "type": "authored_progression",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。 旧王領の村の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q087_clue_a",
+      "title": "願いを消す流星：現場の痕跡",
+      "points": [
+        {
+          "map": "region_9_f2",
+          "x": 7,
+          "y": 1,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q087.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q087.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q087"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q087"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "q087_clue_b",
+      "title": "願いを消す流星：記録と証言",
+      "points": [
+        {
+          "map": "region_9_f2",
+          "x": 12,
+          "y": 3,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q087.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q087.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q087"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q087"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "q087_decision",
+      "title": "願いを消す流星：決着の場",
+      "points": [
+        {
+          "map": "region_9_f2",
+          "x": 15,
+          "y": 5,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q087.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q087.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q087.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q087"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "q087_observatory_entry",
+      "title": "願いを消す流星の現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q087.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q087.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q087"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q087.observatory.visit",
+      "points": [
+        {
+          "dungeon": "region_9",
+          "map": "region_9_f2",
+          "x": 15,
+          "y": 5
+        }
+      ]
+    },
+    {
+      "id": "q087_observatory_sky",
+      "title": "流星を眺める上映席",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "sky",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q087.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q087.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q087"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q087.observatory.visit",
+      "points": [
+        {
+          "dungeon": "region_9",
+          "map": "region_9_f2",
+          "x": 13,
+          "y": 5
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_9_f2",
+      "x": 7,
+      "y": 1,
+      "object": "q087_clue_a",
+      "role": "clue_a"
+    },
+    {
+      "map": "region_9_f2",
+      "x": 12,
+      "y": 3,
+      "object": "q087_clue_b",
+      "role": "clue_b"
+    },
+    {
+      "map": "region_9_f2",
+      "x": 15,
+      "y": 5,
+      "object": "q087_decision",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "願いを本人へ読み返し、最初の一つを一緒に片付ける",
+      "text": "願いは再び本人の仕事になった。ハクは最初の一歩を一緒に書く。",
+      "gold": 153,
+      "xp": 132
+    },
+    "contract": {
+      "label": "願いを受け付ける筒を壊す",
+      "text": "新しい誤認は止まった。すでに出された札の説明は残る。",
+      "gold": 173,
+      "xp": 103
+    },
+    "compromise": {
+      "label": "願いを手帳へ写してから空を見る",
+      "text": "流星の後も言葉が残った。叶ったかどうかは本人が書き足す。",
+      "gold": 99,
+      "xp": 99
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/observatory-first.mjs",
+    "world": {
+      "truth": "願いは忘れたのでなく、声を録る筒が願いの完了札を返して終わったと誤認させている。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "願いは忘れたのでなく、声を録る筒が願いの完了札を返して終わったと誤認させている。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "流星へ願った人が願いを忘れる。観測室を調べてください。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "見習いのハク",
+        "observation": "流星へ願った人が願いを忘れる。観測室を調べてください。",
+        "belief": "流星へ願った人が願いを忘れる。観測室を調べてください。",
+        "goal": "流星へ願った人が願いを忘れる。観測室を調べてください。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "流星へ願った人が願いを忘れる。観測室を調べてください。",
+      "progression": "自分の短い願いを筒へ入れ、流星の前に出る完了札の意味を試す。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q087.observatory.entry"
+        },
+        {
+          "id": "ticket",
+          "script": "q087.observatory.ticket"
+        },
+        {
+          "id": "firststep",
+          "script": "q087.observatory.firststep"
+        },
+        {
+          "id": "written",
+          "script": "q087.observatory.written"
+        },
+        {
+          "id": "desk",
+          "script": "q087.observatory.desk"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "流星へ願った人が願いを忘れる。観測室を調べてください。",
+      "openQuestion": "願いを消す流星の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "identitySplit",
+      "newInformation": "願いは忘れたのでなく、声を録る筒が願いの完了札を返して終わったと誤認させている。",
+      "retroactiveTargets": [],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q087.flow.entry"
+      },
+      {
+        "id": "ticket",
+        "script": "q087.flow.ticket"
+      },
+      {
+        "id": "firststep",
+        "script": "q087.flow.firststep"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q087.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "自分の短い願いを筒へ入れ、流星の前に出る完了札の意味を試す。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "自分の短い願いを筒へ入れ、流星の前に出る完了札の意味を試す。",
+    "flowVersion": 2,
+    "entryScript": "q087.observatory.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "ハクは「机を片付けたい」と願ったばかりなのに、もう終わった気がすると言う。机は散らかったままだ。",
+        "options": [
+          {
+            "id": "test",
+            "text": "流星のない時間に「一歩歩く」と筒へ言う",
+            "to": "ticket",
+            "action": "entry_test"
+          },
+          {
+            "id": "notebook",
+            "text": "願いを手帳へ写してから空を見る",
+            "to": "written",
+            "action": "entry_notebook"
+          },
+          {
+            "id": "break",
+            "text": "願いを受け付ける筒を壊す",
+            "to": "@contract",
+            "action": "entry_break"
+          }
+        ]
+      },
+      {
+        "id": "ticket",
+        "place": "entry",
+        "text": "歩く前に完了札が出た。筒の脇の「受付」の字だけが擦れていた。",
+        "options": [
+          {
+            "id": "wording",
+            "text": "札を受付完了へ直す",
+            "to": "firststep",
+            "action": "ticket_wording"
+          },
+          {
+            "id": "record",
+            "text": "札を信用せず、願いを手帳へ書く",
+            "to": "written",
+            "action": "ticket_record"
+          }
+        ]
+      },
+      {
+        "id": "firststep",
+        "place": "entry",
+        "text": "ハクは札を読み直した。「片付けるのは、まだ自分なんだ」。",
+        "options": [
+          {
+            "id": "act",
+            "text": "願いを本人へ読み返し、最初の一つを一緒に片付ける",
+            "to": "desk",
+            "action": "firststep_act"
+          },
+          {
+            "id": "write",
+            "text": "実行は本人へ任せ、手帳へ残す",
+            "to": "written",
+            "action": "firststep_write"
+          }
+        ]
+      },
+      {
+        "id": "written",
+        "place": "sky",
+        "text": "ハクと上映席へ来た。手帳に残した願いと、本人が実行したことを区別して読み返す。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@compromise",
+            "action": "written_finish"
+          }
+        ]
+      },
+      {
+        "id": "desk",
+        "place": "home",
+        "text": "ハクと家の机へ戻った。願いを読み返し、最初の一つを棚へ片付ける。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@informed",
+            "action": "desk_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "observatory-twenty",
+      "settlement": "oddland_village",
+      "saveRevision": 2,
+      "scope": "観測所20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q087.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "完了札は星が流れる前に出て、願いの内容を読み取っていない。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q087",
+          "key": "clue_a",
+          "text": "完了札は星が流れる前に出て、願いの内容を読み取っていない。"
+        }
+      ]
+    },
+    "q087.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "見習いのハク",
+          "text": "設計図の完了は受付完了を意味し、願いを叶える機構はありません。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q087",
+          "key": "clue_b",
+          "text": "設計図の完了は受付完了を意味し、願いを叶える機構はない。"
+        }
+      ]
+    },
+    "q087.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "願いを消す流星\n\n流星へ願った人が願いを忘れる。観測室を調べてください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "願いの番人を倒し筒を壊す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "新しい誤認は止まった。すでに出された札の説明は残る。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q087",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "受付札に直し願いを本人へ読み返す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q087.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q087.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "願いは忘れたのでなく、声を録る筒が願いの完了札を返して終わったと誤認させている。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "願いは再び本人の仕事になった。ハクは最初の一歩を一緒に書く。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q087",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "願いを手帳へ写してから観測する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "流星の後も言葉が残った。叶ったかどうかは本人が書き足す。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q087",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q087.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "願いを消す流星\n\n流星へ願った人が願いを忘れる。観測室を調べてください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q087.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q087.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "願いは忘れたのでなく、声を録る筒が願いの完了札を返して終わったと誤認させている。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q087.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "願いの番人を倒し筒を壊す",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "新しい誤認は止まった。すでに出された札の説明は残る。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q087",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "受付札に直し願いを本人へ読み返す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q087.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q087.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "願いは再び本人の仕事になった。ハクは最初の一歩を一緒に書く。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q087",
+                  "outcome": "informed"
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q087.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q087.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "compromise",
+              "text": "願いを手帳へ写してから観測する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "流星の後も言葉が残った。叶ったかどうかは本人が書き足す。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q087",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」見習いのハクは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられる。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q087.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q087.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q087.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "願いは再び本人の仕事になった。ハクは最初の一歩を一緒に書く。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q087.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "新しい誤認は止まった。すでに出された札の説明は残る。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q087.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "流星の後も言葉が残った。叶ったかどうかは本人が書き足す。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q087.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q087.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q087.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q087.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q087.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q087.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q087.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "ハクは「机を片付けたい」と願ったばかりなのに、もう終わった気がすると言う。机は散らかったままだ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "test",
+              "text": "流星のない時間に「一歩歩く」と筒へ言う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q087.flow.ticket"
+                }
+              ]
+            },
+            {
+              "id": "notebook",
+              "text": "願いを手帳へ写してから空を見る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q087.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "break",
+              "text": "願いを受け付ける筒を壊す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q087.flow.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q087.flow.ticket": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q087.node",
+          "value": "ticket"
+        },
+        {
+          "op": "say",
+          "text": "歩く前に完了札が出た。筒の脇の「受付」の字だけが擦れていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wording",
+              "text": "札を受付完了へ直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q087.flow.firststep"
+                }
+              ]
+            },
+            {
+              "id": "record",
+              "text": "札を信用せず、願いを手帳へ書く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q087.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q087.flow.firststep": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q087.node",
+          "value": "firststep"
+        },
+        {
+          "op": "say",
+          "text": "ハクは札を読み直した。「片付けるのは、まだ自分なんだ」。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "act",
+              "text": "願いを本人へ読み返し、最初の一つを一緒に片付ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q087.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "write",
+              "text": "実行は本人へ任せ、手帳へ残す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q087.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q087.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q087.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "願いは再び本人の仕事になった。ハクは最初の一歩を一緒に書く。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q087",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q087.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q087.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "新しい誤認は止まった。すでに出された札の説明は残る。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q087",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q087.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q087.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "流星の後も言葉が残った。叶ったかどうかは本人が書き足す。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q087",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q087.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q087.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q087.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "願いは再び本人の仕事になった。ハクは最初の一歩を一緒に書く。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "新しい誤認は止まった。すでに出された札の説明は残る。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "流星の後も言葉が残った。叶ったかどうかは本人が書き足す。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q087"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q087.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q087.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q087.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "ticket",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q087.flow.ticket"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "firststep",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q087.flow.firststep"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q087.flow.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q087.observatory.entry": {
+      "storyQuest": "q087",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q087",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "ハクは「机を片付けたい」と願ったばかりなのに、もう終わった気がすると言う。机は散らかったままだ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "test",
+              "text": "流星のない時間に「一歩歩く」と筒へ言う",
+              "storyAction": {
+                "quest": "q087",
+                "action": "entry_test"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q087",
+                  "action": "entry_test"
+                },
+                {
+                  "op": "jump",
+                  "script": "q087.observatory.ticket"
+                }
+              ]
+            },
+            {
+              "id": "notebook",
+              "text": "願いを手帳へ写してから空を見る",
+              "storyAction": {
+                "quest": "q087",
+                "action": "entry_notebook"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q087",
+                  "action": "entry_notebook"
+                }
+              ]
+            },
+            {
+              "id": "break",
+              "text": "願いを受け付ける筒を壊す",
+              "storyAction": {
+                "quest": "q087",
+                "action": "entry_break"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q087",
+                  "action": "entry_break"
+                },
+                {
+                  "op": "jump",
+                  "script": "q087.observatory.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q087.observatory.ticket": {
+      "storyQuest": "q087",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q087",
+          "scene": "ticket"
+        },
+        {
+          "op": "narrate",
+          "text": "歩く前に完了札が出た。筒の脇の「受付」の字だけが擦れていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wording",
+              "text": "札を受付完了へ直す",
+              "storyAction": {
+                "quest": "q087",
+                "action": "ticket_wording"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q087",
+                  "action": "ticket_wording"
+                },
+                {
+                  "op": "jump",
+                  "script": "q087.observatory.firststep"
+                }
+              ]
+            },
+            {
+              "id": "record",
+              "text": "札を信用せず、願いを手帳へ書く",
+              "storyAction": {
+                "quest": "q087",
+                "action": "ticket_record"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q087",
+                  "action": "ticket_record"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q087.observatory.firststep": {
+      "storyQuest": "q087",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q087",
+          "scene": "firststep"
+        },
+        {
+          "op": "narrate",
+          "text": "ハクは札を読み直した。「片付けるのは、まだ自分なんだ」。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "act",
+              "text": "願いを本人へ読み返し、最初の一つを一緒に片付ける",
+              "storyAction": {
+                "quest": "q087",
+                "action": "firststep_act"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q087",
+                  "action": "firststep_act"
+                }
+              ]
+            },
+            {
+              "id": "write",
+              "text": "実行は本人へ任せ、手帳へ残す",
+              "storyAction": {
+                "quest": "q087",
+                "action": "firststep_write"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q087",
+                  "action": "firststep_write"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q087.observatory.written": {
+      "storyQuest": "q087",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q087",
+          "scene": "written"
+        },
+        {
+          "op": "narrate",
+          "text": "ハクと上映席へ来た。手帳に残した願いと、本人が実行したことを区別して読み返す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q087",
+                "action": "written_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q087",
+                  "action": "written_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q087.observatory.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q087.observatory.desk": {
+      "storyQuest": "q087",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q087",
+          "scene": "desk"
+        },
+        {
+          "op": "narrate",
+          "text": "ハクと家の机へ戻った。願いを読み返し、最初の一つを棚へ片付ける。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q087",
+                "action": "desk_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q087",
+                  "action": "desk_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q087.observatory.end.informed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q087.observatory.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "願いは再び本人の仕事になった。ハクは最初の一歩を一緒に書く。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q087",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q087.observatory.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "新しい誤認は止まった。すでに出された札の説明は残る。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q087",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q087.observatory.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "流星の後も言葉が残った。叶ったかどうかは本人が書き足す。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q087",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q087.observatory.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q087"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q087.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q087.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q087.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "願いは再び本人の仕事になった。ハクは最初の一歩を一緒に書く。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "新しい誤認は止まった。すでに出された札の説明は残る。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "流星の後も言葉が残った。叶ったかどうかは本人が書き足す。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q087"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q087.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q087.observatory.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "ticket",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q087.observatory.ticket"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "firststep",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q087.observatory.firststep"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "written",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q087.observatory.written"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "desk",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q087.observatory.desk"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q087.observatory.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "願いを消す流星の現場",
+      "sky": "流星を眺める上映席",
+      "home": "片付ける机のあるハクの家",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "sky"
+      ],
+      [
+        "transit",
+        "home"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "sky",
+          "home",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "ticketIssued": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "ticketIssued"
+      },
+      "written": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "written"
+      },
+      "broken": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "broken"
+      },
+      "wordingFixed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "wordingFixed"
+      },
+      "firstStep": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "firstStep"
+      },
+      "hakuAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "sky",
+          "home",
+          "transit"
+        ],
+        "meaning": "haku の所在または保持者"
+      },
+      "notebookAt": {
+        "type": "enum",
+        "initial": "party",
+        "values": [
+          "entry",
+          "sky",
+          "home",
+          "transit",
+          "party",
+          "haku",
+          "desk",
+          "clutter",
+          "shelf"
+        ],
+        "meaning": "notebook の所在または保持者"
+      },
+      "deskAt": {
+        "type": "enum",
+        "initial": "home",
+        "values": [
+          "entry",
+          "sky",
+          "home",
+          "transit",
+          "party",
+          "haku",
+          "notebook",
+          "clutter",
+          "shelf"
+        ],
+        "meaning": "desk の所在または保持者"
+      },
+      "clutterAt": {
+        "type": "enum",
+        "initial": "desk",
+        "values": [
+          "entry",
+          "sky",
+          "home",
+          "transit",
+          "party",
+          "haku",
+          "notebook",
+          "desk",
+          "shelf"
+        ],
+        "meaning": "clutter の所在または保持者"
+      },
+      "shelfAt": {
+        "type": "enum",
+        "initial": "home",
+        "values": [
+          "entry",
+          "sky",
+          "home",
+          "transit",
+          "party",
+          "haku",
+          "notebook",
+          "desk",
+          "clutter"
+        ],
+        "meaning": "shelf の所在または保持者"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "haku": {
+        "holder": "hakuAt",
+        "kind": "person"
+      },
+      "notebook": {
+        "holder": "notebookAt",
+        "kind": "item"
+      },
+      "desk": {
+        "holder": "deskAt",
+        "kind": "item"
+      },
+      "clutter": {
+        "holder": "clutterAt",
+        "kind": "item"
+      },
+      "shelf": {
+        "holder": "shelfAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "願いは忘れたのでなく、声を録る筒が願いの完了札を返して終わったと誤認させている。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "願いを消す流星の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "ticket": {
+        "title": "願いを消す流星の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "firststep": {
+        "title": "願いを消す流星の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "written": {
+        "title": "流星を眺める上映席",
+        "place": "sky",
+        "cast": [],
+        "requires": true
+      },
+      "desk": {
+        "title": "片付ける机のあるハクの家",
+        "place": "home",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_test": {
+        "from": [
+          "entry"
+        ],
+        "to": "ticket",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "ticketIssued",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "entry_notebook": {
+        "from": [
+          "entry"
+        ],
+        "to": "written",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "haku"
+            ],
+            "path": [
+              "transit",
+              "sky"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "sky",
+          "companions": [
+            "haku"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "written",
+            "value": true
+          }
+        ]
+      },
+      "entry_break": {
+        "from": [
+          "entry"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "broken",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "ticket_wording": {
+        "from": [
+          "ticket"
+        ],
+        "to": "firststep",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "wordingFixed",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "ticket_record": {
+        "from": [
+          "ticket"
+        ],
+        "to": "written",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "haku"
+            ],
+            "path": [
+              "transit",
+              "sky"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "sky",
+          "companions": [
+            "haku"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "written",
+            "value": true
+          }
+        ]
+      },
+      "firststep_act": {
+        "from": [
+          "firststep"
+        ],
+        "to": "desk",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "haku"
+            ],
+            "path": [
+              "transit",
+              "home"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "home",
+          "companions": [
+            "haku"
+          ]
+        },
+        "depart": []
+      },
+      "firststep_write": {
+        "from": [
+          "firststep"
+        ],
+        "to": "written",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "haku"
+            ],
+            "path": [
+              "transit",
+              "sky"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "sky",
+          "companions": [
+            "haku"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "written",
+            "value": true
+          }
+        ]
+      },
+      "written_finish": {
+        "from": [
+          "written"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "desk_finish": {
+        "from": [
+          "desk"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "clutter",
+            "from": "desk",
+            "to": "shelf"
+          },
+          {
+            "op": "set",
+            "key": "firstStep",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q087.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q087.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q087.values.partyAt"
+                },
+                "right": "home"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q087.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q087.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q087.values.partyAt"
+                },
+                "right": "entry"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q087.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q087.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q087.values.partyAt"
+                },
+                "right": "sky"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_9",
+        "map": "region_9_f2",
+        "x": 15,
+        "y": 5
+      },
+      "sky": {
+        "kind": "dungeon",
+        "dungeon": "region_9",
+        "map": "region_9_f2",
+        "x": 13,
+        "y": 5
+      },
+      "home": {
+        "kind": "town",
+        "location": "observatory_haku"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_village",
+  "receptionLocations": [
+    "royal_board"
+  ]
+}
