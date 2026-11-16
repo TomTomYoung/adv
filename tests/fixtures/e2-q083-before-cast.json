@@ -1,0 +1,2434 @@
+{
+  "schemaVersion": 1,
+  "id": "q083",
+  "number": 83,
+  "title": "地底の日食",
+  "client": "暦職人のツキ",
+  "brief": "地底の太陽が欠け、暦が狂う。何が光を遮っているか調べてください。",
+  "region": 9,
+  "type": "authored_progression",
+  "recommendedLevel": 9,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。 旧王領の村の依頼所で受注し、現場まで歩いて進める。",
+  "events": [
+    {
+      "id": "q083_clue_a",
+      "title": "地底の日食：現場の痕跡",
+      "points": [
+        {
+          "map": "region_9_f1",
+          "x": 5,
+          "y": 3,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q083.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q083.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q083"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q083"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "q083_clue_b",
+      "title": "地底の日食：記録と証言",
+      "points": [
+        {
+          "map": "region_9_f1",
+          "x": 11,
+          "y": 4,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q083.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q083.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q083"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q083"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "q083_decision",
+      "title": "地底の日食：決着の場",
+      "points": [
+        {
+          "map": "region_9_f1",
+          "x": 15,
+          "y": 5,
+          "dungeon": "region_9"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q083.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q083.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q083.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q083"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_9"
+    },
+    {
+      "id": "q083_observatory_entry",
+      "title": "地底の日食の現場",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "decision",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q083.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q083.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q083"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q083.observatory.visit",
+      "points": [
+        {
+          "dungeon": "region_9",
+          "map": "region_9_f1",
+          "x": 15,
+          "y": 5
+        }
+      ]
+    },
+    {
+      "id": "q083_observatory_scaffold",
+      "title": "保守足場を引き戻す操作点",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "scaffold",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q083.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q083.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q083"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q083.observatory.visit",
+      "points": [
+        {
+          "dungeon": "region_9",
+          "map": "region_9_f1",
+          "x": 7,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "id": "q083_observatory_control",
+      "title": "人工太陽の回転制御",
+      "trigger": "interact",
+      "kind": "decision",
+      "role": "control",
+      "interactionRange": "here",
+      "safe": true,
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q083.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q083.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "flags.legacyStoryRoutes.q083"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      "script": "q083.observatory.visit",
+      "points": [
+        {
+          "dungeon": "region_9",
+          "map": "region_9_f1",
+          "x": 5,
+          "y": 1
+        }
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_9_f1",
+      "x": 5,
+      "y": 3,
+      "object": "q083_clue_a",
+      "role": "clue_a"
+    },
+    {
+      "map": "region_9_f1",
+      "x": 11,
+      "y": 4,
+      "object": "q083_clue_b",
+      "role": "clue_b"
+    },
+    {
+      "map": "region_9_f1",
+      "x": 15,
+      "y": 5,
+      "object": "q083_decision",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "足場を撤去し、過去の日食記録を注記して直す",
+      "text": "地底の昼が戻った。ツキは欠けた日も注記して残す。",
+      "gold": 153,
+      "xp": 132
+    },
+    "contract": {
+      "label": "太陽の回転を止める",
+      "text": "日食は止んだ。昼夜の循環も止まり、手動で灯を落とす仕事ができる。",
+      "gold": 173,
+      "xp": 103
+    },
+    "compromise": {
+      "label": "今の影の時間を暦へ組み込む",
+      "text": "人々は短い薄明を休憩に使う。足場の撤去費も積み立てる。",
+      "gold": 99,
+      "xp": 99
+    },
+    "repaired": {
+      "gold": 153,
+      "xp": 99,
+      "label": "足場の撤去だけで仕事を終える",
+      "text": "足場が撤去され、昼は戻った。暦の訂正は残り、ツキが各工房の予定を照合する仕事を引き受けた。"
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/oddland/observatory-first.mjs",
+    "world": {
+      "truth": "人工太陽の前に、放置された保守足場が周期的に回り込んでいる。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "人工太陽の前に、放置された保守足場が周期的に回り込んでいる。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "地底の太陽が欠け、暦が狂う。何が光を遮っているか調べてください。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "暦職人のツキ",
+        "observation": "地底の太陽が欠け、暦が狂う。何が光を遮っているか調べてください。",
+        "belief": "地底の太陽が欠け、暦が狂う。何が光を遮っているか調べてください。",
+        "goal": "地底の太陽が欠け、暦が狂う。何が光を遮っているか調べてください。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "地底の太陽が欠け、暦が狂う。何が光を遮っているか調べてください。",
+      "progression": "影の通過を一周期見るか、先に回転を止めるかを選び、修理後には暦の訂正が残る。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q083.observatory.entry"
+        },
+        {
+          "id": "scaffold",
+          "script": "q083.observatory.scaffold"
+        },
+        {
+          "id": "stopped",
+          "script": "q083.observatory.stopped"
+        },
+        {
+          "id": "removed",
+          "script": "q083.observatory.removed"
+        },
+        {
+          "id": "corrected",
+          "script": "q083.observatory.corrected"
+        },
+        {
+          "id": "shade",
+          "script": "q083.observatory.shade"
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "地底の太陽が欠け、暦が狂う。何が光を遮っているか調べてください。",
+      "openQuestion": "地底の日食の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "ruleReveal",
+      "newInformation": "人工太陽の前に、放置された保守足場が周期的に回り込んでいる。",
+      "retroactiveTargets": [
+        "scaffold"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q083.flow.entry"
+      },
+      {
+        "id": "scaffold",
+        "script": "q083.flow.scaffold"
+      }
+    ],
+    "revision": "game-scenario-1.0",
+    "stateRegistry": [
+      {
+        "path": "flags.flow.q083.node",
+        "meaning": "現在の場面。中断・逃走・敗北後の再開位置",
+        "writer": [],
+        "scope": "quest",
+        "lifetime": "保存して後続場面で参照"
+      }
+    ],
+    "choiceContract": {
+      "progression": "影の通過を一周期見るか、先に回転を止めるかを選び、修理後には暦の訂正が残る。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "影の通過を一周期見るか、先に回転を止めるかを選び、修理後には暦の訂正が残る。",
+    "flowVersion": 2,
+    "entryScript": "q083.observatory.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "place": "entry",
+        "text": "人工太陽を梯子の形の影が横切る。暦職人は日食と記している。",
+        "options": [
+          {
+            "id": "cycle",
+            "text": "影が戻る一周期を観察する",
+            "to": "scaffold",
+            "action": "entry_cycle"
+          },
+          {
+            "id": "stop",
+            "text": "太陽の回転を止める",
+            "to": "stopped",
+            "action": "entry_stop"
+          },
+          {
+            "id": "calendar",
+            "text": "今の影の時間を暦へ組み込む",
+            "to": "shade",
+            "action": "entry_calendar"
+          }
+        ]
+      },
+      {
+        "id": "scaffold",
+        "place": "scaffold",
+        "text": "人工太陽の前に、放置された保守足場が周期的に回り込んでいる。 保守員は、撤去待ちの足場が影を作っていると認めた。引き戻せば太陽の光は戻る。",
+        "options": [
+          {
+            "id": "dates",
+            "text": "足場を撤去し、過去の日食記録を注記して直す",
+            "to": "removed",
+            "action": "scaffold_dates"
+          },
+          {
+            "id": "only",
+            "text": "足場の撤去だけで仕事を終える",
+            "to": "@repaired",
+            "action": "scaffold_only"
+          },
+          {
+            "id": "shade",
+            "text": "足場を残し、定期的な薄明を運用へ組み込む",
+            "to": "shade",
+            "action": "scaffold_shade"
+          }
+        ]
+      },
+      {
+        "id": "stopped",
+        "place": "control",
+        "text": "回転制御の前で人工太陽を止める。昼夜も止まるので、以後の消灯は手動になる。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@contract",
+            "action": "stopped_finish"
+          }
+        ]
+      },
+      {
+        "id": "removed",
+        "place": "scaffold",
+        "text": "足場を引き戻し、光が戻ったことを確認した。過去の記録を直す窓口へ向かう。",
+        "options": [
+          {
+            "id": "record",
+            "text": "暦の窓口へ撤去と訂正を伝える",
+            "to": "corrected",
+            "action": "removed_record"
+          }
+        ]
+      },
+      {
+        "id": "corrected",
+        "place": "calendar",
+        "text": "以前の欠けた日も消さず、保守足場による影だったと注記する。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@informed",
+            "action": "corrected_finish"
+          }
+        ]
+      },
+      {
+        "id": "shade",
+        "place": "calendar",
+        "text": "影が続く時間を暦へ記し、短い薄明の運用を相談する。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "相手と結果を確かめ、依頼を終える",
+            "to": "@compromise",
+            "action": "shade_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.2b",
+      "source": "doc/scenarios/SCENARIO_MODEL_V12B.md",
+      "adapter": "adv-story-state/1",
+      "scope": "既存本文の現場・保持者・到着条件の接続。全文改稿は含めない。"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "relocation": {
+      "stage": "observatory-twenty",
+      "settlement": "oddland_village",
+      "saveRevision": 2,
+      "scope": "観測所20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
+    },
+    "preserveAcceptedRoute": true
+  },
+  "scripts": {
+    "q083.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "影の縁は丸くなく、手すりと梯子の形がある。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q083",
+          "key": "clue_a",
+          "text": "影の縁は丸くなく、手すりと梯子の形がある。"
+        }
+      ]
+    },
+    "q083.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "暦職人のツキ",
+          "text": "保守日誌には撤去待ちの足場があり、軌道の回転周期と一致します。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q083",
+          "key": "clue_b",
+          "text": "保守日誌には撤去待ちの足場があり、軌道の回転周期と一致する。"
+        }
+      ]
+    },
+    "q083.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "地底の日食\n\n地底の太陽が欠け、暦が狂う。何が光を遮っているか調べてください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "太陽の影獣を倒し回転を止める",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "日食は止んだ。昼夜の循環も止まり、手動で灯を落とす仕事ができる。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q083",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "足場を撤去し過去の暦を補正する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q083.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q083.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "人工太陽の前に、放置された保守足場が周期的に回り込んでいる。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "地底の昼が戻った。ツキは欠けた日も注記して残す。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q083",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "影の時間を暦へ組み込んで運用する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "人々は短い薄明を休憩に使う。足場の撤去費も積み立てる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q083",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q083.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "地底の日食\n\n地底の太陽が欠け、暦が狂う。何が光を遮っているか調べてください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q083.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q083.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "人工太陽の前に、放置された保守足場が周期的に回り込んでいる。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q083.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "太陽の影獣を倒し回転を止める",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_9",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "日食は止んだ。昼夜の循環も止まり、手動で灯を落とす仕事ができる。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q083",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "足場を撤去し過去の暦を補正する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q083.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q083.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "地底の昼が戻った。ツキは欠けた日も注記して残す。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q083",
+                  "outcome": "informed"
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q083.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q083.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "compromise",
+              "text": "影の時間を暦へ組み込んで運用する",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "人々は短い薄明を休憩に使う。足場の撤去費も積み立てる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q083",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」暦職人のツキは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられる。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q083.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q083.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q083.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "地底の昼が戻った。ツキは欠けた日も注記して残す。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q083.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "日食は止んだ。昼夜の循環も止まり、手動で灯を落とす仕事ができる。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q083.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "人々は短い薄明を休憩に使う。足場の撤去費も積み立てる。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q083.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q083.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q083.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q083.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q083.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q083.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q083.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "人工太陽を梯子の形の影が横切る。暦職人は日食と記している。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "cycle",
+              "text": "影が戻る一周期を観察する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q083.flow.scaffold"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "太陽の回転を止める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q083.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "calendar",
+              "text": "今の影の時間を暦へ組み込む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q083.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q083.flow.scaffold": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q083.node",
+          "value": "scaffold"
+        },
+        {
+          "op": "say",
+          "text": "人工太陽の前に、放置された保守足場が周期的に回り込んでいる。 保守員は、撤去待ちの足場が影を作っていると認めた。引き戻せば太陽の光は戻る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "dates",
+              "text": "足場を撤去し、過去の日食記録を注記して直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q083.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "only",
+              "text": "足場の撤去だけで仕事を終える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q083.flow.end.repaired"
+                }
+              ]
+            },
+            {
+              "id": "shade",
+              "text": "足場を残し、定期的な薄明を運用へ組み込む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q083.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q083.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q083.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "地底の昼が戻った。ツキは欠けた日も注記して残す。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q083",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q083.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q083.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "日食は止んだ。昼夜の循環も止まり、手動で灯を落とす仕事ができる。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q083",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q083.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q083.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "人々は短い薄明を休憩に使う。足場の撤去費も積み立てる。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q083",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q083.flow.end.repaired": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q083.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "足場が撤去され、昼は戻った。暦の訂正は残り、ツキが各工房の予定を照合する仕事を引き受けた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q083",
+              "outcome": "repaired"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q083.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q083.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q083.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "地底の昼が戻った。ツキは欠けた日も注記して残す。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "日食は止んだ。昼夜の循環も止まり、手動で灯を落とす仕事ができる。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "人々は短い薄明を休憩に使う。足場の撤去費も積み立てる。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "repaired",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "足場が撤去され、昼は戻った。暦の訂正は残り、ツキが各工房の予定を照合する仕事を引き受けた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q083"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q083.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q083.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q083.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "scaffold",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q083.flow.scaffold"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q083.flow.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q083.observatory.entry": {
+      "storyQuest": "q083",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q083",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "人工太陽を梯子の形の影が横切る。暦職人は日食と記している。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "cycle",
+              "text": "影が戻る一周期を観察する",
+              "storyAction": {
+                "quest": "q083",
+                "action": "entry_cycle"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q083",
+                  "action": "entry_cycle"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "太陽の回転を止める",
+              "storyAction": {
+                "quest": "q083",
+                "action": "entry_stop"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q083",
+                  "action": "entry_stop"
+                }
+              ]
+            },
+            {
+              "id": "calendar",
+              "text": "今の影の時間を暦へ組み込む",
+              "storyAction": {
+                "quest": "q083",
+                "action": "entry_calendar"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q083",
+                  "action": "entry_calendar"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q083.observatory.scaffold": {
+      "storyQuest": "q083",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q083",
+          "scene": "scaffold"
+        },
+        {
+          "op": "narrate",
+          "text": "人工太陽の前に、放置された保守足場が周期的に回り込んでいる。 保守員は、撤去待ちの足場が影を作っていると認めた。引き戻せば太陽の光は戻る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "dates",
+              "text": "足場を撤去し、過去の日食記録を注記して直す",
+              "storyAction": {
+                "quest": "q083",
+                "action": "scaffold_dates"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q083",
+                  "action": "scaffold_dates"
+                },
+                {
+                  "op": "jump",
+                  "script": "q083.observatory.removed"
+                }
+              ]
+            },
+            {
+              "id": "only",
+              "text": "足場の撤去だけで仕事を終える",
+              "storyAction": {
+                "quest": "q083",
+                "action": "scaffold_only"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q083",
+                  "action": "scaffold_only"
+                },
+                {
+                  "op": "jump",
+                  "script": "q083.observatory.end.repaired"
+                }
+              ]
+            },
+            {
+              "id": "shade",
+              "text": "足場を残し、定期的な薄明を運用へ組み込む",
+              "storyAction": {
+                "quest": "q083",
+                "action": "scaffold_shade"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q083",
+                  "action": "scaffold_shade"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q083.observatory.stopped": {
+      "storyQuest": "q083",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q083",
+          "scene": "stopped"
+        },
+        {
+          "op": "narrate",
+          "text": "回転制御の前で人工太陽を止める。昼夜も止まるので、以後の消灯は手動になる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q083",
+                "action": "stopped_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q083",
+                  "action": "stopped_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q083.observatory.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q083.observatory.removed": {
+      "storyQuest": "q083",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q083",
+          "scene": "removed"
+        },
+        {
+          "op": "narrate",
+          "text": "足場を引き戻し、光が戻ったことを確認した。過去の記録を直す窓口へ向かう。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "record",
+              "text": "暦の窓口へ撤去と訂正を伝える",
+              "storyAction": {
+                "quest": "q083",
+                "action": "removed_record"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q083",
+                  "action": "removed_record"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q083.observatory.corrected": {
+      "storyQuest": "q083",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q083",
+          "scene": "corrected"
+        },
+        {
+          "op": "narrate",
+          "text": "以前の欠けた日も消さず、保守足場による影だったと注記する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q083",
+                "action": "corrected_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q083",
+                  "action": "corrected_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q083.observatory.end.informed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q083.observatory.shade": {
+      "storyQuest": "q083",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q083",
+          "scene": "shade"
+        },
+        {
+          "op": "narrate",
+          "text": "影が続く時間を暦へ記し、短い薄明の運用を相談する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "相手と結果を確かめ、依頼を終える",
+              "storyAction": {
+                "quest": "q083",
+                "action": "shade_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q083",
+                  "action": "shade_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q083.observatory.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q083.observatory.end.informed": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "地底の昼が戻った。ツキは欠けた日も注記して残す。"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q083",
+          "outcome": "informed"
+        }
+      ]
+    },
+    "q083.observatory.end.contract": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "日食は止んだ。昼夜の循環も止まり、手動で灯を落とす仕事ができる。"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q083",
+          "outcome": "contract"
+        }
+      ]
+    },
+    "q083.observatory.end.compromise": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "人々は短い薄明を休憩に使う。足場の撤去費も積み立てる。"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q083",
+          "outcome": "compromise"
+        }
+      ]
+    },
+    "q083.observatory.end.repaired": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "足場が撤去され、昼は戻った。暦の訂正は残り、ツキが各工房の予定を照合する仕事を引き受けた。"
+        },
+        {
+          "op": "add",
+          "target": "vars.repaired",
+          "value": 1
+        },
+        {
+          "op": "quest.complete",
+          "quest": "q083",
+          "outcome": "repaired"
+        }
+      ]
+    },
+    "q083.observatory.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q083"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q083.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q083.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q083.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "地底の昼が戻った。ツキは欠けた日も注記して残す。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "日食は止んだ。昼夜の循環も止まり、手動で灯を落とす仕事ができる。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "人々は短い薄明を休憩に使う。足場の撤去費も積み立てる。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "repaired",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "足場が撤去され、昼は戻った。暦の訂正は残り、ツキが各工房の予定を照合する仕事を引き受けた。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q083"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q083.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q083.observatory.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "scaffold",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q083.observatory.scaffold"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "stopped",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q083.observatory.stopped"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "removed",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q083.observatory.removed"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "corrected",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q083.observatory.corrected"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "shade",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q083.observatory.shade"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q083.observatory.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entry": "地底の日食の現場",
+      "scaffold": "保守足場を引き戻す操作点",
+      "control": "人工太陽の回転制御",
+      "calendar": "過去の日食を注記する暦の窓口",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "entry"
+      ],
+      [
+        "transit",
+        "scaffold"
+      ],
+      [
+        "transit",
+        "control"
+      ],
+      [
+        "transit",
+        "calendar"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry",
+          "scaffold",
+          "control",
+          "calendar",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "resolution": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "informed",
+          "contract",
+          "compromise",
+          "repaired"
+        ],
+        "meaning": "現地で実行した解決方法"
+      },
+      "finished": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "現地の結果を確認して依頼を終えた"
+      },
+      "removed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "removed"
+      },
+      "stopped": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "stopped"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      }
+    },
+    "propositions": {
+      "truth": {
+        "text": "人工太陽の前に、放置された保守足場が周期的に回り込んでいる。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "地底の日食の現場",
+        "place": "entry",
+        "cast": [],
+        "requires": true
+      },
+      "scaffold": {
+        "title": "保守足場を引き戻す操作点",
+        "place": "scaffold",
+        "cast": [],
+        "requires": true
+      },
+      "stopped": {
+        "title": "人工太陽の回転制御",
+        "place": "control",
+        "cast": [],
+        "requires": true
+      },
+      "removed": {
+        "title": "保守足場を引き戻す操作点",
+        "place": "scaffold",
+        "cast": [],
+        "requires": true
+      },
+      "corrected": {
+        "title": "過去の日食を注記する暦の窓口",
+        "place": "calendar",
+        "cast": [],
+        "requires": true
+      },
+      "shade": {
+        "title": "過去の日食を注記する暦の窓口",
+        "place": "calendar",
+        "cast": [],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_cycle": {
+        "from": [
+          "entry"
+        ],
+        "to": "scaffold",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "scaffold"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "truth",
+            "source": "scaffold",
+            "requires": true
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "scaffold",
+          "companions": []
+        },
+        "depart": []
+      },
+      "entry_stop": {
+        "from": [
+          "entry"
+        ],
+        "to": "stopped",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "control"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "control",
+          "companions": []
+        },
+        "depart": []
+      },
+      "entry_calendar": {
+        "from": [
+          "entry"
+        ],
+        "to": "shade",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "calendar"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "calendar",
+          "companions": []
+        },
+        "depart": []
+      },
+      "scaffold_dates": {
+        "from": [
+          "scaffold"
+        ],
+        "to": "removed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "removed",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "scaffold_only": {
+        "from": [
+          "scaffold"
+        ],
+        "ending": "repaired",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "removed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "repaired"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "scaffold_shade": {
+        "from": [
+          "scaffold"
+        ],
+        "to": "shade",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "calendar"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "calendar",
+          "companions": []
+        },
+        "depart": []
+      },
+      "stopped_finish": {
+        "from": [
+          "stopped"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "stopped",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "contract"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "removed_record": {
+        "from": [
+          "removed"
+        ],
+        "to": "corrected",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "calendar"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "calendar",
+          "companions": []
+        },
+        "depart": []
+      },
+      "corrected_finish": {
+        "from": [
+          "corrected"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "informed"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "shade_finish": {
+        "from": [
+          "shade"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "resolution",
+            "value": "compromise"
+          },
+          {
+            "op": "set",
+            "key": "finished",
+            "value": true
+          }
+        ],
+        "once": false
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q083.values.resolution"
+            },
+            "right": "informed"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q083.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q083.values.partyAt"
+                },
+                "right": "calendar"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q083.values.resolution"
+            },
+            "right": "contract"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q083.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q083.values.partyAt"
+                },
+                "right": "control"
+              }
+            ]
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q083.values.resolution"
+            },
+            "right": "compromise"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q083.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q083.values.partyAt"
+                },
+                "right": "calendar"
+              }
+            ]
+          }
+        ]
+      },
+      "repaired": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q083.values.resolution"
+            },
+            "right": "repaired"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q083.values.finished"
+            },
+            "right": true
+          },
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q083.values.partyAt"
+                },
+                "right": "scaffold"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entry": {
+        "kind": "dungeon",
+        "dungeon": "region_9",
+        "map": "region_9_f1",
+        "x": 15,
+        "y": 5
+      },
+      "scaffold": {
+        "kind": "dungeon",
+        "dungeon": "region_9",
+        "map": "region_9_f1",
+        "x": 7,
+        "y": 3
+      },
+      "control": {
+        "kind": "dungeon",
+        "dungeon": "region_9",
+        "map": "region_9_f1",
+        "x": 5,
+        "y": 1
+      },
+      "calendar": {
+        "kind": "town",
+        "location": "observatory_calendar"
+      }
+    },
+    "revision": 1
+  },
+  "settlement": "oddland_village",
+  "receptionLocations": [
+    "royal_board"
+  ]
+}

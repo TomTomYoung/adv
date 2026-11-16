@@ -39,6 +39,15 @@ export function observatoryFirstSource(q,{cast=true}={}){
   route('scaffold','dates','removed',{effects:[set('removed')]});add('removed','scaffold','足場を引き戻し、光が戻ったことを確認した。過去の記録を直す窓口へ向かう。',[opt('record','暦の窓口へ撤去と訂正を伝える','corrected')]);end('corrected','calendar','以前の欠けた日も消さず、保守足場による影だったと注記する。','informed');choice('scaffold','only').effects=[set('removed')];
   for(const [from,key] of [['entry','calendar'],['scaffold','shade']])route(from,key,'shade');end('shade','calendar','影が続く時間を暦へ記し、短い薄明の運用を相談する。','compromise');
  }
+ if(q.number===83&&cast){
+  entity('calendarMaker','entry','person');entity('maintainer','scaffold','person');
+  x.entities.calendarMaker.character='q083_calendarMaker';x.entities.maintainer.character='q083_maintainer';
+  node('entry').cast=[{entity:'calendarMaker',display:{x:50}}];
+  node('scaffold').cast=[{entity:'maintainer',display:{x:50}}];
+  node('stopped').text='回転制御へ着いた。ここで人工太陽の回転を止める。止めれば昼夜の循環も止まり、以後の消灯は手動になる。';
+  node('corrected').text='暦の窓口へ着いた。以前の欠けた日を消さず、保守足場による影だったと注記する準備ができている。';
+  node('shade').text='暦の窓口へ着いた。足場を残したまま、影の続く時間を記して短い薄明の運用をここで相談する。';
+ }
  if(q.number===84){
   cell('beacon','反復する救助標と矢印',1,3,13);field('crossing','担架の跡がある上層の空気室','rescue',7,3);field('survivors','返事をする一行の空気室','rescue',13,7);town('rescue','専門隊の引継ぎ詰所','royal_rescue');town('family','発信機を待つ家','observatory_family');node('beacon').place='beacon';node('crossing').place='crossing';entity('beaconDevice','beacon');entity('stretcherParty','survivors','group');entity('specialists','rescue','group');entity('chartCopy','rescue');
   route('entry','recover','recovery');add('recovery','beacon','発信地点へ来た。機械だけを持ち帰る場合、本人を見つけたことにはしない。',[opt('carry','発信機を家族へ持ち帰る','recovered',{depart:[give('beaconDevice','beacon','party')]})]);end('recovered','family','反復する発信機を家族へ渡し、本人の行方はまだ分からないと伝える。','contract',[give('beaconDevice','party','family')]);
