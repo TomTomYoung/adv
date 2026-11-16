@@ -534,7 +534,7 @@
       {
         "id": "stopped",
         "place": "control",
-        "text": "回転制御の前で人工太陽を止める。昼夜も止まるので、以後の消灯は手動になる。",
+        "text": "回転制御へ着いた。ここで人工太陽の回転を止める。止めれば昼夜の循環も止まり、以後の消灯は手動になる。",
         "options": [
           {
             "id": "finish",
@@ -560,7 +560,7 @@
       {
         "id": "corrected",
         "place": "calendar",
-        "text": "以前の欠けた日も消さず、保守足場による影だったと注記する。",
+        "text": "暦の窓口へ着いた。以前の欠けた日を消さず、保守足場による影だったと注記する準備ができている。",
         "options": [
           {
             "id": "finish",
@@ -573,7 +573,7 @@
       {
         "id": "shade",
         "place": "calendar",
-        "text": "影が続く時間を暦へ記し、短い薄明の運用を相談する。",
+        "text": "暦の窓口へ着いた。足場を残したまま、影の続く時間を記して短い薄明の運用をここで相談する。",
         "options": [
           {
             "id": "finish",
@@ -593,7 +593,7 @@
     },
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -602,7 +602,547 @@
       "saveRevision": 2,
       "scope": "観測所20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "地底の日食の現場",
+            "scaffold": "保守足場を引き戻す操作点",
+            "control": "人工太陽の回転制御",
+            "calendar": "過去の日食を注記する暦の窓口",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "scaffold"
+            ],
+            [
+              "transit",
+              "control"
+            ],
+            [
+              "transit",
+              "calendar"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "scaffold",
+                "control",
+                "calendar",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "informed",
+                "contract",
+                "compromise",
+                "repaired"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "removed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "removed"
+            },
+            "stopped": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "stopped"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "人工太陽の前に、放置された保守足場が周期的に回り込んでいる。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "地底の日食の現場",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "scaffold": {
+              "title": "保守足場を引き戻す操作点",
+              "place": "scaffold",
+              "cast": [],
+              "requires": true
+            },
+            "stopped": {
+              "title": "人工太陽の回転制御",
+              "place": "control",
+              "cast": [],
+              "requires": true
+            },
+            "removed": {
+              "title": "保守足場を引き戻す操作点",
+              "place": "scaffold",
+              "cast": [],
+              "requires": true
+            },
+            "corrected": {
+              "title": "過去の日食を注記する暦の窓口",
+              "place": "calendar",
+              "cast": [],
+              "requires": true
+            },
+            "shade": {
+              "title": "過去の日食を注記する暦の窓口",
+              "place": "calendar",
+              "cast": [],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_cycle": {
+              "from": [
+                "entry"
+              ],
+              "to": "scaffold",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "scaffold"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "observe",
+                  "observer": "party",
+                  "proposition": "truth",
+                  "source": "scaffold",
+                  "requires": true
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "scaffold",
+                "companions": []
+              },
+              "depart": []
+            },
+            "entry_stop": {
+              "from": [
+                "entry"
+              ],
+              "to": "stopped",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "control"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "control",
+                "companions": []
+              },
+              "depart": []
+            },
+            "entry_calendar": {
+              "from": [
+                "entry"
+              ],
+              "to": "shade",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "calendar"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "calendar",
+                "companions": []
+              },
+              "depart": []
+            },
+            "scaffold_dates": {
+              "from": [
+                "scaffold"
+              ],
+              "to": "removed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "removed",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "scaffold_only": {
+              "from": [
+                "scaffold"
+              ],
+              "ending": "repaired",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "removed",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "repaired"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "scaffold_shade": {
+              "from": [
+                "scaffold"
+              ],
+              "to": "shade",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "calendar"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "calendar",
+                "companions": []
+              },
+              "depart": []
+            },
+            "stopped_finish": {
+              "from": [
+                "stopped"
+              ],
+              "ending": "contract",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "stopped",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "contract"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "removed_record": {
+              "from": [
+                "removed"
+              ],
+              "to": "corrected",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "calendar"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "calendar",
+                "companions": []
+              },
+              "depart": []
+            },
+            "corrected_finish": {
+              "from": [
+                "corrected"
+              ],
+              "ending": "informed",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "informed"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "shade_finish": {
+              "from": [
+                "shade"
+              ],
+              "ending": "compromise",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "compromise"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            }
+          },
+          "endings": {
+            "informed": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q083.values.resolution"
+                  },
+                  "right": "informed"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q083.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q083.values.partyAt"
+                      },
+                      "right": "calendar"
+                    }
+                  ]
+                }
+              ]
+            },
+            "contract": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q083.values.resolution"
+                  },
+                  "right": "contract"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q083.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q083.values.partyAt"
+                      },
+                      "right": "control"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compromise": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q083.values.resolution"
+                  },
+                  "right": "compromise"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q083.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q083.values.partyAt"
+                      },
+                      "right": "calendar"
+                    }
+                  ]
+                }
+              ]
+            },
+            "repaired": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q083.values.resolution"
+                  },
+                  "right": "repaired"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q083.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q083.values.partyAt"
+                      },
+                      "right": "scaffold"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_9",
+              "map": "region_9_f1",
+              "x": 15,
+              "y": 5
+            },
+            "scaffold": {
+              "kind": "dungeon",
+              "dungeon": "region_9",
+              "map": "region_9_f1",
+              "x": 7,
+              "y": 3
+            },
+            "control": {
+              "kind": "dungeon",
+              "dungeon": "region_9",
+              "map": "region_9_f1",
+              "x": 5,
+              "y": 1
+            },
+            "calendar": {
+              "kind": "town",
+              "location": "observatory_calendar"
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "calendarMakerAt",
+            "value": "entry"
+          },
+          {
+            "key": "maintainerAt",
+            "value": "scaffold"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q083.clue_a": {
@@ -1535,7 +2075,7 @@
         },
         {
           "op": "narrate",
-          "text": "回転制御の前で人工太陽を止める。昼夜も止まるので、以後の消灯は手動になる。"
+          "text": "回転制御へ着いた。ここで人工太陽の回転を止める。止めれば昼夜の循環も止まり、以後の消灯は手動になる。"
         },
         {
           "op": "choice",
@@ -1609,7 +2149,7 @@
         },
         {
           "op": "narrate",
-          "text": "以前の欠けた日も消さず、保守足場による影だったと注記する。"
+          "text": "暦の窓口へ着いた。以前の欠けた日を消さず、保守足場による影だったと注記する準備ができている。"
         },
         {
           "op": "choice",
@@ -1648,7 +2188,7 @@
         },
         {
           "op": "narrate",
-          "text": "影が続く時間を暦へ記し、短い薄明の運用を相談する。"
+          "text": "暦の窓口へ着いた。足場を残したまま、影の続く時間を記して短い薄明の運用をここで相談する。"
         },
         {
           "op": "choice",
@@ -1970,12 +2510,38 @@
         "type": "boolean",
         "initial": false,
         "meaning": "stopped"
+      },
+      "calendarMakerAt": {
+        "type": "enum",
+        "initial": "entry",
+        "values": [
+          "entry"
+        ],
+        "meaning": "calendarMaker の所在または保持者"
+      },
+      "maintainerAt": {
+        "type": "enum",
+        "initial": "scaffold",
+        "values": [
+          "scaffold"
+        ],
+        "meaning": "maintainer の所在または保持者"
       }
     },
     "entities": {
       "party": {
         "holder": "partyAt",
         "kind": "group"
+      },
+      "calendarMaker": {
+        "holder": "calendarMakerAt",
+        "kind": "person",
+        "character": "q083_calendarMaker"
+      },
+      "maintainer": {
+        "holder": "maintainerAt",
+        "kind": "person",
+        "character": "q083_maintainer"
       }
     },
     "propositions": {
@@ -1989,13 +2555,27 @@
       "entry": {
         "title": "地底の日食の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "calendarMaker",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "scaffold": {
         "title": "保守足場を引き戻す操作点",
         "place": "scaffold",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "maintainer",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "stopped": {
@@ -2425,7 +3005,7 @@
         "location": "observatory_calendar"
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "oddland_village",
   "receptionLocations": [

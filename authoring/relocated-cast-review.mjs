@@ -3,6 +3,80 @@
 export const RELOCATED_CAST_REVIEW={
  reviewedAt:'2026-11-16',
  quests:{
+  q083:{
+    "sourceSha256": "5d296e0dd131a844c321cf557443e29455cf43a5bf192b8b3f3c05d90eb93b01",
+    "identityNotes": [
+      "原稿authoring/quests.txt・structures-5.mjsのQ(83)、初版2場面・現行6場面を精読した。梯子状の影は保守足場によるもので、実際の天体の日食とは区別する。",
+      "冒頭で記録する暦職人は依頼人欄の暦職人ツキとしてentryだけに表示する。原因を認める保守員はscaffoldだけに表示する。二役は各現場に固定し、全5旅程の同行者は空のまま。結末のツキの言及を根拠に暦窓口へ先回りさせない。",
+      "scaffold_datesの選択で足場撤去が確定し、removed到着本文では既に光が戻っている。訂正窓口への到着では依頼未完了で、corrected_finishで注記を含む結末を確定する。撤去だけのrepairedは暦訂正を完了したことにしない。",
+      "回転制御への到着だけではstoppedはfalseのまま。stopped_finishで停止を確定する。shadeは足場を残す運用で、直接向かう場合と原因確認後に向かう場合を区別する。地形装置・携行灯燃料は変更しない。",
+      "物語改訂1→2では旧定義で保存全体を検証後、二役の固定所在のみ補う。既存registry・10行動・4結末・報酬・旧受注を保持し、stopped・corrected・shadeの本文3箇所だけを完了操作前へ明確化する。旧保存の表示途中の本文・選択肢は保持する。原稿の影獣という旧表現から戦闘は追加しない。"
+    ],
+    "relatedClients": {},
+    "people": {
+      "q083_calendarMaker": {
+        "label": "暦職人ツキ",
+        "status": "connected",
+        "entity": "calendarMaker",
+        "need": "冒頭で日食と記録するentryだけ。結末の行動を他場面の同席へ拡張しない。"
+      },
+      "q083_maintainer": {
+        "label": "保守員",
+        "status": "connected",
+        "entity": "maintainer",
+        "need": "足場の原因を認めるscaffoldだけ。撤去後や地上へ自動的に持ち越さない。"
+      }
+    },
+    "scenes": {
+      "entry": {
+        "decision": "person-evidence",
+        "people": [
+          "q083_calendarMaker"
+        ],
+        "evidence": "暦職人は日食と記している。",
+        "reason": "暦職人の記録動作が明記される。依頼人欄の役と接続し、保守員はこの場に追加しない。",
+        "visual": "梯子の影と暦の記述を分ける。まだ原因は未確認。"
+      },
+      "scaffold": {
+        "decision": "person-evidence",
+        "people": [
+          "q083_maintainer"
+        ],
+        "evidence": "保守員は、撤去待ちの足場が影を作っていると認めた。",
+        "reason": "現場で保守員が影の原因を説明する。暦職人が同行する記述はない。",
+        "visual": "原因の観察と足場の撤去を別の操作として扱う。"
+      },
+      "stopped": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "回転制御へ着いた。",
+        "reason": "操作点への到着。二役の同席根拠はなく、停止はまだ未確定。",
+        "visual": "最後の操作で回転を止め、昼夜停止と手動消灯を結果にする。"
+      },
+      "removed": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "光が戻ったことを確認した。",
+        "reason": "撤去結果を確認する本文で、特定人物の動作・発言はない。保守員の呼称を前場面から自動継続しない。",
+        "visual": "足場は既に撤去済みだが、暦の訂正は残る。"
+      },
+      "corrected": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "注記する準備ができている。",
+        "reason": "訂正窓口の作業前。結末でツキが記録を残すことだけから、この場への移動を補わない。",
+        "visual": "過去の日付を消去せず、完了操作で原因の注記を確定する。"
+      },
+      "shade": {
+        "decision": "no-person-evidence",
+        "people": [],
+        "evidence": "足場を残したまま",
+        "reason": "短い薄明の運用相談。特定の相談相手の発言・所在は書かれていない。",
+        "visual": "直接訪問と原因確認後の訪問を保持し、足場撤去・回転停止とは別の結末にする。"
+      }
+    },
+    "next": "実画面・全体CIの最終結果をPRへ記録する。次はq084「帰還信号」。"
+  },
   q082:{
     "sourceSha256": "f8daed04e3552379d6859f8ccf722b45ec0fb92341e1730271aba6164c12ae1a",
     "identityNotes": [
