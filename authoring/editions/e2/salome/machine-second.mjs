@@ -16,6 +16,12 @@ export function machineSecondSource(q,{cast=true}={}){
   x.entities.dai.character='q171_dai';x.entities.family.character='q171_family';
   for(const id of ['watch','onsite','rule_done','ward_done','wait_done','ring','loop_home','returned','return_home','defended'])node(id).cast=[{entity:'dai',display:{x:50}}];
   for(const id of ['defense','collect_family','evacuated'])node(id).cast=[{entity:'dai',display:{x:31}},{entity:'family',display:{x:69}}];
+  if(cast){
+   // The wife belongs to the existing family; its journey is her journey too.
+   // Intake names the subject of a request, but does not place her at the desk.
+   entity('wife','family','person');x.entities.wife.character='q171_wife';
+   for(const id of ['onsite','loop_home','return_home','defended'])node(id).cast=[{entity:'dai',display:{x:31}},{entity:'wife',display:{x:69}}];
+  }
  }
  if(q.number===172){
   town('workshop','ルイ本人の刺繍工房','machine_lui');town('mother','母から昔の名を聞く家','machine_mother');town('market','作品の名を確かめる市','library_market');field('well_place','名前を取った井戸','cemetery',7,3);town('water','代わりの水源を手配する窓口','machine_registry');entity('lui','workshop','person');entity('motherPerson','mother','person');entity('wellMaster','well_place','person');

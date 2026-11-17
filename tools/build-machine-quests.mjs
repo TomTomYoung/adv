@@ -58,7 +58,17 @@ export async function buildMachineQuests({check=false}={}){
    quest.story.revision=2;quest.model.edition.revision=2;
    quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values}];
   }
-  if(n===171)quest.story.scenes.watch_ward_ready.cast=[{entity:'dai',display:{x:50}}];
+  if(n===171){
+   const previous=compileRelocatedQuest(first,source(first,{cast:false}),options).story;
+   previous.scenes.watch_ward_ready.cast=[{entity:'dai',display:{x:50}}];
+   quest.story.scenes.watch_ward_ready.cast=[{entity:'dai',display:{x:50}}];
+   // Preserve every old field, including the ward's possible holders. The wife
+   // is a member of family, so she cannot independently stay behind or teleport.
+   for(const [key,entry] of Object.entries(previous.registry))quest.story.registry[key]=structuredClone(entry);
+   quest.story.registry.wifeAt={type:'enum',initial:'family',values:['family'],meaning:'妻は既存の家族集団に属し、その実所在に従う'};
+   quest.story.revision=2;quest.model.edition.revision=2;
+   quest.model.storyUpgrades=[{fromRevision:1,toRevision:2,previous,values:[{key:'wifeAt',value:'family'}]}];
+  }
   if(n===172){
    quest.story.scenes.well_seal_ready.cast=[{entity:'lui',display:{x:50}}];
    quest.story.registry.motherPersonAt.values=['mother'];
