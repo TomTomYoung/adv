@@ -16,6 +16,13 @@ test('trial prerequisite q005 uses the preserved historical route while q005 its
  const save=g.save();g.load(save);assert.equal(g.save(),save);
  const current=trial('q005').engine;assert.equal(current.state.flags.currentStoryRoutes.q005,true);assert.equal(current.state.flags.preservedStoryRoutes?.q005,undefined);assert.equal(current.state.stories.q005.revision,2);assert.deepEqual(validateSave(JSON.parse(current.save()),data),[]);
 });
+test('trial prerequisite q006 uses the preserved historical route while q006 itself starts the current story',()=>{
+ const data=editions.e2,trial=id=>createQuestTrial(data,catalog,{quest:id,party:'balanced',level:catalog.quests.e2[id].level.standard,start:'site'});
+ const prerequisite=trial('q100');assert.ok(prerequisite.prerequisites.includes('q006'));
+ const g=prerequisite.engine;assert.equal(g.data.quests.q006.story,data.previousQuestRoutes.q006.story);assert.equal(g.state.flags.preservedStoryRoutes.q006,true);
+ const save=g.save();g.load(save);assert.equal(g.save(),save);
+ const current=trial('q006').engine;assert.equal(current.state.flags.currentStoryRoutes.q006,true);assert.equal(current.state.flags.preservedStoryRoutes?.q006,undefined);assert.equal(current.state.stories.q006.revision,2);assert.deepEqual(validateSave(JSON.parse(current.save()),data),[]);
+});
 for(const [edition,data] of Object.entries(editions))test(`${edition}: every quest and all party variants start in both modes with a valid real state`,()=>{
   assert.deepEqual(questPartyErrors(data,catalog),[]);let count=0;
   for(const [quest,p] of Object.entries(catalog.quests[edition]))for(const party of p.parties)for(const start of ['reception','site']){
