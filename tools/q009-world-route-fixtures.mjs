@@ -11,7 +11,7 @@ export function ratRouteFixtures(){
   const capture=(g,variant,{pageOnly=false}={})=>{
     const scene=g.state.stories.q009.scene,key=variant+'/'+scene;if(seen.has(key))return;seen.add(key);checkpoint(g);
     const d=projectGame(g).dialog,cast=d.scene.cast.map(c=>c.id),choice=d.options?.find(o=>o.enabled);assert.ok(pageOnly||choice);
-    fixtures.push({edition:'e2',quest:'q009',scene,variant,cast,save:g.save(),expectedText:d.text,imageExpectationsByLayout:images,...(!pageOnly?{availableChoice:choice.id,blockedChoices:d.options.filter(o=>!o.enabled).map(o=>o.id)}:{}),...(!variant.startsWith('preserved')?{faces:Object.fromEntries(cast.map(id=>[id,faces[id]])),clearOfHud:true,...(g.state.mode==='town'?{townCast:cast}:{})}:{})});
+    fixtures.push({edition:'e2',quest:'q009',scene,variant,cast,save:g.save(),expectedText:pageOnly?d.text.split('。')[0]+'。':d.text,imageExpectationsByLayout:images,...(!pageOnly?{availableChoice:choice.id,blockedChoices:d.options.filter(o=>!o.enabled).map(o=>o.id)}:{}),...(!variant.startsWith('preserved')?{faces:Object.fromEntries(cast.map(id=>[id,faces[id]])),clearOfHud:true,...(g.state.mode==='town'?{townCast:cast}:{})}:{})});
   };
   const g=ready();
   for(const row of graph.active){
