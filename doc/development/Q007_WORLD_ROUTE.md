@@ -32,7 +32,17 @@ q005・q006のpreserveAcceptedStoryを用いる。受注済み・完了済みの
 
 成果物14304664521の結果JSONを照合し、Scene/Classic・1440/390pxの代表8画面を目視した。手紙後の声、対面成立、原本受取後、救援後の受渡し前・迎え到着、同意確認の再開、旧保存を含む。92条件の自動検査と、8画面の個別目視を区別する。ZIPのSHA-256は41ecc89e387cef5da5b9ba1dc5caae777a4abb25500a5b7a9d63c28ef73bdce5。
 
+互換検査修正後の先端a7423b951fa0009f898eb7a21f3391c7824560d8でも、[専用Chromium44033760784](https://github.com/TomTomYoung/adv/actions/runs/44033760784)が92条件・3結末・errors=[]、通常試遊36条件・敗北0で成功した。成果物14306182270のJSONを取得して照合し、代表8画面中7画面は初回とバイト一致、差があったScene390pxの手紙場面は再目視した。最終ZIPのSHA-256は91152b4eb5ddd6cabf99e46ff84a11668ca02b482c24840bed8bbae03e5af248。
+
 最初の全体CI44032026910は3,272件中3,267成功・5ファイル失敗だった。礼拝堂第2期、観測所、王国地理、沈没城、沈没城第2期の互換検査で、旧地理に現在のq007を混ぜて読み込み、町3施設が見つからず試験登録前に停止した。旧地理を使う4読込器からq007の新差分を除外し、旧q007を読み込むよう修正した。旧fixtureの原本・本体の参照検証は変更しない。登録前停止により未実行となった個別試験を成功件数へ含めない。修正後は該当5ファイルとq007専用の計115試験が全件成功した。
+
+## 統合と公開
+
+[PR #277](https://github.com/TomTomYoung/adv/pull/277)の先端a7423b9は全35ワークフローが成功した。[全体CI44033761098](https://github.com/TomTomYoung/adv/actions/runs/44033761098)は3,333試験すべて成功、失敗・取消・スキップ0（job 133871601020、583157.766357ms）。master 3b77fc1573b4c3f07e3d841e2fb0cfec162366cbへ統合し、検証済みツリーe7aa9f12bb453a3580d2cab824c51b9502e22d01との一致を確認した。
+
+[公開44036476581](https://github.com/TomTomYoung/adv/actions/runs/44036476581)のbuild・deploy・report-build-statusはすべて成功。公開runtime.json、q007配布JSON、geography.jsonの3ファイルが検証済みファイルとバイト一致した。[統合後CI44036477075](https://github.com/TomTomYoung/adv/actions/runs/44036477075)も3,333試験すべて成功した（job 133880456829、失敗・取消・スキップ0、593763.54152ms）。
+
+[公開試遊](https://tomtomyoung.github.io/adv/quest-party-playtest.html?edition=e2&quest=q007&start=site)で、第2版・基本4人・Lv1・現場開始・seed1907の面会経路を画面操作で完了した。町の隣接移動8回、戦闘・敗北・救援0、所持金120→177G、結末informed。ダンジョンのセル歩数表示は0歩で、町移動8回とは別に数える。廃番所への到着時に始まる会話、原本を保持した帰着、現地の引渡し、声の出演、ミレと弟の順次同意、迎えと同行、実到着による対面を確認した。最初のタブは読込み待機が続いたため、新しいタブで起動し、最後まで操作した。
 
 ## 次工程
 
