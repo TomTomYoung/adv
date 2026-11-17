@@ -4,7 +4,7 @@ import {loadContent} from '../src/core/loader.js';
 import {data,ready,go,drain,checkpoint,read} from './machine-helpers.mjs';
 const maps=['outskirts','cemetery','valley'].map(s=>'e2_salome_'+s);
 test('three outside paths join Salome without adding a dungeon definition or touching the initial edition',async()=>{
- assert.equal(Object.keys(data.maps).length,93);assert.equal(Object.keys(data.dungeons).length,20);assert.equal(Object.keys(data.quests).length,300);assert.equal(data.scenarioEditions.editions.e2.saveRevision,2);assert.equal(data.worldTravel.version,2);
+ assert.equal(Object.keys(data.maps).length,94);assert.equal(Object.keys(data.dungeons).length,20);assert.equal(Object.keys(data.quests).length,300);assert.equal(data.scenarioEditions.editions.e2.saveRevision,2);assert.equal(data.worldTravel.version,2);
  const old=await read('tests/fixtures/e2-geography-before-machine.json');for(const [id,map] of Object.entries(old.additions.maps)){
   // The later outdoor theme is presentation metadata; all previous geography stays exact.
   const {outdoor,...current}=data.maps[id];assert.equal(outdoor,id.slice(3));assert.deepEqual({...current,objects:[]},map);

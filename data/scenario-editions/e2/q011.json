@@ -1,0 +1,6909 @@
+{
+  "schemaVersion": 1,
+  "id": "q011",
+  "number": 11,
+  "title": "塩の花嫁",
+  "client": "坑夫のメル",
+  "brief": "坑道の分岐で白い花嫁のような像を見た同僚が、その先から戻らない。同僚の足跡と像の正体を調べてください。",
+  "region": 2,
+  "type": "authored_progression",
+  "recommendedLevel": 2,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。",
+  "events": [
+    {
+      "id": "q011_clue_a",
+      "title": "塩の花嫁：現場の痕跡",
+      "points": [
+        {
+          "map": "region_2_f1",
+          "x": 2,
+          "y": 7,
+          "dungeon": "region_2"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q011.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q011.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q011"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q011"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_2"
+    },
+    {
+      "id": "q011_clue_b",
+      "title": "塩の花嫁：記録と証言",
+      "points": [
+        {
+          "map": "region_2_f1",
+          "x": 9,
+          "y": 6,
+          "dungeon": "region_2"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q011.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q011.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q011"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q011"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_2"
+    },
+    {
+      "id": "q011_decision",
+      "title": "塩の花嫁：決着の場",
+      "points": [
+        {
+          "map": "region_2_f1",
+          "x": 11,
+          "y": 9,
+          "dungeon": "region_2"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q011.catalog1.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q011.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q011.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q011"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_2"
+    },
+    {
+      "id": "region_2",
+      "title": "塩壁の向こうの退路",
+      "dungeon": "region_2",
+      "points": [
+        {
+          "map": "region_2_f1",
+          "x": 5,
+          "y": 1,
+          "dungeon": "region_2"
+        }
+      ],
+      "trigger": "action",
+      "script": "dungeon.scene.region_2.v1",
+      "condition": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q011.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      },
+      "requirement": "関連する依頼を受けると調査できる。",
+      "note": {
+        "text": "入口脇の塩壁を除いた通路を確認した。白い人型の標識を壊した記録ではなく、別地点の退路の記録である。",
+        "when": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.dungeonNotes.region_2"
+          },
+          "right": true
+        }
+      }
+    },
+    {
+      "id": "q011_saltbride_entrance",
+      "title": "塩の花嫁：メルの待つ坑道入口",
+      "points": [
+        {
+          "dungeon": "region_2",
+          "map": "region_2_f1",
+          "x": 1,
+          "y": 1
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "interactionRange": "here",
+      "safe": true,
+      "script": "q011.saltbride.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q011.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q011.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.currentStoryRoutes.q011"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_2"
+    },
+    {
+      "id": "q011_saltbride_fork",
+      "title": "塩の花嫁：白い像のある分岐",
+      "points": [
+        {
+          "dungeon": "region_2",
+          "map": "region_2_f1",
+          "x": 11,
+          "y": 9
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "interactionRange": "here",
+      "safe": true,
+      "script": "q011.saltbride.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q011.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q011.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.currentStoryRoutes.q011"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_2"
+    },
+    {
+      "id": "q011_saltbride_tunnel",
+      "title": "塩の花嫁：避難先の安全坑",
+      "points": [
+        {
+          "dungeon": "region_2",
+          "map": "e2_saltbride_tunnel",
+          "x": 3,
+          "y": 2
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "interactionRange": "here",
+      "safe": true,
+      "script": "q011.saltbride.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q011.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q011.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.currentStoryRoutes.q011"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_2"
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_2_f1",
+      "x": 2,
+      "y": 7,
+      "object": "q011_clue_a",
+      "role": "clue_a"
+    },
+    {
+      "map": "region_2_f1",
+      "x": 9,
+      "y": 6,
+      "object": "q011_clue_b",
+      "role": "clue_b"
+    },
+    {
+      "map": "region_2_f1",
+      "x": 11,
+      "y": 9,
+      "object": "q011_decision",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "安全坑から全員を導き、標示を直す",
+      "text": "像の塩を払い、台座と指先が示す安全坑から同僚と迷った坑夫たちを連れ帰った。人型の形、矢印、避難先を塗り直し、花嫁の噂は安全坑の方向を伝える話へ変わった。",
+      "gold": 69,
+      "xp": 76,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.rescued"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.reported"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.partyAt"
+                },
+                "right": "entrance"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.colleagueAt"
+                },
+                "right": "entrance"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.peopleAt"
+                },
+                "right": "entrance"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q011.values.route"
+            },
+            "right": "sign"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q011.values.signKnown"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q011.values.repainted"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    "contract": {
+      "label": "像を砕いて今回の救助を終える",
+      "text": "白い像を危険の原因と考えて砕いた。塩の下から現れた台座の矢印と足跡をたどり、同僚と坑夫たちは見つかった。しかし避難標識は失われ、次のために分岐を測量し直す必要が生じた。",
+      "gold": 89,
+      "xp": 54,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.rescued"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.reported"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.partyAt"
+                },
+                "right": "entrance"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.colleagueAt"
+                },
+                "right": "entrance"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.peopleAt"
+                },
+                "right": "entrance"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q011.values.route"
+            },
+            "right": "broken"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q011.values.signDestroyed"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    "compromise": {
+      "label": "足跡を追い、縄で帰路を残す",
+      "text": "像の恒久的な修復は行わず、同僚の足跡を追いながら分岐から縄を延ばした。同僚と坑夫たちは縄をたどって帰還した。像の正体については確認できた範囲だけを記し、恒久的な標示の修復は後日に残した。",
+      "gold": 44,
+      "xp": 57,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.rescued"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.reported"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.partyAt"
+                },
+                "right": "entrance"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.colleagueAt"
+                },
+                "right": "entrance"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.peopleAt"
+                },
+                "right": "entrance"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q011.values.route"
+            },
+            "right": "rope"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q011.values.ropeLaid"
+            },
+            "right": true
+          }
+        ]
+      }
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/story-q011.mjs",
+    "world": {
+      "truth": "白い像は、文字を読めない坑夫にも避難方向が伝わるよう、灯を掲げて安全坑を指す人型に彫られた古い避難標識である。塩水の染み出す分岐に長く置かれ、白い塩の層に覆われたため、ヴェールをかぶった花嫁のように見えている。メルの同僚は像の先で助けを呼ぶ声を聞き、安全坑へ入った。そこで道を失った坑夫たちを見つけ、再び迷わせないため一緒に留まっている。",
+      "history": [
+        {
+          "id": "fixed_0",
+          "text": "白い像は、文字を読めない坑夫にも避難方向が伝わるよう、灯を掲げて安全坑を指す人型に彫られた古い避難標識である。塩水の染み出す分岐に長く置かれ、白い塩の層に覆われたため、ヴェールをかぶった花嫁のように見えている。メルの同僚は像の先で助けを呼ぶ声を聞き、安全坑へ入った。そこで道を失った坑夫たちを見つけ、再び迷わせないため一緒に留まっている。"
+        }
+      ],
+      "authoringNotes": {
+        "notice": "以下の事実はq011を成立させる世界設定上の制約だ。これらを台詞、説明、選択肢としてシナリオへ直接反映する必要はない。ただし、生成・改稿時に矛盾させてはいけない。",
+        "factsHeading": "世界設定上の事実",
+        "facts": [
+          "古い坑道では、識字に頼らない避難標識として、灯を掲げた人型と、その腕が指す方向で安全坑を示していた。像の台座には同じ方向を示す矢印も刻まれている。",
+          "塩水が像の表面で乾燥を繰り返し、人型の頭部と肩へ薄い塩の層を重ねたため、坑夫には白い花嫁の姿に見える。像は魔物でも人間でもない。",
+          "同僚と迷った坑夫たちは像が指す安全坑にいる。像を壊した場合でも、砕けた塩の下から台座の矢印が一時的に現れるため、今回の救助だけは可能だ。ただし標識そのものは失われる。"
+        ]
+      }
+    },
+    "agents": [
+      {
+        "id": "mel",
+        "name": "メル",
+        "goal": "戻らない同僚を連れ帰る"
+      },
+      {
+        "id": "colleague",
+        "name": "メルの同僚",
+        "goal": "迷った坑夫たちを再び一人にしない"
+      }
+    ],
+    "conflict": {
+      "request": "坑道の分岐で白い花嫁のような像を見た同僚が、その先から戻らない。同僚の足跡と像の正体を調べてください。",
+      "progression": "像の塩を払えば古い避難標識だと確認できる。像を先に壊しても台座の矢印から今回の救助はできるが、恒久的な標識は失われる。足跡と縄だけを使えば、像の正体を決めずに救助を優先できる。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q011.saltbride.entry",
+          "assertion": {
+            "title": "メルの待つ坑道入口",
+            "place": "entrance",
+            "cast": [
+              {
+                "entity": "mel",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q011.values.melAt"
+                  },
+                  "right": "entrance"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "statue",
+          "script": "q011.saltbride.statue",
+          "assertion": {
+            "title": "白い像のある分岐",
+            "place": "fork",
+            "cast": [],
+            "requires": true
+          }
+        },
+        {
+          "id": "brushed",
+          "script": "q011.saltbride.brushed",
+          "assertion": {
+            "title": "白い像のある分岐",
+            "place": "fork",
+            "cast": [],
+            "requires": true
+          }
+        },
+        {
+          "id": "sign",
+          "script": "q011.saltbride.sign",
+          "assertion": {
+            "title": "白い像のある分岐",
+            "place": "fork",
+            "cast": [],
+            "requires": true
+          }
+        },
+        {
+          "id": "broken",
+          "script": "q011.saltbride.broken",
+          "assertion": {
+            "title": "白い像のある分岐",
+            "place": "fork",
+            "cast": [],
+            "requires": true
+          }
+        },
+        {
+          "id": "broken_direction",
+          "script": "q011.saltbride.broken_direction",
+          "assertion": {
+            "title": "白い像のある分岐",
+            "place": "fork",
+            "cast": [],
+            "requires": true
+          }
+        },
+        {
+          "id": "rope_prepare",
+          "script": "q011.saltbride.rope_prepare",
+          "assertion": {
+            "title": "白い像のある分岐",
+            "place": "fork",
+            "cast": [],
+            "requires": true
+          }
+        },
+        {
+          "id": "rope_started",
+          "script": "q011.saltbride.rope_started",
+          "assertion": {
+            "title": "白い像のある分岐",
+            "place": "fork",
+            "cast": [],
+            "requires": true
+          }
+        },
+        {
+          "id": "rope_arrival",
+          "script": "q011.saltbride.rope_arrival",
+          "assertion": {
+            "title": "避難先の安全坑",
+            "place": "safeTunnel",
+            "cast": [],
+            "requires": true
+          }
+        },
+        {
+          "id": "tunnel_arrival",
+          "script": "q011.saltbride.tunnel_arrival",
+          "assertion": {
+            "title": "避難先の安全坑",
+            "place": "safeTunnel",
+            "cast": [],
+            "requires": true
+          }
+        },
+        {
+          "id": "found",
+          "script": "q011.saltbride.found",
+          "assertion": {
+            "title": "避難先の安全坑",
+            "place": "safeTunnel",
+            "cast": [
+              {
+                "entity": "colleague",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q011.values.colleagueAt"
+                  },
+                  "right": "safeTunnel"
+                },
+                "display": {
+                  "x": 25,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "people",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q011.values.peopleAt"
+                  },
+                  "right": "safeTunnel"
+                },
+                "display": {
+                  "x": 75,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "joined",
+          "script": "q011.saltbride.joined",
+          "assertion": {
+            "title": "避難先の安全坑",
+            "place": "safeTunnel",
+            "cast": [
+              {
+                "entity": "colleague",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q011.values.colleagueAt"
+                  },
+                  "right": "safeTunnel"
+                },
+                "display": {
+                  "x": 25,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "people",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q011.values.peopleAt"
+                  },
+                  "right": "safeTunnel"
+                },
+                "display": {
+                  "x": 75,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "fork_return",
+          "script": "q011.saltbride.fork_return",
+          "assertion": {
+            "title": "白い像のある分岐",
+            "place": "fork",
+            "cast": [
+              {
+                "entity": "colleague",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q011.values.colleagueAt"
+                  },
+                  "right": "fork"
+                },
+                "display": {
+                  "x": 25,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "people",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q011.values.peopleAt"
+                  },
+                  "right": "fork"
+                },
+                "display": {
+                  "x": 75,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "entrance_arrival",
+          "script": "q011.saltbride.entrance_arrival",
+          "assertion": {
+            "title": "メルの待つ坑道入口",
+            "place": "entrance",
+            "cast": [
+              {
+                "entity": "mel",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q011.values.melAt"
+                  },
+                  "right": "entrance"
+                },
+                "display": {
+                  "x": 16,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "colleague",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q011.values.colleagueAt"
+                  },
+                  "right": "entrance"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              },
+              {
+                "entity": "people",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q011.values.peopleAt"
+                  },
+                  "right": "entrance"
+                },
+                "display": {
+                  "x": 84,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 2
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "confirmed",
+          "script": "q011.saltbride.confirmed",
+          "assertion": {
+            "title": "メルの待つ坑道入口",
+            "place": "entrance",
+            "cast": [
+              {
+                "entity": "mel",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q011.values.melAt"
+                  },
+                  "right": "entrance"
+                },
+                "display": {
+                  "x": 16,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "colleague",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q011.values.colleagueAt"
+                  },
+                  "right": "entrance"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              },
+              {
+                "entity": "people",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q011.values.peopleAt"
+                  },
+                  "right": "entrance"
+                },
+                "display": {
+                  "x": 84,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 2
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "repair_arrival",
+          "script": "q011.saltbride.repair_arrival",
+          "assertion": {
+            "title": "白い像のある分岐",
+            "place": "fork",
+            "cast": [],
+            "requires": true
+          }
+        },
+        {
+          "id": "repaired",
+          "script": "q011.saltbride.repaired",
+          "assertion": {
+            "title": "白い像のある分岐",
+            "place": "fork",
+            "cast": [],
+            "requires": true
+          }
+        },
+        {
+          "id": "repair_report",
+          "script": "q011.saltbride.repair_report",
+          "assertion": {
+            "title": "メルの待つ坑道入口",
+            "place": "entrance",
+            "cast": [
+              {
+                "entity": "mel",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q011.values.melAt"
+                  },
+                  "right": "entrance"
+                },
+                "display": {
+                  "x": 16,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "colleague",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q011.values.colleagueAt"
+                  },
+                  "right": "entrance"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              },
+              {
+                "entity": "people",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q011.values.peopleAt"
+                  },
+                  "right": "entrance"
+                },
+                "display": {
+                  "x": 84,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 2
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "report",
+          "script": "q011.saltbride.report",
+          "assertion": {
+            "title": "メルの待つ坑道入口",
+            "place": "entrance",
+            "cast": [
+              {
+                "entity": "mel",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q011.values.melAt"
+                  },
+                  "right": "entrance"
+                },
+                "display": {
+                  "x": 16,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "colleague",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q011.values.colleagueAt"
+                  },
+                  "right": "entrance"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              },
+              {
+                "entity": "people",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q011.values.peopleAt"
+                  },
+                  "right": "entrance"
+                },
+                "display": {
+                  "x": 84,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 2
+                }
+              }
+            ],
+            "requires": true
+          }
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "坑道の分岐で白い花嫁のような像を見た同僚が、その先から戻らない。同僚の足跡と像の正体を調べてください。",
+      "openQuestion": "塩の花嫁の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "causeSwap",
+      "newInformation": "白い像は、文字を読めない坑夫にも避難方向が伝わるよう、灯を掲げて安全坑を指す人型に彫られた古い避難標識である。塩水の染み出す分岐に長く置かれ、白い塩の層に覆われたため、ヴェールをかぶった花嫁のように見えている。メルの同僚は像の先で助けを呼ぶ声を聞き、安全坑へ入った。そこで道を失った坑夫たちを見つけ、再び迷わせないため一緒に留まっている。",
+      "retroactiveTargets": [
+        "entry",
+        "sign"
+      ],
+      "gate": null,
+      "window": "各場面の観察と行為を経た時点でのみ開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q011.saltbride.entry",
+        "assertion": {
+          "title": "メルの待つ坑道入口",
+          "place": "entrance",
+          "cast": [
+            {
+              "entity": "mel",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.melAt"
+                },
+                "right": "entrance"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "statue",
+        "script": "q011.saltbride.statue",
+        "assertion": {
+          "title": "白い像のある分岐",
+          "place": "fork",
+          "cast": [],
+          "requires": true
+        }
+      },
+      {
+        "id": "brushed",
+        "script": "q011.saltbride.brushed",
+        "assertion": {
+          "title": "白い像のある分岐",
+          "place": "fork",
+          "cast": [],
+          "requires": true
+        }
+      },
+      {
+        "id": "sign",
+        "script": "q011.saltbride.sign",
+        "assertion": {
+          "title": "白い像のある分岐",
+          "place": "fork",
+          "cast": [],
+          "requires": true
+        }
+      },
+      {
+        "id": "broken",
+        "script": "q011.saltbride.broken",
+        "assertion": {
+          "title": "白い像のある分岐",
+          "place": "fork",
+          "cast": [],
+          "requires": true
+        }
+      },
+      {
+        "id": "broken_direction",
+        "script": "q011.saltbride.broken_direction",
+        "assertion": {
+          "title": "白い像のある分岐",
+          "place": "fork",
+          "cast": [],
+          "requires": true
+        }
+      },
+      {
+        "id": "rope_prepare",
+        "script": "q011.saltbride.rope_prepare",
+        "assertion": {
+          "title": "白い像のある分岐",
+          "place": "fork",
+          "cast": [],
+          "requires": true
+        }
+      },
+      {
+        "id": "rope_started",
+        "script": "q011.saltbride.rope_started",
+        "assertion": {
+          "title": "白い像のある分岐",
+          "place": "fork",
+          "cast": [],
+          "requires": true
+        }
+      },
+      {
+        "id": "rope_arrival",
+        "script": "q011.saltbride.rope_arrival",
+        "assertion": {
+          "title": "避難先の安全坑",
+          "place": "safeTunnel",
+          "cast": [],
+          "requires": true
+        }
+      },
+      {
+        "id": "tunnel_arrival",
+        "script": "q011.saltbride.tunnel_arrival",
+        "assertion": {
+          "title": "避難先の安全坑",
+          "place": "safeTunnel",
+          "cast": [],
+          "requires": true
+        }
+      },
+      {
+        "id": "found",
+        "script": "q011.saltbride.found",
+        "assertion": {
+          "title": "避難先の安全坑",
+          "place": "safeTunnel",
+          "cast": [
+            {
+              "entity": "colleague",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.colleagueAt"
+                },
+                "right": "safeTunnel"
+              },
+              "display": {
+                "x": 25,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "people",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.peopleAt"
+                },
+                "right": "safeTunnel"
+              },
+              "display": {
+                "x": 75,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "joined",
+        "script": "q011.saltbride.joined",
+        "assertion": {
+          "title": "避難先の安全坑",
+          "place": "safeTunnel",
+          "cast": [
+            {
+              "entity": "colleague",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.colleagueAt"
+                },
+                "right": "safeTunnel"
+              },
+              "display": {
+                "x": 25,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "people",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.peopleAt"
+                },
+                "right": "safeTunnel"
+              },
+              "display": {
+                "x": 75,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "fork_return",
+        "script": "q011.saltbride.fork_return",
+        "assertion": {
+          "title": "白い像のある分岐",
+          "place": "fork",
+          "cast": [
+            {
+              "entity": "colleague",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.colleagueAt"
+                },
+                "right": "fork"
+              },
+              "display": {
+                "x": 25,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "people",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.peopleAt"
+                },
+                "right": "fork"
+              },
+              "display": {
+                "x": 75,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "entrance_arrival",
+        "script": "q011.saltbride.entrance_arrival",
+        "assertion": {
+          "title": "メルの待つ坑道入口",
+          "place": "entrance",
+          "cast": [
+            {
+              "entity": "mel",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.melAt"
+                },
+                "right": "entrance"
+              },
+              "display": {
+                "x": 16,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "colleague",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.colleagueAt"
+                },
+                "right": "entrance"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            },
+            {
+              "entity": "people",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.peopleAt"
+                },
+                "right": "entrance"
+              },
+              "display": {
+                "x": 84,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 2
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "confirmed",
+        "script": "q011.saltbride.confirmed",
+        "assertion": {
+          "title": "メルの待つ坑道入口",
+          "place": "entrance",
+          "cast": [
+            {
+              "entity": "mel",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.melAt"
+                },
+                "right": "entrance"
+              },
+              "display": {
+                "x": 16,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "colleague",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.colleagueAt"
+                },
+                "right": "entrance"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            },
+            {
+              "entity": "people",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.peopleAt"
+                },
+                "right": "entrance"
+              },
+              "display": {
+                "x": 84,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 2
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "repair_arrival",
+        "script": "q011.saltbride.repair_arrival",
+        "assertion": {
+          "title": "白い像のある分岐",
+          "place": "fork",
+          "cast": [],
+          "requires": true
+        }
+      },
+      {
+        "id": "repaired",
+        "script": "q011.saltbride.repaired",
+        "assertion": {
+          "title": "白い像のある分岐",
+          "place": "fork",
+          "cast": [],
+          "requires": true
+        }
+      },
+      {
+        "id": "repair_report",
+        "script": "q011.saltbride.repair_report",
+        "assertion": {
+          "title": "メルの待つ坑道入口",
+          "place": "entrance",
+          "cast": [
+            {
+              "entity": "mel",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.melAt"
+                },
+                "right": "entrance"
+              },
+              "display": {
+                "x": 16,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "colleague",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.colleagueAt"
+                },
+                "right": "entrance"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            },
+            {
+              "entity": "people",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.peopleAt"
+                },
+                "right": "entrance"
+              },
+              "display": {
+                "x": 84,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 2
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "report",
+        "script": "q011.saltbride.report",
+        "assertion": {
+          "title": "メルの待つ坑道入口",
+          "place": "entrance",
+          "cast": [
+            {
+              "entity": "mel",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.melAt"
+                },
+                "right": "entrance"
+              },
+              "display": {
+                "x": 16,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "colleague",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.colleagueAt"
+                },
+                "right": "entrance"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            },
+            {
+              "entity": "people",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.peopleAt"
+                },
+                "right": "entrance"
+              },
+              "display": {
+                "x": 84,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 2
+              }
+            }
+          ],
+          "requires": true
+        }
+      }
+    ],
+    "revision": "scenario-edition-e2-q011-r1",
+    "stateRegistry": [
+      {
+        "path": "stories.q011.values.partyAt",
+        "type": "enum",
+        "initial": "entrance",
+        "values": [
+          "entrance",
+          "fork",
+          "safeTunnel",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q011.values.melAt",
+        "type": "enum",
+        "initial": "entrance",
+        "values": [
+          "entrance",
+          "fork",
+          "safeTunnel",
+          "transit"
+        ],
+        "meaning": "mel の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q011.values.colleagueAt",
+        "type": "enum",
+        "initial": "safeTunnel",
+        "values": [
+          "entrance",
+          "fork",
+          "safeTunnel",
+          "transit"
+        ],
+        "meaning": "colleague の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q011.values.peopleAt",
+        "type": "enum",
+        "initial": "safeTunnel",
+        "values": [
+          "entrance",
+          "fork",
+          "safeTunnel",
+          "transit"
+        ],
+        "meaning": "people の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q011.values.signAt",
+        "type": "enum",
+        "initial": "fork",
+        "values": [
+          "entrance",
+          "fork",
+          "safeTunnel",
+          "transit",
+          "party",
+          "mel",
+          "colleague",
+          "people"
+        ],
+        "meaning": "sign の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q011.values.signKnown",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "signKnown",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q011.values.signDestroyed",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "signDestroyed",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q011.values.arrowKnown",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "arrowKnown",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q011.values.rescued",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "rescued",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q011.values.repainted",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "repainted",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q011.values.ropeStarted",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "ropeStarted",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q011.values.ropeLaid",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "ropeLaid",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q011.values.found",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "found",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q011.values.joined",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "joined",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q011.values.reported",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "reported",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q011.values.route",
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "sign",
+          "broken",
+          "rope"
+        ],
+        "meaning": "route",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      }
+    ],
+    "choiceContract": {
+      "progression": "像の塩を払えば古い避難標識だと確認できる。像を先に壊しても台座の矢印から今回の救助はできるが、恒久的な標識は失われる。足跡と縄だけを使えば、像の正体を決めずに救助を優先できる。",
+      "resources": "各選択に明記した縄・金のみ消費。戦闘付き作業は勝利時に確定する",
+      "residue": "調査・同意・搬送・精算・引継ぎを分けて保存し、結末条件を検査する"
+    },
+    "progression": "像の塩を払えば古い避難標識だと確認できる。像を先に壊しても台座の矢印から今回の救助はできるが、恒久的な標識は失われる。足跡と縄だけを使えば、像の正体を決めずに救助を優先できる。",
+    "flowVersion": 2,
+    "entryScript": "q011.saltbride.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "メルは坑道入口で同僚の帰りを待っている。「白い像の前を通った靴跡が、分岐の奥へ続いている。見つけたら、ここまで連れてきてほしい」。まず像のある分岐へ向かう。",
+        "options": [
+          {
+            "id": "fork",
+            "text": "足跡の残る分岐へ向かう",
+            "to": "statue",
+            "action": "entry_fork"
+          }
+        ]
+      },
+      {
+        "id": "statue",
+        "text": "白い塊は、灯を掲げた人のようにも、ヴェールをかぶった花嫁のようにも見えた。メルの同僚の靴跡は、その前を通って分岐の奥へ続く。台座と指先には塩が厚く積もっていた。",
+        "options": [
+          {
+            "id": "brush",
+            "text": "像の腕と台座の塩を払う",
+            "to": "brushed",
+            "action": "statue_brush"
+          },
+          {
+            "id": "break",
+            "text": "危険の原因と考え、白い像を砕く",
+            "to": "broken",
+            "action": "statue_break"
+          },
+          {
+            "id": "rope",
+            "text": "像の正体は決めず、帰路の縄を用意する",
+            "to": "rope_prepare",
+            "action": "statue_rope"
+          }
+        ]
+      },
+      {
+        "id": "brushed",
+        "text": "塩を払うと、灯を掲げた腕と台座の矢印が現れた。腕の向き、矢印、その先の坑道を照らし合わせる。",
+        "options": [
+          {
+            "id": "read",
+            "text": "腕と矢印が指す避難先を確認する",
+            "to": "sign",
+            "action": "brushed_read"
+          }
+        ]
+      },
+      {
+        "id": "sign",
+        "text": "腕と台座の矢印は同じ安全坑を指している。白い像は避難先を示す古い標識だった。人の声はその先から聞こえる。像が何か分かっても、坑夫を連れ帰ったことにはならない。",
+        "options": [
+          {
+            "id": "guide",
+            "text": "標識を頼りに、安全坑へ迎えに行く",
+            "to": "tunnel_arrival",
+            "action": "sign_guide"
+          },
+          {
+            "id": "rope",
+            "text": "修復は後日に回し、帰路の縄を用意する",
+            "to": "rope_prepare",
+            "action": "sign_rope"
+          }
+        ]
+      },
+      {
+        "id": "broken",
+        "text": "白い像を砕いた。塩の下から台座の矢印が現れている。永久の目印は失われたが、まだ読み取れる向きを靴跡と照らし合わせる。",
+        "options": [
+          {
+            "id": "read",
+            "text": "残った台座の矢印と靴跡の向きを確認する",
+            "to": "broken_direction",
+            "action": "broken_read"
+          }
+        ]
+      },
+      {
+        "id": "broken_direction",
+        "text": "台座の矢印と靴跡は同じ坑を指している。戻る分岐の形を確かめてから、その先へ向かう。",
+        "options": [
+          {
+            "id": "follow",
+            "text": "矢印と靴跡をたどって安全坑へ向かう",
+            "to": "tunnel_arrival",
+            "action": "broken_direction_follow"
+          }
+        ]
+      },
+      {
+        "id": "rope_prepare",
+        "text": [
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q011.values.signKnown"
+              },
+              "right": true
+            },
+            "yes": "標識の役目は確認した。修復は後日に回し、帰路を縄でつなぐ。",
+            "no": "像の正体は決めず、足跡を追う帰路を縄でつなぐ。"
+          },
+          "縄はまだ荷物の中だ。分岐の固定点へ結び、そこから足跡に沿って延ばす。"
+        ],
+        "options": [
+          {
+            "id": "lay",
+            "text": "縄1本を取り出し、分岐の固定点へ結ぶ",
+            "to": "rope_started",
+            "action": "rope_prepare_lay"
+          }
+        ]
+      },
+      {
+        "id": "rope_started",
+        "text": "縄の端を分岐に固定した。使用した縄を延ばしながら、靴跡の先へ向かう。帰路の敷設はまだ終わっていない。",
+        "options": [
+          {
+            "id": "extend",
+            "text": "縄を延ばしながら安全坑へ向かう",
+            "to": "rope_arrival",
+            "action": "rope_started_extend"
+          }
+        ]
+      },
+      {
+        "id": "rope_arrival",
+        "text": "足跡の続く安全坑へ着いた。縄は分岐からここまで延びている。入口側へ引かれて外れないよう、こちらの端も留める。",
+        "options": [
+          {
+            "id": "fix",
+            "text": "安全坑側の端を固定し、帰路の縄を確認する",
+            "to": "tunnel_arrival",
+            "action": "rope_arrival_fix"
+          }
+        ]
+      },
+      {
+        "id": "tunnel_arrival",
+        "text": "坑の奥から声がする。灯の届く範囲を確かめ、呼びかけている人を探す。",
+        "options": [
+          {
+            "id": "find",
+            "text": "声のする奥を照らし、姿を確かめる",
+            "to": "found",
+            "action": "tunnel_arrival_find"
+          }
+        ]
+      },
+      {
+        "id": "found",
+        "text": "メルの同僚が、迷った坑夫たちと待っていた。まだ帰還はしていない。ここに留まっていた理由と、歩いて戻れる状態かを確かめる。",
+        "options": [
+          {
+            "id": "join",
+            "text": "事情を聞き、全員と合流する",
+            "to": "joined",
+            "action": "found_join"
+          }
+        ]
+      },
+      {
+        "id": "joined",
+        "text": [
+          "「助けを呼ぶ声がしたんだ。一人で戻れば、またはぐれると思った」。同僚は坑夫たちと歩いて戻る用意をした。",
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q011.values.ropeLaid"
+              },
+              "right": true
+            },
+            "yes": "分岐まで敷いた縄をたどり、全員で引き返す。",
+            "no": "確かめた向きと足跡を頼りに、全員で分岐へ引き返す。"
+          }
+        ],
+        "options": [
+          {
+            "id": "escort",
+            "text": "同僚と坑夫たちに同行し、分岐へ戻る",
+            "to": "fork_return",
+            "action": "joined_escort"
+          }
+        ]
+      },
+      {
+        "id": "fork_return",
+        "text": "全員で分岐へ戻った。メルが待つ坑道入口までは、まだ道が続く。",
+        "options": [
+          {
+            "id": "entrance",
+            "text": "全員に同行し、メルの待つ入口へ向かう",
+            "to": "entrance_arrival",
+            "action": "fork_return_entrance"
+          }
+        ]
+      },
+      {
+        "id": "entrance_arrival",
+        "text": "メルの待つ入口に着いた。途中ではぐれた人がいないか、同僚と坑夫たち一人ひとりに返事を求める。",
+        "options": [
+          {
+            "id": "confirm",
+            "text": "メルと全員の帰還を確認する",
+            "to": "confirmed",
+            "action": "entrance_arrival_confirm"
+          }
+        ]
+      },
+      {
+        "id": "confirmed",
+        "text": [
+          "メルは同僚と坑夫たちの帰還を確認した。全員を入口に残し、選んだ処置の後始末をする。",
+          {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q011.values.route"
+              },
+              "right": "sign"
+            },
+            "yes": "避難標識は塩を払っただけだ。分岐へ戻って腕、矢印、避難先の表示を塗り直す。",
+            "no": {
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.route"
+                },
+                "right": "broken"
+              },
+              "yes": "恒久的な標識は失われた。分岐の再測量が必要なことを伝える。",
+              "no": "帰路の縄は敷いたまま残す。標識の恒久的な修復は済んでいない。"
+            }
+          }
+        ],
+        "options": [
+          {
+            "id": "repair",
+            "text": "全員を入口に残し、分岐の標識を直しに戻る",
+            "to": "repair_arrival",
+            "action": "confirmed_repair",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q011.values.route"
+              },
+              "right": "sign"
+            }
+          },
+          {
+            "id": "report",
+            "text": "今回の救助と、残った課題をメルに伝える",
+            "to": "report",
+            "action": "confirmed_report",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.route"
+                },
+                "right": "sign"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "repair_arrival",
+        "text": "像の分岐へ戻った。同僚と坑夫たちは入口でメルと待っている。腕の向き、台座の矢印、避難先の表示をここで塗り直す。",
+        "options": [
+          {
+            "id": "paint",
+            "text": "像の腕・矢印・避難先を塗り直す",
+            "to": "repaired",
+            "action": "repair_arrival_paint"
+          }
+        ]
+      },
+      {
+        "id": "repaired",
+        "text": "塗り直した標示が同じ安全坑を示すことを確かめた。メルのいる入口へ戻り、処置を伝える。",
+        "options": [
+          {
+            "id": "return",
+            "text": "入口へ戻り、メルに修復を報告する",
+            "to": "repair_report",
+            "action": "repaired_return"
+          }
+        ]
+      },
+      {
+        "id": "repair_report",
+        "text": "メルのいる入口へ戻った。標示を塗り直した場所と、安全坑の方向を伝える。",
+        "options": [
+          {
+            "id": "report",
+            "text": "標識の修復と避難先をメルに伝える",
+            "to": "report",
+            "action": "repair_report_report"
+          }
+        ]
+      },
+      {
+        "id": "report",
+        "text": {
+          "when": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q011.values.route"
+            },
+            "right": "sign"
+          },
+          "yes": "安全坑からの帰還と標示の修復を報告した。",
+          "no": {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q011.values.route"
+              },
+              "right": "broken"
+            },
+            "yes": "全員の帰還を報告した。像を砕いた分岐は、次のために測量し直す必要がある。",
+            "no": {
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.signKnown"
+                },
+                "right": true
+              },
+              "yes": "全員の帰還と縄の敷設を報告した。像が古い避難標識だったことは伝え、修復は未実施として残した。",
+              "no": "全員の帰還と縄の敷設を報告した。像の正体は確認しておらず、恒久的な標示の修復もしていない。"
+            }
+          }
+        },
+        "options": [
+          {
+            "id": "finish",
+            "text": "救助の記録を確定する",
+            "to": "@informed",
+            "action": "report_finish",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q011.values.route"
+              },
+              "right": "sign"
+            }
+          },
+          {
+            "id": "finish_broken",
+            "text": "今回の救助と再測量の課題を確定する",
+            "to": "@contract",
+            "action": "report_finish_broken",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q011.values.route"
+              },
+              "right": "broken"
+            }
+          },
+          {
+            "id": "finish_rope",
+            "text": "縄による帰路と修復未実施の記録を確定する",
+            "to": "@compromise",
+            "action": "report_finish_rope",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q011.values.route"
+              },
+              "right": "rope"
+            }
+          }
+        ]
+      }
+    ],
+    "catalogRevision": 1,
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.1",
+      "source": "https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4",
+      "adapter": "adv-story-state/1",
+      "scope": "quest-episode"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "preserveAcceptedRoute": true,
+    "currentStoryScriptPrefix": "q011.saltbride.",
+    "interruptionEntries": [
+      "q011.visit",
+      "q011.flow.visit",
+      "q011.catalog1.visit",
+      "q011.saltbride.visit"
+    ],
+    "interruptionRoutes": [
+      {
+        "from": "q011.flow.entry",
+        "action": "rope",
+        "option": "rope_supplies",
+        "shortage": "q011.flow.entry.rope.shortage",
+        "resume": "q011.flow.entry.rope.resume",
+        "cost": {
+          "rope": 1
+        }
+      },
+      {
+        "from": "q011.flow.sign",
+        "action": "rope",
+        "option": "rope_supplies",
+        "shortage": "q011.flow.sign.rope.shortage",
+        "resume": "q011.flow.sign.rope.resume",
+        "cost": {
+          "rope": 1
+        }
+      },
+      {
+        "from": "q011.catalog1.entry",
+        "action": "rope",
+        "option": "rope_supplies",
+        "shortage": "q011.catalog1.entry.rope.shortage",
+        "resume": "q011.catalog1.entry.rope.resume",
+        "cost": {
+          "rope": 1
+        }
+      },
+      {
+        "from": "q011.catalog1.sign",
+        "action": "rope",
+        "option": "rope_supplies",
+        "shortage": "q011.catalog1.sign.rope.shortage",
+        "resume": "q011.catalog1.sign.rope.resume",
+        "cost": {
+          "rope": 1
+        }
+      },
+      {
+        "from": "q011.saltbride.rope_prepare",
+        "action": "lay",
+        "option": "lay_supplies",
+        "shortage": "q011.saltbride.rope_prepare.lay.shortage",
+        "resume": "q011.saltbride.rope_prepare.lay.resume",
+        "cost": {
+          "rope": 1
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "q011.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "裾に見えた部分には矢印の浮き彫りが残っている。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q011",
+          "key": "clue_a",
+          "text": "裾に見えた部分には矢印の浮き彫りが残っている。"
+        }
+      ]
+    },
+    "q011.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "坑夫のメル",
+          "text": "姿を見た者だけが落盤のない枝道へ移り、足跡も続いています。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q011",
+          "key": "clue_b",
+          "text": "姿を見た者だけが落盤のない枝道へ移り、足跡も続いている。"
+        }
+      ]
+    },
+    "q011.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "塩の花嫁\n\n坑道奥で花嫁の姿を見た同僚が戻らない。白い像を調べてください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "白い像を守る骸兵を倒して砕く",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_2",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "行方不明者は見つかったが、帰り道を新しく測り直す必要が生まれる。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q011",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "像の塩を払い避難路を標示する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q011.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q011.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "花嫁は塩に覆われた避難標識で、同僚は像の向く安全坑へ人を誘導している。"
+                },
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "迷った坑夫が帰った。花嫁の噂は、助ける方角を教える話へ変わる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q011",
+                  "outcome": "informed"
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "像を残し縄で帰路をつなぐ",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "伝説は残り、初めて来た坑夫にも縄の意味は通じるようになった。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q011",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q011.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "塩の花嫁\n\n坑道奥で花嫁の姿を見た同僚が戻らない。白い像を調べてください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "contains",
+            "left": {
+              "ref": "quests.q011.evidence"
+            },
+            "right": "clue_a"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "花嫁は塩に覆われた避難標識で、同僚は像の向く安全坑へ人を誘導している。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q011.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "contract",
+              "text": "白い像を守る骸兵を倒して砕く",
+              "requirement": "戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_2",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "行方不明者は見つかったが、帰り道を新しく測り直す必要が生まれる。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q011",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "informed",
+              "text": "像の塩を払い避難路を標示する",
+              "condition": {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q011.evidence"
+                },
+                "right": "clue_a"
+              },
+              "requirement": "現場の根拠を確認",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.informed",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "迷った坑夫が帰った。花嫁の噂は、助ける方角を教える話へ変わる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q011",
+                  "outcome": "informed"
+                }
+              ],
+              "visibleWhen": {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q011.evidence"
+                },
+                "right": "clue_a"
+              }
+            },
+            {
+              "id": "compromise",
+              "text": "像を残し縄で帰路をつなぐ",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "伝説は残り、初めて来た坑夫にも縄の意味は通じるようになった。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q011",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」坑夫のメルは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられる。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q011.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q011.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q011.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "迷った坑夫が帰った。花嫁の噂は、助ける方角を教える話へ変わる。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q011.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "行方不明者は見つかったが、帰り道を新しく測り直す必要が生まれる。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q011.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "伝説は残り、初めて来た坑夫にも縄の意味は通じるようになった。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q011.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q011.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q011"
+          },
+          "cases": [
+            {
+              "equals": "q011.flow.entry.rope.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.flow.entry.rope.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q011.flow.sign.rope.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.flow.sign.rope.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q011.catalog1.entry.rope.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.catalog1.entry.rope.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q011.catalog1.sign.rope.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.catalog1.sign.rope.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q011.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q011.aftermath"
+                }
+              ],
+              "else": [
+                {
+                  "op": "jump",
+                  "script": "q011.review"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q011.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q011.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "白い像の足元に「出口」の矢印が透けている。坑夫は像の顔ばかり見ていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "brush",
+              "text": "足元から塩を払う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.flow.sign"
+                }
+              ]
+            },
+            {
+              "id": "break",
+              "text": "像を砕き、白い姿を取り除く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.flow.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "rope",
+              "text": "像を目印に縄1本で帰路をつなぐ",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "rope",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "縄 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "rope_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.flow.entry.rope.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q011.flow.sign": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q011.node",
+          "value": "sign"
+        },
+        {
+          "op": "say",
+          "text": "裾に見えた部分には矢印の浮き彫りが残っている。 花嫁は塩に覆われた避難標識で、同僚は像の向く安全坑へ人を誘導している。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "guide",
+              "text": "像の向く安全坑へ人を導き、標示を塗り直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "rope",
+              "text": "塗装は後日にし、縄1本で帰路をつなぐ",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "rope",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "縄 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "rope_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.flow.sign.rope.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q011.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q011.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "迷った坑夫が帰った。花嫁の噂は、助ける方角を教える話へ変わる。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q011",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q011.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q011.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "行方不明者は見つかったが、帰り道を新しく測り直す必要が生まれる。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q011",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q011.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q011.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "伝説は残り、初めて来た坑夫にも縄の意味は通じるようになった。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q011",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q011.flow.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q011"
+          },
+          "cases": [
+            {
+              "equals": "q011.flow.entry.rope.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.flow.entry.rope.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q011.flow.sign.rope.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.flow.sign.rope.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q011.catalog1.entry.rope.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.catalog1.entry.rope.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q011.catalog1.sign.rope.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.catalog1.sign.rope.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q011.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q011.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "迷った坑夫が帰った。花嫁の噂は、助ける方角を教える話へ変わる。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "行方不明者は見つかったが、帰り道を新しく測り直す必要が生まれる。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "伝説は残り、初めて来た坑夫にも縄の意味は通じるようになった。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.legacyQuestRoutes.q011"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "jump",
+                      "script": "q011.visit"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "flags.flow.q011.node"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q011.flow.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "sign",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q011.flow.sign"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
+                        {
+                          "op": "jump",
+                          "script": "q011.flow.entry"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q011.catalog1.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q011.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "白い塊は、灯を掲げた人のようにも、ヴェールをかぶった花嫁のようにも見えた。メルの同僚の靴跡は、その前を通って分岐の奥へ続く。台座と指先には塩が厚く積もっていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "brush",
+              "text": "像の足元から塩を払い、台座と指先を調べる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q011.signKnown",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q011.arrowKnown",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.catalog1.sign"
+                }
+              ]
+            },
+            {
+              "id": "break",
+              "text": "像を砕き、現れた台座の矢印と足跡をたどる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q011.signDestroyed",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q011.arrowKnown",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q011.rescued",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q011.peopleAt",
+                  "value": "entrance"
+                },
+                {
+                  "op": "say",
+                  "text": "砕けた塩の下に台座の矢印が現れた。足跡と重なる方向へ進むと、同僚が迷った坑夫たちと待っている。「一人で戻れば、またはぐれると思った」。全員を分岐の外へ連れ帰った。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.catalog1.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "rope",
+              "text": "同僚の足跡を追いながら、分岐から帰路の縄を延ばす",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "rope",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "縄 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q011.ropeLaid",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q011.rescued",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q011.peopleAt",
+                  "value": "entrance"
+                },
+                {
+                  "op": "say",
+                  "text": "像の正体は決めず、帰路の縄を延ばして足跡を追う。同僚は迷った坑夫たちと安全坑で待っていた。全員に縄をたどってもらい、メルのいる入口へ戻った。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.catalog1.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "rope_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.catalog1.entry.rope.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q011.catalog1.sign": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q011.node",
+          "value": "sign"
+        },
+        {
+          "op": "say",
+          "text": "塩を払うと、灯を掲げた腕と台座の矢印が同じ坑を指した。避難先を示す標識だった。人の声はその先から聞こえる。像が何か分かっても、坑夫を連れ帰ったことにはならない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "guide",
+              "text": "像が指す安全坑から全員を導き、像と矢印を塗り直す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q011.rescued",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q011.peopleAt",
+                  "value": "entrance"
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q011.repainted",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "標識の先で同僚と坑夫たちを見つけた。全員を入口へ導いてから、像の腕、矢印、避難先を塗り直した。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.catalog1.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "rope",
+              "text": "標示の修復は後日にし、縄で全員の帰路をつなぐ",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "rope",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "縄 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "rope",
+                  "count": 1
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q011.ropeLaid",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q011.rescued",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.flow.q011.peopleAt",
+                  "value": "entrance"
+                },
+                {
+                  "op": "say",
+                  "text": "標識の役目は記録した。修復は後日に回し、足跡に沿って縄を延ばして全員の帰路をつないだ。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.catalog1.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "rope_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.catalog1.sign.rope.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q011.catalog1.start": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q011.catalogRevision",
+          "value": 1
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q011.signKnown",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q011.signDestroyed",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q011.arrowKnown",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q011.rescued",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q011.repainted",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q011.ropeLaid",
+          "value": false
+        },
+        {
+          "op": "set",
+          "target": "flags.flow.q011.peopleAt",
+          "value": "safeTunnel"
+        },
+        {
+          "op": "jump",
+          "script": "q011.catalog1.entry"
+        }
+      ]
+    },
+    "q011.catalog1.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q011.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "quest.complete",
+              "quest": "q011",
+              "outcome": "informed"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "say",
+              "text": "像の塩を払い、台座と指先が示す安全坑から同僚と迷った坑夫たちを連れ帰った。人型の形、矢印、避難先を塗り直し、花嫁の噂は安全坑の方向を伝える話へ変わった。"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q011.catalog1.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q011.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "quest.complete",
+              "quest": "q011",
+              "outcome": "contract"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "say",
+              "text": "白い像を危険の原因と考えて砕いた。塩の下から現れた台座の矢印と足跡をたどり、同僚と坑夫たちは見つかった。しかし避難標識は失われ、次のために分岐を測量し直す必要が生じた。"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q011.catalog1.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q011.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "quest.complete",
+              "quest": "q011",
+              "outcome": "compromise"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "say",
+              "text": "像の恒久的な修復は行わず、同僚の足跡を追いながら分岐から縄を延ばした。同僚と坑夫たちは縄をたどって帰還した。像の正体については確認できた範囲だけを記し、恒久的な標示の修復は後日に残した。"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q011.catalog1.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q011"
+          },
+          "cases": [
+            {
+              "equals": "q011.flow.entry.rope.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.flow.entry.rope.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q011.flow.sign.rope.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.flow.sign.rope.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q011.catalog1.entry.rope.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.catalog1.entry.rope.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q011.catalog1.sign.rope.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.catalog1.sign.rope.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.flow.q011.catalogRevision"
+                      },
+                      "right": 1
+                    }
+                  },
+                  {
+                    "op": "or",
+                    "args": [
+                      {
+                        "op": "exists",
+                        "value": {
+                          "ref": "flags.flow.q011.node"
+                        }
+                      },
+                      {
+                        "op": "eq",
+                        "left": {
+                          "ref": "flags.legacyQuestRoutes.q011"
+                        },
+                        "right": true
+                      },
+                      {
+                        "op": "eq",
+                        "left": {
+                          "ref": "quests.q011.stage"
+                        },
+                        "right": "completed"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q011.flow.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "quests.q011.stage"
+                    },
+                    "right": "completed"
+                  },
+                  "then": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "quests.q011.outcome"
+                      },
+                      "cases": [
+                        {
+                          "equals": "informed",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "像の塩を払い、台座と指先が示す安全坑から同僚と迷った坑夫たちを連れ帰った。人型の形、矢印、避難先を塗り直し、花嫁の噂は安全坑の方向を伝える話へ変わった。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "contract",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "白い像を危険の原因と考えて砕いた。塩の下から現れた台座の矢印と足跡をたどり、同僚と坑夫たちは見つかった。しかし避難標識は失われ、次のために分岐を測量し直す必要が生じた。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "compromise",
+                          "commands": [
+                            {
+                              "op": "say",
+                              "text": "像の恒久的な修復は行わず、同僚の足跡を追いながら分岐から縄を延ばした。同僚と坑夫たちは縄をたどって帰還した。像の正体については確認できた範囲だけを記し、恒久的な標示の修復は後日に残した。"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": []
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "flags.flow.q011.node"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q011.catalog1.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "sign",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q011.catalog1.sign"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
+                        {
+                          "op": "jump",
+                          "script": "q011.catalog1.start"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "dungeon.scene.region_2.v1": {
+      "dungeonScene": "region_2",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "入口脇の脆い塩壁には道具を差し込める亀裂がある。遭難者を案内する前に、ここから通れる道を確かめる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "contains",
+            "left": {
+              "ref": "dungeons.persistent.region_2.systems.walls.broken"
+            },
+            "right": "upper_entry"
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "塩壁は除かれ、入口脇の通路がつながっている。開けた場所を地図に記した。人型の避難標識とは別の地点なので、標識の向きも現場で読む必要がある。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.region_2"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.region_2",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "塩壁はまだ通路を塞いでいる。壁の正面から発破薬か対応する探索スキルで開通させ、改めて確認できる。"
+            }
+          ]
+        }
+      ]
+    },
+    "q011.flow.entry.rope.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q011",
+          "value": "q011.flow.entry.rope.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q011.flow.entry.rope.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q011",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q011.flow.entry"
+        }
+      ]
+    },
+    "q011.flow.sign.rope.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q011",
+          "value": "q011.flow.sign.rope.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q011.flow.sign.rope.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q011",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q011.flow.sign"
+        }
+      ]
+    },
+    "q011.catalog1.entry.rope.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q011",
+          "value": "q011.catalog1.entry.rope.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q011.catalog1.entry.rope.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q011",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q011.catalog1.entry"
+        }
+      ]
+    },
+    "q011.catalog1.sign.rope.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q011",
+          "value": "q011.catalog1.sign.rope.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q011.catalog1.sign.rope.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q011",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q011.catalog1.sign"
+        }
+      ]
+    },
+    "q011.saltbride.entry": {
+      "storyQuest": "q011",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q011",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "メルは坑道入口で同僚の帰りを待っている。「白い像の前を通った靴跡が、分岐の奥へ続いている。見つけたら、ここまで連れてきてほしい」。まず像のある分岐へ向かう。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fork",
+              "text": "足跡の残る分岐へ向かう",
+              "storyAction": {
+                "quest": "q011",
+                "action": "entry_fork"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q011",
+                  "action": "entry_fork"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q011.saltbride.statue": {
+      "storyQuest": "q011",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q011",
+          "scene": "statue"
+        },
+        {
+          "op": "narrate",
+          "text": "白い塊は、灯を掲げた人のようにも、ヴェールをかぶった花嫁のようにも見えた。メルの同僚の靴跡は、その前を通って分岐の奥へ続く。台座と指先には塩が厚く積もっていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "brush",
+              "text": "像の腕と台座の塩を払う",
+              "storyAction": {
+                "quest": "q011",
+                "action": "statue_brush"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q011",
+                  "action": "statue_brush"
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.saltbride.brushed"
+                }
+              ]
+            },
+            {
+              "id": "break",
+              "text": "危険の原因と考え、白い像を砕く",
+              "storyAction": {
+                "quest": "q011",
+                "action": "statue_break"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q011",
+                  "action": "statue_break"
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.saltbride.broken"
+                }
+              ]
+            },
+            {
+              "id": "rope",
+              "text": "像の正体は決めず、帰路の縄を用意する",
+              "storyAction": {
+                "quest": "q011",
+                "action": "statue_rope"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q011",
+                  "action": "statue_rope"
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.saltbride.rope_prepare"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q011.saltbride.brushed": {
+      "storyQuest": "q011",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q011",
+          "scene": "brushed"
+        },
+        {
+          "op": "narrate",
+          "text": "塩を払うと、灯を掲げた腕と台座の矢印が現れた。腕の向き、矢印、その先の坑道を照らし合わせる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "read",
+              "text": "腕と矢印が指す避難先を確認する",
+              "storyAction": {
+                "quest": "q011",
+                "action": "brushed_read"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q011",
+                  "action": "brushed_read"
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.saltbride.sign"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q011.saltbride.sign": {
+      "storyQuest": "q011",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q011",
+          "scene": "sign"
+        },
+        {
+          "op": "narrate",
+          "text": "腕と台座の矢印は同じ安全坑を指している。白い像は避難先を示す古い標識だった。人の声はその先から聞こえる。像が何か分かっても、坑夫を連れ帰ったことにはならない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "guide",
+              "text": "標識を頼りに、安全坑へ迎えに行く",
+              "storyAction": {
+                "quest": "q011",
+                "action": "sign_guide"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q011",
+                  "action": "sign_guide"
+                }
+              ]
+            },
+            {
+              "id": "rope",
+              "text": "修復は後日に回し、帰路の縄を用意する",
+              "storyAction": {
+                "quest": "q011",
+                "action": "sign_rope"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q011",
+                  "action": "sign_rope"
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.saltbride.rope_prepare"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q011.saltbride.broken": {
+      "storyQuest": "q011",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q011",
+          "scene": "broken"
+        },
+        {
+          "op": "narrate",
+          "text": "白い像を砕いた。塩の下から台座の矢印が現れている。永久の目印は失われたが、まだ読み取れる向きを靴跡と照らし合わせる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "read",
+              "text": "残った台座の矢印と靴跡の向きを確認する",
+              "storyAction": {
+                "quest": "q011",
+                "action": "broken_read"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q011",
+                  "action": "broken_read"
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.saltbride.broken_direction"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q011.saltbride.broken_direction": {
+      "storyQuest": "q011",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q011",
+          "scene": "broken_direction"
+        },
+        {
+          "op": "narrate",
+          "text": "台座の矢印と靴跡は同じ坑を指している。戻る分岐の形を確かめてから、その先へ向かう。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "follow",
+              "text": "矢印と靴跡をたどって安全坑へ向かう",
+              "storyAction": {
+                "quest": "q011",
+                "action": "broken_direction_follow"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q011",
+                  "action": "broken_direction_follow"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q011.saltbride.rope_prepare": {
+      "storyQuest": "q011",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q011",
+          "scene": "rope_prepare"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q011.values.signKnown"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "標識の役目は確認した。修復は後日に回し、帰路を縄でつなぐ。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "像の正体は決めず、足跡を追う帰路を縄でつなぐ。"
+            }
+          ]
+        },
+        {
+          "op": "narrate",
+          "text": "縄はまだ荷物の中だ。分岐の固定点へ結び、そこから足跡に沿って延ばす。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "lay",
+              "text": "縄1本を取り出し、分岐の固定点へ結ぶ",
+              "storyAction": {
+                "quest": "q011",
+                "action": "rope_prepare_lay"
+              },
+              "requirement": "補修用の縄1個を使う。",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q011",
+                  "action": "rope_prepare_lay"
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.saltbride.rope_started"
+                }
+              ]
+            },
+            {
+              "id": "lay_supplies",
+              "text": "補修用の縄1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "rope",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q011.saltbride.rope_prepare.lay.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q011.saltbride.rope_started": {
+      "storyQuest": "q011",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q011",
+          "scene": "rope_started"
+        },
+        {
+          "op": "narrate",
+          "text": "縄の端を分岐に固定した。使用した縄を延ばしながら、靴跡の先へ向かう。帰路の敷設はまだ終わっていない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "extend",
+              "text": "縄を延ばしながら安全坑へ向かう",
+              "storyAction": {
+                "quest": "q011",
+                "action": "rope_started_extend"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q011",
+                  "action": "rope_started_extend"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q011.saltbride.rope_arrival": {
+      "storyQuest": "q011",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q011",
+          "scene": "rope_arrival"
+        },
+        {
+          "op": "narrate",
+          "text": "足跡の続く安全坑へ着いた。縄は分岐からここまで延びている。入口側へ引かれて外れないよう、こちらの端も留める。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fix",
+              "text": "安全坑側の端を固定し、帰路の縄を確認する",
+              "storyAction": {
+                "quest": "q011",
+                "action": "rope_arrival_fix"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q011",
+                  "action": "rope_arrival_fix"
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.saltbride.tunnel_arrival"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q011.saltbride.tunnel_arrival": {
+      "storyQuest": "q011",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q011",
+          "scene": "tunnel_arrival"
+        },
+        {
+          "op": "narrate",
+          "text": "坑の奥から声がする。灯の届く範囲を確かめ、呼びかけている人を探す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "find",
+              "text": "声のする奥を照らし、姿を確かめる",
+              "storyAction": {
+                "quest": "q011",
+                "action": "tunnel_arrival_find"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q011",
+                  "action": "tunnel_arrival_find"
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.saltbride.found"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q011.saltbride.found": {
+      "storyQuest": "q011",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q011",
+          "scene": "found"
+        },
+        {
+          "op": "narrate",
+          "text": "メルの同僚が、迷った坑夫たちと待っていた。まだ帰還はしていない。ここに留まっていた理由と、歩いて戻れる状態かを確かめる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "join",
+              "text": "事情を聞き、全員と合流する",
+              "storyAction": {
+                "quest": "q011",
+                "action": "found_join"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q011",
+                  "action": "found_join"
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.saltbride.joined"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q011.saltbride.joined": {
+      "storyQuest": "q011",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q011",
+          "scene": "joined"
+        },
+        {
+          "op": "narrate",
+          "text": "「助けを呼ぶ声がしたんだ。一人で戻れば、またはぐれると思った」。同僚は坑夫たちと歩いて戻る用意をした。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q011.values.ropeLaid"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "分岐まで敷いた縄をたどり、全員で引き返す。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "確かめた向きと足跡を頼りに、全員で分岐へ引き返す。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "escort",
+              "text": "同僚と坑夫たちに同行し、分岐へ戻る",
+              "storyAction": {
+                "quest": "q011",
+                "action": "joined_escort"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q011",
+                  "action": "joined_escort"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q011.saltbride.fork_return": {
+      "storyQuest": "q011",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q011",
+          "scene": "fork_return"
+        },
+        {
+          "op": "narrate",
+          "text": "全員で分岐へ戻った。メルが待つ坑道入口までは、まだ道が続く。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "entrance",
+              "text": "全員に同行し、メルの待つ入口へ向かう",
+              "storyAction": {
+                "quest": "q011",
+                "action": "fork_return_entrance"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q011",
+                  "action": "fork_return_entrance"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q011.saltbride.entrance_arrival": {
+      "storyQuest": "q011",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q011",
+          "scene": "entrance_arrival"
+        },
+        {
+          "op": "narrate",
+          "text": "メルの待つ入口に着いた。途中ではぐれた人がいないか、同僚と坑夫たち一人ひとりに返事を求める。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "confirm",
+              "text": "メルと全員の帰還を確認する",
+              "storyAction": {
+                "quest": "q011",
+                "action": "entrance_arrival_confirm"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q011",
+                  "action": "entrance_arrival_confirm"
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.saltbride.confirmed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q011.saltbride.confirmed": {
+      "storyQuest": "q011",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q011",
+          "scene": "confirmed"
+        },
+        {
+          "op": "narrate",
+          "text": "メルは同僚と坑夫たちの帰還を確認した。全員を入口に残し、選んだ処置の後始末をする。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q011.values.route"
+            },
+            "right": "sign"
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "避難標識は塩を払っただけだ。分岐へ戻って腕、矢印、避難先の表示を塗り直す。"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.route"
+                },
+                "right": "broken"
+              },
+              "then": [
+                {
+                  "op": "narrate",
+                  "text": "恒久的な標識は失われた。分岐の再測量が必要なことを伝える。"
+                }
+              ],
+              "else": [
+                {
+                  "op": "narrate",
+                  "text": "帰路の縄は敷いたまま残す。標識の恒久的な修復は済んでいない。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "repair",
+              "text": "全員を入口に残し、分岐の標識を直しに戻る",
+              "storyAction": {
+                "quest": "q011",
+                "action": "confirmed_repair"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.route"
+                },
+                "right": "sign"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q011",
+                  "action": "confirmed_repair"
+                }
+              ]
+            },
+            {
+              "id": "report",
+              "text": "今回の救助と、残った課題をメルに伝える",
+              "storyAction": {
+                "quest": "q011",
+                "action": "confirmed_report"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q011.values.route"
+                  },
+                  "right": "sign"
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q011",
+                  "action": "confirmed_report"
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.saltbride.report"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q011.saltbride.repair_arrival": {
+      "storyQuest": "q011",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q011",
+          "scene": "repair_arrival"
+        },
+        {
+          "op": "narrate",
+          "text": "像の分岐へ戻った。同僚と坑夫たちは入口でメルと待っている。腕の向き、台座の矢印、避難先の表示をここで塗り直す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "paint",
+              "text": "像の腕・矢印・避難先を塗り直す",
+              "storyAction": {
+                "quest": "q011",
+                "action": "repair_arrival_paint"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q011",
+                  "action": "repair_arrival_paint"
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.saltbride.repaired"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q011.saltbride.repaired": {
+      "storyQuest": "q011",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q011",
+          "scene": "repaired"
+        },
+        {
+          "op": "narrate",
+          "text": "塗り直した標示が同じ安全坑を示すことを確かめた。メルのいる入口へ戻り、処置を伝える。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "入口へ戻り、メルに修復を報告する",
+              "storyAction": {
+                "quest": "q011",
+                "action": "repaired_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q011",
+                  "action": "repaired_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q011.saltbride.repair_report": {
+      "storyQuest": "q011",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q011",
+          "scene": "repair_report"
+        },
+        {
+          "op": "narrate",
+          "text": "メルのいる入口へ戻った。標示を塗り直した場所と、安全坑の方向を伝える。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "report",
+              "text": "標識の修復と避難先をメルに伝える",
+              "storyAction": {
+                "quest": "q011",
+                "action": "repair_report_report"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q011",
+                  "action": "repair_report_report"
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.saltbride.report"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q011.saltbride.report": {
+      "storyQuest": "q011",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q011",
+          "scene": "report"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q011.values.route"
+            },
+            "right": "sign"
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "安全坑からの帰還と標示の修復を報告した。"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.route"
+                },
+                "right": "broken"
+              },
+              "then": [
+                {
+                  "op": "narrate",
+                  "text": "全員の帰還を報告した。像を砕いた分岐は、次のために測量し直す必要がある。"
+                }
+              ],
+              "else": [
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q011.values.signKnown"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "narrate",
+                      "text": "全員の帰還と縄の敷設を報告した。像が古い避難標識だったことは伝え、修復は未実施として残した。"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "narrate",
+                      "text": "全員の帰還と縄の敷設を報告した。像の正体は確認しておらず、恒久的な標示の修復もしていない。"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "救助の記録を確定する",
+              "storyAction": {
+                "quest": "q011",
+                "action": "report_finish"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.route"
+                },
+                "right": "sign"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q011",
+                  "action": "report_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.saltbride.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "finish_broken",
+              "text": "今回の救助と再測量の課題を確定する",
+              "storyAction": {
+                "quest": "q011",
+                "action": "report_finish_broken"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.route"
+                },
+                "right": "broken"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q011",
+                  "action": "report_finish_broken"
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.saltbride.end.contract"
+                }
+              ]
+            },
+            {
+              "id": "finish_rope",
+              "text": "縄による帰路と修復未実施の記録を確定する",
+              "storyAction": {
+                "quest": "q011",
+                "action": "report_finish_rope"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.route"
+                },
+                "right": "rope"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q011",
+                  "action": "report_finish_rope"
+                },
+                {
+                  "op": "jump",
+                  "script": "q011.saltbride.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q011.saltbride.end.informed": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q011",
+          "outcome": "informed"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "narrate",
+          "text": "像の塩を払い、台座と指先が示す安全坑から同僚と迷った坑夫たちを連れ帰った。人型の形、矢印、避難先を塗り直し、花嫁の噂は安全坑の方向を伝える話へ変わった。"
+        }
+      ]
+    },
+    "q011.saltbride.end.contract": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q011",
+          "outcome": "contract"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "narrate",
+          "text": "白い像を危険の原因と考えて砕いた。塩の下から現れた台座の矢印と足跡をたどり、同僚と坑夫たちは見つかった。しかし避難標識は失われ、次のために分岐を測量し直す必要が生じた。"
+        }
+      ]
+    },
+    "q011.saltbride.end.compromise": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q011",
+          "outcome": "compromise"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "narrate",
+          "text": "像の恒久的な修復は行わず、同僚の足跡を追いながら分岐から縄を延ばした。同僚と坑夫たちは縄をたどって帰還した。像の正体については確認できた範囲だけを記し、恒久的な標示の修復は後日に残した。"
+        }
+      ]
+    },
+    "q011.saltbride.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q011"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q011.catalog1.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.questResume.q011"
+              },
+              "cases": [
+                {
+                  "equals": "q011.saltbride.rope_prepare.lay.resume",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q011.saltbride.rope_prepare.lay.resume"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "quests.q011.stage"
+                    },
+                    "right": "completed"
+                  },
+                  "then": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "quests.q011.outcome"
+                      },
+                      "cases": [
+                        {
+                          "equals": "informed",
+                          "commands": [
+                            {
+                              "op": "narrate",
+                              "text": "像の塩を払い、台座と指先が示す安全坑から同僚と迷った坑夫たちを連れ帰った。人型の形、矢印、避難先を塗り直し、花嫁の噂は安全坑の方向を伝える話へ変わった。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "contract",
+                          "commands": [
+                            {
+                              "op": "narrate",
+                              "text": "白い像を危険の原因と考えて砕いた。塩の下から現れた台座の矢印と足跡をたどり、同僚と坑夫たちは見つかった。しかし避難標識は失われ、次のために分岐を測量し直す必要が生じた。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "compromise",
+                          "commands": [
+                            {
+                              "op": "narrate",
+                              "text": "像の恒久的な修復は行わず、同僚の足跡を追いながら分岐から縄を延ばした。同僚と坑夫たちは縄をたどって帰還した。像の正体については確認できた範囲だけを記し、恒久的な標示の修復は後日に残した。"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": []
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "story.init",
+                      "quest": "q011"
+                    },
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "stories.q011.scene"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q011.saltbride.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "statue",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q011.saltbride.statue"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "brushed",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q011.saltbride.brushed"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "sign",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q011.saltbride.sign"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "broken",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q011.saltbride.broken"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "broken_direction",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q011.saltbride.broken_direction"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "rope_prepare",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q011.saltbride.rope_prepare"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "rope_started",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q011.saltbride.rope_started"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "rope_arrival",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q011.saltbride.rope_arrival"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "tunnel_arrival",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q011.saltbride.tunnel_arrival"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "found",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q011.saltbride.found"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "joined",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q011.saltbride.joined"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "fork_return",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q011.saltbride.fork_return"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "entrance_arrival",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q011.saltbride.entrance_arrival"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "confirmed",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q011.saltbride.confirmed"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "repair_arrival",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q011.saltbride.repair_arrival"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "repaired",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q011.saltbride.repaired"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "repair_report",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q011.saltbride.repair_report"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "report",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q011.saltbride.report"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
+                        {
+                          "op": "jump",
+                          "script": "q011.saltbride.entry"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q011.saltbride.rope_prepare.lay.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q011",
+          "value": "q011.saltbride.rope_prepare.lay.resume"
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q011.saltbride.rope_prepare.lay.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q011",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "補修用の縄1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q011.saltbride.rope_prepare"
+        }
+      ]
+    }
+  },
+  "legacyOutcomes": {
+    "informed": {
+      "label": "像の向く安全坑へ人を導き、標示を塗り直す",
+      "text": "迷った坑夫が帰った。花嫁の噂は、助ける方角を教える話へ変わる。",
+      "gold": 69,
+      "xp": 76
+    },
+    "contract": {
+      "label": "像を砕き、白い姿を取り除く",
+      "text": "行方不明者は見つかったが、帰り道を新しく測り直す必要が生まれる。",
+      "gold": 89,
+      "xp": 54
+    },
+    "compromise": {
+      "label": "像を目印に縄1本で帰路をつなぐ",
+      "text": "伝説は残り、初めて来た坑夫にも縄の意味は通じるようになった。",
+      "gold": 44,
+      "xp": 57
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "entrance": "メルの待つ坑道入口",
+      "fork": "白い像のある分岐",
+      "safeTunnel": "避難先の安全坑",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "entrance",
+        "fork"
+      ],
+      [
+        "fork",
+        "safeTunnel"
+      ],
+      [
+        "transit",
+        "entrance"
+      ],
+      [
+        "transit",
+        "fork"
+      ],
+      [
+        "transit",
+        "safeTunnel"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "entrance",
+        "values": [
+          "entrance",
+          "fork",
+          "safeTunnel",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "melAt": {
+        "type": "enum",
+        "initial": "entrance",
+        "values": [
+          "entrance",
+          "fork",
+          "safeTunnel",
+          "transit"
+        ],
+        "meaning": "mel の所在または保持者"
+      },
+      "colleagueAt": {
+        "type": "enum",
+        "initial": "safeTunnel",
+        "values": [
+          "entrance",
+          "fork",
+          "safeTunnel",
+          "transit"
+        ],
+        "meaning": "colleague の所在または保持者"
+      },
+      "peopleAt": {
+        "type": "enum",
+        "initial": "safeTunnel",
+        "values": [
+          "entrance",
+          "fork",
+          "safeTunnel",
+          "transit"
+        ],
+        "meaning": "people の所在または保持者"
+      },
+      "signAt": {
+        "type": "enum",
+        "initial": "fork",
+        "values": [
+          "entrance",
+          "fork",
+          "safeTunnel",
+          "transit",
+          "party",
+          "mel",
+          "colleague",
+          "people"
+        ],
+        "meaning": "sign の所在または保持者"
+      },
+      "signKnown": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "signKnown"
+      },
+      "signDestroyed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "signDestroyed"
+      },
+      "arrowKnown": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "arrowKnown"
+      },
+      "rescued": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "rescued"
+      },
+      "repainted": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "repainted"
+      },
+      "ropeStarted": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "ropeStarted"
+      },
+      "ropeLaid": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "ropeLaid"
+      },
+      "found": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "found"
+      },
+      "joined": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "joined"
+      },
+      "reported": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "reported"
+      },
+      "route": {
+        "type": "enum",
+        "initial": "pending",
+        "values": [
+          "pending",
+          "sign",
+          "broken",
+          "rope"
+        ],
+        "meaning": "route"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "mel": {
+        "holder": "melAt",
+        "kind": "person",
+        "character": "e2_saltbride_mel"
+      },
+      "colleague": {
+        "holder": "colleagueAt",
+        "kind": "person",
+        "character": "e2_saltbride_colleague"
+      },
+      "people": {
+        "holder": "peopleAt",
+        "kind": "group",
+        "character": "e2_saltbride_people"
+      },
+      "sign": {
+        "holder": "signAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "sign": {
+        "text": "塩の下の人型と腕・台座の矢印は、安全坑を示す古い避難標識である。"
+      },
+      "stayed": {
+        "text": "メルの同僚は助けを呼ぶ声を追い、安全坑で迷った坑夫たちを再び一人にしないため留まっていた。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [
+      {
+        "id": "fixed-mel",
+        "condition": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q011.values.melAt"
+          },
+          "right": "entrance"
+        },
+        "message": "メルは坑道入口で帰還を確認する"
+      },
+      {
+        "id": "together",
+        "condition": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q011.values.colleagueAt"
+          },
+          "right": {
+            "ref": "stories.q011.values.peopleAt"
+          }
+        },
+        "message": "同僚は坑夫たちと一緒に留まり、同行して戻る"
+      },
+      {
+        "id": "rescued",
+        "condition": {
+          "op": "or",
+          "args": [
+            {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.rescued"
+                },
+                "right": true
+              }
+            },
+            {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q011.values.colleagueAt"
+                  },
+                  "right": "entrance"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q011.values.peopleAt"
+                  },
+                  "right": "entrance"
+                }
+              ]
+            }
+          ]
+        },
+        "message": "帰還確認済みの全員は入口に残る"
+      },
+      {
+        "id": "repair",
+        "condition": {
+          "op": "or",
+          "args": [
+            {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.repainted"
+                },
+                "right": true
+              }
+            },
+            {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q011.values.rescued"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q011.values.signKnown"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "not",
+                  "arg": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q011.values.signDestroyed"
+                    },
+                    "right": true
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "message": "全員の帰還後に標識を修復する"
+      },
+      {
+        "id": "rope",
+        "condition": {
+          "op": "or",
+          "args": [
+            {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.ropeLaid"
+                },
+                "right": true
+              }
+            },
+            {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q011.values.ropeStarted"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q011.values.route"
+                  },
+                  "right": "rope"
+                }
+              ]
+            }
+          ]
+        },
+        "message": "固定点から延ばした一本の縄で帰路をつなぐ"
+      }
+    ],
+    "scenes": {
+      "entry": {
+        "title": "メルの待つ坑道入口",
+        "place": "entrance",
+        "cast": [
+          {
+            "entity": "mel",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q011.values.melAt"
+              },
+              "right": "entrance"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "statue": {
+        "title": "白い像のある分岐",
+        "place": "fork",
+        "cast": [],
+        "requires": true
+      },
+      "brushed": {
+        "title": "白い像のある分岐",
+        "place": "fork",
+        "cast": [],
+        "requires": true
+      },
+      "sign": {
+        "title": "白い像のある分岐",
+        "place": "fork",
+        "cast": [],
+        "requires": true
+      },
+      "broken": {
+        "title": "白い像のある分岐",
+        "place": "fork",
+        "cast": [],
+        "requires": true
+      },
+      "broken_direction": {
+        "title": "白い像のある分岐",
+        "place": "fork",
+        "cast": [],
+        "requires": true
+      },
+      "rope_prepare": {
+        "title": "白い像のある分岐",
+        "place": "fork",
+        "cast": [],
+        "requires": true
+      },
+      "rope_started": {
+        "title": "白い像のある分岐",
+        "place": "fork",
+        "cast": [],
+        "requires": true
+      },
+      "rope_arrival": {
+        "title": "避難先の安全坑",
+        "place": "safeTunnel",
+        "cast": [],
+        "requires": true
+      },
+      "tunnel_arrival": {
+        "title": "避難先の安全坑",
+        "place": "safeTunnel",
+        "cast": [],
+        "requires": true
+      },
+      "found": {
+        "title": "避難先の安全坑",
+        "place": "safeTunnel",
+        "cast": [
+          {
+            "entity": "colleague",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q011.values.colleagueAt"
+              },
+              "right": "safeTunnel"
+            },
+            "display": {
+              "x": 25,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "people",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q011.values.peopleAt"
+              },
+              "right": "safeTunnel"
+            },
+            "display": {
+              "x": 75,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "joined": {
+        "title": "避難先の安全坑",
+        "place": "safeTunnel",
+        "cast": [
+          {
+            "entity": "colleague",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q011.values.colleagueAt"
+              },
+              "right": "safeTunnel"
+            },
+            "display": {
+              "x": 25,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "people",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q011.values.peopleAt"
+              },
+              "right": "safeTunnel"
+            },
+            "display": {
+              "x": 75,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "fork_return": {
+        "title": "白い像のある分岐",
+        "place": "fork",
+        "cast": [
+          {
+            "entity": "colleague",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q011.values.colleagueAt"
+              },
+              "right": "fork"
+            },
+            "display": {
+              "x": 25,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "people",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q011.values.peopleAt"
+              },
+              "right": "fork"
+            },
+            "display": {
+              "x": 75,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "entrance_arrival": {
+        "title": "メルの待つ坑道入口",
+        "place": "entrance",
+        "cast": [
+          {
+            "entity": "mel",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q011.values.melAt"
+              },
+              "right": "entrance"
+            },
+            "display": {
+              "x": 16,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "colleague",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q011.values.colleagueAt"
+              },
+              "right": "entrance"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          },
+          {
+            "entity": "people",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q011.values.peopleAt"
+              },
+              "right": "entrance"
+            },
+            "display": {
+              "x": 84,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 2
+            }
+          }
+        ],
+        "requires": true
+      },
+      "confirmed": {
+        "title": "メルの待つ坑道入口",
+        "place": "entrance",
+        "cast": [
+          {
+            "entity": "mel",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q011.values.melAt"
+              },
+              "right": "entrance"
+            },
+            "display": {
+              "x": 16,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "colleague",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q011.values.colleagueAt"
+              },
+              "right": "entrance"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          },
+          {
+            "entity": "people",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q011.values.peopleAt"
+              },
+              "right": "entrance"
+            },
+            "display": {
+              "x": 84,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 2
+            }
+          }
+        ],
+        "requires": true
+      },
+      "repair_arrival": {
+        "title": "白い像のある分岐",
+        "place": "fork",
+        "cast": [],
+        "requires": true
+      },
+      "repaired": {
+        "title": "白い像のある分岐",
+        "place": "fork",
+        "cast": [],
+        "requires": true
+      },
+      "repair_report": {
+        "title": "メルの待つ坑道入口",
+        "place": "entrance",
+        "cast": [
+          {
+            "entity": "mel",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q011.values.melAt"
+              },
+              "right": "entrance"
+            },
+            "display": {
+              "x": 16,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "colleague",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q011.values.colleagueAt"
+              },
+              "right": "entrance"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          },
+          {
+            "entity": "people",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q011.values.peopleAt"
+              },
+              "right": "entrance"
+            },
+            "display": {
+              "x": 84,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 2
+            }
+          }
+        ],
+        "requires": true
+      },
+      "report": {
+        "title": "メルの待つ坑道入口",
+        "place": "entrance",
+        "cast": [
+          {
+            "entity": "mel",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q011.values.melAt"
+              },
+              "right": "entrance"
+            },
+            "display": {
+              "x": 16,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "colleague",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q011.values.colleagueAt"
+              },
+              "right": "entrance"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          },
+          {
+            "entity": "people",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q011.values.peopleAt"
+              },
+              "right": "entrance"
+            },
+            "display": {
+              "x": 84,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 2
+            }
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_fork": {
+        "from": [
+          "entry"
+        ],
+        "to": "statue",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "fork"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "fork",
+          "companions": []
+        },
+        "depart": []
+      },
+      "statue_brush": {
+        "from": [
+          "statue"
+        ],
+        "to": "brushed",
+        "requires": true,
+        "effects": [],
+        "once": true
+      },
+      "statue_break": {
+        "from": [
+          "statue"
+        ],
+        "to": "broken",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "signDestroyed",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "route",
+            "value": "broken"
+          }
+        ],
+        "once": true
+      },
+      "statue_rope": {
+        "from": [
+          "statue"
+        ],
+        "to": "rope_prepare",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "route",
+            "value": "rope"
+          }
+        ],
+        "once": true
+      },
+      "brushed_read": {
+        "from": [
+          "brushed"
+        ],
+        "to": "sign",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "signKnown",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "arrowKnown",
+            "value": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "sign",
+            "source": "sign",
+            "requires": true
+          }
+        ],
+        "once": true
+      },
+      "sign_guide": {
+        "from": [
+          "sign"
+        ],
+        "to": "tunnel_arrival",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "safeTunnel"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "safeTunnel",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "route",
+            "value": "sign"
+          }
+        ]
+      },
+      "sign_rope": {
+        "from": [
+          "sign"
+        ],
+        "to": "rope_prepare",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "route",
+            "value": "rope"
+          }
+        ],
+        "once": true
+      },
+      "broken_read": {
+        "from": [
+          "broken"
+        ],
+        "to": "broken_direction",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "arrowKnown",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "broken_direction_follow": {
+        "from": [
+          "broken_direction"
+        ],
+        "to": "tunnel_arrival",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "safeTunnel"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "safeTunnel",
+          "companions": []
+        },
+        "depart": []
+      },
+      "rope_prepare_lay": {
+        "from": [
+          "rope_prepare"
+        ],
+        "to": "rope_started",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "ropeStarted",
+            "value": true
+          }
+        ],
+        "cost": {
+          "rope": 1
+        },
+        "once": true
+      },
+      "rope_started_extend": {
+        "from": [
+          "rope_started"
+        ],
+        "to": "rope_arrival",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "safeTunnel"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "safeTunnel",
+          "companions": []
+        },
+        "depart": []
+      },
+      "rope_arrival_fix": {
+        "from": [
+          "rope_arrival"
+        ],
+        "to": "tunnel_arrival",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "ropeLaid",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "tunnel_arrival_find": {
+        "from": [
+          "tunnel_arrival"
+        ],
+        "to": "found",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "found",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "found_join": {
+        "from": [
+          "found"
+        ],
+        "to": "joined",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "joined",
+            "value": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "stayed",
+            "source": "colleague",
+            "requires": true
+          }
+        ],
+        "once": true
+      },
+      "joined_escort": {
+        "from": [
+          "joined"
+        ],
+        "to": "fork_return",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "colleague",
+              "people"
+            ],
+            "path": [
+              "transit",
+              "fork"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "fork",
+          "companions": [
+            "colleague",
+            "people"
+          ]
+        },
+        "depart": []
+      },
+      "fork_return_entrance": {
+        "from": [
+          "fork_return"
+        ],
+        "to": "entrance_arrival",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "colleague",
+              "people"
+            ],
+            "path": [
+              "transit",
+              "entrance"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "entrance",
+          "companions": [
+            "colleague",
+            "people"
+          ]
+        },
+        "depart": []
+      },
+      "entrance_arrival_confirm": {
+        "from": [
+          "entrance_arrival"
+        ],
+        "to": "confirmed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "rescued",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "confirmed_repair": {
+        "from": [
+          "confirmed"
+        ],
+        "to": "repair_arrival",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q011.values.route"
+          },
+          "right": "sign"
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "fork"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "fork",
+          "companions": []
+        },
+        "depart": []
+      },
+      "confirmed_report": {
+        "from": [
+          "confirmed"
+        ],
+        "to": "report",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q011.values.route"
+            },
+            "right": "sign"
+          }
+        },
+        "effects": [
+          {
+            "op": "set",
+            "key": "reported",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "repair_arrival_paint": {
+        "from": [
+          "repair_arrival"
+        ],
+        "to": "repaired",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "repainted",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "repaired_return": {
+        "from": [
+          "repaired"
+        ],
+        "to": "repair_report",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "entrance"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "entrance",
+          "companions": []
+        },
+        "depart": []
+      },
+      "repair_report_report": {
+        "from": [
+          "repair_report"
+        ],
+        "to": "report",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "reported",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "report_finish": {
+        "from": [
+          "report"
+        ],
+        "ending": "informed",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q011.values.route"
+          },
+          "right": "sign"
+        },
+        "effects": [],
+        "once": true
+      },
+      "report_finish_broken": {
+        "from": [
+          "report"
+        ],
+        "ending": "contract",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q011.values.route"
+          },
+          "right": "broken"
+        },
+        "effects": [],
+        "once": true
+      },
+      "report_finish_rope": {
+        "from": [
+          "report"
+        ],
+        "ending": "compromise",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q011.values.route"
+          },
+          "right": "rope"
+        },
+        "effects": [],
+        "once": true
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.rescued"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.reported"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.partyAt"
+                },
+                "right": "entrance"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.colleagueAt"
+                },
+                "right": "entrance"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.peopleAt"
+                },
+                "right": "entrance"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q011.values.route"
+            },
+            "right": "sign"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q011.values.signKnown"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q011.values.repainted"
+            },
+            "right": true
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.rescued"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.reported"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.partyAt"
+                },
+                "right": "entrance"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.colleagueAt"
+                },
+                "right": "entrance"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.peopleAt"
+                },
+                "right": "entrance"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q011.values.route"
+            },
+            "right": "broken"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q011.values.signDestroyed"
+            },
+            "right": true
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.rescued"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.reported"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.partyAt"
+                },
+                "right": "entrance"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.colleagueAt"
+                },
+                "right": "entrance"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q011.values.peopleAt"
+                },
+                "right": "entrance"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q011.values.route"
+            },
+            "right": "rope"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q011.values.ropeLaid"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "entrance": {
+        "kind": "dungeon",
+        "dungeon": "region_2",
+        "map": "region_2_f1",
+        "x": 1,
+        "y": 1,
+        "event": "q011_saltbride_entrance"
+      },
+      "fork": {
+        "kind": "dungeon",
+        "dungeon": "region_2",
+        "map": "region_2_f1",
+        "x": 11,
+        "y": 9,
+        "event": "q011_saltbride_fork"
+      },
+      "safeTunnel": {
+        "kind": "dungeon",
+        "dungeon": "region_2",
+        "map": "e2_saltbride_tunnel",
+        "x": 3,
+        "y": 2,
+        "event": "q011_saltbride_tunnel"
+      }
+    },
+    "revision": 1
+  }
+}
