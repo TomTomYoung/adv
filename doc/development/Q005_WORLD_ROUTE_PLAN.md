@@ -1,5 +1,7 @@
 # q005 甘い排水：現場接続前の監査と実装設計
 
+この文書は着手前の設計履歴。現在の実装と検証は[現場接続の記録](Q005_WORLD_ROUTE.md)を参照する。第2版だけを接続するため、初版の未接続判定と既存の初版試験は保持する。
+
 2026-11-17。原稿 [stories-v11-1.mjs](../../authoring/stories-v11-1.mjs)、[編集注記](../../authoring/quest-page-notes.mjs)、[現在の配布JSON](../../data/quests/q005.json)、[個別ページ](../scenarios/quests/QUEST_Q005.md)を照合した。これは次工程の設計であり、q005の実装・保存移行・実画面検査は未着手である。確認した配布JSONのGit blobは `6d390d923f3f31f9bdf71136a07a28cbdbaab855`。
 
 ## 現在の成立範囲

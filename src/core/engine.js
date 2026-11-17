@@ -1,5 +1,6 @@
 import {freshWorldTravel,rememberDeparture,returnLocation,crossWorldRoute,publicSupply,rideShuttle,questReceptionReason,departureSettlementReason} from './world-travel.js';
 import {craftWeapon} from './expedition-workshop.js';
+import {acceptedRouteSource,acceptedStoryRouteData} from './accepted-story-routes.js';
 import {freshExpedition,expeditionAction,buySkill,travelCheckpoint,campSafe,addGems} from './expedition.js';
 import {rememberOil,restoreOil,balanceOil,managesOil} from './expedition-oil.js';
 import {setFrontFormation,syncFrontFormation} from './battle-frontline.js';
@@ -421,8 +422,9 @@ export class GameEngine {
   save(){return JSON.stringify({saveVersion:1,gameId:this.data.game.id,contentVersion:this.data.game.version,scenarioEdition:this.state.scenarioEdition,...(this.state.scenarioRevision?{scenarioRevision:this.state.scenarioRevision}:{}),state:clone(this.state)});}
   load(text){
     if(typeof text!=='string'||text.length>this.data.system.maxSaveBytes)throw new Error('セーブのサイズが不正です');
-    const save=migrateSave(JSON.parse(text),this.data),errors=validateSave(save,this.data);
+    const source=acceptedRouteSource(this.data),save=migrateSave(JSON.parse(text),source),errors=validateSave(save,source);
     if(errors.length)throw new Error(`セーブを読み込めません：${errors.join(' / ')}`);
+    this.data=acceptedStoryRouteData(source,save.state);
     this.state=clone(save.state);this.restoredCastCueId=this.state.presentation.castCue?.id;this.state.carried??={};this.feedback=freshFeedback();restoreWorldConversations(this);
     // Same-version saves from the side-based scheduler do not contain a turn queue.
     // Rebuild remaining turns without replaying allies already recorded in acted.

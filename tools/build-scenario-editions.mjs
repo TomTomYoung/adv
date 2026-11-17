@@ -1,4 +1,5 @@
 import {buildMachineQuests} from './build-machine-quests.mjs';
+import {buildDrainage} from './build-q005-world-route.mjs';
 import {buildLibrarySecondQuests} from './build-library-second-quests.mjs';
 import {buildLibraryQuests} from './build-library-quests.mjs';
 import {buildObservatoryQuests} from './build-observatory-quests.mjs';
@@ -119,6 +120,7 @@ export function secondEditionDocument(q,firstSha){
 }
 
 export async function buildScenarioEditions({check=false}={}){
+ await buildDrainage({check});
  await buildCompanionEdition({check});
  const geography=await buildOddlandGeography({check});
  await buildSalomeGeography(geography,{check});
