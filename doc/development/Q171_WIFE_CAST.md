@@ -12,7 +12,7 @@
 
 ## 検証
 
-最終のローカル全体検証 `node --test --test-concurrency=4 tests/*.test.mjs` は3,180試験すべて成功、失敗・取消・スキップ0（約580秒）。生成一致、配信指紋、資産・データ、設定編集器、静的参照、文書・リンク検査も成功した。文書は178本・6,418ローカルリンク・26原文アーカイブを照合。実画面160条件は未実行のままで、これらに含めない。
+最終のローカル全体検証 `node --test --test-concurrency=4 tests/*.test.mjs` は3,180試験すべて成功、失敗・取消・スキップ0（約580秒）。生成一致、配信指紋、資産・データ、設定編集器、静的参照、文書・リンク検査も成功した。文書は178本・6,418ローカルリンク・26原文アーカイブを照合。実画面160条件は別途、下記のGitHub Chromium検査で成功を確認した。
 
 専用9試験、出演監査7試験、機関廟の既存50試験、計66試験が成功した。現行と旧保存で全15場面・22行動・16旅程を通し、文章・選択肢・旅程・戦闘中・完了時の保存再開を確認した。全旅程で帰還印と敗北救助を検査し、移動中の家族と妻の所在を保持する。防衛の逃走・敗北では勝利を付けず、再戦拒否と実避難後の完了を確認した。護符の二重支払い、調査回数の意図しない増加、報酬の重複、不正保存の部分適用も検査した。
 
@@ -31,3 +31,17 @@
 作業ブランチ `feature/q171-wife-cast` はローカルに保存した。pushは自動承認審査で拒否され、リモートブランチがないことを確認した。理由は公開への明示的な許可が確認できないこと。PRと専用Chromium CIはまだ作成・起動していない。反映後に160画面条件と全体CIを確認し、成功後に統合・公開を行う。
 
 2026-11-17追記：ユーザーがpush・PR作成・検査成功後のマージ・公開を明示的に許可した。上記の許可待ちは解除し、GitHubへの反映と専用画面検査を進める。前工程q090のPR #270は30系統すべてのCI成功を確認してmaster b5deae6d8e999ec476b5412a70182c627f4306b3へ統合した。
+
+同日、[PR #271](https://github.com/TomTomYoung/adv/pull/271)、先端 `33923562b9834dac01cf538f5bcd846df2c28c7d` を作成した。GitHub上のツリー `77269913aa8fc8ad0042e6b1c8c44d099f9b1c25` はローカルの検証済みツリーと一致する。通常のgit pushは認証情報を取得できなかったため、接続済みGitHub APIでファイルのblob SHAと完成ツリーを照合して反映した。
+
+[専用Chromium 43994491573](https://github.com/TomTomYoung/adv/actions/runs/43994491573)、job 133743051913は160条件・4結末・errors=[]で成功した。成果物 `q171-cast-checkpoints`（artifact 14290175927、161ファイル）内の結果JSONとも照合した。Sceneの390px onsite/current・loop_home/previous、1440px return_home/current・collect_family/current、Classicの390px entry/current・evacuated/previous-evacuation-rescued-lose、1440px defended/previous・defense/previous-battle-escapeの8画面を目視した。妻の4出演、受付での不在、家族集団との分離、逃走後の再戦無効、敗北救助後の避難到着と呼称の非重複を確認した。160画面すべてを個別目視したという意味ではない。共用背景の個別制作は残工程のままとする。
+
+前工程q090の[統合後CI43993790908](https://github.com/TomTomYoung/adv/actions/runs/43993790908)と[公開43993789724](https://github.com/TomTomYoung/adv/actions/runs/43993789724)は成功した。公開処理と、公開サイトでの実操作は別の確認範囲である。
+
+[全体CI43994491579](https://github.com/TomTomYoung/adv/actions/runs/43994491579)、job 133743052526も3,180試験すべて成功、失敗・取消・スキップ0となった。
+
+先端3392356の全31系統・32ジョブ成功を確認してPR #271をmaster `d616184869e62a043373e145805cf4ad888227e0` へ統合した。共通人物表示43994491312のshield-browserとcast-browserも成功した。統合後ツリーは検証済み77269913と一致する。
+
+[公開43997016361](https://github.com/TomTomYoung/adv/actions/runs/43997016361)は成功した。公開先runtime.jsonとdata/scenario-editions/e2/q171.jsonを取得し、検証済みローカルファイルとのバイト単位の一致を確認した。配信revisionは `a799d024716ec47fe8e512692da97dd0b3f387193592a3fb36aae0b8770dd1c8`。公開版をクラウドブラウザーで開き、篝火広場の背景、4人の隊、導入本文、メニューが表示されることを確認した。公開版でq171を再攻略した確認ではなく、q171の詳細な表示確認は上記CIの160条件と代表8画面である。
+
+統合後の全体検査：[43997017321](https://github.com/TomTomYoung/adv/actions/runs/43997017321)。最終状態は実行結果と[PR #271](https://github.com/TomTomYoung/adv/pull/271)に記録する。
