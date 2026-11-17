@@ -56,7 +56,7 @@ try{
         assert.equal(await img.count(),1);
         const info=await img.evaluate(async i=>{await i.decode();const c=document.createElement('canvas');c.width=i.naturalWidth;c.height=i.naturalHeight;const ctx=c.getContext('2d');ctx.drawImage(i,0,0);return {src:i.getAttribute('src'),width:i.naturalWidth,height:i.naturalHeight,cornerAlpha:ctx.getImageData(0,0,1,1).data[3],cornerAlphas:[[0,0],[c.width-1,0],[0,c.height-1],[c.width-1,c.height-1]].map(([x,y])=>ctx.getImageData(x,y,1,1).data[3]),bodyAlpha:ctx.getImageData(512,700,1,1).data[3]};});
         const expected=expectedImage(id);
-        assert.equal(info.src,expected.src);assert.deepEqual([info.width,info.height],expected.size);assert.ok(info.cornerAlphas.every(a=>a<=1),'all corners must be transparent to within one alpha level');assert.ok(info.bodyAlpha>240);
+        assert.equal(info.src,expected.src);assert.deepEqual([info.width,info.height],expected.size);assert.ok(expected.opaque?info.cornerAlphas.every(a=>a===255):info.cornerAlphas.every(a=>a<=1),'corners match the authored image opacity');assert.ok(info.bodyAlpha>240);
         assert.ok((await figure.textContent()).includes(await page.evaluate(id=>h.g.data.characters[id].name,id)));images.push({id,...info});
       }
       await page.evaluate(async()=>{await document.fonts.ready;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));});

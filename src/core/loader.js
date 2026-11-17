@@ -33,7 +33,19 @@ export async function loadContent(read = async path => {
       if(value.objects.some(o=>o.quest))throw Error(`${value.id}: クエスト専用objectはクエストJSONに定義してください`);
       merge(data.maps,{[value.id]:value},type);
     }
-    else if(type==='quest') {const quest=selectedQuests.get(value.id)??value;if(quest.model?.preserveAcceptedRoute){if(value.story||!quest.story)throw Error('受注済み経路の保持は旧イベント形式からの更新に限ります。');(data.previousQuestRoutes??={})[value.id]=value;}merge(data.quests,{[quest.id]:quest},type);merge(data.scripts,quest.scripts,'script');}
+    else if(type==='quest') {
+      const quest=selectedQuests.get(value.id)??value;
+      if(quest.model?.preserveAcceptedRoute){
+        if(!quest.story||value.story&&!quest.model.preserveAcceptedStory)throw Error('旧物語の保持には明示した定義が必要です。');
+        if(quest.model.preserveAcceptedStory){
+          const prefix=quest.model.currentStoryScriptPrefix;
+          if(!value.story||value.story.worldPlaces||typeof prefix!=='string'||!prefix.startsWith(value.id+'.')||!quest.model.entryScript.startsWith(prefix)||Object.keys(value.scripts).some(id=>id.startsWith(prefix)))throw Error('旧物語と新しい経路のスクリプトを分離してください。');
+          for(const [id,script] of Object.entries(value.scripts))if(JSON.stringify(script)!==JSON.stringify(quest.scripts[id]))throw Error('受注済み物語の命令列が変更されています: '+id);
+        }
+        (data.previousQuestRoutes??={})[value.id]=value;
+      }
+      merge(data.quests,{[quest.id]:quest},type);merge(data.scripts,quest.scripts,'script');
+    }
     else if(type==='script') merge(data.scripts,value.scripts,type);
     else data[type]=value;
   }

@@ -1,9 +1,11 @@
 import {departureSettlementReason} from './world-travel.js';
+import {acceptedStoryRouteData} from './accepted-story-routes.js';
 import {clone} from './expression.js';
 import {townLocation,dungeonInterior,locationRoot,atWorldPlace,resolveStoryWorldPlace,storyJourneyPlaces} from './world.js';
 
 // Resolve the pending physical event, without advancing a script or choosing a branch.
 export function nextQuestPlaces(data,state,id){
+  data=acceptedStoryRouteData(data,state);
   if(typeof id!=='string'||!Object.hasOwn(data.quests,id))return [];
   const q=data.quests[id],progress=state.quests[id];
   if(!q||!progress||progress.stage==='completed')return [];

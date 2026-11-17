@@ -1,4 +1,5 @@
 import {freshWorldTravel,worldTravelSaveErrors} from './world-travel.js';
+import {acceptedStoryRouteData} from './accepted-story-routes.js';
 import {reinforcementRoster} from './battle-reinforcements.js';
 import {freshExpedition,expeditionSaveErrors,campTier} from './expedition.js';
 import {migrateFrontlineLifecycle} from './frontline-lifecycle.js';
@@ -58,6 +59,7 @@ function keepLegacyRoutes(save,data,migration){
   for(const [id,q] of Object.entries(save.state.quests))if(q.stage==='active'&&data.quests[id]?.model.flowVersion>=2)routes[id]=true;
 }
 function upgradeStoryRevisions(original,data){
+  data=acceptedStoryRouteData(data,original.state);
   if(!isRecord(original.state?.stories))return original;
   const upgrades=[],quests={...data.quests};
   for(const [id,q] of Object.entries(data.quests)){
@@ -171,14 +173,14 @@ function migrateContentSave(original,data){
 // VM positions stay intact; settlement geography is migrated by its own step.
 function preserveAcceptedQuestRoutes(original,data){
  const previous=data.previousQuestRoutes??{};
- const state=original.state,ids=Object.keys(previous).filter(id=>['active','completed'].includes(state.quests?.[id]?.stage)&&!Object.hasOwn(state.flags?.currentStoryRoutes??{},id)&&!Object.hasOwn(state.flags?.legacyStoryRoutes??{},id));
+ const state=original.state,ids=Object.keys(previous).filter(id=>['active','completed'].includes(state.quests?.[id]?.stage)&&!Object.hasOwn(state.flags?.currentStoryRoutes??{},id)&&!Object.hasOwn(state.flags?.[data.quests[id]?.model.preserveAcceptedStory?'preservedStoryRoutes':'legacyStoryRoutes']??{},id));
  if(!ids.length)return upgradeStoryRevisions(original,data);
  const legacy={...data,quests:{...data.quests,...Object.fromEntries(ids.map(id=>[id,previous[id]]))}};
  // Explicit story revisions may coexist with old accepted routes and the old
  // geography. Validate against both shipped definitions before either change.
  const revised=upgradeStoryRevisions(original,legacy);
  if(validateSave(revised,legacy).length)return original;
- const save=clone(revised);for(const id of ids)(save.state.flags.legacyStoryRoutes??={})[id]=true;
+ const save=clone(revised);for(const id of ids)(save.state.flags[data.quests[id].model.preserveAcceptedStory?'preservedStoryRoutes':'legacyStoryRoutes']??={})[id]=true;
  return save;
 }
 function migrateSettlementGeography(original,data){
@@ -252,6 +254,7 @@ export function validateSave(save,data){
   const errors=[],fail=s=>errors.push(s),integer=(v,min,max)=>Number.isInteger(v)&&v>=min&&v<=max;
   if(!isRecord(save)||save.saveVersion!==1||save.gameId!==data.game.id||save.contentVersion!==data.game.version)return ['作品またはセーブ形式のバージョンが一致しません'];
   const s=save.state;if(!isRecord(s))return ['状態がありません'];
+  data=acceptedStoryRouteData(data,s);
   try{if(readSavedScenarioEdition(save)!==resolveScenarioEdition(data.scenarioEditions,data.scenarioEdition??'e1'))return ['記録と読込中のシナリオ版が一致しません'];}catch(error){return [error.message];}
   const revisionError=scenarioRevisionError(save,data);if(revisionError)return [revisionError];
   if('level' in s||'xp' in s)fail('隊共通経験値の旧形式です');
@@ -319,8 +322,16 @@ export function validateSave(save,data){
   for(const [id,q] of Object.entries(data.quests)){
     if(q.model?.preserveAcceptedRoute){
       const current=s.flags.currentStoryRoutes?.[id],legacy=s.flags.legacyStoryRoutes?.[id],stage=s.quests[id]?.stage;
-      if(stage==='available'?(current!==undefined||legacy!==undefined):!((current===true&&legacy===undefined)||(legacy===true&&current===undefined)))fail('依頼の採用経路が不正です');
-      if(legacy===true&&s.stories?.[id])fail('旧経路と新しい物語状態が混在しています');
+      if(q.model.preserveAcceptedStory){
+        const preserved=s.flags.preservedStoryRoutes?.[id],prefix=q.model.currentStoryScriptPrefix;
+        if(stage==='available'?(current!==undefined||preserved!==undefined||legacy!==undefined):!((current===true&&preserved===undefined&&legacy===undefined)||(preserved===true&&current===undefined)))fail('依頼の採用経路が不正です');
+        if(s.vm.some(frame=>typeof frame.script==='string'&&frame.script.startsWith(id+'.')&&(preserved===true?frame.script.startsWith(prefix):!frame.script.startsWith(prefix))))fail('旧物語と新しい経路の命令列が混在しています');
+        const resume=s.flags.questResume?.[id];
+        if(typeof resume==='string'&&(preserved===true?resume.startsWith(prefix):!resume.startsWith(prefix)))fail('旧物語と新しい経路の再開先が混在しています');
+      }else{
+        if(stage==='available'?(current!==undefined||legacy!==undefined):!((current===true&&legacy===undefined)||(legacy===true&&current===undefined)))fail('依頼の採用経路が不正です');
+        if(legacy===true&&s.stories?.[id])fail('旧経路と新しい物語状態が混在しています');
+      }
     }
     const qs=s.quests[id];if(!isRecord(qs)||!['available','active','completed'].includes(qs.stage)||!Array.isArray(qs.evidence)){fail('依頼状態不正');continue;}
     if(data.game.recordVersion===1&&qs.stage==='active'&&!s.records?.baselines?.[id])fail('受注時の戦績がありません');
