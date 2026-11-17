@@ -27,7 +27,7 @@ function oldReady(q){
 }
 
 test('Salome reuses the six existing facilities, preserves twenty stories and all old dungeon geography',async()=>{
- assert.equal(Object.keys(data.maps).length,86);assert.equal(Object.keys(data.dungeons).length,20);assert.equal(Object.keys(data.quests).length,300);
+ assert.equal(Object.keys(data.maps).length,93);assert.equal(Object.keys(data.dungeons).length,20);assert.equal(Object.keys(data.quests).length,300);
  assert.equal(data.scenarioEditions.editions.e2.saveRevision,2);assert.equal(data.worldTravel.version,2);
  assert.ok(city.every(id=>locationRoot(data,id).id==='e2_academy'));assert.equal(personal.length,20);
  for(const q of personal){assert.deepEqual(q,previous.quests[q.id]);assert.equal(data.worldTravel.questSettlements[q.id],'salome');}

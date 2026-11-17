@@ -1,3 +1,4 @@
+import {buildSluice} from './build-q010-world-route.mjs';
 import {buildRatRoute} from './build-q009-world-route.mjs';
 import {buildFloatingCoffin} from './build-q008-world-route.mjs';
 import {buildVoiceWall} from './build-q007-world-route.mjs';
@@ -129,6 +130,7 @@ export async function buildScenarioEditions({check=false}={}){
  await buildVoiceWall({check});
  await buildFloatingCoffin({check});
  await buildRatRoute({check});
+ await buildSluice({check});
  await buildCompanionEdition({check});
  const geography=await buildOddlandGeography({check});
  await buildSalomeGeography(geography,{check});
