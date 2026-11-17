@@ -30,7 +30,7 @@ test('wait, effect completion, zero duration and cast.clear have distinct valid 
  assert.equal(g.state.waiting.kind,'cast');assert.equal(g.state.presentation.cast,undefined);assert.deepEqual(projectGame(g).dialog.scene.cast,[]);finish(g);assert.equal(g.state.waiting.text,'終わり。');
 });
 test('invalid transition fields, opacity, angle, waits and corrupted saves are rejected',()=>{
- for(const change of [c=>c.transition.enter=-1,c=>c.transition.exit=10001,c=>c.transition.move=1.5,c=>c.transition.easing='bogus',c=>c.transition.wait='yes',c=>c.transition.typo=2,c=>c.cast[0].display.opacity=2,c=>c.cast[0].display.angle=361]){
+ for(const change of [c=>c.transition.enter=-1,c=>c.transition.exit=10001,c=>c.transition.move=1.5,c=>c.transition.easing='bogus',c=>c.transition.wait='yes',c=>c.transition.typo=2,c=>c.cast[0].display.opacity=2,c=>c.cast[0].display.angle=361,c=>c.cast[0].display.cardScale=.1,c=>c.cast[0].display.cardScale=2]){
   const g=fixture([cast([member('rookie')],{enter:200,wait:true})]);change(g.data.scripts.cast_transition_test.commands[0]);assert.ok(validateContent(g.data).length);
  }
  const g=fixture([cast([member('rookie')],{enter:200,wait:true}),{op:'say',text:'後続'}]);
@@ -98,4 +98,13 @@ test('presentation clock pauses, resumes once and discards replaced sessions',()
  const w={id:1,session:1,duration:500};clock.sync(w);now=200;clock.sync(w,true);assert.equal(timers.size,0);clock.sync(w);assert.equal([...timers.values()][0].ms,300);
  const stale=[...timers.values()][0].fn;clock.sync({...w,session:2});stale();assert.equal(sent.length,0);
  [...timers.values()][0].fn();assert.equal(sent.length,1);clock.sync({...w,session:2});assert.equal(sent.length,1);clock.destroy();
+});
+
+test('cardScale preserves full-size readable cards when stage portraits are reduced',()=>{
+ const dom=installDOM(),v=new SceneCastRenderer();try{
+  const cast=[person('yoru',{scale:.5,cardScale:1})];
+  v.render(dom.root,scene(cast),null,'off',1);assert.ok(dom.root.querySelector('[data-character="yoru"]').style.transform.endsWith('scale(0.5)'));
+  v.render(dom.root,{mode:'cards',cast},null,'off',1);assert.equal(dom.root.querySelector('[data-character="yoru"]').style.transform,'rotate(0deg) scale(1)');
+  v.render(dom.root,{mode:'cards',cast:[person('yoru',{scale:.75})]},null,'off',1);assert.equal(dom.root.querySelector('[data-character="yoru"]').style.transform,'rotate(0deg) scale(0.75)');
+ }finally{v.destroy();dom.restore();}
 });

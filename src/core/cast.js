@@ -39,9 +39,9 @@ export function castCueValid(cue,data){
 // Author-controlled presentation data; it never changes a person's story location.
 export function placementValid(p,data){
   if(p===undefined)return true;
-  if(!isRecord(p)||Object.keys(p).some(k=>!['position','x','y','scale','flip','layer','asset','opacity','angle'].includes(k)))return false;
+  if(!isRecord(p)||Object.keys(p).some(k=>!['position','x','y','scale','cardScale','flip','layer','asset','opacity','angle'].includes(k)))return false;
   if(p.position!==undefined&&!['left','center','right'].includes(p.position))return false;
-  for(const [key,min,max] of [['x',0,100],['y',-25,50],['scale',.5,1.5],['layer',0,99],['opacity',0,1],['angle',-360,360]])if(p[key]!==undefined&&(!Number.isFinite(p[key])||p[key]<min||p[key]>max))return false;
+  for(const [key,min,max] of [['x',0,100],['y',-25,50],['scale',.5,1.5],['cardScale',.5,1.5],['layer',0,99],['opacity',0,1],['angle',-360,360]])if(p[key]!==undefined&&(!Number.isFinite(p[key])||p[key]<min||p[key]>max))return false;
   return (p.flip===undefined||typeof p.flip==='boolean')&&(p.layer===undefined||Number.isInteger(p.layer))&&(p.asset===undefined||typeof p.asset==='string'&&Object.hasOwn(data.assets.images,p.asset));
 }
 export function castValid(value,data){

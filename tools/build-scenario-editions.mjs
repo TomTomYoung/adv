@@ -1,3 +1,4 @@
+import {buildFloatingCoffin} from './build-q008-world-route.mjs';
 import {buildVoiceWall} from './build-q007-world-route.mjs';
 import {buildMachineQuests} from './build-machine-quests.mjs';
 import {buildWageBox} from './build-q006-world-route.mjs';
@@ -125,6 +126,7 @@ export async function buildScenarioEditions({check=false}={}){
  await buildDrainage({check});
  await buildWageBox({check});
  await buildVoiceWall({check});
+ await buildFloatingCoffin({check});
  await buildCompanionEdition({check});
  const geography=await buildOddlandGeography({check});
  await buildSalomeGeography(geography,{check});
