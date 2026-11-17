@@ -42,6 +42,18 @@ try{
       if(f.absentStoryScene){assert.deepEqual(f.cast,[]);assert.equal(await page.evaluate(()=>h.view.model.dialog.scene??null),null);}
       else assert.deepEqual(await page.evaluate(()=>h.view.model.dialog.scene.cast.map(c=>c.id)),f.cast);
       assert.equal(await page.locator('[data-character]').count(),f.cast.length,'only the scene cast is displayed');
+      if(f.remoteCast){
+        assert.deepEqual(await page.evaluate(()=>h.view.model.dialog.scene.cast.filter(c=>c.remote).map(c=>c.id)),f.remoteCast,'remote voice is separate from physical presence');
+        for(const id of f.cast){
+          const figure=page.locator(`[data-character="${id}"]`),remote=f.remoteCast.includes(id);
+          assert.equal((await figure.getAttribute('class')).split(' ').includes('remote'),remote);
+          assert.equal((await figure.locator('figcaption').textContent()).includes('（声）'),remote);
+        }
+      }
+      if(f.townCast){
+        assert.deepEqual(await page.evaluate(()=>h.view.model.town.cast.map(c=>c.id)),f.townCast,'town scene excludes remote speakers');
+        if(layout==='classic')assert.deepEqual(await page.locator('.town-character').evaluateAll(images=>images.map(i=>i.getAttribute('src')).sort()),f.townCast.map(id=>f.imageExpectationsByLayout.scene[id].src).sort());
+      }
       if(['oddland','chapel','sunken','machine','observatory','library'].includes(group)&&layout==='classic'&&await page.locator('.town-scene').count()){
         const shown=await page.locator('.town-character').evaluateAll(images=>images.map(i=>i.getAttribute('src')).sort());
         assert.deepEqual(shown,f.cast.filter(id=>!textOnlyCast.includes(id)&&!portraitOnlyCast.includes(id)).map(id=>expectedImage(id).src).sort(),'town backdrop must not reveal an offstage character');
