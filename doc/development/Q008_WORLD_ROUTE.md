@@ -32,8 +32,24 @@
 
 第2版q008の試遊設定は標準Lv4、選択範囲Lv1〜6へ更新し、3結末を検証対象にした。Lv1〜3は低レベル比較として残す。初版の想定レベルと他依頼の支給品・難易度は変更しない。レベル探索時だけ測定用カタログの上限を拡張するexploratoryを使用し、確定後のCIは配布カタログをそのまま使う。
 
-[Chromium検査](../../tools/browser-q008-world-route-smoke.mjs)は新28場面、旧改訂1・2の各4場面、救援後16場面、現地作業保持11場面の計63検査点をScene/Classic・1440/390pxで検査する。ローカル起動はsocket() Operation not permittedで終了したため、画面検証済みとは扱わない。CIでの252条件、成果物確認、全体CI、統合と公開確認は次の確認事項である。
+[Chromium検査](../../tools/browser-q008-world-route-smoke.mjs)は新28場面、旧改訂1・2の各4場面、救援後16場面、現地作業保持11場面の計63検査点をScene/Classic・1440/390pxで検査する。ローカル起動はsocket() Operation not permittedで終了した。画面検証は以下のGitHub上のChromium結果と成果物確認に基づく。
 
 初回Chromium44056620331は252条件・3結末・errors=[]で完了し、通常試遊54条件も記録した。成果物14315707936のZIP SHA-256は3c2943bf73852916b055f03cb9a3bab77610acd9abcabad2a81c96e849790978。ただし代表画面の目視で、Sceneのヨルが担ぎ手の群像に隠れる重なりを確認したため、この結果だけで画面品質確認を完了とはしない。新場面の群像と個人を上下に分け、既存の人物素材を縮小配置した。Classicは追加のcardScale指定で通常のカード寸法を維持する。共通のカード倍率は指定省略時の旧動作を保持する。新場面では顔領域の遮蔽・HUDや台詞欄との重なりも追加検査する。
 
 最終レビューで地形比較のrows参照が実際のマップ項目と異なることを確認したため、存在を検査したtilesとcellsの比較へ訂正した。専用83件と人物表示関連17件、計100試験を再実行して成功した。
+
+## 最終確認・統合・公開
+
+[PR #279](https://github.com/TomTomYoung/adv/pull/279)の最終先端7d8af9c66e4a818cf004cad8c95e613f11638ae8、ツリー7e426259c33bc9285b97d63aa28c0fc633e96c54で全38ワークフロー成功を確認した。[全体CI44058547275](https://github.com/TomTomYoung/adv/actions/runs/44058547275)は3,417試験すべて成功、失敗・取消・スキップ・todo 0（job 133954218501、984800.767617ms）。master 6e49c871d7a866b66e3c06cafce2fd35d9384512への統合後も検証済みツリーと一致する。
+
+[最終Chromium44058547165](https://github.com/TomTomYoung/adv/actions/runs/44058547165)は252条件・3結末・errors=[]で成功した（job 133954071187）。新場面・救援後・現地作業保持の55検査点×Sceneの2幅＝110条件で顔領域の遮蔽も検査した。通常試遊54条件は39クリア・15敗北で、低レベル失敗と推奨Lv4〜6の27条件成功を分けている。
+
+最終成果物14316308428のZIP SHA-256はfa355983f6c010578b69a8034a10c5bd3e46fa5a308142dae32629490e4627b0。結果JSON、通常試遊JSON、252画面の存在を確認した。目視した代表8画面は、Sceneの1440px entry/current・application/current、390px handover/current・tow_jetty/current、Classicの1440px entry/current・application/preserved-r1、390px handed/current・postponed/preserved-r2。人物の顔と呼称を確認した範囲を示すもので、252画面すべての個別目視ではない。
+
+[公開44061727681](https://github.com/TomTomYoung/adv/actions/runs/44061727681)のbuild・deploy・report-build-statusはすべて成功。公開前の旧runtimeとq008の404を一度観測した後、公開完了後に再確認した。公開runtime.json、data/scenario-editions/e2/q008.json、playtests/quest-parties.json、src/core/cast.js、src/view/scene-cast.jsの5ファイルが検証済みローカル内容とバイト単位で一致した。
+
+[公開試遊](https://tomtomyoung.github.io/adv/quest-party-playtest.html?edition=e2&quest=q008&start=site)で、標準Lv4・基本4人・現場開始・seed1907を確認した。遺族の了承を得て担ぎ手と出発し、段差に到着してから別の操作で棺を回収した。到着だけで回収・外底点検を成立させず、回収後も内室と外底を付けたまま、外底の中身は未確認と表示された。
+
+手動では(3,3)から南への通行不可を確認し、拡大地図で(5,3)の分岐へ戻ったため、余分な4歩を含む計10歩になった。道中の通常戦闘は1戦1勝、敗北・逃走・救援0、所持金156G、灯油80/90。実際の技能と回復によるHP・MP消費を保持した。ここまでが公開手動検査の範囲であり、3結末の完走は専用CIと通常試遊での確認である。
+
+[統合後CI44061728669](https://github.com/TomTomYoung/adv/actions/runs/44061728669)も3,417試験すべて成功、失敗・取消・スキップ・todo 0（job 133965037621、602953.381084ms）。次工程は[q009の接続前監査](Q009_WORLD_ROUTE_PLAN.md)に基づく地下・地上の地理設計である。
