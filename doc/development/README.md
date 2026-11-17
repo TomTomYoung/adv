@@ -1,6 +1,6 @@
 # 保守・検証記録
 
-[q010の避難・帳簿・閉門と保存検証](Q010_WORLD_ROUTE.md)。
+[q010の避難・帳簿・閉門と保存検証](Q010_WORLD_ROUTE.md)。[次工程q011の現場接続前監査](Q011_WORLD_ROUTE_PLAN.md)。
 
 [q009の清掃・封鎖・穀物搬送と保存検証](Q009_WORLD_ROUTE.md)。[次工程q010の現場接続前監査](Q010_WORLD_ROUTE_PLAN.md)。
 

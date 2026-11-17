@@ -36,7 +36,7 @@ export function projectDungeonSurfaces(engine,systems){
   const waterSystem=systems.find(s=>s.kind==='waterworks'),waterMarker=waterSystem?.markers.find(m=>m.kind==='water'&&m.x===loc.x+dx&&m.y===loc.y+dy);
   let text='';
   const door=terrain.doors[`${loc.x},${loc.y}/${loc.facing}`];
-  if(door)text=`正面：${door.name}。${door.closed?'圧力錠が掛かっている。扉の向こうは完全水没している。外の操作盤で排水する。':`${door.destination}へ通行可能。扉を開けて進む。`}`;
+  if(door)text=`正面：${door.name}。${door.closed?door.reason:`${door.destination}へ通行可能。扉を開けて進む。`}`;
   else if(ahead?.relief&&ahead.waterDepth!==3&&!ahead.opaque&&!closedFace){text=`正面：${ahead.cellName}。${ahead.blocked?'通行不可':'通行可'}。`;}
   else if(ahead?.waterDepth&&!ahead.opaque&&!closedFace){
     text=`正面：${ahead.waterLabel}・${ahead.blocked?'通行不可':'通行可'}。`;

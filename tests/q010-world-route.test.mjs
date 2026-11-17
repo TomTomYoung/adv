@@ -63,7 +63,8 @@ for(const outcome of ['contract','partial','rescued','informed'])test(`q010 ${ou
   for(const place of ['near','deep','landing'])assert.equal(seen.has('e2_sluice_'+place),false);
   assert.ok(seen.has('e2_sluice_control'));assert.ok(seen.has('region_1_gatehouse'));assert.ok(seen.has('e2_sluice_shaft'));
   go(g,'control');walk(g,5,1);assert.equal(g.dispatch({type:'dungeon.action',system:'connections',action:'cross',target:'q010_gate'}),false);
-  while(g.state.location.facing!=='east')assert.ok(g.dispatch({type:'move',direction:'right'}));assert.equal(g.dispatch({type:'move',direction:'forward'}),false);assert.equal(g.state.location.map,'e2_sluice_control');assert.equal(connectionSurfaces(data,g.state).doors['5,1/east'].closed,true);checkpoint(g);
+  while(g.state.location.facing!=='east')assert.ok(g.dispatch({type:'move',direction:'right'}));assert.equal(g.dispatch({type:'move',direction:'forward'}),false);assert.equal(g.state.location.map,'e2_sluice_control');assert.equal(connectionSurfaces(data,g.state).doors['5,1/east'].closed,true);
+  assert.equal(projectGame(g).dungeon.surfaceNotice.text,`正面：${gate.name}。${gate.requirement}`);checkpoint(g);assert.equal(projectGame(g).dungeon.surfaceNotice.text,`正面：${gate.name}。${gate.requirement}`);
 });
 test('q010 deep-only closure leaves the rescue rope fixed and the other three unconfirmed',()=>{
   const g=ready();choose(g,...inspection,...rescueDeep,'partial');assert.equal(values(g).ropeRigged,true);assert.equal(values(g).rescueRopeAt,'near');assert.equal(values(g).nearPeopleAt,'near');assert.equal(values(g).nearSaved,false);choose(g,'escape','partial');assert.equal(values(g).deepSaved,true);checkpoint(g);
