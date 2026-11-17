@@ -13,14 +13,16 @@ function at(content,id){const g=new GameEngine(content,1907);drain(g);g.state.wo
 
 test('all second-edition outdoor themes have renderers; the first edition has none',async()=>{
   assert.deepEqual(Object.keys(OUTDOOR_PALETTES).sort(),[...OUTDOOR_THEMES].sort());
-  assert.deepEqual(Object.values(data.maps).filter(m=>m.outdoor).map(m=>m.outdoor).sort(),[...OUTDOOR_THEMES].sort());
+  assert.deepEqual(Object.values(data.maps).filter(m=>m.outdoor).map(m=>m.outdoor).sort(),[...OUTDOOR_THEMES,'salome_canal'].sort());
+  assert.equal(data.maps.e2_sluice_ground.outdoor,'salome_canal');
   const first=await loadContent(read);assert.ok(Object.values(first.maps).every(m=>m.outdoor===undefined));
   for(const id of ['region_4_f1','region_5_f1','region_8_f1']){const d=projectGame(at(data,id)).dungeon;assert.equal(d.outdoor,undefined);assert.ok(d.wall?.url&&d.floorArt?.url);}
   for(const id of ['e2_observatory_rescue','e2_sunken_inn']){const d=projectGame(at(data,id)).dungeon;assert.equal(d.outdoor,undefined);assert.equal(d.indoor,id.slice(3));}
 });
 test('outdoor appearance changes neither collision, occlusion, lighting nor save state',()=>{
-  for(const theme of OUTDOOR_THEMES){
-    const id='e2_'+theme,a=at(old,id),b=at(data,id),before=JSON.parse(a.save()),pa=projectGame(a).dungeon,pb=projectGame(b).dungeon;
+  const maps=[...OUTDOOR_THEMES.map(theme=>['e2_'+theme,theme]),['e2_sluice_ground','salome_canal']];
+  for(const [id,theme] of maps){
+    const a=at(old,id),b=at(data,id),before=JSON.parse(a.save()),pa=projectGame(a).dungeon,pb=projectGame(b).dungeon;
     assert.deepEqual(JSON.parse(b.save()),before,id);b.load(a.save());assert.deepEqual(JSON.parse(b.save()),before,id);
     assert.equal(pb.outdoor,theme);assert.equal(pb.wall,null);assert.equal(pb.floorArt,null);
     assert.deepEqual(pb.geometry,pa.geometry,id);assert.deepEqual(pb.boundaries,pa.boundaries,id);assert.deepEqual(pb.lighting,pa.lighting,id);
