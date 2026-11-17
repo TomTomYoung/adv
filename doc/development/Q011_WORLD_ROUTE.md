@@ -22,4 +22,14 @@
 
 通常試遊はseed1907、4経路×3編成×Lv1・2×受付／現場開始の48条件が成功。46歩または82歩、通常戦闘0～2回、敗北・救援なし。乱数を置換せず、回復と灯りの維持は所持品を消費する。状態検査用の戦闘抑制とは区別する。
 
-Chromium用には75地点×Scene／Classic×1440／390の300画面条件を用意した。ローカルにはChromium実行ファイルがないため、GitHub Actionsの固定Playwright環境で実施する。CI・公開の結果は確認後に追記する。
+最終先端127a426ad4d1552eae7c602efdc2a14177d76b3cの全40ワークフローが成功。[全体CI44127721011](https://github.com/TomTomYoung/adv/actions/runs/44127721011)は3,679試験成功、失敗・取消・スキップ0。専用46試験を含む。ローカルの全体試験も3,679件成功した。
+
+[専用Chromium44127720782](https://github.com/TomTomYoung/adv/actions/runs/44127720782)は75地点×Scene／Classic×1440／390の300画面条件、3結末、errors=[]、48通常試遊が成功。成果物14348327059のSHA-256は96d991635d2901b76868c7b5153d0530f5e891e58bf7deed6ae675b1e913cdb0。最終JSONを照合し、幅390の帰還場面も目視した。
+
+初回Chromiumでは3役の名前が幅390で重なった。配置を明示し、さらに名前を通常サイズのまま左右へ離して最終版で解消した。ローカルのChromium実行ファイル不足はGitHub Actionsの固定Playwright環境で検証した。新旧両経路の物資不足による中断、町への帰還、再読込、補充後の再開も別途確認した。
+
+[PR #286](https://github.com/TomTomYoung/adv/pull/286)をmaster 61eca8c4ed7e5c784c8effbf3b9d62384aeffd61へ統合した。検証対象と統合後のtreeは1997924ae7a85c145a1dc82da512548d0b78d19cで一致する。[公開処理44131568423](https://github.com/TomTomYoung/adv/actions/runs/44131568423)のbuild・deploy・report-build-statusは成功。配信中のruntime.json、版一覧、q011、人物追加、地理、story.jsの6ファイルがローカルと完全一致した。公開手動試遊は[第2版q011の試遊画面](https://tomtomyoung.github.io/adv/quest-party-playtest.html?edition=e2&quest=q011&start=site)で、基本4人・Lv2・現場開始・seed1907、縄の結末を選んで完走した。
+
+公開画面で縄を一本取り出す選択、敷設、反対側の固定、人の発見、合流、分岐への同行、入口への同行、メルの帰還確認、報告、結末確定を順に操作した。安全坑で発見した時点にも入口に着いた時点にも、帰還確認の操作が別に残ることを確認した。結果表示は「指定結末でクリア」、46歩・通常戦闘2回2勝・敗北／逃走／救助0・182G・灯油44/90。救助の完了と、像の正体未確認・恒久修復未実施を両立したcompromise結末だった。公開手動確認はこの1経路であり、全3結末の確認はCIによる。
+
+次工程は未接続89件の先頭q012「三つのつるはし」の地理設計と実装。[接続前監査](Q012_WORLD_ROUTE_PLAN.md)に、原本5経路・15基準試遊・90回の保存再読込と、運搬／返却／台帳照合／貸出を分ける方針を記録した。
