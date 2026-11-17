@@ -840,7 +840,7 @@
     "entryScript": "q171.machine.visit",
     "edition": {
       "id": "e2",
-      "revision": 1,
+      "revision": 2,
       "inherits": "e1"
     },
     "relocation": {
@@ -849,7 +849,1425 @@
       "saveRevision": 2,
       "scope": "機関廟20件の現場・出張・同行・受渡し。受注済みの改訂2は旧経路を保持。"
     },
-    "preserveAcceptedRoute": true
+    "preserveAcceptedRoute": true,
+    "storyUpgrades": [
+      {
+        "fromRevision": 1,
+        "toRevision": 2,
+        "previous": {
+          "version": 1,
+          "modelVersion": "1.1",
+          "places": {
+            "entry": "足音を持ち帰るの現場受付",
+            "home": "ダイの家の外戸口",
+            "shoes": "境界の護符を受け取る靴店",
+            "refuge": "家族の避難する下宿屋",
+            "boundary": "家から離れた調査の境界",
+            "rule_place": "閉じた輪の境界標",
+            "test_place": "足音の歩行試験路",
+            "ring": "封じの輪を刻む場所",
+            "return_path": "足音を返す機関廟の入口",
+            "transit": "移動中（現在地はワールド状態）"
+          },
+          "connections": [
+            [
+              "transit",
+              "entry"
+            ],
+            [
+              "transit",
+              "home"
+            ],
+            [
+              "transit",
+              "shoes"
+            ],
+            [
+              "transit",
+              "refuge"
+            ],
+            [
+              "transit",
+              "boundary"
+            ],
+            [
+              "transit",
+              "rule_place"
+            ],
+            [
+              "transit",
+              "test_place"
+            ],
+            [
+              "transit",
+              "ring"
+            ],
+            [
+              "transit",
+              "return_path"
+            ]
+          ],
+          "registry": {
+            "partyAt": {
+              "type": "enum",
+              "initial": "entry",
+              "values": [
+                "entry",
+                "home",
+                "shoes",
+                "refuge",
+                "boundary",
+                "rule_place",
+                "test_place",
+                "ring",
+                "return_path",
+                "transit"
+              ],
+              "meaning": "party の所在または保持者"
+            },
+            "resolution": {
+              "type": "enum",
+              "initial": "pending",
+              "values": [
+                "pending",
+                "loop",
+                "return",
+                "fight",
+                "evacuate"
+              ],
+              "meaning": "現地で実行した解決方法"
+            },
+            "finished": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "現地の結果を確認して依頼を終えた"
+            },
+            "rule": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "rule"
+            },
+            "ward": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "ward"
+            },
+            "wardPaid": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "wardPaid"
+            },
+            "sealed": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "sealed"
+            },
+            "homeReached": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "homeReached"
+            },
+            "detached": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "detached"
+            },
+            "defended": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "defended"
+            },
+            "evacuated": {
+              "type": "boolean",
+              "initial": false,
+              "meaning": "evacuated"
+            },
+            "time": {
+              "type": "integer",
+              "initial": 0,
+              "min": 0,
+              "max": 3,
+              "meaning": "time"
+            },
+            "daiAt": {
+              "type": "enum",
+              "initial": "home",
+              "values": [
+                "entry",
+                "home",
+                "shoes",
+                "refuge",
+                "boundary",
+                "rule_place",
+                "test_place",
+                "ring",
+                "return_path",
+                "transit"
+              ],
+              "meaning": "dai の所在または保持者"
+            },
+            "familyAt": {
+              "type": "enum",
+              "initial": "home",
+              "values": [
+                "entry",
+                "home",
+                "shoes",
+                "refuge",
+                "boundary",
+                "rule_place",
+                "test_place",
+                "ring",
+                "return_path",
+                "transit"
+              ],
+              "meaning": "family の所在または保持者"
+            },
+            "wardPaperAt": {
+              "type": "enum",
+              "initial": "shoes",
+              "values": [
+                "entry",
+                "home",
+                "shoes",
+                "refuge",
+                "boundary",
+                "rule_place",
+                "test_place",
+                "ring",
+                "return_path",
+                "transit",
+                "party",
+                "dai",
+                "family"
+              ],
+              "meaning": "wardPaper の所在または保持者"
+            }
+          },
+          "entities": {
+            "party": {
+              "holder": "partyAt",
+              "kind": "group"
+            },
+            "dai": {
+              "holder": "daiAt",
+              "kind": "person",
+              "character": "q171_dai"
+            },
+            "family": {
+              "holder": "familyAt",
+              "kind": "group",
+              "character": "q171_family"
+            },
+            "wardPaper": {
+              "holder": "wardPaperAt",
+              "kind": "item"
+            }
+          },
+          "propositions": {
+            "truth": {
+              "text": "ダイが止まると音も止まるが、彼が寝た後も、昼間歩いた道を小さく再現する。最初は気のせいに見せ、雨の降らない軒下にも濡れた靴跡が続くことで外在する脅威と示す。妻は冷たいのではなく、家の入口を教えることを恐れている。"
+            }
+          },
+          "initialKnowledge": {},
+          "invariants": [],
+          "scenes": {
+            "entry": {
+              "title": "足音を持ち帰るの現場受付",
+              "place": "entry",
+              "cast": [],
+              "requires": true
+            },
+            "watch": {
+              "title": "家から離れた調査の境界",
+              "place": "boundary",
+              "cast": [
+                {
+                  "entity": "dai",
+                  "display": {
+                    "x": 50
+                  }
+                }
+              ],
+              "requires": true
+            },
+            "onsite": {
+              "title": "ダイの家の外戸口",
+              "place": "home",
+              "cast": [
+                {
+                  "entity": "dai",
+                  "display": {
+                    "x": 50
+                  }
+                }
+              ],
+              "requires": true
+            },
+            "rule_done": {
+              "title": "閉じた輪の境界標",
+              "place": "rule_place",
+              "cast": [
+                {
+                  "entity": "dai",
+                  "display": {
+                    "x": 50
+                  }
+                }
+              ],
+              "requires": true
+            },
+            "ward_done": {
+              "title": "境界の護符を受け取る靴店",
+              "place": "shoes",
+              "cast": [
+                {
+                  "entity": "dai",
+                  "display": {
+                    "x": 50
+                  }
+                }
+              ],
+              "requires": true
+            },
+            "wait_done": {
+              "title": "足音の歩行試験路",
+              "place": "test_place",
+              "cast": [
+                {
+                  "entity": "dai",
+                  "display": {
+                    "x": 50
+                  }
+                }
+              ],
+              "requires": true
+            },
+            "ring": {
+              "title": "封じの輪を刻む場所",
+              "place": "ring",
+              "cast": [
+                {
+                  "entity": "dai",
+                  "display": {
+                    "x": 50
+                  }
+                }
+              ],
+              "requires": true
+            },
+            "loop_home": {
+              "title": "ダイの家の外戸口",
+              "place": "home",
+              "cast": [
+                {
+                  "entity": "dai",
+                  "display": {
+                    "x": 50
+                  }
+                }
+              ],
+              "requires": true
+            },
+            "returned": {
+              "title": "足音を返す機関廟の入口",
+              "place": "return_path",
+              "cast": [
+                {
+                  "entity": "dai",
+                  "display": {
+                    "x": 50
+                  }
+                }
+              ],
+              "requires": true
+            },
+            "return_home": {
+              "title": "ダイの家の外戸口",
+              "place": "home",
+              "cast": [
+                {
+                  "entity": "dai",
+                  "display": {
+                    "x": 50
+                  }
+                }
+              ],
+              "requires": true
+            },
+            "defense": {
+              "title": "ダイの家の外戸口",
+              "place": "home",
+              "cast": [
+                {
+                  "entity": "dai",
+                  "display": {
+                    "x": 31
+                  }
+                },
+                {
+                  "entity": "family",
+                  "display": {
+                    "x": 69
+                  }
+                }
+              ],
+              "requires": true
+            },
+            "defended": {
+              "title": "ダイの家の外戸口",
+              "place": "home",
+              "cast": [
+                {
+                  "entity": "dai",
+                  "display": {
+                    "x": 50
+                  }
+                }
+              ],
+              "requires": true
+            },
+            "collect_family": {
+              "title": "ダイの家の外戸口",
+              "place": "home",
+              "cast": [
+                {
+                  "entity": "dai",
+                  "display": {
+                    "x": 31
+                  }
+                },
+                {
+                  "entity": "family",
+                  "display": {
+                    "x": 69
+                  }
+                }
+              ],
+              "requires": true
+            },
+            "evacuated": {
+              "title": "家族の避難する下宿屋",
+              "place": "refuge",
+              "cast": [
+                {
+                  "entity": "dai",
+                  "display": {
+                    "x": 31
+                  }
+                },
+                {
+                  "entity": "family",
+                  "display": {
+                    "x": 69
+                  }
+                }
+              ],
+              "requires": true
+            },
+            "watch_ward_ready": {
+              "title": "家から離れた調査の境界",
+              "place": "boundary",
+              "cast": [
+                {
+                  "entity": "dai",
+                  "display": {
+                    "x": 50
+                  }
+                }
+              ],
+              "requires": true
+            }
+          },
+          "actions": {
+            "entry_visit": {
+              "from": [
+                "entry"
+              ],
+              "to": "onsite",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party"
+                  ],
+                  "path": [
+                    "transit",
+                    "home"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "home",
+                "companions": []
+              },
+              "depart": []
+            },
+            "watch_rule": {
+              "from": [
+                "watch"
+              ],
+              "to": "rule_done",
+              "requires": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "stories.q171.values.time"
+                    },
+                    "right": 3
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q171.values.rule"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "dai"
+                  ],
+                  "path": [
+                    "transit",
+                    "rule_place"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "rule",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "time",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "stories.q171.values.time"
+                      },
+                      1
+                    ]
+                  }
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "rule_place",
+                "companions": [
+                  "dai"
+                ]
+              },
+              "depart": []
+            },
+            "watch_ward": {
+              "from": [
+                "watch"
+              ],
+              "to": "watch_ward_ready",
+              "requires": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "stories.q171.values.time"
+                    },
+                    "right": 3
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q171.values.ward"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "wardPaid",
+                  "value": true
+                }
+              ],
+              "cost": {
+                "gold": 20
+              },
+              "once": false
+            },
+            "watch_wait": {
+              "from": [
+                "watch"
+              ],
+              "to": "wait_done",
+              "requires": {
+                "op": "lt",
+                "left": {
+                  "ref": "stories.q171.values.time"
+                },
+                "right": 3
+              },
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "dai"
+                  ],
+                  "path": [
+                    "transit",
+                    "test_place"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "time",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "stories.q171.values.time"
+                      },
+                      1
+                    ]
+                  }
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "test_place",
+                "companions": [
+                  "dai"
+                ]
+              },
+              "depart": []
+            },
+            "watch_loop": {
+              "from": [
+                "watch"
+              ],
+              "to": "ring",
+              "requires": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "lt",
+                    "left": {
+                      "ref": "stories.q171.values.time"
+                    },
+                    "right": 3
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q171.values.rule"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q171.values.ward"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "dai"
+                  ],
+                  "path": [
+                    "transit",
+                    "ring"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "ring",
+                "companions": [
+                  "dai"
+                ]
+              },
+              "depart": []
+            },
+            "watch_return": {
+              "from": [
+                "watch"
+              ],
+              "to": "returned",
+              "requires": {
+                "op": "lt",
+                "left": {
+                  "ref": "stories.q171.values.time"
+                },
+                "right": 3
+              },
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "dai"
+                  ],
+                  "path": [
+                    "transit",
+                    "return_path"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "return_path",
+                "companions": [
+                  "dai"
+                ]
+              },
+              "depart": []
+            },
+            "watch_fight": {
+              "from": [
+                "watch"
+              ],
+              "to": "defense",
+              "requires": {
+                "op": "gte",
+                "left": {
+                  "ref": "stories.q171.values.time"
+                },
+                "right": 3
+              },
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "dai"
+                  ],
+                  "path": [
+                    "transit",
+                    "home"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "home",
+                "companions": [
+                  "dai"
+                ]
+              },
+              "depart": []
+            },
+            "watch_leave": {
+              "from": [
+                "watch"
+              ],
+              "to": "collect_family",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "dai"
+                  ],
+                  "path": [
+                    "transit",
+                    "home"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "home",
+                "companions": [
+                  "dai"
+                ]
+              },
+              "depart": []
+            },
+            "onsite_begin": {
+              "from": [
+                "onsite"
+              ],
+              "to": "watch",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "dai"
+                  ],
+                  "path": [
+                    "transit",
+                    "boundary"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "time",
+                  "value": 0
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "boundary",
+                "companions": [
+                  "dai"
+                ]
+              },
+              "depart": []
+            },
+            "rule_done_return": {
+              "from": [
+                "rule_done"
+              ],
+              "to": "watch",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "dai"
+                  ],
+                  "path": [
+                    "transit",
+                    "boundary"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "boundary",
+                "companions": [
+                  "dai"
+                ]
+              },
+              "depart": []
+            },
+            "ward_done_return": {
+              "from": [
+                "ward_done"
+              ],
+              "to": "watch",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "dai"
+                  ],
+                  "path": [
+                    "transit",
+                    "boundary"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "boundary",
+                "companions": [
+                  "dai"
+                ]
+              },
+              "depart": []
+            },
+            "wait_done_return": {
+              "from": [
+                "wait_done"
+              ],
+              "to": "watch",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "dai"
+                  ],
+                  "path": [
+                    "transit",
+                    "boundary"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "boundary",
+                "companions": [
+                  "dai"
+                ]
+              },
+              "depart": []
+            },
+            "ring_home": {
+              "from": [
+                "ring"
+              ],
+              "to": "loop_home",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "dai"
+                  ],
+                  "path": [
+                    "transit",
+                    "home"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "home",
+                "companions": [
+                  "dai"
+                ]
+              },
+              "depart": [
+                {
+                  "op": "transfer",
+                  "entity": "wardPaper",
+                  "from": "party",
+                  "to": "ring"
+                },
+                {
+                  "op": "set",
+                  "key": "sealed",
+                  "value": true
+                }
+              ]
+            },
+            "loop_home_finish": {
+              "from": [
+                "loop_home"
+              ],
+              "ending": "loop",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "homeReached",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "loop"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "returned_home": {
+              "from": [
+                "returned"
+              ],
+              "to": "return_home",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "dai"
+                  ],
+                  "path": [
+                    "transit",
+                    "home"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "home",
+                "companions": [
+                  "dai"
+                ]
+              },
+              "depart": [
+                {
+                  "op": "set",
+                  "key": "detached",
+                  "value": true
+                }
+              ]
+            },
+            "return_home_finish": {
+              "from": [
+                "return_home"
+              ],
+              "ending": "return",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "homeReached",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "return"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "defense_fight": {
+              "from": [
+                "defense"
+              ],
+              "to": "defended",
+              "requires": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.relocatedBattleResult.q171"
+                      },
+                      "right": "escape"
+                    }
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.relocatedBattleResult.q171"
+                      },
+                      "right": "lose"
+                    }
+                  }
+                ]
+              },
+              "effects": [],
+              "once": false
+            },
+            "defense_evacuate": {
+              "from": [
+                "defense"
+              ],
+              "to": "evacuated",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "dai",
+                    "family"
+                  ],
+                  "path": [
+                    "transit",
+                    "refuge"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "refuge",
+                "companions": [
+                  "dai",
+                  "family"
+                ]
+              },
+              "depart": []
+            },
+            "defended_finish": {
+              "from": [
+                "defended"
+              ],
+              "ending": "fight",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "defended",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "fight"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "collect_family_escort": {
+              "from": [
+                "collect_family"
+              ],
+              "to": "evacuated",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "dai",
+                    "family"
+                  ],
+                  "path": [
+                    "transit",
+                    "refuge"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "refuge",
+                "companions": [
+                  "dai",
+                  "family"
+                ]
+              },
+              "depart": []
+            },
+            "evacuated_finish": {
+              "from": [
+                "evacuated"
+              ],
+              "ending": "evacuate",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "set",
+                  "key": "evacuated",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "resolution",
+                  "value": "evacuate"
+                },
+                {
+                  "op": "set",
+                  "key": "finished",
+                  "value": true
+                }
+              ],
+              "once": false
+            },
+            "watch_ward_ready_continue": {
+              "from": [
+                "watch_ward_ready"
+              ],
+              "to": "ward_done",
+              "requires": true,
+              "effects": [
+                {
+                  "op": "move",
+                  "entities": [
+                    "party",
+                    "dai"
+                  ],
+                  "path": [
+                    "transit",
+                    "shoes"
+                  ],
+                  "assistant": "party",
+                  "carrier": "party"
+                },
+                {
+                  "op": "transfer",
+                  "entity": "wardPaper",
+                  "from": "shoes",
+                  "to": "party"
+                },
+                {
+                  "op": "set",
+                  "key": "ward",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "key": "time",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "stories.q171.values.time"
+                      },
+                      1
+                    ]
+                  }
+                }
+              ],
+              "once": false,
+              "journey": {
+                "to": "shoes",
+                "companions": [
+                  "dai"
+                ]
+              },
+              "depart": []
+            }
+          },
+          "endings": {
+            "loop": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q171.values.resolution"
+                  },
+                  "right": "loop"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q171.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q171.values.partyAt"
+                      },
+                      "right": "home"
+                    }
+                  ]
+                }
+              ]
+            },
+            "return": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q171.values.resolution"
+                  },
+                  "right": "return"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q171.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q171.values.partyAt"
+                      },
+                      "right": "home"
+                    }
+                  ]
+                }
+              ]
+            },
+            "fight": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q171.values.resolution"
+                  },
+                  "right": "fight"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q171.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q171.values.partyAt"
+                      },
+                      "right": "home"
+                    }
+                  ]
+                }
+              ]
+            },
+            "evacuate": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q171.values.resolution"
+                  },
+                  "right": "evacuate"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q171.values.finished"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q171.values.partyAt"
+                      },
+                      "right": "refuge"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "worldPlaces": {
+            "entry": {
+              "kind": "dungeon",
+              "dungeon": "region_8",
+              "map": "region_8_f1",
+              "x": 3,
+              "y": 1
+            },
+            "home": {
+              "kind": "town",
+              "location": "machine_home"
+            },
+            "shoes": {
+              "kind": "town",
+              "location": "machine_shoes"
+            },
+            "refuge": {
+              "kind": "town",
+              "location": "salome_inn"
+            },
+            "boundary": {
+              "kind": "dungeon",
+              "dungeon": "salome_road",
+              "map": "e2_salome_outskirts",
+              "x": 3,
+              "y": 3
+            },
+            "rule_place": {
+              "kind": "dungeon",
+              "dungeon": "salome_road",
+              "map": "e2_salome_outskirts",
+              "x": 7,
+              "y": 1
+            },
+            "test_place": {
+              "kind": "dungeon",
+              "dungeon": "salome_road",
+              "map": "e2_salome_outskirts",
+              "x": 7,
+              "y": 5
+            },
+            "ring": {
+              "kind": "dungeon",
+              "dungeon": "salome_road",
+              "map": "e2_salome_outskirts",
+              "x": 13,
+              "y": 3
+            },
+            "return_path": {
+              "kind": "dungeon",
+              "dungeon": "region_8",
+              "map": "region_8_f1",
+              "x": 1,
+              "y": 1
+            }
+          },
+          "revision": 1
+        },
+        "values": [
+          {
+            "key": "wifeAt",
+            "value": "family"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "q171.scene.entry": {
@@ -2850,6 +4268,14 @@
           "family"
         ],
         "meaning": "wardPaper の所在または保持者"
+      },
+      "wifeAt": {
+        "type": "enum",
+        "initial": "family",
+        "values": [
+          "family"
+        ],
+        "meaning": "妻は既存の家族集団に属し、その実所在に従う"
       }
     },
     "entities": {
@@ -2870,6 +4296,11 @@
       "wardPaper": {
         "holder": "wardPaperAt",
         "kind": "item"
+      },
+      "wife": {
+        "holder": "wifeAt",
+        "kind": "person",
+        "character": "q171_wife"
       }
     },
     "propositions": {
@@ -2906,7 +4337,13 @@
           {
             "entity": "dai",
             "display": {
-              "x": 50
+              "x": 31
+            }
+          },
+          {
+            "entity": "wife",
+            "display": {
+              "x": 69
             }
           }
         ],
@@ -2971,7 +4408,13 @@
           {
             "entity": "dai",
             "display": {
-              "x": 50
+              "x": 31
+            }
+          },
+          {
+            "entity": "wife",
+            "display": {
+              "x": 69
             }
           }
         ],
@@ -2997,7 +4440,13 @@
           {
             "entity": "dai",
             "display": {
-              "x": 50
+              "x": 31
+            }
+          },
+          {
+            "entity": "wife",
+            "display": {
+              "x": 69
             }
           }
         ],
@@ -3029,7 +4478,13 @@
           {
             "entity": "dai",
             "display": {
-              "x": 50
+              "x": 31
+            }
+          },
+          {
+            "entity": "wife",
+            "display": {
+              "x": 69
             }
           }
         ],
@@ -4066,7 +5521,7 @@
         "y": 1
       }
     },
-    "revision": 1
+    "revision": 2
   },
   "settlement": "salome",
   "receptionLocations": [

@@ -6,7 +6,7 @@ import {auditRelocatedCast,loadRelocatedCastQuests,relocatedCastFingerprint} fro
 const quests=await loadRelocatedCastQuests();
 test('cast audit distinguishes measured empty casts, reviewed scenes and candidate roles',()=>{
  const report=auditRelocatedCast(quests);
- assert.deepEqual(report.summary,{"quests":100,"scenes":753,"emptyCastScenes":241,"personEntities":157,"characterLinkedEntities":154,"reviewedQuests":100,"reviewedScenes":753,"noPersonEvidenceScenes":240,"personEvidenceScenes":513,"candidateRoles":1,"connectedRoles":211,"unreviewedScenes":0});
+ assert.deepEqual(report.summary,{"quests":100,"scenes":753,"emptyCastScenes":241,"personEntities":158,"characterLinkedEntities":155,"reviewedQuests":100,"reviewedScenes":753,"noPersonEvidenceScenes":241,"personEvidenceScenes":512,"candidateRoles":0,"connectedRoles":212,"unreviewedScenes":0});
  const scaleQuest=report.quests.find(q=>q.id==='q148');
  assert.deepEqual(Object.keys(scaleQuest.review.people),['q148_egi','q148_customer']);
  assert.deepEqual(Object.fromEntries(scaleQuest.scenes.map(s=>[s.id,s.cast.map(c=>c.entity)])),{
@@ -139,19 +139,19 @@ test('cast audit distinguishes measured empty casts, reviewed scenes and candida
  assert.ok(farewell.scenes.every(s=>s.cast.length===1&&s.cast[0].entity==='sef'));
  const footsteps=report.quests.find(q=>q.id==='q171');
  assert.deepEqual(Object.fromEntries(Object.entries(footsteps.review.people).map(([id,role])=>[id,{status:role.status,entity:role.entity}])),{
-  q171_dai:{status:'connected',entity:'dai'},q171_wife:{status:'candidate',entity:undefined},
+  q171_dai:{status:'connected',entity:'dai'},q171_wife:{status:'connected',entity:'wife'},
   q171_family:{status:'connected',entity:'family'}
  });
  assert.deepEqual(Object.fromEntries(footsteps.scenes.map(s=>[s.id,s.review.people])),{
-  entry:['q171_wife'],watch:['q171_dai'],onsite:['q171_dai','q171_wife'],rule_done:['q171_dai'],
+  entry:[],watch:['q171_dai'],onsite:['q171_dai','q171_wife'],rule_done:['q171_dai'],
   ward_done:['q171_dai'],wait_done:['q171_dai'],ring:['q171_dai'],loop_home:['q171_dai','q171_wife'],
   returned:['q171_dai'],return_home:['q171_dai','q171_wife'],defense:['q171_dai','q171_family'],
   defended:['q171_dai','q171_wife'],collect_family:['q171_dai','q171_family'],
   evacuated:['q171_dai','q171_family'],watch_ward_ready:['q171_dai']
  });
  assert.deepEqual(Object.fromEntries(footsteps.scenes.map(s=>[s.id,s.cast.map(c=>c.entity)])),{
-  entry:[],watch:['dai'],onsite:['dai'],rule_done:['dai'],ward_done:['dai'],wait_done:['dai'],ring:['dai'],
-  loop_home:['dai'],returned:['dai'],return_home:['dai'],defense:['dai','family'],defended:['dai'],
+  entry:[],watch:['dai'],onsite:['dai','wife'],rule_done:['dai'],ward_done:['dai'],wait_done:['dai'],ring:['dai'],
+  loop_home:['dai','wife'],returned:['dai'],return_home:['dai','wife'],defense:['dai','family'],defended:['dai','wife'],
   collect_family:['dai','family'],evacuated:['dai','family'],watch_ward_ready:['dai']
  });
  const names=report.quests.find(q=>q.id==='q172');
