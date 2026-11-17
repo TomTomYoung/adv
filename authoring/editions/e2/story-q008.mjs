@@ -110,5 +110,14 @@ export function floatingCoffinSource(){
   s.story.endings.informed=and(s.story.endings.informed,s.is('partyAt','jetty'),s.is('declared'),s.is('coffinAt','river'),s.is('outerBaseAt','shore'));
   s.story.endings.contract=and(s.story.endings.contract,s.is('partyAt','river'),s.is('outerBaseAt','jetty'),s.is('foodAt','recipient'));
   s.story.endings.compromise=and(s.story.endings.compromise,s.is('partyAt','jetty'),not(s.is('permit')),s.is('foodAt','recipient'));
+  // Group illustrations contain several faces. Put groups behind the individual
+  // speakers, keeping both rows clear of the HUD and dialogue at narrow widths.
+  for(const scene of Object.values(s.story.scenes)){
+    const groups=scene.cast.filter(c=>['family','bearers'].includes(c.entity)),people=scene.cast.filter(c=>!groups.includes(c));
+    if(groups.length&&people.length){
+      groups.forEach((c,i)=>c.display={x:groups.length===1?50:[25,75][i],y:25,scale:.5,cardScale:1,layer:i});
+      people.forEach((c,i)=>c.display={x:people.length===1?50:[25,75][i],y:3,scale:.5,cardScale:1,layer:10+i});
+    }else scene.cast.forEach((c,i)=>c.display={x:scene.cast.length===1?50:scene.cast.length===2?[25,75][i]:[20,50,80][i],y:10,scale:scene.cast.length===1?.75:.5,cardScale:1,layer:i});
+  }
   return s;
 }

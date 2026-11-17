@@ -1,7 +1,7 @@
 // The retained layer survives message/HUD rebuilds; it never advances the game.
 const defaults=count=>count===1?[50]:count===2?[28,72]:[22,78,36,64,15,85,43,57];
 function placement(c,index,count,cards){
-  const d=c.display??{},scale=d.scale??1,angle=d.angle??0;
+  const d=c.display??{},scale=(cards?d.cardScale:undefined)??d.scale??1,angle=d.angle??0;
   return {left:cards?'':`${d.x??({left:28,center:50,right:72}[d.position])??defaults(count)[index%8]}%`,bottom:cards?'':`${d.y??-2}%`,
     transform:`${cards?'':'translateX(-50%) '}rotate(${angle}deg) scale(${scale})`,opacity:String((d.opacity??1)*(c.remote ? .7 : 1))};
 }

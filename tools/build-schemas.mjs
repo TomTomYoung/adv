@@ -19,7 +19,7 @@ const string={type:'string',minLength:1},integer={type:'integer',minimum:0},bool
 const obj=(properties,required=Object.keys(properties),additionalProperties=false)=>({type:'object',properties,required,additionalProperties});
 const variants=[];
 const command=(names,properties={},required=Object.keys(properties))=>{for(const name of names.split(' '))variants.push(obj({op:{const:name},...properties},['op',...required]));};
-const castDisplay=obj({position:{enum:['left','center','right']},x:{type:'number',minimum:0,maximum:100},y:{type:'number',minimum:-25,maximum:50},scale:{type:'number',minimum:.5,maximum:1.5},flip:boolean,opacity:{type:'number',minimum:0,maximum:1},angle:{type:'number',minimum:-360,maximum:360},layer:{type:'integer',minimum:0,maximum:99},asset:string},[]);
+const castDisplay=obj({position:{enum:['left','center','right']},x:{type:'number',minimum:0,maximum:100},y:{type:'number',minimum:-25,maximum:50},scale:{type:'number',minimum:.5,maximum:1.5},cardScale:{type:'number',minimum:.5,maximum:1.5},flip:boolean,opacity:{type:'number',minimum:0,maximum:1},angle:{type:'number',minimum:-360,maximum:360},layer:{type:'integer',minimum:0,maximum:99},asset:string},[]);
 const milliseconds={type:'integer',minimum:0,maximum:10000};
 const castTransition=obj({enter:milliseconds,exit:milliseconds,move:milliseconds,change:milliseconds,easing:{enum:CAST_EASINGS},wait:boolean},[]);
 command('scene.cast',{transition:castTransition,mode:{enum:['stage','cards']},cast:{type:'array',maxItems:8,items:obj({character:string,display:castDisplay},['character'])}},['cast']);

@@ -18,13 +18,14 @@ export function floatingCoffinFixtures(){
   ];
   const corners={yoru:[0,0,244,250],family:[0,0,250,249],bearers:[0,0,251,251],recipient:[0,0,0,0],inspector:[0,0,0,0]};
   const images={scene:Object.fromEntries(Object.keys(corners).map(id=>[id,{src:`assets/images/characters/sprites/${id}.webp`,size:[1173,1341],cornerAlphas:corners[id]}])),classic:Object.fromEntries(Object.keys(corners).map(id=>[id,{src:`assets/images/characters/generated/${id}.webp`,size:[896,1024],cornerAlphas:[255,255,255,255]}]))};
+  const faces={yoru:[.43,.15,.58,.28],family:[.20,.12,.78,.40],bearers:[.14,.16,.88,.34],recipient:[.42,.13,.59,.28],inspector:[.43,.14,.61,.30]};
   const capture=(g,variant)=>{
     if(g.state.quests.q008.stage==='completed')return;
     const scene=g.state.stories.q008.scene,key=variant+'/'+scene;if(seen.has(key))return;seen.add(key);checkpoint(g);
     const cast=variant.startsWith('preserved')&&scene==='application'?['yoru','inspector']:groups.find(([scenes])=>scenes.includes(scene))?.[1];assert.ok(cast,scene);
     const dialog=projectGame(g).dialog;assert.deepEqual(dialog.scene.cast.map(c=>c.id),cast);
     const choice=dialog.options.find(o=>o.enabled);assert.ok(choice);
-    fixtures.push({edition:'e2',quest:'q008',scene,variant,cast,save:g.save(),expectedText:dialog.text,availableChoice:choice.id,blockedChoices:dialog.options.filter(o=>!o.enabled).map(o=>o.id),imageExpectationsByLayout:images});
+    fixtures.push({edition:'e2',quest:'q008',scene,variant,cast,save:g.save(),expectedText:dialog.text,availableChoice:choice.id,blockedChoices:dialog.options.filter(o=>!o.enabled).map(o=>o.id),imageExpectationsByLayout:images,...(!variant.startsWith('preserved')?{faces:Object.fromEntries(cast.map(id=>[id,faces[id]])),clearOfHud:true}:{})});
   };
   for(const r of routes){const g=ready();capture(g,'current');for(const id of r.path){choose(g,id);capture(g,'current');}assert.equal(g.state.quests.q008.outcome,r.outcome);outcomes.add('e2/q008/'+r.outcome);}
   for(const old of [1,2])for(const r of oldRoutes){const g=migrated(ready({old}));capture(g,'preserved-r'+old);for(const id of r.path){choose(g,id);capture(g,'preserved-r'+old);}}
