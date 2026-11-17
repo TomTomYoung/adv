@@ -81,7 +81,7 @@ for(const [scene,path] of localWork)test('q008 committed local work survives res
 test('q008 six physical sites are reachable and avoid water controls, doors and supplies',()=>{
   const g=ready(),map=g.map(),points=Object.values(g.data.quests.q008.story.worldPlaces);assert.equal(new Set(points.map(p=>`${p.x},${p.y}`)).size,6);
   for(const p of points){assert.ok(g.walkable(map,p.x,p.y));assert.ok(!['1,1','9,1','2,1','8,1'].includes(`${p.x},${p.y}`));assert.ok(pathTo(g,p.x,p.y).length||g.state.location.x===p.x&&g.state.location.y===p.y);}
-  assert.deepEqual(data.maps.region_1_lower_landing.rows,previousData.maps.region_1_lower_landing.rows);checkpoint(g);
+  for(const key of ['tiles','cells']){assert.ok(data.maps.region_1_lower_landing[key]);assert.deepEqual(data.maps.region_1_lower_landing[key],previousData.maps.region_1_lower_landing[key]);}checkpoint(g);
 });
 for(const version of [1,2])for(const r of oldRoutes)for(let step=0;step<=r.path.length;step++)test(`q008 revision ${version} ${r.outcome} checkpoint ${step} migrates and completes its original route`,()=>{
   const old=ready({old:version});choose(old,...r.path.slice(0,step));const before=structuredClone(old.state),g=migrated(old),s=g.state.stories.q008;
