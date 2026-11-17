@@ -33,7 +33,10 @@ test('q005 bed moves at departure and arrival; pipes and both tests are local wo
   const before=g.save();assert.throws(()=>g.complete('q005','informed'));assert.equal(g.save(),before);choose(g,'verify');assert.equal(values(g).foodTest,true);
 });
 test('q005 burning consumes one torch at the furnace and rewards only after walking back',()=>{
-  const g=ready(),torch=g.state.inventory.torch;depart(g,'burn');assert.equal(g.state.inventory.torch,torch);assert.equal(values(g).bedAt,'party');assert.equal(values(g).totoAt,'drain');arrive(g);
+  const g=ready(),torch=g.state.inventory.torch;
+  assert.ok(projectGame(g).dialog.options.find(o=>o.id==='burn').text.includes(data.items.torch.name));
+  depart(g,'burn');assert.equal(g.state.inventory.torch,torch);assert.equal(values(g).bedAt,'party');assert.equal(values(g).totoAt,'drain');arrive(g);
+  const burn=projectGame(g).dialog.options.find(o=>o.id==='burn');assert.ok(burn.text.includes(data.items.torch.name));assert.ok(burn.requirement.includes(data.items.torch.name));
   assert.deepEqual(projectGame(g).dialog.scene.cast,[]);assert.equal(values(g).fungus,'growing');assert.equal(values(g).bedAt,'disposal');choose(g,'burn');assert.equal(g.state.inventory.torch,torch-1);assert.equal(values(g).fungus,'burned');
   assert.throws(()=>g.complete('q005','contract'));depart(g,'return');checkpoint(g);assert.equal(g.state.quests.q005.stage,'active');arrive(g);assert.equal(values(g).bedAt,'disposal');assert.deepEqual(projectGame(g).dialog.scene.cast.map(c=>c.id),['toto']);choose(g,'finish');assert.equal(g.state.inventory.torch,torch-1);
 });
