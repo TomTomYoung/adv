@@ -26,7 +26,7 @@ for(const r of routes)test('q007 new route '+r.path.join('/'),()=>{
   const rewards=JSON.stringify([g.state.gold,g.state.actors,g.state.vars]);g.run(g.data.quests.q007.model.entryScript);drain(g);assert.equal(JSON.stringify([g.state.gold,g.state.actors,g.state.vars]),rewards);
   if(r.outcome==='contract'){assert.equal(values(g).lettersAt,'brother');assert.equal(values(g).voiceKnown,false);assert.equal(values(g).met,false);}
 });
-test('q007 adjoining town locations preserve the tavern, cistern and flooded eighth floor',()=>{
+test('q007 adjoining town locations preserve the tavern, cistern and eighth-floor landing',()=>{
   const g=ready({visit:false});go(g,'port');assert.equal(nextQuestPlace(data,g.state,'q007').location,'e2_voice_port');
   for(const id of Object.keys(voiceWallLocations)){assert.ok(data.locations[id]);assert.equal(previousData.locations[id],undefined);}
   for(const id of Object.keys(previousData.locations))assert.deepEqual(data.locations[id],previousData.locations[id]);
