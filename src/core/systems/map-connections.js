@@ -34,8 +34,8 @@ export function connectionSurfaces(data,state){
   if(!d||!loc)return {boundaries,doors};
   for(const spec of Object.values(d.systems))if(spec.use==='map_connections'&&spec.enabled!==false)for(const link of spec.links){
     const s=connectionSide(link,loc.map);if(!s?.from.side)continue;
-    const key=`${s.from.x},${s.from.y}/${s.from.side}`;
-    boundaries[key]=true;doors[key]={kind:link.kind,name:link.name,closed:Boolean(connectionBlocked(data,state,s)),destination:data.maps[s.to.map].name};
+    const key=`${s.from.x},${s.from.y}/${s.from.side}`,reason=connectionBlocked(data,state,s);
+    boundaries[key]=true;doors[key]={kind:link.kind,name:link.name,closed:Boolean(reason),reason,destination:data.maps[s.to.map].name};
   }
   return {boundaries,doors};
 }

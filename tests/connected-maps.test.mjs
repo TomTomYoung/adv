@@ -46,9 +46,11 @@ test('a sealed flooded map cannot be entered by moving, interacting, an action, 
 test('door appearance, ray occlusion, map marker and action permission follow the same flood state',()=>{
   const g=begin();walk(g,9,1);g.state.location.facing='east';let d=projectGame(g).dungeon;
   assert.ok(d.doors['9,1/east'].closed);assert.ok(d.objects.find(o=>o.id==='upper_inlet').closed);
+  assert.equal(d.doors['9,1/east'].reason,compartmentBlocked(data,g.state,'region_1_canal_a'));assert.match(d.surfaceNotice.text,/完全水没.*排水弁/s);
   assert.ok(d.cells[1].every(c=>c.waterDepth===0));assert.ok(d.cells.flat().some(c=>c.waterDepth===1));const ray=traceDungeonRay(d,9.5,1.5,1,0);assert.equal(ray.distance,.5);assert.equal(ray.door.kind,'watertight_door');
   walk(g,2,1);assert.ok(act(g,'water','close','upper_gate'));walk(g,9,1);g.state.location.facing='east';d=projectGame(g).dungeon;
   assert.equal(d.doors['9,1/east'].closed,false);assert.equal(d.objects.find(o=>o.id==='upper_inlet').closed,false);
+  assert.equal(d.doors['9,1/east'].reason,null);assert.match(d.surfaceNotice.text,/通行可能/);assert.doesNotMatch(d.surfaceNotice.text,/完全水没|排水/);
   for(const a of d.systems.flatMap(s=>s.cards??[]).flatMap(c=>c.actions))assert.equal(a.enabled,dungeonActionPlan(data,g.state,a.intent).ok);
   const before=g.save();d.doors['9,1/east'].closed=true;assert.equal(g.save(),before);
 });
