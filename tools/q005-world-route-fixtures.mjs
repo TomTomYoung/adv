@@ -10,7 +10,7 @@ export function drainageFixtures(){
     checkpoint(g);const dialog=projectGame(g).dialog,cast=scene==='furnace'||scene==='burned'?[]:['toto'];
     assert.deepEqual(dialog.scene.cast.map(c=>c.id),cast);
     const choice=dialog.options.find(o=>o.enabled);assert.ok(choice);
-    fixtures.push({edition:'e2',quest:'q005',scene,variant,cast,save:g.save(),expectedText:dialog.text,availableChoice:choice.id,blockedChoices:dialog.options.filter(o=>!o.enabled).map(o=>o.id),imageExpectations:{toto:{src:'assets/images/characters/generated/toto.webp',size:[896,1024],opaque:true}}});
+    fixtures.push({edition:'e2',quest:'q005',scene,variant,cast,save:g.save(),expectedText:dialog.text,availableChoice:choice.id,blockedChoices:dialog.options.filter(o=>!o.enabled).map(o=>o.id),imageExpectations:{toto:{src:'assets/images/characters/sprites/toto.webp',size:[1173,1341],cornerAlphas:[0,0,248,0]}}});
   };
   for(const r of routes){const g=ready();capture(g,'current');for(const id of r.path){choose(g,id);capture(g,'current');}assert.equal(g.state.quests.q005.outcome,r.outcome);outcomes.add('e2/q005/'+r.outcome);}
   for(const path of [[],['cold'],['warm'],['cold','move'],['net']])capture(migrated((()=>{const g=ready({old:true});choose(g,...path);return g;})()),'preserved');

@@ -1,4 +1,5 @@
 import {GameEngine} from '../core/engine.js';
+import {acceptedStoryRouteData} from '../core/accepted-story-routes.js';
 import {nextFormation} from '../core/battle-formation.js';
 import {canEquip} from '../core/jobs.js';
 import {syncSkillGrowth} from '../core/skill-levels.js';
@@ -57,6 +58,7 @@ function preparePrerequisites(engine,id){
     visiting.add(key);satisfy(data.quests[key].requires,false);visiting.delete(key);
     state.quests[key]={stage:'completed',evidence:[],outcome:Object.keys(data.quests[key].outcomes)[0]};
     if(data.quests[key].story)(state.flags.legacyStoryRoutes??={})[key]=true;
+    if(data.quests[key].model?.preserveAcceptedStory)(state.flags.preservedStoryRoutes??={})[key]=true;
     state.records.baselines[key]=snapshotRecords(state.records);prepared.add(key);recount();
   };
   const satisfy=(x,current=true)=>{
@@ -76,7 +78,7 @@ function preparePrerequisites(engine,id){
     }
     throw Error(`未対応の受注前提です: ${x?.op??'不明'}`);
   };
-  satisfy(data.quests[id].requires);return [...prepared];
+  satisfy(data.quests[id].requires);engine.data=acceptedStoryRouteData(data,state);return [...prepared];
 }
 
 export function createQuestTrial(data,catalog,options){
