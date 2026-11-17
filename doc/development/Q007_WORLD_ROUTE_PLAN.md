@@ -1,6 +1,6 @@
 # q007 声を返す壁：現場接続前の監査
 
-2026-11-17。[原稿](../../authoring/stories-v11-2.mjs)と[配布JSON](../../data/quests/q007.json)の5場面・9行動・6経路・3結末を照合した。配布原本のGit blobは c9ead526beb3dedb5661875d3a7823038a03ca41。接続前の設計であり、q007の実装・移行・画面検証は未着手。
+2026-11-17。[原稿](../../authoring/stories-v11-2.mjs)と[配布JSON](../../data/quests/q007.json)の5場面・9行動・6経路・3結末を照合した。配布原本のGit blobは c9ead526beb3dedb5661875d3a7823038a03ca41。この文書は着手前の設計を保存した履歴。[実装と検証結果](Q007_WORLD_ROUTE.md)を参照。
 
 ## 現在の進行と根拠
 

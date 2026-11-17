@@ -1,3 +1,4 @@
+import {buildVoiceWall} from './build-q007-world-route.mjs';
 import {buildMachineQuests} from './build-machine-quests.mjs';
 import {buildWageBox} from './build-q006-world-route.mjs';
 import {buildDrainage} from './build-q005-world-route.mjs';
@@ -123,6 +124,7 @@ export function secondEditionDocument(q,firstSha){
 export async function buildScenarioEditions({check=false}={}){
  await buildDrainage({check});
  await buildWageBox({check});
+ await buildVoiceWall({check});
  await buildCompanionEdition({check});
  const geography=await buildOddlandGeography({check});
  await buildSalomeGeography(geography,{check});
