@@ -625,7 +625,7 @@
       {
         "id": "reserve",
         "place": "entry",
-        "text": "マオと蓋の制御台へ戻った。一時間で閉じる役を決め、生活灯を蓄電器へ切り替える。",
+        "text": "マオと蓋の制御台へ戻った。一時間で閉じる役を決め、これから生活灯を蓄電器へ切り替えて観測蓋を開く。",
         "options": [
           {
             "id": "start",
@@ -651,7 +651,7 @@
       {
         "id": "close",
         "place": "entry",
-        "text": "制御台へ戻った。予定内に蓋を閉じ、生活灯を通常電源へ戻す。",
+        "text": "マオと観覧者が制御台へ戻った。蓋はまだ開いており、生活灯は蓄電器で点いている。ここで蓋の閉鎖と通常電源への復帰を確認する。",
         "options": [
           {
             "id": "finish",
@@ -677,7 +677,7 @@
       {
         "id": "overrun",
         "place": "entry",
-        "text": "保守員が制御台で蓋を閉じる。次回は終了役を別に置くことを申し送る。",
+        "text": "マオと観覧者が制御台へ戻った。蓄電が尽きて生活灯は消えたままで、保守員と蓋の閉鎖・給電の復帰をここで確認する。",
         "options": [
           {
             "id": "finish",
@@ -1871,7 +1871,7 @@
         },
         {
           "op": "narrate",
-          "text": "マオと蓋の制御台へ戻った。一時間で閉じる役を決め、生活灯を蓄電器へ切り替える。"
+          "text": "マオと蓋の制御台へ戻った。一時間で閉じる役を決め、これから生活灯を蓄電器へ切り替えて観測蓋を開く。"
         },
         {
           "op": "choice",
@@ -1945,7 +1945,7 @@
         },
         {
           "op": "narrate",
-          "text": "制御台へ戻った。予定内に蓋を閉じ、生活灯を通常電源へ戻す。"
+          "text": "マオと観覧者が制御台へ戻った。蓋はまだ開いており、生活灯は蓄電器で点いている。ここで蓋の閉鎖と通常電源への復帰を確認する。"
         },
         {
           "op": "choice",
@@ -2019,7 +2019,7 @@
         },
         {
           "op": "narrate",
-          "text": "保守員が制御台で蓋を閉じる。次回は終了役を別に置くことを申し送る。"
+          "text": "マオと観覧者が制御台へ戻った。蓄電が尽きて生活灯は消えたままで、保守員と蓋の閉鎖・給電の復帰をここで確認する。"
         },
         {
           "op": "choice",
@@ -2511,15 +2511,18 @@
       },
       "mao": {
         "holder": "maoAt",
-        "kind": "person"
+        "kind": "person",
+        "character": "q090_mao"
       },
       "visitors": {
         "holder": "visitorsAt",
-        "kind": "group"
+        "kind": "group",
+        "character": "q090_visitors"
       },
       "maintenance": {
         "holder": "maintenanceAt",
-        "kind": "group"
+        "kind": "group",
+        "character": "q090_maintenance"
       }
     },
     "propositions": {
@@ -2533,61 +2536,179 @@
       "entry": {
         "title": "空を返す日の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "mao",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "schedule": {
         "title": "封印された蓄電器",
         "place": "battery",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "mao",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "open": {
         "title": "蓋の下の観測席",
         "place": "sky",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "mao",
+            "display": {
+              "x": 32
+            }
+          },
+          {
+            "entity": "visitors",
+            "display": {
+              "x": 68
+            }
+          }
+        ],
         "requires": true
       },
       "reserve": {
         "title": "空を返す日の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "mao",
+            "display": {
+              "x": 50
+            }
+          }
+        ],
         "requires": true
       },
       "opened": {
         "title": "空を返す日の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "mao",
+            "display": {
+              "x": 32
+            }
+          },
+          {
+            "entity": "visitors",
+            "display": {
+              "x": 68
+            }
+          }
+        ],
         "requires": true
       },
       "close": {
         "title": "空を返す日の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "mao",
+            "display": {
+              "x": 32
+            }
+          },
+          {
+            "entity": "visitors",
+            "display": {
+              "x": 68
+            }
+          }
+        ],
         "requires": true
       },
       "exhausted": {
         "title": "蓋の下の観測席",
         "place": "sky",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "mao",
+            "display": {
+              "x": 32
+            }
+          },
+          {
+            "entity": "visitors",
+            "display": {
+              "x": 68
+            }
+          }
+        ],
         "requires": true
       },
       "overrun": {
         "title": "空を返す日の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "mao",
+            "display": {
+              "x": 17
+            }
+          },
+          {
+            "entity": "visitors",
+            "display": {
+              "x": 50
+            }
+          },
+          {
+            "entity": "maintenance",
+            "display": {
+              "x": 83
+            }
+          }
+        ],
         "requires": true
       },
       "assemble": {
         "title": "空を返す日の現場",
         "place": "entry",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "mao",
+            "display": {
+              "x": 32
+            }
+          },
+          {
+            "entity": "visitors",
+            "display": {
+              "x": 68
+            }
+          }
+        ],
         "requires": true
       },
       "surface": {
         "title": "地上の観測行の到着先",
         "place": "surface",
-        "cast": [],
+        "cast": [
+          {
+            "entity": "mao",
+            "display": {
+              "x": 32
+            }
+          },
+          {
+            "entity": "visitors",
+            "display": {
+              "x": 68
+            }
+          }
+        ],
         "requires": true
       }
     },

@@ -3,6 +3,137 @@
 export const RELOCATED_CAST_REVIEW={
  reviewedAt:'2026-11-17',
  quests:{
+  q090:{
+    "sourceSha256": "df43aab0e8fc21d6e7503ab13a776918e85aba4f40af9cb0976fbfc6cf415056",
+    "identityNotes": [
+      "原稿authoring/quests.txt・structures-5.mjsのQ(90)、初版3場面・現行10場面・7旅程・14行動・4結末を精読した。マオと観覧者の実同行、制御台に残る保守員を区別し、専用画・人数・容貌を補わない。",
+      "観測蓋lidOpen、予備給電backup、全電力fullPower、蓄電枯渇exhausted、給電復帰restoredを分ける。点検や制御台への帰還だけでは開閉・給電切替を確定しない。",
+      "延長では観測席でbackup=false・exhausted=trueとなり、一行が制御台へ実際に戻ってfinishを行うまで蓋と停電は残る。地上観測の二経路は地下の給電を変えない。",
+      "物語改訂1・全registry・全行動・報酬・旧受注を維持する。三つのcharacter参照・cast・3本文以外の配布JSON全体は旧版と一致し、旧保存の待機本文と選択肢も保持する。強行戦の勝利前に全電力と開放を成立させない。"
+    ],
+    "relatedClients": {},
+    "people": {
+      "q090_mao": {
+        "label": "マオ",
+        "status": "connected",
+        "entity": "mao",
+        "need": "全10場面で本人の発言・既存同行に沿って表示する。"
+      },
+      "q090_visitors": {
+        "label": "観覧者たち",
+        "status": "connected",
+        "entity": "visitors",
+        "need": "集合後の7場面だけに表示し、蓄電器の点検へ同行させない。"
+      },
+      "q090_maintenance": {
+        "label": "保守員たち",
+        "status": "connected",
+        "entity": "maintenance",
+        "need": "延長後に一行が制御台へ戻ったoverrunだけに表示する。"
+      }
+    },
+    "scenes": {
+      "entry": {
+        "decision": "person-evidence",
+        "people": [
+          "q090_mao"
+        ],
+        "evidence": "マオは読み上げる名簿を持っている。",
+        "reason": "本人が名簿を手にしている。観覧者や保守員の初期所在だけを根拠に冒頭へ同席表示を追加しない。",
+        "visual": "蓋と生活灯の給電札、マオの名簿を区別する。"
+      },
+      "schedule": {
+        "decision": "person-evidence",
+        "people": [
+          "q090_mao"
+        ],
+        "evidence": "マオは四十分で名前を読み終えられるという。",
+        "reason": "マオだけが蓄電器へ同行し、読み上げ所要時間を述べる。",
+        "visual": "一時間と四十分は物語上の手順であり現実時間の待機を追加しない。"
+      },
+      "reserve": {
+        "decision": "person-evidence",
+        "people": [
+          "q090_mao"
+        ],
+        "evidence": "マオと蓋の制御台へ戻った。",
+        "reason": "点検から本人が制御台へ戻る。観覧者の集合表示は次のopenedから。",
+        "visual": "到着では蓋と予備給電が未起動。startで両方が確定する。"
+      },
+      "opened": {
+        "decision": "person-evidence",
+        "people": [
+          "q090_mao",
+          "q090_visitors"
+        ],
+        "evidence": "名簿を持つマオと観覧者を観測席へ案内する。",
+        "reason": "蓋が開いた制御台に集合し、次の旅程で二役が実同行する。",
+        "visual": "蓄電器で生活灯が点いていてもまだ観測席へ移っていない。"
+      },
+      "open": {
+        "decision": "person-evidence",
+        "people": [
+          "q090_mao",
+          "q090_visitors"
+        ],
+        "evidence": "名簿が読み終わり、残る二十分が告げられた。",
+        "reason": "二役が観測席へ実到着した後、名簿の読み上げを終えている。",
+        "visual": "予定内の帰路と観測延長を区別する。"
+      },
+      "close": {
+        "decision": "person-evidence",
+        "people": [
+          "q090_mao",
+          "q090_visitors"
+        ],
+        "evidence": "マオと観覧者が制御台へ戻った。",
+        "reason": "予定内に二役が制御台へ実同行して戻る。保守員の出演は明記されない。",
+        "visual": "蓋の閉鎖と通常給電への復帰はfinishで確定する。"
+      },
+      "exhausted": {
+        "decision": "person-evidence",
+        "people": [
+          "q090_mao",
+          "q090_visitors"
+        ],
+        "evidence": "蓄電が尽きて生活灯が消えた。",
+        "reason": "二役は延長した観測席に留まる。保守員への言及は離れた制御台を指す。",
+        "visual": "停電はここで成立する。復電や帰還を先取りしない。"
+      },
+      "overrun": {
+        "decision": "person-evidence",
+        "people": [
+          "q090_mao",
+          "q090_visitors",
+          "q090_maintenance"
+        ],
+        "evidence": "保守員と蓋の閉鎖・給電の復帰をここで確認する。",
+        "reason": "戻ってきたマオ・観覧者と制御台にいる保守員を表示する。",
+        "visual": "到着では停電が続き、finishで閉鎖と復帰を確定。exhaustedの履歴は残す。"
+      },
+      "assemble": {
+        "decision": "person-evidence",
+        "people": [
+          "q090_mao",
+          "q090_visitors"
+        ],
+        "evidence": "地上へ向かう列を集めた。",
+        "reason": "制御台で見学の列が集合する。マオは直接または点検後の経路から合流する。",
+        "visual": "地下の蓋と生活灯を変更せず、地上への実同行を待つ。"
+      },
+      "surface": {
+        "decision": "person-evidence",
+        "people": [
+          "q090_mao",
+          "q090_visitors"
+        ],
+        "evidence": "皆が地上の観測台へ到着した。",
+        "reason": "マオと観覧者の二役が既存旅程で地上へ到着する。",
+        "visual": "観測蓋や地下の電源は動かさず、finishで依頼の完了だけを確定する。"
+      }
+    },
+    "next": "対象100件・753場面の出演根拠が揃う。q090の保存・強行戦・実同行・通常攻略・実画面と全体CIを確認し、q171の妻1役は未接続候補として別途扱う。監査完了を全作業完了や全画面目視済みと扱わない。"
+  },
   q089:{
     "sourceSha256": "6601c98d4d6d16db4e202827b46b24657be225bd9f448db11ed4a84990202e4e",
     "identityNotes": [
