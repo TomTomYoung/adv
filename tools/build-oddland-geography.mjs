@@ -1,3 +1,4 @@
+import {ratRouteLocations} from '../authoring/editions/e2/story-q009.mjs';
 import {voiceWallLocations} from '../authoring/editions/e2/story-q007.mjs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -50,7 +51,7 @@ export async function buildOddlandGeography({check=false}={}){
   await extendRoyalGeography(bundle,read);
   extendRoyalSites(bundle);
   extendObservatoryGeography(bundle);
-  Object.assign(bundle.additions.locations,structuredClone(voiceWallLocations));
+  Object.assign(bundle.additions.locations,structuredClone(voiceWallLocations),structuredClone(ratRouteLocations));
   applyOutdoorAppearance(bundle);
   applyIndoorAppearance(bundle);
   const output=JSON.stringify(bundle,null,2)+'\n',file=path.join(root,'data/scenario-editions/e2/geography.json');
