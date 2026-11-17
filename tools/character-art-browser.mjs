@@ -34,7 +34,7 @@ try{
     await page.setViewportSize({width,height:width===390?844:1000});
     for(const [index,f] of fixtures.entries()){
       const extension=f.imageExtension??'webp',textOnlyCast=f.textOnlyCast??[],portraitOnlyCast=f.portraitOnlyCast??[];
-      const expectedImage=id=>f.imageExpectations?.[id]??{src:`assets/images/characters/${folder}/${id}.${extension}`,size:[1024,1536]};
+      const expectedImage=id=>f.imageExpectationsByLayout?.[layout]?.[id]??f.imageExpectations?.[id]??{src:`assets/images/characters/${folder}/${id}.${extension}`,size:[1024,1536]};
       assert.ok(textOnlyCast.every(id=>f.cast.includes(id)),'text-only roles must be in the scene cast');
       assert.ok(portraitOnlyCast.every(id=>f.cast.includes(id)&&!textOnlyCast.includes(id)),'portrait-only roles must have a scene image');
       await page.evaluate(({index,layout})=>h.start(index,layout),{index,layout});
@@ -56,7 +56,7 @@ try{
         assert.equal(await img.count(),1);
         const info=await img.evaluate(async i=>{await i.decode();const c=document.createElement('canvas');c.width=i.naturalWidth;c.height=i.naturalHeight;const ctx=c.getContext('2d');ctx.drawImage(i,0,0);return {src:i.getAttribute('src'),width:i.naturalWidth,height:i.naturalHeight,cornerAlpha:ctx.getImageData(0,0,1,1).data[3],cornerAlphas:[[0,0],[c.width-1,0],[0,c.height-1],[c.width-1,c.height-1]].map(([x,y])=>ctx.getImageData(x,y,1,1).data[3]),bodyAlpha:ctx.getImageData(512,700,1,1).data[3]};});
         const expected=expectedImage(id);
-        assert.equal(info.src,expected.src);assert.deepEqual([info.width,info.height],expected.size);
+        assert.equal(info.src,expected.src,`${f.quest}/${f.scene}/${f.variant}: ${layout} ${width} image`);assert.deepEqual([info.width,info.height],expected.size);
         if(expected.cornerAlphas)assert.deepEqual(info.cornerAlphas,expected.cornerAlphas,'preserved artwork matches its exact corner alpha values');
         else assert.ok(info.cornerAlphas.every(a=>a<=1),'all corners must be transparent to within one alpha level');
         assert.ok(info.bodyAlpha>240);
