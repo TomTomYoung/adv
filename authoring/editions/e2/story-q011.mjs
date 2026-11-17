@@ -87,7 +87,7 @@ export function saltBrideSource(){
   s.invariant('rescued',or(not(s.is('rescued')),and(s.is('colleagueAt','entrance'),s.is('peopleAt','entrance'))),'帰還確認済みの全員は入口に残る');
   s.invariant('repair',or(not(s.is('repainted')),and(s.is('rescued'),s.is('signKnown'),not(s.is('signDestroyed')))),'全員の帰還後に標識を修復する');
   s.invariant('rope',or(not(s.is('ropeLaid')),and(s.is('ropeStarted'),s.is('route','rope'))),'固定点から延ばした一本の縄で帰路をつなぐ');
-  for(const scene of Object.values(s.story.scenes))scene.cast.forEach((c,i)=>{c.when=s.is(c.entity+'At',scene.place);c.display={x:scene.cast.length===1?50:scene.cast.length===2?[25,75][i]:[20,50,80][i],y:10,scale:.5,cardScale:1,layer:i};});
+  for(const scene of Object.values(s.story.scenes))scene.cast.forEach((c,i)=>{c.when=s.is(c.entity+'At',scene.place);c.display={x:scene.cast.length===1?50:scene.cast.length===2?[25,75][i]:[16,50,84][i],y:10,scale:1,cardScale:1,layer:i};});
   return s.done();
 }
 
