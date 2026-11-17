@@ -1,0 +1,62 @@
+name: Validate q009 rat-route routes in Chromium
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'data/**'
+      - 'authoring/editions/e2/story-q009.mjs'
+      - 'tools/build-q009-world-route.mjs'
+      - 'tools/browser-q009-world-route-smoke.mjs'
+      - 'tools/q009-world-route-fixtures.mjs'
+      - 'tools/character-art-browser.mjs'
+      - 'tools/measure-rat-route.mjs'
+      - 'playtests/quest-parties.json'
+      - 'tests/q009-*.mjs'
+      - 'tests/fixtures/e2-q009-before-world.json'
+      - 'assets/images/**'
+      - '.github/workflows/q009-world-route.yml'
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+permissions:
+  contents: read
+jobs:
+  q009-browser:
+    runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned browser driver and verify Japanese fonts
+        run: |
+          npm install --no-save --package-lock=false playwright@1.58.2
+          test -n "$(fc-list :lang=ja)"
+      - name: Measure all three endings with three parties at level one from reception and site
+        run: |
+          mkdir -p /tmp/adv-rat-route-art-browser
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import {measureRatRoute} from './tools/measure-rat-route.mjs';
+          const results=measureRatRoute({levels:[1],starts:['site','reception']});
+          fs.writeFileSync('/tmp/adv-rat-route-art-browser/normal-trials.json',JSON.stringify(results,null,2));
+          assert.equal(results.length,150);
+          assert.ok(results.every(r=>r.status==='cleared'&&r.rescues===0&&r.records.losses===0));
+          console.log(JSON.stringify({trials:results.length,failures:0}));
+          JS
+      - name: Check routes, casting, shortages, rescue and accepted saves
+        run: ADV_BROWSER_OUTPUT=/tmp/adv-rat-route-art-browser node tools/browser-q009-world-route-smoke.mjs
+      - name: Keep q009 checkpoints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: q009-world-route-checkpoints
+          path: /tmp/adv-rat-route-art-browser
+          if-no-files-found: error
+          retention-days: 7

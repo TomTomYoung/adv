@@ -1,5 +1,7 @@
 # 保守・検証記録
 
+[q009の清掃・封鎖・穀物搬送と保存検証](Q009_WORLD_ROUTE.md)。[次工程q010の現場接続前監査](Q010_WORLD_ROUTE_PLAN.md)。
+
 [q008の運搬・水葬・食料引渡しと保存検証](Q008_WORLD_ROUTE.md)。[次工程q009の現場接続前監査](Q009_WORLD_ROUTE_PLAN.md)。
 
 [q007の手紙・同意・面会の実移動と保存検証](Q007_WORLD_ROUTE.md)。[次工程q008の現場接続前監査](Q008_WORLD_ROUTE_PLAN.md)。
