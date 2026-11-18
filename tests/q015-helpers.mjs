@@ -5,8 +5,8 @@ import {GameEngine} from '../src/core/engine.js';
 import {validateSave} from '../src/core/save.js';
 import {projectGame} from '../src/application/projection.js';
 import {createQuestTrial} from '../src/application/quest-playtest.js';
-import {drain,walk,fight,navigateMaps} from './helpers.mjs';
-import {town} from './oddland-helpers.mjs';
+import {drain,walk,fight} from './helpers.mjs';
+import {goToMinePlace} from './mine-world-travel.mjs';
 export {drain,walk,fight};
 export const read=file=>fs.readFile(new URL('../'+file,import.meta.url),'utf8').then(JSON.parse);
 export const data=await loadContent(read,{edition:'e2'}),catalog=await read('playtests/quest-parties.json');
@@ -24,13 +24,7 @@ export function ready({old=false,visit=true}={}){
 }
 export function go(g,key,options={}){
  const p=g.data.quests.q015.story?.worldPlaces?.[key]??previous.locations.find(p=>p.role==='decision');
- if(p.kind==='town'){
-  if(g.state.mode==='dungeon'){navigateMaps(g,'region_2_f1',options);walk(g,17,1,options);assert.ok(g.dispatch({type:'world.cross',route:'return_cart_surface'}),g.state.notice);drain(g);}
-  town(g,p.location);
- }else{
-  if(g.state.mode==='town'){town(g,'hikarigaeri_square');assert.ok(g.dispatch({type:'world.cross',route:'return_cart_surface'}),g.state.notice);drain(g);}
-  navigateMaps(g,p.map,options);walk(g,p.x,p.y,options);drain(g);
- }
+ goToMinePlace(g,p,options);
 }
 
 export function depart(g,id){assert.ok(g.dispatch({type:'choose',id}),id+': '+g.state.notice);drain(g);}

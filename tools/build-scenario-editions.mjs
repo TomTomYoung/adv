@@ -1,3 +1,4 @@
+import {buildTwoGraves} from './build-q017-world-route.mjs';
 import {buildSilentBlast} from './build-q016-world-route.mjs';
 import {buildWeepingPillar} from './build-q015-world-route.mjs';
 import {buildReturnCart} from './build-q014-world-route.mjs';
@@ -143,6 +144,7 @@ export async function buildScenarioEditions({check=false}={}){
  await buildReturnCart({check});
  await buildWeepingPillar({check});
  await buildSilentBlast({check});
+ await buildTwoGraves({check});
  await buildCompanionEdition({check});
  const geography=await buildOddlandGeography({check});
  await buildSalomeGeography(geography,{check});

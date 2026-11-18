@@ -1,6 +1,13 @@
+import {useQuestsBeforeGeographyExpansion} from './historical-geography-helpers.mjs';
 import {loadContent} from '../src/core/loader.js';
 import {read} from '../tools/audit-regional-relocation.mjs';
 export const previous=await loadContent(async file=>{
  if(file==='data/scenario-editions/e2/geography.json')return read('tests/fixtures/e2-geography-before-royal-ruins.json');
- const value=await read(file);if(file==='data/scenario-editions.json'){delete value.editions.e2.geographyUpgrade;delete value.editions.e2.questOverrides.q007;delete value.editions.e2.questOverrides.q009;delete value.editions.e2.questOverrides.q010;delete value.editions.e2.questOverrides.q011;delete value.editions.e2.questOverrides.q012;delete value.editions.e2.questOverrides.q013;delete value.editions.e2.questOverrides.q014;delete value.editions.e2.questOverrides.q015;}if(file==='data/scenario-editions.json'){for(let n=41;n<=50;n++)delete value.editions.e2.questOverrides['q0'+n];for(let n=141;n<=150;n++)delete value.editions.e2.questOverrides['q'+n];for(const n of [71,171].flatMap(s=>Array.from({length:10},(_,i)=>s+i)))delete value.editions.e2.questOverrides['q'+String(n).padStart(3,'0')];}if(file==='data/scenario-editions.json')for(const n of [...Array.from({length:10},(_,i)=>81+i),...Array.from({length:10},(_,i)=>181+i)])delete value.editions.e2.questOverrides['q'+String(n).padStart(3,'0')];if(file==='data/scenario-editions.json'){for(let n=61;n<=70;n++)delete value.editions.e2.questOverrides['q0'+n];for(let n=161;n<=170;n++)delete value.editions.e2.questOverrides['q'+n];}return value;
+ const value=await read(file);
+ if(file==='data/scenario-editions.json'){
+   useQuestsBeforeGeographyExpansion(value.editions.e2);
+   delete value.editions.e2.questOverrides.q012;
+   delete value.editions.e2.questOverrides.q013;
+ }
+ if(file==='data/scenario-editions.json'){for(let n=41;n<=50;n++)delete value.editions.e2.questOverrides['q0'+n];for(let n=141;n<=150;n++)delete value.editions.e2.questOverrides['q'+n];for(const n of [71,171].flatMap(s=>Array.from({length:10},(_,i)=>s+i)))delete value.editions.e2.questOverrides['q'+String(n).padStart(3,'0')];}if(file==='data/scenario-editions.json')for(const n of [...Array.from({length:10},(_,i)=>81+i),...Array.from({length:10},(_,i)=>181+i)])delete value.editions.e2.questOverrides['q'+String(n).padStart(3,'0')];if(file==='data/scenario-editions.json'){for(let n=61;n<=70;n++)delete value.editions.e2.questOverrides['q0'+n];for(let n=161;n<=170;n++)delete value.editions.e2.questOverrides['q'+n];}return value;
 },{edition:'e2'});
