@@ -10,7 +10,18 @@ export {drain,walk,fight};
 export const read=file=>fs.readFile(new URL('../'+file,import.meta.url),'utf8').then(JSON.parse);
 export const data=await loadContent(read,{edition:'e2'});
 export const previous=await read('tests/fixtures/e2-q009-before-world.json');
-export const previousData=await loadContent(async p=>{const d=await read(p);if(p==='data/scenario-editions.json')delete d.editions.e2.questOverrides.q009;if(p==='data/scenario-editions/e2/geography.json')for(const id of Object.keys(ratRouteLocations))delete d.additions.locations[id];return d;},{edition:'e2'});
+export const previousData=await loadContent(async path=>{
+  const contents=await read(path);
+  if(path==='data/scenario-editions.json'){
+    delete contents.editions.e2.questOverrides.q009;
+    delete contents.editions.e2.questOverrides.q018;
+  }
+  if(path==='data/scenario-editions/e2/geography.json'){
+    const sites=Object.values(data.quests.q018.story.worldPlaces).map(p=>p.location);
+    for(const id of [...Object.keys(ratRouteLocations),...sites]) delete contents.additions.locations[id];
+  }
+  return contents;
+},{edition:'e2'});
 export const values=g=>g.state.stories.q009.values;
 export function checkpoint(g){const raw=g.save();assert.deepEqual(validateSave(JSON.parse(raw),data),[]);g.load(raw);assert.equal(g.save(),raw);}
 // All new journeys use the existing surface stair and adjoining town doors.
