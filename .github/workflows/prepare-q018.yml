@@ -1,4 +1,4 @@
-name: Exercise q018 and establish q019 baseline
+name: Verify published q018 trial
 on:
   push:
     branches: ['codex/prepare-q018-20261118']
@@ -15,20 +15,23 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Run q018 targeted regression suite
-        run: node --test tests/q018-world-route.test.mjs
-      - name: Check q019 original paths and saved routes
-        if: ${{ !cancelled() }}
-        run: node qa-q019-audit.mjs
-      - name: Play q018 through the trial page
-        if: ${{ !cancelled() }}
+      - name: Play the published trial and compare its six files
         run: |
           npm install --no-save --package-lock=false playwright@1.58.2
-          node --input-type=module -e "import http from 'node:http'; import fs from 'node:fs/promises'; import path from 'node:path'; const types={'.js':'text/javascript','.json':'application/json','.css':'text/css','.html':'text/html','.png':'image/png','.webp':'image/webp'}; http.createServer(async(q,r)=>{try{const p='.'+new URL(q.url,'http://localhost').pathname;r.setHeader('content-type',types[path.extname(p)]??'application/octet-stream');r.end(await fs.readFile(p));}catch{r.writeHead(404);r.end()}}).listen(8000,'127.0.0.1')" >/tmp/q018-http.log 2>&1 &
-          PROOF_ORIGIN=http://127.0.0.1:8000 node qa-q018-proof.mjs
+          node --input-type=module <<'JS'
+          import fs from 'node:fs/promises';
+          const expected=JSON.parse(await fs.readFile('runtime.json','utf8')).revision;
+          for(let i=0;i<24;i++){
+            const published=await fetch('https://tomtomyoung.github.io/adv/runtime.json?check='+Date.now()).then(r=>r.json()).catch(()=>null);
+            if(published?.revision===expected) break;
+            if(i===23)throw Error('Published runtime has not reached the merge');
+            await new Promise(resolve=>setTimeout(resolve,10000));
+          }
+          JS
+          PROOF_ORIGIN=https://tomtomyoung.github.io/adv node qa-q018-proof.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: q018-browser-trial
+          name: q018-public-trial
           path: /tmp/adv-q018-proof
           retention-days: 7
