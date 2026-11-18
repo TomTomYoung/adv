@@ -1,0 +1,30 @@
+name: Prepare q018 generated data
+on:
+  push:
+    branches: ['codex/prepare-q018-20261118']
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm run build:editions
+      - name: Compare generated distribution files
+        run: |
+          python - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          paths = ['data/scenario-editions/e2/q018.json', 'data/scenario-editions/e2/companions.json', 'data/scenario-editions/e2/geography.json', 'runtime.json', 'doc/development/DATA_SNAPSHOT.json']
+          for path in paths:
+              print('BLOB', path, subprocess.check_output(['git', 'hash-object', path],text=True).strip())
+          manifest=json.loads(Path('runtime.json').read_text())
+          snapshot=json.loads(Path(paths[-1]).read_text())
+          print('SNAPSHOT',snapshot['updated'],snapshot['contentSha256'])
+          print('RUNTIME',manifest['revision'],json.dumps({p:manifest['files'][p] for p in paths[:3]+['data/scenario-editions.json']}))
+          quest=json.loads(Path(paths[0]).read_text())
+          print('STORY',len(quest['story']['scenes']),len(quest['story']['actions']))
+          PY
