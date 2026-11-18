@@ -36,10 +36,24 @@ try{
    }
    const button=await ensure(intent.type==='choose'?'choice:'+intent.id:'move:'+intent.direction);
    if(intent.type==='choose'){
+     if(intent.id==='refund'){
+       await page.setViewportSize({width:390,height:844});
+       await ensure('choice:refund');
+       const box=page.locator('#app .scene-dungeon-controls .scene-message-actions:visible');
+       const scroll=await box.evaluate(el=>{
+         const pad=el.previousElementSibling.getBoundingClientRect();
+         el.scrollTop=el.scrollHeight;
+         const area=el.getBoundingClientRect(),end=el.querySelector('[data-focus="choice:refund"]').getBoundingClientRect().bottom;
+         return {needed:el.scrollHeight>el.clientHeight,atBottom:Math.abs(el.scrollHeight-el.scrollTop-el.clientHeight)<=1,buttonEndVisible:end<=area.bottom+1,padStayed:el.previousElementSibling.getBoundingClientRect().top===pad.top};
+       });
+       assert.ok(scroll.buttonEndVisible&&scroll.atBottom&&scroll.padStayed);
+       await page.locator('#app').screenshot({path:out+'/refund-390.png'});evidence.push({mobileScroll:scroll});
+     }
      const row=await page.evaluate(()=>{const s=questPlaytest.trial.engine.state.stories.q019,v=s.values;return {scene:s.scene,sample:v.sampleAt,first:v.firstDryReading,second:v.secondDryReading,humid:v.humidReading,shortfall:v.verifiedShortfall,received:v.paidToMiners,remaining:v.outstanding,holder:v.refundAt,gold:questPlaytest.trial.engine.state.gold};});
      if(['constant','findings','calculated','due','paid','posted'].includes(row.scene)){evidence.push(row);await page.locator('#app').screenshot({path:out+'/'+row.scene+'.png'});}
    }
    await button.click();
+   if(intent.type==='choose'&&intent.id==='refund')await page.setViewportSize({width:1440,height:1000});
  }
  const r=await page.evaluate(()=>questPlaytest.report());
  assert.equal(r.status,'cleared');assert.equal(r.outcome,'informed');assert.deepEqual(r.gold,trace.expected);assert.equal(r.rescues,0);assert.equal(r.steps,58);
