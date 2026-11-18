@@ -1,5 +1,7 @@
 # シナリオ第2版
 
+[q019の試料計量・旧契約の照合・坑夫への一部返金](../../../development/Q019_WORLD_ROUTE.md)。
+
 [q018の最終返済・塩板の失効・二片と写しの引渡し](../../../development/Q018_WORLD_ROUTE.md)。
 
 [q017の二つの墓・記録照合・弁当箱の受渡しと保存検証](../../../development/Q017_WORLD_ROUTE.md)。
