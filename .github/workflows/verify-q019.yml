@@ -1,4 +1,4 @@
-name: Play q019 mine scale in Chromium
+name: Verify published q019 mine scale
 on:
   push:
     branches: ['codex/verify-q019-20261119']
@@ -17,10 +17,23 @@ jobs:
           node-version: '22'
       - run: npm install --no-save --package-lock=false playwright@1.58.2
       - name: Verify the distribution and play the partial repayment route
-        run: node qa-q019-trial.mjs
+        env:
+          TRIAL_ORIGIN: https://tomtomyoung.github.io/adv
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs/promises';
+          const expected=JSON.parse(await fs.readFile('runtime.json','utf8')).revision;
+          for(let i=0;i<30;i++){
+            const res=await fetch(process.env.TRIAL_ORIGIN+'/runtime.json?version='+Date.now()).then(r=>r.json()).catch(()=>null);
+            if(res?.revision===expected)break;
+            if(i===29)throw Error('Published revision has not reached this merge');
+            await new Promise(resolve=>setTimeout(resolve,10000));
+          }
+          JS
+          node qa-q019-trial.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: q019-trial-screens-and-result
+          name: q019-public-trial-screens-and-result
           path: /tmp/mine-scale-trial
           retention-days: 7
