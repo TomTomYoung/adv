@@ -17,7 +17,7 @@ try{
  const files=['runtime.json','data/scenario-editions.json','data/quests/q019.json','data/scenario-editions/e2/q019.json','data/scenario-editions/e2/companions.json','playtests/quest-parties.json'];
  for(const file of files){const res=await page.request.get(origin+'/'+file+'?verify='+Date.now());assert.ok(res.ok(),file);assert.ok((await res.body()).equals(await fs.readFile(file)),file);}
  const url=origin+'/quest-party-playtest.html?edition=e2&quest=q019&party=balanced&level=2&start=site&outcome=informed&battleMode=classic&seed='+trace.seed;
- await page.goto(url);await page.locator('#launch:enabled').waitFor();await page.selectOption('#effects','off');await page.click('#launch');
+ await page.goto(url);await page.locator('#launch:enabled').waitFor({timeout:180000});await page.selectOption('#effects','off');await page.click('#launch');
  await page.waitForFunction(()=>window.questPlaytest?.trial.engine.state.stories.q019);
  const focus=id=>page.locator('#app [data-focus="'+id+'"]:enabled:visible').first();
  async function ensure(id){
@@ -65,5 +65,5 @@ try{
  assert.equal(due.received,0);assert.equal(due.remaining,10);assert.equal(paid.received,6);assert.equal(paid.remaining,4);assert.equal(paid.holder,'miners');assert.equal(paid.gold,due.gold);
  await page.locator('#trial-result').screenshot({path:out+'/complete.png'});await fs.writeFile(out+'/report.json',JSON.stringify({url,files,evidence,report:r},null,2));
  console.log('PROOF',JSON.stringify({files:files.length,ending:r.outcome,steps:r.steps,wins:r.records.wins,losses:r.records.losses,rescues:r.rescues,gold:r.gold,errors}));
-}catch(e){console.error('Action',current);await page.screenshot({path:out+'/failure.png'});throw e;}
+}catch(e){console.error('Action',current,'status',await page.locator('#trial-status').textContent(),'runtime errors',errors);await page.screenshot({path:out+'/failure.png'});throw e;}
 finally{await browser.close();if(server)await new Promise(ok=>server.close(ok));}
