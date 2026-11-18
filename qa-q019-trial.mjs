@@ -38,12 +38,13 @@ try{
    if(intent.type==='choose'){
      if(intent.id==='refund'){
        await page.setViewportSize({width:390,height:844});
-       await ensure('choice:refund');
-       const box=page.locator('#app .scene-dungeon-controls .scene-message-actions:visible');
-       const scroll=await box.evaluate(el=>{
+       await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+       const choice=await ensure('choice:refund');
+       const scroll=await choice.evaluate(option=>{
+         const el=option.closest('.scene-message-actions');
          const pad=el.previousElementSibling.getBoundingClientRect();
          el.scrollTop=el.scrollHeight;
-         const area=el.getBoundingClientRect(),end=el.querySelector('[data-focus="choice:refund"]').getBoundingClientRect().bottom;
+         const area=el.getBoundingClientRect(),end=option.getBoundingClientRect().bottom;
          return {needed:el.scrollHeight>el.clientHeight,atBottom:Math.abs(el.scrollHeight-el.scrollTop-el.clientHeight)<=1,buttonEndVisible:end<=area.bottom+1,padStayed:el.previousElementSibling.getBoundingClientRect().top===pad.top};
        });
        assert.ok(scroll.buttonEndVisible&&scroll.atBottom&&scroll.padStayed);
