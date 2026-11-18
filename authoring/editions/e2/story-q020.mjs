@@ -171,11 +171,11 @@ export function crownSource(){
         set('exitOpen'),set('limitedTraffic'),set('opening','limited')
       ],{when:s.is('shiftHeld')})
     ]);
-  s.node('open_with_keeper','barrier',['keeper'],
+  s.node('open_with_keeper','barrier',['keeper','guards'],
     '安全を確かめた防柵は、人数制限付き避難路として開いた。責任者から預かった王冠と記録を返納し、常駐の役目を終わらせる手続が残っている。',[
       O('escort','責任者を組合の交代受付まで送り、閉鎖終了を届ける','archive_register')
     ]);
-  s.node('open_shifted','barrier',[],
+  s.node('open_shifted','barrier',['guards'],
     '入口と奥、枝坑の補修を終え、人数制限付きで防柵を開けた。前任者は地上で休んでいる。交代時に引き継いだ現物と記録を返納する。',[
       O('file','閉鎖監視の終了を届けに組合へ行く','archive_register')
     ]);
