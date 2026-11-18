@@ -11,6 +11,7 @@ on:
       - 'tools/build-companion-edition.mjs'
       - 'tools/build-scenario-editions.mjs'
       - 'data/scenario-editions.json'
+      - 'tests/q020-*'
 permissions:
   contents: write
 jobs:
@@ -39,6 +40,8 @@ jobs:
           assert.equal(q.story.endings.informed.op,'and');
           console.log('q020 scenes',Object.keys(q.story.scenes).length,'actions',Object.keys(q.story.actions).length);
           JS
+      - name: Exercise current and accepted legacy q020 paths
+        run: node --test tests/q020-world-route.test.mjs
       - name: Commit reproducible generated outputs to working branch
         run: |
           git config user.name 'github-actions[bot]'
