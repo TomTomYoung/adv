@@ -1,5 +1,7 @@
 # シナリオ第2版
 
+[q018の最終返済・塩板の失効・二片と写しの引渡し](../../../development/Q018_WORLD_ROUTE.md)。
+
 [q017の二つの墓・記録照合・弁当箱の受渡しと保存検証](../../../development/Q017_WORLD_ROUTE.md)。
 
 [q016の住民移転・支払い・現物返却・帳簿訂正と保存検証](../../../development/Q016_WORLD_ROUTE.md)。
