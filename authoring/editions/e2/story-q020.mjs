@@ -239,7 +239,7 @@ export function crownSource(){
   const implies=(name,condition,message)=>s.invariant(name,or(not(s.is(name)),condition),message);
   s.invariant('custody',and(s.is('crownAt',s.v('keysAt')),s.is('keysAt',s.v('monitorBookAt'))),'王冠・鍵・監視簿は同じ責任者または保管者の下にある');
   implies('handoverAccepted',s.is('handoverRequested'),'受理より前に交代の申出が必要');
-  implies('handoverCompleted',and(s.is('handoverAccepted'),s.is('shiftHeld'),s.is('crownAt','party')),'交代表を受理し、現物を渡してから交代が成立する');
+  implies('handoverCompleted',and(s.is('handoverAccepted'),s.is('shiftHeld'),or(s.is('crownAt','party'),s.is('crownAt','archive'))),'交代表を受理し、現物を渡してから交代が成立する');
   implies('shiftHeld',s.is('handoverCompleted'),'正式な引継ぎがなければ交代は成立しない');
   implies('supportsChecked',and(s.is('entranceInspected'),s.is('deepInspected')),'入口と奥を両方点検してから補修図を確定する');
   implies('deepRepaired',s.is('entranceBraced'),'退路を確保してから奥の支柱を交換する');
