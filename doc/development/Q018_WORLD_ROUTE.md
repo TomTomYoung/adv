@@ -9,3 +9,9 @@
 [原本6経路・旧受注の検証記録](Q018_WORLD_ROUTE_PLAN.md)。[試遊画面](https://tomtomyoung.github.io/adv/quest-party-playtest.html?edition=e2&quest=q018&start=site&party=balanced&level=2&seed=1907&outcome=compromise)。
 
 専用69試験で原本・報酬・旧保存・旅程途中および各作業中の救援を照合した。72通常試遊は全件成功し、施設間移動は6～14回、敗北・救助は0。45の途中状態、9旅程の救援後、19場面の救援後、旧受注4状態を、Scene／Classic・幅1440／390の計308画面条件で検証した。
+
+## 統合と公開試遊
+
+旧倉庫通りを復元するq009の試験で、親のない質屋・戸口が残る不整合を検出した。当時の地理ではq018も原本を用いて後発の施設を読み込まないよう修正し、[q009の検証](https://github.com/TomTomYoung/adv/actions/runs/44303567536)が成功した。[PR #300](https://github.com/TomTomYoung/adv/pull/300)の全45ワークフローが成功し、[全体試験](https://github.com/TomTomYoung/adv/actions/runs/44303567598)は4,168件成功。 [q018のChromium検証と保存点画像](https://github.com/TomTomYoung/adv/actions/runs/44303567627)。
+
+[Pages公開](https://github.com/TomTomYoung/adv/actions/runs/44306140423)後、配信情報、版カタログ、第2版のq018・人物・地理、試遊カタログの6ファイルを統合コミット `fa891250ad34786c9f40bb94131c6bec251287a5` と照合し、全バイト一致を確認した。公開試遊画面で基本編成・Lv2・現場開始・seed1907を選び、役人に支払ってからオウを呼んだ。受領欄を確認し、完済線を入れた塩板を二分。借り手へ一片と写しを渡した段階で、残る一片と写しは役人が保持する。オウへの引渡しでcompromiseが成立した。町内移動11回・選択12回、救助0、120Gから164G。 [公開試遊の画像と結果JSON](https://github.com/TomTomYoung/adv/actions/runs/44306202688)。

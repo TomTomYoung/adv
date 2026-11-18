@@ -1,37 +1,34 @@
-name: Verify published q018 trial
+name: Verify published handoff for q019
 on:
   push:
     branches: ['codex/prepare-q018-20261118']
 permissions:
   contents: read
 jobs:
-  verify:
+  compare:
     runs-on: ubuntu-24.04
-    container:
-      image: mcr.microsoft.com/playwright:v1.58.2-noble
-      options: --ipc=host
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - name: Play the published trial and compare its six files
+      - name: Match the handoff and route documents to the merged tree
         run: |
-          npm install --no-save --package-lock=false playwright@1.58.2
-          node --input-type=module <<'JS'
-          import fs from 'node:fs/promises';
-          const expected=JSON.parse(await fs.readFile('runtime.json','utf8')).revision;
-          for(let i=0;i<24;i++){
-            const published=await fetch('https://tomtomyoung.github.io/adv/runtime.json?check='+Date.now()).then(r=>r.json()).catch(()=>null);
-            if(published?.revision===expected) break;
-            if(i===23)throw Error('Published runtime has not reached the merge');
-            await new Promise(resolve=>setTimeout(resolve,10000));
-          }
-          JS
-          PROOF_ORIGIN=https://tomtomyoung.github.io/adv node qa-q018-proof.mjs
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: q018-public-trial
-          path: /tmp/adv-q018-proof
-          retention-days: 7
+          python3 - <<'PY'
+          from pathlib import Path
+          from time import sleep, time_ns
+          from urllib.request import urlopen
+          from urllib.error import HTTPError, URLError
+          paths = ['doc/HANDOFF.md','doc/development/Q018_WORLD_ROUTE.md','doc/development/Q019_WORLD_ROUTE_PLAN.md']
+          for retry in range(24):
+              try:
+                  for path in paths:
+                      with urlopen('https://tomtomyoung.github.io/adv/'+path+'?version='+str(time_ns()),timeout=15) as response:
+                          if response.read()!=Path(path).read_bytes():
+                              break
+                  else:
+                      print('PUBLISHED DOCUMENTS MATCH',len(paths))
+                      break
+              except (HTTPError, URLError):
+                  pass
+              sleep(10)
+          else:
+              raise RuntimeError('Published files have not reached the merged version')
+          PY
