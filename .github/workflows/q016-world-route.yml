@@ -1,0 +1,63 @@
+name: Validate q016 silent-blast routes in Chromium
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'data/**'
+      - 'authoring/editions/e2/story-q016.mjs'
+      - 'tools/build-oddland-geography.mjs'
+      - 'tools/build-q016-world-route.mjs'
+      - 'tools/preserved-world-quest.mjs'
+      - 'tools/browser-q016-world-route-smoke.mjs'
+      - 'tools/q016-world-route-fixtures.mjs'
+      - 'tools/character-art-browser.mjs'
+      - 'tools/measure-silent-blast.mjs'
+      - 'playtests/quest-parties.json'
+      - 'tests/q016-*.mjs'
+      - 'assets/images/**'
+      - '.github/workflows/q016-world-route.yml'
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+permissions:
+  contents: read
+jobs:
+  q016-browser:
+    runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned browser driver and verify Japanese fonts
+        run: |
+          npm install --no-save --package-lock=false playwright@1.58.2
+          test -n "$(fc-list :lang=ja)"
+      - name: Measure five paths with three parties at levels one and two from reception and site
+        run: |
+          mkdir -p /tmp/adv-silent-blast-art-browser
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import {measureSilentBlast} from './tools/measure-silent-blast.mjs';
+          const results=measureSilentBlast({levels:[1,2],starts:['site','reception']});
+          fs.writeFileSync('/tmp/adv-silent-blast-art-browser/normal-trials.json',JSON.stringify(results,null,2));
+          assert.equal(results.length,60);
+          assert.ok(results.every(r=>r.status==='cleared'&&r.rescues===0&&r.records.losses===0));
+          console.log(JSON.stringify({trials:results.length,failures:0}));
+          JS
+      - name: Check routes, casting, evacuation, custody, payment and accepted saves
+        run: ADV_BROWSER_OUTPUT=/tmp/adv-silent-blast-art-browser node tools/browser-q016-world-route-smoke.mjs
+      - name: Keep q016 checkpoints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: q016-world-route-checkpoints
+          path: /tmp/adv-silent-blast-art-browser
+          if-no-files-found: error
+          retention-days: 7

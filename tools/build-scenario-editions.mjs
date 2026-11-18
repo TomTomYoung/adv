@@ -1,3 +1,4 @@
+import {buildSilentBlast} from './build-q016-world-route.mjs';
 import {buildWeepingPillar} from './build-q015-world-route.mjs';
 import {buildReturnCart} from './build-q014-world-route.mjs';
 import {buildBreathingVein} from './build-q013-world-route.mjs';
@@ -141,6 +142,7 @@ export async function buildScenarioEditions({check=false}={}){
  await buildBreathingVein({check});
  await buildReturnCart({check});
  await buildWeepingPillar({check});
+ await buildSilentBlast({check});
  await buildCompanionEdition({check});
  const geography=await buildOddlandGeography({check});
  await buildSalomeGeography(geography,{check});
