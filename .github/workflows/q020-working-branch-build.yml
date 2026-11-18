@@ -1,0 +1,50 @@
+name: q020 working-branch deterministic generator
+on:
+  push:
+    branches:
+      - codex/q020-crown-world-route-20261119
+    paths:
+      - '.github/workflows/q020-working-branch-build.yml'
+      - 'authoring/editions/e2/story-q020.mjs'
+      - 'tools/build-q020-world-route.mjs'
+      - 'tools/build-oddland-geography.mjs'
+      - 'tools/build-companion-edition.mjs'
+      - 'tools/build-scenario-editions.mjs'
+      - 'data/scenario-editions.json'
+permissions:
+  contents: write
+jobs:
+  generate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/q020-crown-world-route-20261119
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Regenerate all deterministic edition data and docs
+        run: npm run build:editions
+      - name: Verify edition compilation and q020 JSON structure
+        run: |
+          npm run check:editions
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const q=JSON.parse(fs.readFileSync('data/scenario-editions/e2/q020.json'));
+          assert.equal(q.id,'q020');
+          assert.ok(Object.keys(q.story.scenes).length>=25);
+          assert.ok(Object.keys(q.story.worldPlaces).length>=8);
+          assert.equal(q.story.endings.informed.op,'and');
+          console.log('q020 scenes',Object.keys(q.story.scenes).length,'actions',Object.keys(q.story.actions).length);
+          JS
+      - name: Commit reproducible generated outputs to working branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/scenario-editions data/scenario-editions.json runtime.json doc
+          if ! git diff --cached --quiet; then
+            git commit -m 'chore(q020): regenerate deterministic edition outputs'
+            git push origin HEAD:codex/q020-crown-world-route-20261119
+          fi
