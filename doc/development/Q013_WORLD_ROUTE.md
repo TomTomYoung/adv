@@ -28,6 +28,18 @@
 
 通常試遊はseed1907、4経路×3編成×Lv1・2×受付／現場開始の48条件が成功。3・25・32・50・54・72歩、通常戦闘0～2回、敗北・救援0。乱数は置き換えず、必要な回復と灯りの維持には所持品を消費する。
 
-Chromium検証は91地点×Scene／Classic×1440／390の364画面条件を用意した。全体CI、画面検証、統合と公開確認の結果は実施後に追記する。
+最終先端1fd0793d94c102d55964fba3516dd41eb4267a2dの全40ワークフローが成功。[全体CI44242718070](https://github.com/TomTomYoung/adv/actions/runs/44242718070)は3,792試験成功、失敗・取消・スキップ0。ローカル全体試験も3,792件成功した。
+
+[専用Chromium44242718117](https://github.com/TomTomYoung/adv/actions/runs/44242718117)は91地点×Scene／Classic×1440／390の364画面条件、3結末、errors=[]。48通常試遊の結果も成功した。成果物14399524593のSHA-256は66178b261fb21cf169dd701ad0447d0177db3f388cf9d786636f94bb12031384。取得したZIPとJSONを照合し、幅390のSceneとClassicの代表画面を目視した。
+
+[PR #290](https://github.com/TomTomYoung/adv/pull/290)をmaster d181fdcb8f8d09817b069df533d3af02443145a7へ統合した。検証先端と統合後のtreeは775e6c3aa6bf22ac4eb7e58d50be783537ea469dで一致する。
 
 ローカルのChromiumは画面を開く前にsocket() failed: Operation not permittedで起動を停止した。画面検査の失敗とは区別し、ブラウザー検証は既存と同じ固定版PlaywrightコンテナのGitHub Actionsで実施する。
+
+## 公開確認と次工程
+
+[公開44244935768](https://github.com/TomTomYoung/adv/actions/runs/44244935768)のbuild・deploy・report-build-statusの全3ジョブ成功を確認した。公開runtime.json、data/scenario-editions.json、data/scenario-editions/e2/q013.json、data/scenario-editions/e2/companions.json、playtests/quest-parties.jsonは統合済みの5ファイルとバイト単位で一致した。
+
+[公開試遊画面](https://tomtomyoung.github.io/adv/quest-party-playtest.html?edition=e2&quest=q013&start=site)で基本4人・Lv2・現場開始・seed1907を手動操作した。根の発見、周期の記録、湖への移動と水路の把握、切羽への帰還、根と湖岸の別々の計測、足場への帰還、迂回線と観測標の設置、専門家への記録の現物引渡し、切羽のセイへの報告を経てinformed結末で完了した。50歩、戦闘2回・勝利2回、逃走・敗北・救援0、207G、灯油40/90。セイは切羽、専門家は引継ぎ所で表示され、記録を渡すまで隊が保持する表示と、迂回坑の線を引いても掘削完了としない本文も確認した。全3結末の公開手動完走とは区別する。保存した画面画像は描画更新前の最終報告場面であり、完了判定と207Gは操作直後の画面テキストで確認した。
+
+残る未接続は87件。次は[q014「帰りの貨車」の接続前監査](Q014_WORLD_ROUTE_PLAN.md)に基づく地理設計と実装である。
