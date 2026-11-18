@@ -1,3 +1,4 @@
+import {extendWeepingPillarGeography} from '../authoring/editions/e2/story-q015.mjs';
 import {extendReturnCartGeography} from '../authoring/editions/e2/story-q014.mjs';
 import {extendSaltBrideGeography} from '../authoring/editions/e2/saltbride-geography.mjs';
 import {extendSluiceGeography} from '../authoring/editions/e2/sluice-geography.mjs';
@@ -58,6 +59,7 @@ export async function buildOddlandGeography({check=false}={}){
   extendSluiceGeography(bundle);
   await extendSaltBrideGeography(bundle,read);
   extendReturnCartGeography(bundle);
+  extendWeepingPillarGeography(bundle);
   applyOutdoorAppearance(bundle);
   applyIndoorAppearance(bundle);
   const output=JSON.stringify(bundle,null,2)+'\n',file=path.join(root,'data/scenario-editions/e2/geography.json');
