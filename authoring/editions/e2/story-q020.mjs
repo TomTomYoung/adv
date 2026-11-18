@@ -71,7 +71,7 @@ export function crownSource(){
     '地上へ続く予備出口の防柵には、組合が置いた番兵二体がいる。冠形の職責標を持った責任者が傷んだ支柱を示す。「交代者か補修計画が決まるまで、人をまとめて通せない」。坑夫のメルは同行せず、代表への依頼書を隊に預けている。',[
       O('relieve','組合へ交代の申出を届ける','register_request'),
       O('supports','責任者と地上側の入口から支柱を調べる','guided_mouth'),
-      O('fight','番兵二体と戦って防柵を破る','guards_down',[],{combat:'boss_2'})
+      O('fight','番兵二体と戦って防柵を破る','guards_down',[set('guardsDefeated')],{combat:'boss_2'})
     ]);
   s.node('register_request','registry',atRegistry,
     '交代表は前任者の名で止まっている。係員が監視範囲と引継ぎ時刻を確かめた。「申し出ただけでは責任者は帰せません。受付印を押したあと、現地で王冠と鍵、監視簿を受け取ってください」。',[
