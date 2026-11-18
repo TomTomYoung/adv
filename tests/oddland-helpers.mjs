@@ -31,6 +31,7 @@ export function town(g,id){
  for(let i=0;i<queue.length&&!seen.has(id);i++){const here=data.locations[queue[i]];for(const next of [here.parent,...here.links,...Object.values(data.locations).filter(l=>l.parent===here.id).map(l=>l.id)].filter(Boolean))if(!seen.has(next)){seen.set(next,here.id);queue.push(next);}}
  assert.ok(seen.has(id),`town route to ${id}`);const steps=[];for(let n=id;seen.get(n);n=seen.get(n))steps.unshift(n);
  for(const next of steps){assert.ok(g.dispatch({type:'location.move',id:next}),g.state.notice);drain(g);}
+ return steps.length;
 }
 export function border(g=fresh()){
  assert.ok(g.dispatch({type:'travel',dungeon:'region_1'}));navigateMaps(g,'region_1_landing');walk(g,15,3);
