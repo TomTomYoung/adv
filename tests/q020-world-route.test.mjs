@@ -189,7 +189,7 @@ for(const action of ['entry_relieve','entry_supports','guided_mouth_inspect','re
     });
     assert.ok(row,action);
     const g=ready();g.load(row.save);
-    const choice=action.slice(action.indexOf('_')+1),option=projectGame(g).dialog.options.find(o=>o.enabled&&o.id===choice);
+    const choice=action.slice(row.scene.length+1),option=projectGame(g).dialog.options.find(o=>o.enabled&&o.id===choice);
     assert.ok(option,action);
     depart(g,choice);assert.ok(g.state.journey);
     const save=structuredClone(g.state.stories.q020),journey=structuredClone(g.state.journey);
