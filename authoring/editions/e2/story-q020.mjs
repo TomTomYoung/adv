@@ -179,11 +179,11 @@ export function crownSource(){
     '入口と奥、枝坑の補修を終え、人数制限付きで防柵を開けた。前任者は地上で休んでいる。交代時に引き継いだ現物と記録を返納する。',[
       O('file','閉鎖監視の終了を届けに組合へ行く','archive_register')
     ]);
-  s.node('archive_register','registry',atRegistry,
+  s.node('archive_register','registry',['clerk','keeper'],
     '係員が三つの補修記録と人数制限を確認する。王冠を返納する前に、交代表を終わらせる記録を作らなければならない。',[
       O('record','補修内容・通行人数・閉鎖終了日を登録する','recorded',[set('recordUpdated')])
     ]);
-  s.node('recorded','registry',atRegistry,
+  s.node('recorded','registry',['clerk','keeper'],
     '終了の記録が受理された。王冠・鍵・監視簿はまだ隊の手元にあり、隣の資料室の預かり簿は空白だ。',[
       O('archive','王冠・鍵・監視簿と補修図を資料室へ運ぶ','archive_site')
     ]);
