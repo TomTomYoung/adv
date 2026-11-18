@@ -26,4 +26,20 @@
 
 通常試遊はseed1907、5経路×3編成×Lv1・2×受付／現場開始の60条件が成功。30・38・48・56歩、道中1～2戦、敗北・救援0。乱数は置換せず、回復と灯りの維持は所持品を消費する。
 
-Chromium用に現在状態・旧保存・救援後・作業後の78地点、Scene／Classic×1440／390の312画面条件と3結末を用意した。全体CI、Chromiumの実行結果、統合後の公開確認は実施後に追記する。
+最終先端d9d03ca2fe0a0880fa53935b52591e296b352d60の全39ワークフローが成功。[全体CI44227417770](https://github.com/TomTomYoung/adv/actions/runs/44227417770)は3,727試験成功、失敗・取消・スキップ0。ローカル全体試験も3,727件成功した。
+
+[専用Chromium44227418013](https://github.com/TomTomYoung/adv/actions/runs/44227418013)は78地点×Scene／Classic×1440／390の312画面条件、3結末、errors=[]。60通常試遊の結果も成功した。成果物14393358392のSHA-256はbfc4851a4a1596657d596180f30c026ea38e425d276fc5743509f4d50955898d。最終JSONを照合し、幅390のSceneとClassicの代表画面で人物名の重なりがないことを目視した。
+
+初回の全体回帰では、改訂済みq012を旧版との同一比較から除く対象一覧2箇所に更新漏れがあり失敗した。対象を修正し、最終全体回帰で解消した。試験場所の精査ではq013の切羽との重複を見つけたため、塩層試験を空いている(15,3)へ移し、他クエストと重ならない検査を追加した。
+
+[PR #288](https://github.com/TomTomYoung/adv/pull/288)をmaster 61944b75783e69ee83a85abef5e57ae7407a6768へ統合した。検証先端と統合後のtreeはb81206d3869583027ce59906afedf1e18dd7c5c3で一致する。
+
+## 公開確認
+
+[公開44229091649](https://github.com/TomTomYoung/adv/actions/runs/44229091649)のbuild・deploy・report-build-statusがすべて成功した。公開されたruntime.json、data/scenario-editions.json、data/scenario-editions/e2/q012.json、data/scenario-editions/e2/companions.json、playtests/quest-parties.jsonは、統合済みファイルとバイト単位で一致する。
+
+[公開試遊画面](https://tomtomyoung.github.io/adv/quest-party-playtest.html?edition=e2&quest=q012&start=site)で、基本4人・Lv2・現場開始・seed1907・通常演出・本編指定の戦闘を手動操作した。持出しの了承と三本の受取り、硬岩・塩層・割れ目それぞれへの移動と試験、工房への帰着と現物引渡し、小印の記録、台帳照合、展示札の記入、最終返納を経て「三人の仕事として三本を返す」で完了した。
+
+38歩、通常戦闘2戦2勝、敗北・逃走・救助0、207G、灯油52/90。工房にいるダンと坑夫たちは旅程中に同行表示されず、帰着時に再び表示された。到着だけでは試験や返却が済まず、小印の発見だけでは製作者が確定しない本文と選択肢を確認した。公開での手動完走はこの1経路であり、全3結末の公開手動完走を意味しない。
+
+次は残る未接続88件の先頭、[q013 呼吸する鉱脈の接続前監査](Q013_WORLD_ROUTE_PLAN.md)に従い、現場と作業を設計する。
