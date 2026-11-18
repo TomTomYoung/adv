@@ -1,5 +1,6 @@
 import {extendTwoGravesGeography} from '../authoring/editions/e2/story-q017.mjs';
 import {extendWhiteDebtGeography} from '../authoring/editions/e2/story-q018.mjs';
+import {extendCrownGeography} from '../authoring/editions/e2/story-q020.mjs';
 import {extendWeepingPillarGeography} from '../authoring/editions/e2/story-q015.mjs';
 import {extendReturnCartGeography} from '../authoring/editions/e2/story-q014.mjs';
 import {extendSaltBrideGeography} from '../authoring/editions/e2/saltbride-geography.mjs';
@@ -64,6 +65,7 @@ export async function buildOddlandGeography({check=false}={}){
   extendWeepingPillarGeography(bundle);
   extendTwoGravesGeography(bundle);
   extendWhiteDebtGeography(bundle);
+  extendCrownGeography(bundle);
   applyOutdoorAppearance(bundle);
   applyIndoorAppearance(bundle);
   const output=JSON.stringify(bundle,null,2)+'\n',file=path.join(root,'data/scenario-editions/e2/geography.json');
