@@ -155,8 +155,12 @@ test('q020 rescue during unfinished work leaves all previous work intact but the
   assert.equal(values(g).deepRepaired,true);
   assert.equal(values(g).branchesClosed,false);
   g.defeat();drain(g);checkpoint(g);
-  assert.deepEqual(g.state.stories.q020,snapshot);
+  const afterRescue=structuredClone(g.state.stories.q020);
+  assert.equal(afterRescue.values.partyAt,'transit');
+  afterRescue.values.partyAt=snapshot.values.partyAt;
+  assert.deepEqual(afterRescue,snapshot);
   resume(g);checkpoint(g);
+  assert.deepEqual(g.state.stories.q020,snapshot);
   assert.equal(values(g).exitOpen,false);
   choose(g,'branch','seal','return','open_keeper','escort','record','archive','deposit');
   assert.equal(g.state.quests.q020.outcome,'informed');
