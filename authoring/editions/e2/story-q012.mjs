@@ -2,7 +2,7 @@ import {story,O,set,give,see,and,or,not,when} from '../../story-kit.mjs';
 import {connectWorld} from '../../world-story-kit.mjs';
 export const threePicksPlaces={workshop:'ダンの工房',hard:'硬岩の試験箇所',salt:'塩層の試験箇所',crack:'狭い割れ目の試験箇所'};
 const point=(key,x,y)=>({kind:'dungeon',dungeon:'region_2',map:'region_2_f1',x,y,event:'q012_three_picks_'+key});
-export const threePicksWorld={workshop:point('workshop',13,7),hard:point('hard',11,4),salt:point('salt',15,5),crack:point('crack',17,9)};
+export const threePicksWorld={workshop:point('workshop',13,7),hard:point('hard',11,4),salt:point('salt',15,3),crack:point('crack',17,9)};
 // These are outcome roles, not assignments of a maker or a blade shape.
 export const pickEntities=['displayPick','otherPickA','otherPickB'];
 const hand=(from,to)=>pickEntities.map(id=>give(id,from,to));

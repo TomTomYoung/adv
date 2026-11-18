@@ -74,3 +74,12 @@ test('q012 new and accepted saves select the matching events',()=>{
 for(const route of routes)test('q012 ending and rewards are one-time '+route.old.join('/'),()=>{
  const g=ready();choose(g,...route.path);const before=g.save();assert.throws(()=>g.complete('q012',route.outcome));assert.equal(g.save(),before);const rewards=JSON.stringify([g.state.gold,g.state.actors,g.state.vars]);g.run(g.data.quests.q012.model.entryScript);drain(g);assert.equal(JSON.stringify([g.state.gold,g.state.actors,g.state.vars]),rewards);checkpoint(g);
 });
+
+test('q012 trial sites do not overlap another quest or alter mine terrain',()=>{
+ const q=data.quests.q012;
+ for(const p of Object.values(q.story.worldPlaces)){
+  assert.equal(data.maps[p.map].tiles[p.y][p.x],'.');
+  for(const other of Object.values(data.quests).filter(other=>other.id!==q.id))for(const loc of [...(other.locations??[]),...Object.values(other.story?.worldPlaces??{})])assert.ok(loc.map!==p.map||loc.x!==p.x||loc.y!==p.y,other.id+' overlaps '+p.event);
+ }
+ for(const [id,map] of Object.entries(previousData.maps))assert.deepEqual(data.maps[id].tiles,map.tiles);
+});
