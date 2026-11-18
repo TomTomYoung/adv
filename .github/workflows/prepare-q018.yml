@@ -1,30 +1,34 @@
-name: Prepare q018 generated data
+name: Exercise q018 and establish q019 baseline
 on:
   push:
     branches: ['codex/prepare-q018-20261118']
 permissions:
   contents: read
 jobs:
-  build:
+  verify:
     runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: npm run build:editions
-      - name: Compare generated distribution files
+      - name: Run q018 targeted regression suite
+        run: node --test tests/q018-world-route.test.mjs
+      - name: Check q019 original paths and saved routes
+        if: ${{ !cancelled() }}
+        run: node qa-q019-audit.mjs
+      - name: Play q018 through the trial page
+        if: ${{ !cancelled() }}
         run: |
-          python - <<'PY'
-          import json, subprocess
-          from pathlib import Path
-          paths = ['data/scenario-editions/e2/q018.json', 'data/scenario-editions/e2/companions.json', 'data/scenario-editions/e2/geography.json', 'runtime.json', 'doc/development/DATA_SNAPSHOT.json']
-          for path in paths:
-              print('BLOB', path, subprocess.check_output(['git', 'hash-object', path],text=True).strip())
-          manifest=json.loads(Path('runtime.json').read_text())
-          snapshot=json.loads(Path(paths[-1]).read_text())
-          print('SNAPSHOT',snapshot['updated'],snapshot['contentSha256'])
-          print('RUNTIME',manifest['revision'],json.dumps({p:manifest['files'][p] for p in paths[:3]+['data/scenario-editions.json']}))
-          quest=json.loads(Path(paths[0]).read_text())
-          print('STORY',len(quest['story']['scenes']),len(quest['story']['actions']))
-          PY
+          npm install --no-save --package-lock=false playwright@1.58.2
+          python -m http.server 8000 --bind 127.0.0.1 >/tmp/q018-http.log 2>&1 &
+          PROOF_ORIGIN=http://127.0.0.1:8000 node qa-q018-proof.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: q018-browser-trial
+          path: /tmp/adv-q018-proof
+          retention-days: 7
