@@ -38,7 +38,7 @@ test('q020 six paths cover every authored scene, action and registered outcome',
   for(const row of graph.active){
     const g=ready();g.load(row.save);checkpoint(g);
     const place=story.scenes[row.scene].place;
-    const expected=Object.entries(story.entities).filter(([id,e])=>e.character&&values(g)[id+'At']===place).map(([,e])=>e.character);
+    const expected=Object.entries(story.entities).filter(([id,e])=>e.character&&values(g)[id+'At']===place&&(id!=='guards'||!values(g).guardsDefeated)).map(([,e])=>e.character);
     const dialog=projectGame(g).dialog;
     assert.deepEqual(new Set(dialog.scene.cast.map(c=>c.id)),new Set(expected),row.scene);
   }
