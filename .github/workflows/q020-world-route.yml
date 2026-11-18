@@ -1,0 +1,63 @@
+name: Validate q020 crown routes in Chromium
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'data/**'
+      - 'authoring/editions/e2/story-q020.mjs'
+      - 'tools/build-oddland-geography.mjs'
+      - 'tools/build-q020-world-route.mjs'
+      - 'tools/preserved-world-quest.mjs'
+      - 'tools/browser-q020-world-route-smoke.mjs'
+      - 'tools/q020-world-route-fixtures.mjs'
+      - 'tools/character-art-browser.mjs'
+      - 'tools/measure-crown.mjs'
+      - 'playtests/quest-parties.json'
+      - 'tests/q020-*.mjs'
+      - 'tests/mine-world-travel.mjs'
+      - '.github/workflows/q020-world-route.yml'
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+permissions:
+  contents: read
+jobs:
+  q020-browser:
+    runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned browser driver and verify Japanese fonts
+        run: |
+          npm install --no-save --package-lock=false playwright@1.58.2
+          test -n "$(fc-list :lang=ja)"
+      - name: Measure six paths with three parties at two levels from reception and site
+        run: |
+          mkdir -p /tmp/adv-crown-art-browser
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import {measureCrown} from './tools/measure-crown.mjs';
+          const results=measureCrown({levels:[1,2],starts:['site','reception']});
+          fs.writeFileSync('/tmp/adv-crown-art-browser/normal-trials.json',JSON.stringify(results,null,2));
+          assert.equal(results.length,72);
+          assert.ok(results.every(r=>r.status==='cleared'&&r.rescues===0&&r.records.losses===0));
+          console.log(JSON.stringify({trials:results.length,failures:0,steps:[Math.min(...results.map(r=>r.steps)),Math.max(...results.map(r=>r.steps))]}));
+          JS
+      - name: Check cast, custody, two guards, old saves and narrow layouts
+        run: ADV_BROWSER_OUTPUT=/tmp/adv-crown-art-browser node tools/browser-q020-world-route-smoke.mjs
+      - name: Save q020 checkpoints and trial results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: q020-world-route-checkpoints
+          path: /tmp/adv-crown-art-browser
+          if-no-files-found: error
+          retention-days: 7
