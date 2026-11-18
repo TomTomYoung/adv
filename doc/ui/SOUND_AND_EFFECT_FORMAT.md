@@ -8,23 +8,23 @@
 
 ## 1. 記述の段階と編集場所
 
-1. **部品**：一つの音、ノイズ、録音済み素材、動き、色変化、画像の連番など。
-2. **組み合わせ**：複数の部品を重ねて、強打音や被弾反動などを作る。
-3. **演出のまとまり**：予備動作・音・命中効果・反動を時刻と対象で結び付ける。
-4. **ゲームとの接続**：武器・技能と、会心・防御・回復・撃破などの確定した結果から演出を選ぶ。
+1. 部品：一つの音、ノイズ、録音済み素材、動き、色変化、画像の連番など。
+2. 組み合わせ：複数の部品を重ねて、強打音や被弾反動などを作る。
+3. 演出のまとまり：予備動作・音・命中効果・反動を時刻と対象で結び付ける。
+4. ゲームとの接続：武器・技能と、会心・防御・回復・撃破などの確定した結果から演出を選ぶ。
 
 現在の編集場所は次のとおりです。
 
-- [config/presentation.json](../../config/presentation.json)：既存SEの楽譜、基本効果、音と効果を結ぶ `cues`、武器・技能などの `bindings`。
-- [data/sounds.json](../../data/sounds.json)、[data/effects.json](../../data/effects.json)、[data/presentation.json](../../data/presentation.json)：原稿から生成するゲーム用定義。
-- [config/battle-presentation.json](../../config/battle-presentation.json)：追加合成音、粒子、軌道、タイムライン、材質、ミキサーの編集元。
-- [battle-presentation-editor.html](../../battle-presentation-editor.html)：単体の試聴・試写、編集、A/B比較、JSON読込・書出。
-- [src/presentation-design.js](../../src/presentation-design.js)：型・範囲・参照の検査と、タイムラインを再生命令へ展開する純粋処理。
-- [data/schemas/battle-presentation.schema.json](../../data/schemas/battle-presentation.schema.json)：JSON Schema。未知の項目を拒否します。
-- [src/application/battle-sound.js](../../src/application/battle-sound.js)：定義からWeb Audioノードを組み立てる再生処理。
-- [src/battle-accent.js](../../src/battle-accent.js)：確定結果から選ぶ追加演出の種類。
-- [src/view/battle-impact.js](../../src/view/battle-impact.js)：追加粒子、曲線軌道、残像、光線の描画処理。値は共通JSONから受け取ります。
-- [src/application/audio.js](../../src/application/audio.js)：音量、同時発音数、取消、BGMの一時減音。
+1. [config/presentation.json](../../config/presentation.json)：既存SEの楽譜、基本効果、音と効果を結ぶ `cues`、武器・技能などの `bindings`。
+1. [data/sounds.json](../../data/sounds.json)、[data/effects.json](../../data/effects.json)、[data/presentation.json](../../data/presentation.json)：原稿から生成するゲーム用定義。
+1. [config/battle-presentation.json](../../config/battle-presentation.json)：追加合成音、粒子、軌道、タイムライン、材質、ミキサーの編集元。
+1. [battle-presentation-editor.html](../../battle-presentation-editor.html)：単体の試聴・試写、編集、A/B比較、JSON読込・書出。
+1. [src/presentation-design.js](../../src/presentation-design.js)：型・範囲・参照の検査と、タイムラインを再生命令へ展開する純粋処理。
+1. [data/schemas/battle-presentation.schema.json](../../data/schemas/battle-presentation.schema.json)：JSON Schema。未知の項目を拒否します。
+1. [src/application/battle-sound.js](../../src/application/battle-sound.js)：定義からWeb Audioノードを組み立てる再生処理。
+1. [src/battle-accent.js](../../src/battle-accent.js)：確定結果から選ぶ追加演出の種類。
+1. [src/view/battle-impact.js](../../src/view/battle-impact.js)：追加粒子、曲線軌道、残像、光線の描画処理。値は共通JSONから受け取ります。
+1. [src/application/audio.js](../../src/application/audio.js)：音量、同時発音数、取消、BGMの一時減音。
 
 以下の例は読みやすさのためJavaScriptのオブジェクト記法で示します。JSONファイルへ保存する場合は `JSON.stringify(value, null, 2)` などでJSON化します。変数宣言やコメントをJSONファイルへ直接書くことはできません。
 
@@ -44,16 +44,16 @@ const heavyScore = {
 };
 ```
 
-- 外側のキー `se_heavy`：SEを参照するID。
-- `name`：表示・管理用の名前。
-- `use`：使用する場面の説明。これだけではゲームへの割り当ては変わりません。
-- `instrument`：AIMusic側の音色ID。上例ではキック音です。
-- `gain`：完成したSEをゲームで再生するときの音量係数。0〜1です。
-- `notes`：音符の配列。同じ `start` なら同時に、異なる `start` なら時間をずらして鳴らします。
-- `pitch`：MIDI音高番号。Hzではありません。キックなどの打楽器では、生成器が音色に対応する固定音高へ置き換えます。
-- `start`：SE開始から音符開始までの秒数。
-- `seconds`：音符自体の長さ。秒単位です。音色の余韻を含む完成ファイルの長さとは異なります。
-- `velocity`：音符の強さ。AIMusic側では1〜127の整数です。録音の音圧を直接表す値ではありません。
+1. 外側のキー `se_heavy`：SEを参照するID。
+1. `name`：表示・管理用の名前。
+1. `use`：使用する場面の説明。これだけではゲームへの割り当ては変わりません。
+1. `instrument`：AIMusic側の音色ID。上例ではキック音です。
+1. `gain`：完成したSEをゲームで再生するときの音量係数。0〜1です。
+1. `notes`：音符の配列。同じ `start` なら同時に、異なる `start` なら時間をずらして鳴らします。
+1. `pitch`：MIDI音高番号。Hzではありません。キックなどの打楽器では、生成器が音色に対応する固定音高へ置き換えます。
+1. `start`：SE開始から音符開始までの秒数。
+1. `seconds`：音符自体の長さ。秒単位です。音色の余韻を含む完成ファイルの長さとは異なります。
+1. `velocity`：音符の強さ。AIMusic側では1〜127の整数です。録音の音圧を直接表す値ではありません。
 
 例えば、現行の回復音は次の3音です。
 
@@ -95,14 +95,14 @@ const heavySound = {
 
 ### 3.1 音源の項目と単位
 
-- `wave`：`sine` 正弦波、`triangle` 三角波、`square` 矩形波、`sawtooth` 鋸歯状波、`noise` ノイズ。
-- `atMs`：この合成音の開始から音源を開始するまでの遅延、0〜5000ms。
-- `durationMs`：音源の長さ、10〜5000ms。残響・反響の尾は別に加算します。
-- `gain`：音源振幅の係数、0〜0.5。dB値やスピーカーの実測音量ではありません。
-- `pitch`：周波数Hzの曲線、20〜20000Hz。ノイズ自体には一定の音高がありません。ノイズに明示的な `filter` がない場合はバンドパスの中心周波数として扱います。
-- `envelope`：`gain` に掛ける音量の曲線、0〜1。
-- `pan`：左右位置、左端−1〜中央0〜右端1。イベントの位置へ加算して範囲内に制限します。
-- `distance`：距離による追加減衰、0〜10。係数は `1 / (1 + distance)`。実際のメートル数ではありません。
+1. `wave`：`sine` 正弦波、`triangle` 三角波、`square` 矩形波、`sawtooth` 鋸歯状波、`noise` ノイズ。
+1. `atMs`：この合成音の開始から音源を開始するまでの遅延、0〜5000ms。
+1. `durationMs`：音源の長さ、10〜5000ms。残響・反響の尾は別に加算します。
+1. `gain`：音源振幅の係数、0〜0.5。dB値やスピーカーの実測音量ではありません。
+1. `pitch`：周波数Hzの曲線、20〜20000Hz。ノイズ自体には一定の音高がありません。ノイズに明示的な `filter` がない場合はバンドパスの中心周波数として扱います。
+1. `envelope`：`gain` に掛ける音量の曲線、0〜1。
+1. `pan`：左右位置、左端−1〜中央0〜右端1。イベントの位置へ加算して範囲内に制限します。
+1. `distance`：距離による追加減衰、0〜10。係数は `1 / (1 + distance)`。実際のメートル数ではありません。
 
 曲線は2〜32個の `{ at, value, curve? }` です。`at` は音源の長さを0〜1に正規化した時刻で、開始0・終了1が必要です。途中点の時刻は昇順です。`curve` はその点へ至る補間で、`linear`、`exponential`、`step` を指定します。省略時は線形補間です。指数補間の0は内部で0.0001に置き換え、音源終端後に完全に消音します。
 
@@ -136,11 +136,11 @@ const chargeVoice = {
 
 ### 3.3 音色加工
 
-- `filter`：`type`、`frequency`、`q` が必須です。種類は `lowpass`、`highpass`、`bandpass`、`notch`、`peaking`、`lowshelf`、`highshelf`。周波数20〜20000Hz、Qは0.01〜30、任意の `gain` は−24〜24dBです。`cutoff` に周波数曲線を書くと `frequency` の固定値より優先します。
-- `vibrato`：`hz` が揺れの速度0.1〜40Hz、`cents` が音程の振れ幅0〜1200centです。波形音に適用します。
-- `distortion`：0〜50。波形を飽和させる強さ。0は加工なしです。
-- `echo`：`delayMs` は10〜1000ms、`gain` は0〜0.6、`taps` は1〜4回。第n反響の係数は `gain ** n`。無限フィードバックを使いません。
-- `reverb`：`durationMs` は20〜1500ms、`mix` は0〜0.5。固定シードの減衰ノイズを使う残響です。
+1. `filter`：`type`、`frequency`、`q` が必須です。種類は `lowpass`、`highpass`、`bandpass`、`notch`、`peaking`、`lowshelf`、`highshelf`。周波数20〜20000Hz、Qは0.01〜30、任意の `gain` は−24〜24dBです。`cutoff` に周波数曲線を書くと `frequency` の固定値より優先します。
+1. `vibrato`：`hz` が揺れの速度0.1〜40Hz、`cents` が音程の振れ幅0〜1200centです。波形音に適用します。
+1. `distortion`：0〜50。波形を飽和させる強さ。0は加工なしです。
+1. `echo`：`delayMs` は10〜1000ms、`gain` は0〜0.6、`taps` は1〜4回。第n反響の係数は `gain  n`。無限フィードバックを使いません。
+1. `reverb`：`durationMs` は20〜1500ms、`mix` は0〜0.5。固定シードの減衰ノイズを使う残響です。
 
 音源→フィルター→歪み→音量曲線→原音と反響・残響→距離減衰→左右定位→SE音量→コンプレッサーの順です。ノイズは0.5秒のバッファをループし、長い音にも対応します。音源・LFO・反響経路は省略・停止時に切断します。
 
@@ -183,12 +183,12 @@ const hitShake = {
 
 `kind: 'motion'` のキーフレームには次を指定できます。
 
-- `at`：0〜1。先頭0、末尾1、途中は昇順で重複なし。
-- `x`、`y`：移動量。CSSピクセル単位、各−200〜200。省略時0。
-- `rotate`：回転角。度単位、−360〜360。省略時0。
-- `skewX`、`skewY`：傾斜角。度単位、各−40〜40。省略時0。
-- `scaleX`、`scaleY`：拡大率。各0.1〜3。省略時1。
-- `opacity`：不透明度。0〜1。省略時1。
+1. `at`：0〜1。先頭0、末尾1、途中は昇順で重複なし。
+1. `x`、`y`：移動量。CSSピクセル単位、各−200〜200。省略時0。
+1. `rotate`：回転角。度単位、−360〜360。省略時0。
+1. `skewX`、`skewY`：傾斜角。度単位、各−40〜40。省略時0。
+1. `scaleX`、`scaleY`：拡大率。各0.1〜3。省略時1。
+1. `opacity`：不透明度。0〜1。省略時1。
 
 トラック側の `directed: true` は、移動量の向きを攻撃元と対象の位置関係に合わせます。通常のX・Y方向へ動かすときは省略します。
 
@@ -196,12 +196,12 @@ const hitShake = {
 
 ### 4.2 その他のトラック
 
-- `strike`：`pattern` に `slash`・`blunt`・`pierce`、`color` に色を指定します。斬撃の形などの細部は [battle-effects.js](../../src/view/battle-effects.js) が描きます。
-- `projectile`：`color` を指定します。攻撃元から対象へ矢形を飛ばします。飛ぶ時間は外側の `duration` です。
-- `sprite`：`asset`、`frames`、`columns`、`cell`、必要なら `scale` を指定します。`asset` は画像素材ID、`cell` は1コマのピクセル寸法です。
-- `split`：`axis` に `vertical` または `diagonal`、`distance` に分離距離0〜100、`rotate` に回転角−45〜45を指定します。
-- `tint`：`color` と `opacity` で対象へ一時的な色を重ねます。
-- `shade`：`color` と `opacity` で周縁側へ色を重ねます。
+1. `strike`：`pattern` に `slash`・`blunt`・`pierce`、`color` に色を指定します。斬撃の形などの細部は [battle-effects.js](../../src/view/battle-effects.js) が描きます。
+1. `projectile`：`color` を指定します。攻撃元から対象へ矢形を飛ばします。飛ぶ時間は外側の `duration` です。
+1. `sprite`：`asset`、`frames`、`columns`、`cell`、必要なら `scale` を指定します。`asset` は画像素材ID、`cell` は1コマのピクセル寸法です。
+1. `split`：`axis` に `vertical` または `diagonal`、`distance` に分離距離0〜100、`rotate` に回転角−45〜45を指定します。
+1. `tint`：`color` と `opacity` で対象へ一時的な色を重ねます。
+1. `shade`：`color` と `opacity` で周縁側へ色を重ねます。
 
 色は `#RRGGBB`、tint・shadeの不透明度は0〜0.65です。spriteは2〜64コマ、1〜64列、セル8〜512px、拡大率0.1〜3に対応します。各トラックに任意の `atMs` と `durationMs` を指定できます。省略時は開始0ms、長さは効果の `duration` です。開始＋長さは5000ms以内です。`projectile` に `path` を書くと共通定義の曲線軌道IDを使います。
 
@@ -226,16 +226,16 @@ const healingRing = {
 
 追加の火花・輪・光・破片は基本34効果とは別に、確定結果から描く処理です。共通JSONの `particles` に独立したIDで登録します。
 
-- 斬撃 `slash`：色 `#ffe4a1`、火花4個、240ms。
-- 刺突 `pierce`：色 `#c7eaff`、火花4個、240ms。
-- 強打 `heavy`：色 `#ffc078`、火花7個、衝撃波、240ms。
-- 会心 `critical`：色 `#ffdf74`、火花10個、衝撃波、300ms。
-- 防御 `guard`：色 `#a9d9ff`、火花4個、青い円弧、240ms。
-- 回復 `heal`：色 `#9df7c2`、上昇する光8個、光の輪。粒子420ms、輪300ms。
-- 炎 `fire`：色 `#ff945d`、火花4個、240ms。
-- 氷 `ice`：色 `#aeeaff`、火花4個、240ms。
-- 雷 `lightning`：色 `#e8ceff`、火花4個、240ms。
-- 撃破 `defeat`：色 `#bda68b`、下方へ散る粒子8個、360ms。
+1. 斬撃 `slash`：色 `#ffe4a1`、火花4個、240ms。
+1. 刺突 `pierce`：色 `#c7eaff`、火花4個、240ms。
+1. 強打 `heavy`：色 `#ffc078`、火花7個、衝撃波、240ms。
+1. 会心 `critical`：色 `#ffdf74`、火花10個、衝撃波、300ms。
+1. 防御 `guard`：色 `#a9d9ff`、火花4個、青い円弧、240ms。
+1. 回復 `heal`：色 `#9df7c2`、上昇する光8個、光の輪。粒子420ms、輪300ms。
+1. 炎 `fire`：色 `#ff945d`、火花4個、240ms。
+1. 氷 `ice`：色 `#aeeaff`、火花4個、240ms。
+1. 雷 `lightning`：色 `#e8ceff`、火花4個、240ms。
+1. 撃破 `defeat`：色 `#bda68b`、下方へ散る粒子8個、360ms。
 
 粒子の項目は `color`、`count`（1〜32）、`durationMs`（40〜2000）、`size`（1〜40px）、`speed`（0〜800px/s）、`directionDeg`（−360〜360度）、`spreadDeg`（0〜360度）、`gravity`（−1000〜1000px/s²）、`shape`（`spark` / `circle` / `square`）、`scale` と `alpha` の曲線です。角度0は右、90は下、−90は上。速度には固定シードで0.75〜1.25倍の散らばりを付けます。任意の `colors` は `{ at, color }` の配列で、開始0・終了1を含めます。
 
@@ -269,14 +269,14 @@ const powerCue = {
 };
 ```
 
-- `effects`：命中時に再生する基本効果IDの配列。最大8個。
-- `sound`：命中時に再生する既存SEのID。
-- `target`：対象指定。`target` は呼び出し側から渡す対象です。`scene`・`screen`・`party` などの指定もあります。
-- `battle.impact`：その行動の開始から命中までのミリ秒。0〜1000。
-- `battle.anticipation`：敵側の予備動作。
-- `battle.actorAnticipation`：味方側の予備動作。`battle.anticipation` があるcueで、これを省略した場合には味方用の踏み込みを使います。予備動作を出す条件そのものは `battle.anticipation` の有無です。
-- `battle.projectile`：任意の飛翔効果。予備動作と同じ行動開始時刻から再生します。
-- `gap`：戦闘では命中後から次の行動開始までの間隔。0〜1000ms。戦闘以外の通常cueでは、そのcueの開始から次のcueまでの間隔です。
+1. `effects`：命中時に再生する基本効果IDの配列。最大8個。
+1. `sound`：命中時に再生する既存SEのID。
+1. `target`：対象指定。`target` は呼び出し側から渡す対象です。`scene`・`screen`・`party` などの指定もあります。
+1. `battle.impact`：その行動の開始から命中までのミリ秒。0〜1000。
+1. `battle.anticipation`：敵側の予備動作。
+1. `battle.actorAnticipation`：味方側の予備動作。`battle.anticipation` があるcueで、これを省略した場合には味方用の踏み込みを使います。予備動作を出す条件そのものは `battle.anticipation` の有無です。
+1. `battle.projectile`：任意の飛翔効果。予備動作と同じ行動開始時刻から再生します。
+1. `gap`：戦闘では命中後から次の行動開始までの間隔。0〜1000ms。戦闘以外の通常cueでは、そのcueの開始から次のcueまでの間隔です。
 
 強打では開始0msに予備動作、130msにSE・軌跡・反動・火花・HP更新が始まります。追加低音の `delay: 0.035` はこの命中を基準にするので、行動開始165ms後に鳴ります。通常の次行動開始は130＋240＝370ms後です。次の行動と前の演出の余韻が重なることがあります。
 
@@ -336,17 +336,17 @@ const impactEvent = {
 
 ## 6. 音量・BGM・取消・軽減設定
 
-- 既存SEの再生音量は、マスター音量×SE音量×SE定義の `gain` ×イベントの `gain` を0〜1へ制限した値です。
-- 合成音は各音源のエンベロープに、マスター音量×SE音量を掛けます。既存SE定義の `gain` とイベントの `gain` は、この追加合成音には直接掛かりません。
-- 同時発音は既存SEが最大8音、追加合成音が最大24音。上限は共通JSONの `mixer` で変更できます。上限では低優先度の音から止め、同じ優先度なら古い音を止めます。再生中の音がすべて高優先度の場合、新しい低優先度音を鳴らしません。
-- 強打・会心・撃破ではBGMを設定音量の64%にし、70ms後から190msまでの4段階で100%へ戻します。`duckGain`、`duckHoldMs`、`duckReleaseMs`、`duckPriority` で設定します。
-- `priority` は0〜100、`cooldownMs` は同じ合成音の再発音を抑える0〜1000msです。`mixer.compressor` はSE全体の `threshold`（dB）、`knee`（dB）、`ratio`、`attack` / `release`（秒）。Web Audio利用時は既存SEも合成音と同じコンプレッサーへ通します。BGMは別経路で減音します。これは最終出力のクリッピングを完全に保証するリミッターではありません。
-- 左右位置は表示対象の画面内位置から取り、飛翔の合成音は攻撃側から対象へ移動します。`spatial: { pan, panEnd, distance }` を指定すると上書きできます。既存SEの定位は発音時の固定位置です。
-- BGMを下げても利用者の音量設定自体は変更しません。演出省略・再描画・ロードで音と予約を止め、BGMを設定音量へ戻します。
-- HPの見た目は命中時刻へ揃えます。戦闘計算・支払い・保存は既に確定しており、演出の完了や省略で再計算しません。
-- 演出省略はボタン、Enter、Escで行います。音・粒子・BGM復帰の予約も取り消します。
-- `reduced` とOSの動き軽減では追加の動く粒子を抑制し、基本効果は控えた表示へ置き換えます。`off` は画面効果を止めます。音の有効・無効は別の設定です。
-- Web Audioが利用できない場合も、既存OGGの再生経路は残します。
+1. 既存SEの再生音量は、マスター音量×SE音量×SE定義の `gain` ×イベントの `gain` を0〜1へ制限した値です。
+1. 合成音は各音源のエンベロープに、マスター音量×SE音量を掛けます。既存SE定義の `gain` とイベントの `gain` は、この追加合成音には直接掛かりません。
+1. 同時発音は既存SEが最大8音、追加合成音が最大24音。上限は共通JSONの `mixer` で変更できます。上限では低優先度の音から止め、同じ優先度なら古い音を止めます。再生中の音がすべて高優先度の場合、新しい低優先度音を鳴らしません。
+1. 強打・会心・撃破ではBGMを設定音量の64%にし、70ms後から190msまでの4段階で100%へ戻します。`duckGain`、`duckHoldMs`、`duckReleaseMs`、`duckPriority` で設定します。
+1. `priority` は0〜100、`cooldownMs` は同じ合成音の再発音を抑える0〜1000msです。`mixer.compressor` はSE全体の `threshold`（dB）、`knee`（dB）、`ratio`、`attack` / `release`（秒）。Web Audio利用時は既存SEも合成音と同じコンプレッサーへ通します。BGMは別経路で減音します。これは最終出力のクリッピングを完全に保証するリミッターではありません。
+1. 左右位置は表示対象の画面内位置から取り、飛翔の合成音は攻撃側から対象へ移動します。`spatial: { pan, panEnd, distance }` を指定すると上書きできます。既存SEの定位は発音時の固定位置です。
+1. BGMを下げても利用者の音量設定自体は変更しません。演出省略・再描画・ロードで音と予約を止め、BGMを設定音量へ戻します。
+1. HPの見た目は命中時刻へ揃えます。戦闘計算・支払い・保存は既に確定しており、演出の完了や省略で再計算しません。
+1. 演出省略はボタン、Enter、Escで行います。音・粒子・BGM復帰の予約も取り消します。
+1. `reduced` とOSの動き軽減では追加の動く粒子を抑制し、基本効果は控えた表示へ置き換えます。`off` は画面効果を止めます。音の有効・無効は別の設定です。
+1. Web Audioが利用できない場合も、既存OGGの再生経路は残します。
 
 ## 7. 編集・確認の手順
 
@@ -380,14 +380,14 @@ const heavyHit = {
 };
 ```
 
-- `kind`：`sound`（既存SE）、`synth`（合成音）、`particles`、`path`、`effect`（基本効果）。
-- `atMs`：タイムラインの開始から0〜5000ms。配列順ではなく、この時刻で開始します。
-- `target`：`source`（攻撃側）または `target`（対象側）。
-- `profile`：`synth` / `particles` / `path` の各定義集のID。`effect` は `effect`、`sound` は `sound` のIDを使います。
-- `repeat`：1〜8回。2回以上なら `intervalMs`（20〜2000ms）が必要です。展開後の開始は5000ms以内、タイムライン全体で64命令以内です。
-- `gain`：`sound` の追加音量0〜1。`alternates` に追加の音声IDを1〜8個書くと、`sound` と合わせた候補から演出専用シードで選択します。
-- `priority`：この再生の優先度0〜100。省略時は合成音プリセットの優先度、録音済み音声のみの場合は40です。`cooldownMs` は同じ録音済み音声の連打を抑える0〜1000msです。合成音の再発音間隔は `profiles` の値を使います。
-- `spatial`：左右・距離・終点の上書き。`pan` / `panEnd` は−1〜1、`distance` は0〜10。
+1. `kind`：`sound`（既存SE）、`synth`（合成音）、`particles`、`path`、`effect`（基本効果）。
+1. `atMs`：タイムラインの開始から0〜5000ms。配列順ではなく、この時刻で開始します。
+1. `target`：`source`（攻撃側）または `target`（対象側）。
+1. `profile`：`synth` / `particles` / `path` の各定義集のID。`effect` は `effect`、`sound` は `sound` のIDを使います。
+1. `repeat`：1〜8回。2回以上なら `intervalMs`（20〜2000ms）が必要です。展開後の開始は5000ms以内、タイムライン全体で64命令以内です。
+1. `gain`：`sound` の追加音量0〜1。`alternates` に追加の音声IDを1〜8個書くと、`sound` と合わせた候補から演出専用シードで選択します。
+1. `priority`：この再生の優先度0〜100。省略時は合成音プリセットの優先度、録音済み音声のみの場合は40です。`cooldownMs` は同じ録音済み音声の連打を抑える0〜1000msです。合成音の再発音間隔は `profiles` の値を使います。
+1. `spatial`：左右・距離・終点の上書き。`pan` / `panEnd` は−1〜1、`distance` は0〜10。
 
 `bindings` は結果分類（`heavy`、`critical`、`heal`など）からタイムラインIDへの対応です。このとき `atMs: 0` は既存cueが決めた命中時刻などを意味します。既存の命中時刻130msを再び足すと二重に遅れるため、通常の追加演出は0msで重ねます。上の全体作例は専用プレビューなど、アクション開始を起点に組む場合の例です。既存cueの録音済みSEも残るため、追加タイムラインへ同じSEを記述すると重複再生になります。
 
