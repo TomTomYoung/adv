@@ -24,7 +24,7 @@ jobs:
         if: ${{ !cancelled() }}
         run: |
           npm install --no-save --package-lock=false playwright@1.58.2
-          python -m http.server 8000 --bind 127.0.0.1 >/tmp/q018-http.log 2>&1 &
+          node --input-type=module -e "import http from 'node:http'; import fs from 'node:fs/promises'; import path from 'node:path'; const types={'.js':'text/javascript','.json':'application/json','.css':'text/css','.html':'text/html','.png':'image/png','.webp':'image/webp'}; http.createServer(async(q,r)=>{try{const p='.'+new URL(q.url,'http://localhost').pathname;r.setHeader('content-type',types[path.extname(p)]??'application/octet-stream');r.end(await fs.readFile(p));}catch{r.writeHead(404);r.end()}}).listen(8000,'127.0.0.1')" >/tmp/q018-http.log 2>&1 &
           PROOF_ORIGIN=http://127.0.0.1:8000 node qa-q018-proof.mjs
       - uses: actions/upload-artifact@v4
         if: always()
