@@ -1,3 +1,4 @@
+import {buildReturnCart} from './build-q014-world-route.mjs';
 import {buildBreathingVein} from './build-q013-world-route.mjs';
 import {buildThreePicks} from './build-q012-world-route.mjs';
 import {buildSaltBride} from './build-q011-world-route.mjs';
@@ -137,6 +138,7 @@ export async function buildScenarioEditions({check=false}={}){
  await buildSaltBride({check});
  await buildThreePicks({check});
  await buildBreathingVein({check});
+ await buildReturnCart({check});
  await buildCompanionEdition({check});
  const geography=await buildOddlandGeography({check});
  await buildSalomeGeography(geography,{check});

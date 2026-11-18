@@ -1,3 +1,4 @@
+import {extendReturnCartGeography} from '../authoring/editions/e2/story-q014.mjs';
 import {extendSaltBrideGeography} from '../authoring/editions/e2/saltbride-geography.mjs';
 import {extendSluiceGeography} from '../authoring/editions/e2/sluice-geography.mjs';
 import {ratRouteLocations} from '../authoring/editions/e2/story-q009.mjs';
@@ -56,6 +57,7 @@ export async function buildOddlandGeography({check=false}={}){
   Object.assign(bundle.additions.locations,structuredClone(voiceWallLocations),structuredClone(ratRouteLocations));
   extendSluiceGeography(bundle);
   await extendSaltBrideGeography(bundle,read);
+  extendReturnCartGeography(bundle);
   applyOutdoorAppearance(bundle);
   applyIndoorAppearance(bundle);
   const output=JSON.stringify(bundle,null,2)+'\n',file=path.join(root,'data/scenario-editions/e2/geography.json');
