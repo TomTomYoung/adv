@@ -1,0 +1,73 @@
+name: Verify deployed q021 garden route
+on:
+  push:
+    branches: [codex/verify-green-garden-pages-20261119]
+    paths: ['.github/workflows/q021-published-trial.yml']
+permissions:
+  contents: read
+jobs:
+  deployed:
+    runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 4817c463e6d24a7ade3d754bc4b7a34b545daff6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --package-lock=false playwright@1.58.2
+      - name: Compare seven published files and complete the public route on mobile
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          import {readFile} from 'node:fs/promises';
+          import {chromium} from 'playwright';
+          const base='https://tomtomyoung.github.io/adv/';
+          const paths=['runtime.json','data/scenario-editions.json','data/scenario-editions/e2/q021.json','data/scenario-editions/e2/geography.json','data/scenario-editions/e2/companions.json','data/quests/q021.json','playtests/quest-parties.json'];
+          const hash=b=>createHash('sha256').update(b).digest('hex');
+          for(const path of paths){
+            const expected=hash(await readFile(path));
+            let actual;
+            for(let attempt=0;attempt<8;attempt++){
+              const r=await fetch(base+path+'?revision=4817c463e6d24a7ade3d754bc4b7a34b545daff6&attempt='+attempt);
+              if(r.ok)actual=hash(Buffer.from(await r.arrayBuffer()));
+              if(actual===expected)break;
+              await new Promise(r=>setTimeout(r,5000));
+            }
+            assert.equal(actual,expected,path);
+            console.log(path,actual);
+          }
+          const browser=await chromium.launch({args:['--no-sandbox']});
+          try {
+            const page=await browser.newPage({viewport:{width:390,height:844}});
+            const errors=[];
+            page.on('pageerror',e=>errors.push(e.message));
+            await page.goto(base+'quest-party-playtest.html?edition=e2&quest=q021&party=balanced&level=3&start=site&outcome=compromise&seed=1907&battleMode=classic',{waitUntil:'domcontentloaded'});
+            await page.locator('#launch:enabled').waitFor({timeout:150000});
+            await page.selectOption('#effects','off');
+            await page.click('#launch');
+            await page.waitForFunction(()=>window.questPlaytest?.trial?.engine?.state.quests.q021.stage==='active');
+            const trace=[{"type":"advance"},{"type":"choose","id":"follow"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"battle","action":"skill","skill":"attack","target":"enemy_0"},{"type":"battle","action":"skill","skill":"fire","target":"enemy_0"},{"type":"advance"},{"type":"advance"},{"type":"advance"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"advance"},{"type":"choose","id":"track"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"advance"},{"type":"advance"},{"type":"choose","id":"half"},{"type":"advance"},{"type":"choose","id":"return"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"advance"},{"type":"choose","id":"deliver"},{"type":"advance"}];
+            const choices=[];
+            for(const intent of trace){
+              if(intent.type==='choose'){
+                const button=page.locator('#app [data-focus="choice:'+intent.id+'"]:visible');
+                await button.click({timeout:10000}); choices.push(intent.id);
+              } else {
+                assert.equal(await page.evaluate(intent=>window.questPlaytest.dispatch(intent),intent),true,JSON.stringify(intent));
+              }
+            }
+            const result=await page.evaluate(()=>({report:questPlaytest.report(),values:questPlaytest.trial.engine.state.stories.q021.values}));
+            assert.equal(result.report.status,'cleared');
+            assert.equal(result.report.outcome,'compromise');
+            assert.equal(result.report.gold.end,183);
+            assert.equal(result.report.rescues,0);
+            assert.deepEqual(errors,[]);
+            console.log('PUBLIC_RESULT',JSON.stringify({choices,steps:result.report.steps,records:result.report.records,gold:result.report.gold,values:result.values,errors}));
+          } finally {await browser.close();}
+          JS
