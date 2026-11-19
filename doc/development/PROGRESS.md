@@ -1,5 +1,9 @@
 # 検証結果と残作業
 
+## q023 母樹の指輪
+
+5経路・3結末を実地に接続しました。通常60試遊、専用28試験。次のq024は原本15試遊と旧経路11試遊を完了しています。[q023](Q023_WORLD_ROUTE.md)・[q024](Q024_WORLD_ROUTE_PLAN.md)
+
 ## q021・q022の公開確認 — 2026-11-19
 
 q021は[公開版](https://github.com/TomTomYoung/adv/actions/runs/44456693759)で未植付け種の半分をユイへ返しました。64歩・1勝・救助0、芽と鳥は亀裂に残りました。q022は[PR #307](https://github.com/TomTomYoung/adv/pull/307)で統合しました。全48ワークフロー、全4,443試験、専用63試験、72通常試遊、Chromium 200画面条件が成功しました。[公開版](https://github.com/TomTomYoung/adv/actions/runs/44458143348)では自然覚醒した採集者を支え、22歩で医学校へ戻って採集袋に札を結びました。両クエストとも統合時点の配信7ファイルがSHA-256で一致しました。[q021詳細](Q021_WORLD_ROUTE.md)・[q022詳細](Q022_WORLD_ROUTE.md)。
