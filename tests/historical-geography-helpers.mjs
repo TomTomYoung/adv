@@ -2,7 +2,7 @@
 // Load their original quest scripts when rebuilding an edition against those maps.
 export function useQuestsBeforeGeographyExpansion(edition) {
   delete edition.geographyUpgrade;
-  for (const id of ['q007','q009','q010','q011','q014','q015','q017','q018','q020','q021','q022','q023','q024','q025']) {
+  for (const id of ['q007','q009','q010','q011','q014','q015','q017','q018','q020','q021','q022','q023','q024','q025','q026']) {
     delete edition.questOverrides[id];
   }
 }
