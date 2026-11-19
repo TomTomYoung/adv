@@ -7,7 +7,7 @@ import {loadContent} from '../src/core/loader.js';
 import {drain,fight} from './helpers.mjs';
 
 const read=async file=>JSON.parse(await fs.readFile(new URL('../'+file,import.meta.url),'utf8'));
-const data=await loadContent(read,{edition:'e2'});
+const data=await loadContent(async file=>{const value=await read(file);if(file==='data/scenario-editions.json')delete value.editions.e2.questOverrides.q022;return value;},{edition:'e2'});
 const catalog=await read('playtests/quest-parties.json');
 const routes=[
   {path:['wake'],outcome:'contract',round:null,battles:1},
