@@ -32,3 +32,7 @@
 ## 作業ブランチでの通常攻略とChromium（2026-11-19）
 
 [GitHub Actions run 44433506550](https://github.com/TomTomYoung/adv/actions/runs/44433506550) で3編成×Lv3・4×受付／現場×7経路の84通常攻略が全て完走。失敗・救援0、実移動30〜98歩。Chromiumは途中保存、全11旅程の救援後、途中作業の救援後と旧受注の代表状態について、Scene/Classic×幅1440/390の268画面条件を検証し、3結末・実行時エラー0を確認した。これは作業ブランチのCIであり、全体回帰・統合・公開版の結果とは区別する。
+
+## 統合と公開版の試遊
+
+[PR #306](https://github.com/TomTomYoung/adv/pull/306)でmaster `4817c463` に統合しました。47ワークフローと[全4,380試験](https://github.com/TomTomYoung/adv/actions/runs/44434699537)が成功しました。[Pages配信](https://github.com/TomTomYoung/adv/actions/runs/44436479256)後、[公開確認](https://github.com/TomTomYoung/adv/actions/runs/44456693759)で7ファイルのSHA-256が統合コミットと一致しました。幅390、基本4人・Lv3・現場開始・seed 1907で羽根を追い、芽を残して未植付け分の半分を持ち帰る経路を64歩で完走しました。1戦1勝、敗北・救助0、183G。ユイは返却分を種棚で記帳し、芽と鳥は亀裂、巣の種は巣に残りました。

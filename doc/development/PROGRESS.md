@@ -1,5 +1,9 @@
 # 検証結果と残作業
 
+## q021・q022の公開確認 — 2026-11-19
+
+q021は[公開版](https://github.com/TomTomYoung/adv/actions/runs/44456693759)で未植付け種の半分をユイへ返しました。64歩・1勝・救助0、芽と鳥は亀裂に残りました。q022は[PR #307](https://github.com/TomTomYoung/adv/pull/307)で統合しました。全48ワークフロー、全4,443試験、専用63試験、72通常試遊、Chromium 200画面条件が成功しました。[公開版](https://github.com/TomTomYoung/adv/actions/runs/44458143348)では自然覚醒した採集者を支え、22歩で医学校へ戻って採集袋に札を結びました。両クエストとも統合時点の配信7ファイルがSHA-256で一致しました。[q021詳細](Q021_WORLD_ROUTE.md)・[q022詳細](Q022_WORLD_ROUTE.md)。
+
 ## q021種の運搬・育苗床の現場接続 — 2026-11-19
 
 作業ブランチ `codex/q021-seed-bird-world-route-20261119` で原本3場面・7経路・3結末から19場面・23行動・11旅程へ実装。ユイの同意・巣と亀裂の種の保持者・苗の保全・育苗床の施工・帳簿変更を個別に保存。守護兵の勝利と種の回収は別操作とした。原本、固定旧保存、既存マップは変更しない。[生成・専用68試験](https://github.com/TomTomYoung/adv/actions/runs/44433061267)成功。[作業ブランチChromium](https://github.com/TomTomYoung/adv/actions/runs/44433506550)で84試遊（30〜98歩・敗北／救援0）、268画面条件・3結末・errors=[]に成功。全体CIと統合・公開は判定待ち。[実装資料](Q021_WORLD_ROUTE.md)。以下は履歴。
