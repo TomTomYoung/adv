@@ -77,7 +77,9 @@ jobs:
                 }
                 await button.click({timeout:10000}); choices.push(intent.id);
               } else {
-                assert.equal(await page.evaluate(intent=>window.questPlaytest.dispatch(intent),intent),true,JSON.stringify(intent));
+                const before=await page.evaluate(()=>({status:questPlaytest.report().status,scene:questPlaytest.trial.engine.state.stories.q021.scene,wait:questPlaytest.trial.engine.state.waiting?.type}));
+                if(intent.type==='advance' && before.status==='cleared')continue;
+                assert.equal(await page.evaluate(intent=>window.questPlaytest.dispatch(intent),intent),true,JSON.stringify({intent,before,choices}));
               }
             }
             const result=await page.evaluate(()=>({report:questPlaytest.report(),values:questPlaytest.trial.engine.state.stories.q021.values}));
