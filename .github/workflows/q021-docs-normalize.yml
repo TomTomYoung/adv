@@ -1,0 +1,33 @@
+name: q021 normalize generated docs
+on:
+  push:
+    branches:
+      - codex/q021-seed-bird-world-route-20261119
+    paths:
+      - .github/workflows/q021-docs-normalize.yml
+permissions:
+  contents: write
+jobs:
+  regenerate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/q021-seed-bird-world-route-20261119
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Rebuild generated reference docs from current data snapshot
+        run: npm run build:docs
+      - name: Commit only expected generated dungeon and game catalog pages
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add doc/dungeons/DUNGEON_CATALOG.md doc/dungeons/details/*.md
+          git add doc/battle/SKILL_CATALOG.md doc/battle/MAGIC_CATALOG.md doc/battle/ITEM_CATALOG.md
+          git add doc/battle/BUFF_CATALOG.md doc/battle/DEBUFF_CATALOG.md doc/battle/STATUS_CATALOG.md
+          if ! git diff --cached --quiet; then
+            git commit -m 'docs(q021): refresh generated catalogs for November 19 snapshot'
+            git push origin HEAD:codex/q021-seed-bird-world-route-20261119
+          fi
