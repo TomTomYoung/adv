@@ -1,0 +1,105 @@
+name: Verify deployed q023 garden route
+on:
+  push:
+    branches: [codex/verify-mother-ring-pages-20261119]
+    paths: ['.github/workflows/q023-published-trial.yml']
+permissions:
+  contents: read
+jobs:
+  deployed:
+    runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 961b49775f2073703627d19b4d5aacfc60b32f89
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --package-lock=false playwright@1.58.2
+      - name: Compare seven published files and complete the public route on mobile
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          import {readFile} from 'node:fs/promises';
+          import {chromium} from 'playwright';
+          const base='https://tomtomyoung.github.io/adv/';
+          const paths=['runtime.json','data/scenario-editions.json','data/scenario-editions/e2/q023.json','data/scenario-editions/e2/geography.json','data/scenario-editions/e2/companions.json','data/quests/q023.json','playtests/quest-parties.json'];
+          const hash=b=>createHash('sha256').update(b).digest('hex');
+          for(const path of paths){
+            const expected=hash(await readFile(path));
+            let actual;
+            for(let attempt=0;attempt<8;attempt++){
+              const r=await fetch(base+path+'?revision=961b49775f2073703627d19b4d5aacfc60b32f89&attempt='+attempt);
+              if(r.ok)actual=hash(Buffer.from(await r.arrayBuffer()));
+              if(actual===expected)break;
+              await new Promise(r=>setTimeout(r,5000));
+            }
+            assert.equal(actual,expected,path);
+            console.log(path,actual);
+          }
+          const browser=await chromium.launch({args:['--no-sandbox']});
+          try {
+            const page=await browser.newPage({viewport:{width:390,height:844}});
+            const errors=[];
+            page.on('pageerror',e=>errors.push(e.message));
+            const q038=[];
+            page.on('response',r=>{if(new URL(r.url()).pathname.endsWith('/e2/q038.json'))q038.push(r.status());});
+            await page.goto(base+'quest-party-playtest.html?edition=e2&quest=q023&party=balanced&level=3&start=site&outcome=informed&seed=1907&battleMode=classic',{waitUntil:'domcontentloaded'});
+            try {await page.locator('#launch:enabled').waitFor({timeout:90000});} catch(error){console.log(await page.locator('#trial-status').innerText(),errors); throw error;}
+            assert.ok(q038.includes(200),JSON.stringify(q038));
+            await page.selectOption('#effects','off');
+            await page.click('#launch');
+            await page.waitForFunction(()=>window.questPlaytest?.trial?.engine?.state.quests.q023.stage==='active');
+            const trace=[{"type":"advance"},{"type":"choose","id":"measure"},{"type":"advance"},{"type":"choose","id":"report"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"battle","action":"skill","skill":"attack","target":"enemy_0"},{"type":"battle","action":"skill","skill":"fire","target":"enemy_0"},{"type":"advance"},{"type":"advance"},{"type":"advance"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"advance"},{"type":"choose","id":"notice"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"advance"},{"type":"choose","id":"warn"},{"type":"advance"},{"type":"choose","id":"archive"},{"type":"advance"},{"type":"choose","id":"post"},{"type":"advance"},{"type":"choose","id":"back"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"advance"},{"type":"choose","id":"remove"},{"type":"advance"},{"type":"choose","id":"lift"},{"type":"advance"},{"type":"choose","id":"return"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"right"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"move","direction":"forward"},{"type":"advance"},{"type":"choose","id":"hand"},{"type":"advance"}];
+            const choices=[];
+            for(const intent of trace){
+              if(intent.type==='choose'){
+                const selector=await page.evaluate(id=>'#app [data-focus='+CSS.escape('choice:'+id)+']:visible',intent.id);
+                const button=page.locator(selector);
+                for(let n=0;n<25 && !await button.isVisible();n++){
+                  const next=page.locator('#app [data-focus="message:next"]:visible');
+                  await next.click({timeout:7000});
+                }
+                await button.click({timeout:10000}); choices.push(intent.id);
+              } else {
+                const before=await page.evaluate(()=>({status:questPlaytest.report().status,scene:questPlaytest.trial.engine.state.stories.q023.scene,wait:questPlaytest.trial.engine.state.waiting?.type}));
+                if(intent.type==='advance' && before.status==='cleared')continue;
+                assert.equal(await page.evaluate(intent=>window.questPlaytest.dispatch(intent),intent),true,JSON.stringify({intent,before,choices}));
+              }
+            }
+            const result=await page.evaluate(()=>({report:questPlaytest.report(),values:questPlaytest.trial.engine.state.stories.q023.values}));
+            assert.equal(result.report.status,'cleared');
+            assert.equal(result.report.outcome,'informed');
+            assert.equal(result.report.gold.end,212);
+            assert.equal(result.report.rescues,0);
+            assert.equal(result.report.steps,107);
+            assert.equal(result.report.records.wins,1);
+            const v=result.values;
+            assert.ok(v.aseTold && v.warned && v.archived && v.posted);
+            assert.equal(v.marker,'peg');assert.equal(v.pegAt,'root');assert.equal(v.ringAt,'ase');assert.equal(v.notesAt,'ase');
+            assert.equal(v.cutRoot,false);assert.equal(v.madeCopy,false);
+            console.log('q038 HTTP',q038);
+            assert.deepEqual(errors,[]);
+            console.log('PUBLIC_RESULT',JSON.stringify({choices,steps:result.report.steps,records:result.report.records,gold:result.report.gold,values:result.values,errors}));
+            const retryPage=await browser.newPage({viewport:{width:390,height:844}});
+            const statuses=[];
+            let attempts=0;
+            await retryPage.route(url=>url.pathname.endsWith('/e2/q038.json'),async route=>{
+              attempts++;
+              if(attempts===1)await route.fulfill({status:503,contentType:'text/plain',body:'Injected transient failure'});
+              else await route.continue();
+            });
+            retryPage.on('response',r=>{if(new URL(r.url()).pathname.endsWith('/e2/q038.json'))statuses.push(r.status());});
+            await retryPage.goto(page.url(),{waitUntil:'domcontentloaded'});
+            await retryPage.locator('#launch:enabled').waitFor({timeout:90000});
+            await retryPage.click('#launch');
+            await retryPage.waitForFunction(()=>window.questPlaytest?.trial?.engine?.state.quests.q023.stage==='active');
+            assert.equal(statuses[0],503);assert.equal(statuses.at(-1),200);
+            console.log('Q038_RETRY',JSON.stringify({attempts,statuses,quest:'q023'}));
+          } finally {await browser.close();}
+          JS
