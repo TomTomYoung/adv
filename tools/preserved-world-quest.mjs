@@ -23,7 +23,7 @@ export function compilePreservedWorldQuest(original, items, source, namespace) {
     edition:{id:'e2',revision:1,inherits:'e1'}, entryScript:sid('visit'), preserveAcceptedRoute:true,
     currentStoryScriptPrefix:sid(''), narrative:{...q.model.narrative,units},
     graph:source.nodes.map(n => ({id:n.id,text:n.text,options:n.options.map(o => ({
-      id:o.id,text:o.text,to:o.to,action:o.action,...(o.combat && {combat:true}),...(o.when && {when:o.when})
+      id:o.id,text:o.text,to:o.to,action:o.action,...(o.combat && {combat:true}),...(o.when && {when:o.when}),...(o.visibleWhen!==undefined && {visibleWhen:o.visibleWhen})
     }))})),
     stateRegistry:Object.entries(q.story.registry).map(([key,value]) => ({
       path:'stories.'+id+'.values.'+key,...value,writer:'story.action',scope:'quest',lifetime:'保存・再開・完了後まで保持'
@@ -45,7 +45,8 @@ export function compilePreservedWorldQuest(original, items, source, namespace) {
       on_lose:[{op:'narrate',text:'救助班に運び出された。現場へ戻ると直前の場面から再開できる。'}]}];
     const requirements=Object.entries(action.cost??{}).map(([item,n])=>item==='gold'?n+'Gを支払う。':items[item].name+n+'個を使う。');
     if(o.combat) requirements.push('戦闘に勝つと次の場面へ進む。');
-    return {id:o.id,text:o.text,storyAction:{quest:id,action:o.action},...(o.when && {condition:o.when}),requirement:requirements.join(' '),commands};
+    return {id:o.id,text:o.text,storyAction:{quest:id,action:o.action},...(o.when && {condition:o.when}),
+      ...(o.visibleWhen!==undefined && {visibleWhen:o.visibleWhen}),requirement:requirements.join(' '),commands};
   }
   for (const node of source.nodes) {
     q.scripts[sid(node.id)] = {storyQuest:id,commands:[
