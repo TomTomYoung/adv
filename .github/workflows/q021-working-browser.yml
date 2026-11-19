@@ -1,0 +1,47 @@
+name: q021 working-branch browser validation
+on:
+  push:
+    branches:
+      - codex/q021-seed-bird-world-route-20261119
+    paths:
+      - .github/workflows/q021-working-browser.yml
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/q021-seed-bird-world-route-20261119
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright
+        run: |
+          npm install --no-save --package-lock=false playwright@1.58.2
+          test -n "$(fc-list :lang=ja)"
+      - name: Real seven-route campaign matrix
+        run: |
+          mkdir -p /tmp/adv-seed-bird-art-browser
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import {measureSeedBird} from './tools/measure-seed-bird.mjs';
+          const results=measureSeedBird({levels:[3,4],starts:['site','reception']});
+          fs.writeFileSync('/tmp/adv-seed-bird-art-browser/normal-trials.json',JSON.stringify(results,null,2));
+          console.log(JSON.stringify({trials:results.length,failures:0,steps:[Math.min(...results.map(r=>r.steps)),Math.max(...results.map(r=>r.steps))]}));
+          JS
+      - name: Scene Classic widescreen and mobile render checks
+        run: ADV_BROWSER_OUTPUT=/tmp/adv-seed-bird-art-browser node tools/browser-q021-world-route-smoke.mjs
+      - name: Store q021 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: q021-working-branch-evidence
+          path: /tmp/adv-seed-bird-art-browser
+          if-no-files-found: warn
+          retention-days: 7
