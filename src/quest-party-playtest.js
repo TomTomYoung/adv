@@ -1,4 +1,5 @@
 import {loadContent} from './core/loader.js';
+import {readContentJson} from './core/read-content-json.js';
 import {projectGame} from './application/projection.js';
 import {questPartyErrors,createQuestTrial,dispatchQuestTrial,questTrialReport} from './application/quest-playtest.js';
 import {GameAudio} from './application/audio.js';
@@ -8,7 +9,7 @@ import {applyTheme,THEME_DEFAULT} from './view/theme.js';
 
 const $=id=>document.getElementById(id),storageKey='adv.questPartyTrials.v1';
 const statuses={playing:'試遊中',cleared:'指定結末でクリア',other_outcome:'別の結末で完了',defeated:'全滅・救助',changed_party:'編成変更後に完了（比較対象外）'};
-let data,catalog,trial,view,model,lastOptions,loadVersion=0,loading=false,soundEnabled=false,recorded=false;
+let data,catalog,catalogRequest,trial,view,model,lastOptions,loadVersion=0,loading=false,soundEnabled=false,recorded=false;
 const cache=new Map();let history=[];
 try{const saved=JSON.parse(localStorage.getItem(storageKey)??'[]');if(Array.isArray(saved))history=saved.filter(r=>r?.schemaVersion===1&&r.config&&r.initial&&r.party&&statuses[r.status]).slice(-100);}catch{}
 const status=(message,error=false)=>{$('trial-status').textContent=message;$('trial-status').dataset.error=String(error);};
@@ -19,6 +20,7 @@ const ui={status:text=>status(text),menu:()=>status('試遊専用です。本編
 function fill(id,entries,preferred){const select=$(id);select.replaceChildren(...entries.map(([value,label])=>new Option(label,value)));if(entries.some(([v])=>v===preferred))select.value=preferred;}
 function paragraph(parent,text){const p=document.createElement('p');p.textContent=text;parent.append(p);}
 function refreshPlan(){
+  if(!data||loading)return;
   const q=data.quests[$('quest').value],p=catalog.quests[data.scenarioEdition]?.[q?.id];
   $('launch').disabled=loading||!p;if(!p){$('party-preview').replaceChildren();$('party-tactic').textContent='';$('plan-note').textContent='該当するクエストがありません。';$('supplies-preview').textContent='';return;}
   fill('party',p.parties.map(id=>[id,catalog.parties[id].name]),$('party').value);
@@ -29,6 +31,7 @@ function refreshPlan(){
   refreshParty();
 }
 function refreshParty(){
+  if(!data||loading)return;
   const p=catalog.parties[$('party').value];if(!p)return;
   const root=$('party-preview');root.replaceChildren();
   for(const id of p.members){const l=catalog.loadouts[id],node=document.createElement('div');node.className='quest-lab-member';const strong=document.createElement('strong');strong.textContent=`${data.actors[id].name} / ${data.jobs[l.job].name}`;const gear=document.createElement('span');gear.textContent=l.equipment.map(i=>data.items[i].name).join('・');node.append(strong,gear);root.append(node);}
@@ -39,14 +42,51 @@ function filterQuests(preferred=$('quest').value){
   const qs=(data.questOrder?.ids??Object.keys(data.quests)).map(id=>data.quests[id]).filter(Boolean).filter(q=>`${q.id} ${q.title} ${data.regions.find(r=>r.id===q.region)?.name??''}`.toLowerCase().includes(term));
   fill('quest',qs.map(q=>[q.id,`${q.id} ${q.title}`]),preferred);refreshPlan();
 }
-async function selectEdition(edition,preferred){
-  const version=++loadVersion;loading=true;$('launch').disabled=true;status('シナリオを読み込み中…');
+async function selectEdition(edition,preferred,options={}){
+  const version=++loadVersion;
+  loading=true;
+  $('launch').disabled=true;
+  status('シナリオを読み込み中…');
   try{
-    if(!cache.has(edition))cache.set(edition,loadContent(undefined,{edition}));
-    const next=await cache.get(edition);if(version!==loadVersion)return;
-    const errors=questPartyErrors(next,catalog);if(errors.length)throw Error(errors.slice(0,3).join(' / '));
-    data=next;loading=false;$('edition').value=edition;filterQuests(preferred);status(`${Object.keys(data.quests).length}件の想定を読み込みました。`);
-  }catch(e){if(version!==loadVersion)return;cache.delete(edition);status(e.message,true);}
+    catalogRequest??=readContentJson('playtests/quest-parties.json').catch(error=>{
+      catalogRequest=undefined;
+      throw error;
+    });
+    catalog=await catalogRequest;
+    if(version!==loadVersion)return false;
+    if(!cache.has(edition)){
+      cache.set(edition,loadContent(undefined,{edition}).catch(error=>{
+        cache.delete(edition);
+        throw error;
+      }));
+    }
+    const next=await cache.get(edition);
+    if(version!==loadVersion)return false;
+    const errors=questPartyErrors(next,catalog);
+    if(errors.length){cache.delete(edition);throw Error(errors.slice(0,3).join(' / '));}
+    data=next;
+    loading=false;
+    $('edition').value=edition;
+    filterQuests(preferred);
+    for(const [key,id] of [['party','party'],['level','level'],['outcome','outcome'],['start','start'],['battleMode','battle-mode'],['seed','seed']]){
+      if(options[key]!==undefined)$(id).value=String(options[key]);
+    }
+    refreshParty();
+    status(`${Object.keys(data.quests).length}件の想定を読み込みました。`);
+    return true;
+  }catch(error){
+    if(version!==loadVersion)return false;
+    data=null;
+    loading=false;
+    $('launch').disabled=true;
+    status(error.message,true);
+    const retry=document.createElement('button');
+    retry.type='button';
+    retry.textContent='もう一度読み込む';
+    retry.addEventListener('click',()=>selectEdition(edition,preferred,options),{once:true});
+    $('trial-status').append(' ',retry);
+    return false;
+  }
 }
 function selectedOptions(){return {quest:$('quest').value,party:$('party').value,level:Number($('level').value),seed:Number($('seed').value),start:$('start').value,battleMode:$('battle-mode').value,outcome:$('outcome').value};}
 function render(){
@@ -64,7 +104,7 @@ function render(){
 }
 function dispatch(intent){const changed=dispatchQuestTrial(trial,intent);if(changed||trial.engine.state.notice||trial.engine.feedback.events.length)render();return changed;}
 function launch(options=selectedOptions(),source=data){
-  if(loading){status('シナリオの読込完了をお待ちください。');return;}
+  if(loading||!source){status('シナリオの読込完了をお待ちください。');return;}
   try{
     const next=createQuestTrial(source,catalog,options);view?.destroy();sound.stopEffects();trial=next;recorded=false;lastOptions={edition:source.scenarioEdition,options:{...options}};
     view=new SceneView($('app'),dispatch,ui);render();
@@ -76,7 +116,7 @@ function renderHistory(){
   const root=$('trial-history');root.replaceChildren();if(!history.length){paragraph(root,'記録はまだありません。完了または全滅時に記録します。');return;}
   const list=document.createElement('ol');for(const row of [...history].reverse()){
     const c=row.config,li=document.createElement('li');li.textContent=`${c.edition} ${c.quest} / ${c.party} / Lv.${c.level} / ${c.start==='site'?'現場':'受付'} / ${c.battleMode} / seed ${c.seed} → ${statuses[row.status]}${row.outcome?' ('+row.outcome+')':''} ／ 勝利${row.records?.wins??0}回・残HP ${row.party.reduce((sum,a)=>sum+a.hp,0)}・${row.gold?.end??0}G`;
-    const button=document.createElement('button');button.type='button';button.textContent='この条件を選択';button.addEventListener('click',async()=>{$('quest-search').value='';await selectEdition(c.edition,c.quest);if(data.scenarioEdition!==c.edition)return;for(const [id,value] of [['party',c.party],['level',String(c.level)],['outcome',c.expectedOutcomes[0]],['start',c.start],['battle-mode',c.battleMode],['seed',String(c.seed)]])$(id).value=value;refreshParty();status('履歴の条件を選択しました。開始ボタンで再試行できます。');});li.append(button);list.append(li);
+    const button=document.createElement('button');button.type='button';button.textContent='この条件を選択';button.addEventListener('click',async()=>{$('quest-search').value='';if(!await selectEdition(c.edition,c.quest,{...c,outcome:c.expectedOutcomes[0]}))return;status('履歴の条件を選択しました。開始ボタンで再試行できます。');});li.append(button);list.append(li);
   }root.append(list);
 }
 function toggleSound(){soundEnabled=!soundEnabled;sound.configure(soundEnabled,1,.8);$('sound-toggle').textContent=sound.label();syncSound();}
@@ -88,9 +128,7 @@ $('sound-toggle').addEventListener('click',toggleSound);$('effects').addEventLis
 $('copy-trial-url').addEventListener('click',async()=>{if(!lastOptions)return;const url=new URL(location.href);url.search=new URLSearchParams({edition:lastOptions.edition,...lastOptions.options});try{await navigator.clipboard.writeText(url.href);status('開始条件のURLをコピーしました。');}catch{status(url.href);}});
 $('export-trials').addEventListener('click',()=>{const payload={schemaVersion:1,history,current:trial?questTrialReport(trial):null},blob=new Blob([JSON.stringify(payload,null,2)+'\n'],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='quest-party-results.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
  document.addEventListener('keydown',e=>{if(!trial||!view||e.target?.closest('#quest-lab')||/INPUT|SELECT|TEXTAREA/.test(e.target?.tagName))return;handleGameKey(e,{view,model:view.model,dispatch,modalOpen:false});});
-try{
-  const response=await fetch(new URL('../playtests/quest-parties.json',import.meta.url));if(!response.ok)throw Error('攻略パーティー定義を読み込めません。');catalog=await response.json();
-  const params=new URLSearchParams(location.search);await selectEdition(params.get('edition')==='e1'?'e1':'e2',params.get('quest')??'q001');
-  if(data){for(const [id,key] of [['party','party'],['level','level'],['seed','seed'],['start','start'],['battle-mode','battleMode'],['outcome','outcome']])if(params.has(key))$(id).value=params.get(key);refreshParty();}
-  renderHistory();if(history.length)$('export-trials').disabled=false;
-}catch(e){status(e.message,true);}
+const params=Object.fromEntries(new URLSearchParams(location.search));
+await selectEdition(params.edition==='e1'?'e1':'e2',params.quest??'q001',params);
+renderHistory();
+if(history.length)$('export-trials').disabled=false;

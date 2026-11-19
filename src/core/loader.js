@@ -2,11 +2,29 @@ import {applyEditionGeography} from './edition-geography.js';
 import {projectQuestObjects} from './quest-events.js';
 import {LEGACY_SCENARIO_EDITIONS,resolveScenarioEdition,scenarioSaveRevision} from './scenario-editions.js';
 import { validateContent } from './validation.js';
-export async function loadContent(read = async path => {
-  const response = await fetch(new URL(`../../${path}`, import.meta.url),{cache:'no-store'});
-  if (!response.ok) throw new Error(`読込失敗: ${path} (${response.status})`);
-  return response.json();
-},{edition='e1'}={}) {
+import {readContentJson} from './read-content-json.js';
+
+async function readBatch(entries, load) {
+  const results = new Array(entries.length);
+  const queue = entries.entries();
+  let stopped = false;
+  async function worker() {
+    for (const [index, entry] of queue) {
+      try {
+        results[index] = await load(entry);
+      } catch (error) {
+        // Discard queued reads. The other workers can finish their in-flight requests.
+        stopped = true;
+        throw error;
+      }
+      if (stopped) break;
+    }
+  }
+  await Promise.all(Array.from({length: Math.min(8, entries.length)}, worker));
+  return results;
+}
+
+export async function loadContent(read = readContentJson, {edition='e1'}={}) {
   const game = await read('data/game.json');
   const data = {game, maps:{}, quests:{}, scripts:{}};
   const merge = (dest, source, label) => {
@@ -16,17 +34,17 @@ export async function loadContent(read = async path => {
     }
   };
   const paths = [...Object.entries(game.files.databases).map(([type,path])=>({type,path})), ...game.files.maps.map(path=>({type:'map',path})), ...game.files.quests.map(path=>({type:'quest',path})), ...game.files.scripts.map(path=>({type:'script',path}))];
-  const docs = await Promise.all(paths.map(async entry=>({...entry,value:await read(entry.path)})));
+  const docs = await readBatch(paths,async entry=>({...entry,value:await read(entry.path)}));
   const catalogDocument=docs.find(doc=>doc.type==='scenarioEditions');
   const catalog=catalogDocument?catalogDocument.value:structuredClone(LEGACY_SCENARIO_EDITIONS);
   data.scenarioEdition=resolveScenarioEdition(catalog,edition);data.scenarioEditions=catalog;
   const baseQuests=new Set(docs.filter(doc=>doc.type==='quest').map(doc=>doc.value.id));
-  const overrides=await Promise.all(Object.entries(catalog.editions[data.scenarioEdition].questOverrides).map(async([id,path])=>{
+  const overrides=await readBatch(Object.entries(catalog.editions[data.scenarioEdition].questOverrides),async([id,path])=>{
     if(!baseQuests.has(id))throw Error(`シナリオ差替え元の依頼がありません: ${id}`);
     const quest=await read(path);
     if(!quest||quest.id!==id)throw Error(`シナリオ差替え先の依頼IDが一致しません: ${id}`);
     return [id,quest];
-  }));
+  });
   const selectedQuests=new Map(overrides);
   for(const {type,value} of docs) {
     if(type==='map') {

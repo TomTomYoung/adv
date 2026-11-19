@@ -43,5 +43,40 @@ try{
   await page.setViewportSize({width:390,height:844});await page.screenshot({path:path.join(output,'quest-party-mobile.png'),fullPage:true});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));assert.ok(await page.locator('#launch').isVisible());
   const state=await page.evaluate(()=>questPlaytest.trial.engine.save());await page.focus('#seed');await page.keyboard.press('ArrowUp');assert.equal(await page.evaluate(()=>questPlaytest.trial.engine.save()),state);await page.selectOption('#effects','off');assert.equal(await page.evaluate(()=>questPlaytest.trial.engine.save()),state);checks.push('mobile controls fit and editing conditions/effects does not advance the run');
   await page.reload();await page.waitForFunction(()=>!document.querySelector('#launch').disabled);assert.equal(await page.locator('#trial-history li').count(),3);checks.push('comparison history survives reload without auto-launching or loading a normal save');
+  const recovery=await browser.newPage();
+  recovery.on('pageerror',e=>errors.push(e.message));
+  let failures=1,reads=0,neighborReads=0;
+  const target='**/data/scenario-editions/e2/q038.json';
+  await recovery.route(target,route=>{
+    reads++;
+    if(failures>0){failures--;return route.fulfill({status:503,body:'temporary'});}
+    return route.continue();
+  });
+  recovery.on('request',req=>{if(new URL(req.url()).pathname.endsWith('/e2/q037.json'))neighborReads++;});
+  const trialUrl=origin+'/quest-party-playtest.html?edition=e2&quest=q022&party=explore&level=4&start=site&outcome=informed&seed=2051';
+  await recovery.goto(trialUrl);
+  await recovery.locator('#launch:enabled').waitFor();
+  assert.equal(reads,2);
+  assert.equal(neighborReads,1);
+  await recovery.click('#launch');
+  assert.equal(await recovery.evaluate(()=>questPlaytest.report().config.quest),'q022');
+  checks.push('one q038 HTTP 503 retries only that file and starts q022');
+
+  failures=3;reads=0;
+  await recovery.reload();
+  const retry=recovery.getByRole('button',{name:'もう一度読み込む'});
+  await retry.waitFor();
+  assert.match(await recovery.locator('#trial-status').innerText(),/q038\.json \(503\)/);
+  assert.equal(reads,3);
+  assert.ok(await recovery.locator('#launch').isDisabled());
+  await retry.click();
+  await recovery.locator('#launch:enabled').waitFor();
+  await recovery.click('#launch');
+  const config=await recovery.evaluate(()=>questPlaytest.report().config);
+  assert.deepEqual([config.edition,config.quest,config.party,config.level,config.start,config.seed,config.expectedOutcomes],
+    ['e2','q022','explore',4,'site',2051,['informed']]);
+  assert.equal(reads,4);
+  checks.push('three consecutive q038 failures show a retry that restores the exact requested trial');
+  await recovery.close();
   assert.deepEqual(errors,[]);await fs.writeFile(path.join(output,'summary.json'),JSON.stringify({checks,errors},null,2));console.log(JSON.stringify({checks,errors}));
 }catch(e){const page=browser?.contexts()[0]?.pages()[0];if(page){await page.screenshot({path:path.join(output,'failure.png'),fullPage:true}).catch(()=>{});await fs.writeFile(path.join(output,'state.json'),JSON.stringify(await page.evaluate(()=>({status:document.querySelector('#trial-status')?.textContent,report:window.questPlaytest?.report(),waiting:window.questPlaytest?.trial.engine.state.waiting})).catch(()=>null),null,2));}await fs.writeFile(path.join(output,'failure.txt'),e.stack+'\n'+errors.join('\n'));throw e;}finally{await browser?.close();await new Promise(r=>server.close(r));}
