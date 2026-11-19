@@ -1,0 +1,64 @@
+name: Validate q027 pollen-ransom routes in Chromium
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'data/**'
+      - 'authoring/editions/e2/story-q024.mjs'
+      - 'authoring/editions/e2/story-q027.mjs'
+      - 'tools/build-scenario-editions.mjs'
+      - 'tools/build-q027-world-route.mjs'
+      - 'tools/build-companion-edition.mjs'
+      - 'tools/preserved-world-quest.mjs'
+      - 'tools/browser-q027-world-route-smoke.mjs'
+      - 'tools/q027-world-route-fixtures.mjs'
+      - 'tools/character-art-browser.mjs'
+      - 'tools/measure-pollen-ransom.mjs'
+      - 'playtests/quest-parties.json'
+      - 'tests/q027-*.mjs'
+      - '.github/workflows/q027-world-route.yml'
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+permissions:
+  contents: read
+jobs:
+  q027-browser:
+    runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned browser driver and Japanese fonts
+        run: |
+          npm install --no-save --package-lock=false playwright@1.58.2
+          test -n "$(fc-list :lang=ja)"
+      - name: Measure eight paths and two starting points with three parties at levels 3 and 4
+        run: |
+          mkdir -p /tmp/adv-pollen-ransom-art-browser
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import {measurePollenRansom} from './tools/measure-pollen-ransom.mjs';
+          const results=measurePollenRansom({levels:[3,4],starts:['site','reception']});
+          fs.writeFileSync('/tmp/adv-pollen-ransom-art-browser/normal-trials.json',JSON.stringify(results,null,2));
+          assert.equal(results.length,96);
+          assert.ok(results.every(r=>r.status==='cleared'&&r.records.losses===0&&r.rescues===0));
+          console.log(JSON.stringify({trials:results.length,failures:0,steps:[Math.min(...results.map(r=>r.steps)),Math.max(...results.map(r=>r.steps))]}));
+          JS
+      - name: Verify flower response, cart passage and freight, old saves, Scene and Classic widths
+        run: ADV_BROWSER_OUTPUT=/tmp/adv-pollen-ransom-art-browser node tools/browser-q027-world-route-smoke.mjs
+      - name: Upload q027 trial checkpoints and results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: q027-world-route-checkpoints
+          path: /tmp/adv-pollen-ransom-art-browser
+          if-no-files-found: error
+          retention-days: 7
