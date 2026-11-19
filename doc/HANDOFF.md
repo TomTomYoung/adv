@@ -1,5 +1,11 @@
 # 実装引き継ぎ
 
+## q022公開完了とq023の再開位置 — 2026-11-19
+
+第2版q022「緑の寝息」は[PR #307](https://github.com/TomTomYoung/adv/pull/307)でmaster `5576c1b4` に統合しました。原本6経路・3結末を14場面・18行動・8旅程で接続し、全48ワークフロー、[全4,443試験](https://github.com/TomTomYoung/adv/actions/runs/44456540156)、[72通常試遊・Chromium 200画面条件](https://github.com/TomTomYoung/adv/actions/runs/44456540631)が成功しました。[公開配信](https://github.com/TomTomYoung/adv/actions/runs/44457900404)後に7ファイルを照合し、[幅390の公開試遊](https://github.com/TomTomYoung/adv/actions/runs/44458143348)で自然覚醒から灯帰りの医学校（施療受付）まで22歩・1勝・救助0で完走しました。[q022の保存、全滅・再戦と公開結果](development/Q022_WORLD_ROUTE.md)。
+
+次はq023「母樹の指輪」です。現場への移動に未接続の依頼は78件です。原本5経路を3編成で15試遊し、保存再読込90回、旧経路11試遊・再読込68回を確認済みです。根を切る経路、実測・住民への警報を経た原物返却、原物を残す複製3経路を分けて実装してください。[原本、地点と再開位置](development/Q023_WORLD_ROUTE_PLAN.md)。
+
 ## q021現場接続実装・専用試験 — 2026-11-19
 
 第2版q021「種を盗む鳥」を作業ブランチ `codex/q021-seed-bird-world-route-20261119` で19場面・23行動・11旅程に接続した。原本7経路・3結末、鳥の再観察1回、ユイの種棚・光の亀裂・巣・育苗床の実移動、苗と未植付け種の保持者、育苗床の設置・鳥の持分、`guard_3` 戦後の回収を独立して保存する。旧 `flow.visit`、旧 `decision`・`review` の条件・命令列を保持。[生成・専用68試験](https://github.com/TomTomYoung/adv/actions/runs/44433061267)が成功した。[作業ブランチChromium](https://github.com/TomTomYoung/adv/actions/runs/44433506550)で84通常試遊（30〜98歩、敗北・救援0）と268画面条件・3結末・errors=[]が成功。全体CI、PR統合・公開は別工程として未確認のまま成功扱いしない。[実装と検証](development/Q021_WORLD_ROUTE.md)。[接続前監査](development/Q021_WORLD_ROUTE_PLAN.md)。以下は履歴。
