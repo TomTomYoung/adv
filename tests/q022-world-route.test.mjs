@@ -45,7 +45,7 @@ for(const route of routes)test('q022 source branch remains '+route.old.join('/')
   choose(g,...route.path);choose(old,...route.old);
   assert.equal(g.state.quests.q022.outcome,route.outcome);
   assert.equal(values(g).round,route.round);
-  assert.equal(g.state.flags.flow.q022?.round,undefined);
+  assert.equal(g.state.flags.flow?.q022?.round,undefined);
   assert.equal(g.state.gold,old.state.gold);
   assert.equal(g.state.actors.ada.xp,old.state.actors.ada.xp);
   assert.equal(g.state.quests.q022.outcome,old.state.quests.q022.outcome);
@@ -75,6 +75,8 @@ test('q022 bandaging and two observations are distinct, bounded and preserve hea
   const after=g.save();assert.equal(g.dispatch({type:'choose',id:'observe'}),false);assert.equal(g.save(),after);
   assert.equal(g.state.stories.q022.events.filter(x=>x==='watch_observe').length,1);
   choose(g,'awake');checkpoint(g);assert.equal(values(g).spontaneousAwake,true);
+  assert.equal(values(g).patientOnStretcher,false);
+  assert.equal(values(g).stretcherAt,'hana');
   assert.equal(values(g).guardianDefeated,false);assert.equal(values(g).feverReturned,false);
   choose(g,'escort','finish');checkpoint(g);
   assert.equal(values(g).patientAt,'clinic');assert.equal(values(g).hanaAt,'clinic');
@@ -126,7 +128,9 @@ test('q022 battle loss and permitted escape never mark the guardians defeated',(
     checkpoint(g);assert.equal(g.state.quests.q022.stage,'active');
     assert.equal(values(g).guardianDefeated,false);assert.equal(values(g).patientAwake,false);assert.equal(values(g).feverReturned,false);
     assert.equal(values(g).patientAt,'bedside');
-    if(!escaped){resume(g);choose(g,'fight','return','wake','escort','report');assert.equal(g.state.quests.q022.outcome,'contract');}
+    g.random=()=>0.999999;
+    resume(g);choose(g,'fight','return','wake','escort','report');
+    assert.equal(g.state.quests.q022.outcome,'contract');
   }
 });
 for(const scene of ['wash_site','washed','watch','litter_site','sampled','spore_stage','guardian_down','force_ready','forced_awake'])
@@ -143,7 +147,7 @@ for(const row of graph.active){
   const g=ready();g.load(row.save);
   for(const o of projectGame(g).dialog.options.filter(x=>x.enabled)){
     const key=row.scene+'_'+o.id;
-    if(story.actions[key]?.journey&&!departures.has(key))departures.set(key,{save:row.save(),choice:o.id});
+    if(story.actions[key]?.journey&&!departures.has(key))departures.set(key,{save:row.save,choice:o.id});
   }
 }
 assert.equal(departures.size,8);
@@ -164,7 +168,7 @@ for(const route of routes)test('q022 accepted old saves keep their original comm
     if(old.state.battle){fight(old);fight(g);}
     checkpoint(g);
     assert.equal(g.state.quests.q022.stage,old.state.quests.q022.stage);
-    assert.equal(g.state.flags.flow.q022?.round,old.state.flags.flow.q022?.round);
+    assert.equal(g.state.flags.flow?.q022?.round,old.state.flags.flow.q022?.round);
   }
   assert.equal(g.state.quests.q022.outcome,route.outcome);
 });

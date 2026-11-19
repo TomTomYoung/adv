@@ -19,11 +19,11 @@ const world={
 };
 const roles={
   hana:['薬師のハナ','採集者の傷と胞子による治療反応を観察する'],
-  patient:['眠っている採集者','傷が回復し、無理なく帰路につく']
+  patient:['採集者','傷が回復し、無理なく帰路につく']
 };
 export const greenSleepCharacters=Object.fromEntries(Object.entries(roles).map(([key,[name,goal]])=>{
   const id='e2_green_sleep_'+key;
-  return [id,{id,name,goal,quests:['q022'],detail:'地下庭園で負傷し、治療と帰還に関わる人物。専用画像のない人物は名前で表示する。'}];
+  return [id,{id,name,goal,quests:['q022'],detail:goal}];
 }));
 
 export function greenSleepSource(){
@@ -40,7 +40,7 @@ export function greenSleepSource(){
     'healingInterrupted','spontaneousAwake','patientAwake','sporesSampled',
     'feverReturned','clinicReceived','recoveryNoted','recorded'
   ])s.bool(key);
-  const both=['hana','patient'],hana=['hana'];
+  const both=['hana','patient'];
   s.node('entry','bedside',both,
     '薬草を採りに行った人が深く眠っている。額は冷たいが、腕には深い傷があった。胞子は傷の周辺だけへ集まる。薬師ハナは担架と包帯を持っている。「眠りを毒と決めつけず、傷と熱の変化を見よう」。',[
       O('dress','ハナと採集者を洗浄足場へ移し、傷を先に処置する','wash_site'),
@@ -61,15 +61,15 @@ export function greenSleepSource(){
     when(s.is('round',0),
       '最初の検温では包帯に血が滲んでいる。胞子を払わず、患者の呼吸と熱を確かめた。',
       when(s.is('round',1),
-        '次の検温では熱が下がり、傷口が閉じ始めた。ハナは治療反応かもしれないと記録した。',
-        '二度目の経過観察で傷の熱が引き、胞子が自分から離れ始めた。本人の指が動いている。')),
+        '次の検温では熱が下がり、傷口が閉じ始めた。ハナは「胞子が傷の熱を引かせているんです」と説明した。',
+        '二度目の経過観察で傷の熱が引き、胞子が自分から離れた。本人の指が動いている。')),
     '自然に目が覚めるまで見届けるか、眠ったまま担架で治療所へ搬送するかを選べる。'
   ],[
       O('observe','次の検温まで付き添い、傷と胞子の変化を記録する','watch',[
         set('round',{op:'add',args:[s.v('round'),1]})
       ],{once:false,when:{op:'lt',left:s.v('round'),right:2}}),
       O('awake','二度の観察を終え、本人が自然に目を開けるまで待つ','awoke',[
-        set('spontaneousAwake'),set('patientAwake')
+        set('spontaneousAwake'),set('patientAwake'),set('patientOnStretcher',false),give('stretcher','patient','hana')
       ],{when:s.is('round',2)}),
       O('transport','自然覚醒を待たず、今の治療記録で担架搬送を申し出る','litter_site')
     ]);
@@ -78,8 +78,8 @@ export function greenSleepSource(){
       O('escort','本人を支えながら治療所へ案内する','clinic_awake')
     ]);
   s.node('clinic_awake','clinic',both,
-    '採集者は自分の意志で帰り、診察台で傷を確かめた。ハナは二回の検温と自然覚醒を治療中の記録へ記した。',[
-      O('finish','観察二回・自然覚醒・付き添い帰還を診療記録に確定する','@informed',[
+    '採集者は隊に肩を借りて歩き、治療所の椅子に腰を下ろした。ハナは二回の検温の記録を開き、採集袋に結ぶ札を取り出した。',[
+      O('finish','ハナと診療記録を閉じ、採集袋に「治療中」の札を結ぶ','@informed',[
         set('clinicReceived'),set('recoveryNoted'),set('recorded')
       ])
     ]);
@@ -122,7 +122,7 @@ export function greenSleepSource(){
       O('escort','ハナと傷を支え、患者と治療所へ戻る','clinic_force')
     ]);
   s.node('clinic_force','clinic',both,
-    '採集者は歩いて治療所に着いた。ハナが包帯を替えると、治りかけた傷が再び熱を持っていた。胞子を排除した結果を記録する。',[
+    '採集者は歩いて治療所に着いた。ハナはまだ閉じきっていない傷に触れ、熱が戻っていないか確かめた。胞子を排除した結果を記録する。',[
       O('report','患者が歩いて帰り、傷の熱が戻ったことを確認する','@contract',[
         set('feverReturned'),set('clinicReceived'),set('recorded')
       ])
@@ -156,7 +156,7 @@ export function greenSleepSource(){
   const implies=(key,condition,message)=>s.invariant(key,or(not(s.is(key)),condition),message);
   implies('woundDressed',and(s.is('woundClean'),s.is('bandageAt','patient')),'傷を洗ってから包帯を巻く');
   implies('patientOnStretcher',and(s.is('stretcherAt','patient'),s.is('patientMobility','assisted')),'眠る患者の担架と介助状態を保つ');
-  implies('spontaneousAwake',and(s.is('woundDressed'),s.is('round',2'),s.is('patientAwake')),'二度の検温を経て自発的に覚醒する');
+  implies('spontaneousAwake',and(s.is('woundDressed'),s.is('round',2),s.is('patientAwake')),'二度の検温を経て自発的に覚醒する');
   implies('guardianDefeated',s.is('route','force'),'胞子の主との戦闘は強行経路だけ');
   implies('healingInterrupted',and(s.is('guardianDefeated'),s.is('patientAwake')),'守護者排除後に胞子の治療を中断して起こす');
   implies('feverReturned',and(s.is('healingInterrupted'),s.is('patientAt','clinic')),'傷の熱が戻ったのは強行覚醒後の帰還時');

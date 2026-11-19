@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: codex/q022-sleep-spores-plan-20261119
+          ref: ${{ github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -35,7 +35,7 @@ jobs:
           console.log(JSON.stringify({scenes:Object.keys(q.story.scenes).length,actions:Object.keys(q.story.actions).length,journeys:Object.values(q.story.actions).filter(a=>a.journey).length}));
           JS
       - name: Run original, new physical route and legacy save tests
-        run: node --test tests/q022-original-audit.test.mjs tests/q022-world-route.test.mjs
+        run: node --test tests/q022-*.test.mjs
       - name: Commit reproducible q022 outputs
         run: |
           git config user.name 'github-actions[bot]'
