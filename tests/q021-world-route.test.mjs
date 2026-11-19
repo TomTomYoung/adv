@@ -43,7 +43,7 @@ for(const route of routes)test('q021 source outcome, watched flag, reward and on
   choose(old,...route.old);
   choose(g,...route.path);
   assert.equal(g.state.quests.q021.outcome,route.outcome);
-  assert.equal(values(g).watched,old.state.flags.flow.q021.watched);
+  assert.equal(values(g).watched,Boolean(old.state.flags.flow.q021.watched));
   assert.equal(g.state.gold,old.state.gold);
   assert.equal(g.state.actors.ada.xp,old.state.actors.ada.xp);
   const saved=g.save();
