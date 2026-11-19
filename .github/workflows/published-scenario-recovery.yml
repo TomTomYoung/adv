@@ -1,0 +1,55 @@
+name: Verify published scenario recovery
+on:
+  push:
+    branches: [codex/verify-public-scenario-load-503-20261119]
+    paths: ['.github/workflows/published-scenario-recovery.yml']
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 3bffe5758ab26b130a34729fc40043130ba1c1f6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --package-lock=false playwright@1.58.2
+      - name: Verify live modules and start the original mobile trial with and without one 503
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import {readFile} from 'node:fs/promises';
+          import {createHash} from 'node:crypto';
+          import {chromium} from 'playwright';
+          const root='https://tomtomyoung.github.io/adv/';
+          const sha=body=>createHash('sha256').update(body).digest('hex');
+          for(const path of ['runtime.json','src/core/read-content-json.js','src/core/loader.js','src/application/runtime-content.js','src/main.js','src/quest-party-playtest.js','data/scenario-editions/e2/q038.json']){
+            const r=await fetch(root+path+'?verify=3bffe5758ab26b130a34729fc40043130ba1c1f6');assert.equal(r.status,200,path);
+            assert.equal(sha(Buffer.from(await r.arrayBuffer())),sha(await readFile(path)),path);
+          }
+          const browser=await chromium.launch({args:['--no-sandbox']});
+          try{
+            for(const inject of [false,true]){
+              const page=await browser.newPage({viewport:{width:390,height:844}});
+              const errors=[],codes=[];
+              page.on('pageerror',error=>errors.push(error.message));
+              page.on('response',response=>{if(new URL(response.url()).pathname.endsWith('/e2/q038.json'))codes.push(response.status());});
+              if(inject)await page.route('**/data/scenario-editions/e2/q038.json',route=>route.fulfill({status:503,body:'controlled temporary failure'}),{times:1});
+              await page.goto(root+'quest-party-playtest.html?edition=e2&quest=q022&party=balanced&level=3&start=site&outcome=informed&battleMode=classic&seed=1907',{waitUntil:'domcontentloaded',timeout:60000});
+              try{await page.locator('#launch:enabled').waitFor({timeout:120000});}
+              catch(e){console.log(await page.locator('#trial-status').innerText(),codes,errors);throw e;}
+              await page.click('#launch');
+              const started=await page.evaluate(()=>({config:questPlaytest.report().config,stage:questPlaytest.trial.engine.state.quests.q022.stage,scene:questPlaytest.trial.engine.state.stories.q022.scene}));
+              assert.equal(started.config.quest,'q022');assert.equal(started.config.edition,'e2');assert.equal(started.stage,'active');assert.equal(started.scene,'entry');
+              assert.equal(codes.at(-1),200);if(inject)assert.equal(codes[0],503);
+              assert.deepEqual(errors,[]);
+              console.log('PUBLIC_START',JSON.stringify({inject,codes,started,errors}));await page.close();
+            }
+          }finally{await browser.close();}
+          JS
