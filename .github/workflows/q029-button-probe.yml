@@ -1,0 +1,44 @@
+name: Measure q029 mobile choice geometry
+on:
+  push:
+    branches: [codex/verify-red-honey-buttons]
+    paths: ['.github/workflows/q029-button-probe.yml']
+permissions:
+  contents: read
+jobs:
+  sample:
+    runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --package-lock=false playwright@1.58.2
+      - run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import {redHoneyFixtures} from './tools/q029-world-route-fixtures.mjs';
+          const src='tools/character-art-browser.mjs',tmp='tools/q029-layout-probe.mjs';
+          let s=fs.readFileSync(src,'utf8');
+          const a=s.indexOf('        const clipped='),b=s.indexOf('      if(f.expectedText)',a);
+          s=s.slice(0,a)+`        for(const style of ['', '.scene-message .choice {padding: 6px; line-height: 1.35} .scene-message .choice small{margin-top:3px;line-height:1.4}', '.scene-stage[data-mode="dungeon"] .scene-dock:has(.choice small){height:max(33%,280px);flex-basis:max(33%,280px)}']){
+                    const added=await page.addStyleTag({content:style});
+                    const geo=await page.locator('.scene-message-actions').evaluate(p=>{
+                      const arr=[...p.querySelectorAll('[data-focus^="choice:"]')];const bounds=()=>arr.map(b=>[b.dataset.focus,Math.round(b.getBoundingClientRect().y-p.getBoundingClientRect().y),b.offsetHeight]);
+                      const before=[p.clientHeight,p.clientWidth,p.scrollTop,bounds()];
+                      const original=p.scrollTop;p.scrollTop=0;
+                      for(const element of arr)element.scrollIntoView({block:'nearest'});
+                      arr[0].scrollIntoView({block:'nearest'});const after=[p.scrollTop,bounds()];p.scrollTop=original;return {before,after};
+                    });
+                    console.log('GEOMETRY',f.variant,JSON.stringify([style,geo]));await added.evaluate(el=>el.remove());
+                  }
+                }
+          `+s.slice(b);fs.writeFileSync(tmp,s);
+          const {runCharacterArtSmoke}=await import('./'+tmp);
+          const all=redHoneyFixtures().fixtures;
+          const fixtures=[all.find(x=>x.scene==='entry'),all.find(x=>x.scene==='offer'),all.find(x=>x.variant==='short-of-gold')];
+          await runCharacterArtSmoke({fixtures,outcomes:[],group:'red-honey-probe',folder:'generated'});
+          JS
