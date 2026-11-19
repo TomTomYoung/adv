@@ -10,6 +10,7 @@ import {rainSongCharacters} from '../authoring/editions/e2/story-q025.mjs';
 import {orchardPromiseCharacters} from '../authoring/editions/e2/story-q026.mjs';
 import {pollenRansomCharacters} from '../authoring/editions/e2/story-q027.mjs';
 import {gardenersSeatCharacters} from '../authoring/editions/e2/story-q028.mjs';
+import {redHoneyCharacters} from '../authoring/editions/e2/story-q029.mjs';
 import {silentBlastCharacters} from '../authoring/editions/e2/story-q016.mjs';
 import {weepingPillarCharacters} from '../authoring/editions/e2/story-q015.mjs';
 import {returnCartCharacters} from '../authoring/editions/e2/story-q014.mjs';
@@ -37,7 +38,7 @@ export async function companionBundle(){
  const characters=Object.fromEntries(Object.keys(arcs).map(actor=>[`e2_${actor}`,{id:`e2_${actor}`,name:names[actor],portrait:actors[actor==='mika'?'mica':actor].portrait,role:'第2版・仲間連作',goal:arcs[actor][0].title,detail:'既存のプレイアブル人物と同一。能力・加入条件は変更しない。'}]));
  const quests=Object.entries(arcs).flatMap(([actor,episodes])=>episodes.map((s,index)=>compileEpisode(s,actor,index)));
  if(quests.length!==80||Object.values(arcs).some(a=>a.length!==10))throw Error('仲間連作は8人各10件');
- Object.assign(characters,saltBrideCharacters,threePicksCharacters,breathingVeinCharacters,returnCartCharacters,weepingPillarCharacters,silentBlastCharacters,twoGravesCharacters,whiteDebtCharacters,mineScaleCharacters,crownCharacters,seedBirdCharacters,greenSleepCharacters,motherRingCharacters,edibleMapCharacters,rainSongCharacters,orchardPromiseCharacters,pollenRansomCharacters,gardenersSeatCharacters);
+ Object.assign(characters,saltBrideCharacters,threePicksCharacters,breathingVeinCharacters,returnCartCharacters,weepingPillarCharacters,silentBlastCharacters,twoGravesCharacters,whiteDebtCharacters,mineScaleCharacters,crownCharacters,seedBirdCharacters,greenSleepCharacters,motherRingCharacters,edibleMapCharacters,rainSongCharacters,orchardPromiseCharacters,pollenRansomCharacters,gardenersSeatCharacters,redHoneyCharacters);
  return {schemaVersion:1,characters,locations,regions:[{id:11,kind:'story',name:'仲間と巡るトルネア',description:'第2版の仲間連作。街道・地下街・学術都市の各拠点を実際に移動して進める。',color:'#bdaca0',recommendedLevel:2}],quests};
 }
 function document(actor,quests){

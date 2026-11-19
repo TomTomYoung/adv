@@ -10,6 +10,7 @@ import {buildRainSong} from './build-q025-world-route.mjs';
 import {buildOrchardPromise} from './build-q026-world-route.mjs';
 import {buildPollenRansom} from './build-q027-world-route.mjs';
 import {buildGardenersSeat} from './build-q028-world-route.mjs';
+import {buildRedHoney} from './build-q029-world-route.mjs';
 import {buildSilentBlast} from './build-q016-world-route.mjs';
 import {buildWeepingPillar} from './build-q015-world-route.mjs';
 import {buildReturnCart} from './build-q014-world-route.mjs';
@@ -167,6 +168,7 @@ export async function buildScenarioEditions({check=false}={}){
  await buildOrchardPromise({check});
  await buildPollenRansom({check});
  await buildGardenersSeat({check});
+ await buildRedHoney({check});
  await buildCompanionEdition({check});
  const geography=await buildOddlandGeography({check});
  await buildSalomeGeography(geography,{check});

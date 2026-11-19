@@ -46,7 +46,7 @@ test('e2 adds exactly eight ten-quest arcs, locations and presentation order wit
  for(const id of Object.keys(first.quests))if(!Object.hasOwn(data.scenarioEditions.editions.e2.questOverrides,id))assert.deepEqual(data.quests[id],first.quests[id]);
  for(const id of Object.keys(first.locations).filter(id=>id!=='hikarigaeri_square'))assert.deepEqual(data.locations[id],first.locations[id]);
  assert.deepEqual(data.actors,first.actors);for(const [id,map] of Object.entries(first.maps))assert.deepEqual(data.maps[id].tiles,map.tiles);
- const withoutWaterwayOverrides=map=>({...map,objects:map.objects.filter(o=>!['q005','q006','q007','q008','q009','q010','q011','q012','q013','q014','q015','q016','q017','q018','q019','q020','q021','q022','q023','q024','q025','q026','q027','q028'].includes(o.quest))});
+ const withoutWaterwayOverrides=map=>({...map,objects:map.objects.filter(o=>!['q005','q006','q007','q008','q009','q010','q011','q012','q013','q014','q015','q016','q017','q018','q019','q020','q021','q022','q023','q024','q025','q026','q027','q028','q029'].includes(o.quest))});
  for(const id of Object.keys(first.maps))if(!['region_1_landing','region_4_f1','region_4_f2','region_5_f1','region_5_f2','region_7_f1','region_7_f2','region_8_f1','region_8_f2','region_9_f1','region_9_f2'].includes(id))assert.deepEqual(withoutWaterwayOverrides(data.maps[id]),withoutWaterwayOverrides(first.maps[id]));
  const g=ready('nio'),view=projectGame(g);assert.equal(view.quests.length,300);assert.equal(new Set(view.quests.map(q=>q.id)).size,300);
  assert.equal(view.quests.find(q=>q.id==='q221').regionName,'仲間と巡るトルネア');
