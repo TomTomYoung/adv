@@ -100,6 +100,8 @@ try{
       if(f.checkMobileChoiceFit&&layout==='scene'&&width===390){
         const clipped=await page.locator('.scene-message-actions').evaluate(panel=>{
           const initial=panel.scrollTop,missing=[];
+          // Focusing the first enabled choice may have scrolled past a disabled one.
+          panel.scrollTop=0;
           const top=panel.getBoundingClientRect().top+panel.clientTop,bottom=top+panel.clientHeight;
           for(const [index,button] of [...panel.querySelectorAll('[data-focus^="choice:"]')].entries()){
             if(index>0)panel.scrollTop+=Math.max(0,button.getBoundingClientRect().bottom-bottom);
