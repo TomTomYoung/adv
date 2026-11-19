@@ -69,8 +69,8 @@ jobs:
             await page.waitForFunction(()=>document.querySelector('#launch')&&!document.querySelector('#launch').disabled,{timeout:90000});
             await page.locator('#launch').click();
             await page.waitForFunction(()=>window.questPlaytest?.trial?.engine?.state?.stories?.q020?.scene==='entry',{timeout:30000});
-            const snapshot=await page.evaluate(()=>{const q=window.questPlaytest;const g=q.trial.engine;return {scene:g.state.stories.q020.scene,stage:g.state.quests.q020.stage,edition:g.data.scenarioEdition,options:q.model.dialog.options.map(x=>x.id),name:g.data.quests.q020.title,output:document.querySelector('#trial-status').textContent};});
-            assert.equal(snapshot.edition,'e2');assert.equal(snapshot.scene,'entry');assert.equal(snapshot.stage,'active');assert.ok(snapshot.options.includes('relieve'));assert.ok(snapshot.options.includes('fight'));
+            const snapshot=await page.evaluate(()=>{const q=window.questPlaytest;const g=q.trial.engine;const initial={scene:g.state.stories.q020.scene,stage:g.state.quests.q020.stage,edition:g.data.scenarioEdition,options:g.data.quests.q020.model.graph.find(n=>n.id==='entry').options.map(x=>x.id),name:g.data.quests.q020.title,output:document.querySelector('#trial-status').textContent};for(let n=0;n<30&&g.state.waiting?.type==='text';n++)q.dispatch({type:'advance'});initial.choiceWaiting=g.state.waiting?.type;initial.accepted=q.dispatch({type:'choose',id:'relieve'});initial.nextJourney=g.state.journey?.action??null;initial.handoverRequested=g.state.stories.q020.values.handoverRequested;return initial;});
+            assert.equal(snapshot.edition,'e2');assert.equal(snapshot.scene,'entry');assert.equal(snapshot.stage,'active');assert.ok(snapshot.options.includes('relieve'));assert.ok(snapshot.options.includes('fight'));assert.equal(snapshot.accepted,true);assert.equal(snapshot.nextJourney,'entry_relieve');assert.equal(snapshot.handoverRequested,true);
             assert.deepEqual(errors,[]);
             console.log('PUBLIC BROWSER START '+JSON.stringify(snapshot));
           } finally{await browser.close();}
