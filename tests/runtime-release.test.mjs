@@ -35,3 +35,44 @@ test('image and audio URLs follow the release without changing save compatibilit
   assert.equal(data.assets.images.elder,`https://example.test/adv/assets/elder.webp?v=${runtime.manifest.revision}`);
   assert.equal(data.assets.audio.battle,`https://example.test/adv/assets/battle.ogg?v=${runtime.manifest.revision}`);
 });
+
+test('a transient failure retries the same URL with its release fingerprint',async t=>{
+  const runtime={base:'https://example.test/adv/',fresh:'same-start',manifest:{revision:'rev',files:{'data/game.json':'sha256-test'}}};
+  const calls=[];
+  t.mock.method(globalThis,'fetch',async(url,options)=>{
+    calls.push({url:String(url),options});
+    return calls.length===1?new Response(null,{status:503}):Response.json({version:'recovered'});
+  });
+  assert.deepEqual(await runtimeReader(runtime)('data/game.json'),{version:'recovered'});
+  assert.equal(calls.length,2);
+  assert.deepEqual(calls[1],calls[0]);
+  assert.equal(calls[1].options.integrity,'sha256-test');
+});
+
+test('permanent HTTP errors and invalid JSON are reported on the first read',async t=>{
+  const {readContentJson}=await import('../src/core/read-content-json.js');
+  const fetch=t.mock.method(globalThis,'fetch',async()=>new Response(null,{status:404}));
+  await assert.rejects(readContentJson('data/missing.json'),/data\/missing\.json \(404\)/);
+  assert.equal(fetch.mock.callCount(),1);
+  fetch.mock.mockImplementation(async()=>new Response('invalid json'));
+  await assert.rejects(readContentJson('data/malformed.json'),SyntaxError);
+  assert.equal(fetch.mock.callCount(),2);
+});
+
+test('the loader bounds parallel reads and stops issuing new reads after a fatal error',async()=>{
+  const {loadContent}=await import('../src/core/loader.js');
+  const manifest=JSON.parse(await fs.readFile(new URL('../data/game.json',import.meta.url)));
+  const firstFile=Object.values(manifest.files.databases)[0],started=[];
+  let release;
+  const gate=new Promise(resolve=>{release=resolve;});
+  await assert.rejects(loadContent(async path=>{
+    if(path==='data/game.json')return manifest;
+    started.push(path);
+    if(path===firstFile)throw Error('missing database');
+    await gate;
+  }),/missing database/);
+  assert.equal(started.length,8);
+  release();
+  await new Promise(resolve=>setImmediate(resolve));
+  assert.equal(started.length,8);
+});

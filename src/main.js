@@ -1,6 +1,7 @@
 import {PresentationClock} from './application/presentation-clock.js';
 import {ScenarioEditionSession} from './application/scenario-editions.js';
 import {loadContent} from './core/loader.js';
+import {readContentJson} from './core/read-content-json.js';
 import {runtimeReader,versionRuntimeAssets} from './application/runtime-content.js';
 import {projectGame} from './application/projection.js';
 import {replaceView,VIEW_LAYOUTS,normalizeLayout} from './view/view-layout.js';
@@ -113,7 +114,7 @@ const viewUi={menu,help,status,feedbackFinished:()=>{syncAudio();syncPresentatio
 try{
   const savedSettings=storageRead('settings');if(savedSettings){try{const parsed=JSON.parse(savedSettings);const keys=readKeyConfig(parsed.keyBindings);settings.keyBindings=keys.config;if(keys.recovered)status('保存済みのキー設定が不正なため、初期値へ戻しました。');settings.sound=parsed.sound===true;settings.seVolume=Number.isFinite(parsed.seVolume)?Math.max(0,Math.min(1,parsed.seVolume)):.8;settings.effects=['full','reduced','off'].includes(parsed.effects)?parsed.effects:'full';settings.volume=Number.isFinite(parsed.volume)?Math.max(0,Math.min(1,parsed.volume)):.5;settings.theme=applyTheme(parsed.theme??THEME_DEFAULT);}catch{applyTheme(THEME_DEFAULT);}}else applyTheme(THEME_DEFAULT);
   if(savedSettings){try{settings.viewLayout=normalizeLayout(JSON.parse(savedSettings).viewLayout);}catch{settings.viewLayout='scene';}}
-  const readContent=runtimeReader()??(async file=>{const response=await fetch(new URL(`../${file}`,import.meta.url),{cache:'no-store'});if(!response.ok)throw Error(`読込失敗: ${file} (${response.status})`);return response.json();});
+  const readContent=runtimeReader()??readContentJson;
   editionSession=new ScenarioEditionSession({storage:{getItem:key=>localStorage.getItem(key),setItem:(key,value)=>localStorage.setItem(key,value)},loadCatalog:()=>readContent('data/scenario-editions.json'),loadData:async edition=>{const loaded=await loadContent(readContent,{edition});versionRuntimeAssets(loaded);return loaded;},onBusy:syncPresentationClock});
   let preference='latest';if(savedSettings){try{const requested=JSON.parse(savedSettings).scenarioEdition;if(['latest','e1','e2'].includes(requested))preference=requested;}catch{}}
   const started=await editionSession.start(preference);adoptEditionSession();if(started.recovery)menu();if(started.message)status(started.message);
