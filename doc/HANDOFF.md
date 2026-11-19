@@ -2,7 +2,7 @@
 
 ## q021現場接続実装・専用試験 — 2026-11-19
 
-第2版q021「種を盗む鳥」を作業ブランチ `codex/q021-seed-bird-world-route-20261119` で19場面・23行動・11旅程に接続した。原本7経路・3結末、鳥の再観察1回、ユイの種棚・光の亀裂・巣・育苗床の実移動、苗と未植付け種の保持者、育苗床の設置・鳥の持分、`guard_3` 戦後の回収を独立して保存する。旧 `flow.visit`、旧 `decision`・`review` の条件・命令列を保持。[生成・専用68試験](https://github.com/TomTomYoung/adv/actions/runs/44433061267)が成功した。通常84試遊、Chromium、全体CI、PR統合・公開は別工程で、結果を未確認のまま成功扱いしない。[実装と検証](development/Q021_WORLD_ROUTE.md)。[接続前監査](development/Q021_WORLD_ROUTE_PLAN.md)。以下は履歴。
+第2版q021「種を盗む鳥」を作業ブランチ `codex/q021-seed-bird-world-route-20261119` で19場面・23行動・11旅程に接続した。原本7経路・3結末、鳥の再観察1回、ユイの種棚・光の亀裂・巣・育苗床の実移動、苗と未植付け種の保持者、育苗床の設置・鳥の持分、`guard_3` 戦後の回収を独立して保存する。旧 `flow.visit`、旧 `decision`・`review` の条件・命令列を保持。[生成・専用68試験](https://github.com/TomTomYoung/adv/actions/runs/44433061267)が成功した。[作業ブランチChromium](https://github.com/TomTomYoung/adv/actions/runs/44433506550)で84通常試遊（30〜98歩、敗北・救援0）と268画面条件・3結末・errors=[]が成功。全体CI、PR統合・公開は別工程として未確認のまま成功扱いしない。[実装と検証](development/Q021_WORLD_ROUTE.md)。[接続前監査](development/Q021_WORLD_ROUTE_PLAN.md)。以下は履歴。
 
 ## q020統合・公開照合完了、q021の再開位置 — 2026-11-19
 
