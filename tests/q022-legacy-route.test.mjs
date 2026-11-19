@@ -33,3 +33,25 @@ for(const entry of ['decision','review']){
     });
   }
 }
+
+for(const entry of ['decision','review']){
+  test('q022 resumes a saved '+entry+' supply shortage at its original command list',()=>{
+    const old=ready({old:true,visit:false});
+    old.state.inventory.rope=0;
+    for(const clue of ['clue_a','clue_b'])old.evidence('q022',clue,clue);
+    old.run('q022.'+entry);drain(old);
+    assert.equal(old.dispatch({type:'choose',id:'informed'}),false);
+    depart(old,'informed_supplies');
+    const g=migrated(old);checkpoint(g);
+    assert.equal(g.state.flags.questResume.q022,'q022.'+entry+'.informed.resume');
+    g.give('rope',1);
+    g.run('q022.flow.visit');drain(g);
+    assert.equal(g.state.flags.questResume.q022,null);
+    depart(g,'informed');
+    assert.equal(g.state.battle.encounter,'guard_3');
+    assert.equal(g.state.inventory.rope??0,entry==='decision'?0:1);
+    fight(g);drain(g);checkpoint(g);
+    assert.equal(g.state.inventory.rope??0,0);
+    assert.equal(g.state.quests.q022.outcome,'informed');
+  });
+}
