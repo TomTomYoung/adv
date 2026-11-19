@@ -1,5 +1,7 @@
 # 保守・検証記録
 
+[q028「庭師の空席」の実演・道具配置・記録](Q028_WORLD_ROUTE.md)・[q029「赤い蜜の契約」の原本試遊](Q029_WORLD_ROUTE_PLAN.md)
+
 [q027「花粉の身代金」の観察・荷車・香袋の回収](Q027_WORLD_ROUTE.md)・[q028「庭師の空席」の原本試遊](Q028_WORLD_ROUTE_PLAN.md)
 
 [q026「実らない約束」の穂・苗・世話の引き継ぎ](Q026_WORLD_ROUTE.md)・[q027「花粉の身代金」の原本試遊](Q027_WORLD_ROUTE_PLAN.md)

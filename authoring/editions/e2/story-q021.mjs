@@ -17,7 +17,7 @@ export const seedBirdCharacters=Object.fromEntries([
   ['bird','種を運ぶ鳥','光の差す亀裂へ種を運んで発芽させる']
 ].map(([key,name,goal])=>{
   const id='e2_seed_bird_'+key;
-  return [id,{id,name,goal,quests:['q021'],detail:'根喰みの地下庭園の種と育苗をめぐる役。専用画像のない人物・鳥は名前で表示する。'}];
+  return [id,{id,name,goal,quests:key==='gardener'?['q021','q028']:['q021'],detail:'根喰みの地下庭園の種と育苗をめぐる役。専用画像のない人物・鳥は名前で表示する。'}];
 }));
 
 export function seedBirdSource(){
