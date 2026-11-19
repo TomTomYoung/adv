@@ -25,7 +25,7 @@ jobs:
           let s=fs.readFileSync(src,'utf8');
           const a=s.indexOf('        const clipped='),b=s.indexOf('      if(f.expectedText)',a);
           s=s.slice(0,a)+`        for(const style of ['', '.scene-message .choice {padding: 6px; line-height: 1.35} .scene-message .choice small{margin-top:3px;line-height:1.4}', '.scene-stage[data-mode="dungeon"] .scene-dock:has(.choice small){height:max(33%,280px);flex-basis:max(33%,280px)}']){
-                    const added=await page.addStyleTag({content:style});
+                    const added=await page.addStyleTag({content:style || "/* baseline */"});
                     const geo=await page.locator('.scene-message-actions').evaluate(p=>{
                       const arr=[...p.querySelectorAll('[data-focus^="choice:"]')];const bounds=()=>arr.map(b=>[b.dataset.focus,Math.round(b.getBoundingClientRect().y-p.getBoundingClientRect().y),b.offsetHeight]);
                       const before=[p.clientHeight,p.clientWidth,p.scrollTop,bounds()];
