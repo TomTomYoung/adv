@@ -1,5 +1,7 @@
 # 保守・検証記録
 
+[q024「食べられる地図」の調査・帰路図・保存検証](Q024_WORLD_ROUTE.md)。[q025「地下の雨乞い」の原本試遊と接続前監査](Q025_WORLD_ROUTE_PLAN.md)。
+
 [q023「母樹の指輪」の現場接続と保存検証](Q023_WORLD_ROUTE.md)。[q024「食べられる地図」の原本試遊と接続前監査](Q024_WORLD_ROUTE_PLAN.md)。
 
 [q022「緑の寝息」の治療・担架搬送・保存検証](Q022_WORLD_ROUTE.md)。[原本と地理の接続前監査](Q022_WORLD_ROUTE_PLAN.md)。
