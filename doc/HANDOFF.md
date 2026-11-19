@@ -1,5 +1,9 @@
 # 実装引き継ぎ
 
+## q021現場接続実装・専用試験 — 2026-11-19
+
+第2版q021「種を盗む鳥」を作業ブランチ `codex/q021-seed-bird-world-route-20261119` で19場面・23行動・11旅程に接続した。原本7経路・3結末、鳥の再観察1回、ユイの種棚・光の亀裂・巣・育苗床の実移動、苗と未植付け種の保持者、育苗床の設置・鳥の持分、`guard_3` 戦後の回収を独立して保存する。旧 `flow.visit`、旧 `decision`・`review` の条件・命令列を保持。[生成・専用68試験](https://github.com/TomTomYoung/adv/actions/runs/44433061267)が成功した。通常84試遊、Chromium、全体CI、PR統合・公開は別工程で、結果を未確認のまま成功扱いしない。[実装と検証](development/Q021_WORLD_ROUTE.md)。[接続前監査](development/Q021_WORLD_ROUTE_PLAN.md)。以下は履歴。
+
 ## q020統合・公開照合完了、q021の再開位置 — 2026-11-19
 
 第2版q020「坑道の王冠」は[PR #304](https://github.com/TomTomYoung/adv/pull/304)をmaster `1afb4c2b`へ統合。29場面・35行動・21旅程、原本6経路・3結末、旧保存互換を保持した。全46ワークフローが成功し、[全体CI](https://github.com/TomTomYoung/adv/actions/runs/44427098216)の4,311試験と[q020専用Chromium](https://github.com/TomTomYoung/adv/actions/runs/44427097883)の72通常試遊・412画面条件・3結末・errors=[]を確認した。[Pages公開](https://github.com/TomTomYoung/adv/actions/runs/44429458493)は成功し、[公開照合](https://github.com/TomTomYoung/adv/actions/runs/44430754319)で配信7ファイルのSHA-256一致と390pxの公開試遊の開始・交代申出を確認した。全結末の公開手動完走を意味しない。物語上の避難路開放と新たな汎用world.crossは区別し、後者は未実装。[q020の記録](development/Q020_WORLD_ROUTE.md)。
