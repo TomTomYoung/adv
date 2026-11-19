@@ -57,6 +57,10 @@ jobs:
             for(const intent of trace){
               if(intent.type==='choose'){
                 const button=page.locator('#app [data-focus="choice:'+intent.id+'"]:visible');
+                for(let n=0;n<25 && !await button.isVisible();n++){
+                  const next=page.locator('#app [data-focus="message:next"]:visible');
+                  await next.click({timeout:7000});
+                }
                 await button.click({timeout:10000}); choices.push(intent.id);
               } else {
                 assert.equal(await page.evaluate(intent=>window.questPlaytest.dispatch(intent),intent),true,JSON.stringify(intent));
