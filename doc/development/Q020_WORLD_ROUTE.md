@@ -40,3 +40,11 @@
 ## 次工程
 
 専用ブラウザ検証と72通常攻略を完走し、全体CI・生成結果・旧保存・文書検査を確認する。失敗は原因別に修正する。PRをmasterへ統合した後、Pages配信のファイル指紋と公開版の実操作を確認し、次の未接続クエストへ移る。
+
+## 統合・全体検証・公開配信（2026-11-19）
+
+[PR #304](https://github.com/TomTomYoung/adv/pull/304)をmaster `1afb4c2b328981b2b8fa8239a8a5dc5695caa5f4`へ統合。修正後の全46ワークフローが成功。[全体CI run 44427098216](https://github.com/TomTomYoung/adv/actions/runs/44427098216)で4,311試験成功、失敗・スキップ0。旧地理fixtureと現行版別q020の混在を修正し、既存原稿・固定旧保存を変更していない。[q020専用Chromium run 44427097883](https://github.com/TomTomYoung/adv/actions/runs/44427097883)は72通常試遊（3編成・Lv1/2・受付／現場・原本6経路）と412画面条件・3結末・実行時エラー0を確認した。
+
+[Pages deploy 44429458493](https://github.com/TomTomYoung/adv/actions/runs/44429458493)で配信成功。[公開照合 run 44430754319](https://github.com/TomTomYoung/adv/actions/runs/44430754319)では実公開URLからruntime.json、版カタログ、q020第2版、地理定義、人物定義、q020原本、パーティー試遊設定の7ファイルを取得し、masterとのSHA-256完全一致を確認した。390pxの公開試遊画面で第2版q020の開始場面、3選択肢、`relieve`の受理、移動開始と交代申出フラグを確認。全公開経路の手動完走ではない。masterへのマージ後の[全体CI 44429460757](https://github.com/TomTomYoung/adv/actions/runs/44429460757)も成功した。
+
+次の未接続はq021「種を盗む鳥」。[原本・地理・旧保存の接続前監査](Q021_WORLD_ROUTE_PLAN.md)を参照。新規world.crossによる予備出口の汎用通過は本PRの対象外として残す。
