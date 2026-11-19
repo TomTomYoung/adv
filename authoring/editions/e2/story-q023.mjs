@@ -19,62 +19,62 @@ export function motherRingSource(){
   s.fact('pressure','根は母の刻んだ線を越え、通路の支柱を押している。');
   s.node('entry','root',[],
     '根に銀の指輪が食い込んでいる。すぐ脇には短い刻みが三本。旅人アセは「母の形見です。内側に私の名があるはず」と休み場で話していた。',[
-      O('measure','根の太さを測り、古い目盛と比べる','measured',[set('measured'),see('pressure','root')]),
-      O('replica','本物を残し、手持ちの薄い銀板で写しを作る','copied',[set('madeCopy'),set('reason','direct')]),
-      O('cut','指輪の食い込んだ根を切る','severed',[set('cutRoot'),set('marker','lost')])
+      O('measure','根の太さを測る','measured',[set('measured'),see('pressure','root')]),
+      O('replica','写しを作る','copied',[set('madeCopy'),set('reason','direct')]),
+      O('cut','根を切る','severed',[set('cutRoot'),set('marker','lost')])
     ]);
   s.node('severed','root',[],'切り口が開き、指輪が緩んだ。刻みのあった根は折れて転がった。もう支柱までの広がりをあの線と比べることはできない。',[
-    O('take','切り口から本物の指輪を拾う','recovered',[give('ring','root','party')])
+    O('take','指輪を拾う','recovered',[give('ring','root','party')])
   ]);
   s.node('recovered','root',[],'泥をぬぐうと、輪の内側にアセの名が読めた。休み場へ持ち帰ろう。',[
-    O('return','指輪を持ってアセの休み場へ戻る','cut_return')
+    O('return','アセのもとへ','cut_return')
   ]);
-  s.node('cut_return','shelter',['ase'],'アセが両手を差し出した。「この字だ。母が刻んでくれたんです」',[
-    O('hand','本物を渡し、根を切ったと伝える','@contract',[give('ring','party','ase')])
+  s.node('cut_return','shelter',['ase'],'アセが両手を差し出した。切った根のことを伝えると、アセは輪の内側を見た。「この字だ。母が刻んでくれたんです」',[
+    O('hand','指輪を返す','@contract',[give('ring','party','ase')])
   ]);
   s.node('measured','root',[],'糸を根に巻き、その長さを手帳に写した。古い刻みと並べると、根が太った分だけ支柱が傾いている。指輪は母親が毎回同じ場所を測るための目印だった。',[
-    O('report','測定手帳を持ってアセのもとへ行く','warning')
+    O('report','アセに知らせる','warning')
   ]);
   s.node('warning','shelter',['ase'],'アセは手帳の二本の線を指でなぞった。「母はここを見張っていたんだ。通路の人に知らせてください。指輪は後でいい」',[
-    O('notice','崩落のおそれを知らせに住民の通路口へ行く','at_board'),
-    O('leave','指輪は残すと伝え、写しを作りに根元へ戻る','private_copy')
+    O('notice','住民に知らせる','at_board'),
+    O('leave','写しを作りに戻る','private_copy')
   ]);
   s.node('private_copy','root',[],'指輪は測定した時と同じ位置にある。刻みを動かさず、銀板を輪の外側に当てた。',[
-    O('copy','輪の模様を銀板に写す','copied',[set('madeCopy'),set('reason','private')])
+    O('copy','銀板に写す','copied',[set('madeCopy'),set('reason','private')])
   ]);
   s.node('at_board','board',['keeper'],'交替を待つ通路当番が、荷車を止めた。「どこの支柱です？　ここから見えないんです」',[
-    O('warn','手帳を開き、危ない支柱の位置を当番に知らせる','warned',[set('warned')])
+    O('warn','当番に伝える','warned',[set('warned')])
   ]);
   s.node('warned','board',['keeper'],'当番は支柱の位置を仲間に伝えて通行を止めた。次の当番にも測り方が分かるよう、備え付けの台帳を開く。',[
-    O('archive','母の目盛と今日の実測を通路台帳に転記する','archived',[set('archived')])
+    O('archive','台帳に写す','archived',[set('archived')])
   ]);
   s.node('archived','board',['keeper'],'台帳に二本の線が並んだ。手帳は一行の手元にある。当番が避難用の迂回路を指さした。',[
-    O('post','当番と一緒に避難の道順を通路口に掲げる','posted',[set('posted')])
+    O('post','避難案内を掲げる','posted',[set('posted')])
   ]);
   s.node('posted','board',['keeper'],'案内を読んだ人が別の通路へ向かう。当番はここに残り、後から来る人にも道を教えるという。',[
-    O('back','測定手帳を携えて母樹へ戻る','retrieval')
+    O('back','母樹へ戻る','retrieval')
   ]);
   s.node('retrieval','root',[],'古い刻みも指輪も残っている。輪を外すなら、次の当番が同じ高さで測れる目印を先に置ける。',[
-    O('remove','指輪の高さに合わせ、新しい測定標を据える','marked',[give('peg','party','root'),set('marker','ringAndPeg')]),
-    O('keep','指輪を測定標として残し、銀板に模様を写す','copied',[set('madeCopy'),set('reason','warned')])
+    O('remove','代わりの杭を打つ','marked',[give('peg','party','root'),set('marker','ringAndPeg')]),
+    O('keep','指輪を残して写す','copied',[set('madeCopy'),set('reason','warned')])
   ]);
   s.node('marked','root',[],'地面に打った杭の刻みが輪の高さと重なった。根と輪のすきまに糸を通すと、皮を傷つけずに緩められる。',[
-    O('lift','根を傷めず指輪を外して包む','lifted',[give('ring','root','party'),set('marker','peg')])
+    O('lift','指輪を外す','lifted',[give('ring','root','party'),set('marker','peg')])
   ]);
   s.node('lifted','root',[],'根には傷がなく、杭に新しい測定線が残った。包んだ指輪と測定手帳をアセのもとへ運ぼう。',[
-    O('return','指輪と測定手帳を休み場へ持ち帰る','safe_return')
+    O('return','休み場へ戻る','safe_return')
   ]);
   s.node('safe_return','shelter',['ase'],'アセは母の古い線と今日の線を見比べた。「指輪を外しても、次の人が測れるんですね」',[
-    O('hand','本物の指輪と測定手帳をアセに渡す','@informed',[give('ring','party','ase'),give('notes','party','ase')])
+    O('hand','指輪と手帳を渡す','@informed',[give('ring','party','ase'),give('notes','party','ase')])
   ]);
   s.node('copied','root',[],'銀板を細い輪に曲げた。指輪の模様が同じ向きに並んでいる。本物は根の刻みの横に残した。',[
-    O('return','写しを持ってアセの休み場へ戻る','copy_return')
+    O('return','写しを持ち帰る','copy_return')
   ]);
-  s.node('copy_return','shelter',['ase'],when(s.is('posted'),
+  s.node('copy_return','shelter',['ase'],[when(s.is('posted'),
     '「向こうの当番から案内が出たと聞きました」。アセは写しを受け取ろうと手を伸ばした。',
     when(s.is('measured'),'アセは手帳に目を落とした。「母の印は残せたんですね」。通路当番にはまだ知らせていない。',
-      '「この模様、覚えています」。アセは銀の写しをのぞき込んだ。根の太さはまだ測っていない。')),[
-    O('hand','写しを渡し、記録の最初に母の名を記す','@compromise',[give('copy','party','ase'),set('signed')])
+      '「この模様、覚えています」。アセは銀の写しをのぞき込んだ。根の太さはまだ測っていない。')),'アセが記録の一行目を指した。「ここに母の名を」。写しを渡すときに書き添えよう。'],[
+    O('hand','写しを渡す','@compromise',[give('copy','party','ase'),set('signed')])
   ]);
   const journey=connectWorld(s,world,1);
   journey('measured_report','shelter',{arrive:[set('aseTold')]});

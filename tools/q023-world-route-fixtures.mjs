@@ -9,7 +9,7 @@ export function motherRingFixtures(){
     const dialog=projectGame(g).dialog;
     const scene=g.state.stories.q023?.scene??g.state.flags.flow.q023.node;
     const cast=dialog.scene?.cast.map(c=>c.id)??[];
-    fixtures.push({edition:'e2',quest:'q023',scene,variant,cast,textOnlyCast:cast,save:g.save(),expectedText:dialog.text,
+    fixtures.push({edition:'e2',quest:'q023',scene,variant,cast,textOnlyCast:cast,checkMobileChoiceFit:!!dialog.scene,save:g.save(),expectedText:dialog.text,
       availableChoice:dialog.options.find(o=>o.enabled).id,blockedChoices:dialog.options.filter(o=>!o.enabled).map(o=>o.id),
       ...(!dialog.scene&&{absentStoryScene:true})});
   }
