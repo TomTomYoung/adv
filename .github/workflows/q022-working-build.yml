@@ -1,0 +1,47 @@
+name: q022 deterministic edition build and recovery tests
+on:
+  push:
+    branches:
+      - codex/q022-sleep-spores-plan-20261119
+    paths:
+      - .github/workflows/q022-working-build.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/q022-sleep-spores-plan-20261119
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build e2 q022 and regenerate edition data
+        run: npm run build:editions
+      - name: Verify deterministic edition and original source
+        run: |
+          npm run check:editions
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const q=JSON.parse(fs.readFileSync('data/scenario-editions/e2/q022.json'));
+          assert.equal(q.id,'q022');
+          assert.ok(Object.keys(q.story.scenes).length>=14);
+          assert.equal(Object.values(q.story.actions).filter(a=>a.journey).length,8);
+          assert.equal(q.outcomes.informed.gold,81);
+          console.log(JSON.stringify({scenes:Object.keys(q.story.scenes).length,actions:Object.keys(q.story.actions).length,journeys:Object.values(q.story.actions).filter(a=>a.journey).length}));
+          JS
+      - name: Run original, new physical route and legacy save tests
+        run: node --test tests/q022-original-audit.test.mjs tests/q022-world-route.test.mjs
+      - name: Commit reproducible q022 outputs
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/scenario-editions/e2/q022.json data/scenario-editions/e2/companions.json data/scenario-editions.json runtime.json doc/development/DATA_SNAPSHOT.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'chore(q022): regenerate deterministic green-sleep edition outputs'
+            git push origin HEAD:codex/q022-sleep-spores-plan-20261119
+          fi
