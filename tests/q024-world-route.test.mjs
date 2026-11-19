@@ -34,6 +34,10 @@ test('q024 original, legacy events, floor geometry and current co-present cast',
   for(const row of graph.active){
     const g=ready();g.load(row.save);checkpoint(g);
     const place=story.scenes[row.scene].place;
+    if(row.scene==='home'){
+      const handoff=values(g).leafType==='legend'?'give_leaf':'hand';
+      assert.deepEqual(projectGame(g).dialog.options.map(o=>[o.id,o.enabled]),[[handoff,true]]);
+    }
     assert.deepEqual(projectGame(g).dialog.scene?.cast.map(c=>c.id)??[],
       place==='bench'?['e2_edible_map_nom','e2_edible_map_beginner']:['e2_edible_map_beginner'],row.scene);
   }

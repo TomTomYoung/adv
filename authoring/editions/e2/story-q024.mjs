@@ -73,11 +73,12 @@ export function edibleMapSource(){
     '花房の陰に最初の足跡が残っていた。採集人は籠を持ち直し、荷置き場への道を自分で指さした。'),[
     O('back','荷置き場へ戻る','home')
   ]);
+  const hasLegend=is('leafType','legend'),hasReturnMap=not(is('copiedLegs',-1));
   s.node('home','bench',both,when(is('leafType','legend'),
     '一行が荷置き場に着くと、ノムが昨日の写しを広げた。虫はまだ生きた葉にいて、凡例の傍らを歩いている。',
     '採集人は自分の足で荷置き場に帰った。帰路を刻んだ紙と、虫が乗ったままの葉が手元にある。'),[
-    O('give_leaf','葉をノムに返す','received',[give('leaf','party','nom')],{when:is('leafType','legend')}),
-    O('hand','帰路図を渡す','@compromise',[give('leaf','party','nom'),give('returnMap','party','beginner')],{when:not(is('copiedLegs',-1))})
+    O('give_leaf','葉をノムに返す','received',[give('leaf','party','nom')],{when:hasLegend,visibleWhen:hasLegend}),
+    O('hand','帰路図を渡す','@compromise',[give('leaf','party','nom'),give('returnMap','party','beginner')],{when:hasReturnMap,visibleWhen:hasReturnMap})
   ]);
   s.node('received','bench',both,'ノムは戻った葉と古い写しを見比べた。「花が開けば線も変わる。これは昨日までの道だ」。写しの隅に筆を当てた。',[
     O('date','写しに日付を記す','@informed',[set('dated')])
