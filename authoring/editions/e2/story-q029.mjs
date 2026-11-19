@@ -25,7 +25,7 @@ export function redHoneySource(){
   const repeat={once:false};
   s.node('entry','hive',mina,'養蜂家のミナが空樽を抱えている。「今日、これを一杯にして渡す約束です」。巣門の奥では女王の護衛が赤い蜜の栓を囲んでいる。箱の脇には、花の時期を刻んだ木札が下がっていた。',[
     O('season','花期を調べる','calendar'),O('small','少量を頼む','rim'),
-    O('take','護衛と戦う','unguarded',[set('guardsDefeated')],{combat:'guard_3'})
+    O('take','護衛と戦う','unguarded',[set('guardsDefeated')],{combat:'guard_3',combatRequirement:'勝利で採取可'})
   ]);
   s.node('calendar','hive',mina,'花の刻みがある季節はもう過ぎている。巣門には冬用の狭い口が取り付けられ、虫たちは蜜の栓を内側から固めていた。ミナと木札を裏返す。',[
     O('read','巣と札を照合','marks',[see('flowerDate','hive')],repeat)
