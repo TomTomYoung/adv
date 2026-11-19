@@ -153,6 +153,23 @@ test('q021 defeat before the guard battle resolves preserves the nest for a rema
   choose(g,'fight','collect','crack','uproot','return','store');
   assert.equal(g.state.quests.q021.outcome,'contract');
 });
+test('q021 escaping the two nest guards leaves the uncollected seeds and ongoing assignment intact',()=>{
+  const g=at('nest_before');
+  assert.equal(g.data.encounters.guard_3.escape,true);
+  depart(g,'fight');
+  assert.ok(g.state.battle);
+  g.random=()=>0;
+  assert.ok(g.dispatch({type:'battle',action:'escape'}));
+  drain(g);
+  assert.equal(g.state.battle,null);
+  assert.equal(g.state.records.escapes,1);
+  assert.equal(g.state.quests.q021.stage,'active');
+  assert.equal(values(g).guardsDefeated,false);
+  assert.equal(values(g).nestSeedsAt,'nest');
+  assert.equal(values(g).seedlingsAt,'crack');
+  assert.equal(values(g).allRecovered,false);
+  checkpoint(g);
+});
 for(const scene of ['trail','crack','marked','consult','half_carried','bed_work','built','nursery_check','nest_cleared','nest_collected','rack_contract'])
   test('q021 saved work and rescue recover at '+scene,()=>{
     const g=at(scene),before=structuredClone(g.state.stories.q021);
