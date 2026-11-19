@@ -1,0 +1,95 @@
+name: Verify deployed q024 garden routes
+on:
+  push:
+    branches: [codex/verify-edible-map-pages]
+    paths: ['.github/workflows/q024-published-trial.yml']
+permissions:
+  contents: read
+jobs:
+  deployed:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 7e335ff066cb33208e24dba2f7d24d6505658a60
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --package-lock=false playwright@1.58.2
+      - name: Verify release files and play all five routes on the published mobile page
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          import {readFile} from 'node:fs/promises';
+          import {chromium} from 'playwright';
+          import {data,catalog,routes,drain,arrive,fight} from './tests/q024-helpers.mjs';
+          import {createQuestTrial,questTrialReport} from './src/application/quest-playtest.js';
+          const base='https://tomtomyoung.github.io/adv/';
+          const hash=b=>createHash('sha256').update(b).digest('hex');
+          for(const path of ['runtime.json','data/scenario-editions.json','data/scenario-editions/e2/q024.json','data/scenario-editions/e2/geography.json','data/scenario-editions/e2/companions.json','data/quests/q024.json','playtests/quest-parties.json']){
+            const expected=hash(await readFile(path));let actual;
+            for(let n=0;n<24;n++){
+              const response=await fetch(base+path+'?revision=7e335ff066cb33208e24dba2f7d24d6505658a60&attempt='+n);
+              if(response.ok)actual=hash(Buffer.from(await response.arrayBuffer()));
+              if(actual===expected)break;
+              await new Promise(r=>setTimeout(r,5000));
+            }
+            assert.equal(actual,expected,path);console.log('VERIFIED',path,actual);
+          }
+          function commandsFor(route){
+            const t=createQuestTrial(data,catalog,{quest:'q024',party:'balanced',level:3,start:'site',outcome:route.outcome,battleMode:'classic',seed:1907}),g=t.engine,commands=[];
+            const dispatch=g.dispatch.bind(g);
+            g.dispatch=intent=>{const ok=dispatch(intent);if(ok)commands.push(intent);return ok};
+            drain(g);
+            for(const id of route.path){
+              assert.ok(g.dispatch({type:'choose',id}));drain(g);
+              if(g.state.battle)fight(g);
+              if(g.state.journey)arrive(g,{maintain:true});
+            }
+            const report=questTrialReport(t);assert.equal(report.status,'cleared');
+            return {commands,report};
+          }
+          const browser=await chromium.launch({args:['--no-sandbox']});
+          try{
+            for(const route of routes){
+              const {commands,report}=commandsFor(route);
+              const page=await browser.newPage({viewport:{width:390,height:844}});
+              const errors=[],q038=[];
+              page.on('pageerror',err=>errors.push(err.message));
+              page.on('response',r=>{if(new URL(r.url()).pathname.endsWith('/e2/q038.json'))q038.push(r.status())});
+              await page.goto(base+'quest-party-playtest.html?edition=e2&quest=q024&party=balanced&level=3&start=site&seed=1907&battleMode=classic&outcome='+route.outcome,{waitUntil:'domcontentloaded'});
+              await page.locator('#launch:enabled').waitFor({timeout:90000});
+              assert.ok(q038.includes(200),JSON.stringify(q038));
+              await page.selectOption('#effects','off');await page.click('#launch');
+              await page.waitForFunction(()=>window.questPlaytest?.trial?.engine?.state.quests.q024.stage==='active');
+              for(const intent of commands){
+                if(intent.type==='choose'){
+                  const selector=await page.evaluate(id=>'#app [data-focus='+CSS.escape('choice:'+id)+']:visible',intent.id);
+                  const button=page.locator(selector);
+                  for(let n=0;n<25&&!await button.isVisible();n++)await page.locator('#app [data-focus="message:next"]:visible').click({timeout:7000});
+                  await button.click({timeout:10000});
+                }else{
+                  if(intent.type==='advance'&&await page.evaluate(()=>questPlaytest.report().status==='cleared'))continue;
+                  assert.ok(await page.evaluate(i=>questPlaytest.dispatch(i),intent),JSON.stringify(intent));
+                }
+              }
+              const {out,v,known}=await page.evaluate(()=>({out:questPlaytest.report(),v:questPlaytest.trial.engine.state.stories.q024.values,known:questPlaytest.trial.engine.state.stories.q024.knowledge.party??[]}));
+              assert.equal(out.status,'cleared');assert.equal(out.outcome,route.outcome);assert.equal(out.steps,report.steps);
+              assert.deepEqual(out.gold,report.gold);assert.deepEqual(out.records,report.records);assert.equal(out.rescues,0);
+              assert.equal(v.walked,route.legs);assert.equal(v.copiedLegs,route.outcome==='compromise'?route.legs:-1);
+              assert.equal(v.leafAt,'nom');assert.equal(v.oldCopyAt,'nom');assert.equal(v.beginnerAt,'bench');
+              assert.equal(v.returnMapAt,route.outcome==='compromise'?'beginner':'party');
+              assert.equal(v.leafType,({contract:'fixed',compromise:'live',informed:'legend'})[route.outcome]);
+              assert.equal(v.insectAt,route.outcome==='contract'?'bench':'leaf');assert.equal(v.dated,route.outcome==='informed');
+              assert.deepEqual(known,route.outcome==='contract'?[]:['low','high','pollen'].slice(0,route.legs+1));
+              assert.deepEqual(errors,[]);
+              console.log('PUBLIC_RESULT',JSON.stringify({path:route.old,outcome:out.outcome,steps:out.steps,legs:v.walked,copy:v.copiedLegs,known,rescues:out.rescues,q038}));
+              await page.close();
+            }
+          }finally{await browser.close();}
+          JS
