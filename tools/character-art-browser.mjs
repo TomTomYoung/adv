@@ -97,6 +97,20 @@ try{
           assert.equal(await allowed.count(),1);assert.ok(await allowed.isEnabled());
         }
       }
+      if(f.checkMobileChoiceFit&&layout==='scene'&&width===390){
+        const clipped=await page.locator('.scene-message-actions').evaluate(panel=>{
+          const initial=panel.scrollTop,missing=[];
+          const top=panel.getBoundingClientRect().top+panel.clientTop,bottom=top+panel.clientHeight;
+          for(const [index,button] of [...panel.querySelectorAll('[data-focus^="choice:"]')].entries()){
+            if(index>0)panel.scrollTop+=Math.max(0,button.getBoundingClientRect().bottom-bottom);
+            const rect=button.getBoundingClientRect();
+            if(rect.top<top-1||rect.bottom>bottom+1)missing.push(button.textContent);
+          }
+          panel.scrollTop=initial;
+          return missing;
+        });
+        assert.deepEqual(clipped,[],f.quest+'/'+f.scene+': show each mobile choice in full');
+      }
       if(f.expectedText){
         const text=dialoguePages.join('');
         assert.ok(text.includes(f.expectedText),`missing conditional dialogue: ${f.expectedText}`);

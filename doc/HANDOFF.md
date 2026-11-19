@@ -1,5 +1,11 @@
 # 実装引き継ぎ
 
+## q023「母樹の指輪」の現場接続と次の作業
+
+原本5経路を17場面・21行動・7旅程に接続しました。3編成の通常試遊60件と専用28試験が通過しました。住民への通報、台帳への転記、避難案内、新標の設置、指輪の取り外し、アセへの手渡しが個別に保存されます。[実装と検証](development/Q023_WORLD_ROUTE.md)
+
+未接続は77件です。次はq024「食べられる地図」で、原本5経路・旧受注の基準試遊を完了しています。[再開位置](development/Q024_WORLD_ROUTE_PLAN.md)
+
 ## q022公開完了とq023の再開位置 — 2026-11-19
 
 第2版q022「緑の寝息」は[PR #307](https://github.com/TomTomYoung/adv/pull/307)でmaster `5576c1b4` に統合しました。原本6経路・3結末を14場面・18行動・8旅程で接続し、全48ワークフロー、[全4,443試験](https://github.com/TomTomYoung/adv/actions/runs/44456540156)、[72通常試遊・Chromium 200画面条件](https://github.com/TomTomYoung/adv/actions/runs/44456540631)が成功しました。[公開配信](https://github.com/TomTomYoung/adv/actions/runs/44457900404)後に7ファイルを照合し、[幅390の公開試遊](https://github.com/TomTomYoung/adv/actions/runs/44458143348)で自然覚醒から灯帰りの医学校（施療受付）まで22歩・1勝・救助0で完走しました。[q022の保存、全滅・再戦と公開結果](development/Q022_WORLD_ROUTE.md)。

@@ -4,6 +4,7 @@ import {buildMineScale} from './build-q019-world-route.mjs';
 import {buildCrown} from './build-q020-world-route.mjs';
 import {buildSeedBird} from './build-q021-world-route.mjs';
 import {buildGreenSleep} from './build-q022-world-route.mjs';
+import {buildMotherRing} from './build-q023-world-route.mjs';
 import {buildSilentBlast} from './build-q016-world-route.mjs';
 import {buildWeepingPillar} from './build-q015-world-route.mjs';
 import {buildReturnCart} from './build-q014-world-route.mjs';
@@ -155,6 +156,7 @@ export async function buildScenarioEditions({check=false}={}){
  await buildCrown({check});
  await buildSeedBird({check});
  await buildGreenSleep({check});
+ await buildMotherRing({check});
  await buildCompanionEdition({check});
  const geography=await buildOddlandGeography({check});
  await buildSalomeGeography(geography,{check});

@@ -1,0 +1,63 @@
+name: Validate q023 mother-ring routes in Chromium
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'data/**'
+      - 'authoring/editions/e2/story-q023.mjs'
+      - 'tools/build-scenario-editions.mjs'
+      - 'tools/build-q023-world-route.mjs'
+      - 'tools/build-companion-edition.mjs'
+      - 'tools/preserved-world-quest.mjs'
+      - 'tools/browser-q023-world-route-smoke.mjs'
+      - 'tools/q023-world-route-fixtures.mjs'
+      - 'tools/character-art-browser.mjs'
+      - 'tools/measure-mother-ring.mjs'
+      - 'playtests/quest-parties.json'
+      - 'tests/q023-*.mjs'
+      - '.github/workflows/q023-world-route.yml'
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+permissions:
+  contents: read
+jobs:
+  q023-browser:
+    runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned browser driver and Japanese fonts
+        run: |
+          npm install --no-save --package-lock=false playwright@1.58.2
+          test -n "$(fc-list :lang=ja)"
+      - name: Measure five paths and two starting points with three parties at levels 3 and 4
+        run: |
+          mkdir -p /tmp/adv-mother-ring-art-browser
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import {measureMotherRing} from './tools/measure-mother-ring.mjs';
+          const results=measureMotherRing({levels:[3,4],starts:['site','reception']});
+          fs.writeFileSync('/tmp/adv-mother-ring-art-browser/normal-trials.json',JSON.stringify(results,null,2));
+          assert.equal(results.length,60);
+          assert.ok(results.every(r=>r.status==='cleared'&&r.records.losses===0&&r.rescues===0));
+          console.log(JSON.stringify({trials:results.length,failures:0,steps:[Math.min(...results.map(r=>r.steps)),Math.max(...results.map(r=>r.steps))]}));
+          JS
+      - name: Verify resident warnings, ring custody, old saves, Scene and Classic widths
+        run: ADV_BROWSER_OUTPUT=/tmp/adv-mother-ring-art-browser node tools/browser-q023-world-route-smoke.mjs
+      - name: Upload q023 trial checkpoints and results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: q023-world-route-checkpoints
+          path: /tmp/adv-mother-ring-art-browser
+          if-no-files-found: error
+          retention-days: 7
