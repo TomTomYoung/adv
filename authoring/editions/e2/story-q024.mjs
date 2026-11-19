@@ -5,7 +5,7 @@ const places={bench:'採集人の荷置き場',first:'花房の下の分岐',sec
 const site=(id,x,y)=>({kind:'dungeon',dungeon:'region_3',map:'region_3_f1',x,y,event:'q024_edible_map_'+id});
 const world={bench:site('bench',15,5),first:site('first',17,5),second:site('second',10,11),third:site('third',5,8)};
 export const edibleMapCharacters={
-  e2_edible_map_nom:{id:'e2_edible_map_nom',name:'採集人のノム',goal:'奥へ行く人に使える地図を残す',quests:['q024'],detail:'荷置き場で葉の地図と以前の写しを広げている。'},
+  e2_edible_map_nom:{id:'e2_edible_map_nom',name:'採集人のノム',goal:'採集に来る人に道と荷の扱いを伝える',quests:['q024','q027'],detail:'地下庭園で、葉の地図や採集荷の荷札に通行の記録を残す。'},
   e2_edible_map_beginner:{id:'e2_edible_map_beginner',name:'初めての採集人',goal:'自分で帰れる道を覚える',quests:['q024'],detail:'調査に同行して分岐の道標を確かめる。'}
 };
 

@@ -1,5 +1,7 @@
 # 保守・検証記録
 
+[q027「花粉の身代金」の観察・荷車・香袋の回収](Q027_WORLD_ROUTE.md)・[q028「庭師の空席」の原本試遊](Q028_WORLD_ROUTE_PLAN.md)
+
 [q026「実らない約束」の穂・苗・世話の引き継ぎ](Q026_WORLD_ROUTE.md)・[q027「花粉の身代金」の原本試遊](Q027_WORLD_ROUTE_PLAN.md)
 
 [q025「地下の雨乞い」の弁操作・手桶・当番交代](Q025_WORLD_ROUTE.md)。[q026「実らない約束」の原本試遊と接続前監査](Q026_WORLD_ROUTE_PLAN.md)。
