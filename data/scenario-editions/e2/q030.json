@@ -1,0 +1,4915 @@
+{
+  "schemaVersion": 1,
+  "id": "q030",
+  "number": 30,
+  "title": "根の向こうの朝",
+  "client": "薬師のハナ",
+  "brief": "地上へ伸びる根が庭園を裂こうとしている。切るか通すか決めてください。",
+  "region": 3,
+  "type": "authored_progression",
+  "recommendedLevel": 3,
+  "requires": {
+    "op": "gte",
+    "left": {
+      "ref": "vars.region_3"
+    },
+    "right": 3
+  },
+  "unlockHint": "この地域の依頼を3件完了すると受注できる。",
+  "events": [
+    {
+      "id": "q030_clue_a",
+      "title": "根の向こうの朝：現場の痕跡",
+      "points": [
+        {
+          "map": "region_3_f2",
+          "x": 5,
+          "y": 4,
+          "dungeon": "region_3"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q030.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q030.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q030"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q030"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_3"
+    },
+    {
+      "id": "q030_clue_b",
+      "title": "根の向こうの朝：記録と証言",
+      "points": [
+        {
+          "map": "region_3_f2",
+          "x": 7,
+          "y": 9,
+          "dungeon": "region_3"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q030.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q030.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q030"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q030"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_3"
+    },
+    {
+      "id": "q030_decision",
+      "title": "根の向こうの朝：決着の場",
+      "points": [
+        {
+          "map": "region_3_f2",
+          "x": 12,
+          "y": 9,
+          "dungeon": "region_3"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q030.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q030.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q030.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q030"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_3"
+    },
+    {
+      "id": "region_3",
+      "title": "根が支える橋",
+      "dungeon": "region_3",
+      "points": [
+        {
+          "map": "region_3_f1",
+          "x": 1,
+          "y": 3,
+          "dungeon": "region_3"
+        }
+      ],
+      "trigger": "action",
+      "script": "dungeon.scene.region_3.v1",
+      "condition": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q030.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      },
+      "requirement": "関連する依頼を受けると調査できる。",
+      "note": {
+        "text": "第1層の根橋草が亀裂を渡すまで育ったことを確認した。採取すれば通路も戻る。大根を通した場合の天井の強度は、別の調査が必要だ。",
+        "when": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.dungeonNotes.region_3"
+          },
+          "right": true
+        }
+      }
+    },
+    {
+      "id": "q030_root_morning_garden",
+      "title": "根の向こうの朝：地下庭園の薬草棚",
+      "points": [
+        {
+          "dungeon": "region_3",
+          "map": "region_3_f2",
+          "x": 12,
+          "y": 9
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "interactionRange": "here",
+      "safe": true,
+      "script": "q030.rootmorning.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q030.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q030.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.currentStoryRoutes.q030"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_3"
+    },
+    {
+      "id": "q030_root_morning_opening",
+      "title": "根の向こうの朝：古い明かり取り",
+      "points": [
+        {
+          "dungeon": "region_3",
+          "map": "region_3_f2",
+          "x": 10,
+          "y": 9
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "interactionRange": "here",
+      "safe": true,
+      "script": "q030.rootmorning.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q030.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q030.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.currentStoryRoutes.q030"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_3"
+    },
+    {
+      "id": "q030_root_morning_rack",
+      "title": "根の向こうの朝：反射鏡の置き場",
+      "points": [
+        {
+          "dungeon": "region_3",
+          "map": "region_3_f2",
+          "x": 9,
+          "y": 11
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "interactionRange": "here",
+      "safe": true,
+      "script": "q030.rootmorning.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q030.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q030.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.currentStoryRoutes.q030"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_3"
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_3_f2",
+      "x": 5,
+      "y": 4,
+      "object": "q030_clue_a",
+      "role": "clue_a"
+    },
+    {
+      "map": "region_3_f2",
+      "x": 7,
+      "y": 9,
+      "object": "q030_clue_b",
+      "role": "clue_b"
+    },
+    {
+      "map": "region_3_f2",
+      "x": 12,
+      "y": 9,
+      "object": "q030_decision",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "補強した穴へ光を寄せ、根を誘導する",
+      "text": "地下に朝の光が差した。守る庭と伸びる木は、同じ穴を使える。",
+      "gold": 81,
+      "xp": 84,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q030.values.root"
+            },
+            "right": "guided"
+          },
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.braced"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.mirrorAt"
+                },
+                "right": "opening"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.light"
+                },
+                "right": "opening"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "stories.q030.knowledge.party"
+                },
+                "right": "towardLight"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "contract": {
+      "label": "根の化身を倒して成長を止める",
+      "text": "庭園は形を保った。ハナは切り株から取れる最後の薬を保存する。",
+      "gold": 101,
+      "xp": 61,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q030.values.root"
+            },
+            "right": "stump"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q030.values.medicineStored"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    "compromise": {
+      "label": "苗床を運んでから庭を根へ渡す",
+      "text": "庭園は森へ変わった。地上の新しい薬畑には、地下の名が付けられる。",
+      "gold": 52,
+      "xp": 63,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.hanaAt"
+                },
+                "right": "surface"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.residentsAt"
+                },
+                "right": "surface"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q030.values.bedsAt"
+            },
+            "right": "surface"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q030.values.root"
+            },
+            "right": "overgrown"
+          }
+        ]
+      }
+    },
+    "people": {
+      "gold": 81,
+      "xp": 63,
+      "label": "人の避難だけを急ぎ、苗床を残す",
+      "text": "住民は帰った。苗床は根に覆われ、次の薬草を育てる種を地上で集める仕事が残った。",
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.hanaAt"
+                },
+                "right": "surface"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.residentsAt"
+                },
+                "right": "surface"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q030.values.bedsAt"
+            },
+            "right": "garden"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q030.values.root"
+            },
+            "right": "overgrown"
+          }
+        ]
+      }
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/story-q030.mjs",
+    "world": {
+      "truth": "根は日光へ向かっているが、通れば庭園を支える古い天井も崩れる。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "根は日光へ向かっているが、通れば庭園を支える古い天井も崩れる。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "地上へ伸びる根が庭園を裂こうとしている。切るか通すか決めてください。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "薬師のハナ",
+        "observation": "地上へ伸びる根が庭園を裂こうとしている。切るか通すか決めてください。",
+        "belief": "地上へ伸びる根が庭園を裂こうとしている。切るか通すか決めてください。",
+        "goal": "地上へ伸びる根が庭園を裂こうとしている。切るか通すか決めてください。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "地上へ伸びる根が庭園を裂こうとしている。切るか通すか決めてください。",
+      "progression": "成長する根に対して補強と採光を順に施工するか、庭を移転して場を明け渡す。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q030.rootmorning.entry",
+          "assertion": {
+            "title": "地下庭園の薬草棚",
+            "place": "garden",
+            "cast": [
+              {
+                "entity": "hana",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q030.values.hanaAt"
+                  },
+                  "right": "garden"
+                },
+                "display": {
+                  "x": 32,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "residents",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q030.values.residentsAt"
+                  },
+                  "right": "garden"
+                },
+                "display": {
+                  "x": 68,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "supports",
+          "script": "q030.rootmorning.supports",
+          "assertion": {
+            "title": "古い明かり取り",
+            "place": "opening",
+            "cast": [],
+            "requires": true
+          }
+        },
+        {
+          "id": "light",
+          "script": "q030.rootmorning.light",
+          "assertion": {
+            "title": "古い明かり取り",
+            "place": "opening",
+            "cast": [],
+            "requires": true
+          }
+        },
+        {
+          "id": "mirror_rack",
+          "script": "q030.rootmorning.mirror_rack",
+          "assertion": {
+            "title": "反射鏡の置き場",
+            "place": "rack",
+            "cast": [],
+            "requires": true
+          }
+        },
+        {
+          "id": "mirror_held",
+          "script": "q030.rootmorning.mirror_held",
+          "assertion": {
+            "title": "反射鏡の置き場",
+            "place": "rack",
+            "cast": [],
+            "requires": true
+          }
+        },
+        {
+          "id": "align",
+          "script": "q030.rootmorning.align",
+          "assertion": {
+            "title": "古い明かり取り",
+            "place": "opening",
+            "cast": [],
+            "requires": true
+          }
+        },
+        {
+          "id": "lit",
+          "script": "q030.rootmorning.lit",
+          "assertion": {
+            "title": "古い明かり取り",
+            "place": "opening",
+            "cast": [],
+            "requires": true
+          }
+        },
+        {
+          "id": "evacuate",
+          "script": "q030.rootmorning.evacuate",
+          "assertion": {
+            "title": "地下庭園の薬草棚",
+            "place": "garden",
+            "cast": [
+              {
+                "entity": "hana",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q030.values.hanaAt"
+                  },
+                  "right": "garden"
+                },
+                "display": {
+                  "x": 32,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "residents",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q030.values.residentsAt"
+                  },
+                  "right": "garden"
+                },
+                "display": {
+                  "x": 68,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "packed",
+          "script": "q030.rootmorning.packed",
+          "assertion": {
+            "title": "地下庭園の薬草棚",
+            "place": "garden",
+            "cast": [
+              {
+                "entity": "hana",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q030.values.hanaAt"
+                  },
+                  "right": "garden"
+                },
+                "display": {
+                  "x": 32,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "residents",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q030.values.residentsAt"
+                  },
+                  "right": "garden"
+                },
+                "display": {
+                  "x": 68,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "unload",
+          "script": "q030.rootmorning.unload",
+          "assertion": {
+            "title": "地上の施療院裏の林",
+            "place": "surface",
+            "cast": [
+              {
+                "entity": "hana",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q030.values.hanaAt"
+                  },
+                  "right": "surface"
+                },
+                "display": {
+                  "x": 32,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "residents",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q030.values.residentsAt"
+                  },
+                  "right": "surface"
+                },
+                "display": {
+                  "x": 68,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "people_ready",
+          "script": "q030.rootmorning.people_ready",
+          "assertion": {
+            "title": "地下庭園の薬草棚",
+            "place": "garden",
+            "cast": [
+              {
+                "entity": "hana",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q030.values.hanaAt"
+                  },
+                  "right": "garden"
+                },
+                "display": {
+                  "x": 32,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "residents",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q030.values.residentsAt"
+                  },
+                  "right": "garden"
+                },
+                "display": {
+                  "x": 68,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "count",
+          "script": "q030.rootmorning.count",
+          "assertion": {
+            "title": "地上の施療院裏の林",
+            "place": "surface",
+            "cast": [
+              {
+                "entity": "hana",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q030.values.hanaAt"
+                  },
+                  "right": "surface"
+                },
+                "display": {
+                  "x": 32,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "residents",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q030.values.residentsAt"
+                  },
+                  "right": "surface"
+                },
+                "display": {
+                  "x": 68,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "stump",
+          "script": "q030.rootmorning.stump",
+          "assertion": {
+            "title": "地下庭園の薬草棚",
+            "place": "garden",
+            "cast": [
+              {
+                "entity": "hana",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q030.values.hanaAt"
+                  },
+                  "right": "garden"
+                },
+                "display": {
+                  "x": 32,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "residents",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q030.values.residentsAt"
+                  },
+                  "right": "garden"
+                },
+                "display": {
+                  "x": 68,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "地上へ伸びる根が庭園を裂こうとしている。切るか通すか決めてください。",
+      "openQuestion": "根の向こうの朝の問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "frameShift",
+      "newInformation": "根は日光へ向かっているが、通れば庭園を支える古い天井も崩れる。",
+      "retroactiveTargets": [
+        "light"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q030.rootmorning.entry",
+        "assertion": {
+          "title": "地下庭園の薬草棚",
+          "place": "garden",
+          "cast": [
+            {
+              "entity": "hana",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.hanaAt"
+                },
+                "right": "garden"
+              },
+              "display": {
+                "x": 32,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "residents",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.residentsAt"
+                },
+                "right": "garden"
+              },
+              "display": {
+                "x": 68,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "supports",
+        "script": "q030.rootmorning.supports",
+        "assertion": {
+          "title": "古い明かり取り",
+          "place": "opening",
+          "cast": [],
+          "requires": true
+        }
+      },
+      {
+        "id": "light",
+        "script": "q030.rootmorning.light",
+        "assertion": {
+          "title": "古い明かり取り",
+          "place": "opening",
+          "cast": [],
+          "requires": true
+        }
+      },
+      {
+        "id": "mirror_rack",
+        "script": "q030.rootmorning.mirror_rack",
+        "assertion": {
+          "title": "反射鏡の置き場",
+          "place": "rack",
+          "cast": [],
+          "requires": true
+        }
+      },
+      {
+        "id": "mirror_held",
+        "script": "q030.rootmorning.mirror_held",
+        "assertion": {
+          "title": "反射鏡の置き場",
+          "place": "rack",
+          "cast": [],
+          "requires": true
+        }
+      },
+      {
+        "id": "align",
+        "script": "q030.rootmorning.align",
+        "assertion": {
+          "title": "古い明かり取り",
+          "place": "opening",
+          "cast": [],
+          "requires": true
+        }
+      },
+      {
+        "id": "lit",
+        "script": "q030.rootmorning.lit",
+        "assertion": {
+          "title": "古い明かり取り",
+          "place": "opening",
+          "cast": [],
+          "requires": true
+        }
+      },
+      {
+        "id": "evacuate",
+        "script": "q030.rootmorning.evacuate",
+        "assertion": {
+          "title": "地下庭園の薬草棚",
+          "place": "garden",
+          "cast": [
+            {
+              "entity": "hana",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.hanaAt"
+                },
+                "right": "garden"
+              },
+              "display": {
+                "x": 32,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "residents",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.residentsAt"
+                },
+                "right": "garden"
+              },
+              "display": {
+                "x": 68,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "packed",
+        "script": "q030.rootmorning.packed",
+        "assertion": {
+          "title": "地下庭園の薬草棚",
+          "place": "garden",
+          "cast": [
+            {
+              "entity": "hana",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.hanaAt"
+                },
+                "right": "garden"
+              },
+              "display": {
+                "x": 32,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "residents",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.residentsAt"
+                },
+                "right": "garden"
+              },
+              "display": {
+                "x": 68,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "unload",
+        "script": "q030.rootmorning.unload",
+        "assertion": {
+          "title": "地上の施療院裏の林",
+          "place": "surface",
+          "cast": [
+            {
+              "entity": "hana",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.hanaAt"
+                },
+                "right": "surface"
+              },
+              "display": {
+                "x": 32,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "residents",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.residentsAt"
+                },
+                "right": "surface"
+              },
+              "display": {
+                "x": 68,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "people_ready",
+        "script": "q030.rootmorning.people_ready",
+        "assertion": {
+          "title": "地下庭園の薬草棚",
+          "place": "garden",
+          "cast": [
+            {
+              "entity": "hana",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.hanaAt"
+                },
+                "right": "garden"
+              },
+              "display": {
+                "x": 32,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "residents",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.residentsAt"
+                },
+                "right": "garden"
+              },
+              "display": {
+                "x": 68,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "count",
+        "script": "q030.rootmorning.count",
+        "assertion": {
+          "title": "地上の施療院裏の林",
+          "place": "surface",
+          "cast": [
+            {
+              "entity": "hana",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.hanaAt"
+                },
+                "right": "surface"
+              },
+              "display": {
+                "x": 32,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "residents",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.residentsAt"
+                },
+                "right": "surface"
+              },
+              "display": {
+                "x": 68,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "stump",
+        "script": "q030.rootmorning.stump",
+        "assertion": {
+          "title": "地下庭園の薬草棚",
+          "place": "garden",
+          "cast": [
+            {
+              "entity": "hana",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.hanaAt"
+                },
+                "right": "garden"
+              },
+              "display": {
+                "x": 32,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "residents",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.residentsAt"
+                },
+                "right": "garden"
+              },
+              "display": {
+                "x": 68,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      }
+    ],
+    "revision": "scenario-edition-e2-q030-r1",
+    "stateRegistry": [
+      {
+        "path": "stories.q030.values.partyAt",
+        "type": "enum",
+        "initial": "garden",
+        "values": [
+          "garden",
+          "opening",
+          "rack",
+          "surface",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q030.values.hanaAt",
+        "type": "enum",
+        "initial": "garden",
+        "values": [
+          "garden",
+          "opening",
+          "rack",
+          "surface",
+          "transit"
+        ],
+        "meaning": "hana の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q030.values.residentsAt",
+        "type": "enum",
+        "initial": "garden",
+        "values": [
+          "garden",
+          "opening",
+          "rack",
+          "surface",
+          "transit"
+        ],
+        "meaning": "residents の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q030.values.mirrorAt",
+        "type": "enum",
+        "initial": "rack",
+        "values": [
+          "garden",
+          "opening",
+          "rack",
+          "surface",
+          "transit",
+          "party",
+          "hana",
+          "residents",
+          "beds"
+        ],
+        "meaning": "mirror の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q030.values.bedsAt",
+        "type": "enum",
+        "initial": "garden",
+        "values": [
+          "garden",
+          "opening",
+          "rack",
+          "surface",
+          "transit",
+          "party",
+          "hana",
+          "residents",
+          "mirror"
+        ],
+        "meaning": "beds の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q030.values.braced",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "braced",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q030.values.postponed",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "postponed",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q030.values.medicineStored",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "medicineStored",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q030.values.light",
+        "type": "enum",
+        "initial": "pillar",
+        "values": [
+          "pillar",
+          "opening"
+        ],
+        "meaning": "日光が当たる場所",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q030.values.root",
+        "type": "enum",
+        "initial": "growing",
+        "values": [
+          "growing",
+          "guided",
+          "stump",
+          "overgrown"
+        ],
+        "meaning": "根の状態",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      }
+    ],
+    "choiceContract": {
+      "progression": "成長する根に対して補強と採光を順に施工するか、庭を移転して場を明け渡す。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "成長する根に対して補強と採光を順に施工するか、庭を移転して場を明け渡す。",
+    "flowVersion": 2,
+    "entryScript": "q030.rootmorning.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": {
+          "when": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q030.values.postponed"
+            },
+            "right": true
+          },
+          "yes": "荷を解いた住民がハナの薬草棚に集まった。根の白い先は、まだ支柱に落ちる朝日を追っている。次にどうするか、ここで決め直せる。",
+          "no": "薬師のハナが棚から鉢を一つ下ろした。頭上で木が鳴る。「下から押してくるんです」。支柱に落ちた朝日の筋へ、太い根が指のように伸びている。住民は鉢を受け取って返事を待った。"
+        },
+        "options": [
+          {
+            "id": "brace",
+            "text": "天井を調べる",
+            "to": "supports",
+            "action": "entry_brace"
+          },
+          {
+            "id": "move",
+            "text": "移転を相談",
+            "to": "evacuate",
+            "action": "entry_move"
+          },
+          {
+            "id": "stop",
+            "text": "化身と戦う",
+            "to": "stump",
+            "action": "entry_stop",
+            "combat": true
+          }
+        ]
+      },
+      {
+        "id": "supports",
+        "text": {
+          "when": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q030.values.braced"
+            },
+            "right": true
+          },
+          "yes": "明かり取りの両端に、先ほど打った楔が残っている。梁に手を当てても動かない。鏡を置く空間もそのままだ。",
+          "no": "明かり取りの縁から砂がこぼれた。根が光へ伸びてここを抜ければ、古い天井ごと持ち上がる。両側の受けに梁を渡し、楔で突っ張る余地がある。"
+        },
+        "options": [
+          {
+            "id": "install",
+            "text": "梁を固定",
+            "to": "light",
+            "action": "supports_install",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.braced"
+                },
+                "right": true
+              }
+            }
+          },
+          {
+            "id": "check",
+            "text": "梁を確かめる",
+            "to": "light",
+            "action": "supports_check",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q030.values.braced"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "light",
+        "text": "楔の頭は梁と面一で、穴の縁は足をかけても沈まない。支柱の光をこちらへ移すには、道具置き場の反射鏡が要る。梁を残して避難の支度に戻ることもできる。",
+        "options": [
+          {
+            "id": "guide",
+            "text": "鏡を取りに",
+            "to": "mirror_rack",
+            "action": "light_guide"
+          },
+          {
+            "id": "evacuate",
+            "text": "薬草棚へ戻る",
+            "to": "evacuate",
+            "action": "light_evacuate"
+          }
+        ]
+      },
+      {
+        "id": "mirror_rack",
+        "text": "道具掛けに、小さな脚の付いた磨き鏡が伏せてある。裏には、朝の日差しで葉を乾かす時に使った角度の印が残っていた。",
+        "options": [
+          {
+            "id": "lift",
+            "text": "鏡を持つ",
+            "to": "mirror_held",
+            "action": "mirror_rack_lift"
+          }
+        ]
+      },
+      {
+        "id": "mirror_held",
+        "text": "鏡を布でくるんだ。光を曲げるには、補強した穴まで運び、朝日が差す高さに脚を立てる必要がある。",
+        "options": [
+          {
+            "id": "carry",
+            "text": "穴へ運ぶ",
+            "to": "align",
+            "action": "mirror_held_carry"
+          }
+        ]
+      },
+      {
+        "id": "align",
+        "text": "梁の上に鏡の脚が届いた。片手で角度を探ると、支柱の光の輪がほどけて穴の内側へ滑る。そこへ光が残るよう、留めねじを締める。",
+        "options": [
+          {
+            "id": "aim",
+            "text": "鏡を据える",
+            "to": "lit",
+            "action": "align_aim"
+          }
+        ]
+      },
+      {
+        "id": "lit",
+        "text": "光は移った。しばらくすると支柱から白い先端が離れ、穴の縁で光を拾った。梁は鳴らず、根だけが地上の朝へ伸びていく。",
+        "options": [
+          {
+            "id": "watch",
+            "text": "根を見届ける",
+            "to": "@informed",
+            "action": "lit_watch"
+          }
+        ]
+      },
+      {
+        "id": "evacuate",
+        "text": "住民はまだ地下にいる。地上の施療院裏には水の引ける林があるという。「人だけならすぐ。苗床も運ぶなら手を貸してください」とハナが担ぎ棒を差し出した。",
+        "options": [
+          {
+            "id": "beds",
+            "text": "苗床も運ぶ",
+            "to": "packed",
+            "action": "evacuate_beds"
+          },
+          {
+            "id": "people",
+            "text": "人を先に",
+            "to": "people_ready",
+            "action": "evacuate_people"
+          },
+          {
+            "id": "return",
+            "text": "移転を保留",
+            "to": "entry",
+            "action": "evacuate_return"
+          }
+        ]
+      },
+      {
+        "id": "packed",
+        "text": "土を崩さずに苗床の箱を担ぎ棒へ縛った。ハナが一行の結び目を引いて確かめ、住民を出口へ並ばせる。箱はまだ一行の手にある。",
+        "options": [
+          {
+            "id": "escort",
+            "text": "地上へ導く",
+            "to": "unload",
+            "action": "packed_escort"
+          }
+        ]
+      },
+      {
+        "id": "unload",
+        "text": "林で担ぎ棒を肩から下ろす。ハナと住民は地上に着いた。浅く掘った畝に箱を据えれば、地下で育てた薬草の苗がここに根を張れる。",
+        "options": [
+          {
+            "id": "plant",
+            "text": "苗を下ろす",
+            "to": "@compromise",
+            "action": "unload_plant"
+          }
+        ]
+      },
+      {
+        "id": "people_ready",
+        "text": "ハナが担ぎ棒を棚へ戻した。苗床を積む時間はない。住民を数え、歩くのが遅い人を先頭にして出口を目指す。",
+        "options": [
+          {
+            "id": "escort",
+            "text": "地上へ導く",
+            "to": "count",
+            "action": "people_ready_escort"
+          }
+        ]
+      },
+      {
+        "id": "count",
+        "text": "地上の林で呼び合う声に、一人ずつ返事がある。最後にハナが応え、空の手を開いた。苗床は地下に残した。",
+        "options": [
+          {
+            "id": "count",
+            "text": "人数を確認",
+            "to": "@people",
+            "action": "count_count"
+          }
+        ]
+      },
+      {
+        "id": "stump",
+        "text": "化身が倒れ、切り株の年輪から薬になる滴がにじんだ。ハナはまだ空の薬瓶を手にしている。雫を受け、栓をして初めて最後の薬を残せる。",
+        "options": [
+          {
+            "id": "bottle",
+            "text": "最後の薬を採る",
+            "to": "@contract",
+            "action": "stump_bottle"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.1",
+      "source": "https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4",
+      "adapter": "adv-story-state/1",
+      "scope": "quest-episode"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "preserveAcceptedRoute": true,
+    "currentStoryScriptPrefix": "q030.rootmorning.",
+    "interruptionRoutes": [],
+    "interruptionEntries": []
+  },
+  "scripts": {
+    "q030.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "根の先の色は光に近いほど濃く、支柱の周りだけ細く逃げている。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q030",
+          "key": "clue_a",
+          "text": "根の先の色は光に近いほど濃く、支柱の周りだけ細く逃げている。"
+        }
+      ]
+    },
+    "q030.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "薬師のハナ",
+          "text": "旧庭園図には撤去された明かり取りと、補強梁の位置があります。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q030",
+          "key": "clue_b",
+          "text": "旧庭園図には撤去された明かり取りと、補強梁の位置がある。"
+        }
+      ]
+    },
+    "q030.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "根の向こうの朝\n\n地上へ伸びる根が庭園を裂こうとしている。切るか通すか決めてください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "明かり取りを補強し根をそこへ導く",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q030.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q030.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "根は日光へ向かっているが、通れば庭園を支える古い天井も崩れる。"
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_3",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "地下に朝の光が差した。守る庭と伸びる木は、同じ穴を使える。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q030",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "根の化身を倒し成長を止める",
+              "requirement": "戦闘あり・逃走不可",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_3",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "庭園は形を保った。ハナは切り株から取れる最後の薬を保存する。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q030",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "人と薬草を移して根へ庭を渡す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "庭園は森へ変わった。地上の新しい薬畑には、地下の名が付けられる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q030",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q030.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "根の向こうの朝\n\n地上へ伸びる根が庭園を裂こうとしている。切るか通すか決めてください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q030.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q030.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "根は日光へ向かっているが、通れば庭園を支える古い天井も崩れる。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q030.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "明かり取りを補強し根をそこへ導く",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q030.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q030.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合・戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_3",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "地下に朝の光が差した。守る庭と伸びる木は、同じ穴を使える。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q030",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q030.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q030.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "contract",
+              "text": "根の化身を倒し成長を止める",
+              "requirement": "戦闘あり・逃走不可",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_3",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "庭園は形を保った。ハナは切り株から取れる最後の薬を保存する。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q030",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "人と薬草を移して根へ庭を渡す",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "庭園は森へ変わった。地上の新しい薬畑には、地下の名が付けられる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q030",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」薬師のハナは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられる。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q030.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q030.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q030.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "地下に朝の光が差した。守る庭と伸びる木は、同じ穴を使える。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q030.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "庭園は形を保った。ハナは切り株から取れる最後の薬を保存する。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q030.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "庭園は森へ変わった。地上の新しい薬畑には、地下の名が付けられる。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q030.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q030.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q030.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q030.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q030.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q030.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q030.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "根が天井へ伸び、薬草棚の支えが軋んだ。光の方向だけ変えれば、支柱を避けられそうだ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "brace",
+              "text": "天井を先に補強する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q030.flow.light"
+                }
+              ]
+            },
+            {
+              "id": "move",
+              "text": "人と薬草の移転を始める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q030.flow.evacuate"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "根の化身を倒して成長を止める",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_3",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q030.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q030.flow.light": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q030.node",
+          "value": "light"
+        },
+        {
+          "op": "say",
+          "text": "根は日光へ向かっているが、通れば庭園を支える古い天井も崩れる。 補強した明かり取りのそばへ、鏡で日光を導ける。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "guide",
+              "text": "補強した穴へ光を寄せ、根を誘導する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q030.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "evacuate",
+              "text": "補強だけ残し、庭を移す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q030.flow.evacuate"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q030.flow.evacuate": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q030.node",
+          "value": "evacuate"
+        },
+        {
+          "op": "say",
+          "text": "住民は地上へ移れるが、薬草の苗床がまだ地下にある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "beds",
+              "text": "苗床を運んでから庭を根へ渡す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q030.flow.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "people",
+              "text": "人の避難だけを急ぎ、苗床を残す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q030.flow.end.people"
+                }
+              ]
+            },
+            {
+              "id": "return",
+              "text": "移転を保留し、採光の補強へ戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q030.flow.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q030.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q030.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "地下に朝の光が差した。守る庭と伸びる木は、同じ穴を使える。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q030",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q030.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q030.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "庭園は形を保った。ハナは切り株から取れる最後の薬を保存する。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q030",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q030.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q030.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "庭園は森へ変わった。地上の新しい薬畑には、地下の名が付けられる。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q030",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q030.flow.end.people": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q030.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "住民は帰った。苗床は根に覆われ、次の薬草を育てる種を地上で集める仕事が残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q030",
+              "outcome": "people"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q030.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q030.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q030.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "地下に朝の光が差した。守る庭と伸びる木は、同じ穴を使える。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "庭園は形を保った。ハナは切り株から取れる最後の薬を保存する。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "庭園は森へ変わった。地上の新しい薬畑には、地下の名が付けられる。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "people",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "住民は帰った。苗床は根に覆われ、次の薬草を育てる種を地上で集める仕事が残った。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q030"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q030.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q030.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q030.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "light",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q030.flow.light"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "evacuate",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q030.flow.evacuate"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q030.flow.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "dungeon.scene.region_3.v1": {
+      "dungeonScene": "region_3",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "亀裂沿いの植床には、根を支えとして渡せる空間がある。庭園の大根をどう扱うか決める前に、こちらの小さな根橋の成長を観察する。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "dungeons.persistent.region_3.systems.garden.plants.bridge_1.species"
+                },
+                "right": "root_bridge"
+              },
+              {
+                "op": "gte",
+                "left": {
+                  "ref": "dungeons.persistent.region_3.systems.garden.plants.bridge_1.age"
+                },
+                "right": 5
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "育った根が亀裂をまたぎ、床のなかった区画を通れるようになった。採取するとこの橋も失われる。根が道を作る働きと、既存の天井へ及ぼす負荷は、それぞれ確かめる必要がある。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.region_3"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.region_3",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "この植床には、渡れるまで育った根橋がない。種と培養土を使って根橋草を植え、成長を待ってから調べよう。"
+            }
+          ]
+        }
+      ]
+    },
+    "q030.rootmorning.entry": {
+      "storyQuest": "q030",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q030",
+          "scene": "entry"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q030.values.postponed"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "荷を解いた住民がハナの薬草棚に集まった。根の白い先は、まだ支柱に落ちる朝日を追っている。次にどうするか、ここで決め直せる。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "薬師のハナが棚から鉢を一つ下ろした。頭上で木が鳴る。「下から押してくるんです」。支柱に落ちた朝日の筋へ、太い根が指のように伸びている。住民は鉢を受け取って返事を待った。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "brace",
+              "text": "天井を調べる",
+              "storyAction": {
+                "quest": "q030",
+                "action": "entry_brace"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q030",
+                  "action": "entry_brace"
+                }
+              ]
+            },
+            {
+              "id": "move",
+              "text": "移転を相談",
+              "storyAction": {
+                "quest": "q030",
+                "action": "entry_move"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q030",
+                  "action": "entry_move"
+                },
+                {
+                  "op": "jump",
+                  "script": "q030.rootmorning.evacuate"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "化身と戦う",
+              "storyAction": {
+                "quest": "q030",
+                "action": "entry_stop"
+              },
+              "requirement": "逃走不可",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_3",
+                  "on_win": [
+                    {
+                      "op": "story.action",
+                      "quest": "q030",
+                      "action": "entry_stop"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q030.rootmorning.stump"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "narrate",
+                      "text": "退路へ戻った。戦闘後に予定していた作業は、まだ成立していない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "narrate",
+                      "text": "救助班に運び出された。現場へ戻ると直前の場面から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q030.rootmorning.supports": {
+      "storyQuest": "q030",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q030",
+          "scene": "supports"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q030.values.braced"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "明かり取りの両端に、先ほど打った楔が残っている。梁に手を当てても動かない。鏡を置く空間もそのままだ。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "明かり取りの縁から砂がこぼれた。根が光へ伸びてここを抜ければ、古い天井ごと持ち上がる。両側の受けに梁を渡し、楔で突っ張る余地がある。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "install",
+              "text": "梁を固定",
+              "storyAction": {
+                "quest": "q030",
+                "action": "supports_install"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q030.values.braced"
+                  },
+                  "right": true
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q030",
+                  "action": "supports_install"
+                },
+                {
+                  "op": "jump",
+                  "script": "q030.rootmorning.light"
+                }
+              ]
+            },
+            {
+              "id": "check",
+              "text": "梁を確かめる",
+              "storyAction": {
+                "quest": "q030",
+                "action": "supports_check"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.braced"
+                },
+                "right": true
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q030",
+                  "action": "supports_check"
+                },
+                {
+                  "op": "jump",
+                  "script": "q030.rootmorning.light"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q030.rootmorning.light": {
+      "storyQuest": "q030",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q030",
+          "scene": "light"
+        },
+        {
+          "op": "narrate",
+          "text": "楔の頭は梁と面一で、穴の縁は足をかけても沈まない。支柱の光をこちらへ移すには、道具置き場の反射鏡が要る。梁を残して避難の支度に戻ることもできる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "guide",
+              "text": "鏡を取りに",
+              "storyAction": {
+                "quest": "q030",
+                "action": "light_guide"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q030",
+                  "action": "light_guide"
+                }
+              ]
+            },
+            {
+              "id": "evacuate",
+              "text": "薬草棚へ戻る",
+              "storyAction": {
+                "quest": "q030",
+                "action": "light_evacuate"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q030",
+                  "action": "light_evacuate"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q030.rootmorning.mirror_rack": {
+      "storyQuest": "q030",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q030",
+          "scene": "mirror_rack"
+        },
+        {
+          "op": "narrate",
+          "text": "道具掛けに、小さな脚の付いた磨き鏡が伏せてある。裏には、朝の日差しで葉を乾かす時に使った角度の印が残っていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "lift",
+              "text": "鏡を持つ",
+              "storyAction": {
+                "quest": "q030",
+                "action": "mirror_rack_lift"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q030",
+                  "action": "mirror_rack_lift"
+                },
+                {
+                  "op": "jump",
+                  "script": "q030.rootmorning.mirror_held"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q030.rootmorning.mirror_held": {
+      "storyQuest": "q030",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q030",
+          "scene": "mirror_held"
+        },
+        {
+          "op": "narrate",
+          "text": "鏡を布でくるんだ。光を曲げるには、補強した穴まで運び、朝日が差す高さに脚を立てる必要がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "carry",
+              "text": "穴へ運ぶ",
+              "storyAction": {
+                "quest": "q030",
+                "action": "mirror_held_carry"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q030",
+                  "action": "mirror_held_carry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q030.rootmorning.align": {
+      "storyQuest": "q030",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q030",
+          "scene": "align"
+        },
+        {
+          "op": "narrate",
+          "text": "梁の上に鏡の脚が届いた。片手で角度を探ると、支柱の光の輪がほどけて穴の内側へ滑る。そこへ光が残るよう、留めねじを締める。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "aim",
+              "text": "鏡を据える",
+              "storyAction": {
+                "quest": "q030",
+                "action": "align_aim"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q030",
+                  "action": "align_aim"
+                },
+                {
+                  "op": "jump",
+                  "script": "q030.rootmorning.lit"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q030.rootmorning.lit": {
+      "storyQuest": "q030",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q030",
+          "scene": "lit"
+        },
+        {
+          "op": "narrate",
+          "text": "光は移った。しばらくすると支柱から白い先端が離れ、穴の縁で光を拾った。梁は鳴らず、根だけが地上の朝へ伸びていく。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "watch",
+              "text": "根を見届ける",
+              "storyAction": {
+                "quest": "q030",
+                "action": "lit_watch"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q030",
+                  "action": "lit_watch"
+                },
+                {
+                  "op": "jump",
+                  "script": "q030.rootmorning.end.informed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q030.rootmorning.evacuate": {
+      "storyQuest": "q030",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q030",
+          "scene": "evacuate"
+        },
+        {
+          "op": "narrate",
+          "text": "住民はまだ地下にいる。地上の施療院裏には水の引ける林があるという。「人だけならすぐ。苗床も運ぶなら手を貸してください」とハナが担ぎ棒を差し出した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "beds",
+              "text": "苗床も運ぶ",
+              "storyAction": {
+                "quest": "q030",
+                "action": "evacuate_beds"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q030",
+                  "action": "evacuate_beds"
+                },
+                {
+                  "op": "jump",
+                  "script": "q030.rootmorning.packed"
+                }
+              ]
+            },
+            {
+              "id": "people",
+              "text": "人を先に",
+              "storyAction": {
+                "quest": "q030",
+                "action": "evacuate_people"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q030",
+                  "action": "evacuate_people"
+                },
+                {
+                  "op": "jump",
+                  "script": "q030.rootmorning.people_ready"
+                }
+              ]
+            },
+            {
+              "id": "return",
+              "text": "移転を保留",
+              "storyAction": {
+                "quest": "q030",
+                "action": "evacuate_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q030",
+                  "action": "evacuate_return"
+                },
+                {
+                  "op": "jump",
+                  "script": "q030.rootmorning.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q030.rootmorning.packed": {
+      "storyQuest": "q030",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q030",
+          "scene": "packed"
+        },
+        {
+          "op": "narrate",
+          "text": "土を崩さずに苗床の箱を担ぎ棒へ縛った。ハナが一行の結び目を引いて確かめ、住民を出口へ並ばせる。箱はまだ一行の手にある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "escort",
+              "text": "地上へ導く",
+              "storyAction": {
+                "quest": "q030",
+                "action": "packed_escort"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q030",
+                  "action": "packed_escort"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q030.rootmorning.unload": {
+      "storyQuest": "q030",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q030",
+          "scene": "unload"
+        },
+        {
+          "op": "narrate",
+          "text": "林で担ぎ棒を肩から下ろす。ハナと住民は地上に着いた。浅く掘った畝に箱を据えれば、地下で育てた薬草の苗がここに根を張れる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "plant",
+              "text": "苗を下ろす",
+              "storyAction": {
+                "quest": "q030",
+                "action": "unload_plant"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q030",
+                  "action": "unload_plant"
+                },
+                {
+                  "op": "jump",
+                  "script": "q030.rootmorning.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q030.rootmorning.people_ready": {
+      "storyQuest": "q030",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q030",
+          "scene": "people_ready"
+        },
+        {
+          "op": "narrate",
+          "text": "ハナが担ぎ棒を棚へ戻した。苗床を積む時間はない。住民を数え、歩くのが遅い人を先頭にして出口を目指す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "escort",
+              "text": "地上へ導く",
+              "storyAction": {
+                "quest": "q030",
+                "action": "people_ready_escort"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q030",
+                  "action": "people_ready_escort"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q030.rootmorning.count": {
+      "storyQuest": "q030",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q030",
+          "scene": "count"
+        },
+        {
+          "op": "narrate",
+          "text": "地上の林で呼び合う声に、一人ずつ返事がある。最後にハナが応え、空の手を開いた。苗床は地下に残した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "count",
+              "text": "人数を確認",
+              "storyAction": {
+                "quest": "q030",
+                "action": "count_count"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q030",
+                  "action": "count_count"
+                },
+                {
+                  "op": "jump",
+                  "script": "q030.rootmorning.end.people"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q030.rootmorning.stump": {
+      "storyQuest": "q030",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q030",
+          "scene": "stump"
+        },
+        {
+          "op": "narrate",
+          "text": "化身が倒れ、切り株の年輪から薬になる滴がにじんだ。ハナはまだ空の薬瓶を手にしている。雫を受け、栓をして初めて最後の薬を残せる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "bottle",
+              "text": "最後の薬を採る",
+              "storyAction": {
+                "quest": "q030",
+                "action": "stump_bottle"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q030",
+                  "action": "stump_bottle"
+                },
+                {
+                  "op": "jump",
+                  "script": "q030.rootmorning.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q030.rootmorning.end.informed": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q030",
+          "outcome": "informed"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "narrate",
+          "text": "地下に朝の光が差した。守る庭と伸びる木は、同じ穴を使える。"
+        }
+      ]
+    },
+    "q030.rootmorning.end.contract": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q030",
+          "outcome": "contract"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "narrate",
+          "text": "庭園は形を保った。ハナは切り株から取れる最後の薬を保存する。"
+        }
+      ]
+    },
+    "q030.rootmorning.end.compromise": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q030",
+          "outcome": "compromise"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "narrate",
+          "text": "庭園は森へ変わった。地上の新しい薬畑には、地下の名が付けられる。"
+        }
+      ]
+    },
+    "q030.rootmorning.end.people": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q030",
+          "outcome": "people"
+        },
+        {
+          "op": "add",
+          "target": "vars.people",
+          "value": 1
+        },
+        {
+          "op": "narrate",
+          "text": "住民は帰った。苗床は根に覆われ、次の薬草を育てる種を地上で集める仕事が残った。"
+        }
+      ]
+    },
+    "q030.rootmorning.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q030"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q030.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q030.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q030.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "地下に朝の光が差した。守る庭と伸びる木は、同じ穴を使える。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "庭園は形を保った。ハナは切り株から取れる最後の薬を保存する。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "庭園は森へ変わった。地上の新しい薬畑には、地下の名が付けられる。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "people",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "住民は帰った。苗床は根に覆われ、次の薬草を育てる種を地上で集める仕事が残った。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q030"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q030.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q030.rootmorning.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "supports",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q030.rootmorning.supports"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "light",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q030.rootmorning.light"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "mirror_rack",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q030.rootmorning.mirror_rack"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "mirror_held",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q030.rootmorning.mirror_held"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "align",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q030.rootmorning.align"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "lit",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q030.rootmorning.lit"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "evacuate",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q030.rootmorning.evacuate"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "packed",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q030.rootmorning.packed"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "unload",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q030.rootmorning.unload"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "people_ready",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q030.rootmorning.people_ready"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "count",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q030.rootmorning.count"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "stump",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q030.rootmorning.stump"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q030.rootmorning.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "garden": "地下庭園の薬草棚",
+      "opening": "古い明かり取り",
+      "rack": "反射鏡の置き場",
+      "surface": "地上の施療院裏の林",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "garden"
+      ],
+      [
+        "transit",
+        "opening"
+      ],
+      [
+        "transit",
+        "rack"
+      ],
+      [
+        "transit",
+        "surface"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "garden",
+        "values": [
+          "garden",
+          "opening",
+          "rack",
+          "surface",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "hanaAt": {
+        "type": "enum",
+        "initial": "garden",
+        "values": [
+          "garden",
+          "opening",
+          "rack",
+          "surface",
+          "transit"
+        ],
+        "meaning": "hana の所在または保持者"
+      },
+      "residentsAt": {
+        "type": "enum",
+        "initial": "garden",
+        "values": [
+          "garden",
+          "opening",
+          "rack",
+          "surface",
+          "transit"
+        ],
+        "meaning": "residents の所在または保持者"
+      },
+      "mirrorAt": {
+        "type": "enum",
+        "initial": "rack",
+        "values": [
+          "garden",
+          "opening",
+          "rack",
+          "surface",
+          "transit",
+          "party",
+          "hana",
+          "residents",
+          "beds"
+        ],
+        "meaning": "mirror の所在または保持者"
+      },
+      "bedsAt": {
+        "type": "enum",
+        "initial": "garden",
+        "values": [
+          "garden",
+          "opening",
+          "rack",
+          "surface",
+          "transit",
+          "party",
+          "hana",
+          "residents",
+          "mirror"
+        ],
+        "meaning": "beds の所在または保持者"
+      },
+      "braced": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "braced"
+      },
+      "postponed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "postponed"
+      },
+      "medicineStored": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "medicineStored"
+      },
+      "light": {
+        "type": "enum",
+        "initial": "pillar",
+        "values": [
+          "pillar",
+          "opening"
+        ],
+        "meaning": "日光が当たる場所"
+      },
+      "root": {
+        "type": "enum",
+        "initial": "growing",
+        "values": [
+          "growing",
+          "guided",
+          "stump",
+          "overgrown"
+        ],
+        "meaning": "根の状態"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "hana": {
+        "holder": "hanaAt",
+        "kind": "person",
+        "character": "e2_green_sleep_hana"
+      },
+      "residents": {
+        "holder": "residentsAt",
+        "kind": "person",
+        "character": "e2_root_morning_residents"
+      },
+      "mirror": {
+        "holder": "mirrorAt",
+        "kind": "item"
+      },
+      "beds": {
+        "holder": "bedsAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "towardLight": {
+        "text": "根の白い先端は反射光を追って動く。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [
+      {
+        "id": "light-source",
+        "condition": {
+          "op": "or",
+          "args": [
+            {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.light"
+                },
+                "right": "opening"
+              }
+            },
+            {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q030.values.braced"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q030.values.mirrorAt"
+                  },
+                  "right": "opening"
+                }
+              ]
+            }
+          ]
+        },
+        "message": "固定した鏡が補強済みの穴へ光を送る"
+      },
+      {
+        "id": "guided",
+        "condition": {
+          "op": "or",
+          "args": [
+            {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.root"
+                },
+                "right": "guided"
+              }
+            },
+            {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q030.values.braced"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q030.values.mirrorAt"
+                  },
+                  "right": "opening"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q030.values.light"
+                  },
+                  "right": "opening"
+                },
+                {
+                  "op": "contains",
+                  "left": {
+                    "ref": "stories.q030.knowledge.party"
+                  },
+                  "right": "towardLight"
+                }
+              ]
+            }
+          ]
+        },
+        "message": "光を移して根が追ったことを確かめる"
+      },
+      {
+        "id": "bottle",
+        "condition": {
+          "op": "or",
+          "args": [
+            {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.medicineStored"
+                },
+                "right": true
+              }
+            },
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q030.values.root"
+              },
+              "right": "stump"
+            }
+          ]
+        },
+        "message": "化身を倒した後の切り株から採薬する"
+      },
+      {
+        "id": "nursery",
+        "condition": {
+          "op": "or",
+          "args": [
+            {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.bedsAt"
+                },
+                "right": "surface"
+              }
+            },
+            {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q030.values.hanaAt"
+                  },
+                  "right": "surface"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q030.values.residentsAt"
+                  },
+                  "right": "surface"
+                }
+              ]
+            }
+          ]
+        },
+        "message": "苗床は住民とともに地上へ運んでから降ろす"
+      },
+      {
+        "id": "departure",
+        "condition": {
+          "op": "or",
+          "args": [
+            {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.root"
+                },
+                "right": "overgrown"
+              }
+            },
+            {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q030.values.hanaAt"
+                  },
+                  "right": "surface"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q030.values.residentsAt"
+                  },
+                  "right": "surface"
+                }
+              ]
+            }
+          ]
+        },
+        "message": "住民が逃げ切ってから庭を根に渡す"
+      }
+    ],
+    "scenes": {
+      "entry": {
+        "title": "地下庭園の薬草棚",
+        "place": "garden",
+        "cast": [
+          {
+            "entity": "hana",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q030.values.hanaAt"
+              },
+              "right": "garden"
+            },
+            "display": {
+              "x": 32,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "residents",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q030.values.residentsAt"
+              },
+              "right": "garden"
+            },
+            "display": {
+              "x": 68,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "supports": {
+        "title": "古い明かり取り",
+        "place": "opening",
+        "cast": [],
+        "requires": true
+      },
+      "light": {
+        "title": "古い明かり取り",
+        "place": "opening",
+        "cast": [],
+        "requires": true
+      },
+      "mirror_rack": {
+        "title": "反射鏡の置き場",
+        "place": "rack",
+        "cast": [],
+        "requires": true
+      },
+      "mirror_held": {
+        "title": "反射鏡の置き場",
+        "place": "rack",
+        "cast": [],
+        "requires": true
+      },
+      "align": {
+        "title": "古い明かり取り",
+        "place": "opening",
+        "cast": [],
+        "requires": true
+      },
+      "lit": {
+        "title": "古い明かり取り",
+        "place": "opening",
+        "cast": [],
+        "requires": true
+      },
+      "evacuate": {
+        "title": "地下庭園の薬草棚",
+        "place": "garden",
+        "cast": [
+          {
+            "entity": "hana",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q030.values.hanaAt"
+              },
+              "right": "garden"
+            },
+            "display": {
+              "x": 32,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "residents",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q030.values.residentsAt"
+              },
+              "right": "garden"
+            },
+            "display": {
+              "x": 68,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "packed": {
+        "title": "地下庭園の薬草棚",
+        "place": "garden",
+        "cast": [
+          {
+            "entity": "hana",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q030.values.hanaAt"
+              },
+              "right": "garden"
+            },
+            "display": {
+              "x": 32,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "residents",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q030.values.residentsAt"
+              },
+              "right": "garden"
+            },
+            "display": {
+              "x": 68,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "unload": {
+        "title": "地上の施療院裏の林",
+        "place": "surface",
+        "cast": [
+          {
+            "entity": "hana",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q030.values.hanaAt"
+              },
+              "right": "surface"
+            },
+            "display": {
+              "x": 32,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "residents",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q030.values.residentsAt"
+              },
+              "right": "surface"
+            },
+            "display": {
+              "x": 68,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "people_ready": {
+        "title": "地下庭園の薬草棚",
+        "place": "garden",
+        "cast": [
+          {
+            "entity": "hana",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q030.values.hanaAt"
+              },
+              "right": "garden"
+            },
+            "display": {
+              "x": 32,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "residents",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q030.values.residentsAt"
+              },
+              "right": "garden"
+            },
+            "display": {
+              "x": 68,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "count": {
+        "title": "地上の施療院裏の林",
+        "place": "surface",
+        "cast": [
+          {
+            "entity": "hana",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q030.values.hanaAt"
+              },
+              "right": "surface"
+            },
+            "display": {
+              "x": 32,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "residents",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q030.values.residentsAt"
+              },
+              "right": "surface"
+            },
+            "display": {
+              "x": 68,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "stump": {
+        "title": "地下庭園の薬草棚",
+        "place": "garden",
+        "cast": [
+          {
+            "entity": "hana",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q030.values.hanaAt"
+              },
+              "right": "garden"
+            },
+            "display": {
+              "x": 32,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "residents",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q030.values.residentsAt"
+              },
+              "right": "garden"
+            },
+            "display": {
+              "x": 68,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_brace": {
+        "from": [
+          "entry"
+        ],
+        "to": "supports",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "opening"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "opening",
+          "companions": []
+        },
+        "depart": []
+      },
+      "entry_move": {
+        "from": [
+          "entry"
+        ],
+        "to": "evacuate",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "entry_stop": {
+        "from": [
+          "entry"
+        ],
+        "to": "stump",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "root",
+            "value": "stump"
+          }
+        ],
+        "once": true
+      },
+      "supports_install": {
+        "from": [
+          "supports"
+        ],
+        "to": "light",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q030.values.braced"
+            },
+            "right": true
+          }
+        },
+        "effects": [
+          {
+            "op": "set",
+            "key": "braced",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "supports_check": {
+        "from": [
+          "supports"
+        ],
+        "to": "light",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q030.values.braced"
+          },
+          "right": true
+        },
+        "effects": [],
+        "once": false
+      },
+      "light_guide": {
+        "from": [
+          "light"
+        ],
+        "to": "mirror_rack",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "rack"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "rack",
+          "companions": []
+        },
+        "depart": []
+      },
+      "light_evacuate": {
+        "from": [
+          "light"
+        ],
+        "to": "evacuate",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "garden"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "garden",
+          "companions": []
+        },
+        "depart": []
+      },
+      "mirror_rack_lift": {
+        "from": [
+          "mirror_rack"
+        ],
+        "to": "mirror_held",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "mirror",
+            "from": "rack",
+            "to": "party"
+          }
+        ],
+        "once": true
+      },
+      "mirror_held_carry": {
+        "from": [
+          "mirror_held"
+        ],
+        "to": "align",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "opening"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "opening",
+          "companions": []
+        },
+        "depart": []
+      },
+      "align_aim": {
+        "from": [
+          "align"
+        ],
+        "to": "lit",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "mirror",
+            "from": "party",
+            "to": "opening"
+          },
+          {
+            "op": "set",
+            "key": "light",
+            "value": "opening"
+          }
+        ],
+        "once": true
+      },
+      "lit_watch": {
+        "from": [
+          "lit"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "towardLight",
+            "source": "opening",
+            "requires": true
+          },
+          {
+            "op": "set",
+            "key": "root",
+            "value": "guided"
+          }
+        ],
+        "once": true
+      },
+      "evacuate_beds": {
+        "from": [
+          "evacuate"
+        ],
+        "to": "packed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "beds",
+            "from": "garden",
+            "to": "party"
+          }
+        ],
+        "once": true
+      },
+      "evacuate_people": {
+        "from": [
+          "evacuate"
+        ],
+        "to": "people_ready",
+        "requires": true,
+        "effects": [],
+        "once": true
+      },
+      "evacuate_return": {
+        "from": [
+          "evacuate"
+        ],
+        "to": "entry",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "postponed",
+            "value": true
+          }
+        ],
+        "once": false
+      },
+      "packed_escort": {
+        "from": [
+          "packed"
+        ],
+        "to": "unload",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "hana",
+              "residents"
+            ],
+            "path": [
+              "transit",
+              "surface"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "surface",
+          "companions": [
+            "hana",
+            "residents"
+          ]
+        },
+        "depart": []
+      },
+      "unload_plant": {
+        "from": [
+          "unload"
+        ],
+        "ending": "compromise",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "beds",
+            "from": "party",
+            "to": "surface"
+          },
+          {
+            "op": "set",
+            "key": "root",
+            "value": "overgrown"
+          }
+        ],
+        "once": true
+      },
+      "people_ready_escort": {
+        "from": [
+          "people_ready"
+        ],
+        "to": "count",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "hana",
+              "residents"
+            ],
+            "path": [
+              "transit",
+              "surface"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "surface",
+          "companions": [
+            "hana",
+            "residents"
+          ]
+        },
+        "depart": []
+      },
+      "count_count": {
+        "from": [
+          "count"
+        ],
+        "ending": "people",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "root",
+            "value": "overgrown"
+          }
+        ],
+        "once": true
+      },
+      "stump_bottle": {
+        "from": [
+          "stump"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "medicineStored",
+            "value": true
+          }
+        ],
+        "once": true
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q030.values.root"
+            },
+            "right": "guided"
+          },
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.braced"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.mirrorAt"
+                },
+                "right": "opening"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.light"
+                },
+                "right": "opening"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "stories.q030.knowledge.party"
+                },
+                "right": "towardLight"
+              }
+            ]
+          }
+        ]
+      },
+      "contract": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q030.values.root"
+            },
+            "right": "stump"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q030.values.medicineStored"
+            },
+            "right": true
+          }
+        ]
+      },
+      "compromise": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.hanaAt"
+                },
+                "right": "surface"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.residentsAt"
+                },
+                "right": "surface"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q030.values.bedsAt"
+            },
+            "right": "surface"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q030.values.root"
+            },
+            "right": "overgrown"
+          }
+        ]
+      },
+      "people": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.hanaAt"
+                },
+                "right": "surface"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q030.values.residentsAt"
+                },
+                "right": "surface"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q030.values.bedsAt"
+            },
+            "right": "garden"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q030.values.root"
+            },
+            "right": "overgrown"
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "garden": {
+        "kind": "dungeon",
+        "dungeon": "region_3",
+        "map": "region_3_f2",
+        "x": 12,
+        "y": 9,
+        "event": "q030_root_morning_garden"
+      },
+      "opening": {
+        "kind": "dungeon",
+        "dungeon": "region_3",
+        "map": "region_3_f2",
+        "x": 10,
+        "y": 9,
+        "event": "q030_root_morning_opening"
+      },
+      "rack": {
+        "kind": "dungeon",
+        "dungeon": "region_3",
+        "map": "region_3_f2",
+        "x": 9,
+        "y": 11,
+        "event": "q030_root_morning_rack"
+      },
+      "surface": {
+        "kind": "town",
+        "location": "e2_grove"
+      }
+    },
+    "revision": 1
+  }
+}

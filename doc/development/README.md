@@ -1,5 +1,7 @@
 # 保守・検証記録
 
+[q030「根の向こうの朝」の補強・採光・避難](Q030_WORLD_ROUTE.md)・[q051「釣銭のない店」の原本試遊](Q051_WORLD_ROUTE_PLAN.md)
+
 [q029「赤い蜜の契約」の返却・購入・納品](Q029_WORLD_ROUTE.md)・[q030「根の向こうの朝」の原本試遊](Q030_WORLD_ROUTE_PLAN.md)
 
 [q028「庭師の空席」の実演・道具配置・記録](Q028_WORLD_ROUTE.md)・[q029「赤い蜜の契約」の原本試遊](Q029_WORLD_ROUTE_PLAN.md)
