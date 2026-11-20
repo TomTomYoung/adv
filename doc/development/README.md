@@ -1,5 +1,7 @@
 # 保守・検証記録
 
+[地下市場 q052〜q055 の競売・納品・質草・試着と検証](Q052_Q055_WORLD_ROUTES.md)
+
 [q051「釣銭のない店」の返金と食事の精算](Q051_WORLD_ROUTE.md)・[q052「幽霊の競り札」の原本試遊](Q052_WORLD_ROUTE_PLAN.md)
 
 [q030「根の向こうの朝」の補強・採光・避難](Q030_WORLD_ROUTE.md)・[q051「釣銭のない店」の原本試遊](Q051_WORLD_ROUTE_PLAN.md)
