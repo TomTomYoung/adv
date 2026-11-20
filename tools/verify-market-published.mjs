@@ -56,6 +56,15 @@ try{
           const button=page.locator('#app [data-focus="choice:'+intent.id+'"]:visible');
           for(let n=0;n<25&&!await button.isVisible();n++)await page.locator('#app [data-focus="message:next"]:visible').click({timeout:7000});
           await button.click({timeout:10000});
+          if(intent.id==='fight'&&(quest==='q059'||quest==='q060')){
+            const encounter=await page.evaluate(()=>{
+              const g=questPlaytest.trial.engine,save=g.save();
+              g.load(save);questPlaytest.render();
+              return g.save()===save&&g.state.battle?.encounter;
+            });
+            assert.equal(encounter,quest==='q059'?'guard_6':'boss_6');
+            console.log('PUBLIC_BATTLE_SAVE',quest,encounter);
+          }
         }else if(intent.type!=='advance'||!await page.evaluate(()=>questPlaytest.report().status==='cleared')){
           assert.ok(await page.evaluate(i=>questPlaytest.dispatch(i),intent),JSON.stringify({quest,intent}));
         }
