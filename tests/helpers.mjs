@@ -64,9 +64,9 @@ export function exploreSpot(engine,spot,options={}){
 // Town navigation is deliberate; services and dungeon entrances do not relocate the party.
 export function goTownLocation(g,destination){
   assert.equal(g.state.mode,'town');
-  while(data.locations[g.state.townLocation].parent)assert.ok(g.dispatch({type:'location.move',id:data.locations[g.state.townLocation].parent}));
+  while(g.data.locations[g.state.townLocation].parent)assert.ok(g.dispatch({type:'location.move',id:g.data.locations[g.state.townLocation].parent}));
   const route=[];let id=destination;
-  while(data.locations[id].parent){route.unshift(id);id=data.locations[id].parent;}
+  while(g.data.locations[id].parent){route.unshift(id);id=g.data.locations[id].parent;}
   for(const next of route)assert.ok(g.dispatch({type:'location.move',id:next}));
   assert.equal(g.state.townLocation,destination);
 }
@@ -82,14 +82,14 @@ export function leaveDungeonOnFoot(g){
 }
 
 export function leaveInterior(g){
-  if(!dungeonInterior(data,g.state))return;
-  while(data.locations[g.state.townLocation].parent)assert.ok(g.dispatch({type:'location.move',id:data.locations[g.state.townLocation].parent}));
+  if(!dungeonInterior(g.data,g.state))return;
+  while(g.data.locations[g.state.townLocation].parent)assert.ok(g.dispatch({type:'location.move',id:g.data.locations[g.state.townLocation].parent}));
   assert.ok(g.dispatch({type:'location.exit'}));drain(g);
 }
 export function goWorldLocation(g,destination){
-  const root=locationRoot(data,destination),entrance=root.dungeonEntrance;
+  const root=locationRoot(g.data,destination),entrance=root.dungeonEntrance;
   if(!entrance){leaveDungeonOnFoot(g);goTownLocation(g,destination);return;}
-  if(g.state.mode!=='town'||locationRoot(data,g.state.townLocation)?.id!==root.id){
+  if(g.state.mode!=='town'||locationRoot(g.data,g.state.townLocation)?.id!==root.id){
     leaveInterior(g);
     if(g.state.mode==='dungeon'&&g.state.dungeons.active.id!==entrance.dungeon)leaveDungeonOnFoot(g);
     exploreSpot(g,entrance,{maintain:true,interact:false});

@@ -23,7 +23,7 @@ const roles={
 };
 export const greenSleepCharacters=Object.fromEntries(Object.entries(roles).map(([key,[name,goal]])=>{
   const id='e2_green_sleep_'+key;
-  return [id,{id,name,goal,quests:['q022'],detail:goal}];
+  return [id,{id,name,goal,quests:key==='hana'?['q022','q030']:['q022'],detail:goal}];
 }));
 
 export function greenSleepSource(){
