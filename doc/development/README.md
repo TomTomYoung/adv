@@ -1,5 +1,7 @@
 # 保守・検証記録
 
+[q051「釣銭のない店」の返金と食事の精算](Q051_WORLD_ROUTE.md)・[q052「幽霊の競り札」の原本試遊](Q052_WORLD_ROUTE_PLAN.md)
+
 [q030「根の向こうの朝」の補強・採光・避難](Q030_WORLD_ROUTE.md)・[q051「釣銭のない店」の原本試遊](Q051_WORLD_ROUTE_PLAN.md)
 
 [q029「赤い蜜の契約」の返却・購入・納品](Q029_WORLD_ROUTE.md)・[q030「根の向こうの朝」の原本試遊](Q030_WORLD_ROUTE_PLAN.md)
