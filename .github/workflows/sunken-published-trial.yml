@@ -1,0 +1,131 @@
+name: Verify published q061–q070 sunken castle endings
+on:
+  push:
+    branches: [codex/verify-sunken-q061-q070-20261120]
+    paths: ['.github/workflows/sunken-published-trial.yml']
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: e99ecd30eec89ee05bfe5740a1546cefb7199846
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --package-lock=false playwright@1.58.2
+      - name: Test 372 starting conditions and play 31 endings on Pages
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import {pathToFileURL} from 'url';
+          import {chromium} from 'playwright';
+          import {createHash} from 'node:crypto';
+          const root=process.cwd(),ref=p=>pathToFileURL(root+'/'+p).href;
+          const {data,go,drain,audit}=await import(ref('tests/royal-helpers.mjs'));
+          const {fight,maintainParty}=await import(ref('tests/helpers.mjs'));
+          const {createQuestTrial,questTrialReport}=await import(ref('src/application/quest-playtest.js'));
+          const catalog=JSON.parse(fs.readFileSync('playtests/quest-parties.json')),graph=Object.fromEntries(Array.from({length:10},(_,i)=>{const q='q0'+(61+i);return [q,audit(q)];}));
+          const rows=[],errors=[],traces=[];
+          for(const [quest,{ends}] of Object.entries(graph))for(const [outcome,path] of Object.entries(ends))for(const start of ['site','reception'])for(const level of [7,8])for(const party of ['balanced','sustain','support']){
+           let g,step='setup';const spec={quest,party,level,seed:1907,start,battleMode:'classic',outcome};
+           try{
+            const t=createQuestTrial(data,catalog,spec);g=t.engine;
+            const ts=[],log=party==='balanced'&&level===7&&start==='site',dispatch=g.dispatch.bind(g);
+            g.dispatch=i=>{
+             if(i.type==='move'&&i.direction==='forward')maintainParty(g);
+             const ok=dispatch(i);
+             if(ok&&log)ts.push(i);
+             if(ok&&i.type==='move'&&g.state.battle){
+              drain(g);
+              const air=g.state.dungeons.active?.systems.air?.air;
+              if(g.state.battle&&air!==undefined&&air<=data.dungeons.region_7.systems.air.warning&&data.encounters[g.state.battle.encounter].escape){
+               g.dispatch({type:'battle',action:'escape'});drain(g);
+              }
+              if(g.state.battle)fight(g);
+             }
+             return ok;
+            };
+            drain(g);const story=data.quests[quest].story;
+            if(start==='reception'){
+             step='approach';go(g,story.worldPlaces[story.scenes.entry.place]);if(!g.state.stories[quest])assert.ok(g.dispatch({type:'story.resume',quest}),g.state.notice);drain(g);
+            }
+            function save(){const a=g.save();g.load(a);assert.equal(g.save(),a);if(log)ts.push({type:'test.reload'});}
+            for(const id of path){
+             step=id;assert.ok(g.dispatch({type:'choose',id}),g.state.notice);drain(g);
+             if(g.state.battle){save();fight(g);drain(g);}
+             if(g.state.journey){save();go(g,story.worldPlaces[story.actions[g.state.journey.action].journey.to]);if(g.state.journey)assert.ok(g.dispatch({type:'story.resume',quest}));drain(g);}
+             save();
+            }
+            const report=questTrialReport(t);
+            assert.equal(report.status,'cleared');assert.equal(report.outcome,outcome);assert.equal(report.rescues,0);
+            rows.push({...spec,steps:report.steps,wins:report.records.wins});
+            if(log)traces.push({quest,outcome,path,commands:ts,report:{gold:report.gold,records:report.records,steps:report.steps},values:g.state.stories[quest].values});
+           }catch(e){errors.push({...spec,step,error:e.message.slice(0,180),notice:g?.state.notice,mode:g?.state.mode,loc:g?.state.townLocation,active:g?.state.dungeons?.active?.id});}
+          }
+          
+          assert.deepEqual(errors,[]);assert.equal(rows.length,372);assert.equal(traces.length,31);
+          console.log('Normal trials',rows.length,'distinct endings',traces.length,'choices and completion states',Object.values(graph).reduce((s,r)=>s+r.states,0));
+          const base='https://tomtomyoung.github.io/adv/', files=['runtime.json','data/scenario-editions.json','playtests/quest-parties.json','data/scenario-editions/e2/geography.json',...Object.keys(graph).map(q=>'data/scenario-editions/e2/'+q+'.json')];
+          const hash=b=>createHash('sha256').update(b).digest('hex');
+          for(const file of files){
+           const resp=await fetch(base+file+'?check='+process.env.GITHUB_RUN_ID);
+           assert.ok(resp.ok,file+' '+resp.status);assert.equal(hash(Buffer.from(await resp.arrayBuffer())),hash(fs.readFileSync(file)),file);
+          }
+          console.log('Release files verified',files.length);
+          const browser=await chromium.launch({args:['--no-sandbox']});
+          let saves=0,wins=0,done=0;const counts={},errorsSeen=[];
+          try{
+           const page=await browser.newPage({viewport:{width:390,height:844}});
+           page.on('pageerror',e=>errorsSeen.push(e.message));
+           const url=base+'quest-party-playtest.html?edition=e2&quest=q061&party=balanced&level=7&start=site&outcome=informed&seed=1907&battleMode=classic';
+           assert.equal((await page.goto(url,{waitUntil:'domcontentloaded'})).status(),200);
+           await page.locator('#launch:enabled').waitFor({timeout:120000});await page.selectOption('#effects','off');
+           async function replay(intents){
+             if(!intents.length)return;
+             const seen=await page.evaluate(intents=>{
+               let checked=0;
+               for(const intent of intents){
+                 if(intent.type==='test.reload'){
+                   const g=questPlaytest.trial.engine,a=g.save();g.load(a);questPlaytest.render();
+                   if(g.save()!==a)throw Error('save mismatch');checked++;
+                 }else if(!(intent.type==='advance'&&questPlaytest.report().status==='cleared')&&!questPlaytest.dispatch(intent)){
+                   throw Error('Rejected intent '+JSON.stringify(intent)+' '+questPlaytest.trial.engine.state.notice);
+                 }
+               }
+               return checked;
+             },intents);
+             saves+=seen;intents.length=0;
+           }
+           for(const t of traces){
+             await page.selectOption('#quest',t.quest);await page.selectOption('#outcome',t.outcome);await page.click('#launch');
+             await page.waitForFunction(q=>window.questPlaytest?.trial?.engine?.state.quests[q]?.stage==='active',t.quest);
+             const batch=[];
+             for(const intent of t.commands){
+               if(intent.type==='choose'&&t.path.includes(intent.id)){
+                 await replay(batch);
+                 const btn=page.locator('#app [data-focus="choice:'+intent.id+'"]:visible');
+                 for(let n=0;n<35&&!await btn.isVisible();n++)await page.locator('#app [data-focus="message:next"]:visible').click({timeout:7000});
+                 await btn.click({timeout:12000});
+               }else batch.push(intent);
+             }
+             await replay(batch);
+             const actual=await page.evaluate(q=>({report:questPlaytest.report(),values:questPlaytest.trial.engine.state.stories[q].values}),t.quest);
+             assert.equal(actual.report.status,'cleared');assert.equal(actual.report.outcome,t.outcome);assert.equal(actual.report.rescues,0);
+             assert.equal(actual.report.steps,t.report.steps);assert.deepEqual(actual.report.gold,t.report.gold);assert.deepEqual(actual.report.records,t.report.records);
+             assert.deepEqual(actual.values,t.values);
+             done++;wins+=actual.report.records.wins;counts[t.quest]=(counts[t.quest]??0)+1;
+             console.log('PUBLISHED',t.quest,t.outcome,actual.report.steps);
+           }
+           assert.deepEqual(errorsSeen,[]);assert.equal(done,31);
+           console.log('PUBLIC TOTAL',JSON.stringify({done,saves,wins,counts}));
+           await fs.promises.appendFile(process.env.GITHUB_STEP_SUMMARY,`公開中の q061〜q070（master e99ecd30）を検証しました。通常試遊372件、公開版の31結末、保存再読込 ${saves} 回、配信14ファイルの一致を確認しました。\n`);
+          }finally{await browser.close();}
+          JS
