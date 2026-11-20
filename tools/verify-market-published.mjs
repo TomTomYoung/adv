@@ -4,9 +4,13 @@ import {readFile} from 'node:fs/promises';
 import {setTimeout as delay} from 'node:timers/promises';
 import {chromium} from 'playwright';
 import {createQuestTrial,questTrialReport} from '../src/application/quest-playtest.js';
-import {data,catalog,routes,arrive,expectedValues} from '../tests/market-world-helpers.mjs';
 import {drain,fight} from '../tests/helpers.mjs';
 
+const footprints=process.argv.includes('--q091');
+const {data,catalog,routes,arrive,expectedValues}=footprints
+  ?await import('../tests/q091-helpers.mjs')
+  :await import('../tests/market-world-helpers.mjs');
+const level=footprints?10:6;
 const base='https://tomtomyoung.github.io/adv/',hash=b=>createHash('sha256').update(b).digest('hex');
 const quests=Object.keys(routes),files=['runtime.json','data/scenario-editions.json','data/scenario-editions/e2/geography.json',
   'data/scenario-editions/e2/companions.json','playtests/quest-parties.json',...quests.flatMap(q=>['data/quests/'+q+'.json','data/scenario-editions/e2/'+q+'.json'])];
@@ -24,7 +28,7 @@ async function verifyFile(path){
 await Promise.all(files.map(verifyFile));console.log('Verified release files',files.length);
 
 function trace(quest,route){
-  const trial=createQuestTrial(data,catalog,{quest,party:'balanced',level:6,start:'site',outcome:route.outcome,battleMode:'classic',seed:1907});
+  const trial=createQuestTrial(data,catalog,{quest,party:'balanced',level,start:'site',outcome:route.outcome,battleMode:'classic',seed:1907});
   const g=trial.engine,commands=[],dispatch=g.dispatch.bind(g);
   g.dispatch=intent=>{const ok=dispatch(intent);if(ok)commands.push(intent);return ok;};
   drain(g);
@@ -41,7 +45,7 @@ try{
   const page=await browser.newPage({viewport:{width:390,height:844}}),errors=[],q038=[];
   page.on('pageerror',e=>errors.push(e.message));
   page.on('response',r=>{if(new URL(r.url()).pathname.endsWith('/e2/q038.json'))q038.push(r.status());});
-  const url=base+'quest-party-playtest.html?edition=e2&quest=q052&party=balanced&level=6&start=site&outcome=informed&seed=1907&battleMode=classic';
+  const url=base+'quest-party-playtest.html?edition=e2&quest='+quests[0]+'&party=balanced&level='+level+'&start=site&outcome=informed&seed=1907&battleMode=classic';
   assert.equal((await page.goto(url,{waitUntil:'domcontentloaded'})).status(),200);
   await page.locator('#launch:enabled').waitFor({timeout:120000});
   assert.ok(q038.includes(200));await page.selectOption('#effects','off');
@@ -56,6 +60,14 @@ try{
           const button=page.locator('#app [data-focus="choice:'+intent.id+'"]:visible');
           for(let n=0;n<25&&!await button.isVisible();n++)await page.locator('#app [data-focus="message:next"]:visible').click({timeout:7000});
           await button.click({timeout:10000});
+          if(footprints&&intent.id==='return'){
+            const waiting=await page.evaluate(()=>{
+              const g=questPlaytest.trial.engine,save=g.save();g.load(save);questPlaytest.render();
+              const {restChecked,journalAt}=g.state.stories.q091.values;
+              return {same:g.save()===save,restChecked,journalAt,action:g.state.journey?.action};
+            });
+            assert.deepEqual(waiting,{same:true,restChecked:true,journalAt:'noa',action:'checked_return'});
+          }
           if(intent.id==='fight'&&(quest==='q059'||quest==='q060')){
             const encounter=await page.evaluate(()=>{
               const g=questPlaytest.trial.engine,save=g.save();

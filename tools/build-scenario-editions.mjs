@@ -1,3 +1,4 @@
+import {buildReturningFootprints} from './build-q091-world-route.mjs';
 import {buildTwoGraves} from './build-q017-world-route.mjs';
 import {buildWhiteDebt} from './build-q018-world-route.mjs';
 import {buildMineScale} from './build-q019-world-route.mjs';
@@ -175,6 +176,7 @@ export async function buildScenarioEditions({check=false}={}){
  await buildRootMorning({check});
  await buildChangeCounter({check});
  await buildMarketWorldRoutes({check});
+ await buildReturningFootprints({check});
  await buildCompanionEdition({check});
  const geography=await buildOddlandGeography({check});
  await buildSalomeGeography(geography,{check});
