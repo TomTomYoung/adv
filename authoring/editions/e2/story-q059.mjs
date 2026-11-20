@@ -32,7 +32,7 @@ export function feastSource(){
     O('sign','共同炊事を契約','@informed',[set('agreement','cooperative')])
   ]);
   scene('beast','pantry','食糧の木箱に獣が爪を立てている。予約者の名札の付いた箱はまだ閉じたままだ。獣が退けば、予約どおりに宴へ運べる。',[
-    O('fight','獣を追い払う','safe',[set('beastDefeated')],{combat:'guard_6',combatRequirement:'勝利後に食糧を搬出'})
+    O('fight','獣と戦う','safe',[set('beastDefeated')],{combat:'guard_6',combatRequirement:'要勝利'})
   ]);
   scene('safe','pantry','獣が床から飛び退き、棚の奥へ消えた。キクが確認した百人分の箱を一行に託す。勘定はまだ予約者一人の名に付いている。',[
     O('load','百人分を積む','loaded',[give('food','pantry','party')])

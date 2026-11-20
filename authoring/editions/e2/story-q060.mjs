@@ -40,8 +40,8 @@ export function wakingSource(){
     O('rotate','交代通行表を配る','@compromise',[set('gates','rotating'),set('timetable')],{when:is('tested',false),visibleWhen:is('tested',false)}),
     O('one','一門の時刻を掲示','@compromise',[set('gates','trialTimed'),set('timetable')],{when:is('tested'),visibleWhen:is('tested')})
   ]);
-  scene('warden','gate','格子に触れると結界の番人が立った。倒せば出口は自由になる。ゼンは守りが消えた後の夜回りを、店ごとに手配し始めた。',[
-    O('fight','番人と戦う','unbound',[set('guardDefeated'),set('protection','lost')],{combat:'boss_6',combatRequirement:'逃走不可・勝利で結界を解除'})
+  scene('warden','gate','格子に触れると結界の番人が立った。ここで戦いを挑めば逃げられない。倒せば出口は自由になる。ゼンは守りが消えた後の夜回りを、店ごとに手配し始めた。',[
+    O('fight','番人と戦う','unbound',[set('guardDefeated'),set('protection','lost')],{combat:'boss_6',combatRequirement:'逃走不可'})
   ]);
   scene('unbound','gate','番人の姿が消え、店先の保護灯が一斉に落ちた。格子にはもう結界の重みがない。ゼンと一緒に閂を上げれば人も商品も通れる。',[
     O('lift','格子を開け放つ','@contract',[set('gates','free')])
