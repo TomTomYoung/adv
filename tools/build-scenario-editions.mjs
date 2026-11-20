@@ -10,6 +10,7 @@ import {buildRainSong} from './build-q025-world-route.mjs';
 import {buildOrchardPromise} from './build-q026-world-route.mjs';
 import {buildPollenRansom} from './build-q027-world-route.mjs';
 import {buildGardenersSeat} from './build-q028-world-route.mjs';
+import {buildMarketWorldRoutes} from './build-market-world-routes.mjs';
 import {buildChangeCounter} from './build-q051-world-route.mjs';
 import {buildRootMorning} from './build-q030-world-route.mjs';
 import {buildRedHoney} from './build-q029-world-route.mjs';
@@ -173,6 +174,7 @@ export async function buildScenarioEditions({check=false}={}){
  await buildRedHoney({check});
  await buildRootMorning({check});
  await buildChangeCounter({check});
+ await buildMarketWorldRoutes({check});
  await buildCompanionEdition({check});
  const geography=await buildOddlandGeography({check});
  await buildSalomeGeography(geography,{check});
