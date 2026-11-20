@@ -1,20 +1,21 @@
 import {story,or,not} from '../../story-kit.mjs';
 import {connectWorld} from '../../world-story-kit.mjs';
 
-export function marketQuest(number,sites,people){
+export function marketQuest(number,sites,people,{floor=1,characterIds={}}={}){
   const id='q'+String(number).padStart(3,'0');
   const characters={}, places={},world={};
+  const characterId=who=>characterIds[who]??'e2_'+id+'_'+who;
   for(const [place,[name,x,y]] of Object.entries(sites)){
     places[place]=name;
-    world[place]={kind:'dungeon',dungeon:'region_6',map:'region_6_f1',x,y,event:id+'_market_'+place};
+    world[place]={kind:'dungeon',dungeon:'region_6',map:'region_6_f'+floor,x,y,event:id+'_market_'+place};
   }
   for(const [who,[,name,goal]] of Object.entries(people)){
-    const key='e2_'+id+'_'+who;
+    const key=characterId(who);
     characters[key]={id:key,name,goal,detail:goal+'。',quests:[id]};
   }
   function create(){
     const s=story(number,{...places},[]);
-    for(const [who,[place]] of Object.entries(people))s.entity(who,place,'e2_'+id+'_'+who);
+    for(const [who,[place]] of Object.entries(people))s.entity(who,place,characterId(who));
     const peopleHere=Object.keys(people);
     function scene(key,place,text,choices){
       s.node(key,place,peopleHere.filter(who=>people[who][0]===place||people[who][3]?.includes(place)),text,choices);

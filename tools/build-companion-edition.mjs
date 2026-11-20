@@ -1,3 +1,8 @@
+import {theatreCharacters} from '../authoring/editions/e2/story-q056.mjs';
+import {stallCharacters} from '../authoring/editions/e2/story-q057.mjs';
+import {exchangeCharacters} from '../authoring/editions/e2/story-q058.mjs';
+import {feastCharacters} from '../authoring/editions/e2/story-q059.mjs';
+import {wakingCharacters} from '../authoring/editions/e2/story-q060.mjs';
 import {auctionCharacters} from '../authoring/editions/e2/story-q052.mjs';
 import {foodCharacters} from '../authoring/editions/e2/story-q053.mjs';
 import {dreamCharacters} from '../authoring/editions/e2/story-q054.mjs';
@@ -45,6 +50,12 @@ export async function companionBundle(){
  const quests=Object.entries(arcs).flatMap(([actor,episodes])=>episodes.map((s,index)=>compileEpisode(s,actor,index)));
  if(quests.length!==80||Object.values(arcs).some(a=>a.length!==10))throw Error('仲間連作は8人各10件');
  Object.assign(characters,saltBrideCharacters,threePicksCharacters,breathingVeinCharacters,returnCartCharacters,weepingPillarCharacters,silentBlastCharacters,twoGravesCharacters,whiteDebtCharacters,mineScaleCharacters,crownCharacters,seedBirdCharacters,greenSleepCharacters,motherRingCharacters,edibleMapCharacters,rainSongCharacters,orchardPromiseCharacters,pollenRansomCharacters,gardenersSeatCharacters,redHoneyCharacters,rootMorningCharacters,changeCounterCharacters,auctionCharacters,foodCharacters,dreamCharacters,shadowCharacters);
+ for(const cast of [theatreCharacters,stallCharacters,exchangeCharacters,feastCharacters,wakingCharacters]){
+  for(const [id,person] of Object.entries(cast)){
+   const existing=characters[id];
+   characters[id]=existing?{...existing,quests:[...existing.quests,...person.quests]}:person;
+  }
+ }
  return {schemaVersion:1,characters,locations,regions:[{id:11,kind:'story',name:'仲間と巡るトルネア',description:'第2版の仲間連作。街道・地下街・学術都市の各拠点を実際に移動して進める。',color:'#bdaca0',recommendedLevel:2}],quests};
 }
 function document(actor,quests){

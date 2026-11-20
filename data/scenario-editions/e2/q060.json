@@ -1,0 +1,4132 @@
+{
+  "schemaVersion": 1,
+  "id": "q060",
+  "number": 60,
+  "title": "市場の目覚まし",
+  "client": "市場番のゼン",
+  "brief": "地上への出口が開くと市場の結界が消える。商人たちの意思をまとめてください。",
+  "region": 6,
+  "type": "authored_progression",
+  "recommendedLevel": 6,
+  "requires": {
+    "op": "gte",
+    "left": {
+      "ref": "vars.region_6"
+    },
+    "right": 3
+  },
+  "unlockHint": "この地域の依頼を3件完了すると受注できる。",
+  "events": [
+    {
+      "id": "q060_clue_a",
+      "title": "市場の目覚まし：現場の痕跡",
+      "points": [
+        {
+          "map": "region_6_f2",
+          "x": 4,
+          "y": 5,
+          "dungeon": "region_6"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q060.clue_a",
+      "role": "clue_a",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q060.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q060"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q060"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_6"
+    },
+    {
+      "id": "q060_clue_b",
+      "title": "市場の目覚まし：記録と証言",
+      "points": [
+        {
+          "map": "region_6_f2",
+          "x": 14,
+          "y": 1,
+          "dungeon": "region_6"
+        }
+      ],
+      "kind": "clue",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q060.clue_b",
+      "role": "clue_b",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q060.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q060"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q060"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_6"
+    },
+    {
+      "id": "q060_decision",
+      "title": "市場の目覚まし：決着の場",
+      "points": [
+        {
+          "map": "region_6_f2",
+          "x": 11,
+          "y": 10,
+          "dungeon": "region_6"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q060.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q060.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q060.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q060"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_6"
+    },
+    {
+      "id": "region_6",
+      "title": "通行を約束する相手",
+      "dungeon": "region_6",
+      "points": [
+        {
+          "map": "region_6_f1",
+          "x": 1,
+          "y": 2,
+          "dungeon": "region_6"
+        }
+      ],
+      "trigger": "action",
+      "script": "dungeon.scene.region_6.v1",
+      "condition": {
+        "op": "in",
+        "left": {
+          "ref": "quests.q060.stage"
+        },
+        "right": [
+          "active",
+          "completed"
+        ]
+      },
+      "requirement": "関連する依頼を受けると調査できる。",
+      "note": {
+        "text": "入口側の通行取引が成立し、横道が開くことを確認した。この通行権と、市場全体を守る共同保証は別の約束として扱う。",
+        "when": {
+          "op": "eq",
+          "left": {
+            "ref": "flags.dungeonNotes.region_6"
+          },
+          "right": true
+        }
+      }
+    },
+    {
+      "id": "q060_market_gate",
+      "title": "市場の目覚まし：夜市の閉じた出口",
+      "points": [
+        {
+          "dungeon": "region_6",
+          "map": "region_6_f2",
+          "x": 11,
+          "y": 10
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "interactionRange": "here",
+      "safe": true,
+      "script": "q060.market.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q060.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q060.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.currentStoryRoutes.q060"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_6"
+    },
+    {
+      "id": "q060_market_shops",
+      "title": "市場の目覚まし：大店と露店の通り",
+      "points": [
+        {
+          "dungeon": "region_6",
+          "map": "region_6_f2",
+          "x": 11,
+          "y": 9
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "interactionRange": "here",
+      "safe": true,
+      "script": "q060.market.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q060.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q060.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.currentStoryRoutes.q060"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_6"
+    },
+    {
+      "id": "q060_market_test_gate",
+      "title": "市場の目覚まし：荷運び用の試験門",
+      "points": [
+        {
+          "dungeon": "region_6",
+          "map": "region_6_f2",
+          "x": 11,
+          "y": 11
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "interactionRange": "here",
+      "safe": true,
+      "script": "q060.market.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q060.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q060.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.currentStoryRoutes.q060"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_6"
+    },
+    {
+      "id": "q060_market_desk",
+      "title": "市場の目覚まし：夜市の門番詰所",
+      "points": [
+        {
+          "dungeon": "region_6",
+          "map": "region_6_f2",
+          "x": 12,
+          "y": 11
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "interactionRange": "here",
+      "safe": true,
+      "script": "q060.market.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q060.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q060.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.currentStoryRoutes.q060"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_6"
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_6_f2",
+      "x": 4,
+      "y": 5,
+      "object": "q060_clue_a",
+      "role": "clue_a"
+    },
+    {
+      "map": "region_6_f2",
+      "x": 14,
+      "y": 1,
+      "object": "q060_clue_b",
+      "role": "clue_b"
+    },
+    {
+      "map": "region_6_f2",
+      "x": 11,
+      "y": 10,
+      "object": "q060_decision",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "informed": {
+      "label": "全出口を共同保証へ接続して開ける",
+      "text": "市場は朝にも開いた。ゼンは門番から、二つの世界の道案内になる。",
+      "gold": 117,
+      "xp": 108,
+      "requires": {
+        "op": "eq",
+        "left": {
+          "ref": "stories.q060.values.gates"
+        },
+        "right": "all"
+      }
+    },
+    "contract": {
+      "label": "結界の番人を倒して自由通行にする",
+      "text": "人と商品は通った。守りを失った夜の見回りは、商人が自分で始める。",
+      "gold": 137,
+      "xp": 82,
+      "requires": {
+        "op": "eq",
+        "left": {
+          "ref": "stories.q060.values.gates"
+        },
+        "right": "free"
+      }
+    },
+    "compromise": {
+      "label": "出口を時間制にし、交代で通す",
+      "text": "完全な自由ではない。地下と地上を結ぶ時刻表が配られる。",
+      "gold": 76,
+      "xp": 81,
+      "requires": {
+        "op": "eq",
+        "left": {
+          "ref": "stories.q060.values.timetable"
+        },
+        "right": true
+      }
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/story-q060.mjs",
+    "world": {
+      "truth": "結界は夜間営業の保護で、出口を開いても共同保証を組めば維持できる。",
+      "history": [
+        {
+          "id": "e0",
+          "event": "結界は夜間営業の保護で、出口を開いても共同保証を組めば維持できる。",
+          "causes": []
+        },
+        {
+          "id": "e1",
+          "event": "地上への出口が開くと市場の結界が消える。商人たちの意思をまとめてください。",
+          "causes": [
+            "e0"
+          ]
+        }
+      ]
+    },
+    "agents": [
+      {
+        "id": "client",
+        "name": "市場番のゼン",
+        "observation": "地上への出口が開くと市場の結界が消える。商人たちの意思をまとめてください。",
+        "belief": "地上への出口が開くと市場の結界が消える。商人たちの意思をまとめてください。",
+        "goal": "地上への出口が開くと市場の結界が消える。商人たちの意思をまとめてください。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "observation": "探索開始時点では依頼文だけを知る",
+        "goal": "生存して帰還し、得た情報に基づいて決着を選ぶ",
+        "resources": [
+          "hp",
+          "mp",
+          "rope",
+          "gold"
+        ]
+      }
+    ],
+    "conflict": {
+      "request": "地上への出口が開くと市場の結界が消える。商人たちの意思をまとめてください。",
+      "progression": "夜市の出口を開ける前に共同保証を作り、開門試験で保護が続くことを確かめる。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の限定視点",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q060.market.entry",
+          "assertion": {
+            "title": "夜市の閉じた出口",
+            "place": "gate",
+            "cast": [
+              {
+                "entity": "zen",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q060.values.zenAt"
+                  },
+                  "right": "gate"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "shops",
+          "script": "q060.market.shops",
+          "assertion": {
+            "title": "大店と露店の通り",
+            "place": "shops",
+            "cast": [
+              {
+                "entity": "merchants",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q060.values.merchantsAt"
+                  },
+                  "right": "shops"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "guarantee",
+          "script": "q060.market.guarantee",
+          "assertion": {
+            "title": "大店と露店の通り",
+            "place": "shops",
+            "cast": [
+              {
+                "entity": "merchants",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q060.values.merchantsAt"
+                  },
+                  "right": "shops"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "test",
+          "script": "q060.market.test",
+          "assertion": {
+            "title": "荷運び用の試験門",
+            "place": "test_gate",
+            "cast": [
+              {
+                "entity": "carriers",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q060.values.carriersAt"
+                  },
+                  "right": "test_gate"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "lit",
+          "script": "q060.market.lit",
+          "assertion": {
+            "title": "荷運び用の試験門",
+            "place": "test_gate",
+            "cast": [
+              {
+                "entity": "carriers",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q060.values.carriersAt"
+                  },
+                  "right": "test_gate"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "gate",
+          "script": "q060.market.gate",
+          "assertion": {
+            "title": "荷運び用の試験門",
+            "place": "test_gate",
+            "cast": [
+              {
+                "entity": "carriers",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q060.values.carriersAt"
+                  },
+                  "right": "test_gate"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "register",
+          "script": "q060.market.register",
+          "assertion": {
+            "title": "夜市の門番詰所",
+            "place": "desk",
+            "cast": [
+              {
+                "entity": "clerk",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q060.values.clerkAt"
+                  },
+                  "right": "desk"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "schedule",
+          "script": "q060.market.schedule",
+          "assertion": {
+            "title": "夜市の門番詰所",
+            "place": "desk",
+            "cast": [
+              {
+                "entity": "clerk",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q060.values.clerkAt"
+                  },
+                  "right": "desk"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "warden",
+          "script": "q060.market.warden",
+          "assertion": {
+            "title": "夜市の閉じた出口",
+            "place": "gate",
+            "cast": [
+              {
+                "entity": "zen",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q060.values.zenAt"
+                  },
+                  "right": "gate"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "unbound",
+          "script": "q060.market.unbound",
+          "assertion": {
+            "title": "夜市の閉じた出口",
+            "place": "gate",
+            "cast": [
+              {
+                "entity": "zen",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q060.values.zenAt"
+                  },
+                  "right": "gate"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "地上への出口が開くと市場の結界が消える。商人たちの意思をまとめてください。",
+      "openQuestion": "市場の目覚ましの問題は何から生じ、誰が費用を負うか"
+    },
+    "reveal": {
+      "operator": "frameShift",
+      "newInformation": "結界は夜間営業の保護で、出口を開いても共同保証を組めば維持できる。",
+      "retroactiveTargets": [
+        "guarantee"
+      ],
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q060.market.entry",
+        "assertion": {
+          "title": "夜市の閉じた出口",
+          "place": "gate",
+          "cast": [
+            {
+              "entity": "zen",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q060.values.zenAt"
+                },
+                "right": "gate"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "shops",
+        "script": "q060.market.shops",
+        "assertion": {
+          "title": "大店と露店の通り",
+          "place": "shops",
+          "cast": [
+            {
+              "entity": "merchants",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q060.values.merchantsAt"
+                },
+                "right": "shops"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "guarantee",
+        "script": "q060.market.guarantee",
+        "assertion": {
+          "title": "大店と露店の通り",
+          "place": "shops",
+          "cast": [
+            {
+              "entity": "merchants",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q060.values.merchantsAt"
+                },
+                "right": "shops"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "test",
+        "script": "q060.market.test",
+        "assertion": {
+          "title": "荷運び用の試験門",
+          "place": "test_gate",
+          "cast": [
+            {
+              "entity": "carriers",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q060.values.carriersAt"
+                },
+                "right": "test_gate"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "lit",
+        "script": "q060.market.lit",
+        "assertion": {
+          "title": "荷運び用の試験門",
+          "place": "test_gate",
+          "cast": [
+            {
+              "entity": "carriers",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q060.values.carriersAt"
+                },
+                "right": "test_gate"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "gate",
+        "script": "q060.market.gate",
+        "assertion": {
+          "title": "荷運び用の試験門",
+          "place": "test_gate",
+          "cast": [
+            {
+              "entity": "carriers",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q060.values.carriersAt"
+                },
+                "right": "test_gate"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "register",
+        "script": "q060.market.register",
+        "assertion": {
+          "title": "夜市の門番詰所",
+          "place": "desk",
+          "cast": [
+            {
+              "entity": "clerk",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q060.values.clerkAt"
+                },
+                "right": "desk"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "schedule",
+        "script": "q060.market.schedule",
+        "assertion": {
+          "title": "夜市の門番詰所",
+          "place": "desk",
+          "cast": [
+            {
+              "entity": "clerk",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q060.values.clerkAt"
+                },
+                "right": "desk"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "warden",
+        "script": "q060.market.warden",
+        "assertion": {
+          "title": "夜市の閉じた出口",
+          "place": "gate",
+          "cast": [
+            {
+              "entity": "zen",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q060.values.zenAt"
+                },
+                "right": "gate"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "unbound",
+        "script": "q060.market.unbound",
+        "assertion": {
+          "title": "夜市の閉じた出口",
+          "place": "gate",
+          "cast": [
+            {
+              "entity": "zen",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q060.values.zenAt"
+                },
+                "right": "gate"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      }
+    ],
+    "revision": "scenario-edition-e2-q060-r1",
+    "stateRegistry": [
+      {
+        "path": "stories.q060.values.partyAt",
+        "type": "enum",
+        "initial": "gate",
+        "values": [
+          "gate",
+          "shops",
+          "test_gate",
+          "desk",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q060.values.zenAt",
+        "type": "enum",
+        "initial": "gate",
+        "values": [
+          "gate",
+          "shops",
+          "test_gate",
+          "desk",
+          "transit"
+        ],
+        "meaning": "zen の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q060.values.merchantsAt",
+        "type": "enum",
+        "initial": "shops",
+        "values": [
+          "gate",
+          "shops",
+          "test_gate",
+          "desk",
+          "transit"
+        ],
+        "meaning": "merchants の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q060.values.carriersAt",
+        "type": "enum",
+        "initial": "test_gate",
+        "values": [
+          "gate",
+          "shops",
+          "test_gate",
+          "desk",
+          "transit"
+        ],
+        "meaning": "carriers の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q060.values.clerkAt",
+        "type": "enum",
+        "initial": "desk",
+        "values": [
+          "gate",
+          "shops",
+          "test_gate",
+          "desk",
+          "transit"
+        ],
+        "meaning": "clerk の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q060.values.pledgeAt",
+        "type": "enum",
+        "initial": "merchants",
+        "values": [
+          "gate",
+          "shops",
+          "test_gate",
+          "desk",
+          "transit",
+          "party",
+          "zen",
+          "merchants",
+          "carriers",
+          "clerk"
+        ],
+        "meaning": "pledge の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q060.values.signed",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "signed",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q060.values.tested",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "tested",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q060.values.passed",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "passed",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q060.values.guardDefeated",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "guardDefeated",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q060.values.gates",
+        "type": "enum",
+        "initial": "closed",
+        "values": [
+          "closed",
+          "trial",
+          "all",
+          "rotating",
+          "trialTimed",
+          "free"
+        ],
+        "meaning": "gates",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q060.values.protection",
+        "type": "enum",
+        "initial": "night",
+        "values": [
+          "night",
+          "trial",
+          "joint",
+          "lost"
+        ],
+        "meaning": "protection",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q060.values.timetable",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "timetable",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      }
+    ],
+    "choiceContract": {
+      "progression": "夜市の出口を開ける前に共同保証を作り、開門試験で保護が続くことを確かめる。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "progression": "夜市の出口を開ける前に共同保証を作り、開門試験で保護が続くことを確かめる。",
+    "flowVersion": 2,
+    "entryScript": "q060.market.visit",
+    "graph": [
+      {
+        "id": "entry",
+        "text": "ゼンが地上へ続く格子を押した。夜市を守る灯はともっているが、格子は動かない。荷を下ろした人たちが、向こうに見える朝の道を見ている。",
+        "options": [
+          {
+            "id": "guarantors",
+            "text": "店の保証を集める",
+            "to": "shops",
+            "action": "entry_guarantors"
+          },
+          {
+            "id": "break",
+            "text": "番人と対決する",
+            "to": "warden",
+            "action": "entry_break"
+          },
+          {
+            "id": "hours",
+            "text": "交代通行を決める",
+            "to": "schedule",
+            "action": "entry_hours"
+          }
+        ]
+      },
+      {
+        "id": "shops",
+        "text": "大店の主人が夜間営業の契約を広げた。「閉じた門が守っているんじゃない。夜の商いを誰が引き受けるかだ」。露店の代表は、両方の店が同じ保証に入るならと署名欄を引き寄せた。",
+        "options": [
+          {
+            "id": "sign",
+            "text": "双方の署名を預かる",
+            "to": "guarantee",
+            "action": "shops_sign"
+          }
+        ]
+      },
+      {
+        "id": "guarantee",
+        "text": "二つの署名がそろった。これで開門時も保護が続くかは、まだ誰も見ていない。荷運び用の門を一つだけ開けて試すか、契約は保留して時間制を頼める。",
+        "options": [
+          {
+            "id": "test",
+            "text": "一門で試す",
+            "to": "test",
+            "action": "guarantee_test"
+          },
+          {
+            "id": "hours",
+            "text": "時間制にする",
+            "to": "schedule",
+            "action": "guarantee_hours"
+          }
+        ]
+      },
+      {
+        "id": "test",
+        "text": "帰りを待つ人の先頭で、試験門の金具に二つの署名を合わせた。格子を一本ぶん開ける間も、通りから店の保護灯が見える。",
+        "options": [
+          {
+            "id": "unlatch",
+            "text": "試験門を開ける",
+            "to": "lit",
+            "action": "test_unlatch"
+          }
+        ]
+      },
+      {
+        "id": "lit",
+        "text": "一人目が門をくぐり、もう一人がその後に続いた。二人が外から手を振っても、奥の露店の灯は消えなかった。",
+        "options": [
+          {
+            "id": "verify",
+            "text": "通過後の灯を確認",
+            "to": "gate",
+            "action": "lit_verify"
+          }
+        ]
+      },
+      {
+        "id": "gate",
+        "text": "試したのは荷運び用の一門だけだ。全出口に共同保証をつなぐか、この門だけを決まった時刻に使うか。署名の紙を持って門番詰所へ向かう。",
+        "options": [
+          {
+            "id": "open",
+            "text": "全出口へつなぐ",
+            "to": "register",
+            "action": "gate_open"
+          },
+          {
+            "id": "limited",
+            "text": "試験門を時間制に",
+            "to": "schedule",
+            "action": "gate_limited"
+          }
+        ]
+      },
+      {
+        "id": "register",
+        "text": "時刻係は署名の写しを全出口の保護灯へ回した。ゼンから各門の返事が届く。夜の店の守りを引き受けたまま、地上との道をすべて開ける。",
+        "options": [
+          {
+            "id": "open",
+            "text": "全門を開放する",
+            "to": "@informed",
+            "action": "register_open"
+          }
+        ]
+      },
+      {
+        "id": "schedule",
+        "text": {
+          "when": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q060.values.tested"
+            },
+            "right": true
+          },
+          "yes": "時刻係は試した一門の名だけを板に書いた。この門の保証を使い、通れる時間を皆に配る。",
+          "no": {
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q060.values.signed"
+              },
+              "right": true
+            },
+            "yes": "共同保証の署名は預かったまま、まだ適用していない。時刻係は開ける時間を分けた交代通行表を書く。",
+            "no": "時刻係は閉まる門ごとに帰りたい人の数を聞いた。一度に通し切れない列を分け、時刻と出口を交代にする。"
+          }
+        },
+        "options": [
+          {
+            "id": "rotate",
+            "text": "交代通行表を配る",
+            "to": "@compromise",
+            "action": "schedule_rotate",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q060.values.tested"
+              },
+              "right": false
+            },
+            "visibleWhen": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q060.values.tested"
+              },
+              "right": false
+            }
+          },
+          {
+            "id": "one",
+            "text": "一門の時刻を掲示",
+            "to": "@compromise",
+            "action": "schedule_one",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q060.values.tested"
+              },
+              "right": true
+            },
+            "visibleWhen": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q060.values.tested"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "warden",
+        "text": "格子に触れると結界の番人が立った。倒せば出口は自由になる。ゼンは守りが消えた後の夜回りを、店ごとに手配し始めた。",
+        "options": [
+          {
+            "id": "fight",
+            "text": "番人と戦う",
+            "to": "unbound",
+            "action": "warden_fight",
+            "combat": true
+          }
+        ]
+      },
+      {
+        "id": "unbound",
+        "text": "番人の姿が消え、店先の保護灯が一斉に落ちた。格子にはもう結界の重みがない。ゼンと一緒に閂を上げれば人も商品も通れる。",
+        "options": [
+          {
+            "id": "lift",
+            "text": "格子を開け放つ",
+            "to": "@contract",
+            "action": "unbound_lift"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.1",
+      "source": "https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4",
+      "adapter": "adv-story-state/1",
+      "scope": "quest-episode"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "preserveAcceptedRoute": true,
+    "currentStoryScriptPrefix": "q060.market.",
+    "interruptionRoutes": [],
+    "interruptionEntries": []
+  },
+  "scripts": {
+    "q060.clue_a": {
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "古い契約には単独閉鎖と共同保証の二つの欄がある。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q060",
+          "key": "clue_a",
+          "text": "古い契約には単独閉鎖と共同保証の二つの欄がある。"
+        }
+      ]
+    },
+    "q060.clue_b": {
+      "commands": [
+        {
+          "op": "say",
+          "name": "市場番のゼン",
+          "text": "保証人の欄は空白ですが、各露店の納税額を足せば条件を満たします。"
+        },
+        {
+          "op": "quest.evidence",
+          "quest": "q060",
+          "key": "clue_b",
+          "text": "保証人の欄は空白だが、各露店の納税額を足せば条件を満たす。"
+        }
+      ]
+    },
+    "q060.decision": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "市場の目覚まし\n\n地上への出口が開くと市場の結界が消える。商人たちの意思をまとめてください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "共同保証を結び出口を開ける",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q060.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q060.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "手掛かり2つ・戦闘あり",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "結界は夜間営業の保護で、出口を開いても共同保証を組めば維持できる。"
+                },
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_6",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "市場は朝にも開いた。ゼンは門番から、二つの世界の道案内になる。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q060",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "contract",
+              "text": "結界の番人を倒し自由通行にする",
+              "requirement": "戦闘あり・逃走不可",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_6",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "人と商品は通った。守りを失った夜の見回りは、商人が自分で始める。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q060",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "出口を時間制にして結界を保つ",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "完全な自由ではない。地下と地上を結ぶ時刻表が配られる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q060",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q060.review": {
+      "commands": [
+        {
+          "op": "say",
+          "text": "市場の目覚まし\n\n地上への出口が開くと市場の結界が消える。商人たちの意思をまとめてください。\n\nこの場所で、依頼の行方を決められる。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q060.evidence"
+                },
+                "right": "clue_a"
+              },
+              {
+                "op": "contains",
+                "left": {
+                  "ref": "quests.q060.evidence"
+                },
+                "right": "clue_b"
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "結界は夜間営業の保護で、出口を開いても共同保証を組めば維持できる。"
+            },
+            {
+              "op": "flag.set",
+              "key": "quest.q060.disclosed",
+              "value": true
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "informed",
+              "text": "共同保証を結び出口を開ける",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q060.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q060.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              },
+              "requirement": "痕跡と記録を照合・戦闘あり",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_6",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.informed",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "市場は朝にも開いた。ゼンは門番から、二つの世界の道案内になる。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q060",
+                      "outcome": "informed"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ],
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q060.evidence"
+                    },
+                    "right": "clue_a"
+                  },
+                  {
+                    "op": "contains",
+                    "left": {
+                      "ref": "quests.q060.evidence"
+                    },
+                    "right": "clue_b"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "contract",
+              "text": "結界の番人を倒し自由通行にする",
+              "requirement": "戦闘あり・逃走不可",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_6",
+                  "on_win": [
+                    {
+                      "op": "add",
+                      "target": "vars.contract",
+                      "value": 1
+                    },
+                    {
+                      "op": "say",
+                      "text": "人と商品は通った。守りを失った夜の見回りは、商人が自分で始める。"
+                    },
+                    {
+                      "op": "quest.complete",
+                      "quest": "q060",
+                      "outcome": "contract"
+                    }
+                  ],
+                  "on_lose": [],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路は開いている。準備を整えて、この場所で再び判断できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compromise",
+              "text": "出口を時間制にして結界を保つ",
+              "requirement": "戦闘を伴わない決着",
+              "commands": [
+                {
+                  "op": "add",
+                  "target": "vars.compromise",
+                  "value": 1
+                },
+                {
+                  "op": "say",
+                  "text": "完全な自由ではない。地下と地上を結ぶ時刻表が配られる。"
+                },
+                {
+                  "op": "quest.complete",
+                  "quest": "q060",
+                  "outcome": "compromise"
+                }
+              ]
+            },
+            {
+              "id": "question",
+              "text": "今の説明では足りないと申し出る",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "「まだ決めない、ということですね」市場番のゼンは依頼書を引き戻した。\n現場の痕跡と記録は、どちらからでも確かめられる。"
+                },
+                {
+                  "op": "flag.set",
+                  "key": "quest.q060.questioned",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "id": "leave",
+              "text": "まだ決めず、調査を続ける",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "q060.aftermath": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "quests.q060.outcome"
+          },
+          "cases": [
+            {
+              "equals": "informed",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "市場は朝にも開いた。ゼンは門番から、二つの世界の道案内になる。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q060.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "contract",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "人と商品は通った。守りを失った夜の見回りは、商人が自分で始める。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q060.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            },
+            {
+              "equals": "compromise",
+              "commands": [
+                {
+                  "op": "say",
+                  "text": "完全な自由ではない。地下と地上を結ぶ時刻表が配られる。"
+                },
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q060.questioned"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "say",
+                      "text": "依頼人は、あなたが一度判断を保留したことも覚えている。結末の記録と一緒に、その時の問いを聞き直した。"
+                    }
+                  ],
+                  "else": []
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ]
+    },
+    "q060.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q060.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q060.aftermath"
+            }
+          ],
+          "else": [
+            {
+              "op": "jump",
+              "script": "q060.review"
+            }
+          ]
+        }
+      ]
+    },
+    "q060.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q060.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "夜市の結界で出口が閉じた。店は安全だが、荷運び人が帰れない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "guarantors",
+              "text": "店ごとに保護契約の署名を持ち寄る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q060.flow.guarantee"
+                }
+              ]
+            },
+            {
+              "id": "break",
+              "text": "結界の番人を倒して自由通行にする",
+              "requirement": "戦闘（支払い・作業確定は勝利時）",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_6",
+                  "on_win": [
+                    {
+                      "op": "jump",
+                      "script": "q060.flow.end.contract"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。勝利を前提とした作業や支払いはまだ行っていない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "救助班に運び出された。現場へ戻れば、直前の作業から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "hours",
+              "text": "出口を時間制にし、交代で通す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q060.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q060.flow.guarantee": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q060.node",
+          "value": "guarantee"
+        },
+        {
+          "op": "say",
+          "text": "結界は夜間営業の保護で、出口を開いても共同保証を組めば維持できる。 大店と露店が同じ保証へ入ることに同意した。出口を開いた瞬間の守りを試す必要がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "test",
+              "text": "一つの出口を開けて結界の継続を試す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q060.flow.gate"
+                }
+              ]
+            },
+            {
+              "id": "hours",
+              "text": "契約を見送り、時間制で開く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q060.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q060.flow.gate": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q060.node",
+          "value": "gate"
+        },
+        {
+          "op": "say",
+          "text": "出口を通っても店の保護灯は消えなかった。荷運び人が一人、次に二人と帰っていく。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "open",
+              "text": "全出口を共同保証へ接続して開ける",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q060.flow.end.informed"
+                }
+              ]
+            },
+            {
+              "id": "limited",
+              "text": "試した出口だけ時間制で運用する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q060.flow.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q060.flow.end.informed": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q060.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "市場は朝にも開いた。ゼンは門番から、二つの世界の道案内になる。"
+            },
+            {
+              "op": "add",
+              "target": "vars.informed",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q060",
+              "outcome": "informed"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q060.flow.end.contract": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q060.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "人と商品は通った。守りを失った夜の見回りは、商人が自分で始める。"
+            },
+            {
+              "op": "add",
+              "target": "vars.contract",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q060",
+              "outcome": "contract"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q060.flow.end.compromise": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q060.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "完全な自由ではない。地下と地上を結ぶ時刻表が配られる。"
+            },
+            {
+              "op": "add",
+              "target": "vars.compromise",
+              "value": 1
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q060",
+              "outcome": "compromise"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q060.flow.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q060.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q060.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "informed",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "市場は朝にも開いた。ゼンは門番から、二つの世界の道案内になる。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "contract",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "人と商品は通った。守りを失った夜の見回りは、商人が自分で始める。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "compromise",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "完全な自由ではない。地下と地上を結ぶ時刻表が配られる。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "flags.legacyQuestRoutes.q060"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "jump",
+                  "script": "q060.visit"
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.flow.q060.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q060.flow.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "guarantee",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q060.flow.guarantee"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "gate",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q060.flow.gate"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q060.flow.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "dungeon.scene.region_6.v1": {
+      "dungeonScene": "region_6",
+      "commands": [
+        {
+          "op": "narrate",
+          "text": "市場の横道を通す相手に、通行料の対象を確かめる。市場全体の保証を相談する前に、一件の取引がどこまで有効なのかを見る。"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "contains",
+            "left": {
+              "ref": "dungeons.persistent.region_6.systems.market.paid"
+            },
+            "right": "toll_1"
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "この相手への通行料は支払われ、横道が開いている。取引の効力はこの通路に及ぶ。市場全体の結界を維持する共同保証には、さらに商人たちの意思確認が必要だ。"
+            },
+            {
+              "op": "choice",
+              "options": [
+                {
+                  "id": "record",
+                  "text": "確認した事実を依頼の手帳へ記す",
+                  "condition": {
+                    "op": "ne",
+                    "left": {
+                      "ref": "flags.dungeonNotes.region_6"
+                    },
+                    "right": true
+                  },
+                  "commands": [
+                    {
+                      "op": "set",
+                      "target": "flags.dungeonNotes.region_6",
+                      "value": true
+                    },
+                    {
+                      "op": "narrate",
+                      "text": "現地の観察を手帳に記した。"
+                    }
+                  ]
+                },
+                {
+                  "id": "leave",
+                  "text": "探索へ戻る",
+                  "commands": []
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "この横道の通行料はまだ支払われていない。相手のいるセルで取引を成立させ、開く通路を確かめよう。"
+            }
+          ]
+        }
+      ]
+    },
+    "q060.market.entry": {
+      "storyQuest": "q060",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q060",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "ゼンが地上へ続く格子を押した。夜市を守る灯はともっているが、格子は動かない。荷を下ろした人たちが、向こうに見える朝の道を見ている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "guarantors",
+              "text": "店の保証を集める",
+              "storyAction": {
+                "quest": "q060",
+                "action": "entry_guarantors"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q060",
+                  "action": "entry_guarantors"
+                }
+              ]
+            },
+            {
+              "id": "break",
+              "text": "番人と対決する",
+              "storyAction": {
+                "quest": "q060",
+                "action": "entry_break"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q060",
+                  "action": "entry_break"
+                },
+                {
+                  "op": "jump",
+                  "script": "q060.market.warden"
+                }
+              ]
+            },
+            {
+              "id": "hours",
+              "text": "交代通行を決める",
+              "storyAction": {
+                "quest": "q060",
+                "action": "entry_hours"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q060",
+                  "action": "entry_hours"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q060.market.shops": {
+      "storyQuest": "q060",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q060",
+          "scene": "shops"
+        },
+        {
+          "op": "narrate",
+          "text": "大店の主人が夜間営業の契約を広げた。「閉じた門が守っているんじゃない。夜の商いを誰が引き受けるかだ」。露店の代表は、両方の店が同じ保証に入るならと署名欄を引き寄せた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sign",
+              "text": "双方の署名を預かる",
+              "storyAction": {
+                "quest": "q060",
+                "action": "shops_sign"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q060",
+                  "action": "shops_sign"
+                },
+                {
+                  "op": "jump",
+                  "script": "q060.market.guarantee"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q060.market.guarantee": {
+      "storyQuest": "q060",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q060",
+          "scene": "guarantee"
+        },
+        {
+          "op": "narrate",
+          "text": "二つの署名がそろった。これで開門時も保護が続くかは、まだ誰も見ていない。荷運び用の門を一つだけ開けて試すか、契約は保留して時間制を頼める。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "test",
+              "text": "一門で試す",
+              "storyAction": {
+                "quest": "q060",
+                "action": "guarantee_test"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q060",
+                  "action": "guarantee_test"
+                }
+              ]
+            },
+            {
+              "id": "hours",
+              "text": "時間制にする",
+              "storyAction": {
+                "quest": "q060",
+                "action": "guarantee_hours"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q060",
+                  "action": "guarantee_hours"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q060.market.test": {
+      "storyQuest": "q060",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q060",
+          "scene": "test"
+        },
+        {
+          "op": "narrate",
+          "text": "帰りを待つ人の先頭で、試験門の金具に二つの署名を合わせた。格子を一本ぶん開ける間も、通りから店の保護灯が見える。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "unlatch",
+              "text": "試験門を開ける",
+              "storyAction": {
+                "quest": "q060",
+                "action": "test_unlatch"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q060",
+                  "action": "test_unlatch"
+                },
+                {
+                  "op": "jump",
+                  "script": "q060.market.lit"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q060.market.lit": {
+      "storyQuest": "q060",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q060",
+          "scene": "lit"
+        },
+        {
+          "op": "narrate",
+          "text": "一人目が門をくぐり、もう一人がその後に続いた。二人が外から手を振っても、奥の露店の灯は消えなかった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "verify",
+              "text": "通過後の灯を確認",
+              "storyAction": {
+                "quest": "q060",
+                "action": "lit_verify"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q060",
+                  "action": "lit_verify"
+                },
+                {
+                  "op": "jump",
+                  "script": "q060.market.gate"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q060.market.gate": {
+      "storyQuest": "q060",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q060",
+          "scene": "gate"
+        },
+        {
+          "op": "narrate",
+          "text": "試したのは荷運び用の一門だけだ。全出口に共同保証をつなぐか、この門だけを決まった時刻に使うか。署名の紙を持って門番詰所へ向かう。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "open",
+              "text": "全出口へつなぐ",
+              "storyAction": {
+                "quest": "q060",
+                "action": "gate_open"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q060",
+                  "action": "gate_open"
+                }
+              ]
+            },
+            {
+              "id": "limited",
+              "text": "試験門を時間制に",
+              "storyAction": {
+                "quest": "q060",
+                "action": "gate_limited"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q060",
+                  "action": "gate_limited"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q060.market.register": {
+      "storyQuest": "q060",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q060",
+          "scene": "register"
+        },
+        {
+          "op": "narrate",
+          "text": "時刻係は署名の写しを全出口の保護灯へ回した。ゼンから各門の返事が届く。夜の店の守りを引き受けたまま、地上との道をすべて開ける。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "open",
+              "text": "全門を開放する",
+              "storyAction": {
+                "quest": "q060",
+                "action": "register_open"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q060",
+                  "action": "register_open"
+                },
+                {
+                  "op": "jump",
+                  "script": "q060.market.end.informed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q060.market.schedule": {
+      "storyQuest": "q060",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q060",
+          "scene": "schedule"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q060.values.tested"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "時刻係は試した一門の名だけを板に書いた。この門の保証を使い、通れる時間を皆に配る。"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q060.values.signed"
+                },
+                "right": true
+              },
+              "then": [
+                {
+                  "op": "narrate",
+                  "text": "共同保証の署名は預かったまま、まだ適用していない。時刻係は開ける時間を分けた交代通行表を書く。"
+                }
+              ],
+              "else": [
+                {
+                  "op": "narrate",
+                  "text": "時刻係は閉まる門ごとに帰りたい人の数を聞いた。一度に通し切れない列を分け、時刻と出口を交代にする。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "rotate",
+              "text": "交代通行表を配る",
+              "storyAction": {
+                "quest": "q060",
+                "action": "schedule_rotate"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q060.values.tested"
+                },
+                "right": false
+              },
+              "visibleWhen": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q060.values.tested"
+                },
+                "right": false
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q060",
+                  "action": "schedule_rotate"
+                },
+                {
+                  "op": "jump",
+                  "script": "q060.market.end.compromise"
+                }
+              ]
+            },
+            {
+              "id": "one",
+              "text": "一門の時刻を掲示",
+              "storyAction": {
+                "quest": "q060",
+                "action": "schedule_one"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q060.values.tested"
+                },
+                "right": true
+              },
+              "visibleWhen": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q060.values.tested"
+                },
+                "right": true
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q060",
+                  "action": "schedule_one"
+                },
+                {
+                  "op": "jump",
+                  "script": "q060.market.end.compromise"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q060.market.warden": {
+      "storyQuest": "q060",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q060",
+          "scene": "warden"
+        },
+        {
+          "op": "narrate",
+          "text": "格子に触れると結界の番人が立った。倒せば出口は自由になる。ゼンは守りが消えた後の夜回りを、店ごとに手配し始めた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fight",
+              "text": "番人と戦う",
+              "storyAction": {
+                "quest": "q060",
+                "action": "warden_fight"
+              },
+              "requirement": "逃走不可・勝利で結界を解除",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "boss_6",
+                  "on_win": [
+                    {
+                      "op": "story.action",
+                      "quest": "q060",
+                      "action": "warden_fight"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q060.market.unbound"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "narrate",
+                      "text": "退路へ戻った。戦闘後に予定していた作業は、まだ成立していない。"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "narrate",
+                      "text": "救助班に運び出された。現場へ戻ると直前の場面から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q060.market.unbound": {
+      "storyQuest": "q060",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q060",
+          "scene": "unbound"
+        },
+        {
+          "op": "narrate",
+          "text": "番人の姿が消え、店先の保護灯が一斉に落ちた。格子にはもう結界の重みがない。ゼンと一緒に閂を上げれば人も商品も通れる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "lift",
+              "text": "格子を開け放つ",
+              "storyAction": {
+                "quest": "q060",
+                "action": "unbound_lift"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q060",
+                  "action": "unbound_lift"
+                },
+                {
+                  "op": "jump",
+                  "script": "q060.market.end.contract"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q060.market.end.informed": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q060",
+          "outcome": "informed"
+        },
+        {
+          "op": "add",
+          "target": "vars.informed",
+          "value": 1
+        },
+        {
+          "op": "narrate",
+          "text": "市場は朝にも開いた。ゼンは門番から、二つの世界の道案内になる。"
+        }
+      ]
+    },
+    "q060.market.end.contract": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q060",
+          "outcome": "contract"
+        },
+        {
+          "op": "add",
+          "target": "vars.contract",
+          "value": 1
+        },
+        {
+          "op": "narrate",
+          "text": "人と商品は通った。守りを失った夜の見回りは、商人が自分で始める。"
+        }
+      ]
+    },
+    "q060.market.end.compromise": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q060",
+          "outcome": "compromise"
+        },
+        {
+          "op": "add",
+          "target": "vars.compromise",
+          "value": 1
+        },
+        {
+          "op": "narrate",
+          "text": "完全な自由ではない。地下と地上を結ぶ時刻表が配られる。"
+        }
+      ]
+    },
+    "q060.market.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q060"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q060.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q060.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q060.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "informed",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "市場は朝にも開いた。ゼンは門番から、二つの世界の道案内になる。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "contract",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "人と商品は通った。守りを失った夜の見回りは、商人が自分で始める。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "compromise",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "完全な自由ではない。地下と地上を結ぶ時刻表が配られる。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q060"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q060.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q060.market.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "shops",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q060.market.shops"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "guarantee",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q060.market.guarantee"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "test",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q060.market.test"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "lit",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q060.market.lit"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "gate",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q060.market.gate"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "register",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q060.market.register"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "schedule",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q060.market.schedule"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "warden",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q060.market.warden"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "unbound",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q060.market.unbound"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q060.market.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "gate": "夜市の閉じた出口",
+      "shops": "大店と露店の通り",
+      "test_gate": "荷運び用の試験門",
+      "desk": "夜市の門番詰所",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "gate"
+      ],
+      [
+        "transit",
+        "shops"
+      ],
+      [
+        "transit",
+        "test_gate"
+      ],
+      [
+        "transit",
+        "desk"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "gate",
+        "values": [
+          "gate",
+          "shops",
+          "test_gate",
+          "desk",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "zenAt": {
+        "type": "enum",
+        "initial": "gate",
+        "values": [
+          "gate",
+          "shops",
+          "test_gate",
+          "desk",
+          "transit"
+        ],
+        "meaning": "zen の所在または保持者"
+      },
+      "merchantsAt": {
+        "type": "enum",
+        "initial": "shops",
+        "values": [
+          "gate",
+          "shops",
+          "test_gate",
+          "desk",
+          "transit"
+        ],
+        "meaning": "merchants の所在または保持者"
+      },
+      "carriersAt": {
+        "type": "enum",
+        "initial": "test_gate",
+        "values": [
+          "gate",
+          "shops",
+          "test_gate",
+          "desk",
+          "transit"
+        ],
+        "meaning": "carriers の所在または保持者"
+      },
+      "clerkAt": {
+        "type": "enum",
+        "initial": "desk",
+        "values": [
+          "gate",
+          "shops",
+          "test_gate",
+          "desk",
+          "transit"
+        ],
+        "meaning": "clerk の所在または保持者"
+      },
+      "pledgeAt": {
+        "type": "enum",
+        "initial": "merchants",
+        "values": [
+          "gate",
+          "shops",
+          "test_gate",
+          "desk",
+          "transit",
+          "party",
+          "zen",
+          "merchants",
+          "carriers",
+          "clerk"
+        ],
+        "meaning": "pledge の所在または保持者"
+      },
+      "signed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "signed"
+      },
+      "tested": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "tested"
+      },
+      "passed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "passed"
+      },
+      "guardDefeated": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "guardDefeated"
+      },
+      "gates": {
+        "type": "enum",
+        "initial": "closed",
+        "values": [
+          "closed",
+          "trial",
+          "all",
+          "rotating",
+          "trialTimed",
+          "free"
+        ],
+        "meaning": "gates"
+      },
+      "protection": {
+        "type": "enum",
+        "initial": "night",
+        "values": [
+          "night",
+          "trial",
+          "joint",
+          "lost"
+        ],
+        "meaning": "protection"
+      },
+      "timetable": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "timetable"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "zen": {
+        "holder": "zenAt",
+        "kind": "person",
+        "character": "e2_q057_zen"
+      },
+      "merchants": {
+        "holder": "merchantsAt",
+        "kind": "person",
+        "character": "e2_q060_merchants"
+      },
+      "carriers": {
+        "holder": "carriersAt",
+        "kind": "person",
+        "character": "e2_q060_carriers"
+      },
+      "clerk": {
+        "holder": "clerkAt",
+        "kind": "person",
+        "character": "e2_q060_clerk"
+      },
+      "pledge": {
+        "holder": "pledgeAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {},
+    "initialKnowledge": {},
+    "invariants": [
+      {
+        "id": "tested",
+        "condition": {
+          "op": "or",
+          "args": [
+            {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q060.values.tested"
+                },
+                "right": true
+              }
+            },
+            {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q060.values.signed"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q060.values.passed"
+                  },
+                  "right": true
+                }
+              ]
+            }
+          ]
+        },
+        "message": "両者署名後に実際の通過と保護灯を確かめる"
+      },
+      {
+        "id": "all",
+        "condition": {
+          "op": "or",
+          "args": [
+            {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q060.values.gates"
+                },
+                "right": "all"
+              }
+            },
+            {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q060.values.tested"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q060.values.protection"
+                  },
+                  "right": "joint"
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q060.values.pledgeAt"
+                  },
+                  "right": "clerk"
+                }
+              ]
+            }
+          ]
+        },
+        "message": "試験の結果を確認し全門に保証をつなぐ"
+      },
+      {
+        "id": "free",
+        "condition": {
+          "op": "or",
+          "args": [
+            {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q060.values.gates"
+                },
+                "right": "free"
+              }
+            },
+            {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q060.values.guardDefeated"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q060.values.protection"
+                  },
+                  "right": "lost"
+                }
+              ]
+            }
+          ]
+        },
+        "message": "番人への勝利後に自由通行にする"
+      }
+    ],
+    "scenes": {
+      "entry": {
+        "title": "夜市の閉じた出口",
+        "place": "gate",
+        "cast": [
+          {
+            "entity": "zen",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q060.values.zenAt"
+              },
+              "right": "gate"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "shops": {
+        "title": "大店と露店の通り",
+        "place": "shops",
+        "cast": [
+          {
+            "entity": "merchants",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q060.values.merchantsAt"
+              },
+              "right": "shops"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "guarantee": {
+        "title": "大店と露店の通り",
+        "place": "shops",
+        "cast": [
+          {
+            "entity": "merchants",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q060.values.merchantsAt"
+              },
+              "right": "shops"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "test": {
+        "title": "荷運び用の試験門",
+        "place": "test_gate",
+        "cast": [
+          {
+            "entity": "carriers",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q060.values.carriersAt"
+              },
+              "right": "test_gate"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "lit": {
+        "title": "荷運び用の試験門",
+        "place": "test_gate",
+        "cast": [
+          {
+            "entity": "carriers",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q060.values.carriersAt"
+              },
+              "right": "test_gate"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "gate": {
+        "title": "荷運び用の試験門",
+        "place": "test_gate",
+        "cast": [
+          {
+            "entity": "carriers",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q060.values.carriersAt"
+              },
+              "right": "test_gate"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "register": {
+        "title": "夜市の門番詰所",
+        "place": "desk",
+        "cast": [
+          {
+            "entity": "clerk",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q060.values.clerkAt"
+              },
+              "right": "desk"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "schedule": {
+        "title": "夜市の門番詰所",
+        "place": "desk",
+        "cast": [
+          {
+            "entity": "clerk",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q060.values.clerkAt"
+              },
+              "right": "desk"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "warden": {
+        "title": "夜市の閉じた出口",
+        "place": "gate",
+        "cast": [
+          {
+            "entity": "zen",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q060.values.zenAt"
+              },
+              "right": "gate"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "unbound": {
+        "title": "夜市の閉じた出口",
+        "place": "gate",
+        "cast": [
+          {
+            "entity": "zen",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q060.values.zenAt"
+              },
+              "right": "gate"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_guarantors": {
+        "from": [
+          "entry"
+        ],
+        "to": "shops",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "shops"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "shops",
+          "companions": []
+        },
+        "depart": []
+      },
+      "entry_break": {
+        "from": [
+          "entry"
+        ],
+        "to": "warden",
+        "requires": true,
+        "effects": [],
+        "once": true
+      },
+      "entry_hours": {
+        "from": [
+          "entry"
+        ],
+        "to": "schedule",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "desk"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "desk",
+          "companions": []
+        },
+        "depart": []
+      },
+      "shops_sign": {
+        "from": [
+          "shops"
+        ],
+        "to": "guarantee",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "pledge",
+            "from": "merchants",
+            "to": "party"
+          },
+          {
+            "op": "set",
+            "key": "signed",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "guarantee_test": {
+        "from": [
+          "guarantee"
+        ],
+        "to": "test",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "test_gate"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "test_gate",
+          "companions": []
+        },
+        "depart": []
+      },
+      "guarantee_hours": {
+        "from": [
+          "guarantee"
+        ],
+        "to": "schedule",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "desk"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "desk",
+          "companions": []
+        },
+        "depart": []
+      },
+      "test_unlatch": {
+        "from": [
+          "test"
+        ],
+        "to": "lit",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "gates",
+            "value": "trial"
+          },
+          {
+            "op": "set",
+            "key": "protection",
+            "value": "trial"
+          }
+        ],
+        "once": true
+      },
+      "lit_verify": {
+        "from": [
+          "lit"
+        ],
+        "to": "gate",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "tested",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "passed",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "gate_open": {
+        "from": [
+          "gate"
+        ],
+        "to": "register",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "desk"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "desk",
+          "companions": []
+        },
+        "depart": []
+      },
+      "gate_limited": {
+        "from": [
+          "gate"
+        ],
+        "to": "schedule",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "desk"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "desk",
+          "companions": []
+        },
+        "depart": []
+      },
+      "register_open": {
+        "from": [
+          "register"
+        ],
+        "ending": "informed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "pledge",
+            "from": "party",
+            "to": "clerk"
+          },
+          {
+            "op": "set",
+            "key": "protection",
+            "value": "joint"
+          },
+          {
+            "op": "set",
+            "key": "gates",
+            "value": "all"
+          }
+        ],
+        "once": true
+      },
+      "schedule_rotate": {
+        "from": [
+          "schedule"
+        ],
+        "ending": "compromise",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q060.values.tested"
+          },
+          "right": false
+        },
+        "effects": [
+          {
+            "op": "set",
+            "key": "gates",
+            "value": "rotating"
+          },
+          {
+            "op": "set",
+            "key": "timetable",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "schedule_one": {
+        "from": [
+          "schedule"
+        ],
+        "ending": "compromise",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q060.values.tested"
+          },
+          "right": true
+        },
+        "effects": [
+          {
+            "op": "set",
+            "key": "gates",
+            "value": "trialTimed"
+          },
+          {
+            "op": "set",
+            "key": "timetable",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "warden_fight": {
+        "from": [
+          "warden"
+        ],
+        "to": "unbound",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "guardDefeated",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "protection",
+            "value": "lost"
+          }
+        ],
+        "once": true
+      },
+      "unbound_lift": {
+        "from": [
+          "unbound"
+        ],
+        "ending": "contract",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "gates",
+            "value": "free"
+          }
+        ],
+        "once": true
+      }
+    },
+    "endings": {
+      "informed": {
+        "op": "eq",
+        "left": {
+          "ref": "stories.q060.values.gates"
+        },
+        "right": "all"
+      },
+      "contract": {
+        "op": "eq",
+        "left": {
+          "ref": "stories.q060.values.gates"
+        },
+        "right": "free"
+      },
+      "compromise": {
+        "op": "eq",
+        "left": {
+          "ref": "stories.q060.values.timetable"
+        },
+        "right": true
+      }
+    },
+    "worldPlaces": {
+      "gate": {
+        "kind": "dungeon",
+        "dungeon": "region_6",
+        "map": "region_6_f2",
+        "x": 11,
+        "y": 10,
+        "event": "q060_market_gate"
+      },
+      "shops": {
+        "kind": "dungeon",
+        "dungeon": "region_6",
+        "map": "region_6_f2",
+        "x": 11,
+        "y": 9,
+        "event": "q060_market_shops"
+      },
+      "test_gate": {
+        "kind": "dungeon",
+        "dungeon": "region_6",
+        "map": "region_6_f2",
+        "x": 11,
+        "y": 11,
+        "event": "q060_market_test_gate"
+      },
+      "desk": {
+        "kind": "dungeon",
+        "dungeon": "region_6",
+        "map": "region_6_f2",
+        "x": 12,
+        "y": 11,
+        "event": "q060_market_desk"
+      }
+    },
+    "revision": 1
+  }
+}
