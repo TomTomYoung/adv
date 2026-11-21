@@ -6,15 +6,22 @@ export function checkpoint(g){
   const save=g.save();assert.deepEqual(validateSave(JSON.parse(save),g.data),[]);
   g.load(save);assert.equal(g.save(),save);return save;
 }
-export function go(g,q,place){
-  exploreSpot(g,g.data.quests[q].story.worldPlaces[place],{maintain:true,interact:false});
+export function go(g,q,place,options={}){
+  exploreSpot(g,g.data.quests[q].story.worldPlaces[place],{maintain:true,interact:false,...options});
 }
 export function resume(g,q){
   assert.ok(g.dispatch({type:'story.resume',quest:q}),q+': '+g.state.notice);drain(g);
 }
-export function arrive(g,q){
-  const story=g.data.quests[q].story,to=story.actions[g.state.journey.action].journey.to;
-  go(g,q,to);if(g.state.journey)resume(g,q);
+export function arrive(g,q,{recover=false,...options}={}){
+  const pending=structuredClone(g.state.journey),story=g.data.quests[q].story,to=story.actions[pending.action].journey.to;
+  const before=recover?structuredClone(g.state.stories[q]):null,losses=g.state.records.losses;
+  go(g,q,to,{...options,stopOnRescue:recover});
+  if(recover&&g.state.records.losses>losses){
+    assert.equal(g.state.mode,'town');
+    assert.deepEqual(g.state.journey,pending);assert.deepEqual(g.state.stories[q],before);
+    checkpoint(g);go(g,q,to,options);
+  }
+  if(g.state.journey)resume(g,q);
   drain(g);assert.equal(g.state.journey,null);
 }
 export function depart(g,id){

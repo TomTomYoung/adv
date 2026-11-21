@@ -33,7 +33,22 @@ export function pathTo(engine,x,y){const loc=engine.state.location,map=engine.ma
   for(let i=0;i<queue.length;i++){const [cx,cy]=queue[i];if(cx===x&&cy===y){found=true;break;}for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const key=`${cx+dx},${cy+dy}`;if(engine.walkable(map,cx+dx,cy+dy)&&!seen.has(key)){seen.set(key,[cx,cy]);queue.push([cx+dx,cy+dy]);}}}
   assert.ok(found,`Path to ${x},${y}`);const steps=[];let p=[x,y];while(p){steps.push(p);p=seen.get(p.join(','));}return steps.reverse().slice(1);
 }
-export function walk(engine,x,y,{heal=false,maintain=false,settleDestination=true,beforeStep=null}={}){for(const [nx,ny] of pathTo(engine,x,y)){beforeStep?.(engine);if(maintain)maintainParty(engine);const loc=engine.state.location,dx=nx-loc.x,dy=ny-loc.y,wanted=dx===1?'east':dx===-1?'west':dy===1?'south':'north';while(loc.facing!==wanted)assert.ok(engine.dispatch({type:'move',direction:'right'}));assert.ok(engine.dispatch({type:'move',direction:'forward'}));if(heal)engine.healAll();if(!settleDestination&&nx===x&&ny===y)drain(engine);else settle(engine);assert.equal(engine.state.mode,'dungeon','party survived route');}}
+export function walk(engine,x,y,{heal=false,maintain=false,settleDestination=true,beforeStep=null,stopOnRescue=false,settleEncounter=fight}={}){
+  const initialLosses=engine.state.records.losses;
+  for(const [nx,ny] of pathTo(engine,x,y)){
+    beforeStep?.(engine);
+    if(maintain)maintainParty(engine);
+    const loc=engine.state.location,dx=nx-loc.x,dy=ny-loc.y;
+    const wanted=dx===1?'east':dx===-1?'west':dy===1?'south':'north';
+    while(loc.facing!==wanted)assert.ok(engine.dispatch({type:'move',direction:'right'}));
+    assert.ok(engine.dispatch({type:'move',direction:'forward'}));
+    if(heal)engine.healAll();
+    drain(engine);
+    if(engine.state.battle&&(settleDestination||nx!==x||ny!==y))settleEncounter(engine);
+    if(stopOnRescue&&engine.state.mode==='town'&&engine.state.records.losses>initialLosses)return;
+    assert.equal(engine.state.mode,'dungeon','party survived route');
+  }
+}
 export function maintainParty(g){
   // Long post-q001 journeys need real fuel upkeep as well as healing. Never
   // interfere with q001's deliberately authored extinguishing/return scene.
