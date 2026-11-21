@@ -6,7 +6,7 @@ import {objectVisible} from '../src/core/quest-events.js';
 import {projectGame} from '../src/application/projection.js';
 import {drain,fight,exploreSpot,inspect} from './helpers.mjs';
 import {arrive,checkpoint,choose,depart,go,resume} from './world-route-helpers.mjs';
-import {data,expectedValues,migrated,previous,ready,routes,states} from './q095-helpers.mjs';
+import {data,expectedValues,migrated,openOldDecision,previous,ready,routes,states} from './q095-helpers.mjs';
 
 const q='q095',story=data.quests[q].story,graph=states(q);
 const values=g=>g.state.stories[q].values;
@@ -101,7 +101,7 @@ test('q095 forged custody, relay knowledge, monument and a premature unveiling a
 for(const entry of ['decision','review'])for(const outcome of ['informed','contract','compromise']){
   test('q095 older '+entry+' preserves its evidence gate, encounter and reward for '+outcome,()=>{
     const old=ready(q,{old:true,start:'reception'});if(outcome==='informed')for(const clue of ['clue_a','clue_b'])old.evidence(q,clue,clue);
-    old.run(q+'.'+entry);drain(old);const g=migrated(old);checkpoint(g);
+    openOldDecision(old,entry);const g=migrated(old);checkpoint(g);
     for(const engine of [old,g]){
       if(outcome!=='informed')assert.equal(engine.dispatch({type:'choose',id:'informed'}),false);
       depart(engine,outcome);
@@ -112,7 +112,7 @@ for(const entry of ['decision','review'])for(const outcome of ['informed','contr
   });
 }
 test('q095 pre-update guard battle keeps its continuation on loading the new edition',()=>{
-  const old=ready(q,{old:true,start:'reception'});old.run(q+'.review');drain(old);depart(old,'contract');
+  const old=ready(q,{old:true,start:'reception'});openOldDecision(old,'review');depart(old,'contract');
   const g=migrated(old);checkpoint(g);assert.equal(g.state.battle.encounter,'guard_10');
   fight(g);drain(g);assert.equal(g.state.quests[q].outcome,'contract');assert.equal(g.state.records.wins,1);checkpoint(g);
 });

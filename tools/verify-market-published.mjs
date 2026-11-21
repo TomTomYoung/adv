@@ -146,9 +146,10 @@ if(quest==='q095'&&['back','match','deliver','carry','hand'].includes(intent.id)
     }
   }
 if(suite==='--q095'){
-    const {previous}=await import('../tests/q095-helpers.mjs');
+    const {previous,openOldDecision}=await import('../tests/q095-helpers.mjs');
     const q='q095',original=createQuestTrial(previous,catalog,{quest:q,party:'balanced',level,start:'reception',outcome:'contract',battleMode:'classic',seed:1907}).engine;
-    original.run(q+'.review');drain(original);
+    openOldDecision(original,'review');
+    const winsBefore=original.state.records.wins;
     assert.ok(original.dispatch({type:'choose',id:'contract'}));drain(original);
     assert.equal(original.state.battle.encounter,'guard_10');
     const save=original.save(),commands=[],dispatch=original.dispatch.bind(original);
@@ -158,9 +159,9 @@ if(suite==='--q095'){
     await page.waitForFunction(()=>questPlaytest.trial.engine.state.quests.q095.stage==='active');
     const loaded=await page.evaluate(save=>{
       const g=questPlaytest.trial.engine;g.load(save);const migrated=g.save();g.load(migrated);questPlaytest.render();
-      return [g.state.flags.legacyStoryRoutes.q095,g.state.battle?.encounter,g.save()===migrated];
+      return [g.state.flags.legacyStoryRoutes.q095,g.state.battle?.encounter,g.save()===migrated,g.map().id,g.state.location.x,g.state.location.y];
     },save);
-    assert.deepEqual(loaded,[true,'guard_10',true]);
+    assert.deepEqual(loaded,[true,'guard_10',true,'region_10_f1',13,8]);
     for(const intent of commands){
       if(await page.evaluate(()=>questPlaytest.report().status==='cleared'))break;
       assert.ok(await page.evaluate(i=>questPlaytest.dispatch(i),intent));
@@ -168,7 +169,7 @@ if(suite==='--q095'){
     const result=await page.evaluate(()=>{
       const r=questPlaytest.report();return [r.status,r.outcome,r.records.wins,r.gold.end,questPlaytest.trial.engine.state.actors.ada.xp];
     });
-    assert.deepEqual(result,['cleared','contract',1,original.state.gold,original.state.actors.ada.xp]);
+    assert.deepEqual(result,['cleared','contract',winsBefore+1,original.state.gold,original.state.actors.ada.xp]);
     console.log('PUBLIC_LEGACY_BATTLE_SAVE',q,'guard_10','contract');
   }
   let attempts=0;const first=q038.length;
