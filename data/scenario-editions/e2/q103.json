@@ -1,0 +1,2995 @@
+{
+  "schemaVersion": 1,
+  "id": "q103",
+  "number": 103,
+  "title": "一枚多い食券",
+  "client": "料理人トマ",
+  "brief": "炊き出しの食券が毎日一枚増える。出所を調べてください。",
+  "region": 1,
+  "type": "scene_graph",
+  "recommendedLevel": 1,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。灯帰りの広場から運河通りへ進み、手帳に示される現場を訪ねる。",
+  "events": [
+    {
+      "id": "q103_scene",
+      "title": "一枚多い食券：料理人トマ",
+      "points": [
+        {
+          "map": "region_1_f1",
+          "x": 5,
+          "y": 1,
+          "dungeon": "region_1"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q103.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q103.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q103.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q103"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_1"
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_1_f1",
+      "x": 5,
+      "y": 1,
+      "object": "q103_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "stop": {
+      "label": "券の数を合わせる",
+      "text": "偽券は消えた。ニルは枚数を揃え、列に来なくなった老人の皿を片付けた。",
+      "gold": 57,
+      "xp": 51,
+      "requires": {
+        "op": "eq",
+        "left": {
+          "ref": "stories.q103.values.stopped"
+        },
+        "right": true
+      }
+    },
+    "write": {
+      "label": "一人の申請",
+      "text": "申請が通り、老人の券に名前が入った。ニルは券を数えた後、まだ空いている皿も数えた。",
+      "gold": 57,
+      "xp": 51,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q103.values.asked"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q103.values.filed"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q103.values.formAt"
+            },
+            "right": "toma"
+          }
+        ]
+      }
+    },
+    "joint": {
+      "label": "二店の仕込み",
+      "text": "女将の店にも仕込みの代金が戻る。鍋の横には明日の当番表が置かれ、善意だけでは埋まらない欄も残った。",
+      "gold": 57,
+      "xp": 51,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q103.values.paid"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q103.values.shared"
+            },
+            "right": true
+          }
+        ]
+      }
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/story-q103.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3813d958cf10f9782f264",
+    "revision": "scenario-edition-e2-q103-r1",
+    "world": {
+      "truth": "偽券は食堂の献立の裏紙で、発見は難しくない。追及されると女将は謝るより先に「今日の鍋は足りるのか」と聞く。問題の中心を犯人当てから、誰が食事を受け取れるかへ移す。トマは善意に同情しても、在庫を無限には増やせない。",
+      "fixedPast": "炊き出しの料理人トマが、毎日一枚ずつ増える食券を調べてほしいと頼む。見習いニルは不正を許せない。券を増やすのは、字が読めず申請できない老人を見た、隣の食堂の女将だ。自店の客を減らす炊き出しを嫌いながら、見捨てられない。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "料理人トマ",
+        "beliefsAndGoals": "炊き出しの料理人トマが、毎日一枚ずつ増える食券を調べてほしいと頼む。見習いニルは不正を許せない。券を増やすのは、字が読めず申請できない老人を見た、隣の食堂の女将だ。自店の客を減らす炊き出しを嫌いながら、見捨てられない。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "炊き出しの食券が毎日一枚増える。出所を調べてください。"
+      }
+    ],
+    "conflict": {
+      "design": "券の調査→食堂→配膳前の相談。偽造を止める、本人の同意で申請を代筆する、食材を持ち込んで共同仕込みを仲介する道がある。代筆は無料だが老人の身の上を公表しない。食材不足なら代筆か不正停止へ戻れる。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q103.canal.entry",
+          "assertion": {
+            "title": "炊き出しの配膳口",
+            "place": "pot",
+            "cast": [
+              {
+                "entity": "nil",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q103.values.nilAt"
+                  },
+                  "right": "pot"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "toma",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q103.values.tomaAt"
+                  },
+                  "right": "pot"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "inn",
+          "script": "q103.canal.inn",
+          "assertion": {
+            "title": "隣の食堂",
+            "place": "inn",
+            "cast": [
+              {
+                "entity": "host",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q103.values.hostAt"
+                  },
+                  "right": "inn"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "elder",
+          "script": "q103.canal.elder",
+          "assertion": {
+            "title": "運河沿いの腰掛け",
+            "place": "bench",
+            "cast": [
+              {
+                "entity": "elder",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q103.values.elderAt"
+                  },
+                  "right": "bench"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "write",
+          "script": "q103.canal.write",
+          "assertion": {
+            "title": "炊き出しの配膳口",
+            "place": "pot",
+            "cast": [
+              {
+                "entity": "nil",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q103.values.nilAt"
+                  },
+                  "right": "pot"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "toma",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q103.values.tomaAt"
+                  },
+                  "right": "pot"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "joint",
+          "script": "q103.canal.joint",
+          "assertion": {
+            "title": "炊き出しの仕込み場",
+            "place": "kitchen",
+            "cast": [
+              {
+                "entity": "host",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q103.values.hostAt"
+                  },
+                  "right": "kitchen"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "paid",
+          "script": "q103.canal.paid",
+          "assertion": {
+            "title": "炊き出しの仕込み場",
+            "place": "kitchen",
+            "cast": [
+              {
+                "entity": "host",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q103.values.hostAt"
+                  },
+                  "right": "kitchen"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "roster",
+          "script": "q103.canal.roster",
+          "assertion": {
+            "title": "炊き出しの配膳口",
+            "place": "pot",
+            "cast": [
+              {
+                "entity": "toma",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q103.values.tomaAt"
+                  },
+                  "right": "pot"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "nil",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q103.values.nilAt"
+                  },
+                  "right": "pot"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "stop",
+          "script": "q103.canal.stop",
+          "assertion": {
+            "title": "炊き出しの配膳口",
+            "place": "pot",
+            "cast": [
+              {
+                "entity": "toma",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q103.values.tomaAt"
+                  },
+                  "right": "pot"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "nil",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q103.values.nilAt"
+                  },
+                  "right": "pot"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "炊き出しの食券が毎日一枚増える。出所を調べてください。"
+    },
+    "reveal": {
+      "newInformation": "偽券は食堂の献立の裏紙で、発見は難しくない。追及されると女将は謝るより先に「今日の鍋は足りるのか」と聞く。問題の中心を犯人当てから、誰が食事を受け取れるかへ移す。トマは善意に同情しても、在庫を無限には増やせない。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q103.canal.entry",
+        "assertion": {
+          "title": "炊き出しの配膳口",
+          "place": "pot",
+          "cast": [
+            {
+              "entity": "nil",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q103.values.nilAt"
+                },
+                "right": "pot"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "toma",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q103.values.tomaAt"
+                },
+                "right": "pot"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "inn",
+        "script": "q103.canal.inn",
+        "assertion": {
+          "title": "隣の食堂",
+          "place": "inn",
+          "cast": [
+            {
+              "entity": "host",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q103.values.hostAt"
+                },
+                "right": "inn"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "elder",
+        "script": "q103.canal.elder",
+        "assertion": {
+          "title": "運河沿いの腰掛け",
+          "place": "bench",
+          "cast": [
+            {
+              "entity": "elder",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q103.values.elderAt"
+                },
+                "right": "bench"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "write",
+        "script": "q103.canal.write",
+        "assertion": {
+          "title": "炊き出しの配膳口",
+          "place": "pot",
+          "cast": [
+            {
+              "entity": "nil",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q103.values.nilAt"
+                },
+                "right": "pot"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "toma",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q103.values.tomaAt"
+                },
+                "right": "pot"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "joint",
+        "script": "q103.canal.joint",
+        "assertion": {
+          "title": "炊き出しの仕込み場",
+          "place": "kitchen",
+          "cast": [
+            {
+              "entity": "host",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q103.values.hostAt"
+                },
+                "right": "kitchen"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "paid",
+        "script": "q103.canal.paid",
+        "assertion": {
+          "title": "炊き出しの仕込み場",
+          "place": "kitchen",
+          "cast": [
+            {
+              "entity": "host",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q103.values.hostAt"
+                },
+                "right": "kitchen"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "roster",
+        "script": "q103.canal.roster",
+        "assertion": {
+          "title": "炊き出しの配膳口",
+          "place": "pot",
+          "cast": [
+            {
+              "entity": "toma",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q103.values.tomaAt"
+                },
+                "right": "pot"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "nil",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q103.values.nilAt"
+                },
+                "right": "pot"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "stop",
+        "script": "q103.canal.stop",
+        "assertion": {
+          "title": "炊き出しの配膳口",
+          "place": "pot",
+          "cast": [
+            {
+              "entity": "toma",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q103.values.tomaAt"
+                },
+                "right": "pot"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "nil",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q103.values.nilAt"
+                },
+                "right": "pot"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "stories.q103.values.partyAt",
+        "type": "enum",
+        "initial": "pot",
+        "values": [
+          "pot",
+          "inn",
+          "bench",
+          "kitchen",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q103.values.nilAt",
+        "type": "enum",
+        "initial": "pot",
+        "values": [
+          "pot",
+          "inn",
+          "bench",
+          "kitchen",
+          "transit"
+        ],
+        "meaning": "nil の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q103.values.tomaAt",
+        "type": "enum",
+        "initial": "pot",
+        "values": [
+          "pot",
+          "inn",
+          "bench",
+          "kitchen",
+          "transit"
+        ],
+        "meaning": "toma の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q103.values.hostAt",
+        "type": "enum",
+        "initial": "inn",
+        "values": [
+          "pot",
+          "inn",
+          "bench",
+          "kitchen",
+          "transit"
+        ],
+        "meaning": "host の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q103.values.elderAt",
+        "type": "enum",
+        "initial": "bench",
+        "values": [
+          "pot",
+          "inn",
+          "bench",
+          "kitchen",
+          "transit"
+        ],
+        "meaning": "elder の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q103.values.formAt",
+        "type": "enum",
+        "initial": "elder",
+        "values": [
+          "pot",
+          "inn",
+          "bench",
+          "kitchen",
+          "transit",
+          "party",
+          "nil",
+          "toma",
+          "host",
+          "elder"
+        ],
+        "meaning": "form の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q103.values.asked",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "asked",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q103.values.paid",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "paid",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q103.values.stopped",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "stopped",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q103.values.filed",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "filed",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q103.values.shared",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "shared",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "ニルが一枚ずつ食券を光にかざした。最後の一枚だけ、裏から隣の食堂の献立が読める。トマは鍋を見た。「仕込みを分けるなら、調理場はうちが出すよ。でも、材料はどこかで帳尻を合わせないとね」",
+        "options": [
+          {
+            "id": "source",
+            "text": "隣の食堂を訪ねる",
+            "to": "inn",
+            "action": "entry_source"
+          },
+          {
+            "id": "stop",
+            "text": "券を照合する",
+            "to": "stop",
+            "action": "entry_stop"
+          }
+        ]
+      },
+      {
+        "id": "inn",
+        "text": "女将は献立をしまった。「それで、今日の鍋は足りるの？」。字を書けず申請できない人がいる。券を止めるほかに、本人に希望を聞く道と、二店で仕込みを分ける道がある。",
+        "options": [
+          {
+            "id": "consent",
+            "text": "本人を訪ねる",
+            "to": "elder",
+            "action": "inn_consent"
+          },
+          {
+            "id": "join",
+            "text": "仕込み場へ",
+            "to": "joint",
+            "action": "inn_join"
+          },
+          {
+            "id": "stop",
+            "text": "配膳口で照合",
+            "to": "stop",
+            "action": "inn_stop"
+          }
+        ]
+      },
+      {
+        "id": "elder",
+        "text": "「身の上まで皆に書いてやる気はない。食事の申請だけ、頼めるか」。老人は名前の欄を指し、用紙を膝に置いた。",
+        "options": [
+          {
+            "id": "write",
+            "text": "申請だけを預かる",
+            "to": "write",
+            "action": "elder_write"
+          },
+          {
+            "id": "back",
+            "text": "相談に戻る",
+            "to": "inn",
+            "action": "elder_back"
+          }
+        ]
+      },
+      {
+        "id": "write",
+        "text": "持ち帰った用紙には本人に頼まれた欄だけが開いている。トマが受け取り、ニルがその名を記した券を皿の横に置く。",
+        "options": [
+          {
+            "id": "file",
+            "text": "申請を届ける",
+            "to": "@write",
+            "action": "write_file"
+          }
+        ]
+      },
+      {
+        "id": "joint",
+        "text": "トマが貸すと言った調理場で、女将が前掛けを結んだ。「仕込みはうちの仕事にしておくれ。明日からの手間賃も帳面にね」今日の一鍋を始めるには野営糧食が一つ足りない。",
+        "options": [
+          {
+            "id": "food",
+            "text": "糧食を一つ渡す",
+            "to": "paid",
+            "action": "joint_food"
+          },
+          {
+            "id": "back",
+            "text": "食堂へ引き返す",
+            "to": "inn",
+            "action": "joint_back"
+          }
+        ]
+      },
+      {
+        "id": "paid",
+        "text": "今日の分が鍋に入った。女将は火を見ながら、翌日以降の仕込みを誰が受け持つか、配膳口の帳面にも書いておくよう頼んだ。",
+        "options": [
+          {
+            "id": "roster",
+            "text": "配膳口へ",
+            "to": "roster",
+            "action": "paid_roster"
+          }
+        ]
+      },
+      {
+        "id": "roster",
+        "text": "トマは店に払う仕込み代を記し、明日の当番表を鍋の横に置いた。空いている欄には線を引かずにおく。",
+        "options": [
+          {
+            "id": "record",
+            "text": "当番表を置く",
+            "to": "@joint",
+            "action": "roster_record"
+          }
+        ]
+      },
+      {
+        "id": "stop",
+        "text": "ニルが食券の束を取り出した。一枚ずつ照合すれば数は合う。老人の分にとっておいた皿は、まだ配膳口にある。",
+        "options": [
+          {
+            "id": "check",
+            "text": "券を照合する",
+            "to": "@stop",
+            "action": "stop_check"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.1",
+      "source": "https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4",
+      "adapter": "adv-story-state/1",
+      "scope": "quest-episode"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "entryScript": "q103.canal.visit",
+    "preserveAcceptedRoute": true,
+    "currentStoryScriptPrefix": "q103.canal.",
+    "interruptionEntries": [
+      "q103.visit",
+      "q103.canal.visit"
+    ],
+    "interruptionRoutes": [
+      {
+        "from": "q103.scene.joint",
+        "action": "food",
+        "option": "food_supplies",
+        "shortage": "q103.scene.joint.food.shortage",
+        "resume": "q103.scene.joint.food.resume",
+        "cost": {
+          "ration": 1
+        }
+      },
+      {
+        "from": "q103.canal.joint",
+        "action": "food",
+        "option": "food_supplies",
+        "shortage": "q103.canal.joint.food.shortage",
+        "resume": "q103.canal.joint.food.resume",
+        "cost": {
+          "ration": 1
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "q103.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q103.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "見習いニルは食券を並べ直した。一枚の裏に、隣の食堂の献立が透けている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "source",
+              "text": "献立を持って隣の食堂へ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q103.scene.inn"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "券の照合を厳格にし、偽券を止める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q103.end.stop"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q103.scene.inn": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q103.node",
+          "value": "inn"
+        },
+        {
+          "op": "say",
+          "text": "女将は謝るより先に尋ねた。「今日の鍋は足りるの？」字の読めない老人が申請できずにいたという。トマも、食材を無限に増やせはしない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "consent",
+              "text": "老人に代筆を望むか聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q103.scene.elder"
+                }
+              ]
+            },
+            {
+              "id": "join",
+              "text": "共同仕込みの仕事と費用を相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q103.scene.joint"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "事情を聞いても偽券は止める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q103.end.stop"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q103.scene.elder": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q103.node",
+          "value": "elder"
+        },
+        {
+          "op": "say",
+          "text": "老人は身の上を皆に話すのは断った。「申請だけ、頼めるか」トマは申請の欄だけを開いた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "write",
+              "text": "本人の同意した申請だけ代筆する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q103.end.write"
+                }
+              ]
+            },
+            {
+              "id": "back",
+              "text": "配膳前の相談に戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q103.scene.inn"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q103.scene.joint": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q103.node",
+          "value": "joint"
+        },
+        {
+          "op": "say",
+          "text": "トマは調理場所を、女将は仕込みを出すと同意した。最初の食材に野営糧食一つが足りない。明日以降の仕込みは二店の仕事になる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "food",
+              "text": "糧食一つを渡し、共同仕込みを始める",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "ration",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "野営糧食 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "ration",
+                  "count": 1
+                },
+                {
+                  "op": "jump",
+                  "script": "q103.end.joint"
+                }
+              ]
+            },
+            {
+              "id": "back",
+              "text": "寄付せず、代筆や券の扱いを相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q103.scene.inn"
+                }
+              ]
+            },
+            {
+              "id": "food_supplies",
+              "text": "野営糧食1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "ration",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "ration",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q103.scene.joint.food.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q103.end.stop": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q103.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "偽券は消えた。ニルは枚数を揃え、列に来なくなった老人の皿を片付けた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q103",
+              "outcome": "stop"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q103.end.write": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q103.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "申請が通り、老人の券に名前が入った。ニルは券を数えた後、まだ空いている皿も数えた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q103",
+              "outcome": "write"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q103.end.joint": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q103.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "女将の店にも仕込みの代金が戻る。鍋の横には明日の当番表が置かれ、善意だけでは埋まらない欄も残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q103",
+              "outcome": "joint"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q103.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q103"
+          },
+          "cases": [
+            {
+              "equals": "q103.scene.joint.food.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q103.scene.joint.food.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q103.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q103.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "stop",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "偽券は消えた。ニルは枚数を揃え、列に来なくなった老人の皿を片付けた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "write",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "申請が通り、老人の券に名前が入った。ニルは券を数えた後、まだ空いている皿も数えた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "joint",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "女将の店にも仕込みの代金が戻る。鍋の横には明日の当番表が置かれ、善意だけでは埋まらない欄も残った。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q103.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q103.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "inn",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q103.scene.inn"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "elder",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q103.scene.elder"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "joint",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q103.scene.joint"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q103.scene.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q103.scene.joint.food.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q103",
+          "value": "q103.scene.joint.food.resume"
+        },
+        {
+          "op": "say",
+          "text": "野営糧食1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q103.scene.joint.food.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q103",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "野営糧食1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q103.scene.joint"
+        }
+      ]
+    },
+    "q103.canal.entry": {
+      "storyQuest": "q103",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q103",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "ニルが一枚ずつ食券を光にかざした。最後の一枚だけ、裏から隣の食堂の献立が読める。トマは鍋を見た。「仕込みを分けるなら、調理場はうちが出すよ。でも、材料はどこかで帳尻を合わせないとね」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "source",
+              "text": "隣の食堂を訪ねる",
+              "storyAction": {
+                "quest": "q103",
+                "action": "entry_source"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q103",
+                  "action": "entry_source"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "券を照合する",
+              "storyAction": {
+                "quest": "q103",
+                "action": "entry_stop"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q103",
+                  "action": "entry_stop"
+                },
+                {
+                  "op": "jump",
+                  "script": "q103.canal.stop"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q103.canal.inn": {
+      "storyQuest": "q103",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q103",
+          "scene": "inn"
+        },
+        {
+          "op": "narrate",
+          "text": "女将は献立をしまった。「それで、今日の鍋は足りるの？」。字を書けず申請できない人がいる。券を止めるほかに、本人に希望を聞く道と、二店で仕込みを分ける道がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "consent",
+              "text": "本人を訪ねる",
+              "storyAction": {
+                "quest": "q103",
+                "action": "inn_consent"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q103",
+                  "action": "inn_consent"
+                }
+              ]
+            },
+            {
+              "id": "join",
+              "text": "仕込み場へ",
+              "storyAction": {
+                "quest": "q103",
+                "action": "inn_join"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q103",
+                  "action": "inn_join"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "配膳口で照合",
+              "storyAction": {
+                "quest": "q103",
+                "action": "inn_stop"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q103",
+                  "action": "inn_stop"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q103.canal.elder": {
+      "storyQuest": "q103",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q103",
+          "scene": "elder"
+        },
+        {
+          "op": "narrate",
+          "text": "「身の上まで皆に書いてやる気はない。食事の申請だけ、頼めるか」。老人は名前の欄を指し、用紙を膝に置いた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "write",
+              "text": "申請だけを預かる",
+              "storyAction": {
+                "quest": "q103",
+                "action": "elder_write"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q103",
+                  "action": "elder_write"
+                }
+              ]
+            },
+            {
+              "id": "back",
+              "text": "相談に戻る",
+              "storyAction": {
+                "quest": "q103",
+                "action": "elder_back"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q103",
+                  "action": "elder_back"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q103.canal.write": {
+      "storyQuest": "q103",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q103",
+          "scene": "write"
+        },
+        {
+          "op": "narrate",
+          "text": "持ち帰った用紙には本人に頼まれた欄だけが開いている。トマが受け取り、ニルがその名を記した券を皿の横に置く。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "file",
+              "text": "申請を届ける",
+              "storyAction": {
+                "quest": "q103",
+                "action": "write_file"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q103",
+                  "action": "write_file"
+                },
+                {
+                  "op": "jump",
+                  "script": "q103.canal.end.write"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q103.canal.joint": {
+      "storyQuest": "q103",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q103",
+          "scene": "joint"
+        },
+        {
+          "op": "narrate",
+          "text": "トマが貸すと言った調理場で、女将が前掛けを結んだ。「仕込みはうちの仕事にしておくれ。明日からの手間賃も帳面にね」今日の一鍋を始めるには野営糧食が一つ足りない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "food",
+              "text": "糧食を一つ渡す",
+              "storyAction": {
+                "quest": "q103",
+                "action": "joint_food"
+              },
+              "requirement": "野営糧食1個を使う。",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q103",
+                  "action": "joint_food"
+                },
+                {
+                  "op": "jump",
+                  "script": "q103.canal.paid"
+                }
+              ]
+            },
+            {
+              "id": "back",
+              "text": "食堂へ引き返す",
+              "storyAction": {
+                "quest": "q103",
+                "action": "joint_back"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q103",
+                  "action": "joint_back"
+                }
+              ]
+            },
+            {
+              "id": "food_supplies",
+              "text": "野営糧食1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "ration",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "ration",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q103.canal.joint.food.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q103.canal.paid": {
+      "storyQuest": "q103",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q103",
+          "scene": "paid"
+        },
+        {
+          "op": "narrate",
+          "text": "今日の分が鍋に入った。女将は火を見ながら、翌日以降の仕込みを誰が受け持つか、配膳口の帳面にも書いておくよう頼んだ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "roster",
+              "text": "配膳口へ",
+              "storyAction": {
+                "quest": "q103",
+                "action": "paid_roster"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q103",
+                  "action": "paid_roster"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q103.canal.roster": {
+      "storyQuest": "q103",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q103",
+          "scene": "roster"
+        },
+        {
+          "op": "narrate",
+          "text": "トマは店に払う仕込み代を記し、明日の当番表を鍋の横に置いた。空いている欄には線を引かずにおく。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "record",
+              "text": "当番表を置く",
+              "storyAction": {
+                "quest": "q103",
+                "action": "roster_record"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q103",
+                  "action": "roster_record"
+                },
+                {
+                  "op": "jump",
+                  "script": "q103.canal.end.joint"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q103.canal.stop": {
+      "storyQuest": "q103",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q103",
+          "scene": "stop"
+        },
+        {
+          "op": "narrate",
+          "text": "ニルが食券の束を取り出した。一枚ずつ照合すれば数は合う。老人の分にとっておいた皿は、まだ配膳口にある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "check",
+              "text": "券を照合する",
+              "storyAction": {
+                "quest": "q103",
+                "action": "stop_check"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q103",
+                  "action": "stop_check"
+                },
+                {
+                  "op": "jump",
+                  "script": "q103.canal.end.stop"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q103.canal.end.stop": {
+      "commands": [
+        {
+          "op": "jump",
+          "script": "q103.end.stop"
+        }
+      ]
+    },
+    "q103.canal.end.write": {
+      "commands": [
+        {
+          "op": "jump",
+          "script": "q103.end.write"
+        }
+      ]
+    },
+    "q103.canal.end.joint": {
+      "commands": [
+        {
+          "op": "jump",
+          "script": "q103.end.joint"
+        }
+      ]
+    },
+    "q103.canal.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q103"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q103.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.questResume.q103"
+              },
+              "cases": [
+                {
+                  "equals": "q103.canal.joint.food.resume",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q103.canal.joint.food.resume"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "quests.q103.stage"
+                    },
+                    "right": "completed"
+                  },
+                  "then": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "quests.q103.outcome"
+                      },
+                      "cases": [
+                        {
+                          "equals": "stop",
+                          "commands": [
+                            {
+                              "op": "narrate",
+                              "text": "偽券は消えた。ニルは枚数を揃え、列に来なくなった老人の皿を片付けた。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "write",
+                          "commands": [
+                            {
+                              "op": "narrate",
+                              "text": "申請が通り、老人の券に名前が入った。ニルは券を数えた後、まだ空いている皿も数えた。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "joint",
+                          "commands": [
+                            {
+                              "op": "narrate",
+                              "text": "女将の店にも仕込みの代金が戻る。鍋の横には明日の当番表が置かれ、善意だけでは埋まらない欄も残った。"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": []
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "story.init",
+                      "quest": "q103"
+                    },
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "stories.q103.scene"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q103.canal.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "inn",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q103.canal.inn"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "elder",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q103.canal.elder"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "write",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q103.canal.write"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "joint",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q103.canal.joint"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "paid",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q103.canal.paid"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "roster",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q103.canal.roster"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "stop",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q103.canal.stop"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
+                        {
+                          "op": "jump",
+                          "script": "q103.canal.entry"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q103.canal.joint.food.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q103",
+          "value": "q103.canal.joint.food.resume"
+        },
+        {
+          "op": "say",
+          "text": "野営糧食1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q103.canal.joint.food.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q103",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "野営糧食1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q103.canal.joint"
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "pot": "炊き出しの配膳口",
+      "inn": "隣の食堂",
+      "bench": "運河沿いの腰掛け",
+      "kitchen": "炊き出しの仕込み場",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "pot"
+      ],
+      [
+        "transit",
+        "inn"
+      ],
+      [
+        "transit",
+        "bench"
+      ],
+      [
+        "transit",
+        "kitchen"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "pot",
+        "values": [
+          "pot",
+          "inn",
+          "bench",
+          "kitchen",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "nilAt": {
+        "type": "enum",
+        "initial": "pot",
+        "values": [
+          "pot",
+          "inn",
+          "bench",
+          "kitchen",
+          "transit"
+        ],
+        "meaning": "nil の所在または保持者"
+      },
+      "tomaAt": {
+        "type": "enum",
+        "initial": "pot",
+        "values": [
+          "pot",
+          "inn",
+          "bench",
+          "kitchen",
+          "transit"
+        ],
+        "meaning": "toma の所在または保持者"
+      },
+      "hostAt": {
+        "type": "enum",
+        "initial": "inn",
+        "values": [
+          "pot",
+          "inn",
+          "bench",
+          "kitchen",
+          "transit"
+        ],
+        "meaning": "host の所在または保持者"
+      },
+      "elderAt": {
+        "type": "enum",
+        "initial": "bench",
+        "values": [
+          "pot",
+          "inn",
+          "bench",
+          "kitchen",
+          "transit"
+        ],
+        "meaning": "elder の所在または保持者"
+      },
+      "formAt": {
+        "type": "enum",
+        "initial": "elder",
+        "values": [
+          "pot",
+          "inn",
+          "bench",
+          "kitchen",
+          "transit",
+          "party",
+          "nil",
+          "toma",
+          "host",
+          "elder"
+        ],
+        "meaning": "form の所在または保持者"
+      },
+      "asked": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "asked"
+      },
+      "paid": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "paid"
+      },
+      "stopped": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "stopped"
+      },
+      "filed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "filed"
+      },
+      "shared": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "shared"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "nil": {
+        "holder": "nilAt",
+        "kind": "person",
+        "character": "e2_q103_nil"
+      },
+      "toma": {
+        "holder": "tomaAt",
+        "kind": "person",
+        "character": "e2_q103_toma"
+      },
+      "host": {
+        "holder": "hostAt",
+        "kind": "person",
+        "character": "e2_q103_host"
+      },
+      "elder": {
+        "holder": "elderAt",
+        "kind": "person",
+        "character": "e2_q103_elder"
+      },
+      "form": {
+        "holder": "formAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {},
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "炊き出しの配膳口",
+        "place": "pot",
+        "cast": [
+          {
+            "entity": "nil",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q103.values.nilAt"
+              },
+              "right": "pot"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "toma",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q103.values.tomaAt"
+              },
+              "right": "pot"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "inn": {
+        "title": "隣の食堂",
+        "place": "inn",
+        "cast": [
+          {
+            "entity": "host",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q103.values.hostAt"
+              },
+              "right": "inn"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "elder": {
+        "title": "運河沿いの腰掛け",
+        "place": "bench",
+        "cast": [
+          {
+            "entity": "elder",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q103.values.elderAt"
+              },
+              "right": "bench"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "write": {
+        "title": "炊き出しの配膳口",
+        "place": "pot",
+        "cast": [
+          {
+            "entity": "nil",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q103.values.nilAt"
+              },
+              "right": "pot"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "toma",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q103.values.tomaAt"
+              },
+              "right": "pot"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "joint": {
+        "title": "炊き出しの仕込み場",
+        "place": "kitchen",
+        "cast": [
+          {
+            "entity": "host",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q103.values.hostAt"
+              },
+              "right": "kitchen"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "paid": {
+        "title": "炊き出しの仕込み場",
+        "place": "kitchen",
+        "cast": [
+          {
+            "entity": "host",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q103.values.hostAt"
+              },
+              "right": "kitchen"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "roster": {
+        "title": "炊き出しの配膳口",
+        "place": "pot",
+        "cast": [
+          {
+            "entity": "toma",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q103.values.tomaAt"
+              },
+              "right": "pot"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "nil",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q103.values.nilAt"
+              },
+              "right": "pot"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "stop": {
+        "title": "炊き出しの配膳口",
+        "place": "pot",
+        "cast": [
+          {
+            "entity": "toma",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q103.values.tomaAt"
+              },
+              "right": "pot"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "nil",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q103.values.nilAt"
+              },
+              "right": "pot"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_source": {
+        "from": [
+          "entry"
+        ],
+        "to": "inn",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "inn"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "inn",
+          "companions": []
+        },
+        "depart": []
+      },
+      "entry_stop": {
+        "from": [
+          "entry"
+        ],
+        "to": "stop",
+        "requires": true,
+        "effects": [],
+        "once": true
+      },
+      "inn_consent": {
+        "from": [
+          "inn"
+        ],
+        "to": "elder",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "bench"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "bench",
+          "companions": []
+        },
+        "depart": []
+      },
+      "inn_join": {
+        "from": [
+          "inn"
+        ],
+        "to": "joint",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "host"
+            ],
+            "path": [
+              "transit",
+              "kitchen"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "kitchen",
+          "companions": [
+            "host"
+          ]
+        },
+        "depart": []
+      },
+      "inn_stop": {
+        "from": [
+          "inn"
+        ],
+        "to": "stop",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "pot"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "pot",
+          "companions": []
+        },
+        "depart": []
+      },
+      "elder_write": {
+        "from": [
+          "elder"
+        ],
+        "to": "write",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "pot"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "pot",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "asked",
+            "value": true
+          },
+          {
+            "op": "transfer",
+            "entity": "form",
+            "from": "elder",
+            "to": "party"
+          }
+        ]
+      },
+      "elder_back": {
+        "from": [
+          "elder"
+        ],
+        "to": "inn",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "inn"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "inn",
+          "companions": []
+        },
+        "depart": []
+      },
+      "write_file": {
+        "from": [
+          "write"
+        ],
+        "ending": "write",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "form",
+            "from": "party",
+            "to": "toma"
+          },
+          {
+            "op": "set",
+            "key": "filed",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "joint_food": {
+        "from": [
+          "joint"
+        ],
+        "to": "paid",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "paid",
+            "value": true
+          }
+        ],
+        "cost": {
+          "ration": 1
+        },
+        "once": true
+      },
+      "joint_back": {
+        "from": [
+          "joint"
+        ],
+        "to": "inn",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "host"
+            ],
+            "path": [
+              "transit",
+              "inn"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "inn",
+          "companions": [
+            "host"
+          ]
+        },
+        "depart": []
+      },
+      "paid_roster": {
+        "from": [
+          "paid"
+        ],
+        "to": "roster",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "pot"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "pot",
+          "companions": []
+        },
+        "depart": []
+      },
+      "roster_record": {
+        "from": [
+          "roster"
+        ],
+        "ending": "joint",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "shared",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "stop_check": {
+        "from": [
+          "stop"
+        ],
+        "ending": "stop",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "stopped",
+            "value": true
+          }
+        ],
+        "once": true
+      }
+    },
+    "endings": {
+      "stop": {
+        "op": "eq",
+        "left": {
+          "ref": "stories.q103.values.stopped"
+        },
+        "right": true
+      },
+      "write": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q103.values.asked"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q103.values.filed"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q103.values.formAt"
+            },
+            "right": "toma"
+          }
+        ]
+      },
+      "joint": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q103.values.paid"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q103.values.shared"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "pot": {
+        "kind": "town",
+        "location": "e2_q103_pot"
+      },
+      "inn": {
+        "kind": "town",
+        "location": "e2_q103_inn"
+      },
+      "bench": {
+        "kind": "town",
+        "location": "e2_q103_bench"
+      },
+      "kitchen": {
+        "kind": "town",
+        "location": "e2_q103_kitchen"
+      }
+    },
+    "revision": 1
+  }
+}

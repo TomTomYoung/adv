@@ -7,10 +7,11 @@ import {createQuestTrial,questTrialReport} from '../src/application/quest-playte
 import {drain,fight} from '../tests/helpers.mjs';
 
 const suite=process.argv[2]??'market';
-const suites={market:()=>import('../tests/market-world-helpers.mjs'),'--deep-abyss':()=>import('../tests/deep-abyss-helpers.mjs'),'--q091':()=>import('../tests/q091-helpers.mjs'),'--q092':()=>import('../tests/q092-helpers.mjs'),'--q093':()=>import('../tests/q093-helpers.mjs'),'--q094':()=>import('../tests/q094-helpers.mjs'),'--q095':()=>import('../tests/q095-helpers.mjs')};
+const suites={'--canal':()=>import('../tests/canal-world-helpers.mjs'),market:()=>import('../tests/market-world-helpers.mjs'),'--deep-abyss':()=>import('../tests/deep-abyss-helpers.mjs'),'--q091':()=>import('../tests/q091-helpers.mjs'),'--q092':()=>import('../tests/q092-helpers.mjs'),'--q093':()=>import('../tests/q093-helpers.mjs'),'--q094':()=>import('../tests/q094-helpers.mjs'),'--q095':()=>import('../tests/q095-helpers.mjs')};
 assert.ok(Object.hasOwn(suites,suite),'Unknown published trial suite');
 const {data,catalog,routes,arrive,expectedValues,setupRoute}=await suites[suite]();
-const level=suite==='market'?6:10;
+const level=suite==='--canal'?1:suite==='market'?6:10;
+const checkEachChoice=suite==='--deep-abyss'||suite==='--canal';
 const base=process.env.ADV_TRIAL_BASE_URL??'https://tomtomyoung.github.io/adv/',hash=b=>createHash('sha256').update(b).digest('hex');
 const quests=Object.keys(routes),files=['runtime.json','data/scenario-editions.json','data/scenario-editions/e2/geography.json',
   'data/scenario-editions/e2/companions.json','playtests/quest-parties.json',...quests.flatMap(q=>['data/quests/'+q+'.json','data/scenario-editions/e2/'+q+'.json'])];
@@ -35,7 +36,7 @@ function trace(quest,route){
     const ok=dispatch(intent);
     if(ok){
       commands.push(intent);
-      if(suite==='--deep-abyss'&&intent.type==='choose'&&route.path.includes(intent.id)){
+      if(checkEachChoice&&intent.type==='choose'&&route.path.includes(intent.id)){
         checkpoints.push({same:true,values:structuredClone(g.state.stories[quest].values),journey:g.state.journey?.action??null,
           battle:g.state.battle?.encounter??null,rations:g.state.inventory.ration??0});
       }
@@ -56,7 +57,7 @@ try{
   const page=await browser.newPage({viewport:{width:390,height:844}}),errors=[],q038=[];
   page.on('pageerror',e=>errors.push(e.message));
   page.on('response',r=>{if(new URL(r.url()).pathname.endsWith('/e2/q038.json'))q038.push(r.status());});
-  const url=base+'quest-party-playtest.html?edition=e2&quest='+quests[0]+'&party=balanced&level='+level+'&start=site&outcome=informed&seed=1907&battleMode=classic';
+  const url=base+'quest-party-playtest.html?edition=e2&quest='+quests[0]+'&party=balanced&level='+level+'&start=site&outcome='+routes[quests[0]][0].outcome+'&seed=1907&battleMode=classic';
   assert.equal((await page.goto(url,{waitUntil:'domcontentloaded'})).status(),200);
   await page.locator('#launch:enabled').waitFor({timeout:120000});
   assert.ok(q038.includes(200));await page.selectOption('#effects','off');
@@ -72,7 +73,7 @@ try{
           const button=page.locator('#app [data-focus="choice:'+intent.id+'"]:visible');
           for(let n=0;n<25&&!await button.isVisible();n++)await page.locator('#app [data-focus="message:next"]:visible').click({timeout:7000});
           await button.click({timeout:10000});
-if(suite==='--deep-abyss'){
+          if(checkEachChoice){
             const saved=await page.evaluate(q=>{
               const g=questPlaytest.trial.engine,raw=g.save();g.load(raw);questPlaytest.render();
               return {same:g.save()===raw,values:g.state.stories[q].values,journey:g.state.journey?.action??null,
@@ -198,6 +199,17 @@ if(suite==='--q095'){
     console.log('PUBLIC_LEGACY_BATTLE_SAVE',q,'guard_10','contract');
   }
   if(suite==='--deep-abyss')await (await import('./verify-deep-abyss-saves.mjs')).verifyDeepAbyssSaves(page);
+  if(suite==='--canal'){
+    const {previous}=await suites[suite]();
+    const {verifyPublishedSaves}=await import('./verify-published-saves.mjs');
+    await verifyPublishedSaves(page,{previous,catalog,level,cases:[
+      ['q101',['watch','talk','wish','listen'],['talk','visit','agree'],'visit'],
+      ['q102',['begin','family','heard','notice'],['inn','heard','go','bell'],'bell'],
+      ['q103',['source','join','back','consent'],['write'],'write'],
+      ['q104',['sound','learn','find'],['buy'],'buy'],
+      ['q105',['canal','roles','back','report'],['roles','agree'],'roles']
+    ]});
+  }
   let attempts=0;const first=q038.length;
   await page.route(url=>url.pathname.endsWith('/e2/q038.json'),async request=>{
     if(++attempts===1)await request.fulfill({status:503,body:'Temporary outage'});

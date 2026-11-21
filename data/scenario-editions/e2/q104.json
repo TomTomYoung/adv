@@ -1,0 +1,3232 @@
+{
+  "schemaVersion": 1,
+  "id": "q104",
+  "number": 104,
+  "title": "雨を売る少年",
+  "client": "花売りの少年",
+  "brief": "雨音を出す瓶を盗まれた。音を頼りに捜してください。",
+  "region": 1,
+  "type": "scene_graph",
+  "recommendedLevel": 1,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。灯帰りの広場から運河通りへ進み、手帳に示される現場を訪ねる。",
+  "events": [
+    {
+      "id": "q104_scene",
+      "title": "雨を売る少年：花売りの少年",
+      "points": [
+        {
+          "map": "region_1_f1",
+          "x": 6,
+          "y": 1,
+          "dungeon": "region_1"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q104.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q104.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q104.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q104"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_1"
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_1_f1",
+      "x": 6,
+      "y": 1,
+      "object": "q104_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "return": {
+      "label": "商品の返却",
+      "text": "瓶は店へ戻った。ベロは借りを返すため、昼の店先で一曲弾いた。",
+      "gold": 57,
+      "xp": 51,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q104.values.use"
+            },
+            "right": "returned"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q104.values.bottleAt"
+            },
+            "right": "stall"
+          }
+        ]
+      }
+    },
+    "buy": {
+      "label": "雨音の贈り物",
+      "text": "支払いを受けた少年は包みを付けた。夜、ベロの窓から雨音と同じくしゃみが聞こえた。",
+      "gold": 57,
+      "xp": 51,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q104.values.paid"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q104.values.owner"
+            },
+            "right": "vero"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q104.values.use"
+            },
+            "right": "gift"
+          }
+        ]
+      }
+    },
+    "lease": {
+      "label": "夜だけの雨",
+      "text": "曲入りの瓶が棚に増えた。雨音を選んだ客は、くしゃみのところで笑って買った。",
+      "gold": 57,
+      "xp": 51,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q104.values.lease"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q104.values.owner"
+            },
+            "right": "boy"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q104.values.use"
+            },
+            "right": "overnight"
+          }
+        ]
+      }
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/story-q104.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3813d958cf10f9782f264",
+    "revision": "scenario-edition-e2-q104-r1",
+    "world": {
+      "truth": "追跡は音を頼りにするが、噴水、桶、屋根の修理音が紛らわしく響く。瓶は雨を生むのではなく、最初に聞かせた音を繰り返す品だ。ベロが思い出す雨音の途中に、少年のくしゃみが入る。魔法の誤認を、笑いと郷愁へ着地させる。",
+      "fixedPast": "花売りの少年が、晴天なのに雨音を立てる瓶を盗まれたと訴える。盗んだのは老楽師ベロ。眠れない夜に、故郷の雨の音を聞きたかったのだ。少年は不思議な道具の商売に誇りがあり、同情で商品を無価値にされることを嫌う。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "花売りの少年",
+        "beliefsAndGoals": "花売りの少年が、晴天なのに雨音を立てる瓶を盗まれたと訴える。盗んだのは老楽師ベロ。眠れない夜に、故郷の雨の音を聞きたかったのだ。少年は不思議な道具の商売に誇りがあり、同情で商品を無価値にされることを嫌う。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "雨音を出す瓶を盗まれた。音を頼りに捜してください。"
+      }
+    ],
+    "conflict": {
+      "design": "聞き込み→音の追跡→発見→返却／買い取りの仲介／貸出の提案。仕組みに早く気づけば少年へ直接尋ね、追跡を短縮できる。買い取りは金が足りなければ選べないが、返却は常に可能だ。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q104.canal.entry",
+          "assertion": {
+            "title": "花売りの少年の露店",
+            "place": "stall",
+            "cast": [
+              {
+                "entity": "boy",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q104.values.boyAt"
+                  },
+                  "right": "stall"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "rule",
+          "script": "q104.canal.rule",
+          "assertion": {
+            "title": "花売りの少年の露店",
+            "place": "stall",
+            "cast": [
+              {
+                "entity": "boy",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q104.values.boyAt"
+                  },
+                  "right": "stall"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "sound",
+          "script": "q104.canal.sound",
+          "assertion": {
+            "title": "噴水のある辻",
+            "place": "fountain",
+            "cast": [
+              {
+                "entity": "boy",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q104.values.boyAt"
+                  },
+                  "right": "fountain"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "found",
+          "script": "q104.canal.found",
+          "assertion": {
+            "title": "楽師の窓辺",
+            "place": "window",
+            "cast": [
+              {
+                "entity": "boy",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q104.values.boyAt"
+                  },
+                  "right": "window"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "vero",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q104.values.veroAt"
+                  },
+                  "right": "window"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "lease",
+          "script": "q104.canal.lease",
+          "assertion": {
+            "title": "楽師の窓辺",
+            "place": "window",
+            "cast": [
+              {
+                "entity": "boy",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q104.values.boyAt"
+                  },
+                  "right": "window"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "vero",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q104.values.veroAt"
+                  },
+                  "right": "window"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "carrying",
+          "script": "q104.canal.carrying",
+          "assertion": {
+            "title": "楽師の窓辺",
+            "place": "window",
+            "cast": [
+              {
+                "entity": "boy",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q104.values.boyAt"
+                  },
+                  "right": "window"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "vero",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q104.values.veroAt"
+                  },
+                  "right": "window"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "shelf",
+          "script": "q104.canal.shelf",
+          "assertion": {
+            "title": "花売りの少年の露店",
+            "place": "stall",
+            "cast": [
+              {
+                "entity": "boy",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q104.values.boyAt"
+                  },
+                  "right": "stall"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "receipt",
+          "script": "q104.canal.receipt",
+          "assertion": {
+            "title": "楽師の窓辺",
+            "place": "window",
+            "cast": [
+              {
+                "entity": "boy",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q104.values.boyAt"
+                  },
+                  "right": "window"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "vero",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q104.values.veroAt"
+                  },
+                  "right": "window"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "terms",
+          "script": "q104.canal.terms",
+          "assertion": {
+            "title": "楽師の窓辺",
+            "place": "window",
+            "cast": [
+              {
+                "entity": "boy",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q104.values.boyAt"
+                  },
+                  "right": "window"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "vero",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q104.values.veroAt"
+                  },
+                  "right": "window"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "雨音を出す瓶を盗まれた。音を頼りに捜してください。"
+    },
+    "reveal": {
+      "newInformation": "追跡は音を頼りにするが、噴水、桶、屋根の修理音が紛らわしく響く。瓶は雨を生むのではなく、最初に聞かせた音を繰り返す品だ。ベロが思い出す雨音の途中に、少年のくしゃみが入る。魔法の誤認を、笑いと郷愁へ着地させる。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q104.canal.entry",
+        "assertion": {
+          "title": "花売りの少年の露店",
+          "place": "stall",
+          "cast": [
+            {
+              "entity": "boy",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q104.values.boyAt"
+                },
+                "right": "stall"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "rule",
+        "script": "q104.canal.rule",
+        "assertion": {
+          "title": "花売りの少年の露店",
+          "place": "stall",
+          "cast": [
+            {
+              "entity": "boy",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q104.values.boyAt"
+                },
+                "right": "stall"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "sound",
+        "script": "q104.canal.sound",
+        "assertion": {
+          "title": "噴水のある辻",
+          "place": "fountain",
+          "cast": [
+            {
+              "entity": "boy",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q104.values.boyAt"
+                },
+                "right": "fountain"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "found",
+        "script": "q104.canal.found",
+        "assertion": {
+          "title": "楽師の窓辺",
+          "place": "window",
+          "cast": [
+            {
+              "entity": "boy",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q104.values.boyAt"
+                },
+                "right": "window"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "vero",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q104.values.veroAt"
+                },
+                "right": "window"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "lease",
+        "script": "q104.canal.lease",
+        "assertion": {
+          "title": "楽師の窓辺",
+          "place": "window",
+          "cast": [
+            {
+              "entity": "boy",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q104.values.boyAt"
+                },
+                "right": "window"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "vero",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q104.values.veroAt"
+                },
+                "right": "window"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "carrying",
+        "script": "q104.canal.carrying",
+        "assertion": {
+          "title": "楽師の窓辺",
+          "place": "window",
+          "cast": [
+            {
+              "entity": "boy",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q104.values.boyAt"
+                },
+                "right": "window"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "vero",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q104.values.veroAt"
+                },
+                "right": "window"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "shelf",
+        "script": "q104.canal.shelf",
+        "assertion": {
+          "title": "花売りの少年の露店",
+          "place": "stall",
+          "cast": [
+            {
+              "entity": "boy",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q104.values.boyAt"
+                },
+                "right": "stall"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "receipt",
+        "script": "q104.canal.receipt",
+        "assertion": {
+          "title": "楽師の窓辺",
+          "place": "window",
+          "cast": [
+            {
+              "entity": "boy",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q104.values.boyAt"
+                },
+                "right": "window"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "vero",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q104.values.veroAt"
+                },
+                "right": "window"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "terms",
+        "script": "q104.canal.terms",
+        "assertion": {
+          "title": "楽師の窓辺",
+          "place": "window",
+          "cast": [
+            {
+              "entity": "boy",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q104.values.boyAt"
+                },
+                "right": "window"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "vero",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q104.values.veroAt"
+                },
+                "right": "window"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "stories.q104.values.partyAt",
+        "type": "enum",
+        "initial": "stall",
+        "values": [
+          "stall",
+          "fountain",
+          "window",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q104.values.boyAt",
+        "type": "enum",
+        "initial": "stall",
+        "values": [
+          "stall",
+          "fountain",
+          "window",
+          "transit"
+        ],
+        "meaning": "boy の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q104.values.veroAt",
+        "type": "enum",
+        "initial": "window",
+        "values": [
+          "stall",
+          "fountain",
+          "window",
+          "transit"
+        ],
+        "meaning": "vero の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q104.values.bottleAt",
+        "type": "enum",
+        "initial": "vero",
+        "values": [
+          "stall",
+          "fountain",
+          "window",
+          "transit",
+          "party",
+          "boy",
+          "vero"
+        ],
+        "meaning": "bottle の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q104.values.rule",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "rule",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q104.values.paid",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "paid",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q104.values.lease",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "lease",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q104.values.owner",
+        "type": "enum",
+        "initial": "boy",
+        "values": [
+          "boy",
+          "vero"
+        ],
+        "meaning": "瓶の所有者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q104.values.use",
+        "type": "enum",
+        "initial": "unsettled",
+        "values": [
+          "unsettled",
+          "returned",
+          "gift",
+          "overnight"
+        ],
+        "meaning": "use",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "晴天の棚に丸い跡が一つ。少年は空いたところに耳を寄せた。「向こうから、うちの雨が聞こえる」。",
+        "options": [
+          {
+            "id": "sound",
+            "text": "水音を追う",
+            "to": "sound",
+            "action": "entry_sound"
+          },
+          {
+            "id": "ask",
+            "text": "仕組みを尋ねる",
+            "to": "rule",
+            "action": "entry_ask"
+          }
+        ]
+      },
+      {
+        "id": "rule",
+        "text": "少年が別の瓶の口で指を鳴らす。少し待つと瓶だけが同じ音を返した。「初めに聞かせた音を覚えるんだ」。",
+        "options": [
+          {
+            "id": "find",
+            "text": "繰り返す音を追う",
+            "to": "found",
+            "action": "rule_find"
+          }
+        ]
+      },
+      {
+        "id": "sound",
+        "text": "噴水の間隔は同じでも風で飛沫がずれる。屋根の槌は次第に近づく。遠い窓からだけ、雨とくしゃみが毎回同じ順で聞こえた。",
+        "options": [
+          {
+            "id": "repeat",
+            "text": "くしゃみを追う",
+            "to": "found",
+            "action": "sound_repeat"
+          },
+          {
+            "id": "learn",
+            "text": "店で仕組みを聞く",
+            "to": "rule",
+            "action": "sound_learn"
+          }
+        ]
+      },
+      {
+        "id": "found",
+        "text": {
+          "when": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q104.values.rule"
+            },
+            "right": true
+          },
+          "yes": "聞き慣れた繰り返しの先で、ベロが瓶を抱えていた。「故郷の雨だ」。少年は掌を出した。「それでも、売り物だよ」。",
+          "no": "また同じくしゃみだ。窓を開けたベロは瓶を離さない。「故郷では、夜になると降った」。少年が値札を見せた。"
+        },
+        "options": [
+          {
+            "id": "return",
+            "text": "瓶を返してもらう",
+            "to": "carrying",
+            "action": "found_return"
+          },
+          {
+            "id": "buy",
+            "text": "40Gで買う",
+            "to": "receipt",
+            "action": "found_buy"
+          },
+          {
+            "id": "lease",
+            "text": "貸し方を相談",
+            "to": "lease",
+            "action": "found_lease"
+          }
+        ]
+      },
+      {
+        "id": "lease",
+        "text": "「朝には返すよ」とベロ。「じゃあ一曲、別の瓶に入れて」。所有者は少年のまま、夜だけ貸す条件がそろった。",
+        "options": [
+          {
+            "id": "agree",
+            "text": "夜だけ貸す",
+            "to": "terms",
+            "action": "lease_agree"
+          },
+          {
+            "id": "return",
+            "text": "契約せず返す",
+            "to": "carrying",
+            "action": "lease_return"
+          }
+        ]
+      },
+      {
+        "id": "carrying",
+        "text": "瓶が少年の手に戻った。水音を割らないよう抱えて、少年と露店の棚へ戻る。",
+        "options": [
+          {
+            "id": "shelf",
+            "text": "露店へ戻る",
+            "to": "shelf",
+            "action": "carrying_shelf"
+          }
+        ]
+      },
+      {
+        "id": "shelf",
+        "text": "少年が瓶を棚の丸い跡に戻すと、その場所で雨音がまた鳴り始めた。",
+        "options": [
+          {
+            "id": "place",
+            "text": "棚に戻す",
+            "to": "@return",
+            "action": "shelf_place"
+          }
+        ]
+      },
+      {
+        "id": "receipt",
+        "text": "少年が四十枚を数えて包み紙を渡した。ベロの手元の瓶に包みが掛かる。今度はその人自身の持ち物だ。",
+        "options": [
+          {
+            "id": "gift",
+            "text": "贈り物を包む",
+            "to": "@buy",
+            "action": "receipt_gift"
+          }
+        ]
+      },
+      {
+        "id": "terms",
+        "text": "夜の借り手、朝の返し先、曲を録る瓶。それぞれを少年とベロが確かめる。少年は自分の値札を外さなかった。",
+        "options": [
+          {
+            "id": "record",
+            "text": "貸し方を記す",
+            "to": "@lease",
+            "action": "terms_record"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.1",
+      "source": "https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4",
+      "adapter": "adv-story-state/1",
+      "scope": "quest-episode"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "entryScript": "q104.canal.visit",
+    "preserveAcceptedRoute": true,
+    "currentStoryScriptPrefix": "q104.canal.",
+    "interruptionEntries": [
+      "q104.visit",
+      "q104.canal.visit"
+    ],
+    "interruptionRoutes": [
+      {
+        "from": "q104.scene.found",
+        "action": "buy",
+        "option": "buy_supplies",
+        "shortage": "q104.scene.found.buy.shortage",
+        "resume": "q104.scene.found.buy.resume",
+        "cost": {
+          "gold": 40
+        }
+      },
+      {
+        "from": "q104.canal.found",
+        "action": "buy",
+        "option": "buy_supplies",
+        "shortage": "q104.canal.found.buy.shortage",
+        "resume": "q104.canal.found.buy.resume",
+        "cost": {
+          "gold": 40
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "q104.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q104.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "晴れている。少年の空の棚から、瓶を置いていた丸い跡だけが消えていなかった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sound",
+              "text": "水音をたどる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q104.scene.sound"
+                }
+              ]
+            },
+            {
+              "id": "ask",
+              "text": "瓶の仕組みを先に尋ねる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q104.scene.rule"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q104.scene.rule": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q104.node",
+          "value": "rule"
+        },
+        {
+          "op": "say",
+          "text": "少年が別の瓶へ指を鳴らすと、同じ音が繰り返された。「入れた音を覚えるんだ。雨が降るわけじゃない」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "find",
+              "text": "繰り返す音を選んで追う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q104.loop",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q104.scene.found"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q104.scene.sound": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q104.node",
+          "value": "sound"
+        },
+        {
+          "op": "say",
+          "text": "噴水は一定、桶の音は途切れ、屋根の修理音は近づく。遠くの雨音だけに、同じくしゃみが混じる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "repeat",
+              "text": "くしゃみを繰り返す音へ向かう",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q104.scene.found"
+                }
+              ]
+            },
+            {
+              "id": "learn",
+              "text": "少年へ仕組みを確かめる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q104.scene.rule"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q104.scene.found": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q104.node",
+          "value": "found"
+        },
+        {
+          "op": "say",
+          "text": "老楽師ベロは瓶を抱いていた。「故郷では、夜になると降った」少年は手を差し出す。「それでも商品だよ」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "瓶を少年へ返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q104.end.return"
+                }
+              ]
+            },
+            {
+              "id": "buy",
+              "text": "40Gを払い、少年から買って楽師へ贈る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 40
+                  }
+                ]
+              },
+              "requirement": "G 40消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -40
+                },
+                {
+                  "op": "jump",
+                  "script": "q104.end.buy"
+                }
+              ]
+            },
+            {
+              "id": "lease",
+              "text": "音楽との交換で貸し出せないか相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q104.scene.lease"
+                }
+              ]
+            },
+            {
+              "id": "buy_supplies",
+              "text": "40Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 40
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 40
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q104.scene.found.buy.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q104.scene.lease": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q104.node",
+          "value": "lease"
+        },
+        {
+          "op": "say",
+          "text": "少年は録音した曲を新商品にしたいと言い、ベロは朝には瓶を返すと答えた。所有者は少年のまま、夜だけ貸す約束になる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "二人の貸出契約を取り持つ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q104.end.lease"
+                }
+              ]
+            },
+            {
+              "id": "return",
+              "text": "契約を結ばず瓶を返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q104.end.return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q104.end.return": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q104.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "瓶は店へ戻った。ベロは借りを返すため、昼の店先で一曲弾いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q104",
+              "outcome": "return"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q104.end.buy": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q104.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "支払いを受けた少年は包みを付けた。夜、ベロの窓から雨音と同じくしゃみが聞こえた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q104",
+              "outcome": "buy"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q104.end.lease": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q104.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "曲入りの瓶が棚に増えた。雨音を選んだ客は、くしゃみのところで笑って買った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q104",
+              "outcome": "lease"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q104.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q104"
+          },
+          "cases": [
+            {
+              "equals": "q104.scene.found.buy.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q104.scene.found.buy.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q104.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q104.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "return",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "瓶は店へ戻った。ベロは借りを返すため、昼の店先で一曲弾いた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "buy",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "支払いを受けた少年は包みを付けた。夜、ベロの窓から雨音と同じくしゃみが聞こえた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "lease",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "曲入りの瓶が棚に増えた。雨音を選んだ客は、くしゃみのところで笑って買った。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q104.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q104.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "rule",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q104.scene.rule"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "sound",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q104.scene.sound"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "found",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q104.scene.found"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "lease",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q104.scene.lease"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q104.scene.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q104.scene.found.buy.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q104",
+          "value": "q104.scene.found.buy.resume"
+        },
+        {
+          "op": "say",
+          "text": "40Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q104.scene.found.buy.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q104",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "40Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q104.scene.found"
+        }
+      ]
+    },
+    "q104.canal.entry": {
+      "storyQuest": "q104",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q104",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "晴天の棚に丸い跡が一つ。少年は空いたところに耳を寄せた。「向こうから、うちの雨が聞こえる」。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sound",
+              "text": "水音を追う",
+              "storyAction": {
+                "quest": "q104",
+                "action": "entry_sound"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q104",
+                  "action": "entry_sound"
+                }
+              ]
+            },
+            {
+              "id": "ask",
+              "text": "仕組みを尋ねる",
+              "storyAction": {
+                "quest": "q104",
+                "action": "entry_ask"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q104",
+                  "action": "entry_ask"
+                },
+                {
+                  "op": "jump",
+                  "script": "q104.canal.rule"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q104.canal.rule": {
+      "storyQuest": "q104",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q104",
+          "scene": "rule"
+        },
+        {
+          "op": "narrate",
+          "text": "少年が別の瓶の口で指を鳴らす。少し待つと瓶だけが同じ音を返した。「初めに聞かせた音を覚えるんだ」。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "find",
+              "text": "繰り返す音を追う",
+              "storyAction": {
+                "quest": "q104",
+                "action": "rule_find"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q104",
+                  "action": "rule_find"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q104.canal.sound": {
+      "storyQuest": "q104",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q104",
+          "scene": "sound"
+        },
+        {
+          "op": "narrate",
+          "text": "噴水の間隔は同じでも風で飛沫がずれる。屋根の槌は次第に近づく。遠い窓からだけ、雨とくしゃみが毎回同じ順で聞こえた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "repeat",
+              "text": "くしゃみを追う",
+              "storyAction": {
+                "quest": "q104",
+                "action": "sound_repeat"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q104",
+                  "action": "sound_repeat"
+                }
+              ]
+            },
+            {
+              "id": "learn",
+              "text": "店で仕組みを聞く",
+              "storyAction": {
+                "quest": "q104",
+                "action": "sound_learn"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q104",
+                  "action": "sound_learn"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q104.canal.found": {
+      "storyQuest": "q104",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q104",
+          "scene": "found"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q104.values.rule"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "聞き慣れた繰り返しの先で、ベロが瓶を抱えていた。「故郷の雨だ」。少年は掌を出した。「それでも、売り物だよ」。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "また同じくしゃみだ。窓を開けたベロは瓶を離さない。「故郷では、夜になると降った」。少年が値札を見せた。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "瓶を返してもらう",
+              "storyAction": {
+                "quest": "q104",
+                "action": "found_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q104",
+                  "action": "found_return"
+                },
+                {
+                  "op": "jump",
+                  "script": "q104.canal.carrying"
+                }
+              ]
+            },
+            {
+              "id": "buy",
+              "text": "40Gで買う",
+              "storyAction": {
+                "quest": "q104",
+                "action": "found_buy"
+              },
+              "requirement": "40Gを支払う。",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q104",
+                  "action": "found_buy"
+                },
+                {
+                  "op": "jump",
+                  "script": "q104.canal.receipt"
+                }
+              ]
+            },
+            {
+              "id": "lease",
+              "text": "貸し方を相談",
+              "storyAction": {
+                "quest": "q104",
+                "action": "found_lease"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q104",
+                  "action": "found_lease"
+                },
+                {
+                  "op": "jump",
+                  "script": "q104.canal.lease"
+                }
+              ]
+            },
+            {
+              "id": "buy_supplies",
+              "text": "40Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 40
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 40
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q104.canal.found.buy.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q104.canal.lease": {
+      "storyQuest": "q104",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q104",
+          "scene": "lease"
+        },
+        {
+          "op": "narrate",
+          "text": "「朝には返すよ」とベロ。「じゃあ一曲、別の瓶に入れて」。所有者は少年のまま、夜だけ貸す条件がそろった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "夜だけ貸す",
+              "storyAction": {
+                "quest": "q104",
+                "action": "lease_agree"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q104",
+                  "action": "lease_agree"
+                },
+                {
+                  "op": "jump",
+                  "script": "q104.canal.terms"
+                }
+              ]
+            },
+            {
+              "id": "return",
+              "text": "契約せず返す",
+              "storyAction": {
+                "quest": "q104",
+                "action": "lease_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q104",
+                  "action": "lease_return"
+                },
+                {
+                  "op": "jump",
+                  "script": "q104.canal.carrying"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q104.canal.carrying": {
+      "storyQuest": "q104",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q104",
+          "scene": "carrying"
+        },
+        {
+          "op": "narrate",
+          "text": "瓶が少年の手に戻った。水音を割らないよう抱えて、少年と露店の棚へ戻る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "shelf",
+              "text": "露店へ戻る",
+              "storyAction": {
+                "quest": "q104",
+                "action": "carrying_shelf"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q104",
+                  "action": "carrying_shelf"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q104.canal.shelf": {
+      "storyQuest": "q104",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q104",
+          "scene": "shelf"
+        },
+        {
+          "op": "narrate",
+          "text": "少年が瓶を棚の丸い跡に戻すと、その場所で雨音がまた鳴り始めた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "place",
+              "text": "棚に戻す",
+              "storyAction": {
+                "quest": "q104",
+                "action": "shelf_place"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q104",
+                  "action": "shelf_place"
+                },
+                {
+                  "op": "jump",
+                  "script": "q104.canal.end.return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q104.canal.receipt": {
+      "storyQuest": "q104",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q104",
+          "scene": "receipt"
+        },
+        {
+          "op": "narrate",
+          "text": "少年が四十枚を数えて包み紙を渡した。ベロの手元の瓶に包みが掛かる。今度はその人自身の持ち物だ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "gift",
+              "text": "贈り物を包む",
+              "storyAction": {
+                "quest": "q104",
+                "action": "receipt_gift"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q104",
+                  "action": "receipt_gift"
+                },
+                {
+                  "op": "jump",
+                  "script": "q104.canal.end.buy"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q104.canal.terms": {
+      "storyQuest": "q104",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q104",
+          "scene": "terms"
+        },
+        {
+          "op": "narrate",
+          "text": "夜の借り手、朝の返し先、曲を録る瓶。それぞれを少年とベロが確かめる。少年は自分の値札を外さなかった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "record",
+              "text": "貸し方を記す",
+              "storyAction": {
+                "quest": "q104",
+                "action": "terms_record"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q104",
+                  "action": "terms_record"
+                },
+                {
+                  "op": "jump",
+                  "script": "q104.canal.end.lease"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q104.canal.end.return": {
+      "commands": [
+        {
+          "op": "jump",
+          "script": "q104.end.return"
+        }
+      ]
+    },
+    "q104.canal.end.buy": {
+      "commands": [
+        {
+          "op": "jump",
+          "script": "q104.end.buy"
+        }
+      ]
+    },
+    "q104.canal.end.lease": {
+      "commands": [
+        {
+          "op": "jump",
+          "script": "q104.end.lease"
+        }
+      ]
+    },
+    "q104.canal.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q104"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q104.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.questResume.q104"
+              },
+              "cases": [
+                {
+                  "equals": "q104.canal.found.buy.resume",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q104.canal.found.buy.resume"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "quests.q104.stage"
+                    },
+                    "right": "completed"
+                  },
+                  "then": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "quests.q104.outcome"
+                      },
+                      "cases": [
+                        {
+                          "equals": "return",
+                          "commands": [
+                            {
+                              "op": "narrate",
+                              "text": "瓶は店へ戻った。ベロは借りを返すため、昼の店先で一曲弾いた。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "buy",
+                          "commands": [
+                            {
+                              "op": "narrate",
+                              "text": "支払いを受けた少年は包みを付けた。夜、ベロの窓から雨音と同じくしゃみが聞こえた。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "lease",
+                          "commands": [
+                            {
+                              "op": "narrate",
+                              "text": "曲入りの瓶が棚に増えた。雨音を選んだ客は、くしゃみのところで笑って買った。"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": []
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "story.init",
+                      "quest": "q104"
+                    },
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "stories.q104.scene"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q104.canal.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "rule",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q104.canal.rule"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "sound",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q104.canal.sound"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "found",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q104.canal.found"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "lease",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q104.canal.lease"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "carrying",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q104.canal.carrying"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "shelf",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q104.canal.shelf"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "receipt",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q104.canal.receipt"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "terms",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q104.canal.terms"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
+                        {
+                          "op": "jump",
+                          "script": "q104.canal.entry"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q104.canal.found.buy.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q104",
+          "value": "q104.canal.found.buy.resume"
+        },
+        {
+          "op": "say",
+          "text": "40Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q104.canal.found.buy.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q104",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "40Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q104.canal.found"
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "stall": "花売りの少年の露店",
+      "fountain": "噴水のある辻",
+      "window": "楽師の窓辺",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "stall"
+      ],
+      [
+        "transit",
+        "fountain"
+      ],
+      [
+        "transit",
+        "window"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "stall",
+        "values": [
+          "stall",
+          "fountain",
+          "window",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "boyAt": {
+        "type": "enum",
+        "initial": "stall",
+        "values": [
+          "stall",
+          "fountain",
+          "window",
+          "transit"
+        ],
+        "meaning": "boy の所在または保持者"
+      },
+      "veroAt": {
+        "type": "enum",
+        "initial": "window",
+        "values": [
+          "stall",
+          "fountain",
+          "window",
+          "transit"
+        ],
+        "meaning": "vero の所在または保持者"
+      },
+      "bottleAt": {
+        "type": "enum",
+        "initial": "vero",
+        "values": [
+          "stall",
+          "fountain",
+          "window",
+          "transit",
+          "party",
+          "boy",
+          "vero"
+        ],
+        "meaning": "bottle の所在または保持者"
+      },
+      "rule": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "rule"
+      },
+      "paid": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "paid"
+      },
+      "lease": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "lease"
+      },
+      "owner": {
+        "type": "enum",
+        "initial": "boy",
+        "values": [
+          "boy",
+          "vero"
+        ],
+        "meaning": "瓶の所有者"
+      },
+      "use": {
+        "type": "enum",
+        "initial": "unsettled",
+        "values": [
+          "unsettled",
+          "returned",
+          "gift",
+          "overnight"
+        ],
+        "meaning": "use"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "boy": {
+        "holder": "boyAt",
+        "kind": "person",
+        "character": "e2_q104_boy"
+      },
+      "vero": {
+        "holder": "veroAt",
+        "kind": "person",
+        "character": "e2_q104_vero"
+      },
+      "bottle": {
+        "holder": "bottleAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {},
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "花売りの少年の露店",
+        "place": "stall",
+        "cast": [
+          {
+            "entity": "boy",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q104.values.boyAt"
+              },
+              "right": "stall"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "rule": {
+        "title": "花売りの少年の露店",
+        "place": "stall",
+        "cast": [
+          {
+            "entity": "boy",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q104.values.boyAt"
+              },
+              "right": "stall"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "sound": {
+        "title": "噴水のある辻",
+        "place": "fountain",
+        "cast": [
+          {
+            "entity": "boy",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q104.values.boyAt"
+              },
+              "right": "fountain"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "found": {
+        "title": "楽師の窓辺",
+        "place": "window",
+        "cast": [
+          {
+            "entity": "boy",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q104.values.boyAt"
+              },
+              "right": "window"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "vero",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q104.values.veroAt"
+              },
+              "right": "window"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "lease": {
+        "title": "楽師の窓辺",
+        "place": "window",
+        "cast": [
+          {
+            "entity": "boy",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q104.values.boyAt"
+              },
+              "right": "window"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "vero",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q104.values.veroAt"
+              },
+              "right": "window"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "carrying": {
+        "title": "楽師の窓辺",
+        "place": "window",
+        "cast": [
+          {
+            "entity": "boy",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q104.values.boyAt"
+              },
+              "right": "window"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "vero",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q104.values.veroAt"
+              },
+              "right": "window"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "shelf": {
+        "title": "花売りの少年の露店",
+        "place": "stall",
+        "cast": [
+          {
+            "entity": "boy",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q104.values.boyAt"
+              },
+              "right": "stall"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "receipt": {
+        "title": "楽師の窓辺",
+        "place": "window",
+        "cast": [
+          {
+            "entity": "boy",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q104.values.boyAt"
+              },
+              "right": "window"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "vero",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q104.values.veroAt"
+              },
+              "right": "window"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "terms": {
+        "title": "楽師の窓辺",
+        "place": "window",
+        "cast": [
+          {
+            "entity": "boy",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q104.values.boyAt"
+              },
+              "right": "window"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "vero",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q104.values.veroAt"
+              },
+              "right": "window"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_sound": {
+        "from": [
+          "entry"
+        ],
+        "to": "sound",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "boy"
+            ],
+            "path": [
+              "transit",
+              "fountain"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "fountain",
+          "companions": [
+            "boy"
+          ]
+        },
+        "depart": []
+      },
+      "entry_ask": {
+        "from": [
+          "entry"
+        ],
+        "to": "rule",
+        "requires": true,
+        "effects": [],
+        "once": true
+      },
+      "rule_find": {
+        "from": [
+          "rule"
+        ],
+        "to": "found",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "boy"
+            ],
+            "path": [
+              "transit",
+              "window"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "window",
+          "companions": [
+            "boy"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "rule",
+            "value": true
+          }
+        ]
+      },
+      "sound_repeat": {
+        "from": [
+          "sound"
+        ],
+        "to": "found",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "boy"
+            ],
+            "path": [
+              "transit",
+              "window"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "window",
+          "companions": [
+            "boy"
+          ]
+        },
+        "depart": []
+      },
+      "sound_learn": {
+        "from": [
+          "sound"
+        ],
+        "to": "rule",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "boy"
+            ],
+            "path": [
+              "transit",
+              "stall"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "stall",
+          "companions": [
+            "boy"
+          ]
+        },
+        "depart": []
+      },
+      "found_return": {
+        "from": [
+          "found"
+        ],
+        "to": "carrying",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "bottle",
+            "from": "vero",
+            "to": "boy"
+          }
+        ],
+        "once": true
+      },
+      "found_buy": {
+        "from": [
+          "found"
+        ],
+        "to": "receipt",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "paid",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "owner",
+            "value": "vero"
+          }
+        ],
+        "cost": {
+          "gold": 40
+        },
+        "once": true
+      },
+      "found_lease": {
+        "from": [
+          "found"
+        ],
+        "to": "lease",
+        "requires": true,
+        "effects": [],
+        "once": true
+      },
+      "lease_agree": {
+        "from": [
+          "lease"
+        ],
+        "to": "terms",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "lease",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "lease_return": {
+        "from": [
+          "lease"
+        ],
+        "to": "carrying",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "bottle",
+            "from": "vero",
+            "to": "boy"
+          }
+        ],
+        "once": true
+      },
+      "carrying_shelf": {
+        "from": [
+          "carrying"
+        ],
+        "to": "shelf",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "boy"
+            ],
+            "path": [
+              "transit",
+              "stall"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "stall",
+          "companions": [
+            "boy"
+          ]
+        },
+        "depart": []
+      },
+      "shelf_place": {
+        "from": [
+          "shelf"
+        ],
+        "ending": "return",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "bottle",
+            "from": "boy",
+            "to": "stall"
+          },
+          {
+            "op": "set",
+            "key": "use",
+            "value": "returned"
+          }
+        ],
+        "once": true
+      },
+      "receipt_gift": {
+        "from": [
+          "receipt"
+        ],
+        "ending": "buy",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "use",
+            "value": "gift"
+          }
+        ],
+        "once": true
+      },
+      "terms_record": {
+        "from": [
+          "terms"
+        ],
+        "ending": "lease",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "use",
+            "value": "overnight"
+          }
+        ],
+        "once": true
+      }
+    },
+    "endings": {
+      "return": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q104.values.use"
+            },
+            "right": "returned"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q104.values.bottleAt"
+            },
+            "right": "stall"
+          }
+        ]
+      },
+      "buy": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q104.values.paid"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q104.values.owner"
+            },
+            "right": "vero"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q104.values.use"
+            },
+            "right": "gift"
+          }
+        ]
+      },
+      "lease": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q104.values.lease"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q104.values.owner"
+            },
+            "right": "boy"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q104.values.use"
+            },
+            "right": "overnight"
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "stall": {
+        "kind": "town",
+        "location": "e2_q104_stall"
+      },
+      "fountain": {
+        "kind": "town",
+        "location": "e2_q104_fountain"
+      },
+      "window": {
+        "kind": "town",
+        "location": "e2_q104_window"
+      }
+    },
+    "revision": 1
+  }
+}
