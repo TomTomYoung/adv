@@ -32,13 +32,13 @@ export function choose(g,q,id){
   if(g.state.battle){fight(g);drain(g);}
   if(g.state.journey)arrive(g,q);
 }
-export function collectStates(q,paths,ready){
+export function collectStates(q,paths,ready,setupRoute){
   const current=new Map(),legacy=new Map();
   for(const route of paths){
     for(const [old,collection,choices] of [[false,current,route.path],[true,legacy,route.old]]){
-      const g=ready(q,{old});
+      const g=ready(q,{old});setupRoute?.(g,q,route);
       for(const id of choices){
-        const state=old?g.state.flags.flow[q]:g.state.stories[q],key=JSON.stringify(state);
+        const state=old?g.state.flags.flow[q]:g.state.stories[q],key=JSON.stringify([state,route.history]);
         if(!collection.has(key))collection.set(key,{scene:old?state.node:state.scene,save:g.save()});
         choose(g,q,id);
       }
