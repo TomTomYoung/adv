@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {projectGame} from '../src/application/projection.js';
+import {objectVisible} from '../src/core/quest-events.js';
 import {nextQuestPlace} from '../src/core/quest-navigation.js';
 import {drain,goWorldLocation} from './helpers.mjs';
 import {arrive,checkpoint,choose,depart,go,resume} from './world-route-helpers.mjs';
@@ -14,6 +15,11 @@ for(const [q,paths] of Object.entries(routes)){
     const old=migrated(ready(q,{old:true,start:'reception'})),fresh=ready(q,{start:'reception'});
     assert.equal(nextQuestPlace(data,old.state,q).map,'region_1_f1');
     assert.deepEqual(nextQuestPlace(data,fresh.state,q),story.worldPlaces[story.scenes.entry.place]);
+    for(const e of previous.quests[q].events){
+      const {map}=e.points[0],original=previous.maps[map].objects.find(o=>o.id===e.id),current=data.maps[map].objects.find(o=>o.id===e.id);
+      assert.deepEqual({...current,visibleWhen:original.visibleWhen},original);
+      assert.ok(objectVisible(old.state,data.maps[map],current));assert.equal(objectVisible(fresh.state,data.maps[map],current),false);
+    }
     for(const p of Object.values(story.worldPlaces))assert.equal(data.locations[p.location].parent,'e2_canal_quarter');
   });
   for(const r of paths)test(q+' '+r.old.join('/')+' retains the manuscript ending and payment',()=>{
