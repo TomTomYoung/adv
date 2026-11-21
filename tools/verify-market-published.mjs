@@ -7,7 +7,7 @@ import {createQuestTrial,questTrialReport} from '../src/application/quest-playte
 import {drain,fight} from '../tests/helpers.mjs';
 
 const suite=process.argv[2]??'market';
-const suites={market:()=>import('../tests/market-world-helpers.mjs'),'--q091':()=>import('../tests/q091-helpers.mjs'),'--q092':()=>import('../tests/q092-helpers.mjs'),'--q093':()=>import('../tests/q093-helpers.mjs')};
+const suites={market:()=>import('../tests/market-world-helpers.mjs'),'--q091':()=>import('../tests/q091-helpers.mjs'),'--q092':()=>import('../tests/q092-helpers.mjs'),'--q093':()=>import('../tests/q093-helpers.mjs'),'--q094':()=>import('../tests/q094-helpers.mjs')};
 assert.ok(Object.hasOwn(suites,suite),'Unknown published trial suite');
 const {data,catalog,routes,arrive,expectedValues}=await suites[suite]();
 const level=suite==='market'?6:10;
@@ -68,6 +68,21 @@ try{
             });
             assert.deepEqual(waiting,{same:true,restChecked:true,journalAt:'noa',action:'checked_return'});
           }
+          if(quest==='q094'&&['advance','pay','rise'].includes(intent.id)){
+            const saved=await page.evaluate(()=>{
+              const trial=questPlaytest.trial,g=trial.engine,raw=g.save();
+              g.load(raw);questPlaytest.render();
+              const {payment,rescue,woundedAt}=g.state.stories.q094.values;
+              return {same:g.save()===raw,payment,rescue,woundedAt,gold:g.state.gold,initial:trial.gold,pending:g.state.journey?.action};
+            });
+            assert.ok(saved.same);
+            if(intent.id==='rise'){
+              assert.equal(saved.pending,'aboard_rise');assert.equal(saved.rescue,'aboard');assert.equal(saved.woundedAt,'transit');
+            }else{
+              assert.equal(saved.payment,intent.id==='advance'?'advance':'afterReview');assert.equal(saved.rescue,'waiting');
+              assert.equal(saved.gold,saved.initial-30);
+            }
+          }
           if(quest==='q093'&&['back','next','gate'].includes(intent.id)){
             const saved=await page.evaluate(()=>{
               const g=questPlaytest.trial.engine,raw=g.save();g.load(raw);questPlaytest.render();
@@ -93,13 +108,13 @@ try{
             assert.deepEqual(occupants,{same:true,aboard:riding,shellAt:riding?'transit':'track',crewAt:'transit',
               opening:riding?'closed':intent.id==='escort'?'hatch':'breach'});
           }
-          if((intent.id==='fight'&&(quest==='q059'||quest==='q060'))||(quest==='q092'&&intent.id==='cut')){
+          if((intent.id==='fight'&&(quest==='q059'||quest==='q060'))||(quest==='q092'&&intent.id==='cut')||(quest==='q094'&&intent.id==='free')){
             const encounter=await page.evaluate(()=>{
               const g=questPlaytest.trial.engine,save=g.save();
               g.load(save);questPlaytest.render();
               return g.save()===save&&g.state.battle?.encounter;
             });
-            assert.equal(encounter,{q059:'guard_6',q060:'boss_6',q092:'guard_10'}[quest]);
+            assert.equal(encounter,{q059:'guard_6',q060:'boss_6',q092:'guard_10',q094:'guard_10'}[quest]);
             console.log('PUBLIC_BATTLE_SAVE',quest,encounter);
           }
         }else if(intent.type!=='advance'||!await page.evaluate(()=>questPlaytest.report().status==='cleared')){
