@@ -18,7 +18,7 @@ export function movingShelterSource(){
 
   s.node('entry','track',[],'重い腹が泥を擦っていく。獣が出口に背を向けたとき、腹板の内側で、こつ、こつ、こつ、と金属が鳴った。足が地面を踏む音とは拍子が違う。分かれ道までなら横を歩ける。',[
     O('signal','三打を返す','echo'),O('lead','灯を掲げる','route'),
-    O('cut','外装と戦う','wreck',[set('shellState','disabled')],{combat:'guard_10',combatRequirement:'勝利で外装停止'})
+    O('cut','外装戦','wreck',[set('shellState','disabled')],{combat:'guard_10',combatRequirement:'要勝利'})
   ]);
   s.node('echo','fork',[],when(s.known('answer'),
     '腹板を三つ叩くと、さっきと同じ間で三打が返った。扉の番号札も灯る。中の隊はまだ乗っている。',
