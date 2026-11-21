@@ -1,3 +1,4 @@
+import {buildInnNames} from './build-q093-world-route.mjs';
 import {buildMovingShelter} from './build-q092-world-route.mjs';
 import {buildReturningFootprints} from './build-q091-world-route.mjs';
 import {buildTwoGraves} from './build-q017-world-route.mjs';
@@ -179,6 +180,7 @@ export async function buildScenarioEditions({check=false}={}){
  await buildMarketWorldRoutes({check});
  await buildReturningFootprints({check});
  await buildMovingShelter({check});
+ await buildInnNames({check});
  await buildCompanionEdition({check});
  const geography=await buildOddlandGeography({check});
  await buildSalomeGeography(geography,{check});

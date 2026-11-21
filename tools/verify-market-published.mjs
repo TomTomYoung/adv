@@ -7,7 +7,7 @@ import {createQuestTrial,questTrialReport} from '../src/application/quest-playte
 import {drain,fight} from '../tests/helpers.mjs';
 
 const suite=process.argv[2]??'market';
-const suites={market:()=>import('../tests/market-world-helpers.mjs'),'--q091':()=>import('../tests/q091-helpers.mjs'),'--q092':()=>import('../tests/q092-helpers.mjs')};
+const suites={market:()=>import('../tests/market-world-helpers.mjs'),'--q091':()=>import('../tests/q091-helpers.mjs'),'--q092':()=>import('../tests/q092-helpers.mjs'),'--q093':()=>import('../tests/q093-helpers.mjs')};
 assert.ok(Object.hasOwn(suites,suite),'Unknown published trial suite');
 const {data,catalog,routes,arrive,expectedValues}=await suites[suite]();
 const level=suite==='market'?6:10;
@@ -67,6 +67,21 @@ try{
               return {same:g.save()===save,restChecked,journalAt,action:g.state.journey?.action};
             });
             assert.deepEqual(waiting,{same:true,restChecked:true,journalAt:'noa',action:'checked_return'});
+          }
+          if(quest==='q093'&&['back','next','gate'].includes(intent.id)){
+            const saved=await page.evaluate(()=>{
+              const g=questPlaytest.trial.engine,raw=g.save();g.load(raw);questPlaytest.render();
+              const {oneName,dated,passOneAt,passTwoAt}=g.state.stories.q093.values;
+              return {same:g.save()===raw,pending:g.state.journey?.action,oneName,dated,passOneAt,passTwoAt};
+            });
+            assert.ok(saved.same);
+            if(intent.id==='back'){
+              assert.ok(['restored_back','dated_back'].includes(saved.pending));
+              if(saved.pending==='restored_back')assert.equal(saved.oneName,'returned');else assert.equal(saved.dated,true);
+            }else{
+              assert.equal(saved.pending,intent.id==='next'?'firstReady_next':'bothReady_gate');
+              assert.equal(saved.passOneAt,'guestOne');assert.equal(saved.passTwoAt,intent.id==='next'?'party':'guestTwo');
+            }
           }
           if(quest==='q092'&&['walk','escort','carry'].includes(intent.id)){
             const occupants=await page.evaluate(()=>{
