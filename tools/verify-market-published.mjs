@@ -7,7 +7,7 @@ import {createQuestTrial,questTrialReport} from '../src/application/quest-playte
 import {drain,fight} from '../tests/helpers.mjs';
 
 const suite=process.argv[2]??'market';
-const suites={market:()=>import('../tests/market-world-helpers.mjs'),'--q091':()=>import('../tests/q091-helpers.mjs'),'--q092':()=>import('../tests/q092-helpers.mjs'),'--q093':()=>import('../tests/q093-helpers.mjs'),'--q094':()=>import('../tests/q094-helpers.mjs')};
+const suites={market:()=>import('../tests/market-world-helpers.mjs'),'--q091':()=>import('../tests/q091-helpers.mjs'),'--q092':()=>import('../tests/q092-helpers.mjs'),'--q093':()=>import('../tests/q093-helpers.mjs'),'--q094':()=>import('../tests/q094-helpers.mjs'),'--q095':()=>import('../tests/q095-helpers.mjs')};
 assert.ok(Object.hasOwn(suites,suite),'Unknown published trial suite');
 const {data,catalog,routes,arrive,expectedValues}=await suites[suite]();
 const level=suite==='market'?6:10;
@@ -67,6 +67,18 @@ try{
               return {same:g.save()===save,restChecked,journalAt,action:g.state.journey?.action};
             });
             assert.deepEqual(waiting,{same:true,restChecked:true,journalAt:'noa',action:'checked_return'});
+          }
+if(quest==='q095'&&['back','match','deliver','carry','hand'].includes(intent.id)){
+            const result=await page.evaluate(()=>{
+              const g=questPlaytest.trial.engine,save=g.save();g.load(save);questPlaytest.render();
+              const {stripAt,sheetAt,finished}=g.state.stories.q095.values;
+              return {same:g.save()===save,stripAt,sheetAt,finished,journey:g.state.journey?.action??null};
+            });
+            const studied=route.old[0]==='timeline';
+            const journeys={back:'carrying_back',deliver:studied?'wallDraft_deliver':'portrait_deliver',carry:'pages_carry'};
+            assert.deepEqual(result,{same:true,stripAt:intent.id==='back'?'party':studied?'teo':'rack',
+              sheetAt:['back','match'].includes(intent.id)?'teo':intent.id==='hand'?'mason':'party',
+              finished:false,journey:journeys[intent.id]??null});
           }
           if(quest==='q094'&&['advance','pay','rise'].includes(intent.id)){
             const saved=await page.evaluate(()=>{
@@ -132,6 +144,32 @@ try{
       for(const [key,value] of Object.entries(expectedValues(quest,route)))assert.equal(result.values[key],value,quest+'/'+key);
       console.log('PUBLIC',quest,route.old.join('/'),result.report.outcome,result.report.steps);
     }
+  }
+if(suite==='--q095'){
+    const {previous}=await import('../tests/q095-helpers.mjs');
+    const q='q095',original=createQuestTrial(previous,catalog,{quest:q,party:'balanced',level,start:'reception',outcome:'contract',battleMode:'classic',seed:1907}).engine;
+    original.run(q+'.review');drain(original);
+    assert.ok(original.dispatch({type:'choose',id:'contract'}));drain(original);
+    assert.equal(original.state.battle.encounter,'guard_10');
+    const save=original.save(),commands=[],dispatch=original.dispatch.bind(original);
+    original.dispatch=intent=>{const changed=dispatch(intent);if(changed)commands.push(intent);return changed;};
+    fight(original);assert.equal(original.state.quests[q].outcome,'contract');
+    await page.selectOption('#outcome','contract');await page.click('#launch');
+    await page.waitForFunction(()=>questPlaytest.trial.engine.state.quests.q095.stage==='active');
+    const loaded=await page.evaluate(save=>{
+      const g=questPlaytest.trial.engine;g.load(save);const migrated=g.save();g.load(migrated);questPlaytest.render();
+      return [g.state.flags.legacyStoryRoutes.q095,g.state.battle?.encounter,g.save()===migrated];
+    },save);
+    assert.deepEqual(loaded,[true,'guard_10',true]);
+    for(const intent of commands){
+      if(await page.evaluate(()=>questPlaytest.report().status==='cleared'))break;
+      assert.ok(await page.evaluate(i=>questPlaytest.dispatch(i),intent));
+    }
+    const result=await page.evaluate(()=>{
+      const r=questPlaytest.report();return [r.status,r.outcome,r.records.wins,r.gold.end,questPlaytest.trial.engine.state.actors.ada.xp];
+    });
+    assert.deepEqual(result,['cleared','contract',1,original.state.gold,original.state.actors.ada.xp]);
+    console.log('PUBLIC_LEGACY_BATTLE_SAVE',q,'guard_10','contract');
   }
   let attempts=0;const first=q038.length;
   await page.route(url=>url.pathname.endsWith('/e2/q038.json'),async request=>{

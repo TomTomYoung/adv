@@ -1,0 +1,89 @@
+name: Validate q095 hero-memorial routes in Chromium
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'data/**'
+      - 'authoring/editions/e2/story-q095.mjs'
+      - 'tools/build-scenario-editions.mjs'
+      - 'tools/build-q095-world-route.mjs'
+      - 'tools/build-companion-edition.mjs'
+      - 'tools/preserved-world-quest.mjs'
+      - 'tools/browser-q095-world-route-smoke.mjs'
+      - 'tools/world-route-browser-fixtures.mjs'
+      - 'tools/character-art-browser.mjs'
+      - 'tools/measure-world-routes.mjs'
+      - 'tests/world-route-helpers.mjs'
+      - 'tests/abyss-world-helpers.mjs'
+      - 'playtests/quest-parties.json'
+      - 'tests/q095-*.mjs'
+      - 'tests/helpers.mjs'
+      - '.github/workflows/q095-world-route.yml'
+  push:
+    branches: [master]
+    paths:
+      - 'data/scenario-editions/e2/q095.json'
+      - 'tools/verify-market-published.mjs'
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+permissions:
+  contents: read
+jobs:
+  q095-browser:
+    if: github.event_name != 'push'
+    runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned browser driver and Japanese fonts
+        run: |
+          npm install --no-save --package-lock=false playwright@1.58.2
+          test -n "$(fc-list :lang=ja)"
+      - name: Measure four memorial paths and two starting points with three parties at levels 10 and 11
+        run: |
+          mkdir -p /tmp/adv-hero-memorial-art-browser
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import {measureWorldRoutes} from './tools/measure-world-routes.mjs';
+          import * as memorial from './tests/q095-helpers.mjs';
+          const results=measureWorldRoutes(memorial,[10,11],['balanced','sustain','support']);
+          fs.writeFileSync('/tmp/adv-hero-memorial-art-browser/normal-trials.json',JSON.stringify(results,null,2));
+          assert.equal(results.length,48);
+          assert.ok(results.every(r=>r.status==='cleared'&&r.records.losses===0&&r.rescues===0));
+          console.log(JSON.stringify({trials:results.length,failures:0,steps:[Math.min(...results.map(r=>r.steps)),Math.max(...results.map(r=>r.steps))]}));
+          JS
+      - name: Verify signatures, draft custody, memorials and original saves in both layouts and widths
+        run: ADV_BROWSER_OUTPUT=/tmp/adv-hero-memorial-art-browser node tools/browser-q095-world-route-smoke.mjs
+      - name: Upload q095 trial checkpoints and results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: q095-world-route-checkpoints
+          path: /tmp/adv-hero-memorial-art-browser
+          if-no-files-found: error
+          retention-days: 7
+
+  published:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --package-lock=false playwright@1.58.2
+      - name: Verify the deployed files, four playthroughs and q038 retry
+        run: node tools/verify-market-published.mjs --q095
