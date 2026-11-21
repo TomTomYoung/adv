@@ -1,3 +1,4 @@
+import {extendCanalQuarter} from './build-canal-world-routes.mjs';
 import {extendTwoGravesGeography} from '../authoring/editions/e2/story-q017.mjs';
 import {extendWhiteDebtGeography} from '../authoring/editions/e2/story-q018.mjs';
 import {extendCrownGeography} from '../authoring/editions/e2/story-q020.mjs';
@@ -64,6 +65,7 @@ export async function buildOddlandGeography({check=false}={}){
   extendReturnCartGeography(bundle);
   extendWeepingPillarGeography(bundle);
   extendTwoGravesGeography(bundle);
+  extendCanalQuarter(bundle);
   extendWhiteDebtGeography(bundle);
   extendCrownGeography(bundle);
   applyOutdoorAppearance(bundle);

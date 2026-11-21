@@ -1,0 +1,3347 @@
+{
+  "schemaVersion": 1,
+  "id": "q101",
+  "number": 101,
+  "title": "三度目の戸締まり",
+  "client": "鍵屋の娘ミナ",
+  "brief": "裏口が毎晩開く。今夜の見張りをお願いする。",
+  "region": 1,
+  "type": "scene_graph",
+  "recommendedLevel": 1,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。灯帰りの広場から運河通りへ進み、手帳に示される現場を訪ねる。",
+  "events": [
+    {
+      "id": "q101_scene",
+      "title": "三度目の戸締まり：鍵屋の娘ミナ",
+      "points": [
+        {
+          "map": "region_1_f1",
+          "x": 2,
+          "y": 1,
+          "dungeon": "region_1"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q101.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q101.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q101.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q101"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_1"
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_1_f1",
+      "x": 2,
+      "y": 1,
+      "object": "q101_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "report": {
+      "label": "開錠を報告",
+      "text": "父娘は言い合いになり、ミナは予定を早めて店を出た。新店の鍵は後から郵便で届いた。",
+      "gold": 57,
+      "xp": 51,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q101.values.unlocked"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q101.values.reported"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    "quiet": {
+      "label": "秘密を保つ",
+      "text": "夜番の代金は支払われた。ミナの店の話は、また来月に延びた。",
+      "gold": 57,
+      "xp": 51,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q101.values.unlocked"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q101.values.silent"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    "visit": {
+      "label": "二軒の店",
+      "text": "水曜だけ、ガロの店は早仕舞いする。戸締まりの音は一度で終わり、その足音は娘の店へ向かった。",
+      "gold": 57,
+      "xp": 51,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q101.values.promise"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q101.values.wish"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q101.values.keyAt"
+            },
+            "right": "mina"
+          }
+        ]
+      }
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/story-q101.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3813d958cf10f9782f264",
+    "revision": "scenario-edition-e2-q101-r1",
+    "world": {
+      "truth": "見張ると、父が自分で鍵を開けている。盗難ではなく、娘に必要とされる口実だ。ただし、引き出しには娘の新店用の鍵も作られている。父が嘘をつく場面を先に、娘の名を刻んだ鍵を後で見せ、妨害と送り出したさが同居する人物にする。",
+      "fixedPast": "鍵屋の娘ミナが、毎晩開いている裏口の見張りを頼む。父ガロは「閉め忘れる者に店は渡せん」と引退を延ばしている。ミナは継ぎたいのではなく、自分の店を出したいのだが、父を一人にすることを言い出せない。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "鍵屋の娘ミナ",
+        "beliefsAndGoals": "鍵屋の娘ミナが、毎晩開いている裏口の見張りを頼む。父ガロは「閉め忘れる者に店は渡せん」と引退を延ばしている。ミナは継ぎたいのではなく、自分の店を出したいのだが、父を一人にすることを言い出せない。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "裏口が毎晩開く。今夜の見張りをお願いする。"
+      }
+    ],
+    "conflict": {
+      "design": "受注→夜番→父に話す／朝まで黙る→娘への報告だ。告発は目撃だけで可能だ。両者の話を知れば、食事の日を決めて別居する案を出せる。娘の希望を聞かずに同居や継承を勝手に確約する選択はない。見張りを中断すれば翌晩やり直せる。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q101.canal.entry",
+          "assertion": {
+            "title": "鍵屋の帳場",
+            "place": "counter",
+            "cast": [
+              {
+                "entity": "mina",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q101.values.minaAt"
+                  },
+                  "right": "counter"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "wish",
+          "script": "q101.canal.wish",
+          "assertion": {
+            "title": "鍵屋の帳場",
+            "place": "counter",
+            "cast": [
+              {
+                "entity": "mina",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q101.values.minaAt"
+                  },
+                  "right": "counter"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "watch",
+          "script": "q101.canal.watch",
+          "assertion": {
+            "title": "鍵屋の裏口",
+            "place": "door",
+            "cast": [
+              {
+                "entity": "garo",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q101.values.garoAt"
+                  },
+                  "right": "door"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "father",
+          "script": "q101.canal.father",
+          "assertion": {
+            "title": "鍵屋の作業台",
+            "place": "bench",
+            "cast": [
+              {
+                "entity": "garo",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q101.values.garoAt"
+                  },
+                  "right": "bench"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "lateWish",
+          "script": "q101.canal.lateWish",
+          "assertion": {
+            "title": "鍵屋の帳場",
+            "place": "counter",
+            "cast": [
+              {
+                "entity": "mina",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q101.values.minaAt"
+                  },
+                  "right": "counter"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "rewatch",
+          "script": "q101.canal.rewatch",
+          "assertion": {
+            "title": "鍵屋の裏口",
+            "place": "door",
+            "cast": [],
+            "requires": true
+          }
+        },
+        {
+          "id": "agreement",
+          "script": "q101.canal.agreement",
+          "assertion": {
+            "title": "鍵屋の帳場",
+            "place": "counter",
+            "cast": [
+              {
+                "entity": "mina",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q101.values.minaAt"
+                  },
+                  "right": "counter"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "garo",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q101.values.garoAt"
+                  },
+                  "right": "counter"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "key",
+          "script": "q101.canal.key",
+          "assertion": {
+            "title": "鍵屋の帳場",
+            "place": "counter",
+            "cast": [
+              {
+                "entity": "mina",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q101.values.minaAt"
+                  },
+                  "right": "counter"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "garo",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q101.values.garoAt"
+                  },
+                  "right": "counter"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "report",
+          "script": "q101.canal.report",
+          "assertion": {
+            "title": "鍵屋の帳場",
+            "place": "counter",
+            "cast": [
+              {
+                "entity": "mina",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q101.values.minaAt"
+                  },
+                  "right": "counter"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "garo",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q101.values.garoAt"
+                  },
+                  "right": "counter"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "quiet",
+          "script": "q101.canal.quiet",
+          "assertion": {
+            "title": "鍵屋の帳場",
+            "place": "counter",
+            "cast": [
+              {
+                "entity": "mina",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q101.values.minaAt"
+                  },
+                  "right": "counter"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "裏口が毎晩開く。今夜の見張りをお願いする。"
+    },
+    "reveal": {
+      "newInformation": "見張ると、父が自分で鍵を開けている。盗難ではなく、娘に必要とされる口実だ。ただし、引き出しには娘の新店用の鍵も作られている。父が嘘をつく場面を先に、娘の名を刻んだ鍵を後で見せ、妨害と送り出したさが同居する人物にする。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q101.canal.entry",
+        "assertion": {
+          "title": "鍵屋の帳場",
+          "place": "counter",
+          "cast": [
+            {
+              "entity": "mina",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q101.values.minaAt"
+                },
+                "right": "counter"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "wish",
+        "script": "q101.canal.wish",
+        "assertion": {
+          "title": "鍵屋の帳場",
+          "place": "counter",
+          "cast": [
+            {
+              "entity": "mina",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q101.values.minaAt"
+                },
+                "right": "counter"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "watch",
+        "script": "q101.canal.watch",
+        "assertion": {
+          "title": "鍵屋の裏口",
+          "place": "door",
+          "cast": [
+            {
+              "entity": "garo",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q101.values.garoAt"
+                },
+                "right": "door"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "father",
+        "script": "q101.canal.father",
+        "assertion": {
+          "title": "鍵屋の作業台",
+          "place": "bench",
+          "cast": [
+            {
+              "entity": "garo",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q101.values.garoAt"
+                },
+                "right": "bench"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "lateWish",
+        "script": "q101.canal.lateWish",
+        "assertion": {
+          "title": "鍵屋の帳場",
+          "place": "counter",
+          "cast": [
+            {
+              "entity": "mina",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q101.values.minaAt"
+                },
+                "right": "counter"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "rewatch",
+        "script": "q101.canal.rewatch",
+        "assertion": {
+          "title": "鍵屋の裏口",
+          "place": "door",
+          "cast": [],
+          "requires": true
+        }
+      },
+      {
+        "id": "agreement",
+        "script": "q101.canal.agreement",
+        "assertion": {
+          "title": "鍵屋の帳場",
+          "place": "counter",
+          "cast": [
+            {
+              "entity": "mina",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q101.values.minaAt"
+                },
+                "right": "counter"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "garo",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q101.values.garoAt"
+                },
+                "right": "counter"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "key",
+        "script": "q101.canal.key",
+        "assertion": {
+          "title": "鍵屋の帳場",
+          "place": "counter",
+          "cast": [
+            {
+              "entity": "mina",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q101.values.minaAt"
+                },
+                "right": "counter"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "garo",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q101.values.garoAt"
+                },
+                "right": "counter"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "report",
+        "script": "q101.canal.report",
+        "assertion": {
+          "title": "鍵屋の帳場",
+          "place": "counter",
+          "cast": [
+            {
+              "entity": "mina",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q101.values.minaAt"
+                },
+                "right": "counter"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "garo",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q101.values.garoAt"
+                },
+                "right": "counter"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "quiet",
+        "script": "q101.canal.quiet",
+        "assertion": {
+          "title": "鍵屋の帳場",
+          "place": "counter",
+          "cast": [
+            {
+              "entity": "mina",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q101.values.minaAt"
+                },
+                "right": "counter"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "stories.q101.values.partyAt",
+        "type": "enum",
+        "initial": "counter",
+        "values": [
+          "counter",
+          "door",
+          "bench",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q101.values.minaAt",
+        "type": "enum",
+        "initial": "counter",
+        "values": [
+          "counter",
+          "door",
+          "bench",
+          "transit"
+        ],
+        "meaning": "mina の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q101.values.garoAt",
+        "type": "enum",
+        "initial": "door",
+        "values": [
+          "counter",
+          "door",
+          "bench",
+          "transit"
+        ],
+        "meaning": "garo の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q101.values.keyAt",
+        "type": "enum",
+        "initial": "garo",
+        "values": [
+          "counter",
+          "door",
+          "bench",
+          "transit",
+          "party",
+          "mina",
+          "garo"
+        ],
+        "meaning": "key の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q101.values.wish",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "wish",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q101.values.unlocked",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "unlocked",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q101.values.keySeen",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "keySeen",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q101.values.promise",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "promise",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q101.values.reported",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "reported",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q101.values.silent",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "silent",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "ミナは裏口の鍵を差し出した。「何も盗られていないんです。でも朝になると、また開いていて」。",
+        "options": [
+          {
+            "id": "wish",
+            "text": "店の話を聞く",
+            "to": "wish",
+            "action": "entry_wish"
+          },
+          {
+            "id": "watch",
+            "text": "裏口を見張る",
+            "to": "watch",
+            "action": "entry_watch"
+          }
+        ]
+      },
+      {
+        "id": "wish",
+        "text": "「自分の看板を掛けたいんです。でも、閉店後に父だけが残るでしょう」。ミナは言い終えてから裏口の方を見た。",
+        "options": [
+          {
+            "id": "listen",
+            "text": "希望を聞いて夜番へ",
+            "to": "watch",
+            "action": "wish_listen"
+          }
+        ]
+      },
+      {
+        "id": "watch",
+        "text": {
+          "when": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q101.values.unlocked"
+            },
+            "right": true
+          },
+          "yes": "裏口の掛け金がまた鳴った。ガロが作業台へ戻る足音だ。",
+          "no": "夜の通りには誰もいない。鍵が内側から回り、ガロの指が扉を押した。店に入ってきた者はいなかった。"
+        },
+        "options": [
+          {
+            "id": "talk",
+            "text": "作業台で理由を聞く",
+            "to": "father",
+            "action": "watch_talk"
+          },
+          {
+            "id": "report",
+            "text": "ミナに知らせる",
+            "to": "report",
+            "action": "watch_report"
+          },
+          {
+            "id": "quiet",
+            "text": "秘密を守る",
+            "to": "quiet",
+            "action": "watch_quiet"
+          }
+        ]
+      },
+      {
+        "id": "father",
+        "text": "ガロは鍵を一本、引き出しから出した。娘の新店の名が彫ってある。「夜番でも口実にしなけりゃ、あの子と飯を食う日までなくなる気がしてな」。",
+        "options": [
+          {
+            "id": "wish",
+            "text": "ミナに希望を聞く",
+            "to": "lateWish",
+            "action": "father_wish"
+          },
+          {
+            "id": "visit",
+            "text": "二人に食事を提案",
+            "to": "agreement",
+            "action": "father_visit",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q101.values.wish"
+              },
+              "right": true
+            }
+          },
+          {
+            "id": "report",
+            "text": "開錠だけ伝える",
+            "to": "report",
+            "action": "father_report"
+          },
+          {
+            "id": "quiet",
+            "text": "事情を伏せる",
+            "to": "quiet",
+            "action": "father_quiet"
+          }
+        ]
+      },
+      {
+        "id": "lateWish",
+        "text": "ミナは新しい店を借りたいと言った。「水曜なら早く閉められます。でも、継ぐ約束にはしたくないんです」。",
+        "options": [
+          {
+            "id": "listen",
+            "text": "希望を聞いて裏口へ",
+            "to": "rewatch",
+            "action": "lateWish_listen"
+          }
+        ]
+      },
+      {
+        "id": "rewatch",
+        "text": "掛け金には見覚えのある擦り跡が残る。ガロは作業台で待っている。父の話に戻るか、夜番を終えるかを選べる。",
+        "options": [
+          {
+            "id": "talk",
+            "text": "作業台へ戻る",
+            "to": "father",
+            "action": "rewatch_talk"
+          },
+          {
+            "id": "report",
+            "text": "ミナに知らせる",
+            "to": "report",
+            "action": "rewatch_report"
+          },
+          {
+            "id": "quiet",
+            "text": "秘密を守る",
+            "to": "quiet",
+            "action": "rewatch_quiet"
+          }
+        ]
+      },
+      {
+        "id": "agreement",
+        "text": "「店は別々にしたいです」とミナ。ガロは勘定帳の水曜を指した。「じゃ、その晩だけはそっちで飯にしよう」。合意を取り持つか、目撃だけ伝えるかを選べる。",
+        "options": [
+          {
+            "id": "agree",
+            "text": "水曜の約束を結ぶ",
+            "to": "key",
+            "action": "agreement_agree"
+          },
+          {
+            "id": "decline",
+            "text": "目撃だけを伝える",
+            "to": "report",
+            "action": "agreement_decline"
+          }
+        ]
+      },
+      {
+        "id": "key",
+        "text": "ガロが新店の鍵を帳場に置いた。ミナは自分の手で受け取ると、水曜の仕舞い時を父の帳面に書いた。",
+        "options": [
+          {
+            "id": "hand",
+            "text": "鍵を娘へ渡す",
+            "to": "@visit",
+            "action": "key_hand"
+          }
+        ]
+      },
+      {
+        "id": "report",
+        "text": "裏口を開けたのはガロ自身だった。ミナにその手つきを伝える。食事の日取りを決める欄は空いたままだ。",
+        "options": [
+          {
+            "id": "tell",
+            "text": "目撃を報告する",
+            "to": "@report",
+            "action": "report_tell"
+          }
+        ]
+      },
+      {
+        "id": "quiet",
+        "text": "朝、ミナが夜番の代金を数えた。開錠した人の名を伏せたまま鍵を返す。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "夜番を終える",
+            "to": "@quiet",
+            "action": "quiet_finish"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.1",
+      "source": "https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4",
+      "adapter": "adv-story-state/1",
+      "scope": "quest-episode"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "entryScript": "q101.canal.visit",
+    "preserveAcceptedRoute": true,
+    "currentStoryScriptPrefix": "q101.canal.",
+    "interruptionRoutes": [],
+    "interruptionEntries": []
+  },
+  "scripts": {
+    "q101.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q101.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "ミナは父の作業台を避け、裏口の鍵だけを差し出した。「盗まれた物は、まだないんです」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wish",
+              "text": "店をどうしたいか、ミナに尋ねる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q101.scene.wish"
+                }
+              ]
+            },
+            {
+              "id": "watch",
+              "text": "裏口で夜番をする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q101.scene.watch"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q101.scene.wish": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q101.node",
+          "value": "wish"
+        },
+        {
+          "op": "say",
+          "text": "「自分の店を出したい。でも、父を一人にする話になると……」ミナは鍵を握り直した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "listen",
+              "text": "希望を聞いたうえで見張りへ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q101.mina_wish",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q101.scene.watch"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q101.scene.watch": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q101.node",
+          "value": "watch"
+        },
+        {
+          "op": "say",
+          "text": "閉店後、父ガロが内側から鍵を開けた。外を確かめ、また作業台へ戻る。侵入者はいない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "talk",
+              "text": "ガロに開けた理由を尋ねる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q101.saw_unlock",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q101.scene.father"
+                }
+              ]
+            },
+            {
+              "id": "report",
+              "text": "朝、目撃した行為をミナへ伝える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q101.end.report"
+                }
+              ]
+            },
+            {
+              "id": "quiet",
+              "text": "今夜のことを伏せて夜番を終える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q101.end.quiet"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q101.scene.father": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q101.node",
+          "value": "father"
+        },
+        {
+          "op": "say",
+          "text": "「あの子が出ていくと、戸締まりまで静かになる」ガロは引き出しを開けた。新しい店の名を彫った鍵がある。「渡すつもりでは、あるんだ」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wish",
+              "text": "ミナ本人の希望を聞きに行く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q101.scene.wish"
+                }
+              ]
+            },
+            {
+              "id": "visit",
+              "text": "週一度の食事を二人に提案する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q101.mina_wish"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q101.scene.agreement"
+                }
+              ]
+            },
+            {
+              "id": "report",
+              "text": "開錠の事実だけを報告する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q101.end.report"
+                }
+              ]
+            },
+            {
+              "id": "quiet",
+              "text": "父の秘密を守る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q101.end.quiet"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q101.scene.agreement": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q101.node",
+          "value": "agreement"
+        },
+        {
+          "op": "say",
+          "text": "ミナは別居を、ガロは毎週水曜の食事を望んだ。二人とも、相手の店を継ぐことは条件にしないと答えた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "二人が承諾した訪問の約束を取り持つ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q101.promise",
+                  "value": "wednesday"
+                },
+                {
+                  "op": "jump",
+                  "script": "q101.end.visit"
+                }
+              ]
+            },
+            {
+              "id": "decline",
+              "text": "約束の仲介はせず、目撃だけ伝える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q101.end.report"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q101.end.report": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q101.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "父娘は言い合いになり、ミナは予定を早めて店を出た。新店の鍵は後から郵便で届いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q101",
+              "outcome": "report"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q101.end.quiet": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q101.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "夜番の代金は支払われた。ミナの店の話は、また来月に延びた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q101",
+              "outcome": "quiet"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q101.end.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q101.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "水曜だけ、ガロの店は早仕舞いする。戸締まりの音は一度で終わり、その足音は娘の店へ向かった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q101",
+              "outcome": "visit"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q101.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q101.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q101.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "report",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "父娘は言い合いになり、ミナは予定を早めて店を出た。新店の鍵は後から郵便で届いた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "quiet",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "夜番の代金は支払われた。ミナの店の話は、また来月に延びた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "visit",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "水曜だけ、ガロの店は早仕舞いする。戸締まりの音は一度で終わり、その足音は娘の店へ向かった。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q101.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q101.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "wish",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q101.scene.wish"
+                    }
+                  ]
+                },
+                {
+                  "equals": "watch",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q101.scene.watch"
+                    }
+                  ]
+                },
+                {
+                  "equals": "father",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q101.scene.father"
+                    }
+                  ]
+                },
+                {
+                  "equals": "agreement",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q101.scene.agreement"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q101.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q101.canal.entry": {
+      "storyQuest": "q101",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q101",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "ミナは裏口の鍵を差し出した。「何も盗られていないんです。でも朝になると、また開いていて」。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wish",
+              "text": "店の話を聞く",
+              "storyAction": {
+                "quest": "q101",
+                "action": "entry_wish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q101",
+                  "action": "entry_wish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q101.canal.wish"
+                }
+              ]
+            },
+            {
+              "id": "watch",
+              "text": "裏口を見張る",
+              "storyAction": {
+                "quest": "q101",
+                "action": "entry_watch"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q101",
+                  "action": "entry_watch"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q101.canal.wish": {
+      "storyQuest": "q101",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q101",
+          "scene": "wish"
+        },
+        {
+          "op": "narrate",
+          "text": "「自分の看板を掛けたいんです。でも、閉店後に父だけが残るでしょう」。ミナは言い終えてから裏口の方を見た。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "listen",
+              "text": "希望を聞いて夜番へ",
+              "storyAction": {
+                "quest": "q101",
+                "action": "wish_listen"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q101",
+                  "action": "wish_listen"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q101.canal.watch": {
+      "storyQuest": "q101",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q101",
+          "scene": "watch"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q101.values.unlocked"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "裏口の掛け金がまた鳴った。ガロが作業台へ戻る足音だ。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "夜の通りには誰もいない。鍵が内側から回り、ガロの指が扉を押した。店に入ってきた者はいなかった。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "talk",
+              "text": "作業台で理由を聞く",
+              "storyAction": {
+                "quest": "q101",
+                "action": "watch_talk"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q101",
+                  "action": "watch_talk"
+                }
+              ]
+            },
+            {
+              "id": "report",
+              "text": "ミナに知らせる",
+              "storyAction": {
+                "quest": "q101",
+                "action": "watch_report"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q101",
+                  "action": "watch_report"
+                }
+              ]
+            },
+            {
+              "id": "quiet",
+              "text": "秘密を守る",
+              "storyAction": {
+                "quest": "q101",
+                "action": "watch_quiet"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q101",
+                  "action": "watch_quiet"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q101.canal.father": {
+      "storyQuest": "q101",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q101",
+          "scene": "father"
+        },
+        {
+          "op": "narrate",
+          "text": "ガロは鍵を一本、引き出しから出した。娘の新店の名が彫ってある。「夜番でも口実にしなけりゃ、あの子と飯を食う日までなくなる気がしてな」。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "wish",
+              "text": "ミナに希望を聞く",
+              "storyAction": {
+                "quest": "q101",
+                "action": "father_wish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q101",
+                  "action": "father_wish"
+                }
+              ]
+            },
+            {
+              "id": "visit",
+              "text": "二人に食事を提案",
+              "storyAction": {
+                "quest": "q101",
+                "action": "father_visit"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q101.values.wish"
+                },
+                "right": true
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q101",
+                  "action": "father_visit"
+                }
+              ]
+            },
+            {
+              "id": "report",
+              "text": "開錠だけ伝える",
+              "storyAction": {
+                "quest": "q101",
+                "action": "father_report"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q101",
+                  "action": "father_report"
+                }
+              ]
+            },
+            {
+              "id": "quiet",
+              "text": "事情を伏せる",
+              "storyAction": {
+                "quest": "q101",
+                "action": "father_quiet"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q101",
+                  "action": "father_quiet"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q101.canal.lateWish": {
+      "storyQuest": "q101",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q101",
+          "scene": "lateWish"
+        },
+        {
+          "op": "narrate",
+          "text": "ミナは新しい店を借りたいと言った。「水曜なら早く閉められます。でも、継ぐ約束にはしたくないんです」。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "listen",
+              "text": "希望を聞いて裏口へ",
+              "storyAction": {
+                "quest": "q101",
+                "action": "lateWish_listen"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q101",
+                  "action": "lateWish_listen"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q101.canal.rewatch": {
+      "storyQuest": "q101",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q101",
+          "scene": "rewatch"
+        },
+        {
+          "op": "narrate",
+          "text": "掛け金には見覚えのある擦り跡が残る。ガロは作業台で待っている。父の話に戻るか、夜番を終えるかを選べる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "talk",
+              "text": "作業台へ戻る",
+              "storyAction": {
+                "quest": "q101",
+                "action": "rewatch_talk"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q101",
+                  "action": "rewatch_talk"
+                }
+              ]
+            },
+            {
+              "id": "report",
+              "text": "ミナに知らせる",
+              "storyAction": {
+                "quest": "q101",
+                "action": "rewatch_report"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q101",
+                  "action": "rewatch_report"
+                }
+              ]
+            },
+            {
+              "id": "quiet",
+              "text": "秘密を守る",
+              "storyAction": {
+                "quest": "q101",
+                "action": "rewatch_quiet"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q101",
+                  "action": "rewatch_quiet"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q101.canal.agreement": {
+      "storyQuest": "q101",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q101",
+          "scene": "agreement"
+        },
+        {
+          "op": "narrate",
+          "text": "「店は別々にしたいです」とミナ。ガロは勘定帳の水曜を指した。「じゃ、その晩だけはそっちで飯にしよう」。合意を取り持つか、目撃だけ伝えるかを選べる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "水曜の約束を結ぶ",
+              "storyAction": {
+                "quest": "q101",
+                "action": "agreement_agree"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q101",
+                  "action": "agreement_agree"
+                },
+                {
+                  "op": "jump",
+                  "script": "q101.canal.key"
+                }
+              ]
+            },
+            {
+              "id": "decline",
+              "text": "目撃だけを伝える",
+              "storyAction": {
+                "quest": "q101",
+                "action": "agreement_decline"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q101",
+                  "action": "agreement_decline"
+                },
+                {
+                  "op": "jump",
+                  "script": "q101.canal.report"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q101.canal.key": {
+      "storyQuest": "q101",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q101",
+          "scene": "key"
+        },
+        {
+          "op": "narrate",
+          "text": "ガロが新店の鍵を帳場に置いた。ミナは自分の手で受け取ると、水曜の仕舞い時を父の帳面に書いた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hand",
+              "text": "鍵を娘へ渡す",
+              "storyAction": {
+                "quest": "q101",
+                "action": "key_hand"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q101",
+                  "action": "key_hand"
+                },
+                {
+                  "op": "jump",
+                  "script": "q101.canal.end.visit"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q101.canal.report": {
+      "storyQuest": "q101",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q101",
+          "scene": "report"
+        },
+        {
+          "op": "narrate",
+          "text": "裏口を開けたのはガロ自身だった。ミナにその手つきを伝える。食事の日取りを決める欄は空いたままだ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "tell",
+              "text": "目撃を報告する",
+              "storyAction": {
+                "quest": "q101",
+                "action": "report_tell"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q101",
+                  "action": "report_tell"
+                },
+                {
+                  "op": "jump",
+                  "script": "q101.canal.end.report"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q101.canal.quiet": {
+      "storyQuest": "q101",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q101",
+          "scene": "quiet"
+        },
+        {
+          "op": "narrate",
+          "text": "朝、ミナが夜番の代金を数えた。開錠した人の名を伏せたまま鍵を返す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "夜番を終える",
+              "storyAction": {
+                "quest": "q101",
+                "action": "quiet_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q101",
+                  "action": "quiet_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q101.canal.end.quiet"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q101.canal.end.report": {
+      "commands": [
+        {
+          "op": "jump",
+          "script": "q101.end.report"
+        }
+      ]
+    },
+    "q101.canal.end.quiet": {
+      "commands": [
+        {
+          "op": "jump",
+          "script": "q101.end.quiet"
+        }
+      ]
+    },
+    "q101.canal.end.visit": {
+      "commands": [
+        {
+          "op": "jump",
+          "script": "q101.end.visit"
+        }
+      ]
+    },
+    "q101.canal.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q101"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q101.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q101.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q101.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "report",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "父娘は言い合いになり、ミナは予定を早めて店を出た。新店の鍵は後から郵便で届いた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "quiet",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "夜番の代金は支払われた。ミナの店の話は、また来月に延びた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "visit",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "水曜だけ、ガロの店は早仕舞いする。戸締まりの音は一度で終わり、その足音は娘の店へ向かった。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q101"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q101.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q101.canal.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "wish",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q101.canal.wish"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "watch",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q101.canal.watch"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "father",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q101.canal.father"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "lateWish",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q101.canal.lateWish"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "rewatch",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q101.canal.rewatch"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "agreement",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q101.canal.agreement"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "key",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q101.canal.key"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "report",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q101.canal.report"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "quiet",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q101.canal.quiet"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q101.canal.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "counter": "鍵屋の帳場",
+      "door": "鍵屋の裏口",
+      "bench": "鍵屋の作業台",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "counter"
+      ],
+      [
+        "transit",
+        "door"
+      ],
+      [
+        "transit",
+        "bench"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "counter",
+        "values": [
+          "counter",
+          "door",
+          "bench",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "minaAt": {
+        "type": "enum",
+        "initial": "counter",
+        "values": [
+          "counter",
+          "door",
+          "bench",
+          "transit"
+        ],
+        "meaning": "mina の所在または保持者"
+      },
+      "garoAt": {
+        "type": "enum",
+        "initial": "door",
+        "values": [
+          "counter",
+          "door",
+          "bench",
+          "transit"
+        ],
+        "meaning": "garo の所在または保持者"
+      },
+      "keyAt": {
+        "type": "enum",
+        "initial": "garo",
+        "values": [
+          "counter",
+          "door",
+          "bench",
+          "transit",
+          "party",
+          "mina",
+          "garo"
+        ],
+        "meaning": "key の所在または保持者"
+      },
+      "wish": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "wish"
+      },
+      "unlocked": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "unlocked"
+      },
+      "keySeen": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "keySeen"
+      },
+      "promise": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "promise"
+      },
+      "reported": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "reported"
+      },
+      "silent": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "silent"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "mina": {
+        "holder": "minaAt",
+        "kind": "person",
+        "character": "e2_q101_mina"
+      },
+      "garo": {
+        "holder": "garoAt",
+        "kind": "person",
+        "character": "e2_q101_garo"
+      },
+      "key": {
+        "holder": "keyAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {
+      "newShop": {
+        "text": "ミナは店を継ぐより、自分の店を出したい。"
+      }
+    },
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "鍵屋の帳場",
+        "place": "counter",
+        "cast": [
+          {
+            "entity": "mina",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q101.values.minaAt"
+              },
+              "right": "counter"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "wish": {
+        "title": "鍵屋の帳場",
+        "place": "counter",
+        "cast": [
+          {
+            "entity": "mina",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q101.values.minaAt"
+              },
+              "right": "counter"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "watch": {
+        "title": "鍵屋の裏口",
+        "place": "door",
+        "cast": [
+          {
+            "entity": "garo",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q101.values.garoAt"
+              },
+              "right": "door"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "father": {
+        "title": "鍵屋の作業台",
+        "place": "bench",
+        "cast": [
+          {
+            "entity": "garo",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q101.values.garoAt"
+              },
+              "right": "bench"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "lateWish": {
+        "title": "鍵屋の帳場",
+        "place": "counter",
+        "cast": [
+          {
+            "entity": "mina",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q101.values.minaAt"
+              },
+              "right": "counter"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "rewatch": {
+        "title": "鍵屋の裏口",
+        "place": "door",
+        "cast": [],
+        "requires": true
+      },
+      "agreement": {
+        "title": "鍵屋の帳場",
+        "place": "counter",
+        "cast": [
+          {
+            "entity": "mina",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q101.values.minaAt"
+              },
+              "right": "counter"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "garo",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q101.values.garoAt"
+              },
+              "right": "counter"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "key": {
+        "title": "鍵屋の帳場",
+        "place": "counter",
+        "cast": [
+          {
+            "entity": "mina",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q101.values.minaAt"
+              },
+              "right": "counter"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "garo",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q101.values.garoAt"
+              },
+              "right": "counter"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "report": {
+        "title": "鍵屋の帳場",
+        "place": "counter",
+        "cast": [
+          {
+            "entity": "mina",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q101.values.minaAt"
+              },
+              "right": "counter"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "garo",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q101.values.garoAt"
+              },
+              "right": "counter"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "quiet": {
+        "title": "鍵屋の帳場",
+        "place": "counter",
+        "cast": [
+          {
+            "entity": "mina",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q101.values.minaAt"
+              },
+              "right": "counter"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_wish": {
+        "from": [
+          "entry"
+        ],
+        "to": "wish",
+        "requires": true,
+        "effects": [],
+        "once": true
+      },
+      "entry_watch": {
+        "from": [
+          "entry"
+        ],
+        "to": "watch",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "door"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "door",
+          "companions": []
+        },
+        "depart": []
+      },
+      "wish_listen": {
+        "from": [
+          "wish"
+        ],
+        "to": "watch",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "door"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "door",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "wish",
+            "value": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "newShop",
+            "source": "mina",
+            "requires": true
+          }
+        ]
+      },
+      "watch_talk": {
+        "from": [
+          "watch"
+        ],
+        "to": "father",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "garo"
+            ],
+            "path": [
+              "transit",
+              "bench"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "bench",
+          "companions": [
+            "garo"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "unlocked",
+            "value": true
+          }
+        ]
+      },
+      "watch_report": {
+        "from": [
+          "watch"
+        ],
+        "to": "report",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "counter"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "counter",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "unlocked",
+            "value": true
+          }
+        ]
+      },
+      "watch_quiet": {
+        "from": [
+          "watch"
+        ],
+        "to": "quiet",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "counter"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "counter",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "unlocked",
+            "value": true
+          }
+        ]
+      },
+      "father_wish": {
+        "from": [
+          "father"
+        ],
+        "to": "lateWish",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "counter"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "counter",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "keySeen",
+            "value": true
+          }
+        ]
+      },
+      "father_visit": {
+        "from": [
+          "father"
+        ],
+        "to": "agreement",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q101.values.wish"
+          },
+          "right": true
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "garo"
+            ],
+            "path": [
+              "transit",
+              "counter"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "counter",
+          "companions": [
+            "garo"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "keySeen",
+            "value": true
+          }
+        ]
+      },
+      "father_report": {
+        "from": [
+          "father"
+        ],
+        "to": "report",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "counter"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "counter",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "keySeen",
+            "value": true
+          }
+        ]
+      },
+      "father_quiet": {
+        "from": [
+          "father"
+        ],
+        "to": "quiet",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "counter"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "counter",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "keySeen",
+            "value": true
+          }
+        ]
+      },
+      "lateWish_listen": {
+        "from": [
+          "lateWish"
+        ],
+        "to": "rewatch",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "door"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "door",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "wish",
+            "value": true
+          },
+          {
+            "op": "observe",
+            "observer": "party",
+            "proposition": "newShop",
+            "source": "mina",
+            "requires": true
+          }
+        ]
+      },
+      "rewatch_talk": {
+        "from": [
+          "rewatch"
+        ],
+        "to": "father",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "bench"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "bench",
+          "companions": []
+        },
+        "depart": []
+      },
+      "rewatch_report": {
+        "from": [
+          "rewatch"
+        ],
+        "to": "report",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "counter"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "counter",
+          "companions": []
+        },
+        "depart": []
+      },
+      "rewatch_quiet": {
+        "from": [
+          "rewatch"
+        ],
+        "to": "quiet",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "counter"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "counter",
+          "companions": []
+        },
+        "depart": []
+      },
+      "agreement_agree": {
+        "from": [
+          "agreement"
+        ],
+        "to": "key",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "promise",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "agreement_decline": {
+        "from": [
+          "agreement"
+        ],
+        "to": "report",
+        "requires": true,
+        "effects": [],
+        "once": true
+      },
+      "key_hand": {
+        "from": [
+          "key"
+        ],
+        "ending": "visit",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "key",
+            "from": "garo",
+            "to": "mina"
+          }
+        ],
+        "once": true
+      },
+      "report_tell": {
+        "from": [
+          "report"
+        ],
+        "ending": "report",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "reported",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "quiet_finish": {
+        "from": [
+          "quiet"
+        ],
+        "ending": "quiet",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "silent",
+            "value": true
+          }
+        ],
+        "once": true
+      }
+    },
+    "endings": {
+      "visit": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q101.values.promise"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q101.values.wish"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q101.values.keyAt"
+            },
+            "right": "mina"
+          }
+        ]
+      },
+      "report": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q101.values.unlocked"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q101.values.reported"
+            },
+            "right": true
+          }
+        ]
+      },
+      "quiet": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q101.values.unlocked"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q101.values.silent"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "counter": {
+        "kind": "town",
+        "location": "e2_q101_counter"
+      },
+      "door": {
+        "kind": "town",
+        "location": "e2_q101_door"
+      },
+      "bench": {
+        "kind": "town",
+        "location": "e2_q101_bench"
+      }
+    },
+    "revision": 1
+  }
+}

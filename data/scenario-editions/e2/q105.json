@@ -1,0 +1,3944 @@
+{
+  "schemaVersion": 1,
+  "id": "q105",
+  "number": 105,
+  "title": "花嫁の片方の靴",
+  "client": "婚約者ダン",
+  "brief": "花嫁リセが見当たらず、靴が運河に浮いている。捜してください。",
+  "region": 1,
+  "type": "scene_graph",
+  "recommendedLevel": 1,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。灯帰りの広場から運河通りへ進み、手帳に示される現場を訪ねる。",
+  "events": [
+    {
+      "id": "q105_scene",
+      "title": "花嫁の片方の靴：婚約者ダン",
+      "points": [
+        {
+          "map": "region_1_f1",
+          "x": 8,
+          "y": 1,
+          "dungeon": "region_1"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q105.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q105.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q105.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q105"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_1"
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_1_f1",
+      "x": 8,
+      "y": 1,
+      "object": "q105_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "return": {
+      "label": "空席のある式",
+      "text": "リセは式へ戻った。姉の席は空いたままだったが、片方の靴は修繕して届けられた。",
+      "gold": 57,
+      "xp": 51,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q105.values.returned"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q105.values.liseAt"
+            },
+            "right": "hall"
+          }
+        ]
+      }
+    },
+    "roles": {
+      "label": "婚礼後の当番",
+      "text": "姉は荷を片付けて遅れて来た。修繕された靴は両方とも頑丈になり、リセは文句を言いながら履いた。",
+      "gold": 57,
+      "xp": 51,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q105.values.work"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q105.values.reported"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q105.values.shoeAt"
+            },
+            "right": "sister"
+          }
+        ]
+      }
+    },
+    "delay": {
+      "label": "延期した祝い",
+      "text": "料理は近所へ配られた。次の式は小さくなる。姉妹はその前に、来週の仕事を二人で書き出した。",
+      "gold": 57,
+      "xp": 51,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q105.values.postponed"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q105.values.liseAt"
+            },
+            "right": "cart"
+          }
+        ]
+      }
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/story-q105.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3813d958cf10f9782f264",
+    "revision": "scenario-edition-e2-q105-r1",
+    "world": {
+      "truth": "靴を落としたのは、泥道で姉の荷車を押したためだ。ダンは浮気や誘拐を恐れているが、別の靴には工房の木屑が詰まっている。リセは姉に来てほしくても、今後の家業を手伝う気持ちは未整理だ。仲直りの言葉だけでは姉は動かない。",
+      "fixedPast": "婚礼の日、成人した花嫁リセが姿を消し、靴だけが運河に浮かぶ。婚約者ダンは捜索を頼む。リセは結婚から逃げたのではなく、出席を拒む姉のもとへ行った。姉は家業を一人で背負ったことへの怒りを、結婚への反対として口にしている。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "婚約者ダン",
+        "beliefsAndGoals": "婚礼の日、成人した花嫁リセが姿を消し、靴だけが運河に浮かぶ。婚約者ダンは捜索を頼む。リセは結婚から逃げたのではなく、出席を拒む姉のもとへ行った。姉は家業を一人で背負ったことへの怒りを、結婚への反対として口にしている。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "花嫁リセが見当たらず、靴が運河に浮いている。捜してください。"
+      }
+    ],
+    "conflict": {
+      "design": "靴を拾う→工房か運河を追う→姉妹へ合流→婚礼へ戻る／役割を相談／式を延期。発見後はいつでも無事の報告を先にできる。勝手に連れ戻す道ではなく、リセが戻る条件を交渉する。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q105.canal.entry",
+          "assertion": {
+            "title": "婚礼の会場",
+            "place": "hall",
+            "cast": [
+              {
+                "entity": "dan",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q105.values.danAt"
+                  },
+                  "right": "hall"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "clues",
+          "script": "q105.canal.clues",
+          "assertion": {
+            "title": "婚礼の日の運河橋",
+            "place": "bridge",
+            "cast": [],
+            "requires": true
+          }
+        },
+        {
+          "id": "shop",
+          "script": "q105.canal.shop",
+          "assertion": {
+            "title": "木屑の残る工房",
+            "place": "shop",
+            "cast": [],
+            "requires": true
+          }
+        },
+        {
+          "id": "bank",
+          "script": "q105.canal.bank",
+          "assertion": {
+            "title": "運河の泥道",
+            "place": "bank",
+            "cast": [],
+            "requires": true
+          }
+        },
+        {
+          "id": "sisters",
+          "script": "q105.canal.sisters",
+          "assertion": {
+            "title": "荷車の停まる船着場",
+            "place": "cart",
+            "cast": [
+              {
+                "entity": "lise",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q105.values.liseAt"
+                  },
+                  "right": "cart"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "sister",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q105.values.sisterAt"
+                  },
+                  "right": "cart"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "news",
+          "script": "q105.canal.news",
+          "assertion": {
+            "title": "婚礼の会場",
+            "place": "hall",
+            "cast": [
+              {
+                "entity": "dan",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q105.values.danAt"
+                  },
+                  "right": "hall"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "roles",
+          "script": "q105.canal.roles",
+          "assertion": {
+            "title": "荷車の停まる船着場",
+            "place": "cart",
+            "cast": [
+              {
+                "entity": "lise",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q105.values.liseAt"
+                  },
+                  "right": "cart"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "sister",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q105.values.sisterAt"
+                  },
+                  "right": "cart"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "calendar",
+          "script": "q105.canal.calendar",
+          "assertion": {
+            "title": "婚礼の会場",
+            "place": "hall",
+            "cast": [
+              {
+                "entity": "dan",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q105.values.danAt"
+                  },
+                  "right": "hall"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "lise",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q105.values.liseAt"
+                  },
+                  "right": "hall"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "deliver",
+          "script": "q105.canal.deliver",
+          "assertion": {
+            "title": "荷車の停まる船着場",
+            "place": "cart",
+            "cast": [
+              {
+                "entity": "sister",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q105.values.sisterAt"
+                  },
+                  "right": "cart"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "ready",
+          "script": "q105.canal.ready",
+          "assertion": {
+            "title": "荷車の停まる船着場",
+            "place": "cart",
+            "cast": [
+              {
+                "entity": "sister",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q105.values.sisterAt"
+                  },
+                  "right": "cart"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "arrival",
+          "script": "q105.canal.arrival",
+          "assertion": {
+            "title": "婚礼の会場",
+            "place": "hall",
+            "cast": [
+              {
+                "entity": "dan",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q105.values.danAt"
+                  },
+                  "right": "hall"
+                },
+                "display": {
+                  "x": 17,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "lise",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q105.values.liseAt"
+                  },
+                  "right": "hall"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              },
+              {
+                "entity": "sister",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q105.values.sisterAt"
+                  },
+                  "right": "hall"
+                },
+                "display": {
+                  "x": 83,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 2
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "wedding",
+          "script": "q105.canal.wedding",
+          "assertion": {
+            "title": "婚礼の会場",
+            "place": "hall",
+            "cast": [
+              {
+                "entity": "lise",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q105.values.liseAt"
+                  },
+                  "right": "hall"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "dan",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q105.values.danAt"
+                  },
+                  "right": "hall"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "delay",
+          "script": "q105.canal.delay",
+          "assertion": {
+            "title": "婚礼の会場",
+            "place": "hall",
+            "cast": [
+              {
+                "entity": "lise",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q105.values.liseAt"
+                  },
+                  "right": "hall"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "dan",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q105.values.danAt"
+                  },
+                  "right": "hall"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "week",
+          "script": "q105.canal.week",
+          "assertion": {
+            "title": "荷車の停まる船着場",
+            "place": "cart",
+            "cast": [
+              {
+                "entity": "lise",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q105.values.liseAt"
+                  },
+                  "right": "cart"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "sister",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q105.values.sisterAt"
+                  },
+                  "right": "cart"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "花嫁リセが見当たらず、靴が運河に浮いている。捜してください。"
+    },
+    "reveal": {
+      "newInformation": "靴を落としたのは、泥道で姉の荷車を押したためだ。ダンは浮気や誘拐を恐れているが、別の靴には工房の木屑が詰まっている。リセは姉に来てほしくても、今後の家業を手伝う気持ちは未整理だ。仲直りの言葉だけでは姉は動かない。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q105.canal.entry",
+        "assertion": {
+          "title": "婚礼の会場",
+          "place": "hall",
+          "cast": [
+            {
+              "entity": "dan",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q105.values.danAt"
+                },
+                "right": "hall"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "clues",
+        "script": "q105.canal.clues",
+        "assertion": {
+          "title": "婚礼の日の運河橋",
+          "place": "bridge",
+          "cast": [],
+          "requires": true
+        }
+      },
+      {
+        "id": "shop",
+        "script": "q105.canal.shop",
+        "assertion": {
+          "title": "木屑の残る工房",
+          "place": "shop",
+          "cast": [],
+          "requires": true
+        }
+      },
+      {
+        "id": "bank",
+        "script": "q105.canal.bank",
+        "assertion": {
+          "title": "運河の泥道",
+          "place": "bank",
+          "cast": [],
+          "requires": true
+        }
+      },
+      {
+        "id": "sisters",
+        "script": "q105.canal.sisters",
+        "assertion": {
+          "title": "荷車の停まる船着場",
+          "place": "cart",
+          "cast": [
+            {
+              "entity": "lise",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q105.values.liseAt"
+                },
+                "right": "cart"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "sister",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q105.values.sisterAt"
+                },
+                "right": "cart"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "news",
+        "script": "q105.canal.news",
+        "assertion": {
+          "title": "婚礼の会場",
+          "place": "hall",
+          "cast": [
+            {
+              "entity": "dan",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q105.values.danAt"
+                },
+                "right": "hall"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "roles",
+        "script": "q105.canal.roles",
+        "assertion": {
+          "title": "荷車の停まる船着場",
+          "place": "cart",
+          "cast": [
+            {
+              "entity": "lise",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q105.values.liseAt"
+                },
+                "right": "cart"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "sister",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q105.values.sisterAt"
+                },
+                "right": "cart"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "calendar",
+        "script": "q105.canal.calendar",
+        "assertion": {
+          "title": "婚礼の会場",
+          "place": "hall",
+          "cast": [
+            {
+              "entity": "dan",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q105.values.danAt"
+                },
+                "right": "hall"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "lise",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q105.values.liseAt"
+                },
+                "right": "hall"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "deliver",
+        "script": "q105.canal.deliver",
+        "assertion": {
+          "title": "荷車の停まる船着場",
+          "place": "cart",
+          "cast": [
+            {
+              "entity": "sister",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q105.values.sisterAt"
+                },
+                "right": "cart"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "ready",
+        "script": "q105.canal.ready",
+        "assertion": {
+          "title": "荷車の停まる船着場",
+          "place": "cart",
+          "cast": [
+            {
+              "entity": "sister",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q105.values.sisterAt"
+                },
+                "right": "cart"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "arrival",
+        "script": "q105.canal.arrival",
+        "assertion": {
+          "title": "婚礼の会場",
+          "place": "hall",
+          "cast": [
+            {
+              "entity": "dan",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q105.values.danAt"
+                },
+                "right": "hall"
+              },
+              "display": {
+                "x": 17,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "lise",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q105.values.liseAt"
+                },
+                "right": "hall"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            },
+            {
+              "entity": "sister",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q105.values.sisterAt"
+                },
+                "right": "hall"
+              },
+              "display": {
+                "x": 83,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 2
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "wedding",
+        "script": "q105.canal.wedding",
+        "assertion": {
+          "title": "婚礼の会場",
+          "place": "hall",
+          "cast": [
+            {
+              "entity": "lise",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q105.values.liseAt"
+                },
+                "right": "hall"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "dan",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q105.values.danAt"
+                },
+                "right": "hall"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "delay",
+        "script": "q105.canal.delay",
+        "assertion": {
+          "title": "婚礼の会場",
+          "place": "hall",
+          "cast": [
+            {
+              "entity": "lise",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q105.values.liseAt"
+                },
+                "right": "hall"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "dan",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q105.values.danAt"
+                },
+                "right": "hall"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "week",
+        "script": "q105.canal.week",
+        "assertion": {
+          "title": "荷車の停まる船着場",
+          "place": "cart",
+          "cast": [
+            {
+              "entity": "lise",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q105.values.liseAt"
+                },
+                "right": "cart"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "sister",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q105.values.sisterAt"
+                },
+                "right": "cart"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "stories.q105.values.partyAt",
+        "type": "enum",
+        "initial": "hall",
+        "values": [
+          "hall",
+          "bridge",
+          "shop",
+          "bank",
+          "cart",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q105.values.danAt",
+        "type": "enum",
+        "initial": "hall",
+        "values": [
+          "hall",
+          "bridge",
+          "shop",
+          "bank",
+          "cart",
+          "transit"
+        ],
+        "meaning": "dan の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q105.values.liseAt",
+        "type": "enum",
+        "initial": "cart",
+        "values": [
+          "hall",
+          "bridge",
+          "shop",
+          "bank",
+          "cart",
+          "transit"
+        ],
+        "meaning": "lise の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q105.values.sisterAt",
+        "type": "enum",
+        "initial": "cart",
+        "values": [
+          "hall",
+          "bridge",
+          "shop",
+          "bank",
+          "cart",
+          "transit"
+        ],
+        "meaning": "sister の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q105.values.shoeAt",
+        "type": "enum",
+        "initial": "bridge",
+        "values": [
+          "hall",
+          "bridge",
+          "shop",
+          "bank",
+          "cart",
+          "transit",
+          "party",
+          "dan",
+          "lise",
+          "sister"
+        ],
+        "meaning": "shoe の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q105.values.reported",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "reported",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q105.values.work",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "work",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q105.values.postponed",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "postponed",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q105.values.returned",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "returned",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q105.values.trail",
+        "type": "enum",
+        "initial": "none",
+        "values": [
+          "none",
+          "shop",
+          "canal"
+        ],
+        "meaning": "姉妹を見つけた手がかり",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "ダンが片方だけの足元を指で示した。「橋にリセの靴が浮いてるんです。連れ去られたんでしょうか」。会場に戻って来たときのため、ダンにここで待ってもらう。",
+        "options": [
+          {
+            "id": "bridge",
+            "text": "運河橋を調べる",
+            "to": "clues",
+            "action": "entry_bridge"
+          }
+        ]
+      },
+      {
+        "id": "clues",
+        "text": "橋から片方の靴を引き上げた。工房側に木屑が、泥道には車輪の跡がある。",
+        "options": [
+          {
+            "id": "shop",
+            "text": "木屑をたどる",
+            "to": "shop",
+            "action": "clues_shop"
+          },
+          {
+            "id": "canal",
+            "text": "轍をたどる",
+            "to": "bank",
+            "action": "clues_canal"
+          }
+        ]
+      },
+      {
+        "id": "shop",
+        "text": "敷居の木屑に靴の縁がこすれた。奥は空で、削った材を積んだ車が船着場に出たばかりだった。",
+        "options": [
+          {
+            "id": "follow",
+            "text": "荷車を追う",
+            "to": "sisters",
+            "action": "shop_follow"
+          }
+        ]
+      },
+      {
+        "id": "bank",
+        "text": "轍の脇で片方の靴跡が途切れ、その先に裸足の跡が続く。荷車は船着場で止まった。",
+        "options": [
+          {
+            "id": "follow",
+            "text": "足跡を追う",
+            "to": "sisters",
+            "action": "bank_follow"
+          }
+        ]
+      },
+      {
+        "id": "sisters",
+        "text": {
+          "when": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q105.values.reported"
+            },
+            "right": true
+          },
+          "yes": "「無事って伝わったのね」。リセは荷車の柄から手を離し、姉に向き直った。",
+          "no": "リセは裸足で姉の荷車を押していた。「式に来てほしい。でも、この荷を明日から誰が運ぶか、まだ話せてないの」。"
+        },
+        "options": [
+          {
+            "id": "report",
+            "text": "無事を伝えに行く",
+            "to": "news",
+            "action": "sisters_report",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q105.values.reported"
+                },
+                "right": true
+              }
+            }
+          },
+          {
+            "id": "roles",
+            "text": "分担を相談する",
+            "to": "roles",
+            "action": "sisters_roles"
+          },
+          {
+            "id": "return",
+            "text": "式へ戻る",
+            "to": "wedding",
+            "action": "sisters_return"
+          },
+          {
+            "id": "delay",
+            "text": "延期を提案する",
+            "to": "delay",
+            "action": "sisters_delay"
+          }
+        ]
+      },
+      {
+        "id": "news",
+        "text": "ダンは椅子を引いたまま待っていた。荷車を押していたこと、靴が脱げてもリセが無事だったことを直接知らせる。",
+        "options": [
+          {
+            "id": "tell",
+            "text": "知らせて姉妹のもとへ",
+            "to": "sisters",
+            "action": "news_tell"
+          }
+        ]
+      },
+      {
+        "id": "roles",
+        "text": "姉は週二日だけ荷を運んでほしいと頼んだ。リセは、その日なら婚礼の後も来られると答えた。ダンと曜日を確かめて初めて約束が決まる。",
+        "options": [
+          {
+            "id": "agree",
+            "text": "ダンと日取りを確認",
+            "to": "calendar",
+            "action": "roles_agree"
+          },
+          {
+            "id": "back",
+            "text": "まだ決めずに戻る",
+            "to": "sisters",
+            "action": "roles_back"
+          }
+        ]
+      },
+      {
+        "id": "calendar",
+        "text": {
+          "when": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q105.values.reported"
+            },
+            "right": true
+          },
+          "yes": "ダンは無事の知らせをすでに聞いている。リセと一緒に、姉が頼んだ二日を暦に書き込んだ。",
+          "no": "ダンはリセ本人を迎え、無事を確かめた。荷車を押した話を聞き、週二日を一緒に暦に印した。"
+        },
+        "options": [
+          {
+            "id": "confirm",
+            "text": "二日を姉に届ける",
+            "to": "deliver",
+            "action": "calendar_confirm"
+          }
+        ]
+      },
+      {
+        "id": "deliver",
+        "text": "姉が暦を開いて荷運びの日を読み返した。濡れた靴は修繕に預ける。残った荷を片付ければ、遅れてでも席に着ける。",
+        "options": [
+          {
+            "id": "hand",
+            "text": "暦と靴を預ける",
+            "to": "ready",
+            "action": "deliver_hand"
+          }
+        ]
+      },
+      {
+        "id": "ready",
+        "text": "姉が最後の荷を降ろした。暦と修繕道具をしまうと、婚礼の席まで一緒に来てほしいと頼んだ。",
+        "options": [
+          {
+            "id": "escort",
+            "text": "姉と会場へ",
+            "to": "arrival",
+            "action": "ready_escort"
+          }
+        ]
+      },
+      {
+        "id": "arrival",
+        "text": "姉のために空けておいた席に、遅れて本人が着いた。来週の仕事はもう暦にある。リセが椅子を引いた。",
+        "options": [
+          {
+            "id": "seat",
+            "text": "姉を席へ案内",
+            "to": "@roles",
+            "action": "arrival_seat"
+          }
+        ]
+      },
+      {
+        "id": "wedding",
+        "text": "リセは自分で式へ戻った。姉の席は空いたまま。落とした靴は乾かし、修繕して届けるためにダンへ預ける。",
+        "options": [
+          {
+            "id": "seat",
+            "text": "式を始める",
+            "to": "@return",
+            "action": "wedding_seat"
+          }
+        ]
+      },
+      {
+        "id": "delay",
+        "text": "リセが延期を申し出ると、ダンは料理を近所へ分ける段取りをつけた。姉のもとに戻れば、来週の荷を書き出す時間がある。",
+        "options": [
+          {
+            "id": "back",
+            "text": "姉のもとへ",
+            "to": "week",
+            "action": "delay_back"
+          }
+        ]
+      },
+      {
+        "id": "week",
+        "text": "荷車の上に来週の紙を広げた。式の日を急いで決める前に、姉妹で最初の仕事を書く。",
+        "options": [
+          {
+            "id": "plan",
+            "text": "来週の仕事を書く",
+            "to": "@delay",
+            "action": "week_plan"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.1",
+      "source": "https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4",
+      "adapter": "adv-story-state/1",
+      "scope": "quest-episode"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "entryScript": "q105.canal.visit",
+    "preserveAcceptedRoute": true,
+    "currentStoryScriptPrefix": "q105.canal.",
+    "interruptionRoutes": [],
+    "interruptionEntries": []
+  },
+  "scripts": {
+    "q105.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q105.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "片方の靴は濡れている。ダンは誘拐では、と繰り返す。近くに工房の木屑が落ちていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "shop",
+              "text": "木屑をたどって工房へ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q105.scene.sisters"
+                }
+              ]
+            },
+            {
+              "id": "canal",
+              "text": "運河の荷車の跡を追う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q105.scene.sisters"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q105.scene.sisters": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q105.node",
+          "value": "sisters"
+        },
+        {
+          "op": "say",
+          "text": "リセは姉の荷車を押していた。落とした靴の代わりに裸足だ。「式に来てほしい。でも仕事を全部姉さんに残す話は、まだしてない」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "report",
+              "text": "先にダンへ無事を伝える",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q105.reported"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q105.reported",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q105.scene.sisters"
+                }
+              ]
+            },
+            {
+              "id": "roles",
+              "text": "今後の仕事を姉妹で相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q105.scene.roles"
+                }
+              ]
+            },
+            {
+              "id": "return",
+              "text": "家業の話は保留し、リセの意思で式へ戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q105.end.return"
+                }
+              ]
+            },
+            {
+              "id": "delay",
+              "text": "姉妹とダンへ式の延期を提案する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q105.end.delay"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q105.scene.roles": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q105.node",
+          "value": "roles"
+        },
+        {
+          "op": "say",
+          "text": "姉は週二日の荷運びを頼み、リセは婚礼後も来ると答えた。報告を受けたダンにも日取りを確認する必要がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "ダンにも予定を伝え、三人で分担を決める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q105.reported",
+                  "value": true
+                },
+                {
+                  "op": "set",
+                  "target": "flags.quest.q105.work",
+                  "value": "two_days"
+                },
+                {
+                  "op": "jump",
+                  "script": "q105.end.roles"
+                }
+              ]
+            },
+            {
+              "id": "back",
+              "text": "約束を確定せず姉妹の話へ戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q105.scene.sisters"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q105.end.return": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q105.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "リセは式へ戻った。姉の席は空いたままだったが、片方の靴は修繕して届けられた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q105",
+              "outcome": "return"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q105.end.roles": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q105.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "姉は荷を片付けて遅れて来た。修繕された靴は両方とも頑丈になり、リセは文句を言いながら履いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q105",
+              "outcome": "roles"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q105.end.delay": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q105.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "料理は近所へ配られた。次の式は小さくなる。姉妹はその前に、来週の仕事を二人で書き出した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q105",
+              "outcome": "delay"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q105.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q105.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q105.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "return",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "リセは式へ戻った。姉の席は空いたままだったが、片方の靴は修繕して届けられた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "roles",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "姉は荷を片付けて遅れて来た。修繕された靴は両方とも頑丈になり、リセは文句を言いながら履いた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "delay",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "料理は近所へ配られた。次の式は小さくなる。姉妹はその前に、来週の仕事を二人で書き出した。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q105.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q105.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "sisters",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q105.scene.sisters"
+                    }
+                  ]
+                },
+                {
+                  "equals": "roles",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q105.scene.roles"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q105.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q105.canal.entry": {
+      "storyQuest": "q105",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q105",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "ダンが片方だけの足元を指で示した。「橋にリセの靴が浮いてるんです。連れ去られたんでしょうか」。会場に戻って来たときのため、ダンにここで待ってもらう。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "bridge",
+              "text": "運河橋を調べる",
+              "storyAction": {
+                "quest": "q105",
+                "action": "entry_bridge"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q105",
+                  "action": "entry_bridge"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q105.canal.clues": {
+      "storyQuest": "q105",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q105",
+          "scene": "clues"
+        },
+        {
+          "op": "narrate",
+          "text": "橋から片方の靴を引き上げた。工房側に木屑が、泥道には車輪の跡がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "shop",
+              "text": "木屑をたどる",
+              "storyAction": {
+                "quest": "q105",
+                "action": "clues_shop"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q105",
+                  "action": "clues_shop"
+                }
+              ]
+            },
+            {
+              "id": "canal",
+              "text": "轍をたどる",
+              "storyAction": {
+                "quest": "q105",
+                "action": "clues_canal"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q105",
+                  "action": "clues_canal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q105.canal.shop": {
+      "storyQuest": "q105",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q105",
+          "scene": "shop"
+        },
+        {
+          "op": "narrate",
+          "text": "敷居の木屑に靴の縁がこすれた。奥は空で、削った材を積んだ車が船着場に出たばかりだった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "follow",
+              "text": "荷車を追う",
+              "storyAction": {
+                "quest": "q105",
+                "action": "shop_follow"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q105",
+                  "action": "shop_follow"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q105.canal.bank": {
+      "storyQuest": "q105",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q105",
+          "scene": "bank"
+        },
+        {
+          "op": "narrate",
+          "text": "轍の脇で片方の靴跡が途切れ、その先に裸足の跡が続く。荷車は船着場で止まった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "follow",
+              "text": "足跡を追う",
+              "storyAction": {
+                "quest": "q105",
+                "action": "bank_follow"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q105",
+                  "action": "bank_follow"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q105.canal.sisters": {
+      "storyQuest": "q105",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q105",
+          "scene": "sisters"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q105.values.reported"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "「無事って伝わったのね」。リセは荷車の柄から手を離し、姉に向き直った。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "リセは裸足で姉の荷車を押していた。「式に来てほしい。でも、この荷を明日から誰が運ぶか、まだ話せてないの」。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "report",
+              "text": "無事を伝えに行く",
+              "storyAction": {
+                "quest": "q105",
+                "action": "sisters_report"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q105.values.reported"
+                  },
+                  "right": true
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q105",
+                  "action": "sisters_report"
+                }
+              ]
+            },
+            {
+              "id": "roles",
+              "text": "分担を相談する",
+              "storyAction": {
+                "quest": "q105",
+                "action": "sisters_roles"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q105",
+                  "action": "sisters_roles"
+                },
+                {
+                  "op": "jump",
+                  "script": "q105.canal.roles"
+                }
+              ]
+            },
+            {
+              "id": "return",
+              "text": "式へ戻る",
+              "storyAction": {
+                "quest": "q105",
+                "action": "sisters_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q105",
+                  "action": "sisters_return"
+                }
+              ]
+            },
+            {
+              "id": "delay",
+              "text": "延期を提案する",
+              "storyAction": {
+                "quest": "q105",
+                "action": "sisters_delay"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q105",
+                  "action": "sisters_delay"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q105.canal.news": {
+      "storyQuest": "q105",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q105",
+          "scene": "news"
+        },
+        {
+          "op": "narrate",
+          "text": "ダンは椅子を引いたまま待っていた。荷車を押していたこと、靴が脱げてもリセが無事だったことを直接知らせる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "tell",
+              "text": "知らせて姉妹のもとへ",
+              "storyAction": {
+                "quest": "q105",
+                "action": "news_tell"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q105",
+                  "action": "news_tell"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q105.canal.roles": {
+      "storyQuest": "q105",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q105",
+          "scene": "roles"
+        },
+        {
+          "op": "narrate",
+          "text": "姉は週二日だけ荷を運んでほしいと頼んだ。リセは、その日なら婚礼の後も来られると答えた。ダンと曜日を確かめて初めて約束が決まる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "ダンと日取りを確認",
+              "storyAction": {
+                "quest": "q105",
+                "action": "roles_agree"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q105",
+                  "action": "roles_agree"
+                }
+              ]
+            },
+            {
+              "id": "back",
+              "text": "まだ決めずに戻る",
+              "storyAction": {
+                "quest": "q105",
+                "action": "roles_back"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q105",
+                  "action": "roles_back"
+                },
+                {
+                  "op": "jump",
+                  "script": "q105.canal.sisters"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q105.canal.calendar": {
+      "storyQuest": "q105",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q105",
+          "scene": "calendar"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q105.values.reported"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "ダンは無事の知らせをすでに聞いている。リセと一緒に、姉が頼んだ二日を暦に書き込んだ。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "ダンはリセ本人を迎え、無事を確かめた。荷車を押した話を聞き、週二日を一緒に暦に印した。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "confirm",
+              "text": "二日を姉に届ける",
+              "storyAction": {
+                "quest": "q105",
+                "action": "calendar_confirm"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q105",
+                  "action": "calendar_confirm"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q105.canal.deliver": {
+      "storyQuest": "q105",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q105",
+          "scene": "deliver"
+        },
+        {
+          "op": "narrate",
+          "text": "姉が暦を開いて荷運びの日を読み返した。濡れた靴は修繕に預ける。残った荷を片付ければ、遅れてでも席に着ける。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hand",
+              "text": "暦と靴を預ける",
+              "storyAction": {
+                "quest": "q105",
+                "action": "deliver_hand"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q105",
+                  "action": "deliver_hand"
+                },
+                {
+                  "op": "jump",
+                  "script": "q105.canal.ready"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q105.canal.ready": {
+      "storyQuest": "q105",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q105",
+          "scene": "ready"
+        },
+        {
+          "op": "narrate",
+          "text": "姉が最後の荷を降ろした。暦と修繕道具をしまうと、婚礼の席まで一緒に来てほしいと頼んだ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "escort",
+              "text": "姉と会場へ",
+              "storyAction": {
+                "quest": "q105",
+                "action": "ready_escort"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q105",
+                  "action": "ready_escort"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q105.canal.arrival": {
+      "storyQuest": "q105",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q105",
+          "scene": "arrival"
+        },
+        {
+          "op": "narrate",
+          "text": "姉のために空けておいた席に、遅れて本人が着いた。来週の仕事はもう暦にある。リセが椅子を引いた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "seat",
+              "text": "姉を席へ案内",
+              "storyAction": {
+                "quest": "q105",
+                "action": "arrival_seat"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q105",
+                  "action": "arrival_seat"
+                },
+                {
+                  "op": "jump",
+                  "script": "q105.canal.end.roles"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q105.canal.wedding": {
+      "storyQuest": "q105",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q105",
+          "scene": "wedding"
+        },
+        {
+          "op": "narrate",
+          "text": "リセは自分で式へ戻った。姉の席は空いたまま。落とした靴は乾かし、修繕して届けるためにダンへ預ける。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "seat",
+              "text": "式を始める",
+              "storyAction": {
+                "quest": "q105",
+                "action": "wedding_seat"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q105",
+                  "action": "wedding_seat"
+                },
+                {
+                  "op": "jump",
+                  "script": "q105.canal.end.return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q105.canal.delay": {
+      "storyQuest": "q105",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q105",
+          "scene": "delay"
+        },
+        {
+          "op": "narrate",
+          "text": "リセが延期を申し出ると、ダンは料理を近所へ分ける段取りをつけた。姉のもとに戻れば、来週の荷を書き出す時間がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "back",
+              "text": "姉のもとへ",
+              "storyAction": {
+                "quest": "q105",
+                "action": "delay_back"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q105",
+                  "action": "delay_back"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q105.canal.week": {
+      "storyQuest": "q105",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q105",
+          "scene": "week"
+        },
+        {
+          "op": "narrate",
+          "text": "荷車の上に来週の紙を広げた。式の日を急いで決める前に、姉妹で最初の仕事を書く。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "plan",
+              "text": "来週の仕事を書く",
+              "storyAction": {
+                "quest": "q105",
+                "action": "week_plan"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q105",
+                  "action": "week_plan"
+                },
+                {
+                  "op": "jump",
+                  "script": "q105.canal.end.delay"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q105.canal.end.return": {
+      "commands": [
+        {
+          "op": "jump",
+          "script": "q105.end.return"
+        }
+      ]
+    },
+    "q105.canal.end.roles": {
+      "commands": [
+        {
+          "op": "jump",
+          "script": "q105.end.roles"
+        }
+      ]
+    },
+    "q105.canal.end.delay": {
+      "commands": [
+        {
+          "op": "jump",
+          "script": "q105.end.delay"
+        }
+      ]
+    },
+    "q105.canal.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q105"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q105.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q105.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q105.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "return",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "リセは式へ戻った。姉の席は空いたままだったが、片方の靴は修繕して届けられた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "roles",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "姉は荷を片付けて遅れて来た。修繕された靴は両方とも頑丈になり、リセは文句を言いながら履いた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "delay",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "料理は近所へ配られた。次の式は小さくなる。姉妹はその前に、来週の仕事を二人で書き出した。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q105"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q105.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q105.canal.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "clues",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q105.canal.clues"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "shop",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q105.canal.shop"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "bank",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q105.canal.bank"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "sisters",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q105.canal.sisters"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "news",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q105.canal.news"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "roles",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q105.canal.roles"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "calendar",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q105.canal.calendar"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "deliver",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q105.canal.deliver"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "ready",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q105.canal.ready"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "arrival",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q105.canal.arrival"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "wedding",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q105.canal.wedding"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "delay",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q105.canal.delay"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "week",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q105.canal.week"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q105.canal.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "hall": "婚礼の会場",
+      "bridge": "婚礼の日の運河橋",
+      "shop": "木屑の残る工房",
+      "bank": "運河の泥道",
+      "cart": "荷車の停まる船着場",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "hall"
+      ],
+      [
+        "transit",
+        "bridge"
+      ],
+      [
+        "transit",
+        "shop"
+      ],
+      [
+        "transit",
+        "bank"
+      ],
+      [
+        "transit",
+        "cart"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "hall",
+        "values": [
+          "hall",
+          "bridge",
+          "shop",
+          "bank",
+          "cart",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "danAt": {
+        "type": "enum",
+        "initial": "hall",
+        "values": [
+          "hall",
+          "bridge",
+          "shop",
+          "bank",
+          "cart",
+          "transit"
+        ],
+        "meaning": "dan の所在または保持者"
+      },
+      "liseAt": {
+        "type": "enum",
+        "initial": "cart",
+        "values": [
+          "hall",
+          "bridge",
+          "shop",
+          "bank",
+          "cart",
+          "transit"
+        ],
+        "meaning": "lise の所在または保持者"
+      },
+      "sisterAt": {
+        "type": "enum",
+        "initial": "cart",
+        "values": [
+          "hall",
+          "bridge",
+          "shop",
+          "bank",
+          "cart",
+          "transit"
+        ],
+        "meaning": "sister の所在または保持者"
+      },
+      "shoeAt": {
+        "type": "enum",
+        "initial": "bridge",
+        "values": [
+          "hall",
+          "bridge",
+          "shop",
+          "bank",
+          "cart",
+          "transit",
+          "party",
+          "dan",
+          "lise",
+          "sister"
+        ],
+        "meaning": "shoe の所在または保持者"
+      },
+      "reported": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "reported"
+      },
+      "work": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "work"
+      },
+      "postponed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "postponed"
+      },
+      "returned": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "returned"
+      },
+      "trail": {
+        "type": "enum",
+        "initial": "none",
+        "values": [
+          "none",
+          "shop",
+          "canal"
+        ],
+        "meaning": "姉妹を見つけた手がかり"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "dan": {
+        "holder": "danAt",
+        "kind": "person",
+        "character": "e2_q105_dan"
+      },
+      "lise": {
+        "holder": "liseAt",
+        "kind": "person",
+        "character": "e2_q105_lise"
+      },
+      "sister": {
+        "holder": "sisterAt",
+        "kind": "person",
+        "character": "e2_q105_sister"
+      },
+      "shoe": {
+        "holder": "shoeAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {},
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "婚礼の会場",
+        "place": "hall",
+        "cast": [
+          {
+            "entity": "dan",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q105.values.danAt"
+              },
+              "right": "hall"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "clues": {
+        "title": "婚礼の日の運河橋",
+        "place": "bridge",
+        "cast": [],
+        "requires": true
+      },
+      "shop": {
+        "title": "木屑の残る工房",
+        "place": "shop",
+        "cast": [],
+        "requires": true
+      },
+      "bank": {
+        "title": "運河の泥道",
+        "place": "bank",
+        "cast": [],
+        "requires": true
+      },
+      "sisters": {
+        "title": "荷車の停まる船着場",
+        "place": "cart",
+        "cast": [
+          {
+            "entity": "lise",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q105.values.liseAt"
+              },
+              "right": "cart"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "sister",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q105.values.sisterAt"
+              },
+              "right": "cart"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "news": {
+        "title": "婚礼の会場",
+        "place": "hall",
+        "cast": [
+          {
+            "entity": "dan",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q105.values.danAt"
+              },
+              "right": "hall"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "roles": {
+        "title": "荷車の停まる船着場",
+        "place": "cart",
+        "cast": [
+          {
+            "entity": "lise",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q105.values.liseAt"
+              },
+              "right": "cart"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "sister",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q105.values.sisterAt"
+              },
+              "right": "cart"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "calendar": {
+        "title": "婚礼の会場",
+        "place": "hall",
+        "cast": [
+          {
+            "entity": "dan",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q105.values.danAt"
+              },
+              "right": "hall"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "lise",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q105.values.liseAt"
+              },
+              "right": "hall"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "deliver": {
+        "title": "荷車の停まる船着場",
+        "place": "cart",
+        "cast": [
+          {
+            "entity": "sister",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q105.values.sisterAt"
+              },
+              "right": "cart"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "ready": {
+        "title": "荷車の停まる船着場",
+        "place": "cart",
+        "cast": [
+          {
+            "entity": "sister",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q105.values.sisterAt"
+              },
+              "right": "cart"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "arrival": {
+        "title": "婚礼の会場",
+        "place": "hall",
+        "cast": [
+          {
+            "entity": "dan",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q105.values.danAt"
+              },
+              "right": "hall"
+            },
+            "display": {
+              "x": 17,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "lise",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q105.values.liseAt"
+              },
+              "right": "hall"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          },
+          {
+            "entity": "sister",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q105.values.sisterAt"
+              },
+              "right": "hall"
+            },
+            "display": {
+              "x": 83,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 2
+            }
+          }
+        ],
+        "requires": true
+      },
+      "wedding": {
+        "title": "婚礼の会場",
+        "place": "hall",
+        "cast": [
+          {
+            "entity": "lise",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q105.values.liseAt"
+              },
+              "right": "hall"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "dan",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q105.values.danAt"
+              },
+              "right": "hall"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "delay": {
+        "title": "婚礼の会場",
+        "place": "hall",
+        "cast": [
+          {
+            "entity": "lise",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q105.values.liseAt"
+              },
+              "right": "hall"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "dan",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q105.values.danAt"
+              },
+              "right": "hall"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "week": {
+        "title": "荷車の停まる船着場",
+        "place": "cart",
+        "cast": [
+          {
+            "entity": "lise",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q105.values.liseAt"
+              },
+              "right": "cart"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "sister",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q105.values.sisterAt"
+              },
+              "right": "cart"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_bridge": {
+        "from": [
+          "entry"
+        ],
+        "to": "clues",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "bridge"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "bridge",
+          "companions": []
+        },
+        "depart": []
+      },
+      "clues_shop": {
+        "from": [
+          "clues"
+        ],
+        "to": "shop",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "shop"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "shop",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "shoe",
+            "from": "bridge",
+            "to": "party"
+          },
+          {
+            "op": "set",
+            "key": "trail",
+            "value": "shop"
+          }
+        ]
+      },
+      "clues_canal": {
+        "from": [
+          "clues"
+        ],
+        "to": "bank",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "bank"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "bank",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "shoe",
+            "from": "bridge",
+            "to": "party"
+          },
+          {
+            "op": "set",
+            "key": "trail",
+            "value": "canal"
+          }
+        ]
+      },
+      "shop_follow": {
+        "from": [
+          "shop"
+        ],
+        "to": "sisters",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "cart"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "cart",
+          "companions": []
+        },
+        "depart": []
+      },
+      "bank_follow": {
+        "from": [
+          "bank"
+        ],
+        "to": "sisters",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "cart"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "cart",
+          "companions": []
+        },
+        "depart": []
+      },
+      "sisters_report": {
+        "from": [
+          "sisters"
+        ],
+        "to": "news",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q105.values.reported"
+            },
+            "right": true
+          }
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "hall"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "hall",
+          "companions": []
+        },
+        "depart": []
+      },
+      "sisters_roles": {
+        "from": [
+          "sisters"
+        ],
+        "to": "roles",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "sisters_return": {
+        "from": [
+          "sisters"
+        ],
+        "to": "wedding",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "lise"
+            ],
+            "path": [
+              "transit",
+              "hall"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "hall",
+          "companions": [
+            "lise"
+          ]
+        },
+        "depart": []
+      },
+      "sisters_delay": {
+        "from": [
+          "sisters"
+        ],
+        "to": "delay",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "lise"
+            ],
+            "path": [
+              "transit",
+              "hall"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "hall",
+          "companions": [
+            "lise"
+          ]
+        },
+        "depart": []
+      },
+      "news_tell": {
+        "from": [
+          "news"
+        ],
+        "to": "sisters",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "cart"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "cart",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "reported",
+            "value": true
+          }
+        ]
+      },
+      "roles_agree": {
+        "from": [
+          "roles"
+        ],
+        "to": "calendar",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "lise"
+            ],
+            "path": [
+              "transit",
+              "hall"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "hall",
+          "companions": [
+            "lise"
+          ]
+        },
+        "depart": []
+      },
+      "roles_back": {
+        "from": [
+          "roles"
+        ],
+        "to": "sisters",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "calendar_confirm": {
+        "from": [
+          "calendar"
+        ],
+        "to": "deliver",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "cart"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "cart",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "reported",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "work",
+            "value": true
+          }
+        ]
+      },
+      "deliver_hand": {
+        "from": [
+          "deliver"
+        ],
+        "to": "ready",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "shoe",
+            "from": "party",
+            "to": "sister"
+          }
+        ],
+        "once": true
+      },
+      "ready_escort": {
+        "from": [
+          "ready"
+        ],
+        "to": "arrival",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "sister"
+            ],
+            "path": [
+              "transit",
+              "hall"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "hall",
+          "companions": [
+            "sister"
+          ]
+        },
+        "depart": []
+      },
+      "arrival_seat": {
+        "from": [
+          "arrival"
+        ],
+        "ending": "roles",
+        "requires": true,
+        "effects": [],
+        "once": true
+      },
+      "wedding_seat": {
+        "from": [
+          "wedding"
+        ],
+        "ending": "return",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "shoe",
+            "from": "party",
+            "to": "dan"
+          },
+          {
+            "op": "set",
+            "key": "returned",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "delay_back": {
+        "from": [
+          "delay"
+        ],
+        "to": "week",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "lise"
+            ],
+            "path": [
+              "transit",
+              "cart"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "cart",
+          "companions": [
+            "lise"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "postponed",
+            "value": true
+          }
+        ]
+      },
+      "week_plan": {
+        "from": [
+          "week"
+        ],
+        "ending": "delay",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "shoe",
+            "from": "party",
+            "to": "lise"
+          }
+        ],
+        "once": true
+      }
+    },
+    "endings": {
+      "return": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q105.values.returned"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q105.values.liseAt"
+            },
+            "right": "hall"
+          }
+        ]
+      },
+      "roles": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q105.values.work"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q105.values.reported"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q105.values.shoeAt"
+            },
+            "right": "sister"
+          }
+        ]
+      },
+      "delay": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q105.values.postponed"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q105.values.liseAt"
+            },
+            "right": "cart"
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "hall": {
+        "kind": "town",
+        "location": "e2_q105_hall"
+      },
+      "bridge": {
+        "kind": "town",
+        "location": "e2_q105_bridge"
+      },
+      "shop": {
+        "kind": "town",
+        "location": "e2_q105_shop"
+      },
+      "bank": {
+        "kind": "town",
+        "location": "e2_q105_bank"
+      },
+      "cart": {
+        "kind": "town",
+        "location": "e2_q105_cart"
+      }
+    },
+    "revision": 1
+  }
+}

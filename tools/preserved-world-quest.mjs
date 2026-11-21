@@ -64,7 +64,7 @@ export function compilePreservedWorldQuest(original, items, source, namespace) {
     else:[{op:'story.init',quest:id},{op:'switch',value:ref('stories.'+id+'.scene'),cases:scenes,default:[jump('entry')]}]}]};
   compileQuestInterruptions(q,items);
   const visit=q.scripts[sid('visit')];
-  visit.commands=[{op:'if',condition:preserved,then:[{op:'jump',script:original.model.entryScript}],else:visit.commands}];
+  visit.commands=[{op:'if',condition:preserved,then:[{op:'jump',script:original.model.entryScript??id+'.visit'}],else:visit.commands}];
   q.scripts={...structuredClone(original.scripts),...q.scripts};
   for (const field of ['interruptionRoutes','interruptionEntries'])
     q.model[field]=[...(original.model[field]??[]),...(q.model[field]??[])];

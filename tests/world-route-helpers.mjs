@@ -1,13 +1,15 @@
 import assert from 'node:assert/strict';
 import {validateSave} from '../src/core/save.js';
-import {drain,fight,exploreSpot} from './helpers.mjs';
+import {drain,fight,exploreSpot,goWorldLocation} from './helpers.mjs';
 
 export function checkpoint(g){
   const save=g.save();assert.deepEqual(validateSave(JSON.parse(save),g.data),[]);
   g.load(save);assert.equal(g.save(),save);return save;
 }
 export function go(g,q,place,options={}){
-  exploreSpot(g,g.data.quests[q].story.worldPlaces[place],{maintain:true,interact:false,...options});
+  const target=g.data.quests[q].story.worldPlaces[place];
+  if(target.kind==='town')goWorldLocation(g,target.location);
+  else exploreSpot(g,target,{maintain:true,interact:false,...options});
 }
 export function resume(g,q){
   assert.ok(g.dispatch({type:'story.resume',quest:q}),q+': '+g.state.notice);drain(g);

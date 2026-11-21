@@ -1,3 +1,4 @@
+import {canalQuests} from './build-canal-world-routes.mjs';
 import {deepAbyssCasts} from './build-deep-abyss-world-routes.mjs';
 import {memorialCharacters} from '../authoring/editions/e2/story-q095.mjs';
 import {taxCharacters} from '../authoring/editions/e2/story-q094.mjs';
@@ -59,6 +60,7 @@ export async function companionBundle(){
  characters[shelteredCrew.id]=shelteredCrew;
  Object.assign(characters,innCharacters,taxCharacters,memorialCharacters);
  Object.assign(characters,saltBrideCharacters,threePicksCharacters,breathingVeinCharacters,returnCartCharacters,weepingPillarCharacters,silentBlastCharacters,twoGravesCharacters,whiteDebtCharacters,mineScaleCharacters,crownCharacters,seedBirdCharacters,greenSleepCharacters,motherRingCharacters,edibleMapCharacters,rainSongCharacters,orchardPromiseCharacters,pollenRansomCharacters,gardenersSeatCharacters,redHoneyCharacters,rootMorningCharacters,changeCounterCharacters,auctionCharacters,foodCharacters,dreamCharacters,shadowCharacters);
+ for(const {characters:cast} of canalQuests)Object.assign(characters,cast);
  for(const cast of [...deepAbyssCasts,theatreCharacters,stallCharacters,exchangeCharacters,feastCharacters,wakingCharacters]){
   for(const [id,person] of Object.entries(cast)){
    const existing=characters[id];
