@@ -3,12 +3,12 @@ import {createQuestTrial,dispatchQuestTrial,questTrialReport} from '../src/appli
 import {go,resume} from '../tests/world-route-helpers.mjs';
 import {drain,fight} from '../tests/helpers.mjs';
 
-export function measureWorldRoutes({data,catalog,routes,expectedValues,arrive},levels,parties){
+export function measureWorldRoutes({data,catalog,routes,expectedValues,arrive,setupRoute},levels,parties){
   const results=[];
   for(const [quest,paths] of Object.entries(routes))for(const route of paths){
     for(const start of ['site','reception'])for(const level of levels)for(const party of parties){
       const trial=createQuestTrial(data,catalog,{quest,start,party,level,seed:1907,outcome:route.outcome}),g=trial.engine;
-      drain(g);
+      setupRoute?.(g,quest,route);drain(g);
       if(start==='reception'){
         go(g,quest,data.quests[quest].story.scenes.entry.place);
         if(!g.state.stories[quest])resume(g,quest);

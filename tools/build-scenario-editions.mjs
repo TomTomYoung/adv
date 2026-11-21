@@ -1,3 +1,4 @@
+import {buildDeepAbyssWorldRoutes} from './build-deep-abyss-world-routes.mjs';
 import {buildHeroMemorial} from './build-q095-world-route.mjs';
 import {buildReturnTax} from './build-q094-world-route.mjs';
 import {buildInnNames} from './build-q093-world-route.mjs';
@@ -185,6 +186,7 @@ export async function buildScenarioEditions({check=false}={}){
  await buildInnNames({check});
  await buildReturnTax({check});
  await buildHeroMemorial({check});
+ await buildDeepAbyssWorldRoutes({check});
  await buildCompanionEdition({check});
  const geography=await buildOddlandGeography({check});
  await buildSalomeGeography(geography,{check});

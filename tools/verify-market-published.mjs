@@ -7,11 +7,11 @@ import {createQuestTrial,questTrialReport} from '../src/application/quest-playte
 import {drain,fight} from '../tests/helpers.mjs';
 
 const suite=process.argv[2]??'market';
-const suites={market:()=>import('../tests/market-world-helpers.mjs'),'--q091':()=>import('../tests/q091-helpers.mjs'),'--q092':()=>import('../tests/q092-helpers.mjs'),'--q093':()=>import('../tests/q093-helpers.mjs'),'--q094':()=>import('../tests/q094-helpers.mjs'),'--q095':()=>import('../tests/q095-helpers.mjs')};
+const suites={market:()=>import('../tests/market-world-helpers.mjs'),'--deep-abyss':()=>import('../tests/deep-abyss-helpers.mjs'),'--q091':()=>import('../tests/q091-helpers.mjs'),'--q092':()=>import('../tests/q092-helpers.mjs'),'--q093':()=>import('../tests/q093-helpers.mjs'),'--q094':()=>import('../tests/q094-helpers.mjs'),'--q095':()=>import('../tests/q095-helpers.mjs')};
 assert.ok(Object.hasOwn(suites,suite),'Unknown published trial suite');
-const {data,catalog,routes,arrive,expectedValues}=await suites[suite]();
+const {data,catalog,routes,arrive,expectedValues,setupRoute}=await suites[suite]();
 const level=suite==='market'?6:10;
-const base='https://tomtomyoung.github.io/adv/',hash=b=>createHash('sha256').update(b).digest('hex');
+const base=process.env.ADV_TRIAL_BASE_URL??'https://tomtomyoung.github.io/adv/',hash=b=>createHash('sha256').update(b).digest('hex');
 const quests=Object.keys(routes),files=['runtime.json','data/scenario-editions.json','data/scenario-editions/e2/geography.json',
   'data/scenario-editions/e2/companions.json','playtests/quest-parties.json',...quests.flatMap(q=>['data/quests/'+q+'.json','data/scenario-editions/e2/'+q+'.json'])];
 async function verifyFile(path){
@@ -29,15 +29,26 @@ await Promise.all(files.map(verifyFile));console.log('Verified release files',fi
 
 function trace(quest,route){
   const trial=createQuestTrial(data,catalog,{quest,party:'balanced',level,start:'site',outcome:route.outcome,battleMode:'classic',seed:1907});
-  const g=trial.engine,commands=[],dispatch=g.dispatch.bind(g);
-  g.dispatch=intent=>{const ok=dispatch(intent);if(ok)commands.push(intent);return ok;};
+  const g=trial.engine,commands=[],checkpoints=[],dispatch=g.dispatch.bind(g);
+  setupRoute?.(g,quest,route);const initial=route.history?g.save():null;
+  g.dispatch=intent=>{
+    const ok=dispatch(intent);
+    if(ok){
+      commands.push(intent);
+      if(suite==='--deep-abyss'&&intent.type==='choose'&&route.path.includes(intent.id)){
+        checkpoints.push({same:true,values:structuredClone(g.state.stories[quest].values),journey:g.state.journey?.action??null,
+          battle:g.state.battle?.encounter??null,rations:g.state.inventory.ration??0});
+      }
+    }
+    return ok;
+  };
   drain(g);
   for(const id of route.path){
     assert.ok(g.dispatch({type:'choose',id}));drain(g);
     if(g.state.battle){fight(g);drain(g);}
     if(g.state.journey)arrive(g,quest);
   }
-  return {commands,report:questTrialReport(trial)};
+  return {commands,checkpoints,initial,report:questTrialReport(trial)};
 }
 
 const browser=await chromium.launch({args:['--no-sandbox']});
@@ -52,14 +63,23 @@ try{
   for(const [quest,paths] of Object.entries(routes)){
     await page.selectOption('#quest',quest);
     for(const route of paths){
-      const {commands,report}=trace(quest,route);
+      const {commands,report,initial,checkpoints}=trace(quest,route);
       await page.selectOption('#outcome',route.outcome);await page.click('#launch');
       await page.waitForFunction(q=>window.questPlaytest?.trial?.engine?.state.quests[q]?.stage==='active',quest);
+      if(initial)await page.evaluate(raw=>{questPlaytest.trial.engine.load(raw);questPlaytest.render();},initial);
       for(const intent of commands){
         if(intent.type==='choose'&&route.path.includes(intent.id)){
           const button=page.locator('#app [data-focus="choice:'+intent.id+'"]:visible');
           for(let n=0;n<25&&!await button.isVisible();n++)await page.locator('#app [data-focus="message:next"]:visible').click({timeout:7000});
           await button.click({timeout:10000});
+if(suite==='--deep-abyss'){
+            const saved=await page.evaluate(q=>{
+              const g=questPlaytest.trial.engine,raw=g.save();g.load(raw);questPlaytest.render();
+              return {same:g.save()===raw,values:g.state.stories[q].values,journey:g.state.journey?.action??null,
+                battle:g.state.battle?.encounter??null,rations:g.state.inventory.ration??0};
+            },quest);
+            assert.deepEqual(saved,checkpoints.shift(),quest+'/'+intent.id);
+          }
           if(quest==='q091'&&intent.id==='return'){
             const waiting=await page.evaluate(()=>{
               const g=questPlaytest.trial.engine,save=g.save();g.load(save);questPlaytest.render();
@@ -142,6 +162,11 @@ if(quest==='q095'&&['back','match','deliver','carry','hand'].includes(intent.id)
       assert.equal(result.report.steps,report.steps);assert.deepEqual(result.report.gold,report.gold);
       assert.deepEqual(result.report.records,report.records);assert.equal(result.report.rescues,0);
       for(const [key,value] of Object.entries(expectedValues(quest,route)))assert.equal(result.values[key],value,quest+'/'+key);
+      assert.equal(checkpoints.length,0);
+      if(quest==='q100'){
+        const title=await page.evaluate(()=>questPlaytest.trial.engine.state.ending?.title);
+        assert.equal(title,{informed:'道を次へ渡す者',contract:'迷宮の鍵を持つ者',compromise:'灯を守って帰る者'}[route.outcome]);
+      }
       console.log('PUBLIC',quest,route.old.join('/'),result.report.outcome,result.report.steps);
     }
   }
@@ -172,6 +197,7 @@ if(suite==='--q095'){
     assert.deepEqual(result,['cleared','contract',winsBefore+1,original.state.gold,original.state.actors.ada.xp]);
     console.log('PUBLIC_LEGACY_BATTLE_SAVE',q,'guard_10','contract');
   }
+  if(suite==='--deep-abyss')await (await import('./verify-deep-abyss-saves.mjs')).verifyDeepAbyssSaves(page);
   let attempts=0;const first=q038.length;
   await page.route(url=>url.pathname.endsWith('/e2/q038.json'),async request=>{
     if(++attempts===1)await request.fulfill({status:503,body:'Temporary outage'});

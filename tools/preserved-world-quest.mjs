@@ -43,7 +43,7 @@ export function compilePreservedWorldQuest(original, items, source, namespace) {
     if (o.combat) commands = [{op:'battle.start',encounter:o.combat,on_win:local,
       on_escape:[{op:'narrate',text:'退路へ戻った。戦闘後に予定していた作業は、まだ成立していない。'}],
       on_lose:[{op:'narrate',text:'救助班に運び出された。現場へ戻ると直前の場面から再開できる。'}]}];
-    const requirements=Object.entries(action.cost??{}).map(([item,n])=>item==='gold'?n+'Gを支払う。':items[item].name+n+'個を使う。');
+    const requirements=o.costRequirement?[o.costRequirement]:Object.entries(action.cost??{}).map(([item,n])=>item==='gold'?n+'Gを支払う。':items[item].name+n+'個を使う。');
     if(o.combat) requirements.push(o.combatRequirement??'戦闘に勝つと次の場面へ進む。');
     return {id:o.id,text:o.text,storyAction:{quest:id,action:o.action},...(o.when && {condition:o.when}),
       ...(o.visibleWhen!==undefined && {visibleWhen:o.visibleWhen}),requirement:requirements.join(' '),commands};

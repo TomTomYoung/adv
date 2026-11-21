@@ -1,0 +1,97 @@
+name: Validate q096–q100 deep abyss routes in Chromium
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'data/**'
+      - 'authoring/editions/e2/story-q09[6-9].mjs'
+      - 'authoring/editions/e2/story-q100.mjs'
+      - 'authoring/editions/e2/dungeon-world.mjs'
+      - 'authoring/*story-kit.mjs'
+      - 'tools/build-scenario-editions.mjs'
+      - 'tools/build-deep-abyss-world-routes.mjs'
+      - 'tools/build-companion-edition.mjs'
+      - 'tools/preserved-world-quest.mjs'
+      - 'tools/browser-deep-abyss-world-routes.mjs'
+      - 'tools/world-route-browser-fixtures.mjs'
+      - 'tools/character-art-browser.mjs'
+      - 'tools/measure-world-routes.mjs'
+      - 'tests/world-route-helpers.mjs'
+      - 'tests/abyss-world-helpers.mjs'
+      - 'playtests/quest-parties.json'
+      - 'tests/deep-abyss-*.mjs'
+      - 'tools/verify-deep-abyss-saves.mjs'
+      - 'tools/verify-market-published.mjs'
+      - 'tests/helpers.mjs'
+      - '.github/workflows/deep-abyss-world-routes.yml'
+  push:
+    branches: [master]
+    paths:
+      - 'data/scenario-editions/e2/q09[6-9].json'
+      - 'data/scenario-editions/e2/q100.json'
+      - 'tools/verify-deep-abyss-saves.mjs'
+      - 'tools/verify-market-published.mjs'
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+permissions:
+  contents: read
+jobs:
+  browser:
+    strategy:
+      fail-fast: false
+      matrix:
+        quest: [q096, q097, q098, q099, q100]
+    if: github.event_name != 'push'
+    runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned browser driver and Japanese fonts
+        run: |
+          npm install --no-save --package-lock=false playwright@1.58.2
+          test -n "$(fc-list :lang=ja)"
+      - name: Verify parties, saved scenes and original branches
+        run: node tools/browser-deep-abyss-world-routes.mjs ${{ matrix.quest }}
+        env:
+          ADV_BROWSER_OUTPUT: /tmp/deep-abyss-browser
+      - name: Exercise the release playthrough against this revision
+        if: matrix.quest == 'q100'
+        env:
+          ADV_TRIAL_BASE_URL: http://127.0.0.1:8000/
+        run: |
+          python3 -m http.server 8000 --bind 127.0.0.1 >/tmp/abyss-http.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid"' EXIT
+          node tools/verify-market-published.mjs --deep-abyss
+      - name: Upload trial checkpoints and results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.quest }}-abyss-checkpoints
+          path: /tmp/deep-abyss-browser
+          if-no-files-found: error
+          retention-days: 7
+
+  published:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --package-lock=false playwright@1.58.2
+      - name: Verify the deployed files, 32 playthroughs, five pre-update saves and q038 retry
+        run: node tools/verify-market-published.mjs --deep-abyss
