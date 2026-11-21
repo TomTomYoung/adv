@@ -10,16 +10,16 @@ export function describeTarget(engine,key='scene'){
   if(kind==='enemy'){const e=engine.state.battle?.enemies.find(e=>e.instance===id);return {key,image:e?.sprite,label:e?.name,material:engine.data.enemies[e?.id]?.impactMaterial??defaultPresentation.materialSprites[e?.sprite]??'flesh'};}
   return {key};
 }
-export function emitFeedback(engine,{effects=[],sound=null,targets=['scene'],source,at=engine.feedback.clock,gain=1,phase,action}){
+export function emitFeedback(engine,{effects=[],sound=null,targets=['scene'],source,at=engine.feedback.clock,gain=1,phase,action,attackStart}){
   const f=engine.feedback;if(f.events.length>=64)throw Error('一度の演出数が多すぎます');
-  f.events.push({effects:[...effects],sound,targets:targets.map(t=>describeTarget(engine,t)),...(source?{source:describeTarget(engine,source)}:{}),...(phase?{phase}:{}),...(action?{action}:{}),at:Math.min(5000,Math.max(0,at)),gain});
+  f.events.push({effects:[...effects],sound,targets:targets.map(t=>describeTarget(engine,t)),...(source?{source:describeTarget(engine,source)}:{}),...(phase?{phase}:{}),...(attackStart?{attackStart:true}:{}),...(action?{action}:{}),at:Math.min(5000,Math.max(0,at)),gain});
 }
 // Battle results are already resolved. This schedules presentation only; no waits or RNG.
-export function playBattleCue(engine,id,source,targets,hostile=false,action){
+export function playBattleCue(engine,id,source,targets,attacking=false,action){
   const cue=engine.data.presentation?.cues[id];if(!cue)return;
   const start=engine.feedback.clock,impact=start+(cue.battle?.impact??0);
   if(cue.battle?.anticipation){
-    emitFeedback(engine,{effects:[source.key.startsWith('actor:')?(cue.battle.actorAnticipation??'actor_strike'):cue.battle.anticipation],targets:[source],source:targets[0],at:start,phase:'windup',action});
+    emitFeedback(engine,{effects:[source.key.startsWith('actor:')?(cue.battle.actorAnticipation??'actor_strike'):cue.battle.anticipation],targets:[source],source:targets[0],at:start,phase:'windup',action,attackStart:attacking});
   }
   if(cue.battle?.projectile)emitFeedback(engine,{effects:[cue.battle.projectile],source,targets,at:start,phase:'flight'});
   const missed=targets.length>0&&targets.every(t=>t.missed),guarded=targets.length>0&&targets.every(t=>t.guarded&&!(t.healing>0));

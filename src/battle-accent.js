@@ -1,6 +1,11 @@
 // Presentation-only classification, shared by the visual and audio adapters.
 export function battleAccent(event,target){
-  if(event.phase==='windup')return 'swing';
+  if(event.phase==='windup'){
+    const performer=event.targets?.[0]?.key;
+    if(event.attackStart&&performer?.startsWith('actor:'))return 'ally_attack_start';
+    if(event.attackStart&&performer?.startsWith('enemy:'))return 'enemy_attack_start';
+    return 'swing';
+  }
   if(event.phase==='flight')return 'bow';
   if(event.phase==='defeat')return 'defeat';
   if(event.phase!=='impact')return null;

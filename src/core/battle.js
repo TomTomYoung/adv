@@ -222,11 +222,11 @@ function useSkill(engine,source,targets,skill,skillId,enemySource=false,itemId=n
     return result;
   };
   const results=isFrontline(engine.state)?resolveFrontlineAttack(engine,source,targets,skill,skillId,{snapshot:target=>damageSnapshot(engine,source,target,enemySource),hit,react:(u,on,attacker)=>frontlineReact(engine,u,on,attacker)}):targets.map(target=>hit(target,null));
-  const hostile=enemySource&&targets.some(t=>!t.instance)&&skill.effects.some(e=>e.type==='damage');
+  const attacking=skill.effects.some(effect=>effect.type==='damage');
   const bindings=engine.data.presentation?.bindings;
   const weapon=!enemySource&&skillId==='attack'?engine.data.items[source.equipment?.weapon]?.equipmentType:null;
   const cue=bindings?.weapons?.[weapon]??bindings?.skills[skillId];
-  playBattleCue(engine,cue,origin,results,hostile,`${sourceName}・${skill.name}`);
+  playBattleCue(engine,cue,origin,results,attacking,`${sourceName}・${skill.name}`);
   wetAfterSkill(engine,source,skill);return true;
 }
 function coveredTarget(engine,target,skill){

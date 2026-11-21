@@ -1501,6 +1501,160 @@ export const defaultPresentation = {
           }
         }
       ]
+    },
+    "ally_attack_start": {
+      "name": "味方の攻撃開始",
+      "priority": 45,
+      "cooldownMs": 0,
+      "voices": [
+        {
+          "wave": "triangle",
+          "atMs": 0,
+          "durationMs": 46,
+          "gain": 0.14,
+          "pitch": [
+            {
+              "at": 0,
+              "value": 510
+            },
+            {
+              "at": 1,
+              "value": 700,
+              "curve": "exponential"
+            }
+          ],
+          "envelope": [
+            {
+              "at": 0,
+              "value": 0
+            },
+            {
+              "at": 0.08,
+              "value": 1
+            },
+            {
+              "at": 0.55,
+              "value": 0.64
+            },
+            {
+              "at": 1,
+              "value": 0
+            }
+          ]
+        },
+        {
+          "wave": "sine",
+          "atMs": 34,
+          "durationMs": 54,
+          "gain": 0.17,
+          "pitch": [
+            {
+              "at": 0,
+              "value": 760
+            },
+            {
+              "at": 1,
+              "value": 1040,
+              "curve": "exponential"
+            }
+          ],
+          "envelope": [
+            {
+              "at": 0,
+              "value": 0
+            },
+            {
+              "at": 0.08,
+              "value": 1
+            },
+            {
+              "at": 0.55,
+              "value": 0.64
+            },
+            {
+              "at": 1,
+              "value": 0
+            }
+          ]
+        }
+      ]
+    },
+    "enemy_attack_start": {
+      "name": "敵の攻撃開始",
+      "priority": 45,
+      "cooldownMs": 0,
+      "voices": [
+        {
+          "wave": "triangle",
+          "atMs": 0,
+          "durationMs": 97,
+          "gain": 0.21,
+          "pitch": [
+            {
+              "at": 0,
+              "value": 405
+            },
+            {
+              "at": 1,
+              "value": 175,
+              "curve": "exponential"
+            }
+          ],
+          "envelope": [
+            {
+              "at": 0,
+              "value": 0
+            },
+            {
+              "at": 0.08,
+              "value": 1
+            },
+            {
+              "at": 0.55,
+              "value": 0.64
+            },
+            {
+              "at": 1,
+              "value": 0
+            }
+          ]
+        },
+        {
+          "wave": "sine",
+          "atMs": 9,
+          "durationMs": 75,
+          "gain": 0.1,
+          "pitch": [
+            {
+              "at": 0,
+              "value": 580
+            },
+            {
+              "at": 1,
+              "value": 255,
+              "curve": "exponential"
+            }
+          ],
+          "envelope": [
+            {
+              "at": 0,
+              "value": 0
+            },
+            {
+              "at": 0.08,
+              "value": 1
+            },
+            {
+              "at": 0.55,
+              "value": 0.64
+            },
+            {
+              "at": 1,
+              "value": 0
+            }
+          ]
+        }
+      ]
     }
   },
   "particles": {
@@ -2205,6 +2359,28 @@ export const defaultPresentation = {
           "intervalMs": 80
         }
       ]
+    },
+    "ally_attack_start": {
+      "name": "味方の攻撃開始",
+      "tracks": [
+        {
+          "kind": "synth",
+          "atMs": 0,
+          "profile": "ally_attack_start",
+          "target": "target"
+        }
+      ]
+    },
+    "enemy_attack_start": {
+      "name": "敵の攻撃開始",
+      "tracks": [
+        {
+          "kind": "synth",
+          "atMs": 0,
+          "profile": "enemy_attack_start",
+          "target": "target"
+        }
+      ]
     }
   },
   "bindings": {
@@ -2219,7 +2395,9 @@ export const defaultPresentation = {
     "fire": "fire",
     "ice": "ice",
     "lightning": "lightning",
-    "defeat": "defeat"
+    "defeat": "defeat",
+    "ally_attack_start": "ally_attack_start",
+    "enemy_attack_start": "enemy_attack_start"
   },
   "materials": {
     "flesh": "material_flesh",
