@@ -150,7 +150,8 @@ try{
   checks.push('real OfflineAudioContext mixes 10 recorded+synthesized SE variants: all non-silent, distinct and below clipping; speaker listening is not claimed');
   await page.goto(`http://127.0.0.1:${server.address().port}/battle-presentation-editor.html`);
   await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('プリセットを選び'));
-  assert.equal(await page.locator('#preset option').count(),19);
+  assert.equal(await page.locator('#preset option').count(),Object.keys(JSON.parse(await fs.readFile(path.join(root,'config/battle-presentation.json'),'utf8')).profiles).length);
+  assert.equal(await page.locator('#preset option[value$="_attack_start"]').count(),2);
   await page.selectOption('#preset','charge');await page.click('#play');
   await page.waitForFunction(()=>document.querySelector('#wave-status').textContent.includes('ピーク'));
   assert.equal(await page.locator('#status').getAttribute('data-error'),'false');await page.click('#stop');
@@ -180,7 +181,49 @@ try{
   });
   for(const r of designAudio){assert.ok(r.rms>.00001,r.id+' is silent');assert.ok(r.peak<.98,r.id+' peak');}
   assert.ok(designAudio.find(r=>r.id==='charge').right<1e-10);assert.ok(designAudio.find(r=>r.id==='charge').tail>0);
-  checks.push('presentation editor: JSON validation/import/export, A/B snapshots, waveform, arc/trail/beam previews, stop/reduced motion, desktop/mobile layout; 19 synthesized profiles rendered with echo tail and stereo checks');
+  checks.push('presentation editor: JSON validation/import/export, A/B snapshots, waveform, arc/trail/beam previews, stop/reduced motion, desktop/mobile layout; all synthesized profiles rendered with echo tail and stereo checks');
+  await page.goto(`http://127.0.0.1:${server.address().port}/sound-library.html`);
+  await page.waitForFunction(()=>!document.querySelector('#attack').disabled);
+  assert.equal(await page.locator('#title').textContent(),'味方の攻撃開始');
+  await page.click('#source');await page.waitForFunction(()=>document.querySelector('#preset')?.value==='ally_attack_start');
+  await page.goBack();await page.waitForFunction(()=>!document.querySelector('#attack').disabled);
+  await page.evaluate(async()=>{
+    const {BattleSound}=await import('./src/application/battle-sound.js'),{GameAudio}=await import('./src/application/audio.js');
+    window.audition=[];
+    for(const [adapter,method] of [[BattleSound,'play'],[GameAudio,'playEffect']]){
+      const original=adapter.prototype[method];
+      adapter.prototype[method]=function(first,...rest){window.audition.push(typeof first==='string'?first:first.synth);return original.call(this,first,...rest);};
+    }
+  });
+  for(const side of ['ally','enemy'])for(const result of ['hit','miss']){
+    await page.evaluate(()=>{window.audition.length=0;});
+    await page.selectOption('#side',side);await page.selectOption('#result',result);await page.click('#attack');
+    assert.match(await page.locator('#status').textContent(),new RegExp(side==='ally'?'味方':'敵'));
+    await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('終了'));
+    const heard=await page.evaluate(()=>window.audition);
+    assert.equal(heard[0],side+'_attack_start');
+    if(result==='miss')assert.equal(heard.length,1);else assert.ok(heard.some(id=>id.endsWith('se_slash.ogg')));
+    await page.click('#stop');
+  }
+  await page.selectOption('#kind','bgm');assert.equal(await page.locator('.row').count(),4);
+  await page.click('#preview');await page.waitForFunction(()=>performance.getEntriesByType('resource').some(e=>e.name.includes('exploration-v2.ogg')));await page.click('#stop');
+  await page.selectOption('#kind','se');await page.fill('#search','se_slash');assert.equal(await page.locator('.row').count(),1);
+  await page.click('#preview');await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('終了'));
+  await page.fill('#name','試聴用斬撃');await page.locator('#gain').evaluate(el=>{el.value='0.23';el.dispatchEvent(new Event('input'));});await page.getByRole('button',{name:'変更を保存'}).click();
+  await page.reload();await page.fill('#search','試聴用斬撃');await page.waitForFunction(()=>document.querySelector('#identifier').textContent==='se_slash');
+  assert.equal(await page.inputValue('#gain'),'0.23');
+  const fileEvent=page.waitForEvent('download');await page.click('#export');const file=await fileEvent;
+  const saved=JSON.parse(await fs.readFile(await file.path(),'utf8'));assert.equal(saved.sounds.se_slash.gain,.23);assert.ok(saved.sounds.se_slash.notes.length);
+  await page.click('#reset');assert.equal(await page.locator('.row').count(),0);await page.fill('#search','');
+  await page.fill('#search','存在しない音源');assert.equal(await page.locator('#detail').isVisible(),false);
+  await page.fill('#search','');await page.selectOption('#kind','synth');await page.locator('.row').filter({hasText:'味方の攻撃開始'}).click();await page.click('#preview');
+  await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('終了'));
+  for(const width of [390,1440]){
+    await page.setViewportSize({width,height:856});
+    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+    await page.screenshot({fullPage:true,path:path.join(output,`sound-library-${width}.png`)});
+  }
+  checks.push('sound library: four attack previews, synth editor link, recorded/BGM playback controls, search, saved draft, export, reset, 390/1440 layout');
   await fs.writeFile(path.join(output,'design-audio.json'),JSON.stringify(designAudio,null,2)+'\n');
   assert.deepEqual(errors,[]);await fs.writeFile(path.join(output,'results.json'),JSON.stringify({checks,sounds,errors},null,2)+'\n');console.log(JSON.stringify({passed:true,checks,errors},null,2));
 }finally{await browser?.close();server.close();}

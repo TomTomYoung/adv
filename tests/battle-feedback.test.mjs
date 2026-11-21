@@ -6,6 +6,9 @@ import {projectGame} from '../src/application/projection.js';
 import {validatePresentation} from '../src/core/feedback-validation.js';
 import {EffectsRenderer} from '../src/view/effects.js';
 import {installDOM} from './view-dom.mjs';
+import {freshFeedback,playBattleCue} from '../src/core/feedback.js';
+import {decorateFeedback,profileDuration} from '../src/presentation-design.js';
+import {defaultPresentation} from '../src/presentation-presets.js';
 import {feedbackDelay} from '../src/feedback-timing.js';
 
 function battle(){const g=newGame(311);g.state.members=['ada'];g.state.partyFormation=nextFormation(g.state.members,g.state.partyFormation);g.startBattle('wild_pair_1',{win:[],lose:[],escape:[]});for(const e of g.state.battle.enemies){e.hp=1000;e.ai=[{priority:1,skill:'attack',target:'weakest'}];}return g;}
@@ -25,7 +28,27 @@ test('one impact carries sound, recoil and the resolved damage; enemy advance pr
   assert.deepEqual(advance.effects,['enemy_advance']);assert.equal(enemyHit.at-advance.at,130);
   assert.equal(advance.targets[0].key,enemyHit.source.key);assert.equal(enemyHit.targets[0].key,'actor:ada');assert.ok(enemyHit.targets[0].damage>0);
   const projected=projectGame(g).feedback.events;
+  const starts=decorateFeedback(projectGame(g).feedback,defaultPresentation).events.filter(e=>e.originalPhase==='windup');
+  assert.deepEqual(starts.slice(0,2).map(e=>[e.at,e.synth]),[[0,'ally_attack_start'],[advance.at,'enemy_attack_start']]);
   assert.ok(projected[3].source.image.startsWith('assets/'));projected[1].targets[0].damage=9999;assert.notEqual(hit.targets[0].damage,9999);
+});
+
+test('each attacking side sounds once before contact even on a group miss, with shared windup for support and old designs',()=>{
+  const ally={key:'actor:ada'},enemy={key:'enemy:preview'};
+  const older=structuredClone(defaultPresentation);
+  delete older.bindings.ally_attack_start;
+  delete older.bindings.enemy_attack_start;
+  for(const [source,opponent,start] of [[ally,enemy,'ally_attack_start'],[enemy,ally,'enemy_attack_start']]){
+    const feedback=freshFeedback(),opponents=[opponent,{key:opponent.key+'2'}].map(target=>({...target,missed:true}));
+    playBattleCue({data,feedback},'attack',source,opponents,true);
+    const sounds=decorateFeedback(feedback,defaultPresentation).events.filter(e=>e.synth||e.sound);
+    assert.deepEqual(sounds.map(e=>[e.at,e.synth]),[[0,start]]);
+    assert.ok(profileDuration(defaultPresentation.profiles[start])<feedback.events.find(e=>e.phase==='impact').at);
+    assert.deepEqual(decorateFeedback(feedback,older).events.filter(e=>e.synth).map(e=>e.synth),['swing']);
+    const support=freshFeedback();
+    playBattleCue({data,feedback:support},'heal',source,[source],false);
+    assert.equal(decorateFeedback(support,defaultPresentation).events.find(e=>e.originalPhase==='windup').synth,'swing');
+  }
 });
 
 test('all-target enemy attacks use one sound and one anticipation with each target damage, healing has no damage number',()=>{

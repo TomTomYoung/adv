@@ -88,13 +88,15 @@ export function decorateFeedback(feedback,design,catalogs={}){
   if(!feedback||feedback.decorated)return feedback;
   const events=[];
   for(const event of feedback.events){
-    const kind=battleAccent(event),timeline=event.timeline??design.bindings[kind];
+    // Older design files define only a shared windup.
+    const binding=kind=>event.timeline??design.bindings[kind]??(event.phase==='windup'?design.bindings.swing:null);
+    const kind=battleAccent(event),timeline=binding(kind);
     events.push({...event,decorated:true,synth:event.synth??null,particles:event.particles??null});
     if(timeline){
       // Audio is emitted once for an area attack; visual profiles follow each result.
       const expanded=timelineEvents(design,timeline,{...catalogs,...event,seed:`${feedback.session}:${feedback.revision}`});
       events.push(...expanded.filter(e=>!e.particles).map(e=>({...e,originalPhase:event.phase})));
-      for(const target of event.targets??[]){const targetTimeline=event.timeline??design.bindings[battleAccent(event,target)];events.push(...timelineEvents(design,targetTimeline,{...catalogs,...event,targets:[target]}).filter(e=>e.particles));}
+      for(const target of event.targets??[]){const targetTimeline=binding(battleAccent(event,target));events.push(...timelineEvents(design,targetTimeline,{...catalogs,...event,targets:[target]}).filter(e=>e.particles));}
     }
     const t=(event.targets??[]).find(t=>!t.missed&&(t.damage>0||t.guarded));
     if(t&&['slash','pierce','heavy','critical','guard'].includes(kind)){
