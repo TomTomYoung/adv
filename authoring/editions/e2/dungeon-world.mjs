@@ -22,7 +22,7 @@ export function dungeonQuest(number,sites,people,{dungeon,floor,prefix,character
       const cast=s.story.scenes[key].cast;
       for(const [i,c] of cast.entries()){
         c.when=s.is(c.entity+'At',place);
-        c.display={x:cast.length===1?50:cast.length===2?[30,70][i]:[23,50,77][i],y:cast.length===3&&i===1?26:10,scale:1,cardScale:1,layer:i};
+        c.display={x:cast.length===1?50:cast.length===2?[30,70][i]:[17,50,83][i],y:10,scale:1,cardScale:1,layer:i};
       }
     }
     function implies(key,condition,result,description){s.invariant(key,or(not(condition),result),description);}
