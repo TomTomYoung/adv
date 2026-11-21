@@ -1,3 +1,4 @@
+import {shelteredCrew} from '../authoring/editions/e2/story-q092.mjs';
 import {guideNoa} from '../authoring/editions/e2/story-q091.mjs';
 import {theatreCharacters} from '../authoring/editions/e2/story-q056.mjs';
 import {stallCharacters} from '../authoring/editions/e2/story-q057.mjs';
@@ -51,6 +52,7 @@ export async function companionBundle(){
  const quests=Object.entries(arcs).flatMap(([actor,episodes])=>episodes.map((s,index)=>compileEpisode(s,actor,index)));
  if(quests.length!==80||Object.values(arcs).some(a=>a.length!==10))throw Error('仲間連作は8人各10件');
  characters[guideNoa.id]=guideNoa;
+ characters[shelteredCrew.id]=shelteredCrew;
  Object.assign(characters,saltBrideCharacters,threePicksCharacters,breathingVeinCharacters,returnCartCharacters,weepingPillarCharacters,silentBlastCharacters,twoGravesCharacters,whiteDebtCharacters,mineScaleCharacters,crownCharacters,seedBirdCharacters,greenSleepCharacters,motherRingCharacters,edibleMapCharacters,rainSongCharacters,orchardPromiseCharacters,pollenRansomCharacters,gardenersSeatCharacters,redHoneyCharacters,rootMorningCharacters,changeCounterCharacters,auctionCharacters,foodCharacters,dreamCharacters,shadowCharacters);
  for(const cast of [theatreCharacters,stallCharacters,exchangeCharacters,feastCharacters,wakingCharacters]){
   for(const [id,person] of Object.entries(cast)){

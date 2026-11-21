@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import {createQuestTrial,dispatchQuestTrial,questTrialReport} from '../src/application/quest-playtest.js';
-import {arrive,go,resume} from '../tests/world-route-helpers.mjs';
+import {go,resume} from '../tests/world-route-helpers.mjs';
 import {drain,fight} from '../tests/helpers.mjs';
 
-export function measureWorldRoutes({data,catalog,routes,expectedValues},levels,parties){
+export function measureWorldRoutes({data,catalog,routes,expectedValues,arrive},levels,parties){
   const results=[];
   for(const [quest,paths] of Object.entries(routes))for(const route of paths){
     for(const start of ['site','reception'])for(const level of levels)for(const party of parties){
