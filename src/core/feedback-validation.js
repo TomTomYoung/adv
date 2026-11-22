@@ -30,6 +30,7 @@ export function validatePresentation(data){
     }
   }
   const p=data.presentation;if(!p)return errors;
+  if(p.attackLead!==undefined&&(!isRecord(p.attackLead)||!['ally','enemy'].every(side=>number(p.attackLead[side],0,1000))))fail('attackLead','敵味方の攻撃開始から命中までの時間は0〜1000msです');
   for(const [id,c] of Object.entries(p.cues??{})){if(!Array.isArray(c.effects)||c.effects.length>8)fail(id,'効果の数が不正です');else for(const e of c.effects)ref(data.effects,e,id);if(c.sound)ref(data.sounds,c.sound,id);if(c.target!=='target'&&!targetValid(c.target))fail(id,'対象が不正です');if(!number(c.gap,0,1000))fail(id,'間隔が不正です');}
   for(const [id,c] of Object.entries(p.cues??{}))if(c.battle!==undefined){
     if(!isRecord(c.battle)||!number(c.battle.impact,0,1000)){fail(id,'戦闘の命中時刻が不正です');continue;}

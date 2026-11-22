@@ -14,6 +14,7 @@ function chunk(type,b){let c=0xffffffff;const t=Buffer.from(type);for(const v of
 function png({width,height,data}){const h=Buffer.alloc(13);h.writeUInt32BE(width);h.writeUInt32BE(height,4);h[8]=8;h[9]=6;const raw=Buffer.alloc((width*4+1)*height);for(let y=0;y<height;y++)raw.set(data.subarray(y*width*4,(y+1)*width*4),y*(width*4+1)+1);return Buffer.concat([Buffer.from([137,80,78,71,13,10,26,10]),chunk('IHDR',h),chunk('IDAT',zlib.deflateSync(raw)),chunk('IEND',Buffer.alloc(0))]);}
 const report={version:plan.version,sounds:[],animations:[]};
 for(const [id,s] of Object.entries(plan.sounds)){
+ if(s.file)continue; // Authored recordings are distributed directly from the source WAV.
  const project=blankProject(id);Object.assign(project,{title:s.name,tempo:240,bars:1,master:1});const core=new MusicCore(project),track=newTrack(id,s.name,s.instrument);track.volume=1;
  track.notes=s.notes.map((n,i)=>({id:`n${i}`,pitch:INSTRUMENTS[s.instrument].drum??n.pitch,start:Math.round(n.start*1920),duration:Math.round(n.seconds*1920),velocity:n.velocity}));
  core.applyBatch({projectId:id,expectedRevision:core.getState().revision,operationId:'original-se',commands:[{type:'track.add',track}]});const score=core.getProject(),pcm=renderPCM(score,{sampleRate:22050,mode:'tail'});

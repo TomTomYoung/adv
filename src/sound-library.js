@@ -42,16 +42,19 @@ function attack(){
   const actor={key:'actor:preview',material:'flesh'},enemy={key:'enemy:preview',material:'flesh'};
   const feedback=freshFeedback();
   const target={...(ally?enemy:actor),...(miss?{missed:true}:{damage:12})};
-  playBattleCue({data:{presentation},feedback},'attack',ally?actor:enemy,[target],true);
+  const version=$('windup-version').value;
+  const legacy=version!=='current';
+  playBattleCue({data:{presentation:legacy?{...presentation,attackLead:undefined}:presentation},feedback},'attack',ally?actor:enemy,[target],true);
   const catalog=Object.fromEntries(Object.keys(sounds).map(id=>[id,recorded(id)]));
   for(const e of feedback.events)if(e.sound){
-    const sound=catalog[e.sound];
+    const sound=catalog[legacy&&e.phase==='impact'?'se_slash':e.sound];
     e.sound={url:assets.audio[sound.asset],gain:e.gain*sound.gain};
   }
   const sequence=decorateFeedback(feedback,design,{sounds:catalog,soundAssets:assets.audio});
-  if($('windup-version').value==='v1'){
-    for(const e of sequence.events){
-      if(e.originalPhase==='windup'&&e.synth)e.synth=e.synth+'_v1';
+  if(legacy){
+    for(const e of sequence.events.filter(e=>e.originalPhase==='windup'&&e.sound)){
+      e.sound=null;
+      e.synth=(ally?'ally':'enemy')+'_attack_start'+(version==='v1'?'_v1':'');
     }
   }
   audio.configure(true,volume());
@@ -164,13 +167,14 @@ try{
     {kind:'bgm',id:'exploration_original',name:'探索（初版）',url:'assets/audio/exploration.ogg',use:'音量調整前の原音'},
     {kind:'bgm',id:'battle_original',name:'戦闘（初版）',url:'assets/audio/battle.ogg',use:'音量調整前の原音'}
   ];
-  items.sort((a,b)=>Number(b.id.endsWith('_attack_start'))-Number(a.id.endsWith('_attack_start')));
-  current=items.find(i=>i.id==='ally_attack_start');
+  const selected=['se_ally_call','se_enemy_warning','se_thick_blade'];
+  items.sort((a,b)=>Number(selected.includes(b.id))-Number(selected.includes(a.id)));
+  current=items.find(i=>i.id==='se_ally_call');
   const query=new URLSearchParams(location.search),kind=query.get('kind');
   if(query.get('result')==='miss')$('result').value='miss';
   if(Object.hasOwn(types,kind))$('kind').value=kind;
   render();
-  audio.preload([assets.audio[sounds[presentation.cues.attack.sound].asset]]);
+  audio.preload(['se_ally_call','se_enemy_warning',presentation.cues.attack.sound,'se_slash'].map(id=>assets.audio[sounds[id].asset]));
   $('attack').disabled=false;
   report(archiveError?'命中音サンプルの読み込みに失敗しました。 '+archiveError.message:'試聴待機');
 }catch(error){report('読み込みに失敗しました。 '+error.message);}

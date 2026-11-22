@@ -42,9 +42,13 @@ export function createDefinitions(read=browserRead){
     if(family==='jobs')shape=obj({gridProfiles:dict(targetingSchema),frontlineProfiles:dict(frontlineTargetingSchema),battle:battleRulesSchema,version:str,profile:obj({skillActions:array(str),commonSkills:array(str),legacyGrowth:stats,equipmentTypes:dict(array(str)),statNames:dict(str)},['commonSkills','legacyGrowth','equipmentTypes','statNames']),initialJobs:dict(str),jobs:await schema('jobs'),buffs:await schema('buffs'),fieldAbilities:dict(ability),skills:dict(skill),formulas:dict({$ref:'#/$defs/value'}),items:dict(item),equipmentPatches:dict({type:'object'}),shopGoods:goods,skillCues:dict(str)});
     if(family==='entities')shape=obj({version:str,source:str,examples:str,monsters:array({...enemy,properties:{...enemy.properties,region:{type:'integer',minimum:1,maximum:10},skill:str},required:[...enemy.required,'region','skill']}),actors:dict(actor)});
     if(family==='presentation'){
-      const sound=obj({name:str,use:str,instrument:str,gain:{type:'number',minimum:0,maximum:1},notes:array(obj({pitch:{type:'integer',minimum:0,maximum:127},start:{type:'number',minimum:0},seconds:{type:'number',exclusiveMinimum:0},velocity:{type:'integer',minimum:0,maximum:127}}))});
+      const score=obj({name:str,use:str,instrument:str,gain:{type:'number',minimum:0,maximum:1},notes:array(obj({pitch:{type:'integer',minimum:0,maximum:127},start:{type:'number',minimum:0},seconds:{type:'number',exclusiveMinimum:0},velocity:{type:'integer',minimum:0,maximum:127}}))});
       const cue=obj({effects:array(str),sound:str,target:str,gap:{type:'number',minimum:0},battle:obj({impact:{type:'number',minimum:0,maximum:1000},anticipation:str,actorAnticipation:str,projectile:str},['impact'])},['effects','target']);
-      shape=obj({battleGrid:battleGridPresentationSchema,version:str,sounds:dict(sound),effects:await schema('effects'),cues:dict(cue),bindings:dict(dict(str)),ambient:{type:'object'}},['version','sounds','effects','cues','bindings','ambient']);
+      const file={type:'string',pattern:'^assets/audio/[\\w/-]+\\.(wav|ogg)$'};
+      const sound={...obj({...score.properties,file},['name','use','gain']),if:{required:['file']},
+        then:{not:{anyOf:[{required:['notes']},{required:['instrument']}]}},else:{required:['instrument','notes']}};
+      const lead={type:'number',minimum:0,maximum:1000};
+      shape=obj({attackLead:obj({ally:lead,enemy:lead}),battleGrid:battleGridPresentationSchema,version:str,sounds:dict(sound),effects:await schema('effects'),cues:dict(cue),bindings:dict(dict(str)),ambient:{type:'object'}},['version','sounds','effects','cues','bindings','ambient']);
     }
     if(family==='catalog')shape={...array(obj({id:str,title:str,brief:str,past:str,progression:str,outcomes:dict(outcome),nodes:array(obj({id:str,options:array(obj({text:str,to:str},['text']))},['id']))})),minItems:10,maxItems:10};
     if(!shape)throw Error(`編集形式がありません: ${family}`);

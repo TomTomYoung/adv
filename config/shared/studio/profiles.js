@@ -35,7 +35,7 @@ export const groups={
  edge:[['名前・用途',['name','description']],['通行',['passage']],['外観・遮光',['visual']],['性質',['parameters']]],
  cell:[['名前・用途',['name','description']],['通行',['passage']],['外観・遮光',['visual']],['性質・イベント',['parameters','events','eventFaces']]],
  story:[['本文',['title','brief','past','progression']],['分岐',['nodes']],['結末',['outcomes']],['制約・メモ',['authoringNotes']]],
- sound:[['基本',['name','use','instrument','gain']],['音符',['notes']]],
+ sound:[['基本',['name','use','file','instrument','gain']],['音符',['notes']]],
  effect:[['基本',['name','category','duration','palette']],['効果の構成',['tracks']]],
  cue:[['効果・音',['effects','sound','target','gap']]],
 };

@@ -2,7 +2,13 @@
 
 音符・波形・音量変化・重ね方の記述例と追加合成音の全プリセットは[音・戦闘演出の記述形式](SOUND_AND_EFFECT_FORMAT.md)を参照してください。
 
-更新日: 2026-09-25。作品版1.20.0では28種を登録しています。AIMusicの固定したMusicCoreとPCM合成器で作成した単発OGGと編集可能なmusic.jsonを保持しています。外部サンプルは使用していません。
+2026-11-22現在、本編には31種の収録SEがあります。28種はAIMusicで合成したOGGです。攻撃用の3種はADV用に制作したWAV原本を直接再生します。
+
+味方の攻撃開始には `se_ally_call` を使います。[A03 戦列の号令](../../assets/audio/auditions/windup-20/A03.wav)
+
+敵の攻撃開始には `se_enemy_warning` を使います。[E07 魔将の宣告](../../assets/audio/auditions/windup-20/E07.wav)
+
+通常の斬撃が命中したときは `se_thick_blade` が鳴ります。[01 厚刃の一閃](../../assets/audio/auditions/attack-v1/01_atsuba.wav)
 
 ID：se_step / SE：石床の足音 / 再生する場面：移動成功 / 合成音色：kick
 
