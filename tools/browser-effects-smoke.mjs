@@ -27,6 +27,8 @@ try{
     const {nextFormation}=await import('./src/core/battle-formation.js');
     const {loadContent}=await import('./src/core/loader.js'),{GameEngine}=await import('./src/core/engine.js'),{projectGame}=await import('./src/application/projection.js');
     const {SceneView}=await import('./src/view/scene-view.js'),{GameView}=await import('./src/view/view.js'),{GameAudio}=await import('./src/application/audio.js');
+    const {handleGameKey}=await import('./src/view/keyboard.js');
+    document.addEventListener('keydown',event=>handleGameKey(event,{view,model:view.model,dispatch}));
     const {applyTheme,THEME_DEFAULT}=await import('./src/view/theme.js');applyTheme(THEME_DEFAULT);const data=await loadContent();
     window.setup=async({actor='ada',mode='full',layout='scene',kill=false,battleMode='classic'}={})=>{
       window.view?.destroy();window.sound?.stopEffects();const g=new GameEngine(data,42);while(g.state.waiting?.type==='text')g.dispatch({type:'advance'});
@@ -81,6 +83,33 @@ try{
     }
   }
   checks.push('impact-aligned HP and skip without duplicate actions in all three battle modes and both views');
+  for(const layout of ['scene','classic']){
+    for(const input of ['mouse','keyboard']){
+      await page.evaluate(options=>setup(options),{layout});
+      const attack=page.locator('[data-focus="skill:attack"]');
+      await attack.scrollIntoViewIfNeeded();
+      const box=await attack.boundingBox(),x=box.x+box.width/2,y=box.y+box.height/2;
+      if(input==='mouse'){
+        await page.mouse.click(x,y);
+        await page.locator('[data-focus="target:enemy_0"]').click();
+      }else{
+        assert.equal(await page.locator(':focus').getAttribute('data-focus'),'skill:attack');
+        await page.keyboard.press('Enter');
+        await page.keyboard.press('Enter');
+      }
+      assert.ok(await page.evaluate(()=>Boolean(view.playback.active)),'attack confirmation starts playback');
+      const saved=await page.evaluate(()=>g.save());
+      if(input==='mouse'){
+        await page.mouse.click(x,y,{button:'right'});
+        assert.ok(await page.evaluate(()=>Boolean(view.playback.active)));
+        await page.mouse.click(x,y);
+      }else await page.keyboard.press('Enter');
+      assert.ok(await page.evaluate(()=>!view.playback.active&&view.model===last),'next input immediately settles playback');
+      assert.equal(await page.evaluate(()=>g.save()),saved);
+      assert.equal(await page.locator(':focus').getAttribute('data-focus'),'skill:attack');
+    }
+  }
+  checks.push('repeat left click at the attack position or press Enter to skip immediately in both layouts');
   checks.push('real engine attacks: three distinct physical patterns; sound adapter and damage/impact within 50ms; 50ms heavy hold; animation never changes saved game');
   for(const width of [1280,390]){
     await page.setViewportSize({width,height:856});await page.evaluate(()=>setup());

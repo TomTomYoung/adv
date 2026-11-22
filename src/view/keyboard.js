@@ -6,8 +6,11 @@ export function handleGameKey(event,{view,model,dispatch,bindings=DEFAULT_BINDIN
   if(event.defaultPrevented||modalOpen||event.ctrlKey||event.metaKey||event.altKey||event.isComposing)return;
   if(view.playback?.active){
     const action=keyAction(event,bindings);
-    if(action==='confirm'||action==='cancel'){event.preventDefault();if(!event.repeat)view.playback.finish();}
-    else if(action||event.key==='Tab')event.preventDefault();
+    const enter=event.key==='Enter'&&!event.shiftKey;
+    if(enter||action==='confirm'||action==='cancel'){
+      event.preventDefault();
+      if(enter||!event.repeat)view.playback.finish();
+    }else if(action||event.key==='Tab')event.preventDefault();
     return;
   }
   const scope=view.inputScope?.()??view.root;

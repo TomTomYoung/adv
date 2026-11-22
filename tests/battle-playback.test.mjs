@@ -5,6 +5,7 @@ import {projectGame} from '../src/application/projection.js';
 import {nextFormation} from '../src/core/battle-formation.js';
 import {GameView} from '../src/view/view.js';
 import {handleGameKey} from '../src/view/keyboard.js';
+import {DEFAULT_BINDINGS} from '../src/view/key-bindings.js';
 import {installDOM} from './view-dom.mjs';
 
 function setup(t,mode='full'){
@@ -38,6 +39,20 @@ test('rerendering the old visible model settles on the latest result; load cance
   assert.equal(c.view.model,next);assert.equal(c.view.playback.active,null);
   c.act();const loaded=projectGame(newGame(7));c.view.render(loaded);t.mock.timers.tick(10000);
   assert.equal(c.view.model,loaded);assert.equal(c.root.querySelector('[inert]'),null);
+});
+
+test('Enter can cut playback with remapped controls, including a repeat from a held key',t=>{
+  const c=setup(t),next=c.act(),saved=c.g.save();
+  const bindings={...DEFAULT_BINDINGS,confirm:['KeyZ',null]};
+  const input={view:c.view,model:next,bindings,dispatch(){assert.fail('skip dispatched a command');}};
+  for(let i=0;i<2;i++){
+    const event={key:'Enter',code:'NumpadEnter',repeat:true,preventDefault(){this.defaultPrevented=true;}};
+    handleGameKey(event,input);
+    assert.equal(event.defaultPrevented,true);
+    assert.equal(c.view.playback.active,null);
+    assert.equal(c.view.model,next);
+  }
+  assert.equal(c.dispatches(),0);assert.equal(c.g.save(),saved);
 });
 
 test('automatic completion restores controls; effects off presents the final state immediately',t=>{
