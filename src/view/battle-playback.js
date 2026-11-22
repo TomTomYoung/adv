@@ -8,7 +8,7 @@ export class BattlePlayback {
   resolve(model){return this.active&&model===this.view.model?this.active.next:model;}
   cancel(){
     const active=this.active;if(!active)return;
-    clearTimeout(active.timer);this.active=null;
+    clearTimeout(active.timer);active.input.abort();this.active=null;
     for(const [node,inert] of active.inert)node.inert=inert;
     active.bar.remove();this.view.effects.onEvent=null;
   }
@@ -26,12 +26,21 @@ export class BattlePlayback {
     this.key=key;view.ui.cancelFeedback?.();view.effects.capture();
     const bar=document.createElement('div');bar.className='battle-playback';
     const label=document.createElement('span');label.setAttribute('role','status');label.textContent='';
-    const skip=document.createElement('button');skip.type='button';skip.textContent='演出を省略';skip.dataset.focus='battle:skip';skip.addEventListener('click',()=>this.finish());bar.append(label,skip);
+    const skip=document.createElement('button');skip.type='button';skip.textContent='演出を省略';skip.dataset.focus='battle:skip';bar.append(label,skip);
     const inert=[...view.root.children].map(node=>[node,node.inert]);for(const [node] of inert)node.inert=true;
     // The stage is inert too; place the controls outside it, above either layout.
     view.root.append(bar);
     const duration=feedbackDuration(decorateFeedback(next.feedback,view.effects.design,{sounds:next.sounds,soundAssets:next.soundAssets}),view.effects.design,next.effects)+30;
-    this.active={next,bar,label,inert,timer:setTimeout(()=>this.finish(),feedbackDelay(next.feedback,duration))};
+    const input=new AbortController();
+    this.active={next,bar,label,inert,input,timer:setTimeout(()=>this.finish(),feedbackDelay(next.feedback,duration))};
+    // Inert battle controls retarget clicks to the root. Capture the next click,
+    // so the target-confirmation click that started playback cannot also skip it.
+    view.root.addEventListener('click',event=>{
+      if(event.button!==0)return;
+      event.preventDefault();
+      event.stopPropagation();
+      this.finish();
+    },{capture:true,signal:input.signal});
     view.effects.onEvent=event=>{
       if(event.action)label.textContent=event.action;
       for(const target of event.targets){
