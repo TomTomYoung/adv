@@ -91,7 +91,7 @@ try{
       const box=await attack.boundingBox(),x=box.x+box.width/2,y=box.y+box.height/2;
       if(input==='mouse'){
         await page.mouse.click(x,y);
-        await page.locator('[data-focus="target:enemy_0"]').click();
+        await page.mouse.click(x,y);
       }else{
         assert.equal(await page.locator(':focus').getAttribute('data-focus'),'skill:attack');
         await page.keyboard.press('Enter');
@@ -107,6 +107,10 @@ try{
       assert.ok(await page.evaluate(()=>!view.playback.active&&view.model===last),'next input immediately settles playback');
       assert.equal(await page.evaluate(()=>g.save()),saved);
       assert.equal(await page.locator(':focus').getAttribute('data-focus'),'skill:attack');
+      if(input==='mouse')await page.mouse.click(x,y);
+      else await page.keyboard.press('Enter');
+      assert.equal(await page.locator(':focus').getAttribute('data-focus'),'target:enemy_0');
+      assert.equal(await page.evaluate(()=>g.save()),saved);
     }
   }
   checks.push('repeat left click at the attack position or press Enter to skip immediately in both layouts');
