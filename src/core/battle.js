@@ -260,7 +260,12 @@ function performSkill(engine,source,selection){
   }
   if(skill.effects.some(e=>e.type==='repel')){
     const lit=kindlePortable(engine.data,s,skill.fireEffect,engine);
-    if(s.battle&&lit){engine.eventCue('light');endBattle(engine,'repel');}return;
+    if(s.battle&&lit){
+      const bindings=engine.data.presentation?.bindings;
+      engine.cue(bindings?.skills?.[skillId]??bindings?.events?.light);
+      endBattle(engine,'repel');
+    }
+    return;
   }
   const activated=useSkill(engine,source,targets,skill,skillId,enemySource,itemId);
   if(activated&&skill.selfEffects?.length)applySkill(engine,source,source,{...skill,effects:skill.selfEffects},skillId,enemySource,null,false);

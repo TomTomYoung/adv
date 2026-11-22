@@ -31459,6 +31459,1225 @@ export const referenceData={
     {
       "file": "presentation.json",
       "path": [
+        "cues",
+        "skill_smash",
+        "effects",
+        0
+      ],
+      "kind": "effects",
+      "id": "strike_blunt"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_smash",
+        "effects",
+        1
+      ],
+      "kind": "effects",
+      "id": "recoil_blunt"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_smash",
+        "sound"
+      ],
+      "kind": "sounds",
+      "id": "se_skill_smash"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_smash",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_smash",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_strike"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_cleave",
+        "effects",
+        0
+      ],
+      "kind": "effects",
+      "id": "strike_slash"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_cleave",
+        "effects",
+        1
+      ],
+      "kind": "effects",
+      "id": "split_diagonal"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_cleave",
+        "sound"
+      ],
+      "kind": "sounds",
+      "id": "se_skill_cleave"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_cleave",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_cleave",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_strike"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_thrust",
+        "effects",
+        0
+      ],
+      "kind": "effects",
+      "id": "strike_pierce"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_thrust",
+        "effects",
+        1
+      ],
+      "kind": "effects",
+      "id": "recoil_pierce"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_thrust",
+        "sound"
+      ],
+      "kind": "sounds",
+      "id": "se_skill_thrust"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_thrust",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_thrust",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_strike"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_volley",
+        "effects",
+        0
+      ],
+      "kind": "effects",
+      "id": "strike_pierce"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_volley",
+        "effects",
+        1
+      ],
+      "kind": "effects",
+      "id": "recoil_pierce"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_volley",
+        "sound"
+      ],
+      "kind": "sounds",
+      "id": "se_skill_volley"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_volley",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_volley",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_cast"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_volley",
+        "battle",
+        "projectile"
+      ],
+      "kind": "effects",
+      "id": "arrow_flight"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_fire",
+        "effects",
+        0
+      ],
+      "kind": "effects",
+      "id": "fire_burst"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_fire",
+        "effects",
+        1
+      ],
+      "kind": "effects",
+      "id": "hit_shake"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_fire",
+        "sound"
+      ],
+      "kind": "sounds",
+      "id": "se_skill_fire"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_fire",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_fire",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_cast"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_inferno",
+        "effects",
+        0
+      ],
+      "kind": "effects",
+      "id": "fire_burst"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_inferno",
+        "effects",
+        1
+      ],
+      "kind": "effects",
+      "id": "hit_shake"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_inferno",
+        "sound"
+      ],
+      "kind": "sounds",
+      "id": "se_skill_inferno"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_inferno",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_inferno",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_cast"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_ice",
+        "effects",
+        0
+      ],
+      "kind": "effects",
+      "id": "ice_shards"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_ice",
+        "effects",
+        1
+      ],
+      "kind": "effects",
+      "id": "skew"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_ice",
+        "sound"
+      ],
+      "kind": "sounds",
+      "id": "se_skill_ice"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_ice",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_ice",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_cast"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_glacier",
+        "effects",
+        0
+      ],
+      "kind": "effects",
+      "id": "ice_shards"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_glacier",
+        "effects",
+        1
+      ],
+      "kind": "effects",
+      "id": "skew"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_glacier",
+        "sound"
+      ],
+      "kind": "sounds",
+      "id": "se_skill_glacier"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_glacier",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_glacier",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_cast"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_bolt",
+        "effects",
+        0
+      ],
+      "kind": "effects",
+      "id": "lightning_arc"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_bolt",
+        "effects",
+        1
+      ],
+      "kind": "effects",
+      "id": "hit_shake"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_bolt",
+        "sound"
+      ],
+      "kind": "sounds",
+      "id": "se_skill_bolt"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_bolt",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_bolt",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_cast"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_storm",
+        "effects",
+        0
+      ],
+      "kind": "effects",
+      "id": "lightning_arc"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_storm",
+        "effects",
+        1
+      ],
+      "kind": "effects",
+      "id": "hit_shake"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_storm",
+        "sound"
+      ],
+      "kind": "sounds",
+      "id": "se_skill_storm"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_storm",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_storm",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_cast"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_light",
+        "effects",
+        0
+      ],
+      "kind": "effects",
+      "id": "mana_orbit"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_light",
+        "effects",
+        1
+      ],
+      "kind": "effects",
+      "id": "impact_burst"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_light",
+        "sound"
+      ],
+      "kind": "sounds",
+      "id": "se_skill_light"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_light",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_light",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_cast"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_shadow",
+        "effects",
+        0
+      ],
+      "kind": "effects",
+      "id": "mana_orbit"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_shadow",
+        "effects",
+        1
+      ],
+      "kind": "effects",
+      "id": "skew"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_shadow",
+        "sound"
+      ],
+      "kind": "sounds",
+      "id": "se_skill_shadow"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_shadow",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_shadow",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_cast"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_root",
+        "effects",
+        0
+      ],
+      "kind": "effects",
+      "id": "heavy_shake"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_root",
+        "effects",
+        1
+      ],
+      "kind": "effects",
+      "id": "hit_shake"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_root",
+        "sound"
+      ],
+      "kind": "sounds",
+      "id": "se_skill_root"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_root",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_root",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_strike"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_tide",
+        "effects",
+        0
+      ],
+      "kind": "effects",
+      "id": "impact_burst"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_tide",
+        "effects",
+        1
+      ],
+      "kind": "effects",
+      "id": "hit_shake"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_tide",
+        "sound"
+      ],
+      "kind": "sounds",
+      "id": "se_skill_tide"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_tide",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_tide",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_strike"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_venom",
+        "effects",
+        0
+      ],
+      "kind": "effects",
+      "id": "poison_cloud"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_venom",
+        "effects",
+        1
+      ],
+      "kind": "effects",
+      "id": "hit_shake"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_venom",
+        "sound"
+      ],
+      "kind": "sounds",
+      "id": "se_skill_venom"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_venom",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_venom",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_strike"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_heal",
+        "effects",
+        0
+      ],
+      "kind": "effects",
+      "id": "healing_ring"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_heal",
+        "sound"
+      ],
+      "kind": "sounds",
+      "id": "se_skill_heal"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_heal",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_heal",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_cast"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_grace",
+        "effects",
+        0
+      ],
+      "kind": "effects",
+      "id": "healing_ring"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_grace",
+        "sound"
+      ],
+      "kind": "sounds",
+      "id": "se_skill_grace"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_grace",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_grace",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_cast"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_cleanse",
+        "effects",
+        0
+      ],
+      "kind": "effects",
+      "id": "healing_ring"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_cleanse",
+        "effects",
+        1
+      ],
+      "kind": "effects",
+      "id": "squash"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_cleanse",
+        "sound"
+      ],
+      "kind": "sounds",
+      "id": "se_skill_cleanse"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_cleanse",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_cleanse",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_cast"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_ward",
+        "effects",
+        0
+      ],
+      "kind": "effects",
+      "id": "squash"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_ward",
+        "sound"
+      ],
+      "kind": "sounds",
+      "id": "se_skill_ward"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_ward",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_ward",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_cast"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_chant",
+        "effects",
+        0
+      ],
+      "kind": "effects",
+      "id": "mana_orbit"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_chant",
+        "sound"
+      ],
+      "kind": "sounds",
+      "id": "se_skill_chant"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_chant",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_chant",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_cast"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_focus",
+        "effects",
+        0
+      ],
+      "kind": "effects",
+      "id": "squash"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_focus",
+        "sound"
+      ],
+      "kind": "sounds",
+      "id": "se_skill_focus"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_focus",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_focus",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_cast"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_drain",
+        "effects",
+        0
+      ],
+      "kind": "effects",
+      "id": "mana_orbit"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_drain",
+        "effects",
+        1
+      ],
+      "kind": "effects",
+      "id": "skew"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_drain",
+        "sound"
+      ],
+      "kind": "sounds",
+      "id": "se_skill_drain"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_drain",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_drain",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_cast"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_roll",
+        "effects",
+        0
+      ],
+      "kind": "effects",
+      "id": "strike_blunt"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_roll",
+        "effects",
+        1
+      ],
+      "kind": "effects",
+      "id": "spin"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_roll",
+        "sound"
+      ],
+      "kind": "sounds",
+      "id": "se_skill_smash"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_roll",
+        "battle",
+        "anticipation"
+      ],
+      "kind": "effects",
+      "id": "enemy_advance"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_roll",
+        "battle",
+        "actorAnticipation"
+      ],
+      "kind": "effects",
+      "id": "actor_strike"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_repel",
+        "effects",
+        0
+      ],
+      "kind": "effects",
+      "id": "field_reveal"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_repel",
+        "sound"
+      ],
+      "kind": "sounds",
+      "id": "se_skill_light"
+    },
+    {
+      "file": "presentation.json",
+      "path": [
         "bindings",
         "skills",
         "attack"
@@ -31474,7 +32693,7 @@ export const referenceData={
         "power"
       ],
       "kind": "cues",
-      "id": "power"
+      "id": "skill_smash"
     },
     {
       "file": "presentation.json",
@@ -31484,7 +32703,7 @@ export const referenceData={
         "fire"
       ],
       "kind": "cues",
-      "id": "fire"
+      "id": "skill_fire"
     },
     {
       "file": "presentation.json",
@@ -31494,7 +32713,7 @@ export const referenceData={
         "heal"
       ],
       "kind": "cues",
-      "id": "heal"
+      "id": "skill_heal"
     },
     {
       "file": "presentation.json",
@@ -31514,7 +32733,7 @@ export const referenceData={
         "venom"
       ],
       "kind": "cues",
-      "id": "venom"
+      "id": "skill_venom"
     },
     {
       "file": "presentation.json",
@@ -31524,7 +32743,7 @@ export const referenceData={
         "cleanse"
       ],
       "kind": "cues",
-      "id": "cleanse"
+      "id": "skill_cleanse"
     },
     {
       "file": "presentation.json",
@@ -31534,7 +32753,7 @@ export const referenceData={
         "pierce"
       ],
       "kind": "cues",
-      "id": "pierce"
+      "id": "skill_thrust"
     },
     {
       "file": "presentation.json",
@@ -31544,7 +32763,7 @@ export const referenceData={
         "ice"
       ],
       "kind": "cues",
-      "id": "ice"
+      "id": "skill_ice"
     },
     {
       "file": "presentation.json",
@@ -31554,7 +32773,7 @@ export const referenceData={
         "lightning"
       ],
       "kind": "cues",
-      "id": "lightning"
+      "id": "skill_bolt"
     },
     {
       "file": "presentation.json",
@@ -31564,7 +32783,7 @@ export const referenceData={
         "group_heal"
       ],
       "kind": "cues",
-      "id": "heal"
+      "id": "skill_heal"
     },
     {
       "file": "presentation.json",
@@ -31574,7 +32793,7 @@ export const referenceData={
         "party_guard"
       ],
       "kind": "cues",
-      "id": "guard"
+      "id": "skill_ward"
     },
     {
       "file": "presentation.json",
@@ -31584,7 +32803,7 @@ export const referenceData={
         "inspire"
       ],
       "kind": "cues",
-      "id": "mana"
+      "id": "skill_chant"
     },
     {
       "file": "presentation.json",
@@ -31594,7 +32813,7 @@ export const referenceData={
         "water_tail"
       ],
       "kind": "cues",
-      "id": "power"
+      "id": "skill_tide"
     },
     {
       "file": "presentation.json",
@@ -31604,7 +32823,7 @@ export const referenceData={
         "gate_slam"
       ],
       "kind": "cues",
-      "id": "power"
+      "id": "skill_smash"
     },
     {
       "file": "presentation.json",
@@ -31614,7 +32833,7 @@ export const referenceData={
         "drill_thrust"
       ],
       "kind": "cues",
-      "id": "pierce"
+      "id": "skill_thrust"
     },
     {
       "file": "presentation.json",
@@ -31624,7 +32843,7 @@ export const referenceData={
         "shell_roll"
       ],
       "kind": "cues",
-      "id": "roll"
+      "id": "skill_roll"
     },
     {
       "file": "presentation.json",
@@ -31634,7 +32853,7 @@ export const referenceData={
         "wax_flame"
       ],
       "kind": "cues",
-      "id": "fire"
+      "id": "skill_fire"
     },
     {
       "file": "presentation.json",
@@ -31644,7 +32863,7 @@ export const referenceData={
         "saw_cut"
       ],
       "kind": "cues",
-      "id": "cut"
+      "id": "skill_cleave"
     },
     {
       "file": "presentation.json",
@@ -31654,7 +32873,7 @@ export const referenceData={
         "iris_ray"
       ],
       "kind": "cues",
-      "id": "lightning"
+      "id": "skill_light"
     },
     {
       "file": "presentation.json",
@@ -31664,7 +32883,7 @@ export const referenceData={
         "glass_shards"
       ],
       "kind": "cues",
-      "id": "cut"
+      "id": "skill_cleave"
     },
     {
       "file": "presentation.json",
@@ -31674,7 +32893,7 @@ export const referenceData={
         "type_needles"
       ],
       "kind": "cues",
-      "id": "pierce"
+      "id": "skill_thrust"
     },
     {
       "file": "presentation.json",
@@ -31684,7 +32903,7 @@ export const referenceData={
         "ink_sip"
       ],
       "kind": "cues",
-      "id": "drain"
+      "id": "skill_drain"
     },
     {
       "file": "presentation.json",
@@ -31694,7 +32913,7 @@ export const referenceData={
         "vault_bite"
       ],
       "kind": "cues",
-      "id": "power"
+      "id": "skill_smash"
     },
     {
       "file": "presentation.json",
@@ -31704,7 +32923,7 @@ export const referenceData={
         "stitch_mend"
       ],
       "kind": "cues",
-      "id": "heal"
+      "id": "skill_heal"
     },
     {
       "file": "presentation.json",
@@ -31714,7 +32933,7 @@ export const referenceData={
         "bone_rain"
       ],
       "kind": "cues",
-      "id": "power"
+      "id": "skill_smash"
     },
     {
       "file": "presentation.json",
@@ -31724,7 +32943,7 @@ export const referenceData={
         "anchor_strike"
       ],
       "kind": "cues",
-      "id": "power"
+      "id": "skill_smash"
     },
     {
       "file": "presentation.json",
@@ -31734,7 +32953,7 @@ export const referenceData={
         "discharge"
       ],
       "kind": "cues",
-      "id": "lightning"
+      "id": "skill_bolt"
     },
     {
       "file": "presentation.json",
@@ -31744,7 +32963,7 @@ export const referenceData={
         "rail_charge"
       ],
       "kind": "cues",
-      "id": "power"
+      "id": "skill_smash"
     },
     {
       "file": "presentation.json",
@@ -31754,7 +32973,7 @@ export const referenceData={
         "needle_lunge"
       ],
       "kind": "cues",
-      "id": "pierce"
+      "id": "skill_thrust"
     },
     {
       "file": "presentation.json",
@@ -31764,7 +32983,7 @@ export const referenceData={
         "moon_sweep"
       ],
       "kind": "cues",
-      "id": "cut"
+      "id": "skill_cleave"
     },
     {
       "file": "presentation.json",
@@ -31774,7 +32993,7 @@ export const referenceData={
         "blade_pass"
       ],
       "kind": "cues",
-      "id": "cut"
+      "id": "skill_cleave"
     },
     {
       "file": "presentation.json",
@@ -31784,7 +33003,7 @@ export const referenceData={
         "recover_stance"
       ],
       "kind": "cues",
-      "id": "guard"
+      "id": "skill_focus"
     },
     {
       "file": "presentation.json",
@@ -31794,7 +33013,7 @@ export const referenceData={
         "poison_bite"
       ],
       "kind": "cues",
-      "id": "venom"
+      "id": "skill_venom"
     },
     {
       "file": "presentation.json",
@@ -43743,6 +44962,72 @@ export const referenceData={
       },
       "se_chip_contact": {
         "name": "通常斬撃・ノイズの一撃"
+      },
+      "se_skill_smash": {
+        "name": "重打・二段の落とし"
+      },
+      "se_skill_cleave": {
+        "name": "薙斬・刃の返し"
+      },
+      "se_skill_thrust": {
+        "name": "穿突・鋼の芯"
+      },
+      "se_skill_volley": {
+        "name": "連射・三本矢"
+      },
+      "se_skill_fire": {
+        "name": "火術・火口"
+      },
+      "se_skill_inferno": {
+        "name": "爆炎・三連炸裂"
+      },
+      "se_skill_ice": {
+        "name": "氷術・晶片"
+      },
+      "se_skill_glacier": {
+        "name": "氷縛・氷柱崩し"
+      },
+      "se_skill_bolt": {
+        "name": "雷術・瞬雷"
+      },
+      "se_skill_storm": {
+        "name": "雷雲・遠雷"
+      },
+      "se_skill_light": {
+        "name": "光術・光槍"
+      },
+      "se_skill_shadow": {
+        "name": "呪術・沈む脈"
+      },
+      "se_skill_root": {
+        "name": "樹土・根割れ"
+      },
+      "se_skill_tide": {
+        "name": "水術・波打ち"
+      },
+      "se_skill_venom": {
+        "name": "毒技・刺し返し"
+      },
+      "se_skill_heal": {
+        "name": "回復・灯の三音"
+      },
+      "se_skill_grace": {
+        "name": "大回復・祈りの和音"
+      },
+      "se_skill_cleanse": {
+        "name": "浄化・澄み鐘"
+      },
+      "se_skill_ward": {
+        "name": "守護・盾鳴り"
+      },
+      "se_skill_chant": {
+        "name": "鼓舞・三拍の号令"
+      },
+      "se_skill_focus": {
+        "name": "構え・照準の合図"
+      },
+      "se_skill_drain": {
+        "name": "吸収・逆流"
       }
     },
     "presentation": {
@@ -46638,6 +47923,78 @@ export const referenceData={
       },
       "bow_attack": {
         "name": "bow_attack"
+      },
+      "skill_smash": {
+        "name": "skill_smash"
+      },
+      "skill_cleave": {
+        "name": "skill_cleave"
+      },
+      "skill_thrust": {
+        "name": "skill_thrust"
+      },
+      "skill_volley": {
+        "name": "skill_volley"
+      },
+      "skill_fire": {
+        "name": "skill_fire"
+      },
+      "skill_inferno": {
+        "name": "skill_inferno"
+      },
+      "skill_ice": {
+        "name": "skill_ice"
+      },
+      "skill_glacier": {
+        "name": "skill_glacier"
+      },
+      "skill_bolt": {
+        "name": "skill_bolt"
+      },
+      "skill_storm": {
+        "name": "skill_storm"
+      },
+      "skill_light": {
+        "name": "skill_light"
+      },
+      "skill_shadow": {
+        "name": "skill_shadow"
+      },
+      "skill_root": {
+        "name": "skill_root"
+      },
+      "skill_tide": {
+        "name": "skill_tide"
+      },
+      "skill_venom": {
+        "name": "skill_venom"
+      },
+      "skill_heal": {
+        "name": "skill_heal"
+      },
+      "skill_grace": {
+        "name": "skill_grace"
+      },
+      "skill_cleanse": {
+        "name": "skill_cleanse"
+      },
+      "skill_ward": {
+        "name": "skill_ward"
+      },
+      "skill_chant": {
+        "name": "skill_chant"
+      },
+      "skill_focus": {
+        "name": "skill_focus"
+      },
+      "skill_drain": {
+        "name": "skill_drain"
+      },
+      "skill_roll": {
+        "name": "skill_roll"
+      },
+      "skill_repel": {
+        "name": "skill_repel"
       }
     },
     "eventCues": {
@@ -71243,6 +72600,160 @@ export const referenceData={
         "se_chip_contact"
       ]
     },
+    "sounds/se_skill_smash": {
+      "file": "presentation.json",
+      "path": [
+        "sounds",
+        "se_skill_smash"
+      ]
+    },
+    "sounds/se_skill_cleave": {
+      "file": "presentation.json",
+      "path": [
+        "sounds",
+        "se_skill_cleave"
+      ]
+    },
+    "sounds/se_skill_thrust": {
+      "file": "presentation.json",
+      "path": [
+        "sounds",
+        "se_skill_thrust"
+      ]
+    },
+    "sounds/se_skill_volley": {
+      "file": "presentation.json",
+      "path": [
+        "sounds",
+        "se_skill_volley"
+      ]
+    },
+    "sounds/se_skill_fire": {
+      "file": "presentation.json",
+      "path": [
+        "sounds",
+        "se_skill_fire"
+      ]
+    },
+    "sounds/se_skill_inferno": {
+      "file": "presentation.json",
+      "path": [
+        "sounds",
+        "se_skill_inferno"
+      ]
+    },
+    "sounds/se_skill_ice": {
+      "file": "presentation.json",
+      "path": [
+        "sounds",
+        "se_skill_ice"
+      ]
+    },
+    "sounds/se_skill_glacier": {
+      "file": "presentation.json",
+      "path": [
+        "sounds",
+        "se_skill_glacier"
+      ]
+    },
+    "sounds/se_skill_bolt": {
+      "file": "presentation.json",
+      "path": [
+        "sounds",
+        "se_skill_bolt"
+      ]
+    },
+    "sounds/se_skill_storm": {
+      "file": "presentation.json",
+      "path": [
+        "sounds",
+        "se_skill_storm"
+      ]
+    },
+    "sounds/se_skill_light": {
+      "file": "presentation.json",
+      "path": [
+        "sounds",
+        "se_skill_light"
+      ]
+    },
+    "sounds/se_skill_shadow": {
+      "file": "presentation.json",
+      "path": [
+        "sounds",
+        "se_skill_shadow"
+      ]
+    },
+    "sounds/se_skill_root": {
+      "file": "presentation.json",
+      "path": [
+        "sounds",
+        "se_skill_root"
+      ]
+    },
+    "sounds/se_skill_tide": {
+      "file": "presentation.json",
+      "path": [
+        "sounds",
+        "se_skill_tide"
+      ]
+    },
+    "sounds/se_skill_venom": {
+      "file": "presentation.json",
+      "path": [
+        "sounds",
+        "se_skill_venom"
+      ]
+    },
+    "sounds/se_skill_heal": {
+      "file": "presentation.json",
+      "path": [
+        "sounds",
+        "se_skill_heal"
+      ]
+    },
+    "sounds/se_skill_grace": {
+      "file": "presentation.json",
+      "path": [
+        "sounds",
+        "se_skill_grace"
+      ]
+    },
+    "sounds/se_skill_cleanse": {
+      "file": "presentation.json",
+      "path": [
+        "sounds",
+        "se_skill_cleanse"
+      ]
+    },
+    "sounds/se_skill_ward": {
+      "file": "presentation.json",
+      "path": [
+        "sounds",
+        "se_skill_ward"
+      ]
+    },
+    "sounds/se_skill_chant": {
+      "file": "presentation.json",
+      "path": [
+        "sounds",
+        "se_skill_chant"
+      ]
+    },
+    "sounds/se_skill_focus": {
+      "file": "presentation.json",
+      "path": [
+        "sounds",
+        "se_skill_focus"
+      ]
+    },
+    "sounds/se_skill_drain": {
+      "file": "presentation.json",
+      "path": [
+        "sounds",
+        "se_skill_drain"
+      ]
+    },
     "effects/hit_shake": {
       "file": "presentation.json",
       "path": [
@@ -71759,6 +73270,174 @@ export const referenceData={
       "path": [
         "cues",
         "bow_attack"
+      ]
+    },
+    "cues/skill_smash": {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_smash"
+      ]
+    },
+    "cues/skill_cleave": {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_cleave"
+      ]
+    },
+    "cues/skill_thrust": {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_thrust"
+      ]
+    },
+    "cues/skill_volley": {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_volley"
+      ]
+    },
+    "cues/skill_fire": {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_fire"
+      ]
+    },
+    "cues/skill_inferno": {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_inferno"
+      ]
+    },
+    "cues/skill_ice": {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_ice"
+      ]
+    },
+    "cues/skill_glacier": {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_glacier"
+      ]
+    },
+    "cues/skill_bolt": {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_bolt"
+      ]
+    },
+    "cues/skill_storm": {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_storm"
+      ]
+    },
+    "cues/skill_light": {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_light"
+      ]
+    },
+    "cues/skill_shadow": {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_shadow"
+      ]
+    },
+    "cues/skill_root": {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_root"
+      ]
+    },
+    "cues/skill_tide": {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_tide"
+      ]
+    },
+    "cues/skill_venom": {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_venom"
+      ]
+    },
+    "cues/skill_heal": {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_heal"
+      ]
+    },
+    "cues/skill_grace": {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_grace"
+      ]
+    },
+    "cues/skill_cleanse": {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_cleanse"
+      ]
+    },
+    "cues/skill_ward": {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_ward"
+      ]
+    },
+    "cues/skill_chant": {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_chant"
+      ]
+    },
+    "cues/skill_focus": {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_focus"
+      ]
+    },
+    "cues/skill_drain": {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_drain"
+      ]
+    },
+    "cues/skill_roll": {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_roll"
+      ]
+    },
+    "cues/skill_repel": {
+      "file": "presentation.json",
+      "path": [
+        "cues",
+        "skill_repel"
       ]
     },
     "items/blasting_charge": {
@@ -76664,7 +78343,29 @@ export const referenceData={
       "se_thick_blade": "assets/audio/auditions/attack-v1/01_atsuba.wav",
       "se_chip_ally": "assets/audio/se/se_chip_ally.wav",
       "se_chip_enemy": "assets/audio/se/se_chip_enemy.wav",
-      "se_chip_contact": "assets/audio/se/se_chip_contact.wav"
+      "se_chip_contact": "assets/audio/se/se_chip_contact.wav",
+      "se_skill_smash": "assets/audio/se/se_skill_smash.wav",
+      "se_skill_cleave": "assets/audio/se/se_skill_cleave.wav",
+      "se_skill_thrust": "assets/audio/se/se_skill_thrust.wav",
+      "se_skill_volley": "assets/audio/se/se_skill_volley.wav",
+      "se_skill_fire": "assets/audio/se/se_skill_fire.wav",
+      "se_skill_inferno": "assets/audio/se/se_skill_inferno.wav",
+      "se_skill_ice": "assets/audio/se/se_skill_ice.wav",
+      "se_skill_glacier": "assets/audio/se/se_skill_glacier.wav",
+      "se_skill_bolt": "assets/audio/se/se_skill_bolt.wav",
+      "se_skill_storm": "assets/audio/se/se_skill_storm.wav",
+      "se_skill_light": "assets/audio/se/se_skill_light.wav",
+      "se_skill_shadow": "assets/audio/se/se_skill_shadow.wav",
+      "se_skill_root": "assets/audio/se/se_skill_root.wav",
+      "se_skill_tide": "assets/audio/se/se_skill_tide.wav",
+      "se_skill_venom": "assets/audio/se/se_skill_venom.wav",
+      "se_skill_heal": "assets/audio/se/se_skill_heal.wav",
+      "se_skill_grace": "assets/audio/se/se_skill_grace.wav",
+      "se_skill_cleanse": "assets/audio/se/se_skill_cleanse.wav",
+      "se_skill_ward": "assets/audio/se/se_skill_ward.wav",
+      "se_skill_chant": "assets/audio/se/se_skill_chant.wav",
+      "se_skill_focus": "assets/audio/se/se_skill_focus.wav",
+      "se_skill_drain": "assets/audio/se/se_skill_drain.wav"
     }
   }
 };

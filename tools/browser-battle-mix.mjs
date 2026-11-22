@@ -66,9 +66,9 @@ function waveFile(samples,rate){
   return wav;
 }
 
-export async function captureBattleMix(browser,base,output,name,{checkSelection=true}={}){
+export async function captureBattleMix(browser,base,output,name,{checkSelection=true,actor='ada',skill='attack',impactFile='se_chip_contact.wav'}={}){
   const engine=newGame(311);
-  engine.state.members=['ada'];
+  engine.state.members=[actor];
   engine.state.partyFormation=nextFormation(engine.state.members,engine.state.partyFormation);
   engine.dispatch({type:'travel',dungeon:'kagaribi'});
   engine.startBattle('roaming_1',{win:[],lose:[],escape:[]},{battleMode:'classic'});
@@ -80,7 +80,8 @@ export async function captureBattleMix(browser,base,output,name,{checkSelection=
     await page.locator('[data-focus="skill:attack"]').waitFor();
     await page.locator('[data-audio-toggle]').click();
     await page.waitForFunction(()=>battleCapture.played.some(e=>e.file==='battle-v2.ogg'));
-    await page.locator('[data-focus="skill:attack"]').click();
+    if(skill!=='attack')await page.locator('[data-focus="battle-menu:skills"]').click();
+    await page.locator(`[data-focus="skill:${skill}"]`).click();
     await page.evaluate(()=>battleCapture.begin());
     await page.waitForTimeout(350);
     await page.locator('[data-focus="target:enemy_0"]').click();
@@ -89,7 +90,7 @@ export async function captureBattleMix(browser,base,output,name,{checkSelection=
     const {pcm,rate,played}=await page.evaluate(()=>battleCapture.end());
     const events=played.filter(e=>e.file.endsWith('.wav'));
     if(checkSelection){
-      assert.deepEqual(events.map(e=>e.file),['se_chip_ally.wav','se_chip_contact.wav','se_chip_enemy.wav','se_chip_contact.wav']);
+      assert.deepEqual(events.map(e=>e.file),['se_chip_ally.wav',impactFile,'se_chip_enemy.wav','se_chip_contact.wav']);
       for(const [start,hit] of [[0,1],[2,3]])assert.ok(events[hit].time-events[start].time>.12 && events[hit].time-events[start].time<.4,JSON.stringify(events));
     }
     assert.ok(pcm.length>rate*2 && pcm.some(v=>Math.abs(v)>600),'recorded mix is empty or silent');

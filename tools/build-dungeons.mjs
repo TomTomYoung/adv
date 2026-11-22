@@ -65,7 +65,7 @@ export async function buildDungeons(){
   game.files.scripts=[...new Set([...game.files.scripts,'data/scripts/kagaribi.json','data/scripts/dungeon-systems.json','data/scripts/voxel-space.json'])];
   await buildConnectedMaps(root,definitions,game);
   await write('data/game.json',game);
-  const presentation=await read('data/presentation.json');presentation.bindings.skills.repel_kuragari='light';await write('data/presentation.json',presentation);
+  const presentation=await read('data/presentation.json');presentation.bindings.skills.repel_kuragari??='light';await write('data/presentation.json',presentation);
   await buildBattleRewards(root);
   await buildWorld(root);
   await buildCellLayers(root);

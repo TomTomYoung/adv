@@ -217,6 +217,15 @@ try{
     else assert.ok(heard.some(id=>id.endsWith(version==='current'?'se_chip_contact.wav':version==='v3'?'01_atsuba.wav':'se_slash.ogg')));
     await page.click('#stop');
   }
+  await page.locator('a[href*="search=se_skill_"]').click();
+  await page.waitForFunction(()=>document.querySelector('#count').textContent==='22件');
+  for(const row of await page.locator('.row').all()){
+    await row.click();await page.click('#preview');
+    await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('終了'));
+  }
+  await page.fill('#search','祓いの光');
+  assert.equal(await page.locator('#identifier').textContent(),'se_skill_light');
+  checks.push('all 22 assigned skill WAVs play to completion and can be found by skill name');
   const sampleUrl=`http://127.0.0.1:${server.address().port}/sound-library.html?kind=sample&result=miss#catalog`;
   await page.goto(sampleUrl);await page.waitForFunction(()=>!document.querySelector('#attack').disabled);
   assert.equal(await page.locator('.row').count(),10);assert.equal(await page.inputValue('#result'),'miss');
@@ -295,6 +304,10 @@ try{
   const audioOutput=path.join(output,'battle-mix');
   await captureBattleMix(browser,`http://127.0.0.1:${server.address().port}/`,audioOutput,'game');
   checks.push('real index.html: both attack calls, both contact WAVs and battle BGM captured from the output in one turn');
+  for(const [actor,skill,impactFile] of [['ada','power','se_skill_smash.wav'],['mica','ice','se_skill_ice.wav']]){
+    await captureBattleMix(browser,`http://127.0.0.1:${server.address().port}/`,audioOutput,skill,{actor,skill,impactFile});
+  }
+  checks.push('real index.html skill menu: heavy strike and ice spell captured with battle BGM, attack call, skill impact and counterattack');
   if(process.env.ADV_COMPARE_PUBLISHED_AUDIO==='true'){
     try{
       await captureBattleMix(browser,'https://tomtomyoung.github.io/adv/',audioOutput,'published',{checkSelection:false});

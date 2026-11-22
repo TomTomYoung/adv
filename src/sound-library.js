@@ -179,6 +179,7 @@ try{
   const query=new URLSearchParams(location.search),kind=query.get('kind');
   if(query.get('result')==='miss')$('result').value='miss';
   if(Object.hasOwn(types,kind))$('kind').value=kind;
+  if(query.has('search'))$('search').value=query.get('search');
   render();
   audio.preload([...selected,'se_ally_call','se_enemy_warning','se_thick_blade','se_slash'].map(id=>assets.audio[sounds[id].asset]));
   $('attack').disabled=false;
