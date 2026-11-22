@@ -1,3 +1,4 @@
+import {buildRiverside} from '../authoring/editions/e2/hikarigaeri-districts.mjs';
 import {extendCanalQuarter} from './build-canal-world-routes.mjs';
 import {extendTwoGravesGeography} from '../authoring/editions/e2/story-q017.mjs';
 import {extendWhiteDebtGeography} from '../authoring/editions/e2/story-q018.mjs';
@@ -68,6 +69,7 @@ export async function buildOddlandGeography({check=false}={}){
   extendCanalQuarter(bundle);
   extendWhiteDebtGeography(bundle);
   extendCrownGeography(bundle);
+  buildRiverside(bundle);
   applyOutdoorAppearance(bundle);
   applyIndoorAppearance(bundle);
   const output=JSON.stringify(bundle,null,2)+'\n',file=path.join(root,'data/scenario-editions/e2/geography.json');

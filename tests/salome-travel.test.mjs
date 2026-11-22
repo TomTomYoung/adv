@@ -39,7 +39,7 @@ test('a new party walks both highland sections for its first visit, keeps expedi
  const g=fresh();g.state.gold=0;g.state.light=0;g.state.expedition.lamp.fuel=0;g.state.expedition.reserve=0;
  assert.equal(g.accept('q241'),false);assert.equal(g.dispatch({type:'location.move',id:'e2_academy'}),false);assert.equal(g.dispatch({type:'world.ride',route:'salome_coach'}),false);
  assert.equal(g.dispatch({type:'world.cross',route:'salome_road_gate'}),false);
- cross(g,'salome_road_home');const number=g.state.dungeons.active.run;checkpoint(g);
+ go(g,place('e2_sakashita'));cross(g,'salome_road_home');const number=g.state.dungeons.active.run;checkpoint(g);
  walk(g,13,5);cross(g,'salome_road_slope');assert.equal(g.state.dungeons.active.run,number);assert.equal(g.state.worldTravel.visited.salome,undefined);checkpoint(g);
  walk(g,13,5);cross(g,'salome_road_gate');assert.equal(g.state.worldTravel.visited.salome,true);assert.deepEqual(g.state.worldTravel.registrations,{});assert.equal(g.state.light,0);
  assert.equal(worldTravelView(g).country,'聖王国トルネア領');const steps=g.state.steps;assert.ok(steps>20);
@@ -50,6 +50,7 @@ test('a new party walks both highland sections for its first visit, keeps expedi
 
 for(const from of ['hikarigaeri','salome'])for(const kind of ['mark','defeat'])test(`${from}/${kind}: rescue returns to the actual departure settlement`,()=>{
  const g=fresh();if(from==='salome')toCity(g);
+ if(from!=='salome')go(g,place('e2_sakashita'));
  cross(g,from==='salome'?'salome_road_gate':'salome_road_home');checkpoint(g);
  if(kind==='mark')assert.ok(g.dispatch({type:'retreat'}));else g.defeat();drain(g);
  assert.equal(g.state.townLocation,from==='salome'?'e2_academy':'hikarigaeri_square');assert.equal(g.state.worldTravel.returnAnchor,from);checkpoint(g);
@@ -73,7 +74,7 @@ test('coach requires both visits, the actual stop, free interaction and one fare
  g.state.gold=10;go(g,place('e2_archive'));assert.equal(g.dispatch({type:'world.ride',route:'salome_coach'}),false);toCity(g);
  g.run('e2_oddland_route_sign');assert.equal(g.dispatch({type:'world.ride',route:'salome_coach'}),false);drain(g);
  const anchor=g.state.worldTravel.returnAnchor,steps=g.state.steps;
- for(const destination of ['hikarigaeri_square','e2_academy']){assert.ok(g.dispatch({type:'world.ride',route:'salome_coach'}));assert.equal(g.state.townLocation,destination);checkpoint(g);}
+ for(const destination of ['e2_road','e2_academy']){assert.ok(g.dispatch({type:'world.ride',route:'salome_coach'}));assert.equal(g.state.townLocation,destination);checkpoint(g);}
  assert.equal(g.state.gold,0);assert.equal(g.state.steps,steps);assert.equal(g.state.worldTravel.returnAnchor,anchor);
  cross(g,'salome_road_gate');assert.equal(g.dispatch({type:'world.ride',route:'salome_coach'}),false);
 });

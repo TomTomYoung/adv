@@ -44,7 +44,12 @@ test('e2 adds exactly eight ten-quest arcs, locations and presentation order wit
  for(const [actor,episodes] of Object.entries(arcs)){assert.equal(episodes.length,10);assert.deepEqual(episodes.map(q=>q.number),Array.from({length:10},(_,i)=>episodes[0].number+i));}
  assert.equal(added.reduce((n,q)=>n+Object.keys(q.outcomes).length,0),162);
  for(const id of Object.keys(first.quests))if(!Object.hasOwn(data.scenarioEditions.editions.e2.questOverrides,id))assert.deepEqual(data.quests[id],first.quests[id]);
- for(const id of Object.keys(first.locations).filter(id=>id!=='hikarigaeri_square'))assert.deepEqual(data.locations[id],first.locations[id]);
+ const districtChanges={
+  hikarigaeri_medical:{parent:'e2_sakashita'},hikarigaeri_skill_shop:{parent:'e2_sakashita'},
+  hikarigaeri_insurance:{parent:'e2_sakashita'},hikarigaeri_pass_registry:{parent:'e2_sakashita'},
+  hikarigaeri_waterwatch:{parent:'e2_wharf',localName:'水道待避場'},hikarigaeri_medical_specimens:{localName:'標本室'}
+ };
+ for(const [id,place] of Object.entries(first.locations))if(id!=='hikarigaeri_square')assert.deepEqual(data.locations[id],{...place,...districtChanges[id]});
  assert.deepEqual(data.actors,first.actors);for(const [id,map] of Object.entries(first.maps))assert.deepEqual(data.maps[id].tiles,map.tiles);
  const withoutWaterwayOverrides=map=>({...map,objects:map.objects.filter(o=>!['q005','q006','q007','q008','q009','q010','q011','q012','q013','q014','q015','q016','q017','q018','q019','q020','q021','q022','q023','q024','q025','q026','q027','q028','q029','q030','q051','q052','q053','q054','q055','q056','q057','q058','q059','q060','q091','q092','q093','q094','q095','q096','q097','q098','q099','q100','q101','q102','q103','q104','q105'].includes(o.quest))});
  for(const id of Object.keys(first.maps))if(!['region_1_landing','region_4_f1','region_4_f2','region_5_f1','region_5_f2','region_7_f1','region_7_f2','region_8_f1','region_8_f2','region_9_f1','region_9_f2'].includes(id))assert.deepEqual(withoutWaterwayOverrides(data.maps[id]),withoutWaterwayOverrides(first.maps[id]));

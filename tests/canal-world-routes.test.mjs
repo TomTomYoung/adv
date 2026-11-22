@@ -20,7 +20,7 @@ for(const [q,paths] of Object.entries(routes)){
       assert.deepEqual({...current,visibleWhen:original.visibleWhen},original);
       assert.ok(objectVisible(old.state,data.maps[map],current));assert.equal(objectVisible(fresh.state,data.maps[map],current),false);
     }
-    for(const p of Object.values(story.worldPlaces))assert.equal(data.locations[p.location].parent,'e2_canal_quarter');
+    for(const p of Object.values(story.worldPlaces))assert.equal(data.locations[data.locations[p.location].parent].parent,'e2_canal_quarter');
   });
   for(const r of paths)test(q+' '+r.old.join('/')+' retains the manuscript ending and payment',()=>{
     const g=ready(q),old=ready(q,{old:true});

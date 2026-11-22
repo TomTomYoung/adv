@@ -51,8 +51,15 @@ try{
   }
   for(const layout of ['scene','classic'])for(const width of [1440,390]){
     await page.setViewportSize({width,height:width===390?844:1000});await page.evaluate(layout=>h.start(layout),layout);
-    assert.ok(await page.getByRole('button',{name:'学術都市サロメへの乗合便（5G）',exact:true}).isDisabled());
-    await click('灯帰りから高台街道へ');await page.evaluate(()=>h.walk(13,5));await cross('salome_road_slope');
+    const menu=page.locator('.location-choices');
+    assert.deepEqual(await menu.getByRole('button').allTextContents(),['帰り火亭','旅道具店','灯番組合','坂下町','荷揚げ河岸','迷宮へ']);
+    await click('荷揚げ河岸');await click('運河通り');await click('鍵屋');await click('帳場');
+    await page.evaluate(()=>{const save=h.g.save();h.g.load(save);h.render();});
+    assert.equal(await page.evaluate(()=>h.g.state.townLocation),'e2_q101_counter');
+    for(const parent of ['鍵屋','運河通り','荷揚げ河岸','篝火広場'])await click(parent+'へ戻る');
+    await click('坂下町');await click('乗合馬車の停留所');
+    assert.ok(await page.getByRole('button',{name:'サロメ行き（5G）',exact:true}).isDisabled());await click('坂下町へ戻る');
+    await click('高台街道へ');await page.evaluate(()=>h.walk(13,5));await cross('salome_road_slope');
     assert.equal(await page.evaluate(()=>h.g.state.worldTravel.visited.salome),undefined);await page.evaluate(()=>h.resume());
     await page.evaluate(()=>h.walk(13,5));await cross('salome_road_gate');assert.equal(await page.evaluate(()=>h.g.state.townLocation),'e2_academy');
     await settlementCheckpoint(page,{location:'e2_academy',asset:'salome_gate',layout,width,output});
@@ -113,14 +120,14 @@ try{
     await click('時間をかけ、静かな水路で届ける');await page.evaluate(()=>{h.settle();h.resume();});await stairs();await page.evaluate(()=>h.walk(1,1));await cross('library_surface');
     await click('サロメから静かな水路沿いへ');await page.evaluate(()=>{h.settle();h.walk(9,3);h.settle();h.resume();});assert.equal(await page.evaluate(()=>h.g.state.stories.q147.values.deliveryMode),'water');
     await click('荷を静かに保ち、受取先へ運ぶ');await page.evaluate(()=>{h.settle();h.walk(15,5);});await cross('salome_canal_lower');await page.evaluate(()=>h.walk(1,1));await cross('salome_road_home');
-    await click('灯帰りの引退した舞踊家の家');await page.evaluate(()=>h.settle());assert.equal(await page.evaluate(()=>h.g.state.stories.q147.values.flowerAt),'party');
+    await click('舞踊家の家');await page.evaluate(()=>h.settle());assert.equal(await page.evaluate(()=>h.g.state.stories.q147.values.flowerAt),'party');
     await page.screenshot({path:path.join(output,`${layout}-${width}-library-flower.png`),fullPage:true});await click('相手と結果を確かめ、依頼を終える');await page.evaluate(()=>{h.settle();h.resume();});
-    assert.equal(await page.evaluate(()=>h.g.state.quests.q147.outcome),'quiet');assert.equal(await page.evaluate(()=>h.g.state.stories.q147.values.flowerAt),'receiver');await click('灯帰り・篝火広場へ戻る');
-    await click('学術都市サロメへの乗合便（5G）');
-    const gold=await page.evaluate(()=>h.g.state.gold);await click('灯帰りへの乗合便（5G）');assert.equal(await page.evaluate(()=>h.g.state.townLocation),'hikarigaeri_square');assert.equal(await page.evaluate(()=>h.g.state.gold),gold-5);
-    await click('学術都市サロメへの乗合便（5G）');assert.equal(await page.evaluate(()=>h.g.state.townLocation),'e2_academy');
+    assert.equal(await page.evaluate(()=>h.g.state.quests.q147.outcome),'quiet');assert.equal(await page.evaluate(()=>h.g.state.stories.q147.values.flowerAt),'receiver');await click('坂下町へ戻る');await click('乗合馬車の停留所');
+    await click('サロメ行き（5G）');
+    const gold=await page.evaluate(()=>h.g.state.gold);await click('灯帰りへの乗合便（5G）');assert.equal(await page.evaluate(()=>h.g.state.townLocation),'e2_road');assert.equal(await page.evaluate(()=>h.g.state.gold),gold-5);
+    await click('サロメ行き（5G）');assert.equal(await page.evaluate(()=>h.g.state.townLocation),'e2_academy');
     await click('サロメの学門と高台街道');await page.evaluate(()=>h.walk(1,1));await cross('salome_road_slope');await page.evaluate(()=>{h.walk(1,1);h.resume();});await cross('salome_road_home');
-    assert.equal(await page.evaluate(()=>h.g.state.townLocation),'hikarigaeri_square');
+    assert.equal(await page.evaluate(()=>h.g.state.townLocation),'e2_sakashita');
     const measure=await page.evaluate(()=>({viewport:innerWidth,document:document.documentElement.scrollWidth,steps:h.g.state.steps,visited:h.g.state.worldTravel.visited,quest:h.g.state.quests.q241.outcome}));
     assert.ok(measure.document<=measure.viewport+1,`${layout} ${width}: horizontal overflow`);
     await page.screenshot({path:path.join(output,`${layout}-${width}-return.png`),fullPage:true});checks.push({layout,width,...measure});

@@ -18,7 +18,7 @@ export function go(g,p){
  const current=g.state.mode==='town'?{kind:'town',location:g.state.townLocation}:{kind:'dungeon',...g.state.location};
  if(country(current)!==country(p)){
   if(country(p)==='oddland'){
-   roadGo(g,{kind:'town',location:'hikarigaeri_square'});assert.ok(g.dispatch({type:'world.cross',route:'waterway_surface'}));drain(g);navigateMaps(g,'region_1_landing');walk(g,15,3);roadGo(g,{kind:'town',location:'oddland_border'});
+   roadGo(g,{kind:'town',location:'e2_wharf'});assert.ok(g.dispatch({type:'world.cross',route:'waterway_surface'}));drain(g);navigateMaps(g,'region_1_landing');walk(g,15,3);roadGo(g,{kind:'town',location:'oddland_border'});
   }else{
    roadGo(g,{kind:'town',location:'oddland_border'});roadGo(g,{kind:'dungeon',dungeon:'region_1',map:'region_1_landing',x:15,y:3});navigateMaps(g,'region_1_f1');walk(g,1,1);assert.ok(g.dispatch({type:'world.cross',route:'waterway_surface'}));drain(g);
   }

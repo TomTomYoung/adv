@@ -64,7 +64,7 @@ export function crossWorldRoute(engine,id){
   const {data,state}=engine,registeredNow=p.route.registration&&!state.worldTravel.registrations[p.route.registration];
   if(p.route.registration)state.worldTravel.registrations[p.route.registration]=true;
   if(p.to.kind==='town'){
-    const settlement=Object.entries(data.worldTravel.settlements).find(([,s])=>s.root===p.to.location)?.[0];
+    const settlement=Object.entries(data.worldTravel.settlements).find(([,s])=>s.root===locationRoot(data,p.to.location)?.id)?.[0];
     state.worldTravel.visited[settlement]=true;
     engine.arriveSettlement(p.to.location);
   }else{
@@ -85,9 +85,10 @@ export function publicSupply(engine){
   }else {state.light=data.system.lightCapacity;if(state.expedition)state.expedition.lamp={fuel:state.light,effect:null};}
   engine.notify('公開給油所で携行灯に油を補充した。手当と宿泊は別の窓口で受けられる。');return true;
 }
+const shuttlePlatform=(config,route,stop)=>route.platforms?.[stop]??config.settlements[stop].root;
 export function shuttlePlan(engine,id){
   const {data,state}=engine,route=data.worldTravel?.shuttles?.find(r=>r.id===id),from=townSettlement(data,state);
-  if(!route||!route.stops.includes(from)||state.townLocation!==data.worldTravel.settlements[from].root)return {ok:false,reason:'乗合便は町の停留所から利用してください。'};
+  if(!route||!route.stops.includes(from)||state.townLocation!==shuttlePlatform(data.worldTravel,route,from))return {ok:false,reason:'乗合便は町の停留所から利用してください。'};
   if(state.waiting||state.battle||state.battleResult||state.vm.length)return {ok:false,reason:'会話・戦闘を終えてから乗車してください。'};
   const to=route.stops.find(s=>s!==from);
   if(!route.stops.every(s=>state.worldTravel.visited[s]))return {ok:false,reason:'初めてのサロメへは高台街道を歩いてください。'};
@@ -96,18 +97,18 @@ export function shuttlePlan(engine,id){
 }
 export function rideShuttle(engine,id){
   const p=shuttlePlan(engine,id);if(!p.ok){engine.notify(p.reason);return false;}
-  engine.state.gold-=p.route.cost;engine.arriveSettlement(engine.data.worldTravel.settlements[p.to].root);
+  engine.state.gold-=p.route.cost;engine.arriveSettlement(shuttlePlatform(engine.data.worldTravel,p.route,p.to));
   engine.notify(`${engine.data.worldTravel.settlements[p.to].name}に着いた。乗車賃 ${p.route.cost}G。`);return true;
 }
 export function worldTravelView(engine){
   const {data,state}=engine;if(!data.worldTravel)return null;
   const config=data.worldTravel,settlement=config.settlements[townSettlement(data,state)],anchor=config.settlements[state.worldTravel.returnAnchor],legacy=config.settlements[legacyExpeditionSettlement(data,state)],routes=config.routes.map(r=>expeditionRoute(data,state,r));
-  const actions=routes.filter(r=>sideAt(state,r)).map(r=>({label:r.registration&&!state.worldTravel.registrations[r.registration]?'探索隊を記帳してオッドランド方面へ進む（無料）':r.name,intent:{type:'world.cross',route:r.id},enabled:worldCrossPlan(engine,r.id).ok,reason:worldCrossPlan(engine,r.id).reason??''}));
+  const actions=routes.filter(r=>sideAt(state,r)).map(r=>({label:r.registration&&!state.worldTravel.registrations[r.registration]?'探索隊を記帳してオッドランド方面へ進む（無料）':(state.mode==='town'?r.departureLabel:null)??r.name,intent:{type:'world.cross',route:r.id},enabled:worldCrossPlan(engine,r.id).ok,reason:worldCrossPlan(engine,r.id).reason??''}));
   if(settlement?.publicSupply===state.townLocation)actions.push({label:'携行油を補充する（無料）',intent:{type:'world.supply'},enabled:!state.waiting&&!state.battle&&!state.vm.length});
   for(const route of config.shuttles??[]){
-    if(!route.stops.some(id=>config.settlements[id].root===state.townLocation))continue;
+    if(!route.stops.some(id=>shuttlePlatform(config,route,id)===state.townLocation))continue;
     const plan=shuttlePlan(engine,route.id),destination=route.stops.find(id=>id!==townSettlement(data,state));
-    actions.push({label:`${config.settlements[destination].name}への乗合便（${route.cost}G）`,intent:{type:'world.ride',route:route.id},enabled:plan.ok,reason:plan.reason??''});
+    actions.push({label:route.platforms?.[townSettlement(data,state)]?`${config.settlements[destination].shortName??config.settlements[destination].name}行き（${route.cost}G）`:`${config.settlements[destination].name}への乗合便（${route.cost}G）`,intent:{type:'world.ride',route:route.id},enabled:plan.ok,reason:plan.reason??''});
   }
   const country=settlement?.country??legacy?.country??config.mapCountries[state.location?.map]??config.settlements[config.home].country;
   return {country:config.countries[country],settlement:settlement?.name??null,returnAnchor:anchor.name,actions,markers:routes.flatMap(r=>[r.a,r.b].filter(p=>p.kind==='dungeon'&&p.map===state.location?.map).map(p=>({id:`route:${r.id}`,name:r.name,x:p.x,y:p.y,kind:'map_connection',glyph:'⇄',inInteractionRange:atWorldPlace(state,p)})))};
@@ -140,7 +141,7 @@ export function worldTravelDefinitionErrors(data){
     if(r.exitObject&&!([r.a,r.b].some(p=>p?.kind==='dungeon'&&p.map===r.exitObject.map&&data.maps[p.map]?.objects.some(o=>o.id===r.exitObject.id&&o.x===p.x&&o.y===p.y))))bad('地上出口不正');
     for(const p of [r.a,r.b]){
       errors.push(...worldPlaceErrors(data,p));
-      if(p?.kind==='town'&&!roots.has(p.location)||p?.kind==='dungeon'&&!['north','east','south','west'].includes(p.facing))bad('接続先不正');
+      if(p?.kind==='town'&&!roots.has(locationRoot(data,p.location)?.id)||p?.kind==='dungeon'&&!['north','east','south','west'].includes(p.facing))bad('接続先不正');
     }
     if(r.a?.kind==='town'&&r.b?.kind==='town')bad('徒歩経路のない拠点間接続');
     if(r.a?.kind==='dungeon'&&r.b?.kind==='dungeon'&&r.a.dungeon!==r.b.dungeon)bad('探索番号を保持する接続は同一迷宮内に定義してください');
@@ -149,6 +150,7 @@ export function worldTravelDefinitionErrors(data){
     if(!Array.isArray(d.shuttles))bad('乗合便の一覧不正');
     else for(const r of d.shuttles){
       if(!isRecord(r)||!id(r.id)||ids.has(r.id)||!Number.isSafeInteger(r.cost)||r.cost<0||!Array.isArray(r.stops)||r.stops.length!==2||r.stops[0]===r.stops[1]||r.stops.some(s=>!own(d.settlements,s))){bad('乗合便の定義不正');continue;}
+      if(r.platforms&&(!isRecord(r.platforms)||Object.entries(r.platforms).some(([stop,id])=>!r.stops.includes(stop)||locationRoot(data,id)?.id!==d.settlements[stop]?.root)))bad('乗合便の停留所不正');
       ids.add(r.id);if(d.settlements[r.stops[0]].country!==d.settlements[r.stops[1]].country)bad('乗合便は国内の訪問済み拠点間だけです');
     }
   }

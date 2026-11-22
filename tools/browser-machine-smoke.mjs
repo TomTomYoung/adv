@@ -55,7 +55,7 @@ try{
   const leave=async(second=false)=>{if(second)await stairs();await page.evaluate(()=>h.walk(1,1));await cross('machine_surface');};
   for(const layout of ['scene','classic'])for(const width of [1440,390]){
     await page.setViewportSize({width,height:width===390?844:1000});await page.evaluate(layout=>h.start(layout),layout);
-    await click('灯帰りから高台街道へ');await page.evaluate(()=>h.walk(13,5));await cross('salome_road_slope');await page.evaluate(()=>h.walk(13,5));await cross('salome_road_gate');
+    await click('坂下町');await click('高台街道へ');await page.evaluate(()=>h.walk(13,5));await cross('salome_road_slope');await page.evaluate(()=>h.walk(13,5));await cross('salome_road_gate');
     await accept('q071');await enter('q071',9,11);await choose('q071','retired');await leave();await click('学術都市・遺物管理室');await click('機関廟の点検・承認窓口');await page.evaluate(()=>h.settle());await choose('q071','carry');await click('学術都市・遺物管理室へ戻る');await city();await click(await page.evaluate(()=>h.routeLabel('machine_surface')));await page.evaluate(()=>{h.settle();h.walk(9,11);h.settle();});
     await choose('q071','call');await page.evaluate(()=>{h.walk(5,11);h.settle();});await choose('q071','escort');assert.equal(await page.evaluate(()=>h.g.state.stories.q071.values.workerPersonAt),'transit');await page.evaluate(()=>{h.walk(9,11);h.settle();h.resume();});assert.equal(await page.evaluate(()=>h.g.state.stories.q071.values.returned),false);await revealChoices();await page.screenshot({path:path.join(output,`${layout}-${width}-machine-worker.png`),fullPage:true});await choose('q071','finish');assert.equal(await page.evaluate(()=>h.g.state.quests.q071.outcome),'informed');await leave();
     // A counted observation, a paid ward, real collection and the sealed loop.
