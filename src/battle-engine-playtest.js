@@ -20,7 +20,7 @@ const ui={
   menu:()=>status('試遊中です。編成の変更や再戦はバトルテスターの「実エンジンへロード」から行えます。'),
   help:()=>status('本編と同じ戦闘操作です。コマンドと対象を選んで決定。方向キーで選択、Enterで決定、Escで取消。'),
   keyHint:()=> '方向キー 選択 / Enter 決定 / Esc 取消',
-  modalOpen:()=>false,cancelFeedback:()=>sound.stopEffects(),effectsMode:()=> $('effects').value,soundEnabled:()=>soundEnabled,
+  modalOpen:()=>false,cancelFeedback:options=>sound.cancelFeedback(options),effectsMode:()=> $('effects').value,soundEnabled:()=>soundEnabled,
   feedbackFinished:()=>syncSound(),soundLabel:()=>sound.label(),sound:()=>{if(soundEnabled&&['blocked','error'].includes(sound.state))sound.retry();else{soundEnabled=!soundEnabled;syncSound();}},layoutChanged(){},
 };
 function render(){

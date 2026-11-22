@@ -90,7 +90,7 @@ export class SceneView extends GameView{
     this.pages=messagePages(n.dialog.text,value=>{n.text.textContent=value;return n.text.scrollHeight<=n.viewport.clientHeight;});
     this.page=pageAtOffset(this.pages,offset);this.refreshMessage();return true;
   }
-  render(model){
+  render(model,feedbackOptions){
     model=this.playback.resolve(model);if(this.playback.present(model))return;
     this.closeMap({restore:false});
     const snapshot=captureFocus(this.root),oldPanel=this.root.querySelector('.scene-window-body');
@@ -103,7 +103,7 @@ export class SceneView extends GameView{
     if(model.mode!=='dungeon'||model.busy||model.dialog||model.battle||this.tab!=='explore')this.windowsHidden=false;
     if(this.inventoryAction&&(this.inventoryAction.kind==='buy'?this.tab!=='shop':this.tab!=='bag'))this.inventoryAction=null;
     this.renderedTab=this.tab;
-    this.ui.cancelFeedback?.();this.effects.capture();this.root.replaceChildren();this.messageNodes=null;
+    this.ui.cancelFeedback?.(feedbackOptions);this.effects.capture();this.root.replaceChildren();this.messageNodes=null;
     const stage=make('main','scene-stage');stage.dataset.mode=model.mode;stage.dataset.state=model.battle?'battle':model.dialog?'dialog':'idle';stage.classList.toggle('scene-windows-hidden',Boolean(model.dungeon&&this.windowsHidden));stage.setAttribute('aria-label',model.title);this.root.append(stage);
     const world=make('div','scene-world');world.dataset.fx='screen';stage.append(world);
     const hud=make('div','scene-hud'),dock=make('div','scene-dock');stage.append(hud,dock);
