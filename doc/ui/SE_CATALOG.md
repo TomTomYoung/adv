@@ -8,6 +8,16 @@
 
 旧版は `se_ally_call` と `se_enemy_warning` の号令に `se_thick_blade` の命中音を組み合わせます。[A03 戦列の号令](../../assets/audio/auditions/windup-20/A03.wav) ／ [E07 魔将の宣告](../../assets/audio/auditions/windup-20/E07.wav) ／ [01 厚刃の一閃](../../assets/audio/auditions/attack-v1/01_atsuba.wav)
 
+## 通常攻撃の実戦録音
+
+旧版の号令とFC風の採用版で、同じセーブからアダの通常攻撃と敵の反撃を1回ずつ録音しました。戦闘BGMを含むステレオ原音です。比較動画では旧版、採用版の順に再生します。[4秒の比較動画](../../assets/audio/auditions/battle-turn-fc/comparison.mp4) ／ [旧版のWAV](../../assets/audio/auditions/battle-turn-fc/previous.wav) ／ [採用版のWAV](../../assets/audio/auditions/battle-turn-fc/adopted.wav)
+
+参考にしたのは初代『ドラゴンクエスト』北米NES版の攻撃前の合図です。ADV用の3音は[生成スクリプト](../../tools/assets/generate-chip-battle.py)から再生成できます。採用版の録音で開始音から命中音までを測ると、味方は約229ms、敵は約238msでした。[本編の変更（PR #332）](https://github.com/TomTomYoung/adv/pull/332) ／ [録音に使った戦闘・音量設定](../../tools/browser-battle-mix.mjs) ／ [音と演出の設定方法](SOUND_AND_EFFECT_FORMAT.md)
+
+試作した味方の開始音10種、敵の開始音10種、命中音10種は各試聴ページから確認できます。[開始音20種](../../assets/audio/auditions/windup-20/index.html) ／ [命中音10種](../../sound-library.html?kind=sample#catalog)
+
+## 収録SE一覧
+
 ID：se_step / SE：石床の足音 / 再生する場面：移動成功 / 合成音色：kick
 
 ID：se_bump / SE：壁への接触 / 再生する場面：移動できないとき / 合成音色：bass
