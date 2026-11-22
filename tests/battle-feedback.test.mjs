@@ -7,7 +7,7 @@ import {validatePresentation} from '../src/core/feedback-validation.js';
 import {EffectsRenderer} from '../src/view/effects.js';
 import {installDOM} from './view-dom.mjs';
 import {freshFeedback,playBattleCue} from '../src/core/feedback.js';
-import {decorateFeedback,profileDuration} from '../src/presentation-design.js';
+import {decorateFeedback} from '../src/presentation-design.js';
 import {defaultPresentation} from '../src/presentation-presets.js';
 import {feedbackDelay} from '../src/feedback-timing.js';
 
@@ -21,16 +21,17 @@ test('view and audio delays share the render origin and never schedule in the pa
 test('one impact carries sound, recoil and the resolved damage; enemy advance precedes its own hit',()=>{
   const g=battle(),before=g.state.battle.enemies[0].hp;
   g.dispatch({type:'battle',action:'skill',skill:'attack',target:'enemy_0'});
-  const [windup,hit,advance,enemyHit]=g.feedback.events;
+  const [windup,step,hit,enemyStart,advance,enemyHit]=g.feedback.events;
+  assert.equal(step.at,220);assert.equal(enemyStart.at,hit.at+90);
   assert.equal(windup.phase,"windup");assert.equal(windup.at,0);assert.equal(windup.targets[0].key,"actor:ada");
-  assert.equal(hit.at,130);assert.equal(hit.sound,'se_slash');assert.deepEqual(hit.effects,['strike_slash','recoil_slash']);
+  assert.equal(hit.at,350);assert.equal(hit.sound,'se_thick_blade');assert.deepEqual(hit.effects,['strike_slash','recoil_slash']);
   assert.equal(hit.targets[0].damage,before-g.state.battle.enemies[0].hp);assert.equal(hit.source.key,'actor:ada');
-  assert.deepEqual(advance.effects,['enemy_advance']);assert.equal(enemyHit.at-advance.at,130);
+  assert.deepEqual(advance.effects,['enemy_advance']);assert.equal(enemyHit.at-advance.at,130);assert.equal(enemyHit.at-enemyStart.at,395);
   assert.equal(advance.targets[0].key,enemyHit.source.key);assert.equal(enemyHit.targets[0].key,'actor:ada');assert.ok(enemyHit.targets[0].damage>0);
   const projected=projectGame(g).feedback.events;
-  const starts=decorateFeedback(projectGame(g).feedback,defaultPresentation).events.filter(e=>e.originalPhase==='windup');
-  assert.deepEqual(starts.slice(0,2).map(e=>[e.at,e.synth]),[[0,'ally_attack_start'],[advance.at,'enemy_attack_start']]);
-  assert.ok(projected[3].source.image.startsWith('assets/'));projected[1].targets[0].damage=9999;assert.notEqual(hit.targets[0].damage,9999);
+  const starts=decorateFeedback(projectGame(g).feedback,defaultPresentation,{sounds:data.sounds,soundAssets:data.assets.audio}).events.filter(e=>e.originalPhase==='windup');
+  assert.deepEqual(starts.slice(0,2).map(e=>[e.at,e.sound.url]),[[0,data.assets.audio.se_ally_call],[enemyStart.at,data.assets.audio.se_enemy_warning]]);
+  assert.ok(projected[5].source.image.startsWith('assets/'));projected[2].targets[0].damage=9999;assert.notEqual(hit.targets[0].damage,9999);
 });
 
 test('each attacking side sounds once before contact even on a group miss, with shared windup for support and old designs',()=>{
@@ -38,12 +39,12 @@ test('each attacking side sounds once before contact even on a group miss, with 
   const older=structuredClone(defaultPresentation);
   delete older.bindings.ally_attack_start;
   delete older.bindings.enemy_attack_start;
-  for(const [source,opponent,start] of [[ally,enemy,'ally_attack_start'],[enemy,ally,'enemy_attack_start']]){
+  for(const [source,opponent,start] of [[ally,enemy,'se_ally_call'],[enemy,ally,'se_enemy_warning']]){
     const feedback=freshFeedback(),opponents=[opponent,{key:opponent.key+'2'}].map(target=>({...target,missed:true}));
     playBattleCue({data,feedback},'attack',source,opponents,true);
-    const sounds=decorateFeedback(feedback,defaultPresentation).events.filter(e=>e.synth||e.sound);
-    assert.deepEqual(sounds.map(e=>[e.at,e.synth]),[[0,start]]);
-    assert.ok(profileDuration(defaultPresentation.profiles[start])<feedback.events.find(e=>e.phase==='impact').at);
+    const sounds=decorateFeedback(feedback,defaultPresentation,{sounds:data.sounds,soundAssets:data.assets.audio}).events.filter(e=>e.synth||e.sound);
+    assert.deepEqual(sounds.map(e=>[e.at,e.sound.url]),[[0,data.assets.audio[start]]]);
+    assert.equal(feedback.events.find(e=>e.phase==='impact').sound,null);
     assert.deepEqual(decorateFeedback(feedback,older).events.filter(e=>e.synth).map(e=>e.synth),['swing']);
     const support=freshFeedback();
     playBattleCue({data,feedback:support},'heal',source,[source],false);

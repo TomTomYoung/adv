@@ -17,16 +17,23 @@ export function emitFeedback(engine,{effects=[],sound=null,targets=['scene'],sou
 // Battle results are already resolved. This schedules presentation only; no waits or RNG.
 export function playBattleCue(engine,id,source,targets,attacking=false,action){
   const cue=engine.data.presentation?.cues[id];if(!cue)return;
-  const start=engine.feedback.clock,impact=start+(cue.battle?.impact??0);
+  const start=engine.feedback.clock,travel=cue.battle?.impact??0;
+  const ally=source.key.startsWith('actor:');
+  const lead=attacking && cue.battle?.anticipation ? engine.data.presentation.attackLead?.[ally?'ally':'enemy']??0 : 0;
+  const impact=start+Math.max(travel,lead),motion=impact-travel;
   if(cue.battle?.anticipation){
-    emitFeedback(engine,{effects:[source.key.startsWith('actor:')?(cue.battle.actorAnticipation??'actor_strike'):cue.battle.anticipation],targets:[source],source:targets[0],at:start,phase:'windup',action,attackStart:attacking});
+    const effects=[ally?(cue.battle.actorAnticipation??'actor_strike'):cue.battle.anticipation];
+    emitFeedback(engine,{effects:motion>start?[]:effects,targets:[source],source:targets[0],at:start,phase:'windup',action,attackStart:attacking});
+    if(motion>start)emitFeedback(engine,{effects,targets:[source],source:targets[0],at:motion,phase:'anticipation'});
   }
-  if(cue.battle?.projectile)emitFeedback(engine,{effects:[cue.battle.projectile],source,targets,at:start,phase:'flight'});
+  if(cue.battle?.projectile)emitFeedback(engine,{effects:[cue.battle.projectile],source,targets,at:motion,phase:'flight'});
   const missed=targets.length>0&&targets.every(t=>t.missed),guarded=targets.length>0&&targets.every(t=>t.guarded&&!(t.healing>0));
   emitFeedback(engine,{effects:missed?[]:cue.effects,sound:missed?null:guarded?'se_guard':cue.sound,source,targets,at:impact,phase:'impact',action});
   const defeated=targets.filter(t=>t.defeated);
   if(defeated.length)emitFeedback(engine,{effects:['fade_out'],sound:'se_bump',gain:.55,targets:defeated,at:impact+160,phase:'defeat'});
-  engine.feedback.clock=Math.min(5000,impact+Math.max(cue.gap??0,defeated.length?420:0));
+  // Borrow from the recovery for the longer call. Leave the hit a short beat of its own.
+  const gap=cue.gap??0,recovery=Math.max(Math.min(90,gap),gap-(motion-start));
+  engine.feedback.clock=Math.min(5000,impact+Math.max(recovery,defeated.length?420:0));
 }
 export function playCue(engine,id,targets){
   const cue=engine.data.presentation?.cues[id];if(!cue)return;

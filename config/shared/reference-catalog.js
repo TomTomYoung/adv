@@ -30959,7 +30959,7 @@ export const referenceData={
         "sound"
       ],
       "kind": "sounds",
-      "id": "se_slash"
+      "id": "se_thick_blade"
     },
     {
       "file": "presentation.json",
@@ -43725,6 +43725,15 @@ export const referenceData={
       },
       "se_encounter": {
         "name": "敵出現"
+      },
+      "se_ally_call": {
+        "name": "戦列の号令（味方・攻撃開始）"
+      },
+      "se_enemy_warning": {
+        "name": "魔将の宣告（敵・攻撃開始）"
+      },
+      "se_thick_blade": {
+        "name": "厚刃の一閃（通常斬撃・命中）"
       }
     },
     "presentation": {
@@ -43739,6 +43748,9 @@ export const referenceData={
       },
       "battleGrid": {
         "name": "battleGrid"
+      },
+      "attackLead": {
+        "name": "attackLead"
       }
     },
     "jobs": {
@@ -71180,6 +71192,27 @@ export const referenceData={
         "se_encounter"
       ]
     },
+    "sounds/se_ally_call": {
+      "file": "presentation.json",
+      "path": [
+        "sounds",
+        "se_ally_call"
+      ]
+    },
+    "sounds/se_enemy_warning": {
+      "file": "presentation.json",
+      "path": [
+        "sounds",
+        "se_enemy_warning"
+      ]
+    },
+    "sounds/se_thick_blade": {
+      "file": "presentation.json",
+      "path": [
+        "sounds",
+        "se_thick_blade"
+      ]
+    },
     "effects/hit_shake": {
       "file": "presentation.json",
       "path": [
@@ -76595,7 +76628,10 @@ export const referenceData={
       "se_defeat": "assets/audio/se/se_defeat.ogg",
       "se_escape": "assets/audio/se/se_escape.ogg",
       "se_mana": "assets/audio/se/se_mana.ogg",
-      "se_encounter": "assets/audio/se/se_encounter.ogg"
+      "se_encounter": "assets/audio/se/se_encounter.ogg",
+      "se_ally_call": "assets/audio/auditions/windup-20/A03.wav",
+      "se_enemy_warning": "assets/audio/auditions/windup-20/E07.wav",
+      "se_thick_blade": "assets/audio/auditions/attack-v1/01_atsuba.wav"
     }
   }
 };

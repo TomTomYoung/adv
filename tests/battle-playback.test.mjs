@@ -24,7 +24,7 @@ test('HP stays on the old battlefield until impact; Enter skips presentation onl
   const c=setup(t),before=c.view.model.battle.enemies[0].hp,next=c.act(),saved=c.g.save();
   const text=()=>c.root.querySelector('[data-battle-vitals="enemy:enemy_0"][data-vitals-kind="text"]').textContent;
   assert.ok(c.view.playback.active);assert.ok(text().startsWith(String(before)));
-  t.mock.timers.tick(129);assert.ok(text().startsWith(String(before)));
+  t.mock.timers.tick(next.feedback.events.find(e=>e.phase==='impact').at-1);assert.ok(text().startsWith(String(before)));
   t.mock.timers.tick(1);assert.ok(text().includes(String(next.battle.enemies[0].hp)));assert.equal(c.g.save(),saved);
   const event={key:'Enter',preventDefault(){this.defaultPrevented=true;}};
   handleGameKey(event,{view:c.view,model:next,dispatch(){throw Error('skip dispatched combat');}});
