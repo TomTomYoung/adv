@@ -1,3 +1,4 @@
+import {shiftingDungeonData} from './shifting-dungeon.js';
 import {applyEditionGeography} from './edition-geography.js';
 import {projectQuestObjects} from './quest-events.js';
 import {LEGACY_SCENARIO_EDITIONS,resolveScenarioEdition,scenarioSaveRevision} from './scenario-editions.js';
@@ -118,4 +119,9 @@ export async function loadContent(read = readContentJson, {edition='e1'}={}) {
   const errors=validateContent(data);
   if(errors.length) throw new Error(`シナリオ検証エラー\n${errors.join('\n')}`);
   return data;
+}
+
+// The shipped game includes procedural destinations in addition to authored maps.
+export async function loadPlayableContent(read, options) {
+  return shiftingDungeonData(await loadContent(read, options));
 }

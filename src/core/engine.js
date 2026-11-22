@@ -1,3 +1,4 @@
+import {SHIFTING_DUNGEON,shiftingDungeonData,savedShiftingSeed} from './shifting-dungeon.js';
 import {freshWorldTravel,rememberDeparture,returnLocation,crossWorldRoute,publicSupply,rideShuttle,questReceptionReason,departureSettlementReason} from './world-travel.js';
 import {craftWeapon} from './expedition-workshop.js';
 import {acceptedRouteSource,acceptedStoryRouteData} from './accepted-story-routes.js';
@@ -149,14 +150,29 @@ export class GameEngine {
     this.state.discovered[loc.map]=[...seen];
   }
   teleport(mapId,x,y,facing='north',z=0,continueEntry=false){
-    const map=this.data.maps[mapId];if(!this.walkable(map,x,y,z))throw new Error(`移動できない座標: ${mapId} ${x},${y}`);
+    const freshLayout=this.data.maps[mapId]?.dungeon===SHIFTING_DUNGEON && this.state.dungeons?.active?.id!==SHIFTING_DUNGEON;
+    let destination=this.data;
+    if(freshLayout){
+      // Alternating widths guarantee a different footprint even if the random bits repeat.
+      const parity=1-savedShiftingSeed(this.state)%2;
+      const seed=(globalThis.crypto.getRandomValues(new Uint32Array(1))[0] & 0x7ffffffe) + parity || 2;
+      destination=acceptedStoryRouteData(shiftingDungeonData(acceptedRouteSource(this.data),seed),this.state);
+      if(mapId===destination.dungeons[SHIFTING_DUNGEON].entries.main.map && x===1 && y===1)facing=destination.maps[mapId].entrance.facing;
+    }
+    const map=destination.maps[mapId];if(!this.walkable(map,x,y,z))throw new Error(`移動できない座標: ${mapId} ${x},${y}`);
     rememberDeparture(this.data,this.state);
     rememberOil(this.data,this.state);
     if(this.state.scouting?.recon?.map!==mapId)returnRecon(this);
     collapseAfterLeaving(this,this.state.location,{map:mapId,x,y});
     this.eventCue(this.state.mode==='town'?'enter':'stairs');
     if(this.state.dungeons?.active&&!this.data.dungeons[this.state.dungeons.active.id]?.maps.includes(mapId))leaveDungeon(this);
-    this.state.mode='dungeon';this.state.townLocation=null;this.state.location={map:mapId,x,y,facing,...(map.voxels?{z}: {})};enterDungeon(this,mapId);restoreOil(this.data,this.state);enterVoxelMap(this.data,this.state,map);this.reveal();syncWorldStories(this);
+    if(freshLayout){
+      this.data=destination;
+      for(const id of destination.dungeons[SHIFTING_DUNGEON].maps)delete this.state.discovered[id];
+    }
+    this.state.mode='dungeon';this.state.townLocation=null;this.state.location={map:mapId,x,y,facing,...(map.voxels?{z}: {})};enterDungeon(this,mapId);
+    if(freshLayout)this.state.dungeons.persistent[SHIFTING_DUNGEON].layoutSeed=destination.shiftingLayoutSeed;
+    restoreOil(this.data,this.state);enterVoxelMap(this.data,this.state,map);this.reveal();syncWorldStories(this);
     this.state.presentation.background=map.background;this.state.presentation.music=map.music;
     recordFieldEntry(this.state,continueEntry);
     signalFieldChange(this.data,this.state,'enter');
@@ -334,7 +350,8 @@ export class GameEngine {
       const reason=departureSettlementReason(this.data,this.state,owner);if(reason){this.notify(reason);return false;}
       if(this.data.game.world&&!townLocation(this.data,this.state)?.dungeons?.includes(owner))return false;
       if(!managesOil(this.state)&&!this.data.worldTravel)this.state.light=this.data.system.lightCapacity;
-      const start=this.data.maps[mapId].entrance;this.teleport(mapId,start.x,start.y,start.facing,start.z??0);return true;
+      const start=this.data.maps[mapId].entrance;this.teleport(mapId,start.x,start.y,start.facing,start.z??0);
+      return true;
     }
     if(type==='service'&&this.state.mode==='town'){
       const service=this.data.game.services.find(s=>s.id===intent.id);if(!service)return false;
@@ -419,12 +436,14 @@ export class GameEngine {
     this.give(itemId,-1);this.eventCue('item');this.run(item.script,{target:actorId});return true;
   }
   setPortableFire(command){setPortableFire(this.data,this.state,command,this);}
-  save(){return JSON.stringify({saveVersion:1,gameId:this.data.game.id,contentVersion:this.data.game.version,scenarioEdition:this.state.scenarioEdition,...(this.state.scenarioRevision?{scenarioRevision:this.state.scenarioRevision}:{}),state:clone(this.state)});}
+  save(){return JSON.stringify({saveVersion:1,...(Object.values(this.state.actors).some(a=>a.level>=30)?{levelCap:this.data.system.maxLevel}:{}),gameId:this.data.game.id,contentVersion:this.data.game.version,scenarioEdition:this.state.scenarioEdition,...(this.state.scenarioRevision?{scenarioRevision:this.state.scenarioRevision}:{}),state:clone(this.state)});}
   load(text){
     if(typeof text!=='string'||text.length>this.data.system.maxSaveBytes)throw new Error('セーブのサイズが不正です');
     const source=acceptedRouteSource(this.data),save=migrateSave(JSON.parse(text),source),errors=validateSave(save,source);
     if(errors.length)throw new Error(`セーブを読み込めません：${errors.join(' / ')}`);
-    this.data=acceptedStoryRouteData(source,save.state);
+    const seed=savedShiftingSeed(save.state);
+    const catalog=seed || source.shiftingLayoutSeed!==undefined ? shiftingDungeonData(source,seed) : source;
+    this.data=acceptedStoryRouteData(catalog,save.state);
     this.state=clone(save.state);this.restoredCastCueId=this.state.presentation.castCue?.id;this.state.carried??={};this.feedback=freshFeedback();restoreWorldConversations(this);
     // Same-version saves from the side-based scheduler do not contain a turn queue.
     // Rebuild remaining turns without replaying allies already recorded in acted.

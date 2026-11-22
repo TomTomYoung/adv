@@ -60,8 +60,8 @@ test('escaping, repelling, interruption and defeat never run reward or treasure 
     assert.equal(g.state.battleResult,null);assert.equal(g.state.actors.ada.xp,0);assert.equal(g.state.rng,rng);
   }
 });
-test('multi-level gains cap at Lv30; forged progress or result state is rejected without changing the game',()=>{
-  const g=newGame();g.award(0,34800);assert.equal(g.state.actors.ada.level,30);assert.equal(projectGame(g).party[0].nextXp,null);assert.equal(g.state.actors.berg.level,1);g.award(0,100);assert.equal(g.state.actors.ada.level,30);copy(g);
+test('multi-level gains cap at Lv100; forged progress or result state is rejected without changing the game',()=>{
+  const g=newGame();g.award(0,396000);assert.equal(g.state.actors.ada.level,100);assert.equal(projectGame(g).party[0].nextXp,null);assert.equal(g.state.actors.berg.level,1);g.award(0,100);assert.equal(g.state.actors.ada.level,100);copy(g);
   for(const mutate of [s=>s.actors.ada.level=29,s=>s.actors.berg.xp=80,s=>delete s.actors.sera.level,s=>s.level=30,s=>s.battleResult={phase:'item'},s=>s.waiting={type:'battle_result',text:'x',speaker:''}]){
     const saved=g.save(),bad=JSON.parse(saved);mutate(bad.state);assert.throws(()=>g.load(JSON.stringify(bad)));assert.equal(g.save(),saved);
   }
