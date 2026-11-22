@@ -2658,26 +2658,34 @@ export const defaultPresentation = {
       ]
     },
     "ally_attack_start": {
-      "name": "戦列の号令（味方・攻撃開始）",
+      "name": "味方の攻撃開始・高いパルス",
       "tracks": [
         {
           "kind": "sound",
           "atMs": 0,
-          "sound": "se_ally_call",
+          "sound": "se_chip_ally",
           "target": "target",
-          "priority": 60
+          "priority": 60,
+          "spatial": {
+            "pan": 0,
+            "distance": 0
+          }
         }
       ]
     },
     "enemy_attack_start": {
-      "name": "魔将の宣告（敵・攻撃開始）",
+      "name": "敵の攻撃開始・低いパルス",
       "tracks": [
         {
           "kind": "sound",
           "atMs": 0,
-          "sound": "se_enemy_warning",
+          "sound": "se_chip_enemy",
           "target": "target",
-          "priority": 60
+          "priority": 60,
+          "spatial": {
+            "pan": 0,
+            "distance": 0
+          }
         }
       ]
     }

@@ -75,7 +75,7 @@ test('particle curves include gravity, size and fade; curved trajectories land a
 
 test('recorded alternatives and cooldown use cosmetic state without changing definitions',()=>{
   const d=clone();d.timelines.samples={name:'samples',tracks:[{kind:'sound',sound:'a',alternates:['b'],atMs:0,target:'target',repeat:4,intervalMs:50,priority:70,cooldownMs:30}]};
-  const sounds={se_ally_call:{},se_enemy_warning:{},a:{asset:'a',gain:.5},b:{asset:'b',gain:.7}},soundAssets={a:'a.ogg',b:'b.ogg'},settings={sounds,soundAssets,seed:19};assert.deepEqual(validatePresentationDesign(d,{sounds}),[]);
+  const sounds={se_chip_ally:{},se_chip_enemy:{},a:{asset:'a',gain:.5},b:{asset:'b',gain:.7}},soundAssets={a:'a.ogg',b:'b.ogg'},settings={sounds,soundAssets,seed:19};assert.deepEqual(validatePresentationDesign(d,{sounds}),[]);
   const a=timelineEvents(d,'samples',settings),b=timelineEvents(d,'samples',settings);assert.deepEqual(a,b);assert.ok(a.every(e=>['a.ogg','b.ogg'].includes(e.sound.url)));assert.ok(a.every(e=>e.priority===70&&e.cooldownMs===30));
 });
 test('an individually muted voice creates no audible source and custom mixer is installed',()=>{

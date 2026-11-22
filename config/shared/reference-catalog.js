@@ -30959,7 +30959,7 @@ export const referenceData={
         "sound"
       ],
       "kind": "sounds",
-      "id": "se_thick_blade"
+      "id": "se_chip_contact"
     },
     {
       "file": "presentation.json",
@@ -43734,6 +43734,15 @@ export const referenceData={
       },
       "se_thick_blade": {
         "name": "厚刃の一閃（通常斬撃・命中）"
+      },
+      "se_chip_ally": {
+        "name": "味方の攻撃開始・高いパルス"
+      },
+      "se_chip_enemy": {
+        "name": "敵の攻撃開始・低いパルス"
+      },
+      "se_chip_contact": {
+        "name": "通常斬撃・ノイズの一撃"
       }
     },
     "presentation": {
@@ -71213,6 +71222,27 @@ export const referenceData={
         "se_thick_blade"
       ]
     },
+    "sounds/se_chip_ally": {
+      "file": "presentation.json",
+      "path": [
+        "sounds",
+        "se_chip_ally"
+      ]
+    },
+    "sounds/se_chip_enemy": {
+      "file": "presentation.json",
+      "path": [
+        "sounds",
+        "se_chip_enemy"
+      ]
+    },
+    "sounds/se_chip_contact": {
+      "file": "presentation.json",
+      "path": [
+        "sounds",
+        "se_chip_contact"
+      ]
+    },
     "effects/hit_shake": {
       "file": "presentation.json",
       "path": [
@@ -76631,7 +76661,10 @@ export const referenceData={
       "se_encounter": "assets/audio/se/se_encounter.ogg",
       "se_ally_call": "assets/audio/auditions/windup-20/A03.wav",
       "se_enemy_warning": "assets/audio/auditions/windup-20/E07.wav",
-      "se_thick_blade": "assets/audio/auditions/attack-v1/01_atsuba.wav"
+      "se_thick_blade": "assets/audio/auditions/attack-v1/01_atsuba.wav",
+      "se_chip_ally": "assets/audio/se/se_chip_ally.wav",
+      "se_chip_enemy": "assets/audio/se/se_chip_enemy.wav",
+      "se_chip_contact": "assets/audio/se/se_chip_contact.wav"
     }
   }
 };

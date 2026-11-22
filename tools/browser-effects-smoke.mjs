@@ -1,5 +1,6 @@
 // Real Chromium rendering/clock check; audio adapter is instrumented, not listened to.
 import assert from 'node:assert/strict';
+import {captureBattleMix} from './browser-battle-mix.mjs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import http from 'node:http';
@@ -55,7 +56,7 @@ try{
     assert.ok(await page.evaluate(()=>Number(getComputedStyle(document.querySelector('.fx-strike')).zIndex)>Number(getComputedStyle(document.querySelector('.fx-ghost')).zIndex)),'hit mark must paint above the moving enemy');
     const delta=await page.evaluate(()=>{const url=last.feedback.events.find(e=>e.phase==='impact').sound.url;const hit=voices.find(v=>v.url===url);return Math.abs(hit.at-marks[0].at);});assert.ok(delta<50,`impact/sound scheduling delta ${delta}ms`);
     const opening=await page.evaluate(()=>voices[0].url);
-    assert.ok(opening.endsWith('/A03.wav'));
+    assert.ok(opening.endsWith('/se_chip_ally.wav'));
     assert.equal(await page.evaluate(()=>g.save()),state);await page.screenshot({path:path.join(output,skill+'.png')});
     if(skill==='power'){
       const held=await page.evaluate(()=>{const a=document.getAnimations().find(a=>a.effect.getKeyframes().some(f=>f.transform?.includes('scale(1.12, 0.86)')));if(!a)return null;a.currentTime=50;const first=getComputedStyle(a.effect.target).transform;a.currentTime=85;return [first,getComputedStyle(a.effect.target).transform];});
@@ -190,7 +191,7 @@ try{
   checks.push('presentation editor: JSON validation/import/export, A/B snapshots, waveform, arc/trail/beam previews, stop/reduced motion, desktop/mobile layout; all synthesized profiles rendered with echo tail and stereo checks');
   await page.goto(`http://127.0.0.1:${server.address().port}/sound-library.html`);
   await page.waitForFunction(()=>!document.querySelector('#attack').disabled);
-  assert.equal(await page.locator('#source').getAttribute('href'),'assets/audio/auditions/windup-20/A03.wav');
+  assert.equal(await page.locator('#source').getAttribute('href'),'assets/audio/se/se_chip_ally.wav');
   await page.selectOption('#kind','synth');
   await page.locator('.row').filter({hasText:'味方の攻撃開始'}).first().click();
   await page.click('#source');await page.waitForFunction(()=>document.querySelector('#preset')?.value==='ally_attack_start');
@@ -203,17 +204,17 @@ try{
       adapter.prototype[method]=function(first,...rest){window.audition.push(typeof first==='string'?first:first.synth);return original.call(this,first,...rest);};
     }
   });
-  for(const version of ['current','v2','v1'])for(const side of ['ally','enemy'])for(const result of ['hit','miss']){
+  for(const version of ['current','v3','v2','v1'])for(const side of ['ally','enemy'])for(const result of ['hit','miss']){
     await page.selectOption('#windup-version',version);
     await page.evaluate(()=>{window.audition.length=0;});
     await page.selectOption('#side',side);await page.selectOption('#result',result);await page.click('#attack');
     assert.match(await page.locator('#status').textContent(),new RegExp(side==='ally'?'味方':'敵'));
     await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('終了'));
     const heard=await page.evaluate(()=>window.audition);
-    const start=version==='current'?(side==='ally'?'/A03.wav':'/E07.wav'):side+'_attack_start'+(version==='v1'?'_v1':'');
+    const start=version==='current'?'/se_chip_'+side+'.wav':version==='v3'?(side==='ally'?'/A03.wav':'/E07.wav'):side+'_attack_start'+(version==='v1'?'_v1':'');
     assert.ok(heard[0].endsWith(start),heard.join(', '));
     if(result==='miss')assert.equal(heard.length,1);
-    else assert.ok(heard.some(id=>id.endsWith(version==='current'?'01_atsuba.wav':'se_slash.ogg')));
+    else assert.ok(heard.some(id=>id.endsWith(version==='current'?'se_chip_contact.wav':version==='v3'?'01_atsuba.wav':'se_slash.ogg')));
     await page.click('#stop');
   }
   const sampleUrl=`http://127.0.0.1:${server.address().port}/sound-library.html?kind=sample&result=miss#catalog`;
@@ -243,7 +244,7 @@ try{
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
     await page.screenshot({fullPage:true,path:path.join(output,`sound-library-${width}.png`)});
   }
-  checks.push('sound library: twelve selected/v2/v1 attack previews, heavier windup spectral energy, ten archived WAVs, synth editor link, recorded/BGM playback controls, search, saved draft, export, reset, 390/1440 layout');
+  checks.push('sound library: sixteen chip/selected/v2/v1 attack previews, heavier windup spectral energy, ten archived WAVs, synth editor link, recorded/BGM playback controls, search, saved draft, export, reset, 390/1440 layout');
   const windupBass=await page.evaluate(async()=>{
     const {BattleSound}=await import('./src/application/battle-sound.js');
     const ratios={};
@@ -291,5 +292,13 @@ try{
   assert.equal(await page.locator('.clip[aria-pressed="true"]').count(),0);
   checks.push('windup auditions: all twenty WAVs play to completion, fast side switch, stop, mobile and desktop layouts');
   await fs.writeFile(path.join(output,'design-audio.json'),JSON.stringify(designAudio,null,2)+'\n');
+  const audioOutput=path.join(output,'battle-mix');
+  await captureBattleMix(browser,`http://127.0.0.1:${server.address().port}/`,audioOutput,'game');
+  checks.push('real index.html: both attack calls, both contact WAVs and battle BGM captured from the output in one turn');
+  if(process.env.ADV_COMPARE_PUBLISHED_AUDIO==='true'){
+    try{
+      await captureBattleMix(browser,'https://tomtomyoung.github.io/adv/',audioOutput,'published',{checkSelection:false});
+    }catch(error){console.warn('Published audio comparison unavailable:',error.message);}
+  }
   assert.deepEqual(errors,[]);await fs.writeFile(path.join(output,'results.json'),JSON.stringify({checks,sounds,errors},null,2)+'\n');console.log(JSON.stringify({passed:true,checks,errors},null,2));
 }finally{await browser?.close();server.close();}

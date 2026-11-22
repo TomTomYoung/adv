@@ -25,6 +25,8 @@ on:
       - 'data/effects.json'
       - 'data/presentation.json'
       - 'tools/browser-effects-smoke.mjs'
+      - 'tools/browser-battle-mix.mjs'
+      - 'assets/audio/se/**'
       - '.github/workflows/battle-feedback.yml'
   workflow_dispatch:
 permissions:
@@ -57,11 +59,18 @@ jobs:
         if: steps.ci.outputs.run == 'true'
         env:
           ADV_BROWSER_OUTPUT: /tmp/adv-effects-browser
+          ADV_COMPARE_PUBLISHED_AUDIO: ${{ github.repository == 'TomTomYoung/adv' }}
       - uses: actions/upload-artifact@v4
         if: always() && steps.ci.outputs.run == 'true'
         with:
           name: battle-feedback
           path: /tmp/adv-effects-browser
+          retention-days: 7
+      - uses: actions/upload-artifact@v4
+        if: success() && steps.ci.outputs.run == 'true'
+        with:
+          name: battle-mix
+          path: /tmp/adv-effects-browser/battle-mix
           retention-days: 7
       - name: Remember successful inputs
         if: success() && steps.ci.outputs.run == 'true' && github.event_name != 'workflow_dispatch'
