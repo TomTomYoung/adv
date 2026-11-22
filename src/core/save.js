@@ -1,4 +1,5 @@
 import {freshWorldTravel,worldTravelSaveErrors} from './world-travel.js';
+import {SHIFTING_DUNGEON,shiftingDungeonData,savedShiftingSeed} from './shifting-dungeon.js';
 import {acceptedStoryRouteData} from './accepted-story-routes.js';
 import {reinforcementRoster} from './battle-reinforcements.js';
 import {freshExpedition,expeditionSaveErrors,campTier} from './expedition.js';
@@ -206,6 +207,26 @@ function migrateSettlementGeography(original,data){
   return save;
 }
 export function migrateSave(original,data){
+  // The old cap allowed excess XP. Validate the previous state before applying
+  // the outstanding growth, preserving current HP, MP and in-flight battles.
+  if(original?.levelCap===undefined && data.system.maxLevel>30 && isRecord(original?.state?.actors) &&
+     Object.values(original.state.actors).some(a=>a?.level===30 && a.xp>=xpThreshold(data,30))){
+    const previous={...data,system:{...data.system,maxLevel:30}};
+    const old=migrateScenarioSave(original,previous);
+    if(validateSave(old,previous).length)return original;
+    const upgraded=clone(old);
+    for(const actor of Object.values(upgraded.state.actors)){
+      while(actor.level<data.system.maxLevel && actor.xp>=xpThreshold(data,actor.level)){
+        actor.level++;
+        if(data.jobs)actor.growthHistory[actor.job]=(actor.growthHistory[actor.job]??0)+1;
+      }
+    }
+    upgraded.levelCap=data.system.maxLevel;
+    return upgraded;
+  }
+  return migrateScenarioSave(original,data);
+}
+function migrateScenarioSave(original,data){
   let edition;
   try{edition=readSavedScenarioEdition(original);if(edition!==resolveScenarioEdition(data.scenarioEditions,data.scenarioEdition??'e1'))return original;}catch{return original;}
   if(scenarioRevisionError(original,data))return original;
@@ -254,6 +275,11 @@ export function validateSave(save,data){
   const errors=[],fail=s=>errors.push(s),integer=(v,min,max)=>Number.isInteger(v)&&v>=min&&v<=max;
   if(!isRecord(save)||save.saveVersion!==1||save.gameId!==data.game.id||save.contentVersion!==data.game.version)return ['作品またはセーブ形式のバージョンが一致しません'];
   const s=save.state;if(!isRecord(s))return ['状態がありません'];
+  if(s.dungeons?.persistent?.[SHIFTING_DUNGEON] || s.dungeons?.active?.id===SHIFTING_DUNGEON){
+    const seed=savedShiftingSeed(s);
+    if(!integer(seed,1,0x7fffffff))return ['生成迷宮の探索シードが不正です'];
+    data=shiftingDungeonData(data,seed);
+  }
   data=acceptedStoryRouteData(data,s);
   try{if(readSavedScenarioEdition(save)!==resolveScenarioEdition(data.scenarioEditions,data.scenarioEdition??'e1'))return ['記録と読込中のシナリオ版が一致しません'];}catch(error){return [error.message];}
   const revisionError=scenarioRevisionError(save,data);if(revisionError)return [revisionError];

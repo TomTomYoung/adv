@@ -43270,6 +43270,9 @@ export const referenceData={
       "maxLevel": {
         "name": "maxLevel"
       },
+      "shiftingDungeonFloors": {
+        "name": "shiftingDungeonFloors"
+      },
       "xpBase": {
         "name": "xpBase"
       },
