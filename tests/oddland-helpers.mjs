@@ -11,9 +11,10 @@ export const read=file=>fs.readFile(new URL('../'+file,import.meta.url),'utf8').
 export const data=await loadContent(read,{edition:'e2'});
 export const fresh=()=>{const g=new GameEngine(data,1907);drain(g);g.random=()=>.999999;return g;};
 export function checkpoint(g){const raw=g.save();assert.deepEqual(validateSave(JSON.parse(raw),data),[]);g.load(raw);assert.equal(g.save(),raw);}
-const key=p=>p.kind==='town'?'town:'+p.location:p.map;
+
 export function go(g,p){
  const data=g.data,routes=data.worldTravel.routes;
+ const key=p=>p.kind==='town'?'town:'+locationRoot(data,p.location).id:p.map;
  const root=()=>g.state.mode==='town'?locationRoot(data,g.state.townLocation).id:null;
  const here=()=>g.state.mode==='town'?'town:'+root():g.state.location.map;
  const target=p.kind==='town'?'town:'+locationRoot(data,p.location).id:p.map;

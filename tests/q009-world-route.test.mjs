@@ -44,11 +44,11 @@ for(const [i,r] of oldGraph.endings.entries())test(`q009 original ending-state $
 test('q009 underground points and ground warehouses are connected without changing terrain or water controls',()=>{
   const g=ready();assert.equal(nextQuestPlace(data,g.state,'q009').map,'region_1_f1');
   for(const id of Object.keys(ratRouteLocations)){assert.ok(data.locations[id]);assert.equal(previousData.locations[id],undefined);}
-  assert.equal(data.locations.e2_rat_granary.parent,'e2_rat_lane');assert.equal(data.locations.e2_rat_store.parent,'e2_rat_lane');assert.equal(data.locations.e2_rat_lane.parent,'hikarigaeri_square');
+  assert.equal(data.locations.e2_rat_granary.parent,'e2_rat_lane');assert.equal(data.locations.e2_rat_store.parent,'e2_rat_lane');assert.equal(data.locations.e2_rat_lane.parent,'e2_wharf');
   assert.deepEqual(data.dungeons,previousData.dungeons);
   for(const id of Object.keys(data.maps))for(const field of ['tiles','cells']){assert.ok(data.maps[id][field]);assert.deepEqual(data.maps[id][field],previousData.maps[id][field]);}
   const before=structuredClone(g.state.dungeons.persistent.region_1.systems.water);depart(g,'move');walk(g,1,1);checkpoint(g);assert.equal(g.state.journey.action,'entry_move');assert.ok(g.dispatch({type:'world.cross',route:'waterway_surface'}));drain(g);
-  assert.equal(g.state.townLocation,'hikarigaeri_square');assert.equal(g.state.stories.q009.scene,null);
+  assert.equal(g.state.townLocation,'e2_wharf');assert.equal(g.state.stories.q009.scene,null);
   town(g,'e2_rat_lane');assert.equal(g.dispatch({type:'story.resume',quest:'q009'}),false);town(g,'e2_rat_granary');drain(g);assert.equal(g.state.stories.q009.scene,'granary');assert.deepEqual(g.state.dungeons.persistent.region_1.systems.water.controls,before.controls);checkpoint(g);
 });
 test('q009 structure, arrival, cause and agreement commit at separate local actions',()=>{
@@ -80,7 +80,7 @@ for(const r of graph.active){for(const [key,a] of Object.entries(source.story.ac
 assert.equal(departures.size,10);
 for(const [key,row] of departures)for(const kind of ['retreat','defeat'])test(`q009 ${key} preserves the journey and holders across ${kind}`,()=>{
   const g=ready();g.load(row.save);depart(g,row.id);const before=structuredClone(g.state.stories.q009),journey=structuredClone(g.state.journey);
-  if(g.state.mode==='town'){town(g,'hikarigaeri_square');assert.ok(g.dispatch({type:'world.cross',route:'waterway_surface'}));drain(g);}
+  if(g.state.mode==='town'){town(g,'e2_wharf');assert.ok(g.dispatch({type:'world.cross',route:'waterway_surface'}));drain(g);}
   if(kind==='retreat')assert.ok(g.dispatch({type:'retreat'}));else g.defeat();drain(g);checkpoint(g);assert.deepEqual(g.state.stories.q009,before);assert.deepEqual(g.state.journey,journey);arrive(g);checkpoint(g);
 });
 for(const [scene,save] of work)test('q009 local work at '+scene+' remains committed after rescue',()=>{

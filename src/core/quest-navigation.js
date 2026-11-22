@@ -26,6 +26,16 @@ export function nextQuestPlace(data,state,id){
   return places.find(place=>atWorldPlace(state,place))??places[0]??null;
 }
 
+// Walk the existing parent/child streets from the home square to a tracked town scene.
+export function trackedTownPath(data,state,id,place=nextQuestPlace(data,state,id)){
+  const root=data.game.world?.townRoot;
+  if(!root||!data.locations[root]?.localName||state.mode!=='town'||state.townLocation!==root||
+    state.trackedQuest!==id||state.quests[id]?.stage!=='active'||place?.kind!=='town')return [];
+  const path=[];let location=data.locations[place.location];
+  while(location?.parent){path.unshift(location.id);location=data.locations[location.parent];}
+  return location?.id===root?path:[];
+}
+
 function townDepartureReason(data,state,id){
   if(!data.dungeons[id])return '行き先の迷宮が見つからない。';
   if(state.waiting||state.battle)return '会話・戦闘を終えてから出発する。';

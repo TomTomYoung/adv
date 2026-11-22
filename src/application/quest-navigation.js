@@ -1,5 +1,5 @@
-import {nextQuestPlace,questEntryPlan} from '../core/quest-navigation.js';
-import {atWorldPlace,locationRoot} from '../core/world.js';
+import {nextQuestPlace,questEntryPlan,trackedTownPath} from '../core/quest-navigation.js';
+import {atWorldPlace,locationRoot,localPlaceName} from '../core/world.js';
 
 export function projectQuestNavigation(data,state,q){
   const place=nextQuestPlace(data,state,q.id),plan=questEntryPlan(data,state,q.id);
@@ -21,5 +21,6 @@ export function projectQuestNavigation(data,state,q){
     destination.hint=destination.atPlace?(automatic?'このセルへの進入でイベントが始まる。':place.kind==='town'?'この施設で話を聞く。':'このセルで調べる。'):place.kind==='town'?'町の施設を移動して、この場所へ向かう。':state.location?.map===place.map?(automatic?'指定セルを踏むとイベントが始まる。':'地図を確認し、イベント地点まで歩いて調べる。'):state.mode==='town'?'迷宮の入口に入り、イベント地点まで探索する。':'入口や階段を使い、イベントのあるマップへ向かう。';
     if(entrance)destination.hint=destination.atPlace?'詰所内で話を続ける。':`${data.maps[entrance.map].name} (${entrance.x}, ${entrance.y})の戸口で調べ、詰所に入る。${data.locations[place.location].parent?'受付から留置室前へ進む。':''}`;
   }
-  return {destination,dungeonIds,dungeonNames:dungeonIds.map(id=>data.dungeons[id].name),entryDungeon:plan.place?.kind==='dungeon'?plan.place.dungeon:null,entryDungeonName:data.dungeons[plan.place?.dungeon]?.name,canEnter:plan.ok,entryReason:plan.reason};
+  const townShortcut=state.trackedQuest===q.id&&trackedTownPath(data,state,q.id,place).length?(data.locations[place.location].name.startsWith('灯帰り')?localPlaceName(data.locations[place.location]):data.locations[place.location].name):null;
+  return {destination,townShortcut,dungeonIds,dungeonNames:dungeonIds.map(id=>data.dungeons[id].name),entryDungeon:plan.place?.kind==='dungeon'?plan.place.dungeon:null,entryDungeonName:data.dungeons[plan.place?.dungeon]?.name,canEnter:plan.ok,entryReason:plan.reason};
 }

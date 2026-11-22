@@ -140,14 +140,15 @@ export class GameView {
     const t=m.town,scene=node('div','town-scene');scene.dataset.fx='scene';
     const background=node('img','town-background');background.src=t.background;background.alt=t.name;scene.append(background);
     for(const c of t.cast){const image=node('img','town-character');image.src=c.sprite;image.alt=c.name;image.style.left=`${c.x}%`;scene.append(image);}
-    const title=node('div','town-caption');title.append(node('span','eyebrow',t.breadcrumbs.map(l=>l.name).join(' / ')),node('h2','',t.name));scene.append(title);parent.append(scene);
+    const title=node('div','town-caption');title.append(node('span','eyebrow',t.headingPath??t.breadcrumbs.map(l=>l.name).join(' / ')),node('h2','',t.name));scene.append(title);parent.append(scene);
   }
   location(parent,m){
     if(!m.town)return;const t=m.town,section=node('section','panel-content location-content');section.append(node('p','location-description',t.description));
-    if(m.worldTravel)section.append(node('p','world-travel-status',`${m.worldTravel.country} ／ ${m.worldTravel.settlement??t.name} ／ 帰還先：${m.worldTravel.returnAnchor}`));
+    if(m.worldTravel&&!t.homeDistricts)section.append(node('p','world-travel-status',`${m.worldTravel.country} ／ ${m.worldTravel.settlement??t.name} ／ 帰還先：${m.worldTravel.returnAnchor}`));
     const choices=node('div','location-choices command-window');choices.setAttribute('aria-label','プレイヤーコマンド');
-    for(const action of m.worldTravel?.actions??[])choices.append(button(action.label,()=>this.act(action.intent),'location-choice',!action.enabled));
-    for(const l of t.links)choices.append(button(l.name,()=>this.act({type:'location.move',id:l.id}),'location-choice',t.busy));
+    const destinations=t.links.map(l=>({label:l.name,intent:{type:'location.move',id:l.id},enabled:!t.busy}));
+    const routes=m.worldTravel?.actions??[];
+    for(const action of (t.homeDistricts?[...destinations,...routes]:[...routes,...destinations]))choices.append(button(action.label,()=>this.act(action.intent),'location-choice',!action.enabled));
     for(const q of t.stories)choices.append(button(`${q.title}の続きを話す`,()=>this.act({type:'story.resume',quest:q.id}),'primary',!q.enabled));
     for(const service of t.services)choices.append(button(`${service.label} — ${service.detail}`,()=>this.act({type:'service',id:service.id}),'',t.busy));
     if(t.quests)choices.append(button('依頼掲示板を見る',()=>{this.tab='quests';this.render(m);}));
@@ -155,8 +156,13 @@ export class GameView {
     if(t.shop)choices.append(button('ショップを見る',()=>{this.tab='shop';this.render(m);}));
     if(m.expedition?.shop)choices.append(button('補給・工房を見る',()=>{this.tab='supply';this.render(m);}));
     if(m.expedition?.skillShop)choices.append(button('スキル屋を見る',()=>{this.tab='skills';this.render(m);}));
-    if(t.dungeons.length&&m.tracked?.entryDungeon)this.questEntrance(choices,m.tracked);
-    if(t.dungeons.length)choices.append(button('迷宮へ続く階段へ',()=>{this.tab='regions';this.render(m);},'primary'));
+    if(t.dungeons.length)choices.append(button(t.homeDistricts?'迷宮へ':'迷宮へ続く階段へ',()=>{this.tab='regions';this.render(m);},'primary'));
+    if(t.dungeons.length&&(m.tracked?.entryDungeon||m.tracked?.townShortcut)){
+      const shortcut=node('div','quest-shortcut');shortcut.setAttribute('role','group');shortcut.setAttribute('aria-label','追跡中の依頼');shortcut.append(node('span','eyebrow',`追跡中　${m.tracked.title}`));
+      if(m.tracked.townShortcut)shortcut.append(button(m.tracked.townShortcut+'へ向かう',()=>this.act({type:'quest.town',id:m.tracked.id}),'',t.busy));
+      else this.questEntrance(shortcut,m.tracked);
+      choices.append(shortcut);
+    }
     if(t.parent)choices.append(button(`${t.parent.name}へ戻る`,()=>this.act({type:'location.move',id:t.parent.id}),'location-back',t.busy));
     if(t.exit)choices.append(button(t.exit.label,()=>this.act(t.exit.intent),'location-back',t.busy));
     section.append(choices);parent.append(section);

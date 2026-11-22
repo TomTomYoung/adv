@@ -1,3 +1,4 @@
+import {finishHomeDistricts} from '../authoring/editions/e2/hikarigaeri-districts.mjs';
 import {extendMachineGeography} from '../authoring/editions/e2/salome/machine-geography.mjs';
 import {applyOutdoorAppearance} from '../authoring/editions/e2/outdoor-appearance.mjs';
 import {extendLibraryGeography} from '../authoring/editions/e2/salome/library-geography.mjs';
@@ -44,6 +45,7 @@ export async function buildSalomeGeography(previous,{check=false}={}){
  await extendLibraryGeography(bundle,previous,oldDungeons);
  extendLibrarySecondGeography(bundle);
  extendMachineGeography(bundle);
+ await finishHomeDistricts(bundle,JSON.parse(await fs.readFile(path.join(root,'data/locations.json'),'utf8')));
  applyOutdoorAppearance(bundle);
  const output=JSON.stringify(bundle,null,2)+'\n',file=path.join(root,'data/scenario-editions/e2/salome-geography.json');
  if(check){if(await fs.readFile(file,'utf8').catch(()=>null)!==output)throw Error('サロメ地理が古くなっています。npm run build:editions を実行してください。');}

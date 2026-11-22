@@ -9,6 +9,7 @@ export function locationRoot(data,id){
   while(location?.parent&&!seen.has(location.id)){seen.add(location.id);location=data.locations[location.parent];}
   return location;
 }
+export const localPlaceName=location=>location.localName??location.name.replace(/^灯帰り(?:の|・|外縁・)/u,'');
 export const dungeonInterior=(data,state)=>state.mode==='town'?locationRoot(data,state.townLocation)?.dungeonEntrance??null:null;
 export const interiorEntrances=(data,state)=>state.mode==='dungeon'?Object.values(data.locations??{}).filter(l=>l.dungeonEntrance&&atWorldPlace(state,{kind:'dungeon',...l.dungeonEntrance})):[];
 export function atWorldPlace(state,place){

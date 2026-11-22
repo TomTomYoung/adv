@@ -31,7 +31,7 @@ export function ready({old=false,visit=true}={}){
 export function go(g,key,options={}){
   const p=g.data.quests.q010.story.worldPlaces?.[key];
   if(!p){exploreSpot(g,previous.locations.find(p=>p.role==='decision'),{interact:false,heal:true});return;}
-  if(g.state.mode==='town'){town(g,'hikarigaeri_square');assert.ok(g.dispatch({type:'world.cross',route:'q010_surface'}),g.state.notice);drain(g);}
+  if(g.state.mode==='town'){town(g,'e2_wharf');assert.ok(g.dispatch({type:'world.cross',route:'q010_surface'}),g.state.notice);drain(g);}
   navigateMaps(g,p.map,options);walk(g,p.x,p.y,options);drain(g);
 }
 export function depart(g,id){assert.ok(g.dispatch({type:'choose',id}),id+': '+g.state.notice);drain(g);}

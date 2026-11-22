@@ -33,7 +33,7 @@ export function ready({old=false,visit=true}={}){
 export function go(g,place,options={}){
   const p=g.data.quests.q016.story.worldPlaces[place];
   if(g.state.mode==='town'){
-    town(g,'hikarigaeri_square');
+    town(g,'e2_cart_surface');
     assert.ok(g.dispatch({type:'world.cross',route:'return_cart_surface'}),g.state.notice);
     drain(g);
   }

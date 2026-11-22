@@ -65,7 +65,7 @@ for(const [key,row] of departures)for(const kind of ['retreat','defeat'])test(`q
  if(g.state.mode==='town'){
   // A return seal is a dungeon action. Walk from town to the lift before
   // interrupting the still-pending journey; do not pretend town has retreat.
-  town(g,'hikarigaeri_square');assert.ok(g.dispatch({type:'world.cross',route:'return_cart_surface'}));drain(g);
+  town(g,'e2_cart_surface');assert.ok(g.dispatch({type:'world.cross',route:'return_cart_surface'}));drain(g);
  }
  if(kind==='retreat')assert.ok(g.dispatch({type:'retreat'}));else g.defeat();drain(g);checkpoint(g);assert.deepEqual(g.state.stories.q014,before);assert.deepEqual(g.state.journey,journey);arrive(g);checkpoint(g);
 });

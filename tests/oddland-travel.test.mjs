@@ -32,7 +32,7 @@ function outward(g){
 function inward(g){
   cross(g,'oddland_surface');const run=g.state.dungeons.active.run;
   for(const route of ['border_customs','trade_refuge','oddland_checkpoint']){walk(g,1,1);cross(g,route);assert.equal(g.state.dungeons.active.run,run);}
-  navigateMaps(g,'region_1_f1');walk(g,1,1);cross(g,'waterway_surface');assert.equal(g.state.townLocation,'hikarigaeri_square');
+  navigateMaps(g,'region_1_f1');walk(g,1,1);cross(g,'waterway_surface');assert.equal(g.state.townLocation,'e2_wharf');
 }
 
 test('first-edition geography stays byte-derived and only the second edition has the border',async()=>{
@@ -40,7 +40,11 @@ test('first-edition geography stays byte-derived and only the second edition has
   assert.equal(first.worldTravel,undefined);assert.equal(first.locations.oddland_border,undefined);
   assert.deepEqual(first.maps.region_1_landing.tiles,(await read('data/maps/region_1_landing.json')).tiles);
   assert.equal(data.maps.region_1_landing.objects.filter(o=>o.id==='oddland_route_sign').length,1);
-  for(const id of Object.keys(first.locations).filter(id=>id!=='hikarigaeri_square'))assert.deepEqual(data.locations[id],first.locations[id]);
+  for(const id of Object.keys(first.locations).filter(id=>id!=='hikarigaeri_square')){
+    const {parent,localName,...current}=data.locations[id],{parent:oldParent,...original}=first.locations[id];
+    assert.deepEqual(current,original);
+    if(parent!==oldParent)assert.ok(['e2_sakashita','e2_wharf'].includes(parent)&&oldParent==='hikarigaeri_square');
+  }
   assert.deepEqual(data.locations.hikarigaeri_square.dungeons,first.locations.hikarigaeri_square.dungeons.filter(id=>!['region_4','region_5','region_7','region_8','region_9'].includes(id)));
   assert.deepEqual(data.quests.q004,first.quests.q004);assert.equal(Object.keys(data.quests).length,300);
   const g=new GameEngine(first);drain(g);assert.equal(g.dispatch({type:'world.cross',route:'oddland_checkpoint'}),false);
@@ -53,6 +57,7 @@ test('walk from town through the checkpoint and all three passage maps, save at 
   cross(g,'oddland_checkpoint');assert.equal(g.state.location.map,'region_1_landing');
   outward(g);assert.equal(g.state.quests.q004.stage,'available');inward(g);
   assert.equal(g.state.worldTravel.returnAnchor,'oddland','walking home does not rewrite an in-flight return anchor');
+  assert.ok(g.dispatch({type:'location.move',id:'hikarigaeri_square'}));
   assert.ok(g.dispatch({type:'travel',dungeon:'region_1'}));assert.equal(g.state.worldTravel.returnAnchor,'hikarigaeri');
   save(g);
 });

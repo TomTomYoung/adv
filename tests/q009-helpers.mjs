@@ -42,7 +42,7 @@ export function go(g,key,{maintain=false,onMove}={}){
     if(g.state.mode==='dungeon'){assert.equal(g.state.location.map,'region_1_f1');walk(g,1,1,{maintain});assert.ok(g.dispatch({type:'world.cross',route:'waterway_surface'}),g.state.notice);drain(g);}
     town(g,p.location,onMove);
   }else{
-    if(g.state.mode==='town'){town(g,'hikarigaeri_square',onMove);assert.ok(g.dispatch({type:'world.cross',route:'waterway_surface'}),g.state.notice);drain(g);}
+    if(g.state.mode==='town'){town(g,'e2_wharf',onMove);assert.ok(g.dispatch({type:'world.cross',route:'waterway_surface'}),g.state.notice);drain(g);}
     assert.equal(g.state.location.map,p.map);walk(g,p.x,p.y,{maintain});
   }
 }

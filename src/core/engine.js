@@ -32,7 +32,7 @@ import {setPortableFire} from './systems/fire-network.js';
 import {openQuestEvent,objectVisible,objectBlocks} from './quest-events.js';
 import {storyEnding,resumeWorldStory,encounterStoryJourney} from './story.js';
 import {townRoot,townLocation,syncWorldStories,restoreWorldConversations,locationRoot,dungeonInterior,interiorEntrances} from './world.js';
-import {questEntryPlan} from './quest-navigation.js';
+import {questEntryPlan,trackedTownPath} from './quest-navigation.js';
 import {processFieldEvents,recordFieldEntry} from './field-events.js';
 import {freshFieldReactions,signalFieldChange} from './field-signals.js';
 import {freshRecords,snapshotRecords} from './records.js';
@@ -334,6 +334,12 @@ export class GameEngine {
     if(type==='retreat'&&this.state.mode==='dungeon')return this.returnTown(true);
     if(type==='accept'&&this.state.mode==='town')return this.accept(intent.id);
     if(type==='track'&&this.state.quests[intent.id]?.stage==='active'){this.state.trackedQuest=intent.id;return true;}
+    if(type==='quest.town'){
+      const path=trackedTownPath(this.data,this.state,intent.id);
+      if(!path.length)return false;
+      for(const id of path){if(!this.moveLocation(id))break;if(this.state.waiting||this.state.vm.length)break;}
+      return true;
+    }
     if(type==='quest.travel'){
       const plan=questEntryPlan(this.data,this.state,intent.id);
       if(!plan.ok){this.notify(plan.reason);return false;}

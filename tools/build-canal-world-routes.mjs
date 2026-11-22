@@ -16,7 +16,7 @@ export async function buildCanalWorldRoutes(options){
   for(const {id,source} of canalQuests){
     await buildPreservedWorldFile(id,(original,items)=>{
       const q=compilePreservedWorldQuest(original,items,source(),'canal');
-      q.unlockHint='いつでも受注できる。灯帰りの広場から運河通りへ進み、手帳に示される現場を訪ねる。';
+      q.unlockHint='いつでも受注できる。荷揚げ河岸から運河通りへ進み、手帳に示される現場を訪ねる。';
       for(const key of Object.keys(q.outcomes))q.scripts[id+'.canal.end.'+key]={commands:[{op:'jump',script:id+'.end.'+key}]};
       return q;
     },options);
