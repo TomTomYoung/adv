@@ -9,7 +9,7 @@ export function handleGameKey(event,{view,model,dispatch,bindings=DEFAULT_BINDIN
     const enter=event.key==='Enter'&&!event.shiftKey;
     if(enter||action==='confirm'||action==='cancel'){
       event.preventDefault();
-      if(enter||!event.repeat)view.playback.finish();
+      if(enter||!event.repeat)view.playback.skip();
     }else if(action||event.key==='Tab')event.preventDefault();
     return;
   }

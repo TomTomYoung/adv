@@ -4,6 +4,7 @@ import {battleAccent} from '../battle-accent.js';
 import {BattleSound} from './battle-sound.js';
 import {defaultPresentation} from '../presentation-presets.js';
 import {decorateFeedback,parsePresentationDesign} from '../presentation-design.js';
+const isAttackImpact=event=>event.phase==='impact'&&event.sound?.url&&event.targets?.some(t=>!t.missed&&(t.hit||t.damage>0||t.guarded));
 export class GameAudio {
   constructor({createAudio=url=>new Audio(url),onChange=()=>{},schedule=(fn,delay)=>setTimeout(fn,delay),cancel=id=>clearTimeout(id),battleSound=new BattleSound(),locate=()=>null,design=defaultPresentation}={}){
     if(design!==defaultPresentation)battleSound?.setDesign?.(design);
@@ -27,18 +28,23 @@ export class GameAudio {
     model={...model,feedback:decorateFeedback(model.feedback,this.design,{sounds:model.sounds,soundAssets:model.soundAssets})};
     if(model.feedback){
       const key=`${model.feedback.session}/${model.feedback.revision}`;
-      if(key!==this.feedbackKey){this.feedbackKey=key;this.stopEffects();
+      if(key!==this.feedbackKey){
+        this.stopEffects({keepSkippedHits:this.feedbackSession===model.feedback.session});
+        this.feedbackKey=key;this.feedbackSession=model.feedback.session;
+        const firstImpact=model.feedback.events.find(isAttackImpact);
         if(this.enabled&&this.volume>0&&this.seVolume>0)for(const event of model.feedback.events){
           const accent=battleAccent(event),profile=this.design.profiles[event.synth??accent];if(!event.sound?.url&&!event.synth)continue;
-          const play=()=>{
+          const play=(keepOnSkip=false)=>{
+            if(event===firstImpact)this.pendingImpact=null;
             const target=event.targets?.find(t=>!t.missed&&(t.damage>0||t.healing>0||t.guarded))??event.targets?.[0];
             let spatial=event.spatial??(target?this.locate(target):null)??{};
             if(event.originalPhase==='flight'&&event.source){const from=this.locate(event.source);if(from)spatial={...spatial,pan:from.pan,panEnd:spatial.pan};}
             const priority=event.priority??profile?.priority??40;
-            if(event.sound?.url)this.playEffect(event.sound.url,event.sound.gain??1,{priority,spatial,cooldownMs:event.cooldownMs??0});
+            if(event.sound?.url)this.playEffect(event.sound.url,event.sound.gain??1,{priority,spatial,cooldownMs:event.cooldownMs??0,impact:isAttackImpact(event),keepOnSkip});
             if(event.synth)this.battleSound?.play({...event,phase:event.originalPhase??event.phase,spatial});
             if(['heavy','critical','defeat'].includes(accent)||priority>=this.design.mixer.duckPriority)this.duckMusic();
           },delay=feedbackDelay(model.feedback,event.at);
+          if(event===firstImpact)this.pendingImpact=play;
           if(delay>0){let timer;timer=this.schedule(()=>{this.effectTimers.delete(timer);play();},delay);this.effectTimers.add(timer);}else play();
         }
       }
@@ -54,7 +60,23 @@ export class GameAudio {
     if(this.enabled&&this.audio?.paused&&!this.pending&&!['blocked','error'].includes(this.state))this.play();
   }
   preload(urls){for(const url of urls)if(!this.preloaded.has(url)){const audio=this.createAudio(url);audio.preload='auto';this.preloaded.set(url,audio);}}
-  stopEffects(){this.lastRecorded.clear();for(const timer of this.effectTimers)this.cancel(timer);this.effectTimers.clear();for(const effect of [...this.effects])this.finishEffect(effect);this.battleSound?.stop();for(const timer of this.duckTimers)this.cancel(timer);this.duckTimers.clear();this.duck=1;if(this.audio)this.audio.volume=this.volume;}
+  cancelFeedback({skip=false}={}){
+    const pending=skip&&this.pendingImpact;
+    if(skip)for(const effect of this.effects){
+      const meta=this.effectMeta.get(effect);
+      if(meta.impact)meta.keepOnSkip=true;
+    }
+    this.stopEffects({keepSkippedHits:true});
+    if(pending)pending(true);
+  }
+  stopEffects({keepSkippedHits=false}={}){
+    this.pendingImpact=null;this.lastRecorded.clear();
+    for(const timer of this.effectTimers)this.cancel(timer);this.effectTimers.clear();
+    for(const effect of [...this.effects]){
+      if(!keepSkippedHits||!this.effectMeta.get(effect).keepOnSkip)this.finishEffect(effect);
+    }
+    this.battleSound?.stop();for(const timer of this.duckTimers)this.cancel(timer);this.duckTimers.clear();this.duck=1;if(this.audio)this.audio.volume=this.volume;
+  }
   duckMusic(){
     if(!this.enabled||!this.volume||!this.seVolume)return;
     for(const timer of this.duckTimers)this.cancel(timer);this.duckTimers.clear();this.duck=this.design.mixer.duckGain;if(this.audio)this.audio.volume=this.volume*this.duck;
@@ -62,12 +84,12 @@ export class GameAudio {
     for(let i=0;i<4;i++){const level=mixer.duckGain+(1-mixer.duckGain)*(i+1)/4;let timer;timer=this.schedule(()=>{this.duckTimers.delete(timer);this.duck=level;if(this.audio)this.audio.volume=this.volume*level;},mixer.duckHoldMs+i*mixer.duckReleaseMs/3);this.duckTimers.add(timer);}
   }
   finishEffect(effect){effect.pause();this.effectMeta.get(effect)?.disconnect?.();this.effectMeta.delete(effect);this.effects.delete(effect);}
-  playEffect(url,gain=1,{priority=40,spatial={},cooldownMs=0}={}){
+  playEffect(url,gain=1,{priority=40,spatial={},cooldownMs=0,impact=false,keepOnSkip=false}={}){
     if(!this.enabled||this.volume===0||this.seVolume===0)return false;
     const now=performance.now();if(now-(this.lastRecorded.get(url)??-Infinity)<cooldownMs)return false;
     while(this.effects.size>=this.design.mixer.maxRecordedVoices){const victim=[...this.effects].sort((a,b)=>(this.effectMeta.get(a)?.priority??40)-(this.effectMeta.get(b)?.priority??40))[0];if((this.effectMeta.get(victim)?.priority??40)>priority)return false;this.finishEffect(victim);}
     this.lastRecorded.set(url,now);const effect=this.createAudio(url);this.effectGains.set(effect,gain);effect.volume=Math.max(0,Math.min(1,this.volume*this.seVolume*gain));this.effects.add(effect);
-    this.effectMeta.set(effect,{priority,disconnect:this.battleSound?.connectMedia?.(effect,spatial)});
+    this.effectMeta.set(effect,{priority,impact,keepOnSkip,disconnect:this.battleSound?.connectMedia?.(effect,spatial)});
     const done=()=>this.finishEffect(effect);effect.addEventListener('ended',done,{once:true});effect.addEventListener('error',done,{once:true});effect.play().catch(done);return true;
   }
   play(){

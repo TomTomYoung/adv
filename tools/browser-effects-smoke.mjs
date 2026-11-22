@@ -36,7 +36,7 @@ try{
       if(kill)g.state.battle.enemies[0].hp=1;
       const marks=[],voices=[],root=document.querySelector('#app');root.dataset.view=layout;
       const sound=new GameAudio({battleSound:null,createAudio:url=>({paused:true,volume:0,pause(){this.paused=true;},addEventListener(){},play(){this.paused=false;voices.push({url,at:performance.now()});return Promise.resolve();}})});sound.configure(true,1,1);
-      const ui={status(){},menu(){},help(){},soundEnabled:()=>true,effectsMode:()=>mode,cancelFeedback:()=>sound.stopEffects()};
+      const ui={status(){},menu(){},help(){},soundEnabled:()=>true,effectsMode:()=>mode,cancelFeedback:options=>sound.cancelFeedback(options)};
       const render=()=>{const m=projectGame(g);m.feedback.startedAt=performance.now();view.render(m);sound.sync(m);return m;};
       const dispatch=intent=>{const ok=g.dispatch(intent);window.last=render();return ok;};
       const view=new (layout==='scene'?SceneView:GameView)(root,dispatch,ui),damage=view.effects.damage.bind(view.effects);
@@ -111,6 +111,7 @@ try{
       else await page.keyboard.press('Enter');
       assert.equal(await page.locator(':focus').getAttribute('data-focus'),'target:enemy_0');
       assert.equal(await page.evaluate(()=>g.save()),saved);
+      assert.equal(await page.evaluate(()=>voices.filter(v=>v.url.endsWith('/se_chip_contact.wav')).length),1);
     }
   }
   checks.push('repeat left click at the attack position or press Enter to skip immediately in both layouts');

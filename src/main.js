@@ -110,7 +110,7 @@ function help(){modal('遊び方');for(const paragraph of [
  '8. 各地域の第10依頼は同地域3件完了で解放。最終依頼「百の帰還」は他の99件完了で解放されます。依頼によって結末の数と条件が異なります。'
 ])dialog.append(make('p',paragraph));closeButton();}
 
-const viewUi={menu,help,status,feedbackFinished:()=>{syncAudio();syncPresentationClock();},keyHint:exploring=>inputHint(settings.keyBindings.bindings,exploring),modalOpen:()=>dialog.open,layoutChanged:syncSystemPlacement,cancelFeedback:()=>sound.stopEffects(),effectsMode:()=>settings.effects,soundEnabled:()=>settings.sound,soundLabel:()=>sound.label(),sound:toggleSound};
+const viewUi={menu,help,status,feedbackFinished:()=>{syncAudio();syncPresentationClock();},keyHint:exploring=>inputHint(settings.keyBindings.bindings,exploring),modalOpen:()=>dialog.open,layoutChanged:syncSystemPlacement,cancelFeedback:options=>sound.cancelFeedback(options),effectsMode:()=>settings.effects,soundEnabled:()=>settings.sound,soundLabel:()=>sound.label(),sound:toggleSound};
 try{
   const savedSettings=storageRead('settings');if(savedSettings){try{const parsed=JSON.parse(savedSettings);const keys=readKeyConfig(parsed.keyBindings);settings.keyBindings=keys.config;if(keys.recovered)status('保存済みのキー設定が不正なため、初期値へ戻しました。');settings.sound=parsed.sound===true;settings.seVolume=Number.isFinite(parsed.seVolume)?Math.max(0,Math.min(1,parsed.seVolume)):.8;settings.effects=['full','reduced','off'].includes(parsed.effects)?parsed.effects:'full';settings.volume=Number.isFinite(parsed.volume)?Math.max(0,Math.min(1,parsed.volume)):.5;settings.theme=applyTheme(parsed.theme??THEME_DEFAULT);}catch{applyTheme(THEME_DEFAULT);}}else applyTheme(THEME_DEFAULT);
   if(savedSettings){try{settings.viewLayout=normalizeLayout(JSON.parse(savedSettings).viewLayout);}catch{settings.viewLayout='scene';}}

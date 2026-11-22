@@ -12,9 +12,10 @@ export class BattlePlayback {
     for(const [node,inert] of active.inert)node.inert=inert;
     active.bar.remove();this.view.effects.onEvent=null;
   }
-  finish(){
+  skip(){this.finish({skip:true});}
+  finish(feedbackOptions){
     const next=this.active?.next;if(!next)return;
-    this.cancel();this.view.render(next);this.view.ui.feedbackFinished?.();
+    this.cancel();this.view.render(next,feedbackOptions);this.view.ui.feedbackFinished?.();
   }
   present(next){
     const view=this.view,key=next.feedback?`${next.feedback.session}/${next.feedback.revision}`:null;
@@ -39,7 +40,7 @@ export class BattlePlayback {
       if(event.button!==0)return;
       event.preventDefault();
       event.stopPropagation();
-      this.finish();
+      this.skip();
     },{capture:true,signal:input.signal});
     view.effects.onEvent=event=>{
       if(event.action)label.textContent=event.action;

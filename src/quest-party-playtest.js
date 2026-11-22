@@ -16,7 +16,7 @@ const status=(message,error=false)=>{$('trial-status').textContent=message;$('tr
 const sound=new GameAudio({locate:target=>view?.effects.spatial(target),onChange:()=>{$('sound-toggle').textContent=sound.label();view?.updateSound(sound.label());}});
 sound.configure(false,1,.8);applyTheme(THEME_DEFAULT);
 function syncSound(){if(model)sound.sync({...model,music:view?.playback.active?view.model.music:model.music});}
-const ui={status:text=>status(text),menu:()=>status('試遊専用です。本編のセーブには書き込みません。'),help:()=>status('画面の選択肢・探索・戦闘コマンドで操作できます。方向キーで移動、Enterで決定。'),keyHint:()=> '↑前進 / ↓後退 / ←→旋回 / Enter決定',modalOpen:()=>false,cancelFeedback:()=>sound.stopEffects(),effectsMode:()=>$('effects').value,soundEnabled:()=>soundEnabled,feedbackFinished:()=>syncSound(),soundLabel:()=>sound.label(),sound:toggleSound,layoutChanged(){}};
+const ui={status:text=>status(text),menu:()=>status('試遊専用です。本編のセーブには書き込みません。'),help:()=>status('画面の選択肢・探索・戦闘コマンドで操作できます。方向キーで移動、Enterで決定。'),keyHint:()=> '↑前進 / ↓後退 / ←→旋回 / Enter決定',modalOpen:()=>false,cancelFeedback:options=>sound.cancelFeedback(options),effectsMode:()=>$('effects').value,soundEnabled:()=>soundEnabled,feedbackFinished:()=>syncSound(),soundLabel:()=>sound.label(),sound:toggleSound,layoutChanged(){}};
 function fill(id,entries,preferred){const select=$(id);select.replaceChildren(...entries.map(([value,label])=>new Option(label,value)));if(entries.some(([v])=>v===preferred))select.value=preferred;}
 function paragraph(parent,text){const p=document.createElement('p');p.textContent=text;parent.append(p);}
 function refreshPlan(){

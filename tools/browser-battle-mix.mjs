@@ -9,7 +9,7 @@ function installRecorder(save){
   localStorage.setItem('lantern-archive:v1:scenario:e1:auto',save);
   localStorage.setItem('lantern-archive:v1:settings',JSON.stringify({sound:false,viewLayout:'scene',scenarioEdition:'e1',volume:.5,seVolume:.8}));
   let ctx,tap,recording=false,pcm=[];
-  const played=[];
+  const played=[],ended=[];
   const connect=AudioNode.prototype.connect;
   const NativeContext=window.AudioContext;
   window.AudioContext=class extends NativeContext {
@@ -43,10 +43,11 @@ function installRecorder(save){
     this.addEventListener('playing',()=>{
       played.push({file:new URL(this.currentSrc||this.src,location.href).pathname.split('/').pop(),time:ctx?.currentTime??0});
     },{once:true});
+    this.addEventListener('ended',()=>ended.push(new URL(this.currentSrc||this.src,location.href).pathname.split('/').pop()),{once:true});
     return play.call(this);
   };
   window.battleCapture={
-    played,
+    played,ended,
     begin(){pcm=[];recording=true;},
     end(){
       recording=false;
@@ -97,5 +98,21 @@ export async function captureBattleMix(browser,base,output,name,{checkSelection=
     await fs.mkdir(output,{recursive:true});
     await fs.writeFile(path.join(output,name+'.wav'),waveFile(pcm,rate));
     await fs.writeFile(path.join(output,name+'.json'),JSON.stringify({rate,played},null,2));
+    if(checkSelection&&skill==='attack'){
+      // Reload the same encounter and cut on confirmation, before any impact timer can fire.
+      await page.reload({waitUntil:'domcontentloaded'});
+      await page.locator('[data-focus="skill:attack"]').waitFor();
+      await page.locator('[data-audio-toggle]').click();
+      await page.locator('[data-focus="skill:attack"]').click();
+      await page.locator('[data-focus="target:enemy_0"]').evaluate(target=>{
+        target.click();
+        document.querySelector('[data-focus="battle:skip"]').click();
+        document.querySelector('[data-focus="skill:attack"]').click();
+      });
+      await page.waitForFunction(file=>battleCapture.ended.includes(file),impactFile,{timeout:10000});
+      const played=await page.evaluate(()=>battleCapture.played.map(e=>e.file));
+      assert.equal(played.filter(file=>file===impactFile).length,1);
+      assert.ok(!played.includes('se_chip_enemy.wav'));
+    }
   }finally{await page.close();}
 }
