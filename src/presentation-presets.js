@@ -1508,6 +1508,303 @@ export const defaultPresentation = {
       "cooldownMs": 0,
       "voices": [
         {
+          "wave": "square",
+          "atMs": 0,
+          "durationMs": 114,
+          "gain": 0.155,
+          "pitch": [
+            {
+              "at": 0,
+              "value": 246
+            },
+            {
+              "at": 0.26,
+              "value": 226,
+              "curve": "step"
+            },
+            {
+              "at": 0.51,
+              "value": 294,
+              "curve": "step"
+            },
+            {
+              "at": 0.76,
+              "value": 254,
+              "curve": "step"
+            },
+            {
+              "at": 1,
+              "value": 254,
+              "curve": "step"
+            }
+          ],
+          "envelope": [
+            {
+              "at": 0,
+              "value": 0
+            },
+            {
+              "at": 0.019,
+              "value": 0.92
+            },
+            {
+              "at": 0.19,
+              "value": 0.76
+            },
+            {
+              "at": 0.39,
+              "value": 0.33
+            },
+            {
+              "at": 0.47,
+              "value": 0.07
+            },
+            {
+              "at": 0.515,
+              "value": 0.98
+            },
+            {
+              "at": 0.71,
+              "value": 0.9
+            },
+            {
+              "at": 0.89,
+              "value": 0.51
+            },
+            {
+              "at": 1,
+              "value": 0
+            }
+          ],
+          "filter": {
+            "type": "lowpass",
+            "frequency": 1390,
+            "q": 0.72
+          }
+        },
+        {
+          "wave": "triangle",
+          "atMs": 3,
+          "durationMs": 107,
+          "gain": 0.218,
+          "pitch": [
+            {
+              "at": 0,
+              "value": 170
+            },
+            {
+              "at": 0.21,
+              "value": 120
+            },
+            {
+              "at": 0.48,
+              "value": 104
+            },
+            {
+              "at": 0.58,
+              "value": 152
+            },
+            {
+              "at": 1,
+              "value": 101
+            }
+          ],
+          "envelope": [
+            {
+              "at": 0,
+              "value": 0
+            },
+            {
+              "at": 0.033,
+              "value": 1
+            },
+            {
+              "at": 0.25,
+              "value": 0.77
+            },
+            {
+              "at": 0.48,
+              "value": 0.24
+            },
+            {
+              "at": 0.57,
+              "value": 0.98
+            },
+            {
+              "at": 0.82,
+              "value": 0.8
+            },
+            {
+              "at": 1,
+              "value": 0
+            }
+          ]
+        }
+      ]
+    },
+    "enemy_attack_start": {
+      "name": "敵の攻撃開始",
+      "priority": 45,
+      "cooldownMs": 0,
+      "voices": [
+        {
+          "wave": "sawtooth",
+          "atMs": 0,
+          "durationMs": 117,
+          "gain": 0.21,
+          "pitch": [
+            {
+              "at": 0,
+              "value": 198
+            },
+            {
+              "at": 0.23,
+              "value": 180,
+              "curve": "step"
+            },
+            {
+              "at": 0.34,
+              "value": 166,
+              "curve": "step"
+            },
+            {
+              "at": 0.62,
+              "value": 149,
+              "curve": "step"
+            },
+            {
+              "at": 0.72,
+              "value": 138,
+              "curve": "step"
+            },
+            {
+              "at": 1,
+              "value": 127,
+              "curve": "step"
+            }
+          ],
+          "envelope": [
+            {
+              "at": 0,
+              "value": 0
+            },
+            {
+              "at": 0.026,
+              "value": 0.83
+            },
+            {
+              "at": 0.18,
+              "value": 0.75
+            },
+            {
+              "at": 0.27,
+              "value": 0.14
+            },
+            {
+              "at": 0.35,
+              "value": 0.93
+            },
+            {
+              "at": 0.52,
+              "value": 0.85
+            },
+            {
+              "at": 0.63,
+              "value": 0.13
+            },
+            {
+              "at": 0.72,
+              "value": 1
+            },
+            {
+              "at": 0.9,
+              "value": 0.7
+            },
+            {
+              "at": 1,
+              "value": 0
+            }
+          ],
+          "filter": {
+            "type": "lowpass",
+            "frequency": 1190,
+            "q": 0.72
+          }
+        },
+        {
+          "wave": "triangle",
+          "atMs": 1,
+          "durationMs": 115,
+          "gain": 0.225,
+          "pitch": [
+            {
+              "at": 0,
+              "value": 140
+            },
+            {
+              "at": 0.33,
+              "value": 102
+            },
+            {
+              "at": 0.51,
+              "value": 116
+            },
+            {
+              "at": 0.74,
+              "value": 87
+            },
+            {
+              "at": 1,
+              "value": 79
+            }
+          ],
+          "envelope": [
+            {
+              "at": 0,
+              "value": 0
+            },
+            {
+              "at": 0.055,
+              "value": 0.65
+            },
+            {
+              "at": 0.24,
+              "value": 0.7
+            },
+            {
+              "at": 0.29,
+              "value": 0.29
+            },
+            {
+              "at": 0.39,
+              "value": 0.93
+            },
+            {
+              "at": 0.64,
+              "value": 0.43
+            },
+            {
+              "at": 0.73,
+              "value": 1
+            },
+            {
+              "at": 0.89,
+              "value": 0.81
+            },
+            {
+              "at": 1,
+              "value": 0
+            }
+          ]
+        }
+      ]
+    },
+    "ally_attack_start_v1": {
+      "name": "初版・味方の上昇音",
+      "priority": 45,
+      "cooldownMs": 0,
+      "voices": [
+        {
           "wave": "triangle",
           "atMs": 0,
           "durationMs": 46,
@@ -1579,8 +1876,8 @@ export const defaultPresentation = {
         }
       ]
     },
-    "enemy_attack_start": {
-      "name": "敵の攻撃開始",
+    "enemy_attack_start_v1": {
+      "name": "初版・敵の下降音",
       "priority": 45,
       "cooldownMs": 0,
       "voices": [

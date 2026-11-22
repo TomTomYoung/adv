@@ -4,7 +4,7 @@ import {defaultPresentation as design} from './presentation-presets.js';
 import {feedbackDuration,decorateFeedback,profileDuration} from './presentation-design.js';
 
 const $=id=>document.getElementById(id);
-const types={synth:'合成SE',se:'収録SE',bgm:'BGM'};
+const types={synth:'合成SE',se:'収録SE',bgm:'BGM',sample:'命中音サンプル'};
 const storageKey='adv.sound-library.recorded.v1';
 const audio=new GameAudio();
 let assets,sounds,plan,presentation,items=[],current,drafts={},media,finishTimer;
@@ -49,6 +49,11 @@ function attack(){
     e.sound={url:assets.audio[sound.asset],gain:e.gain*sound.gain};
   }
   const sequence=decorateFeedback(feedback,design,{sounds:catalog,soundAssets:assets.audio});
+  if($('windup-version').value==='v1'){
+    for(const e of sequence.events){
+      if(e.originalPhase==='windup'&&e.synth)e.synth=e.synth+'_v1';
+    }
+  }
   audio.configure(true,volume());
   audio.sync({music:null,feedback:sequence});
   report((ally?'味方':'敵')+'の通常攻撃・'+(miss?'空振り':'命中'));
@@ -137,21 +142,35 @@ $('stop').onclick=()=>{stop();report('停止しました。');};
 addEventListener('pagehide',stop);
 document.addEventListener('visibilitychange',()=>{if(document.hidden){stop();report('試聴待機');}});
 
+async function readJson(url){
+  const response=await fetch(url);
+  if(!response.ok)throw Error(url+' ('+response.status+')');
+  return response.json();
+}
 try{
-  [assets,sounds,plan,presentation]=await Promise.all(['data/assets.json','data/sounds.json','config/presentation.json','data/presentation.json'].map(async url=>{
-    const response=await fetch(url);if(!response.ok)throw Error(url+' ('+response.status+')');return response.json();
-  }));
+  const sampleFolder='assets/audio/auditions/attack-v1/';
+  let samplesList,archiveError;
+  [assets,sounds,plan,presentation,samplesList]=await Promise.all([
+    ...['data/assets.json','data/sounds.json','config/presentation.json','data/presentation.json'].map(readJson),
+    readJson(sampleFolder+'catalog.json').catch(error=>{archiveError=error;return [];})
+  ]);
   loadDrafts();
   const samples=new Set(Object.values(sounds).map(s=>s.asset));
   items=[
     ...Object.entries(design.profiles).map(([id,p])=>({kind:'synth',id,name:p.name,use:profileDuration(p)+' ms'})),
+    ...samplesList.map(({id,name,use,file})=>({kind:'sample',id,name,use,url:sampleFolder+file})),
     ...Object.entries(sounds).map(([id,s])=>({kind:'se',id,url:assets.audio[s.asset],use:plan.sounds[id]?.use??''})),
     ...Object.entries(assets.audio).filter(([id])=>!samples.has(id)).map(([id,url])=>({kind:'bgm',id,url,name:({exploration:'探索',battle:'戦闘'})[id]??id,use:'本編で使用する背景音楽'})),
     {kind:'bgm',id:'exploration_original',name:'探索（初版）',url:'assets/audio/exploration.ogg',use:'音量調整前の原音'},
     {kind:'bgm',id:'battle_original',name:'戦闘（初版）',url:'assets/audio/battle.ogg',use:'音量調整前の原音'}
   ];
   items.sort((a,b)=>Number(b.id.endsWith('_attack_start'))-Number(a.id.endsWith('_attack_start')));
-  current=items.find(i=>i.id==='ally_attack_start');render();
+  current=items.find(i=>i.id==='ally_attack_start');
+  const query=new URLSearchParams(location.search),kind=query.get('kind');
+  if(query.get('result')==='miss')$('result').value='miss';
+  if(Object.hasOwn(types,kind))$('kind').value=kind;
+  render();
   audio.preload([assets.audio[sounds[presentation.cues.attack.sound].asset]]);
-  $('attack').disabled=false;report('試聴待機');
-}catch(error){report('音源一覧を読み込めませんでした。 '+error.message);}
+  $('attack').disabled=false;
+  report(archiveError?'命中音サンプルの読み込みに失敗しました。 '+archiveError.message:'試聴待機');
+}catch(error){report('読み込みに失敗しました。 '+error.message);}

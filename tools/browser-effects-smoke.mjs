@@ -8,7 +8,7 @@ const require=createRequire(import.meta.url);
 const {chromium}=require(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES?process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES+'/playwright':'playwright');
 const root=path.resolve(import.meta.dirname,'..'),output=process.env.ADV_BROWSER_OUTPUT??'/tmp/adv-effects-browser';
 await fs.mkdir(output,{recursive:true});
-const types={'.html':'text/html','.ogg':'audio/ogg','.js':'text/javascript','.css':'text/css','.json':'application/json','.png':'image/png','.webp':'image/webp','.svg':'image/svg+xml'};
+const types={'.html':'text/html','.ogg':'audio/ogg','.wav':'audio/wav','.js':'text/javascript','.css':'text/css','.json':'application/json','.png':'image/png','.webp':'image/webp','.svg':'image/svg+xml'};
 const server=http.createServer(async(req,res)=>{try{
   const url=decodeURI(req.url.split('?')[0]);
   if(url==='/'){res.setHeader('Content-Type','text/html');res.end('<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="src/view/style.css"><link rel="stylesheet" href="src/view/scene-style.css"><div id="app" data-view="scene"></div></html>');return;}
@@ -195,16 +195,26 @@ try{
       adapter.prototype[method]=function(first,...rest){window.audition.push(typeof first==='string'?first:first.synth);return original.call(this,first,...rest);};
     }
   });
-  for(const side of ['ally','enemy'])for(const result of ['hit','miss']){
+  for(const version of ['current','v1'])for(const side of ['ally','enemy'])for(const result of ['hit','miss']){
+    await page.selectOption('#windup-version',version);
     await page.evaluate(()=>{window.audition.length=0;});
     await page.selectOption('#side',side);await page.selectOption('#result',result);await page.click('#attack');
     assert.match(await page.locator('#status').textContent(),new RegExp(side==='ally'?'味方':'敵'));
     await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('終了'));
     const heard=await page.evaluate(()=>window.audition);
-    assert.equal(heard[0],side+'_attack_start');
+    assert.equal(heard[0],side+'_attack_start'+(version==='v1'?'_v1':''));
     if(result==='miss')assert.equal(heard.length,1);else assert.ok(heard.some(id=>id.endsWith('se_slash.ogg')));
     await page.click('#stop');
   }
+  const sampleUrl=`http://127.0.0.1:${server.address().port}/sound-library.html?kind=sample&result=miss#catalog`;
+  await page.goto(sampleUrl);await page.waitForFunction(()=>!document.querySelector('#attack').disabled);
+  assert.equal(await page.locator('.row').count(),10);assert.equal(await page.inputValue('#result'),'miss');
+  for(let i=0;i<10;i++){
+    await page.locator('.row').nth(i).click();
+    await page.click('#preview');
+    await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('終了'));
+  }
+  await page.goto(sampleUrl.split('?')[0]);await page.waitForFunction(()=>!document.querySelector('#attack').disabled);
   await page.selectOption('#kind','bgm');assert.equal(await page.locator('.row').count(),4);
   await page.click('#preview');await page.waitForFunction(()=>performance.getEntriesByType('resource').some(e=>e.name.includes('exploration-v2.ogg')));await page.click('#stop');
   await page.selectOption('#kind','se');await page.fill('#search','se_slash');assert.equal(await page.locator('.row').count(),1);
@@ -223,7 +233,28 @@ try{
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
     await page.screenshot({fullPage:true,path:path.join(output,`sound-library-${width}.png`)});
   }
-  checks.push('sound library: four attack previews, synth editor link, recorded/BGM playback controls, search, saved draft, export, reset, 390/1440 layout');
+  checks.push('sound library: eight current/original attack previews, heavier windup spectral energy, ten archived WAVs, synth editor link, recorded/BGM playback controls, search, saved draft, export, reset, 390/1440 layout');
+  const windupBass=await page.evaluate(async()=>{
+    const {BattleSound}=await import('./src/application/battle-sound.js');
+    const ratios={};
+    for(const side of ['ally','enemy'])for(const suffix of ['','_v1']){
+      const id=side+'_attack_start'+suffix,rate=44100;
+      const context=new OfflineAudioContext(1,Math.round(rate*.25),rate);
+      const synth=new BattleSound({createContext:()=>context});synth.configure(true,1);synth.play({synth:id});
+      const samples=(await context.startRendering()).getChannelData(0);
+      // Two cascaded 220 Hz low-pass stages. Divide by broadband energy to compare timbre at equal level.
+      const weight=1-Math.exp(-2*Math.PI*220/rate);
+      let first=0,second=0,low=0,full=0;
+      for(const sample of samples){first+=weight*(sample-first);second+=weight*(first-second);low+=second*second;full+=sample*sample;}
+      ratios[id]=low/full;synth.stop();
+    }
+    return ratios;
+  });
+  for(const side of ['ally','enemy']){
+    const id=side+'_attack_start';
+    assert.ok(windupBass[id]>windupBass[id+'_v1']+.07,JSON.stringify(windupBass));
+  }
+  await fs.writeFile(path.join(output,'windup-bass.json'),JSON.stringify(windupBass,null,2));
   await fs.writeFile(path.join(output,'design-audio.json'),JSON.stringify(designAudio,null,2)+'\n');
   assert.deepEqual(errors,[]);await fs.writeFile(path.join(output,'results.json'),JSON.stringify({checks,sounds,errors},null,2)+'\n');console.log(JSON.stringify({passed:true,checks,errors},null,2));
 }finally{await browser?.close();server.close();}
