@@ -22,15 +22,15 @@ test('one impact carries sound, recoil and the resolved damage; enemy advance pr
   const g=battle(),before=g.state.battle.enemies[0].hp;
   g.dispatch({type:'battle',action:'skill',skill:'attack',target:'enemy_0'});
   const [windup,step,hit,enemyStart,advance,enemyHit]=g.feedback.events;
-  assert.equal(step.at,220);assert.equal(enemyStart.at,hit.at+90);
+  assert.equal(step.at,100);assert.equal(enemyStart.at,hit.at+140);
   assert.equal(windup.phase,"windup");assert.equal(windup.at,0);assert.equal(windup.targets[0].key,"actor:ada");
-  assert.equal(hit.at,350);assert.equal(hit.sound,'se_thick_blade');assert.deepEqual(hit.effects,['strike_slash','recoil_slash']);
+  assert.equal(hit.at,230);assert.equal(hit.sound,'se_chip_contact');assert.deepEqual(hit.effects,['strike_slash','recoil_slash']);
   assert.equal(hit.targets[0].damage,before-g.state.battle.enemies[0].hp);assert.equal(hit.source.key,'actor:ada');
-  assert.deepEqual(advance.effects,['enemy_advance']);assert.equal(enemyHit.at-advance.at,130);assert.equal(enemyHit.at-enemyStart.at,395);
+  assert.deepEqual(advance.effects,['enemy_advance']);assert.equal(enemyHit.at-advance.at,130);assert.equal(enemyHit.at-enemyStart.at,240);
   assert.equal(advance.targets[0].key,enemyHit.source.key);assert.equal(enemyHit.targets[0].key,'actor:ada');assert.ok(enemyHit.targets[0].damage>0);
   const projected=projectGame(g).feedback.events;
   const starts=decorateFeedback(projectGame(g).feedback,defaultPresentation,{sounds:data.sounds,soundAssets:data.assets.audio}).events.filter(e=>e.originalPhase==='windup');
-  assert.deepEqual(starts.slice(0,2).map(e=>[e.at,e.sound.url]),[[0,data.assets.audio.se_ally_call],[enemyStart.at,data.assets.audio.se_enemy_warning]]);
+  assert.deepEqual(starts.slice(0,2).map(e=>[e.at,e.sound.url]),[[0,data.assets.audio.se_chip_ally],[enemyStart.at,data.assets.audio.se_chip_enemy]]);
   assert.ok(projected[5].source.image.startsWith('assets/'));projected[2].targets[0].damage=9999;assert.notEqual(hit.targets[0].damage,9999);
 });
 
@@ -39,7 +39,7 @@ test('each attacking side sounds once before contact even on a group miss, with 
   const older=structuredClone(defaultPresentation);
   delete older.bindings.ally_attack_start;
   delete older.bindings.enemy_attack_start;
-  for(const [source,opponent,start] of [[ally,enemy,'se_ally_call'],[enemy,ally,'se_enemy_warning']]){
+  for(const [source,opponent,start] of [[ally,enemy,'se_chip_ally'],[enemy,ally,'se_chip_enemy']]){
     const feedback=freshFeedback(),opponents=[opponent,{key:opponent.key+'2'}].map(target=>({...target,missed:true}));
     playBattleCue({data,feedback},'attack',source,opponents,true);
     const sounds=decorateFeedback(feedback,defaultPresentation,{sounds:data.sounds,soundAssets:data.assets.audio}).events.filter(e=>e.synth||e.sound);

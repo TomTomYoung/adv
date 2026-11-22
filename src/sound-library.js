@@ -43,18 +43,24 @@ function attack(){
   const feedback=freshFeedback();
   const target={...(ally?enemy:actor),...(miss?{missed:true}:{damage:12})};
   const version=$('windup-version').value;
-  const legacy=version!=='current';
-  playBattleCue({data:{presentation:legacy?{...presentation,attackLead:undefined}:presentation},feedback},'attack',ally?actor:enemy,[target],true);
+  const archived=version==='v3',synth=version==='v1'||version==='v2';
+  const attackLead=archived?{ally:350,enemy:395}:synth?undefined:presentation.attackLead;
+  playBattleCue({data:{presentation:{...presentation,attackLead}},feedback},'attack',ally?actor:enemy,[target],true);
   const catalog=Object.fromEntries(Object.keys(sounds).map(id=>[id,recorded(id)]));
   for(const e of feedback.events)if(e.sound){
-    const sound=catalog[legacy&&e.phase==='impact'?'se_slash':e.sound];
+    const sound=catalog[synth?'se_slash':archived?'se_thick_blade':e.sound];
     e.sound={url:assets.audio[sound.asset],gain:e.gain*sound.gain};
   }
   const sequence=decorateFeedback(feedback,design,{sounds:catalog,soundAssets:assets.audio});
-  if(legacy){
+  if(archived||synth){
     for(const e of sequence.events.filter(e=>e.originalPhase==='windup'&&e.sound)){
-      e.sound=null;
-      e.synth=(ally?'ally':'enemy')+'_attack_start'+(version==='v1'?'_v1':'');
+      if(archived){
+        const sound=catalog[ally?'se_ally_call':'se_enemy_warning'];
+        e.sound={url:assets.audio[sound.asset],gain:sound.gain};
+      }else{
+        e.sound=null;
+        e.synth=(ally?'ally':'enemy')+'_attack_start'+(version==='v1'?'_v1':'');
+      }
     }
   }
   audio.configure(true,volume());
@@ -167,14 +173,14 @@ try{
     {kind:'bgm',id:'exploration_original',name:'探索（初版）',url:'assets/audio/exploration.ogg',use:'音量調整前の原音'},
     {kind:'bgm',id:'battle_original',name:'戦闘（初版）',url:'assets/audio/battle.ogg',use:'音量調整前の原音'}
   ];
-  const selected=['se_ally_call','se_enemy_warning','se_thick_blade'];
+  const selected=['se_chip_ally','se_chip_enemy','se_chip_contact'];
   items.sort((a,b)=>Number(selected.includes(b.id))-Number(selected.includes(a.id)));
-  current=items.find(i=>i.id==='se_ally_call');
+  current=items.find(i=>i.id==='se_chip_ally');
   const query=new URLSearchParams(location.search),kind=query.get('kind');
   if(query.get('result')==='miss')$('result').value='miss';
   if(Object.hasOwn(types,kind))$('kind').value=kind;
   render();
-  audio.preload(['se_ally_call','se_enemy_warning',presentation.cues.attack.sound,'se_slash'].map(id=>assets.audio[sounds[id].asset]));
+  audio.preload([...selected,'se_ally_call','se_enemy_warning','se_thick_blade','se_slash'].map(id=>assets.audio[sounds[id].asset]));
   $('attack').disabled=false;
   report(archiveError?'命中音サンプルの読み込みに失敗しました。 '+archiveError.message:'試聴待機');
 }catch(error){report('読み込みに失敗しました。 '+error.message);}

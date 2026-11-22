@@ -2,13 +2,11 @@
 
 音符・波形・音量変化・重ね方の記述例と追加合成音の全プリセットは[音・戦闘演出の記述形式](SOUND_AND_EFFECT_FORMAT.md)を参照してください。
 
-2026-11-22現在、本編には31種の収録SEがあります。28種はAIMusicで合成したOGGです。攻撃用の3種はADV用に制作したWAV原本を直接再生します。
+2026-11-22現在、本編には34種の収録SEがあります。28種はAIMusicで合成したOGGです。残る6種はADV用に制作したWAVです。
 
-味方の攻撃開始には `se_ally_call` を使います。[A03 戦列の号令](../../assets/audio/auditions/windup-20/A03.wav)
+味方は `se_chip_ally`、敵は `se_chip_enemy` で攻撃を予告します。通常の斬撃が命中すると `se_chip_contact` が鳴ります。[味方の開始音](../../assets/audio/se/se_chip_ally.wav) ／ [敵の開始音](../../assets/audio/se/se_chip_enemy.wav) ／ [命中音](../../assets/audio/se/se_chip_contact.wav)
 
-敵の攻撃開始には `se_enemy_warning` を使います。[E07 魔将の宣告](../../assets/audio/auditions/windup-20/E07.wav)
-
-通常の斬撃が命中したときは `se_thick_blade` が鳴ります。[01 厚刃の一閃](../../assets/audio/auditions/attack-v1/01_atsuba.wav)
+旧版は `se_ally_call` と `se_enemy_warning` の号令に `se_thick_blade` の命中音を組み合わせます。[A03 戦列の号令](../../assets/audio/auditions/windup-20/A03.wav) ／ [E07 魔将の宣告](../../assets/audio/auditions/windup-20/E07.wav) ／ [01 厚刃の一閃](../../assets/audio/auditions/attack-v1/01_atsuba.wav)
 
 ID：se_step / SE：石床の足音 / 再生する場面：移動成功 / 合成音色：kick
 
