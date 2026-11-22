@@ -58,9 +58,9 @@ test('all-target enemy attacks use one sound and one anticipation with each targ
   g.dispatch({type:'battle',action:'skill',skill:'attack',target:'enemy_0'});
   const hits=g.feedback.events.filter(e=>e.phase==='impact'&&e.source?.key.startsWith('enemy:'));
   assert.equal(hits.length,2);assert.equal(g.feedback.events.filter(e=>e.effects.includes('enemy_advance')).length,2);
-  for(const hit of hits){assert.equal(hit.sound,'se_heavy');assert.equal(hit.targets.length,2);assert.ok(hit.targets.every(t=>t.damage>0));}
+  for(const hit of hits){assert.equal(hit.sound,'se_skill_smash');assert.equal(hit.targets.length,2);assert.ok(hit.targets.every(t=>t.damage>0));}
   const h=newGame();h.state.members=['toma','dora'];h.state.partyFormation=nextFormation(h.state.members,h.state.partyFormation);h.startBattle('wild_pair_1',{win:[],lose:[],escape:[]});h.dispatch({type:'battle',action:'skill',skill:'group_heal'});
-  const heal=h.feedback.events.find(e=>e.sound==='se_heal');assert.ok(heal.targets.every(t=>t.damage===undefined));
+  const heal=h.feedback.events.find(e=>e.sound==='se_skill_heal');assert.ok(heal.targets.every(t=>t.damage===undefined));
 });
 
 test('cover redirects the displayed hit to the defender, and overkill preserves the logged damage and image',()=>{
