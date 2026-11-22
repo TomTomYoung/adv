@@ -77,7 +77,7 @@ export class GameView {
   openCharacter(id){this.profileActor=id;this.profilePage='overview';this.inventoryAction=null;this.tab='profile';this.render(this.model);}
   closePanel(){this.inventoryAction=null;this.tab=this.model.mode==='town'?'location':'explore';this.render(this.model);}
   cancel(){
-    if(this.playback.active){this.playback.finish();return;}
+    if(this.playback.active){this.playback.skip();return;}
     if(this.mapOverlay){this.closeMap();return;}
     if(this.tab==='party'&&this.frontlineFormationOpen){this.frontlineFormationOpen=false;this.render(this.model);return;}
     if(this.tab==='party'&&this.formationOpen){if(this.formationActor)this.formationActor=null;else this.formationOpen=false;this.render(this.model);return;}
@@ -97,11 +97,11 @@ export class GameView {
     else if(!this.model.busy&&this.model.town?.exit)this.act(this.model.town.exit.intent);
     else if(!this.resumeExploration())focusButton(buttons(this.inputScope())[0]);
   }
-  act(intent){if(this.playback.active){this.playback.finish();return;}const accepted=this.dispatch(intent);if(accepted===false)this.ui.status(this.model?.notice||'現在はその操作を行えません。条件や隊の状態を確認してください。');}
-  render(model){
+  act(intent){if(this.playback.active){this.playback.skip();return;}const accepted=this.dispatch(intent);if(accepted===false)this.ui.status(this.model?.notice||'現在はその操作を行えません。条件や隊の状態を確認してください。');}
+  render(model,feedbackOptions){
     model=this.playback.resolve(model);if(this.playback.present(model))return;
     this.closeMap({restore:false});
-    const snapshot=captureFocus(this.root);this.ui.cancelFeedback?.();this.effects.capture();this.model=model;
+    const snapshot=captureFocus(this.root);this.ui.cancelFeedback?.(feedbackOptions);this.effects.capture();this.model=model;
     this.root.replaceChildren();
     const header=node('header','masthead'),brand=node('div','brand');brand.append(node('div','brand-mark','灯'),node('div','brand-type'));
     brand.lastChild.append(node('h1','',model.title),node('p','',model.subtitle));

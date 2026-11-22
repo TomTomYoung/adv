@@ -11,6 +11,38 @@ class FakeAudio {
 const flush=()=>new Promise(resolve=>setImmediate(resolve));
 const setup=()=>{const tracks=[];const player=new GameAudio({createAudio:url=>{const a=new FakeAudio(url);tracks.push(a);return a;}});return {player,tracks};};
 
+for(const timing of ['before impact','during impact','after the sound ends']){
+  test('skipping '+timing+' keeps exactly one contact sound through rapid commands',t=>{
+    t.mock.timers.enable({apis:['setTimeout']});
+    const {player,tracks}=setup();player.configure(true,.5,.4);
+    const impact={phase:'impact',at:100,targets:[{damage:8}],sound:{url:'hit.wav',gain:.5}};
+    const feedback={session:1,revision:1,decorated:true,events:[impact,{...impact,at:300}]};
+    player.sync({feedback});
+    if(timing!=='before impact')t.mock.timers.tick(100);
+    if(timing==='after the sound ends')tracks[0].events.get('ended')();
+    player.cancelFeedback({skip:true});
+    player.cancelFeedback();player.sync({feedback});
+    player.sync({feedback:{...feedback,revision:2,events:[]}});
+    t.mock.timers.tick(1000);
+    assert.deepEqual(tracks.map(a=>a.url),['hit.wav']);
+    assert.equal(tracks[0].volume,.1);
+    assert.equal(tracks[0].paused,timing==='after the sound ends');
+    player.sync({feedback:{...feedback,session:2,events:[]}});
+    assert.ok(tracks[0].paused);
+  });
+}
+
+test('misses, non-attack effects and muted feedback add no impact on skip',t=>{
+  t.mock.timers.enable({apis:['setTimeout']});
+  const {player,tracks}=setup();player.configure(true,1);
+  const events=[{missed:true},{healing:5}].map(target=>({phase:'impact',targets:[target],at:100,sound:{url:'other.wav'}}));
+  const feedback={session:1,revision:1,decorated:true,events};
+  player.sync({feedback});player.cancelFeedback({skip:true});
+  player.sync({feedback:{...feedback,revision:2,events:[{...events[0],targets:[{damage:5}]}]}});
+  player.configure(true,1,0);player.cancelFeedback({skip:true});t.mock.timers.tick(1000);
+  assert.deepEqual(tracks,[]);
+});
+
 test('audio starts disabled, reports autoplay rejection and retries on user intent',async()=>{
   const {player,tracks}=setup();player.sync({music:'explore.ogg'});assert.equal(tracks[0].calls,0);assert.equal(player.label(),'音：切');
   player.configure(true,.5);player.sync({music:'explore.ogg'});assert.equal(player.label(),'音：読込中');player.sync({music:'explore.ogg'});assert.equal(tracks[0].calls,1);
