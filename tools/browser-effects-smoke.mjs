@@ -255,6 +255,31 @@ try{
     assert.ok(windupBass[id]>windupBass[id+'_v1']+.07,JSON.stringify(windupBass));
   }
   await fs.writeFile(path.join(output,'windup-bass.json'),JSON.stringify(windupBass,null,2));
+  await page.locator('a[href="assets/audio/auditions/windup-20/index.html"]').click();
+  const windups=page.locator('.clips button');
+  assert.equal(await windups.count(),20);
+  for(const button of await windups.all()){
+    const file=await button.getAttribute('data-file');
+    await button.click();
+    await page.waitForFunction(src=>{
+      const player=document.querySelector('#player');
+      return player.getAttribute('src')===src && player.ended;
+    },file);
+    assert.equal(await button.getAttribute('aria-pressed'),'false');
+  }
+  for(const width of [390,1440]){
+    await page.setViewportSize({width,height:856});
+    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+  }
+  await page.evaluate(()=>{
+    document.querySelector('[data-file="A10.wav"]').click();
+    document.querySelector('[data-file="E10.wav"]').click();
+  });
+  assert.equal(await page.locator('#player').getAttribute('src'),'E10.wav');
+  await page.click('#stop');
+  assert.ok(await page.locator('#player').evaluate(player=>player.paused));
+  assert.equal(await page.locator('.clip[aria-pressed="true"]').count(),0);
+  checks.push('windup auditions: all twenty WAVs play to completion, fast side switch, stop, mobile and desktop layouts');
   await fs.writeFile(path.join(output,'design-audio.json'),JSON.stringify(designAudio,null,2)+'\n');
   assert.deepEqual(errors,[]);await fs.writeFile(path.join(output,'results.json'),JSON.stringify({checks,sounds,errors},null,2)+'\n');console.log(JSON.stringify({passed:true,checks,errors},null,2));
 }finally{await browser?.close();server.close();}
