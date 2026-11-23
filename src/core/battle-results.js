@@ -1,3 +1,4 @@
+import {formationExperience} from './progression.js';
 import {reinforcementRoster} from './battle-reinforcements.js';
 import {battleGems,addGems} from './expedition.js';
 import {battleAlive} from './frontline-lifecycle.js';
@@ -10,10 +11,18 @@ export function beginBattleResult(engine,battle){
   const gold=battle.enemies.reduce((n,e)=>n+e.rewards.gold,0),xp=battle.enemies.reduce((n,e)=>n+e.rewards.xp,0);
   const recipients=s.members.filter(id=>battleAlive({...s,battle},s.actors[id]));
   const gems=battleGems(d,battle);addGems(s,gems);
-  const levels=engine.award(gold,xp,recipients);
+  // Old saves without the marker finish with the original fixed enemy rewards.
+  const experience=battle.pacedExperience
+    ? Object.fromEntries(recipients.map(id=>[id,formationExperience(d,d.encounters[battle.encounter],s.actors[id].level,s.records.encounters[battle.encounter])]))
+    : xp;
+  const amount=id=>typeof experience==='number'?experience:experience[id];
+  const rewardText=new Set(recipients.map(amount)).size>1
+    ? recipients.map(id=>d.actors[id].name+'は'+amount(id)+'の経験値を獲得した。').join('\n')
+    : recipients.map(id=>d.actors[id].name).join('、')+'は、それぞれ'+(amount(recipients[0])??0)+'の経験値を獲得した。';
+  const levels=engine.award(gold,experience,recipients);
   s.battleResult={encounter:battle.encounter,continuation:clone(battle.continuations),phase:'result',index:0,levels,drops:null,gems,...(battle.reinforcements?{reinforcements:clone(battle.reinforcements)}:{})};
   s.notice='';delete s.presentation.cast;delete s.presentation.message;
-  show(engine,`戦いに勝った！\n${recipients.map(id=>d.actors[id].name).join('、')}は、それぞれ${xp}の経験値を獲得した。\n${gold}ゴールドを手に入れた。${gems?`\n技能宝石を${gems}個手に入れた。`:''}`,'戦闘リザルト');
+  show(engine,`戦いに勝った！\n${rewardText}\n${gold}ゴールドを手に入れた。${gems?`\n技能宝石を${gems}個手に入れた。`:''}`,'戦闘リザルト');
 }
 function show(engine,text,speaker){
   engine.state.waiting={type:'battle_result',text,speaker};engine.log(text);

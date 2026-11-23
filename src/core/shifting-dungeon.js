@@ -68,7 +68,7 @@ export function shiftingDungeonData(source, seed = 0) {
     const root = source.game.world.townRoot, home = source.locations[root];
     const maps = Array.from({length: count}, (_, i) => floorId(i + 1));
     const dungeon = {id: SHIFTING_DUNGEON, schemaVersion: 1, name, profile: 'classic', region: 1, recommendedLevel: 1,
-      description: `入るたびに地形が変わる地下${count}階の迷宮。各階の推奨レベルは階数と同じです。帰還印は全階で使えます。`,
+      description: `入るたびに地形が変わる地下${count}階の迷宮。各階の推奨レベルは階数と同じです。生存している隊員の平均Lvを超える階では敵が強くなります。帰還印は全階で使えます。`,
       maps, entries: {main: {map: maps[0], point: 'entrance'}}, systems: {},
       fieldEvents: [], art: source.dungeons.kagaribi.art};
     data = {...source, dungeons: {...source.dungeons, [SHIFTING_DUNGEON]: dungeon},
