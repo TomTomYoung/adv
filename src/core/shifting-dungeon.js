@@ -1,3 +1,4 @@
+import {floorEncounterGroups} from './encounter-groups.js';
 import {generateDungeonCandidate} from './dungeon-generator.js';
 
 export const SHIFTING_DUNGEON = 'shifting_labyrinth';
@@ -11,13 +12,16 @@ const entrance = {x: 1, y: 1};
 const widthFor = (floor, seed) => sizeFor(floor) + 2 * (seed % 2);
 const farCorner = (floor, seed) => ({x: widthFor(floor, seed) - 2, y: sizeFor(floor) - 2});
 
-function floorMap(data, floor, seed) {
+function floorMap(data, floor, seed, previous) {
   const id = floorId(floor);
   let tiles, cells;
   const layout = () => tiles ??= generateDungeonCandidate({
     seed, candidateIndex: floor, layout: {width: widthFor(floor, seed), height: sizeFor(floor), extraLoops: 2}
   }).tiles;
-  const encounter = `${id}_encounter`;
+  const legacy = `${id}_encounter`;
+  const encounters = previous ? {encounter: previous.encounter, encounterPool: previous.encounterPool}
+    : floorEncounterGroups(data, {id, dungeon: SHIFTING_DUNGEON, floor, recommendedLevel: floor})
+      ?? {encounter: legacy, encounterPool: [{encounter: legacy, weight: 1}]};
   const objects = [];
   if (floor === 1 || floor === data.system.shiftingDungeonFloors) {
     objects.push({id: 'exit', kind: 'exit', name: '地上への帰路', trigger: 'interact',
@@ -36,11 +40,11 @@ function floorMap(data, floor, seed) {
       return cells;
     },
     get entrance() { return {...entrance, facing: layout()[1][2] === '.' ? 'east' : 'south'}; },
-    background: 'corridor', music: 'exploration', encounter, encounterRate: 0.48,
-    encounterPool: [{encounter, weight: 1}], objects
+    background: 'corridor', music: 'exploration', encounterRate: 0.48, ...encounters, objects
   };
 }
 
+// Saved battles and kill records still refer to these original single-enemy IDs.
 function addFloorEncounter(data, floor) {
   const species = ['kagaribi_soot_rat', 'waterwheel_beaver', 'saw_mantis', 'kaleidoscope_owl', 'moon_wolf'];
   const base = data.enemies[species[Math.floor((floor - 1) / 5) % species.length]];
@@ -74,7 +78,7 @@ export function shiftingDungeonData(source, seed = 0) {
     for (let floor = 1; floor <= count; floor++) addFloorEncounter(data, floor);
   }
   const maps = {...data.maps};
-  for (let floor = 1; floor <= count; floor++) maps[floorId(floor)] = floorMap(data, floor, seed);
+  for (let floor = 1; floor <= count; floor++) maps[floorId(floor)] = floorMap(data, floor, seed, source.maps[floorId(floor)]);
   const dungeon = data.dungeons[SHIFTING_DUNGEON];
   const links = dungeon.maps.slice(1).map((map, i) => ({
     id: `stairs_${i + 1}`, kind: 'stairs', name: `地下${i + 1}階と地下${i + 2}階の階段`,
