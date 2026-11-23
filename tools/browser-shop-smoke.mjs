@@ -99,7 +99,7 @@ try{
     await page.setViewportSize({width,height});await page.evaluate(layout=>{h.start(layout);h.open('shop');},layout);await align('.shop-panel');
     assert.equal(await page.locator('.skill-shop,.supply-panel').count(),0,`${name}: normal shop contains another service`);
     const initial=await geometry(`${name}/shop`);
-    if(layout==='scene')await pointer(page.locator('.scene-window-header button'),`${name}/close`);
+    if(layout==='scene')await pointer(page.getByRole('button',{name:'閉じる',exact:true}),`${name}/close`);
     await pointer(page.locator('.shop-character-cards button').first(),`${name}/first recipient`);
     const last=page.locator('.shop-products button').last(),scroll=await wheel('.shop-products');
     await pointer(last,`${name}/last item`,{click:true});
@@ -129,7 +129,7 @@ try{
     await wheel('.skill-shop-products');
     await pointer(page.locator('.skill-shop-card button').last(),`${name}/last skill`);
     const skillEnd=await geometry(`${name}/last skill`);await screenshot(`${name}-skills`);
-    if(layout==='scene')await pointer(page.locator('.scene-window-header button'),`${name}/close skills`,{click:true});
+    if(layout==='scene')await pointer(page.getByRole('button',{name:'閉じる',exact:true}),`${name}/close skills`,{click:true});
     else await page.keyboard.press('Escape');
     assert.equal(await page.evaluate(()=>h.view.tab),'location',`${name}: closes skills`);
     checks.push({name,initial,purchased,skills,skillEnd,checks:'Real wheel reaches final item and lesson; recipient hit targets remain accessible; purchase keeps list position and updates real Core; close works; outer panel never scrolls'});

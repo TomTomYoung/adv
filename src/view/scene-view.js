@@ -76,8 +76,7 @@ export class SceneView extends GameView{
     n.actions.replaceChildren();
     if(n.dialog.type==='presentation'){n.paging.hidden=true;return;}
     if(this.canChoose()&&n.dialog.type==='choice'){
-      const choices=make('div','choices');choices.setAttribute('aria-label','選択肢');
-      for(const o of n.dialog.options){const b=button('',()=>this.act({type:'choose',id:o.id}),'choice');b.disabled=!o.enabled;b.dataset.focus=`choice:${o.id}`;b.append(make('span','',o.text));if(o.requirement)b.append(make('small','',o.requirement));choices.append(b);}n.actions.append(choices);
+      n.actions.append(this.dialogChoices(n.dialog));
     }else{const next=button(this.canChoose()?'続きを読む　›':'次のページ　›',()=>this.advanceText(),'primary continue');next.dataset.focus='message:next';n.actions.append(next);}
   }
   measureMessage(force=false){
@@ -147,8 +146,8 @@ export class SceneView extends GameView{
       world.inert=true;hud.inert=true;dock.inert=true;
       const overlay=make('div','scene-overlay'),panel=make('section','scene-window');panel.dataset.panel=this.tab;panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','true');panel.setAttribute('aria-labelledby','scene-window-title');
       const head=make('header','scene-window-header'),title=make('h2','',panelNames[this.tab]);title.id='scene-window-title';
-      const close=button('閉じる',()=>this.closePanel());head.append(title,close);
-      const body=make('div','scene-window-body');panel.append(head,body);overlay.append(panel);stage.append(overlay);
+      const close=button('閉じる',()=>this.closePanel());close.className='scene-window-close';head.append(title);
+      const body=make('div','scene-window-body');panel.append(head,body,close);overlay.append(panel);stage.append(overlay);
       if(this.tab==='map')this.mapPanel(body,model);else super[this.tab](body,model);
       if(hadPanel&&oldTab===this.tab)body.scrollTop=scrollTop;
     }
