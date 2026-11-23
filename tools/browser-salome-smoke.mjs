@@ -52,7 +52,20 @@ try{
   for(const layout of ['scene','classic'])for(const width of [1440,390]){
     await page.setViewportSize({width,height:width===390?844:1000});await page.evaluate(layout=>h.start(layout),layout);
     const menu=page.locator('.location-choices');
-    assert.deepEqual(await menu.getByRole('button').allTextContents(),['帰り火亭','旅道具店','灯番組合','坂下町','荷揚げ河岸','迷宮へ']);
+    assert.deepEqual(await menu.getByRole('button').allTextContents(),['迷宮へ','帰り火亭','旅道具店','灯番組合','坂下町','荷揚げ河岸']);
+    await click('灯番組合');
+    assert.deepEqual(await menu.getByRole('button').allTextContents(),['依頼掲示板を見る','灯番詰所','救助隊詰所','篝火広場へ戻る']);
+    await revealChoices();assert.equal(await page.evaluate(()=>document.activeElement.textContent),'依頼掲示板を見る');
+    await page.keyboard.press('Enter');
+    const board=page.locator('.quest-list');assert.ok(await board.isVisible());
+    assert.equal(await board.evaluate(list=>list.nextElementSibling.textContent),'篝火広場へ戻る');
+    if(layout==='scene')assert.equal(await page.locator('.scene-window button').last().textContent(),'閉じる');
+    await board.locator('..').getByRole('button',{name:'篝火広場へ戻る',exact:true}).click();await click('帰り火亭');
+    const inn=await menu.getByRole('button').allTextContents();
+    assert.deepEqual(inn.slice(0,3),['宿屋で全回復（24G）','仲間と旅支度を相談する','守衛ベルグを訪ねる']);
+    assert.equal(inn.at(-1),'篝火広場へ戻る');
+    await click('守衛ベルグを訪ねる');await page.evaluate(()=>h.settle());await click('今の隊で進む');
+    await click('篝火広場へ戻る');
     await click('荷揚げ河岸');await click('運河通り');await click('鍵屋');await click('帳場');
     await page.evaluate(()=>{const save=h.g.save();h.g.load(save);h.render();});
     assert.equal(await page.evaluate(()=>h.g.state.townLocation),'e2_q101_counter');

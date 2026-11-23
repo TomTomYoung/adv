@@ -38,7 +38,7 @@ export function compileServiceLocations(locations,generated={services:[],scripts
     if(p.rest){
       const {cost,ratio}=p.rest;if(Object.keys(p.rest).some(k=>!['cost','ratio'].includes(k))||!Number.isSafeInteger(cost)||cost<0||cost>1e9||!Number.isFinite(ratio)||ratio<=0||ratio>1)throw Error(`休息の費用・回復率が不正です: ${location.id}`);
       const id=`package_rest_${location.id}`,script=`service.package.${location.id}.rest`;
-      generated.services.push({id,label:'休息する',detail:`${cost}GでHP・MPを最大値の${Math.round(ratio*100)}%まで回復し、状態異常を解除する。`,script,interior:true});
+      generated.services.push({id,label:cost?`休息する（${cost}G）`:'休息する',detail:`${cost}GでHP・MPを最大値の${Math.round(ratio*100)}%まで回復し、状態異常を解除する。`,script,interior:true});
       generated.scripts[script]={commands:[{op:'if',condition:{op:'gte',left:{ref:'gold'},right:cost},then:[{op:'rest',cost,ratio},{op:'narrate',text:'休息を終え、旅支度を整えた。'}],else:[{op:'narrate',text:`休息には${cost}Gが必要だ。`}]}]};location.services.push(id);
     }
     delete location.package;

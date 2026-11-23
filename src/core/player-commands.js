@@ -76,7 +76,7 @@ export function playerCommands(engine){
   const enabled=!engine.state.waiting&&!engine.state.battle&&!engine.state.vm.length;
   const reason=dungeonRestrictionReason(engine.state,'return_mark');
   const command=(id,label)=>({id,label:id==='retreat'&&reason?'帰還印封印中':label,enabled:enabled&&!(id==='retreat'&&reason),reason:id==='retreat'?reason:'',intent:{type:'player.command',id}});
-  return {title:'プレイヤーコマンド',restrictions:[...new Set(dungeonRestrictions(engine.state).map(r=>r.reason))],movement:[['前へ','forward'],['左を向く','left'],['後ろへ','back'],['右を向く','right']].map(([label,direction])=>({label,direction,enabled,intent:{type:'move',direction}})),actions:[command('interact','便利調べる'),command('inspect','任意調べる'),command('retreat','帰還印で町へ戻る'),...(commandTargets(engine,'portable').length?[command('portable','携帯松明を扱う')]:[]),...(commandTargets(engine,'environment').length?[command('environment','待機・周囲への行動')]:[])]};
+  return {title:'プレイヤーコマンド',restrictions:[...new Set(dungeonRestrictions(engine.state).map(r=>r.reason))],movement:[['前へ','forward'],['左を向く','left'],['後ろへ','back'],['右を向く','right']].map(([label,direction])=>({label,direction,enabled,intent:{type:'move',direction}})),actions:[command('interact','便利調べる'),command('inspect','任意調べる'),...(commandTargets(engine,'portable').length?[command('portable','携帯松明を扱う')]:[]),...(commandTargets(engine,'environment').length?[command('environment','待機・周囲への行動')]:[]),command('retreat','帰還印で町へ戻る')]};
 }
 
 export function commandDialog(engine){

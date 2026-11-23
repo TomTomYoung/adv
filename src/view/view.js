@@ -28,9 +28,9 @@ export class GameView {
     const overlay=node('div','map-overlay'),panel=node('section','map-dialog');
     panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','true');panel.setAttribute('aria-labelledby','expanded-map-title');
     const header=node('header','map-dialog-header'),title=node('h2','',this.model.dungeon.name);title.id='expanded-map-title';
-    const close=button('元に戻す',()=>this.closeMap());close.dataset.focus='map:close';header.append(title,close);
+    const close=button('元に戻す',()=>this.closeMap());close.dataset.focus='map:close';header.append(title);
     const body=node('div','map-dialog-body'),section=mapSection(this.model);section.style.setProperty('--map-expanded-width',`${this.model.dungeon.width*36+10}px`);body.append(section);
-    panel.append(header,body);overlay.append(panel);this.root.append(overlay);this.mapOverlay=overlay;
+    close.className='map-dialog-close';panel.append(header,body,close);overlay.append(panel);this.root.append(overlay);this.mapOverlay=overlay;
     prepareControls(panel);focusButton(close);
   }
   closeMap({restore=true}={}){
@@ -146,17 +146,21 @@ export class GameView {
     if(!m.town)return;const t=m.town,section=node('section','panel-content location-content');section.append(node('p','location-description',t.description));
     if(m.worldTravel&&!t.homeDistricts)section.append(node('p','world-travel-status',`${m.worldTravel.country} ／ ${m.worldTravel.settlement??t.name} ／ 帰還先：${m.worldTravel.returnAnchor}`));
     const choices=node('div','location-choices command-window');choices.setAttribute('aria-label','プレイヤーコマンド');
+    if(t.quests)choices.append(button('依頼掲示板を見る',()=>{this.tab='quests';this.render(m);}));
+    if(t.shop)choices.append(button('ショップを見る',()=>{this.tab='shop';this.render(m);}));
+    if(m.expedition?.skillShop)choices.append(button('スキル屋を見る',()=>{this.tab='skills';this.render(m);}));
+    if(m.expedition?.shop)choices.append(button('補給・工房を見る',()=>{this.tab='supply';this.render(m);}));
+    if(t.dungeons.length)choices.append(button(t.homeDistricts?'迷宮へ':'迷宮へ続く階段へ',()=>{this.tab='regions';this.render(m);},'primary'));
+    const addService=service=>choices.append(button(service.label,()=>this.act({type:'service',id:service.id}),'',t.busy));
+    const [mainService,...otherServices]=t.services;
+    if(mainService)addService(mainService);
+    if(t.party)choices.append(button('仲間と旅支度を相談する',()=>{this.tab='party';this.render(m);}));
+    for(const q of t.stories)choices.append(button(`${q.title}の続きを話す`,()=>this.act({type:'story.resume',quest:q.id}),'primary',!q.enabled));
+    for(const service of otherServices)addService(service);
     const destinations=t.links.map(l=>({label:l.name,intent:{type:'location.move',id:l.id},enabled:!t.busy}));
     const routes=m.worldTravel?.actions??[];
-    for(const action of (t.homeDistricts?[...destinations,...routes]:[...routes,...destinations]))choices.append(button(action.label,()=>this.act(action.intent),'location-choice',!action.enabled));
-    for(const q of t.stories)choices.append(button(`${q.title}の続きを話す`,()=>this.act({type:'story.resume',quest:q.id}),'primary',!q.enabled));
-    for(const service of t.services)choices.append(button(`${service.label} — ${service.detail}`,()=>this.act({type:'service',id:service.id}),'',t.busy));
-    if(t.quests)choices.append(button('依頼掲示板を見る',()=>{this.tab='quests';this.render(m);}));
-    if(t.party)choices.append(button('仲間と旅支度を相談する',()=>{this.tab='party';this.render(m);}));
-    if(t.shop)choices.append(button('ショップを見る',()=>{this.tab='shop';this.render(m);}));
-    if(m.expedition?.shop)choices.append(button('補給・工房を見る',()=>{this.tab='supply';this.render(m);}));
-    if(m.expedition?.skillShop)choices.append(button('スキル屋を見る',()=>{this.tab='skills';this.render(m);}));
-    if(t.dungeons.length)choices.append(button(t.homeDistricts?'迷宮へ':'迷宮へ続く階段へ',()=>{this.tab='regions';this.render(m);},'primary'));
+    const travel=t.prioritizeDestinations?[...destinations,...routes]:[...routes,...destinations];
+    for(const action of travel)choices.append(button(action.label,()=>this.act(action.intent),'location-choice',!action.enabled));
     if(t.dungeons.length&&(m.tracked?.entryDungeon||m.tracked?.townShortcut)){
       const shortcut=node('div','quest-shortcut');shortcut.setAttribute('role','group');shortcut.setAttribute('aria-label','追跡中の依頼');shortcut.append(node('span','eyebrow',`追跡中　${m.tracked.title}`));
       if(m.tracked.townShortcut)shortcut.append(button(m.tracked.townShortcut+'へ向かう',()=>this.act({type:'quest.town',id:m.tracked.id}),'',t.busy));
@@ -183,7 +187,6 @@ export class GameView {
   }
   quests(parent,m){
     const section=node('div','panel-content');section.append(heading('GUILD / REQUESTS','今日も、帰るために潜る。'));
-    if(m.town?.parent)section.append(button(`${m.town.parent.name}へ戻る`,()=>{this.tab='location';this.act({type:'location.move',id:m.town.parent.id});},'location-back',m.busy));
     const controls=node('div','board-controls'),search=node('input','search');search.placeholder='依頼名・依頼人で探す';search.setAttribute('aria-label','依頼を検索');search.value=this.query;search.dataset.focus='quest-search';search.addEventListener('input',()=>{this.query=search.value;this.render(m);});
     const select=node('select');select.setAttribute('aria-label','依頼先の迷宮');select.append(new Option('すべての迷宮','all'));for(const d of m.dungeons??[])select.append(new Option(d.name,d.id));select.value=this.dungeonFilter;select.addEventListener('change',()=>{this.dungeonFilter=select.value;this.render(m);});
     const filter=node('select');filter.setAttribute('aria-label','依頼の状態');for(const [v,t] of [['open','未完了'],['active','受注中'],['completed','完了'],['all','すべて']])filter.append(new Option(t,v));filter.value=this.filter;filter.addEventListener('change',()=>{this.filter=filter.value;this.render(m);});controls.append(search,select,filter);section.append(controls);
@@ -201,7 +204,9 @@ export class GameView {
       if(q.stage==='active')this.mainQuestControl(actions,q,m);
       body.append(actions);if(q.stage==='active')this.questEntrance(body,q);
       card.append(num,body);list.append(card);
-    }section.append(node('p','muted',`${qs.length}件を表示`),list);parent.append(section);
+    }section.append(node('p','muted',`${qs.length}件を表示`),list);
+    if(m.town?.parent)section.append(button(`${m.town.parent.name}へ戻る`,()=>{this.tab='location';this.act({type:'location.move',id:m.town.parent.id});},'location-back',m.busy));
+    parent.append(section);
   }
   regions(parent,m){
     const section=node('div','panel-content');section.append(heading('DESCENT / DUNGEONS','潜る場所を選ぶ'));
@@ -256,7 +261,22 @@ export class GameView {
     }
     if(d.type==='presentation'){section.append(node('span','eyebrow',d.speaker||''),node('p','story-text',d.text??''));}
     else if(d.type==='text'){section.append(node('span','eyebrow',d.speaker||'灯の下で'),node('p','story-text',d.text),button('続きを読む　›',()=>this.advanceText(),'primary continue'));}
-    else{section.append(node('span','eyebrow',d.speaker||'あなたの判断'),node('p','story-text',d.text??'どうする？'));const choices=node('div','choices');for(const o of d.options){const b=button('',()=>this.act({type:'choose',id:o.id}),'choice',!o.enabled);b.dataset.focus=`choice:${o.id}`;b.append(node('span','',o.text));if(o.requirement)b.append(node('small','',o.requirement));choices.append(b);}section.append(choices);}parent.append(section);
+    else{section.append(node('span','eyebrow',d.speaker||'あなたの判断'),node('p','story-text',d.text??'どうする？'),this.dialogChoices(d));}
+    parent.append(section);
+  }
+  dialogChoices(dialog){
+    const list=node('div','choices');list.setAttribute('aria-label','選択肢');
+    const options=dialog.options.filter(o=>o.id!==dialog.cancelId);
+    const cancel=dialog.options.find(o=>o.id===dialog.cancelId);if(cancel)options.push(cancel);
+    for(const o of options){
+      const choice=button(o.text,()=>this.act({type:'choose',id:o.id}),'choice',!o.enabled);
+      choice.dataset.focus=`choice:${o.id}`;
+      if(!o.requirement){list.append(choice);continue;}
+      const row=node('div','choice-with-note'),note=node('small','choice-note',o.requirement);
+      note.id=`choice-note-${encodeURIComponent(o.id)}`;choice.setAttribute('aria-describedby',note.id);
+      row.append(choice,note);list.append(row);
+    }
+    return list;
   }
   battle(parent,m){
     if(!m.battle.enemies.some(e=>e.id===this.selectedTarget&&e.hp>0))this.selectedTarget=m.battle.enemies.find(e=>e.hp>0)?.id;

@@ -20,6 +20,24 @@ function setup(g=newGame()){
 }
 const named=(root,name)=>[...root.querySelectorAll('button')].find(b=>b.textContent===name);
 
+test('both layouts put cancel last and keep requirements outside the choice label',()=>{
+  const d=structuredClone(data);
+  d.scripts.choice_order={commands:[{op:'choice',options:[
+    {id:'leave',text:'戻る',commands:[]},
+    {id:'records',text:'記録を読む',commands:[]},
+    {id:'enter',text:'中に入る',condition:false,requirement:'通行証が必要です。',commands:[]}
+  ]}]};
+  const g=new GameEngine(d);drain(g);g.run('choice_order');const c=setup(g);
+  try{for(const layout of ['scene','classic']){
+    const v=c.switchTo(layout);while(v.canChoose?.()===false)v.advanceText();
+    const list=c.root.querySelector('.choices'),buttons=[...list.querySelectorAll('button')];
+    assert.deepEqual(buttons.map(b=>b.textContent),['記録を読む','中に入る','戻る']);
+    assert.equal(buttons[1].disabled,true);
+    const note=list.querySelector('.choice-note');assert.equal(note.textContent,'通行証が必要です。');
+    assert.equal(buttons[1].getAttribute('aria-describedby'),note.id);
+  }}finally{c.cleanup();}
+});
+
 test('both layouts render all fixtures with the same visible story choices and enemy targets',()=>{
   const c=setup();try{for(const [name,model] of Object.entries(fixtures)){
     for(const layout of ['classic','scene']){
