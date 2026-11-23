@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import {data, drain, inspect, pathTo, walk, fight} from './helpers.mjs';
 import {GameEngine} from '../src/core/engine.js';
-import {applySkill} from '../src/core/battle.js';
+import {formationExperience, xpThreshold} from '../src/core/progression.js';
+import {endBattle, applySkill} from '../src/core/battle.js';
 import {normalEncounterPool} from '../src/core/scouting.js';
 import {loadContent, loadPlayableContent} from '../src/core/loader.js';
 import {validateSave} from '../src/core/save.js';
@@ -121,7 +122,8 @@ test('first and middle floors award floor-level combat rewards to the recommende
     g.startBattle(map.encounter, {win: [], lose: [], escape: []});
     fight(g);
     assert.equal(g.state.records.wins, 1);
-    assert.equal(g.state.actors.ada.xp - xp, 32 * floor);
+    const earned = g.state.actors.ada.xp - xp;
+    assert.equal(earned, floor === 1 ? 9 : 37);
   }
 });
 
@@ -254,4 +256,86 @@ test('a legacy solitary battle resumes with its original HP and rewards before t
   fight(restored);
   assert.equal(restored.state.actors.ada.xp, 96);
   assert.ok(restored.map().encounterPool.every(entry => entry.encounter !== map.encounter));
+});
+
+test('same-level encounters follow the requested pace across all 99 level-ups', () => {
+  const targets = [8, 10, 14, 20, 30, 50, 70, 80, 100];
+  for (let level = 1; level < 100; level++) {
+    const target = targets[Math.min(level, targets.length) - 1];
+    const map = playable.maps[playable.dungeons[id].maps[level - 1]];
+    const weight = map.encounterPool.reduce((sum, e) => sum + e.weight, 0);
+    let average = 0;
+    for (const entry of map.encounterPool) {
+      const encounter = playable.encounters[entry.encounter];
+      assert.equal(encounter.progression.level, level);
+      // Include the full integer XP rounding cycle to within 0.001 XP/win.
+      const earned = Array.from({length: 1000}, (_, i) => formationExperience(playable, encounter, level, i + 1))
+        .reduce((sum, xp) => sum + xp, 0);
+      average += earned / 1000 * entry.weight / weight;
+    }
+    const cost = xpThreshold(playable, level) - xpThreshold(playable, level - 1);
+    assert.ok(Math.abs(cost / average - target) < 0.02, 'Lv' + level);
+    if (level >= 6) {
+      assert.ok(map.encounterPool.length >= 7);
+      const species = new Set(map.encounterPool.flatMap(e => playable.encounters[e.encounter].enemies));
+      assert.ok(species.size >= 4);
+    }
+  }
+});
+
+test('pacing persists across a mixed-level battle and its result, and ignores fallen members', () => {
+  const g = newGame();
+  g.award(0, xpThreshold(data, 7), ['ada']);
+  g.award(0, xpThreshold(data, 5), ['nio', 'sera', 'il']);
+  g.state.actors.sera.hp = 0;
+  enter(g);
+  const map = g.data.maps[id + '_f8'];
+  g.teleport(map.id, map.entrance.x, map.entrance.y);
+  g.startBattle(map.encounter, {win: [], lose: [], escape: []});
+  // The three living levels 8, 6, 6 round to 7.
+  assert.equal(g.state.battle.enemyScale, 1.28);
+  const copy = newGame();
+  copy.load(g.save());
+  assert.deepEqual(copy.state.battle, g.state.battle);
+  const xp = Object.fromEntries(copy.state.members.map(id => [id, copy.state.actors[id].xp]));
+  endBattle(copy, 'win');
+  const delta = id => copy.state.actors[id].xp - xp[id];
+  assert.ok(delta('ada') > 0 && delta('ada') < delta('nio'));
+  assert.equal(delta('sera'), 0);
+  for (const id of ['ada', 'nio']) assert.ok(copy.state.waiting.text.includes(data.actors[id].name + 'は' + delta(id)));
+  const result = copy.save();
+  g.load(result);
+  drain(g);
+  assert.equal(g.state.actors.ada.xp, xp.ada + delta('ada'));
+
+  const old = newGame();
+  enter(old);
+  old.startBattle(old.map().encounter, {win: [], lose: [], escape: []});
+  const preChange = JSON.parse(old.save());
+  delete preChange.state.battle.pacedExperience;
+  g.load(JSON.stringify(preChange));
+  endBattle(g, 'win');
+  assert.equal(g.state.actors.ada.xp, 32);
+});
+
+test('going deeper increases combat pressure, caps XP boosts and gives no XP on retreat', () => {
+  const g = newGame();
+  g.award(0, xpThreshold(data, 5));
+  enter(g);
+  let last = 0;
+  for (const [level, scale] of [[6, 1], [7, 1.245], [8, 1.8]]) {
+    const map = g.data.maps[id + '_f' + level];
+    g.teleport(map.id, map.entrance.x, map.entrance.y);
+    g.startBattle(map.encounter, {win: [], lose: [], escape: []});
+    const battle = g.state.battle;
+    assert.equal(battle.enemyScale ?? 1, scale);
+    assert.ok(battle.enemies[0].stats.str > last);
+    last = battle.enemies[0].stats.str;
+    const xp = g.state.actors.ada.xp;
+    endBattle(g, 'escape');
+    assert.equal(g.state.actors.ada.xp, xp);
+  }
+  const encounterAt = floor => g.data.encounters[g.data.maps[id + '_f' + floor].encounter];
+  assert.equal(formationExperience(g.data, encounterAt(8), 6, 1), formationExperience(g.data, encounterAt(7), 6, 1));
+  assert.ok(formationExperience(g.data, encounterAt(6), 6, 1) > formationExperience(g.data, encounterAt(1), 6, 1));
 });

@@ -404,6 +404,7 @@ export function validateSave(save,data){
     if(!isRecord(b)||!e||!Array.isArray(b.enemies)||!roster||b.enemies.length!==roster.length||!Array.isArray(b.acted)||!Array.isArray(b.guards)||!Array.isArray(b.log)||!integer(b.round,1,1e6)){fail('戦闘状態不正');}
     else{
       if(e.reinforcements&&b.enemies.filter(u=>u?.hp>0&&!b.frontline?.removed?.[`enemy:${u.instance}`]).length>5)fail('増援戦の生存数超過');
+      if(b.pacedExperience!==undefined&&(b.pacedExperience!==true||!data.encounters[b.encounter]?.progression))fail('経験値設定不正');
       if(b.enemyScale!==undefined&&(!Number.isFinite(b.enemyScale)||b.enemyScale<.1||b.enemyScale>5))fail('敵の環境倍率不正');
       if(data.game.recordVersion===1&&(!Array.isArray(b.recordedKills)||new Set(b.recordedKills).size!==b.recordedKills.length||b.recordedKills.some(id=>!b.enemies.some(e=>e?.instance===id&&(e.hp===0||b.mode==='frontline')))))fail('撃破記録不正');
       if(new Set(b.acted).size!==b.acted.length||new Set(b.guards).size!==b.guards.length||b.acted.some(id=>!s.members.includes(id))||b.guards.some(id=>!s.members.includes(id)))fail('行動済み隊員不正');
