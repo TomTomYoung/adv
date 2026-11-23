@@ -42925,6 +42925,7 @@ export const referenceData={
     "data/dungeons.json",
     "data/edge-types.json",
     "data/effects.json",
+    "data/encounter-groups.json",
     "data/encounters.json",
     "data/enemies.json",
     "data/expedition.json",
@@ -44670,6 +44671,14 @@ export const referenceData={
       },
       "mine_shallow_c": {
         "name": "低位の試錐群"
+      }
+    },
+    "encounterGroups": {
+      "bands": {
+        "name": "bands"
+      },
+      "dungeons": {
+        "name": "dungeons"
       }
     },
     "statuses": {

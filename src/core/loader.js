@@ -1,3 +1,4 @@
+import {floorEncounterGroups} from './encounter-groups.js';
 import {shiftingDungeonData} from './shifting-dungeon.js';
 import {applyEditionGeography} from './edition-geography.js';
 import {projectQuestObjects} from './quest-events.js';
@@ -115,6 +116,7 @@ export async function loadContent(read = readContentJson, {edition='e1'}={}) {
     if(previous.worldTravel?.version!==1||data.worldTravel?.version!==2)throw Error('未対応の地理更新です。');
     data.settlementMigration={previous,settlements:Object.entries(data.worldTravel.settlements).filter(([id,s])=>!previous.worldTravel.settlements[id]&&previous.locations[s.root]).map(([id])=>id)};
   }
+  for (const map of Object.values(data.maps)) Object.assign(map, floorEncounterGroups(data, map));
   projectQuestObjects(data);
   const errors=validateContent(data);
   if(errors.length) throw new Error(`シナリオ検証エラー\n${errors.join('\n')}`);
