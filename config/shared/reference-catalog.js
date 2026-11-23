@@ -44674,6 +44674,9 @@ export const referenceData={
       }
     },
     "encounterGroups": {
+      "growthProfiles": {
+        "name": "growthProfiles"
+      },
       "bands": {
         "name": "bands"
       },

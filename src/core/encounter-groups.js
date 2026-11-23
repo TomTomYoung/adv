@@ -1,3 +1,10 @@
+function enemyStats(catalog, template, level) {
+  if (typeof template !== 'string') return template;
+  const {base, perLevel} = catalog.growthProfiles[template];
+  return Object.fromEntries(Object.entries(base).map(([key, value]) =>
+    [key, Math.floor(value + (level - 1) * perLevel[key])]));
+}
+
 // The band defines eligible rosters. A dungeon assigns weights to them and a
 // floor can add, reweight or disable an individual roster (weight zero).
 export function floorEncounterGroups(data, map) {
@@ -16,7 +23,7 @@ export function floorEncounterGroups(data, map) {
     if (weight === 0) continue;
     const enemies = [], names = [];
     for (const [species, count] of Object.entries(roster)) {
-      const base = data.enemies[species], stats = band.enemies[species];
+      const base = data.enemies[species], stats = enemyStats(catalog, band.enemies[species], level);
       if (!base || !stats || !Number.isInteger(count) || count < 1) throw Error(map.id + ': 敵編成が不正です ' + group);
       const enemy = map.id + '_lv' + level + '_' + species;
       data.enemies[enemy] ??= {...base, id: enemy, name: base.name + ' Lv' + level, stats, rewards: band.rewards};
@@ -28,7 +35,19 @@ export function floorEncounterGroups(data, map) {
     data.encounters[encounter] = {id: encounter, text: names.join('、') + 'が現れた。', escape: true, enemies};
     encounterPool.push({encounter, weight});
   }
-  if (encounterPool.length) return {encounter: encounterPool[0].encounter, encounterPool};
+  if (encounterPool.length) {
+    if (profile.progression) {
+      const count = id => data.encounters[id].enemies.length;
+      const weight = encounterPool.reduce((sum, e) => sum + e.weight, 0);
+      const meanSize = encounterPool.reduce((sum, e) => sum + count(e.encounter) * e.weight, 0) / weight;
+      for (const entry of encounterPool) {
+        const encounter = data.encounters[entry.encounter];
+        // Half the reward is for victory, half is proportional to the size of this formation.
+        encounter.progression = {dungeon: map.dungeon, level, rewardFactor: (1 + count(entry.encounter) / meanSize) / 2};
+      }
+    }
+    return {encounter: encounterPool[0].encounter, encounterPool};
+  }
   if (Object.keys(band.groups).some(group => Object.hasOwn(weights, group))) {
     throw Error(map.id + ': このレベル帯で有効な敵編成がありません');
   }

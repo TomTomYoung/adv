@@ -30,13 +30,27 @@ import {describeTarget,playBattleCue} from './feedback.js';
 export function startBattle(engine,id,continuations,options={}){
   if(engine.state.battle||engine.state.battleResult)throw new Error('戦闘は重複して開始できません');
   const encounter=engine.data.encounters[id];if(!encounter)throw new Error(`不明な戦闘: ${id}`);
+  let enemyScale=options.enemyScale??1;
+  if(encounter.progression){
+    const {actors,members}=engine.state;
+    const levels=members.filter(id=>actors[id].hp>0).map(id=>actors[id].level);
+    if(levels.length){
+      const partyLevel=Math.round(levels.reduce((a,b)=>a+b,0)/levels.length);
+      const {dungeon,level}=encounter.progression;
+      const {underlevelMultipliers,fullPressureLevel}=engine.data.encounterGroups.dungeons[dungeon].progression;
+      const gap=Math.max(0,Math.min(level-partyLevel,underlevelMultipliers.length-1));
+      enemyScale*=1+(underlevelMultipliers[gap]-1)*Math.min(1,level/fullPressureLevel);
+    }
+  }
   const layout=gridStart(engine.data,engine.state,encounter,options);
   consumeFieldBattleSignals(engine.data,engine.state);
   dungeonBattleStart(engine);
   engine.state.records.battles++;
-  engine.state.battle={...layout,recordedKills:[],encounter:id,round:1,enemies:encounter.enemies.map((id,i)=>scaledEnemy(engine.data.enemies[id],i,options.enemyScale??1)),acted:[],turnQueue:null,turnIndex:0,guards:[],buffs:[],covers:[],analyzed:[],continuations:clone(continuations),log:[encounter.text],musicBefore:engine.state.presentation.music};
+  engine.state.battle={...layout,recordedKills:[],encounter:id,round:1,enemies:encounter.enemies.map((id,i)=>scaledEnemy(engine.data.enemies[id],i,enemyScale)),acted:[],turnQueue:null,turnIndex:0,guards:[],buffs:[],covers:[],analyzed:[],continuations:clone(continuations),log:[encounter.text],musicBefore:engine.state.presentation.music};
   if(isFrontline(engine.state))for(const key of encounter.frontlineDown??[]){const u=frontlineUnits(engine.state).find(u=>unitKey(u)===key);u.hp=0;}
-  if(options.enemyScale!==undefined&&options.enemyScale!==1)engine.state.battle.enemyScale=options.enemyScale;
+  if(enemyScale!==1)engine.state.battle.enemyScale=enemyScale;
+  // Battles saved before the pace change finish with their original reward.
+  if(encounter.progression)engine.state.battle.pacedExperience=true;
   Object.assign(engine.state.battle,{firedEvents:[],event:null,pendingResult:null});
   if(options.manualTurns===true)engine.state.battle.manualTurns=true;
   if(encounter.reinforcements)engine.state.battle.reinforcements=[];
