@@ -1,13 +1,22 @@
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import test from 'node:test';
-import {guideActor, guideBands, guideGear, loadGuide} from '../src/application/labyrinth-guide.js';
+import {guideActor, guideBands, guideGear, loadGuide, monsterFloorText} from '../src/application/labyrinth-guide.js';
 import {floorEncounterGroups} from '../src/core/encounter-groups.js';
 import {canEquip} from '../src/core/jobs.js';
 import {xpThreshold} from '../src/core/progression.js';
 import {newGame} from './helpers.mjs';
 
 const guide = await loadGuide(file => readFile(new URL('../' + file, import.meta.url), 'utf8').then(JSON.parse));
+
+test('苔虫と戦車ビーバーの生息階は有効な編成から表示する', () => {
+  const sections = guideBands(guide, false);
+  assert.equal(monsterFloorText(sections, 'moss_beetle'), '地下1〜10階');
+  assert.equal(monsterFloorText(sections, 'tank_beaver'), '地下6〜24階');
+  for (const id of ['moss_beetle', 'tank_beaver']) {
+    assert.equal(guide.assets.images[guide.enemies[id].sprite], 'assets/images/monsters/' + id + '.webp');
+  }
+});
 
 test('迷宮図鑑は全階の抽選重みと敵種ごとの個体数を実際の遭遇表と一致させる', () => {
   const data = {...guide, enemies: {...guide.enemies}, encounters: {}};
