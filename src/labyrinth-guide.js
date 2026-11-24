@@ -59,6 +59,51 @@ function block(title) {
   if (title) div.append(el('h4', title));
   return div;
 }
+function summaryCard(section, id, name, picture, subtitle, stats, footer) {
+  const card = el('article', undefined, 'guide-entry');
+  const head = el('div', undefined, 'entry-head'), text = el('div'), title = el('h4');
+  const link = el('a', name);
+  link.href = '#' + section + '/' + id;
+  title.append(link);
+  text.append(title);
+  if (subtitle) text.append(el('small', subtitle));
+  head.append(image(picture), text);
+  const numbers = el('dl', undefined, 'entry-stats');
+  for (const key of STAT_KEYS) {
+    const pair = el('div');
+    pair.append(el('dt', data.jobProfile.statNames[key]), el('dd', String(stats[key])));
+    numbers.append(pair);
+  }
+  card.append(head, numbers, el('p', footer, 'entry-footer'));
+  return card;
+}
+
+function drawAllyGrid(level, mode) {
+  const cards = Object.entries(data.actors).map(([id, actor]) => {
+    const job = actor.initialJob;
+    const {stats, gear} = guideActor(data, id, job, level, mode);
+    return summaryCard('allies', id, actor.name, data.assets.images[actor.portrait],
+      data.jobs[job].name, stats, equipmentText(gear));
+  });
+  $('ally-grid').replaceChildren(...cards);
+}
+
+function filterMonsters() {
+  const query = $('monster-search').value.trim().normalize('NFKC').toLowerCase();
+  let count = 0;
+  for (const group of $('monster-index').querySelectorAll('.monster-category')) {
+    let matches = 0;
+    for (const card of group.querySelectorAll('.guide-entry')) {
+      card.hidden = !card.dataset.search.includes(query);
+      if (!card.hidden) matches++;
+    }
+    group.hidden = matches === 0;
+    group.querySelector('h3 small').textContent = String(matches) + '件';
+    count += matches;
+  }
+  $('monster-empty').hidden = count > 0;
+}
+
 function fillMonsterList() {
   const enemies = Object.values(data.enemies);
   const names = new Set(), duplicates = new Set();
@@ -69,11 +114,27 @@ function fillMonsterList() {
   for (const [category, entries] of monsterGroups(enemies)) {
     const group = el('optgroup');
     group.label = category;
-    for (const {id, name} of entries) {
-      group.append(new Option(duplicates.has(name) ? name + '（' + id + '）' : name, id));
+    const section = el('section', undefined, 'monster-category');
+    const title = el('h3', category), grid = el('div', undefined, 'guide-grid');
+    title.append(el('small', entries.length + '件'));
+    section.append(title, grid);
+    for (const enemy of entries) {
+      const {id, name, sprite, stats, rewards} = enemy;
+      const variant = duplicates.has(name) ? id : '';
+      group.append(new Option(variant ? name + '（' + variant + '）' : name, id));
+      const card = summaryCard('monsters', id, name, data.assets.images[sprite], variant, stats,
+        rewards.xp + ' EXP　' + rewards.gold + ' G');
+      if (variant) card.querySelector('a').setAttribute('aria-label', name + '（' + variant + '）');
+      card.dataset.search = (name + ' ' + id).normalize('NFKC').toLowerCase();
+      grid.append(card);
     }
     $('monster').append(group);
+    $('monster-index').append(section);
   }
+  const empty = el('p', '一致する魔物はいません。');
+  empty.id = 'monster-empty';
+  empty.hidden = true;
+  $('monster-index').append(empty);
 }
 
 function drawMonster(id) {
@@ -189,7 +250,12 @@ function refreshAlly() {
   const input = $('level');
   const level = input.valueAsNumber;
   if (!Number.isInteger(level) || level < 1 || level > data.system.maxLevel) return;
-  const id = $('actor').value, job = $('job').value, mode = $('gear').value;
+  const mode = $('gear').value;
+  if ($('ally-detail').hidden) {
+    drawAllyGrid(level, mode);
+    return;
+  }
+  const id = $('actor').value, job = $('job').value;
   drawActor(id, job, level, mode);
   drawGrowth(id, job, level, mode);
 }
@@ -199,19 +265,45 @@ function changeActor() {
   jobs.replaceChildren();
   for (const [key, job] of Object.entries(data.jobs)) option(jobs, key, job.name + (key === initial ? '（初期職）' : ''));
   jobs.value = initial;
-  refreshAlly();
 }
-function switchPage() {
-  const [section, monsterId] = location.hash.slice(1).split('/');
+function switchPage(event) {
+  const [section, entryId] = location.hash.slice(1).split('/');
   const active = ['monsters', 'enemies'].includes(section) ? section : 'allies';
   for (const id of ['allies', 'monsters', 'enemies']) {
     $(id).hidden = id !== active;
     $('nav-' + id).setAttribute('aria-current', id === active ? 'page' : 'false');
   }
-  if (active === 'monsters') {
-    const select = $('monster');
-    if (monsterId && Object.hasOwn(data.enemies, monsterId)) select.value = monsterId;
-    drawMonster(select.value);
+  if (active === 'enemies') return;
+  const allies = active === 'allies';
+  const detail = Object.hasOwn(allies ? data.actors : data.enemies, entryId ?? '');
+  const select = $(allies ? 'actor' : 'monster');
+  const fromAllyGrid = allies && $('ally-detail').hidden;
+  select.closest('label').hidden = !detail;
+  $(active + '-back').hidden = !detail;
+  $(allies ? 'ally-grid' : 'monster-index').hidden = detail;
+  $(allies ? 'ally-detail' : 'monster-sheet').hidden = !detail;
+  if (allies) {
+    $('job').closest('label').hidden = !detail;
+    if (detail && (fromAllyGrid || select.value !== entryId)) {
+      select.value = entryId;
+      changeActor();
+    }
+    refreshAlly();
+  } else {
+    $('monster-search-label').hidden = detail;
+    if (detail) {
+      select.value = entryId;
+      drawMonster(entryId);
+    }
+  }
+  if (!event) return;
+  const [previous, previousId] = new URL(event.oldURL).hash.slice(1).split('/');
+  if (!detail && previous === active && previousId) {
+    const index = $(allies ? 'ally-grid' : 'monster-index');
+    const link = Array.from(index.querySelectorAll('a')).find(a => a.hash === '#' + active + '/' + previousId);
+    if (link && link.getClientRects().length) link.focus();
+  } else if (detail && document.activeElement !== select) {
+    $(allies ? 'ally-title' : 'monster-title').focus();
   }
 }
 async function init() {
@@ -221,10 +313,15 @@ async function init() {
   for (const [key, def] of Object.entries(data.actors)) option($('actor'), key, def.name);
   for (const [key, label] of Object.entries(gearStages)) option($('gear'), key, label);
   fillMonsterList();
+  $('monster-search').addEventListener('input', filterMonsters);
   $('monster').addEventListener('change', () => { location.hash = 'monsters/' + $('monster').value; });
   $('level').max = data.system.maxLevel;
   $('source').addEventListener('change', drawGroups); $('band').addEventListener('change', drawGroups);
-  $('actor').addEventListener('change', changeActor); $('job').addEventListener('change', refreshAlly);
+  $('actor').addEventListener('change', () => {
+    changeActor();
+    location.hash = 'allies/' + $('actor').value;
+  });
+  $('job').addEventListener('change', refreshAlly);
   $('gear').addEventListener('change', refreshAlly); $('level').addEventListener('input', refreshAlly);
   $('level').addEventListener('change', () => {
     const input = $('level');
@@ -233,6 +330,6 @@ async function init() {
   });
   $('levels').addEventListener('toggle', refreshAlly);
   window.addEventListener('hashchange', switchPage);
-  changeActor(); drawGroups(); switchPage(); $('status').hidden = true;
+  drawGroups(); switchPage(); $('status').hidden = true;
 }
 init().catch(error => { $('status').textContent = '図鑑を読み込めませんでした。' + error.message; });
