@@ -13,7 +13,9 @@ const {data,catalog,routes,arrive,expectedValues,setupRoute}=await suites[suite]
 const level=suite==='--canal'?1:suite==='market'?6:10;
 const checkEachChoice=suite==='--deep-abyss'||suite==='--canal';
 const base=process.env.ADV_TRIAL_BASE_URL??'https://tomtomyoung.github.io/adv/',hash=b=>createHash('sha256').update(b).digest('hex');
-const quests=Object.keys(routes),files=['runtime.json','data/scenario-editions.json','data/scenario-editions/e2/geography.json',
+const filterQuest=process.argv[3];
+if(filterQuest)assert.ok(Object.hasOwn(routes,filterQuest),'Unknown quest in published trial suite');
+const quests=filterQuest?[filterQuest]:Object.keys(routes),files=['runtime.json','data/scenario-editions.json','data/scenario-editions/e2/geography.json',
   'data/scenario-editions/e2/companions.json','playtests/quest-parties.json',...quests.flatMap(q=>['data/quests/'+q+'.json','data/scenario-editions/e2/'+q+'.json'])];
 async function verifyFile(path){
   const expected=hash(await readFile(path)),until=Date.now()+8*60_000;
@@ -52,7 +54,7 @@ function trace(quest,route){
   return {commands,checkpoints,initial,report:questTrialReport(trial)};
 }
 
-const browser=await chromium.launch({args:['--no-sandbox']});
+const browser=await chromium.launch({executablePath:process.env.ADV_BROWSER_EXECUTABLE,args:['--no-sandbox']});
 try{
   const page=await browser.newPage({viewport:{width:390,height:844}}),errors=[],q038=[];
   page.on('pageerror',e=>errors.push(e.message));
@@ -61,7 +63,8 @@ try{
   assert.equal((await page.goto(url,{waitUntil:'domcontentloaded'})).status(),200);
   await page.locator('#launch:enabled').waitFor({timeout:120000});
   assert.ok(q038.includes(200));await page.selectOption('#effects','off');
-  for(const [quest,paths] of Object.entries(routes)){
+  for(const quest of quests){
+    const paths=routes[quest];
     await page.selectOption('#quest',quest);
     for(const route of paths){
       const {commands,report,initial,checkpoints}=trace(quest,route);
@@ -207,8 +210,9 @@ if(suite==='--q095'){
       ['q102',['begin','family','heard','notice'],['inn','heard','go','bell'],'bell'],
       ['q103',['source','join','back','consent'],['write'],'write'],
       ['q104',['sound','learn','find'],['buy'],'buy'],
-      ['q105',['canal','roles','back','report'],['roles','agree'],'roles']
-    ]});
+      ['q105',['canal','roles','back','report'],['roles','agree'],'roles'],
+      ['q106',['owner','ask'],['eat'],'meal']
+    ].filter(([id])=>quests.includes(id))});
   }
   let attempts=0;const first=q038.length;
   await page.route(url=>url.pathname.endsWith('/e2/q038.json'),async request=>{

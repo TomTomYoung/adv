@@ -1,0 +1,4761 @@
+{
+  "schemaVersion": 1,
+  "id": "q106",
+  "number": 106,
+  "title": "パン泥棒の影",
+  "client": "夜市のパン屋",
+  "brief": "姿のないパン泥棒を何とかしてください。",
+  "region": 1,
+  "type": "scene_graph",
+  "recommendedLevel": 1,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。荷揚げ河岸から運河通りへ進み、手帳に示される現場を訪ねる。",
+  "events": [
+    {
+      "id": "q106_scene",
+      "title": "パン泥棒の影：夜市のパン屋",
+      "points": [
+        {
+          "map": "region_1_f2",
+          "x": 2,
+          "y": 1,
+          "dungeon": "region_1"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q106.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q106.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q106.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q106"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_1"
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_1_f2",
+      "x": 2,
+      "y": 1,
+      "object": "q106_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "seal": {
+      "label": "影を封じる",
+      "text": "盗みは止まった。荷運びの疲れは残り、家族は勤務を減らす話を始めた。",
+      "gold": 57,
+      "xp": 51,
+      "requires": {
+        "op": "eq",
+        "left": {
+          "ref": "stories.q106.values.shadowState"
+        },
+        "right": "sealed"
+      }
+    },
+    "meal": {
+      "label": "空腹を認める",
+      "text": "影は男の足元へ戻った。翌晩、影が一拍早くパンへ手を伸ばし、男は笑って二つ買った。",
+      "gold": 57,
+      "xp": 51,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.owner"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.rule"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.admitted"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q106.values.shared"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q106.values.shadowState"
+            },
+            "right": "rejoined"
+          }
+        ]
+      }
+    },
+    "guard": {
+      "label": "一晩の見張り",
+      "text": "今夜のパンは守られた。男の事情は解決していない。店主は翌晩の食事を、取り置きと書いて棚へ置いた。",
+      "gold": 57,
+      "xp": 51,
+      "requires": {
+        "op": "eq",
+        "left": {
+          "ref": "stories.q106.values.guarded"
+        },
+        "right": true
+      }
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/story-q106.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3813d958cf10f9782f264",
+    "revision": "scenario-edition-e2-q106-r1",
+    "world": {
+      "truth": "追うほど影は小さな抜け道へ逃げる。最初は怪物らしい輪郭だけを見せ、次に寝た主人と同じ傷のある手を映す。影を戻す儀式は、主人が自分の空腹を口にした後だけ成立する。説明は術師か古い祭具の実演から得られる。",
+      "fixedPast": "パン屋が、姿のない盗人の捕縛を求める。犯人は夜勤の荷運びから剝がれた影だ。この町の影術では、主人が認めない欲求が影へ移る。荷運びは家族に心配させまいと食事を抜き、影だけが飢えを認めている。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "夜市のパン屋",
+        "beliefsAndGoals": "パン屋が、姿のない盗人の捕縛を求める。犯人は夜勤の荷運びから剝がれた影だ。この町の影術では、主人が認めない欲求が影へ移る。荷運びは家族に心配させまいと食事を抜き、影だけが飢えを認めている。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "姿のないパン泥棒を何とかしてください。"
+      }
+    ],
+    "conflict": {
+      "design": "追跡→捕獲罠／主人の捜索→夕食の場。罠で封じるなら影封じの代金を支払う。主人と食べるならパンと`F.admitted`が必要だ。説得を拒まれたら、一晩だけ店を守り翌日に話し直せる。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q106.canal.entry",
+          "assertion": {
+            "title": "夜市のパン屋",
+            "place": "bakery",
+            "cast": [
+              {
+                "entity": "baker",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q106.values.bakerAt"
+                  },
+                  "right": "bakery"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "shadow",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q106.values.shadowAt"
+                  },
+                  "right": "bakery"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "trail",
+          "script": "q106.canal.trail",
+          "assertion": {
+            "title": "夜市の抜け道",
+            "place": "alley",
+            "cast": [
+              {
+                "entity": "mage",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q106.values.mageAt"
+                  },
+                  "right": "alley"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "shadow",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q106.values.shadowAt"
+                  },
+                  "right": "alley"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "sealed",
+          "script": "q106.canal.sealed",
+          "assertion": {
+            "title": "夜市の抜け道",
+            "place": "alley",
+            "cast": [
+              {
+                "entity": "mage",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q106.values.mageAt"
+                  },
+                  "right": "alley"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "shadow",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q106.values.shadowAt"
+                  },
+                  "right": "alley"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "report",
+          "script": "q106.canal.report",
+          "assertion": {
+            "title": "夜市のパン屋",
+            "place": "bakery",
+            "cast": [
+              {
+                "entity": "baker",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q106.values.bakerAt"
+                  },
+                  "right": "bakery"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "hands",
+          "script": "q106.canal.hands",
+          "assertion": {
+            "title": "荷運びの男の戸口",
+            "place": "door",
+            "cast": [
+              {
+                "entity": "porter",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q106.values.porterAt"
+                  },
+                  "right": "door"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "shadow",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q106.values.shadowAt"
+                  },
+                  "right": "door"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "owner",
+          "script": "q106.canal.owner",
+          "assertion": {
+            "title": "荷運びの男の戸口",
+            "place": "door",
+            "cast": [
+              {
+                "entity": "porter",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q106.values.porterAt"
+                  },
+                  "right": "door"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "shadow",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q106.values.shadowAt"
+                  },
+                  "right": "door"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "rule",
+          "script": "q106.canal.rule",
+          "assertion": {
+            "title": "夜市の抜け道",
+            "place": "alley",
+            "cast": [
+              {
+                "entity": "mage",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q106.values.mageAt"
+                  },
+                  "right": "alley"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "invite",
+          "script": "q106.canal.invite",
+          "assertion": {
+            "title": "荷運びの男の戸口",
+            "place": "door",
+            "cast": [
+              {
+                "entity": "porter",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q106.values.porterAt"
+                  },
+                  "right": "door"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "shadow",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q106.values.shadowAt"
+                  },
+                  "right": "door"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "supper",
+          "script": "q106.canal.supper",
+          "assertion": {
+            "title": "荷運びの家の食卓",
+            "place": "table",
+            "cast": [
+              {
+                "entity": "porter",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q106.values.porterAt"
+                  },
+                  "right": "table"
+                },
+                "display": {
+                  "x": 17,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "shadow",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q106.values.shadowAt"
+                  },
+                  "right": "table"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              },
+              {
+                "entity": "family",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q106.values.familyAt"
+                  },
+                  "right": "table"
+                },
+                "display": {
+                  "x": 83,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 2
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "meal",
+          "script": "q106.canal.meal",
+          "assertion": {
+            "title": "荷運びの家の食卓",
+            "place": "table",
+            "cast": [
+              {
+                "entity": "porter",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q106.values.porterAt"
+                  },
+                  "right": "table"
+                },
+                "display": {
+                  "x": 17,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "shadow",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q106.values.shadowAt"
+                  },
+                  "right": "table"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              },
+              {
+                "entity": "family",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q106.values.familyAt"
+                  },
+                  "right": "table"
+                },
+                "display": {
+                  "x": 83,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 2
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "fed",
+          "script": "q106.canal.fed",
+          "assertion": {
+            "title": "荷運びの家の食卓",
+            "place": "table",
+            "cast": [
+              {
+                "entity": "porter",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q106.values.porterAt"
+                  },
+                  "right": "table"
+                },
+                "display": {
+                  "x": 17,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "shadow",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q106.values.shadowAt"
+                  },
+                  "right": "table"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              },
+              {
+                "entity": "family",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q106.values.familyAt"
+                  },
+                  "right": "table"
+                },
+                "display": {
+                  "x": 83,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 2
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "watch",
+          "script": "q106.canal.watch",
+          "assertion": {
+            "title": "夜市のパン屋",
+            "place": "bakery",
+            "cast": [
+              {
+                "entity": "baker",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q106.values.bakerAt"
+                  },
+                  "right": "bakery"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "dawn",
+          "script": "q106.canal.dawn",
+          "assertion": {
+            "title": "夜市のパン屋",
+            "place": "bakery",
+            "cast": [
+              {
+                "entity": "baker",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q106.values.bakerAt"
+                  },
+                  "right": "bakery"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "姿のないパン泥棒を何とかしてください。"
+    },
+    "reveal": {
+      "newInformation": "追うほど影は小さな抜け道へ逃げる。最初は怪物らしい輪郭だけを見せ、次に寝た主人と同じ傷のある手を映す。影を戻す儀式は、主人が自分の空腹を口にした後だけ成立する。説明は術師か古い祭具の実演から得られる。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q106.canal.entry",
+        "assertion": {
+          "title": "夜市のパン屋",
+          "place": "bakery",
+          "cast": [
+            {
+              "entity": "baker",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.bakerAt"
+                },
+                "right": "bakery"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "shadow",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.shadowAt"
+                },
+                "right": "bakery"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "trail",
+        "script": "q106.canal.trail",
+        "assertion": {
+          "title": "夜市の抜け道",
+          "place": "alley",
+          "cast": [
+            {
+              "entity": "mage",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.mageAt"
+                },
+                "right": "alley"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "shadow",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.shadowAt"
+                },
+                "right": "alley"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "sealed",
+        "script": "q106.canal.sealed",
+        "assertion": {
+          "title": "夜市の抜け道",
+          "place": "alley",
+          "cast": [
+            {
+              "entity": "mage",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.mageAt"
+                },
+                "right": "alley"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "shadow",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.shadowAt"
+                },
+                "right": "alley"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "report",
+        "script": "q106.canal.report",
+        "assertion": {
+          "title": "夜市のパン屋",
+          "place": "bakery",
+          "cast": [
+            {
+              "entity": "baker",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.bakerAt"
+                },
+                "right": "bakery"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "hands",
+        "script": "q106.canal.hands",
+        "assertion": {
+          "title": "荷運びの男の戸口",
+          "place": "door",
+          "cast": [
+            {
+              "entity": "porter",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.porterAt"
+                },
+                "right": "door"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "shadow",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.shadowAt"
+                },
+                "right": "door"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "owner",
+        "script": "q106.canal.owner",
+        "assertion": {
+          "title": "荷運びの男の戸口",
+          "place": "door",
+          "cast": [
+            {
+              "entity": "porter",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.porterAt"
+                },
+                "right": "door"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "shadow",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.shadowAt"
+                },
+                "right": "door"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "rule",
+        "script": "q106.canal.rule",
+        "assertion": {
+          "title": "夜市の抜け道",
+          "place": "alley",
+          "cast": [
+            {
+              "entity": "mage",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.mageAt"
+                },
+                "right": "alley"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "invite",
+        "script": "q106.canal.invite",
+        "assertion": {
+          "title": "荷運びの男の戸口",
+          "place": "door",
+          "cast": [
+            {
+              "entity": "porter",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.porterAt"
+                },
+                "right": "door"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "shadow",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.shadowAt"
+                },
+                "right": "door"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "supper",
+        "script": "q106.canal.supper",
+        "assertion": {
+          "title": "荷運びの家の食卓",
+          "place": "table",
+          "cast": [
+            {
+              "entity": "porter",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.porterAt"
+                },
+                "right": "table"
+              },
+              "display": {
+                "x": 17,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "shadow",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.shadowAt"
+                },
+                "right": "table"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            },
+            {
+              "entity": "family",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.familyAt"
+                },
+                "right": "table"
+              },
+              "display": {
+                "x": 83,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 2
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "meal",
+        "script": "q106.canal.meal",
+        "assertion": {
+          "title": "荷運びの家の食卓",
+          "place": "table",
+          "cast": [
+            {
+              "entity": "porter",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.porterAt"
+                },
+                "right": "table"
+              },
+              "display": {
+                "x": 17,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "shadow",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.shadowAt"
+                },
+                "right": "table"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            },
+            {
+              "entity": "family",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.familyAt"
+                },
+                "right": "table"
+              },
+              "display": {
+                "x": 83,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 2
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "fed",
+        "script": "q106.canal.fed",
+        "assertion": {
+          "title": "荷運びの家の食卓",
+          "place": "table",
+          "cast": [
+            {
+              "entity": "porter",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.porterAt"
+                },
+                "right": "table"
+              },
+              "display": {
+                "x": 17,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "shadow",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.shadowAt"
+                },
+                "right": "table"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            },
+            {
+              "entity": "family",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.familyAt"
+                },
+                "right": "table"
+              },
+              "display": {
+                "x": 83,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 2
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "watch",
+        "script": "q106.canal.watch",
+        "assertion": {
+          "title": "夜市のパン屋",
+          "place": "bakery",
+          "cast": [
+            {
+              "entity": "baker",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.bakerAt"
+                },
+                "right": "bakery"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "dawn",
+        "script": "q106.canal.dawn",
+        "assertion": {
+          "title": "夜市のパン屋",
+          "place": "bakery",
+          "cast": [
+            {
+              "entity": "baker",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.bakerAt"
+                },
+                "right": "bakery"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "stories.q106.values.partyAt",
+        "type": "enum",
+        "initial": "bakery",
+        "values": [
+          "bakery",
+          "alley",
+          "door",
+          "table",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q106.values.bakerAt",
+        "type": "enum",
+        "initial": "bakery",
+        "values": [
+          "bakery",
+          "alley",
+          "door",
+          "table",
+          "transit"
+        ],
+        "meaning": "baker の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q106.values.shadowAt",
+        "type": "enum",
+        "initial": "bakery",
+        "values": [
+          "bakery",
+          "alley",
+          "door",
+          "table",
+          "transit"
+        ],
+        "meaning": "shadow の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q106.values.mageAt",
+        "type": "enum",
+        "initial": "alley",
+        "values": [
+          "bakery",
+          "alley",
+          "door",
+          "table",
+          "transit"
+        ],
+        "meaning": "mage の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q106.values.porterAt",
+        "type": "enum",
+        "initial": "door",
+        "values": [
+          "bakery",
+          "alley",
+          "door",
+          "table",
+          "transit"
+        ],
+        "meaning": "porter の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q106.values.familyAt",
+        "type": "enum",
+        "initial": "table",
+        "values": [
+          "bakery",
+          "alley",
+          "door",
+          "table",
+          "transit"
+        ],
+        "meaning": "family の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q106.values.theft",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "theft",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q106.values.owner",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "owner",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q106.values.rule",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "rule",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q106.values.admitted",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "admitted",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q106.values.shared",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "shared",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q106.values.deferred",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "deferred",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q106.values.guarded",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "guarded",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q106.values.retried",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "retried",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q106.values.shadowState",
+        "type": "enum",
+        "initial": "loose",
+        "values": [
+          "loose",
+          "sealed",
+          "rejoined"
+        ],
+        "meaning": "影の封印・帰還",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "パンが一つ、売り台から落ちた。拾おうとした店主の手をすり抜けて、地面を走っていく。その下に、かぎ爪のような黒い輪郭だけが見えた。",
+        "options": [
+          {
+            "id": "chase",
+            "text": "パンを追う",
+            "to": "trail",
+            "action": "entry_chase"
+          }
+        ]
+      },
+      {
+        "id": "trail",
+        "text": "隊が通れない隙間に影が身を縮めた。パンを抱え直した手の甲に、白く抜けた傷跡がある。術師が隙間を指した。「ここなら封じられる。代金は三十だ」",
+        "options": [
+          {
+            "id": "owner",
+            "text": "隙間の向こうを回る",
+            "to": "hands",
+            "action": "trail_owner"
+          },
+          {
+            "id": "seal",
+            "text": "30Gで影を封じる",
+            "to": "sealed",
+            "action": "trail_seal"
+          },
+          {
+            "id": "guard",
+            "text": "パン屋を見張る",
+            "to": "watch",
+            "action": "trail_guard"
+          }
+        ]
+      },
+      {
+        "id": "sealed",
+        "text": "隙間にかかった罠の中で、影の手が止まった。術師は封じ目を確かめた。主人の空腹は、そのままだという。",
+        "options": [
+          {
+            "id": "report",
+            "text": "店主に知らせる",
+            "to": "report",
+            "action": "sealed_report"
+          }
+        ]
+      },
+      {
+        "id": "report",
+        "text": "店主は売り台のパンを数えた。今度は一つも減っていない。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "捕縛を報告する",
+            "to": "@seal",
+            "action": "report_finish"
+          }
+        ]
+      },
+      {
+        "id": "hands",
+        "text": "戸口で荷運びの男が眠っている。膝から垂れた手の横に、パンを抱えた影の手が並んだ。傷の形も、親指からの長さも同じだった。",
+        "options": [
+          {
+            "id": "compare",
+            "text": "男に声をかける",
+            "to": "owner",
+            "action": "hands_compare"
+          }
+        ]
+      },
+      {
+        "id": "owner",
+        "text": {
+          "when": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q106.values.retried"
+            },
+            "right": true
+          },
+          "yes": "一晩見張ったあと、もう一度戸口を訪ねた。男は起きていた。昨日とは違って、自分から影の手を見た。",
+          "no": "男は目を覚まし、自分の手を握った。「夜勤の日は食べずに寝るんだ。家族には足りてると言った。……今は、言いたくない」"
+        },
+        "options": [
+          {
+            "id": "learn",
+            "text": "術師に戻し方を聞く",
+            "to": "rule",
+            "action": "owner_learn"
+          },
+          {
+            "id": "guard",
+            "text": "話を切り上げて店へ",
+            "to": "watch",
+            "action": "owner_guard"
+          }
+        ]
+      },
+      {
+        "id": "rule",
+        "text": "「あの影が欲しがるのは、本人が欲しくないと言い張ったものだ。誰かが代わりに食べさせても戻らない。腹が減ったと、まず自分で言わなくちゃ」",
+        "options": [
+          {
+            "id": "back",
+            "text": "男に伝える",
+            "to": "invite",
+            "action": "rule_back"
+          }
+        ]
+      },
+      {
+        "id": "invite",
+        "text": "話を聞いた男は家の奥を見た。「俺から言うよ。一緒に来てくれるか」。男が立つと、離れていた影も食卓の方へ動いた。",
+        "options": [
+          {
+            "id": "ask",
+            "text": "男と食卓へ",
+            "to": "supper",
+            "action": "invite_ask"
+          }
+        ]
+      },
+      {
+        "id": "supper",
+        "text": "家族の手が止まった。男は空いた皿に目を落としたまま、しばらく黙っていた。隊は、男が口を開くのを待った。",
+        "options": [
+          {
+            "id": "admit",
+            "text": "本人の言葉を待つ",
+            "to": "meal",
+            "action": "supper_admit"
+          }
+        ]
+      },
+      {
+        "id": "meal",
+        "text": "「腹が減った」。家族は男を責めず、隣の席を空けた。売り台から盗まれたパンとは別に、隊の糧食を一つ出せば、みんなで分けられる。",
+        "options": [
+          {
+            "id": "eat",
+            "text": "糧食を一つ分ける",
+            "to": "fed",
+            "action": "meal_eat",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q106.values.owner"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q106.values.rule"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q106.values.admitted"
+                  },
+                  "right": true
+                }
+              ]
+            }
+          },
+          {
+            "id": "guard",
+            "text": "食事を家族に任せて店へ",
+            "to": "watch",
+            "action": "meal_guard"
+          }
+        ]
+      },
+      {
+        "id": "fed",
+        "text": "男が自分の分を食べると、床に伸びていた指が足元に収まった。「夜勤を少し減らせないか、話してみるよ」。家族がうなずいた。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "食卓を囲む",
+            "to": "@meal",
+            "action": "fed_finish"
+          }
+        ]
+      },
+      {
+        "id": "watch",
+        "text": {
+          "when": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q106.values.guarded"
+            },
+            "right": true
+          },
+          "yes": "店主が棚の取り置きを指した。昨晩、隊が守った店のパンだ。",
+          "no": "店主は残りのパンを売り台から下ろした。ここで夜を明かせば、今夜の分は守れる。"
+        },
+        "options": [
+          {
+            "id": "keep",
+            "text": "夜明けまで見張る",
+            "to": "dawn",
+            "action": "watch_keep",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.guarded"
+                },
+                "right": true
+              }
+            },
+            "visibleWhen": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.guarded"
+                },
+                "right": true
+              }
+            }
+          },
+          {
+            "id": "finish",
+            "text": "昨晩の見張りを報告",
+            "to": "@guard",
+            "action": "watch_finish",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.guarded"
+              },
+              "right": true
+            },
+            "visibleWhen": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.guarded"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "dawn",
+        "text": "パンが減らないまま夜が明けた。店主は翌晩の分を棚に取り置いた。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "見張りを報告する",
+            "to": "@guard",
+            "action": "dawn_finish"
+          },
+          {
+            "id": "retry",
+            "text": "男ともう一度話す",
+            "to": "owner",
+            "action": "dawn_retry",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.deferred"
+              },
+              "right": true
+            },
+            "visibleWhen": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.deferred"
+              },
+              "right": true
+            }
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.1",
+      "source": "https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4",
+      "adapter": "adv-story-state/1",
+      "scope": "quest-episode"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "entryScript": "q106.canal.visit",
+    "preserveAcceptedRoute": true,
+    "currentStoryScriptPrefix": "q106.canal.",
+    "interruptionEntries": [
+      "q106.visit",
+      "q106.canal.visit"
+    ],
+    "interruptionRoutes": [
+      {
+        "from": "q106.scene.entry",
+        "action": "seal",
+        "option": "seal_supplies",
+        "shortage": "q106.scene.entry.seal.shortage",
+        "resume": "q106.scene.entry.seal.resume",
+        "cost": {
+          "gold": 30
+        }
+      },
+      {
+        "from": "q106.scene.meal",
+        "action": "eat",
+        "option": "eat_supplies",
+        "shortage": "q106.scene.meal.eat.shortage",
+        "resume": "q106.scene.meal.eat.resume",
+        "cost": {
+          "ration": 1
+        }
+      },
+      {
+        "from": "q106.canal.trail",
+        "action": "seal",
+        "option": "seal_supplies",
+        "shortage": "q106.canal.trail.seal.shortage",
+        "resume": "q106.canal.trail.seal.resume",
+        "cost": {
+          "gold": 30
+        }
+      },
+      {
+        "from": "q106.canal.meal",
+        "action": "eat",
+        "option": "eat_supplies",
+        "shortage": "q106.canal.meal.eat.shortage",
+        "resume": "q106.canal.meal.eat.resume",
+        "cost": {
+          "ration": 1
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "q106.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q106.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "地面を這う影がパンを抱えて逃げる。影の手には古い傷があり、荷運びの男の手にも同じ傷があった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "owner",
+              "text": "荷運びの男を訪ねる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q106.scene.owner"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "影封じを30Gで手配する",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 30
+                  }
+                ]
+              },
+              "requirement": "G 30消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -30
+                },
+                {
+                  "op": "jump",
+                  "script": "q106.end.seal"
+                }
+              ]
+            },
+            {
+              "id": "guard",
+              "text": "今夜だけ店を守り、話は翌晩へ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q106.end.guard"
+                }
+              ]
+            },
+            {
+              "id": "seal_supplies",
+              "text": "30Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 30
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 30
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q106.scene.entry.seal.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q106.scene.owner": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q106.node",
+          "value": "owner"
+        },
+        {
+          "op": "say",
+          "text": "男は夕食を抜いていた。「家族には足りてると言ったんだ」術師は、影が主人の認めない欲求を引き受けると説明した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "ask",
+              "text": "空腹を本人の言葉で家族へ伝えてもらう",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q106.scene.meal"
+                }
+              ]
+            },
+            {
+              "id": "guard",
+              "text": "今は説得を打ち切り、一晩の見張りをする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q106.end.guard"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q106.scene.meal": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q106.node",
+          "value": "meal"
+        },
+        {
+          "op": "say",
+          "text": "男は家族へ「腹が減った」と言った。家族は責めずに席を空けた。パンの代わりにもなる糧食が一つ必要だ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "eat",
+              "text": "糧食一つを出し、本人と夕食を取る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "has_item",
+                    "item": "ration",
+                    "count": 1
+                  }
+                ]
+              },
+              "requirement": "野営糧食 1消費",
+              "commands": [
+                {
+                  "op": "item.take",
+                  "item": "ration",
+                  "count": 1
+                },
+                {
+                  "op": "jump",
+                  "script": "q106.end.meal"
+                }
+              ]
+            },
+            {
+              "id": "guard",
+              "text": "食事の支度を家族へ頼み、今夜は店を守る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q106.end.guard"
+                }
+              ]
+            },
+            {
+              "id": "eat_supplies",
+              "text": "野営糧食1個を用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "ration",
+                  "count": 1
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "has_item",
+                  "item": "ration",
+                  "count": 1
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q106.scene.meal.eat.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q106.end.seal": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q106.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "盗みは止まった。荷運びの疲れは残り、家族は勤務を減らす話を始めた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q106",
+              "outcome": "seal"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q106.end.meal": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q106.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "影は男の足元へ戻った。翌晩、影が一拍早くパンへ手を伸ばし、男は笑って二つ買った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q106",
+              "outcome": "meal"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q106.end.guard": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q106.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "今夜のパンは守られた。男の事情は解決していない。店主は翌晩の食事を、取り置きと書いて棚へ置いた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q106",
+              "outcome": "guard"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q106.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q106"
+          },
+          "cases": [
+            {
+              "equals": "q106.scene.entry.seal.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q106.scene.entry.seal.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q106.scene.meal.eat.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q106.scene.meal.eat.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q106.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q106.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "seal",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "盗みは止まった。荷運びの疲れは残り、家族は勤務を減らす話を始めた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "meal",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "影は男の足元へ戻った。翌晩、影が一拍早くパンへ手を伸ばし、男は笑って二つ買った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "guard",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "今夜のパンは守られた。男の事情は解決していない。店主は翌晩の食事を、取り置きと書いて棚へ置いた。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q106.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q106.scene.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "owner",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q106.scene.owner"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "meal",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q106.scene.meal"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q106.scene.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q106.scene.entry.seal.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q106",
+          "value": "q106.scene.entry.seal.resume"
+        },
+        {
+          "op": "say",
+          "text": "30Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q106.scene.entry.seal.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q106",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "30Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q106.scene.entry"
+        }
+      ]
+    },
+    "q106.scene.meal.eat.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q106",
+          "value": "q106.scene.meal.eat.resume"
+        },
+        {
+          "op": "say",
+          "text": "野営糧食1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q106.scene.meal.eat.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q106",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "野営糧食1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q106.scene.meal"
+        }
+      ]
+    },
+    "q106.canal.entry": {
+      "storyQuest": "q106",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q106",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "パンが一つ、売り台から落ちた。拾おうとした店主の手をすり抜けて、地面を走っていく。その下に、かぎ爪のような黒い輪郭だけが見えた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "chase",
+              "text": "パンを追う",
+              "storyAction": {
+                "quest": "q106",
+                "action": "entry_chase"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q106",
+                  "action": "entry_chase"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q106.canal.trail": {
+      "storyQuest": "q106",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q106",
+          "scene": "trail"
+        },
+        {
+          "op": "narrate",
+          "text": "隊が通れない隙間に影が身を縮めた。パンを抱え直した手の甲に、白く抜けた傷跡がある。術師が隙間を指した。「ここなら封じられる。代金は三十だ」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "owner",
+              "text": "隙間の向こうを回る",
+              "storyAction": {
+                "quest": "q106",
+                "action": "trail_owner"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q106",
+                  "action": "trail_owner"
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "text": "30Gで影を封じる",
+              "storyAction": {
+                "quest": "q106",
+                "action": "trail_seal"
+              },
+              "requirement": "30Gを支払う。",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q106",
+                  "action": "trail_seal"
+                },
+                {
+                  "op": "jump",
+                  "script": "q106.canal.sealed"
+                }
+              ]
+            },
+            {
+              "id": "guard",
+              "text": "パン屋を見張る",
+              "storyAction": {
+                "quest": "q106",
+                "action": "trail_guard"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q106",
+                  "action": "trail_guard"
+                }
+              ]
+            },
+            {
+              "id": "seal_supplies",
+              "text": "30Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 30
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 30
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q106.canal.trail.seal.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q106.canal.sealed": {
+      "storyQuest": "q106",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q106",
+          "scene": "sealed"
+        },
+        {
+          "op": "narrate",
+          "text": "隙間にかかった罠の中で、影の手が止まった。術師は封じ目を確かめた。主人の空腹は、そのままだという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "report",
+              "text": "店主に知らせる",
+              "storyAction": {
+                "quest": "q106",
+                "action": "sealed_report"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q106",
+                  "action": "sealed_report"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q106.canal.report": {
+      "storyQuest": "q106",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q106",
+          "scene": "report"
+        },
+        {
+          "op": "narrate",
+          "text": "店主は売り台のパンを数えた。今度は一つも減っていない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "捕縛を報告する",
+              "storyAction": {
+                "quest": "q106",
+                "action": "report_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q106",
+                  "action": "report_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q106.canal.end.seal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q106.canal.hands": {
+      "storyQuest": "q106",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q106",
+          "scene": "hands"
+        },
+        {
+          "op": "narrate",
+          "text": "戸口で荷運びの男が眠っている。膝から垂れた手の横に、パンを抱えた影の手が並んだ。傷の形も、親指からの長さも同じだった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "compare",
+              "text": "男に声をかける",
+              "storyAction": {
+                "quest": "q106",
+                "action": "hands_compare"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q106",
+                  "action": "hands_compare"
+                },
+                {
+                  "op": "jump",
+                  "script": "q106.canal.owner"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q106.canal.owner": {
+      "storyQuest": "q106",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q106",
+          "scene": "owner"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q106.values.retried"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "一晩見張ったあと、もう一度戸口を訪ねた。男は起きていた。昨日とは違って、自分から影の手を見た。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "男は目を覚まし、自分の手を握った。「夜勤の日は食べずに寝るんだ。家族には足りてると言った。……今は、言いたくない」"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "learn",
+              "text": "術師に戻し方を聞く",
+              "storyAction": {
+                "quest": "q106",
+                "action": "owner_learn"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q106",
+                  "action": "owner_learn"
+                }
+              ]
+            },
+            {
+              "id": "guard",
+              "text": "話を切り上げて店へ",
+              "storyAction": {
+                "quest": "q106",
+                "action": "owner_guard"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q106",
+                  "action": "owner_guard"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q106.canal.rule": {
+      "storyQuest": "q106",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q106",
+          "scene": "rule"
+        },
+        {
+          "op": "narrate",
+          "text": "「あの影が欲しがるのは、本人が欲しくないと言い張ったものだ。誰かが代わりに食べさせても戻らない。腹が減ったと、まず自分で言わなくちゃ」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "back",
+              "text": "男に伝える",
+              "storyAction": {
+                "quest": "q106",
+                "action": "rule_back"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q106",
+                  "action": "rule_back"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q106.canal.invite": {
+      "storyQuest": "q106",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q106",
+          "scene": "invite"
+        },
+        {
+          "op": "narrate",
+          "text": "話を聞いた男は家の奥を見た。「俺から言うよ。一緒に来てくれるか」。男が立つと、離れていた影も食卓の方へ動いた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "ask",
+              "text": "男と食卓へ",
+              "storyAction": {
+                "quest": "q106",
+                "action": "invite_ask"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q106",
+                  "action": "invite_ask"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q106.canal.supper": {
+      "storyQuest": "q106",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q106",
+          "scene": "supper"
+        },
+        {
+          "op": "narrate",
+          "text": "家族の手が止まった。男は空いた皿に目を落としたまま、しばらく黙っていた。隊は、男が口を開くのを待った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "admit",
+              "text": "本人の言葉を待つ",
+              "storyAction": {
+                "quest": "q106",
+                "action": "supper_admit"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q106",
+                  "action": "supper_admit"
+                },
+                {
+                  "op": "jump",
+                  "script": "q106.canal.meal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q106.canal.meal": {
+      "storyQuest": "q106",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q106",
+          "scene": "meal"
+        },
+        {
+          "op": "narrate",
+          "text": "「腹が減った」。家族は男を責めず、隣の席を空けた。売り台から盗まれたパンとは別に、隊の糧食を一つ出せば、みんなで分けられる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "eat",
+              "text": "糧食を一つ分ける",
+              "storyAction": {
+                "quest": "q106",
+                "action": "meal_eat"
+              },
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q106.values.owner"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q106.values.rule"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q106.values.admitted"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "野営糧食1個を使う。",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q106",
+                  "action": "meal_eat"
+                },
+                {
+                  "op": "jump",
+                  "script": "q106.canal.fed"
+                }
+              ]
+            },
+            {
+              "id": "guard",
+              "text": "食事を家族に任せて店へ",
+              "storyAction": {
+                "quest": "q106",
+                "action": "meal_guard"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q106",
+                  "action": "meal_guard"
+                }
+              ]
+            },
+            {
+              "id": "eat_supplies",
+              "text": "野営糧食1個を用意しに戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q106.values.owner"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q106.values.rule"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q106.values.admitted"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "ration",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q106.values.owner"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q106.values.rule"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q106.values.admitted"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "has_item",
+                      "item": "ration",
+                      "count": 1
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q106.canal.meal.eat.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q106.canal.fed": {
+      "storyQuest": "q106",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q106",
+          "scene": "fed"
+        },
+        {
+          "op": "narrate",
+          "text": "男が自分の分を食べると、床に伸びていた指が足元に収まった。「夜勤を少し減らせないか、話してみるよ」。家族がうなずいた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "食卓を囲む",
+              "storyAction": {
+                "quest": "q106",
+                "action": "fed_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q106",
+                  "action": "fed_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q106.canal.end.meal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q106.canal.watch": {
+      "storyQuest": "q106",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q106",
+          "scene": "watch"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q106.values.guarded"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "店主が棚の取り置きを指した。昨晩、隊が守った店のパンだ。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "店主は残りのパンを売り台から下ろした。ここで夜を明かせば、今夜の分は守れる。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "keep",
+              "text": "夜明けまで見張る",
+              "storyAction": {
+                "quest": "q106",
+                "action": "watch_keep"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q106.values.guarded"
+                  },
+                  "right": true
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q106.values.guarded"
+                  },
+                  "right": true
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q106",
+                  "action": "watch_keep"
+                },
+                {
+                  "op": "jump",
+                  "script": "q106.canal.dawn"
+                }
+              ]
+            },
+            {
+              "id": "finish",
+              "text": "昨晩の見張りを報告",
+              "storyAction": {
+                "quest": "q106",
+                "action": "watch_finish"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.guarded"
+                },
+                "right": true
+              },
+              "visibleWhen": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.guarded"
+                },
+                "right": true
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q106",
+                  "action": "watch_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q106.canal.end.guard"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q106.canal.dawn": {
+      "storyQuest": "q106",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q106",
+          "scene": "dawn"
+        },
+        {
+          "op": "narrate",
+          "text": "パンが減らないまま夜が明けた。店主は翌晩の分を棚に取り置いた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "見張りを報告する",
+              "storyAction": {
+                "quest": "q106",
+                "action": "dawn_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q106",
+                  "action": "dawn_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q106.canal.end.guard"
+                }
+              ]
+            },
+            {
+              "id": "retry",
+              "text": "男ともう一度話す",
+              "storyAction": {
+                "quest": "q106",
+                "action": "dawn_retry"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.deferred"
+                },
+                "right": true
+              },
+              "visibleWhen": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.deferred"
+                },
+                "right": true
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q106",
+                  "action": "dawn_retry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q106.canal.end.seal": {
+      "commands": [
+        {
+          "op": "jump",
+          "script": "q106.end.seal"
+        }
+      ]
+    },
+    "q106.canal.end.meal": {
+      "commands": [
+        {
+          "op": "jump",
+          "script": "q106.end.meal"
+        }
+      ]
+    },
+    "q106.canal.end.guard": {
+      "commands": [
+        {
+          "op": "jump",
+          "script": "q106.end.guard"
+        }
+      ]
+    },
+    "q106.canal.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q106"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q106.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.questResume.q106"
+              },
+              "cases": [
+                {
+                  "equals": "q106.canal.trail.seal.resume",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q106.canal.trail.seal.resume"
+                    }
+                  ]
+                },
+                {
+                  "equals": "q106.canal.meal.eat.resume",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q106.canal.meal.eat.resume"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "quests.q106.stage"
+                    },
+                    "right": "completed"
+                  },
+                  "then": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "quests.q106.outcome"
+                      },
+                      "cases": [
+                        {
+                          "equals": "seal",
+                          "commands": [
+                            {
+                              "op": "narrate",
+                              "text": "盗みは止まった。荷運びの疲れは残り、家族は勤務を減らす話を始めた。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "meal",
+                          "commands": [
+                            {
+                              "op": "narrate",
+                              "text": "影は男の足元へ戻った。翌晩、影が一拍早くパンへ手を伸ばし、男は笑って二つ買った。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "guard",
+                          "commands": [
+                            {
+                              "op": "narrate",
+                              "text": "今夜のパンは守られた。男の事情は解決していない。店主は翌晩の食事を、取り置きと書いて棚へ置いた。"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": []
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "story.init",
+                      "quest": "q106"
+                    },
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "stories.q106.scene"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q106.canal.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "trail",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q106.canal.trail"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "sealed",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q106.canal.sealed"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "report",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q106.canal.report"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "hands",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q106.canal.hands"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "owner",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q106.canal.owner"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "rule",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q106.canal.rule"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "invite",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q106.canal.invite"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "supper",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q106.canal.supper"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "meal",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q106.canal.meal"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "fed",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q106.canal.fed"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "watch",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q106.canal.watch"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "dawn",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q106.canal.dawn"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
+                        {
+                          "op": "jump",
+                          "script": "q106.canal.entry"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q106.canal.trail.seal.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q106",
+          "value": "q106.canal.trail.seal.resume"
+        },
+        {
+          "op": "say",
+          "text": "30Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q106.canal.trail.seal.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q106",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "30Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q106.canal.trail"
+        }
+      ]
+    },
+    "q106.canal.meal.eat.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q106",
+          "value": "q106.canal.meal.eat.resume"
+        },
+        {
+          "op": "say",
+          "text": "野営糧食1個が足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q106.canal.meal.eat.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q106",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "野営糧食1個を使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q106.canal.meal"
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "bakery": "夜市のパン屋",
+      "alley": "夜市の抜け道",
+      "door": "荷運びの男の戸口",
+      "table": "荷運びの家の食卓",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "bakery",
+        "alley"
+      ],
+      [
+        "alley",
+        "door"
+      ],
+      [
+        "transit",
+        "bakery"
+      ],
+      [
+        "transit",
+        "alley"
+      ],
+      [
+        "transit",
+        "door"
+      ],
+      [
+        "transit",
+        "table"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "bakery",
+        "values": [
+          "bakery",
+          "alley",
+          "door",
+          "table",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "bakerAt": {
+        "type": "enum",
+        "initial": "bakery",
+        "values": [
+          "bakery",
+          "alley",
+          "door",
+          "table",
+          "transit"
+        ],
+        "meaning": "baker の所在または保持者"
+      },
+      "shadowAt": {
+        "type": "enum",
+        "initial": "bakery",
+        "values": [
+          "bakery",
+          "alley",
+          "door",
+          "table",
+          "transit"
+        ],
+        "meaning": "shadow の所在または保持者"
+      },
+      "mageAt": {
+        "type": "enum",
+        "initial": "alley",
+        "values": [
+          "bakery",
+          "alley",
+          "door",
+          "table",
+          "transit"
+        ],
+        "meaning": "mage の所在または保持者"
+      },
+      "porterAt": {
+        "type": "enum",
+        "initial": "door",
+        "values": [
+          "bakery",
+          "alley",
+          "door",
+          "table",
+          "transit"
+        ],
+        "meaning": "porter の所在または保持者"
+      },
+      "familyAt": {
+        "type": "enum",
+        "initial": "table",
+        "values": [
+          "bakery",
+          "alley",
+          "door",
+          "table",
+          "transit"
+        ],
+        "meaning": "family の所在または保持者"
+      },
+      "theft": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "theft"
+      },
+      "owner": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "owner"
+      },
+      "rule": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "rule"
+      },
+      "admitted": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "admitted"
+      },
+      "shared": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "shared"
+      },
+      "deferred": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "deferred"
+      },
+      "guarded": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "guarded"
+      },
+      "retried": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "retried"
+      },
+      "shadowState": {
+        "type": "enum",
+        "initial": "loose",
+        "values": [
+          "loose",
+          "sealed",
+          "rejoined"
+        ],
+        "meaning": "影の封印・帰還"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "baker": {
+        "holder": "bakerAt",
+        "kind": "person",
+        "character": "e2_q106_baker"
+      },
+      "shadow": {
+        "holder": "shadowAt",
+        "kind": "person",
+        "character": "e2_q106_shadow"
+      },
+      "mage": {
+        "holder": "mageAt",
+        "kind": "person",
+        "character": "e2_q106_mage"
+      },
+      "porter": {
+        "holder": "porterAt",
+        "kind": "person",
+        "character": "e2_q106_porter"
+      },
+      "family": {
+        "holder": "familyAt",
+        "kind": "person",
+        "character": "e2_q106_family"
+      }
+    },
+    "propositions": {},
+    "initialKnowledge": {},
+    "invariants": [],
+    "scenes": {
+      "entry": {
+        "title": "夜市のパン屋",
+        "place": "bakery",
+        "cast": [
+          {
+            "entity": "baker",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.bakerAt"
+              },
+              "right": "bakery"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "shadow",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.shadowAt"
+              },
+              "right": "bakery"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "trail": {
+        "title": "夜市の抜け道",
+        "place": "alley",
+        "cast": [
+          {
+            "entity": "mage",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.mageAt"
+              },
+              "right": "alley"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "shadow",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.shadowAt"
+              },
+              "right": "alley"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "sealed": {
+        "title": "夜市の抜け道",
+        "place": "alley",
+        "cast": [
+          {
+            "entity": "mage",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.mageAt"
+              },
+              "right": "alley"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "shadow",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.shadowAt"
+              },
+              "right": "alley"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "report": {
+        "title": "夜市のパン屋",
+        "place": "bakery",
+        "cast": [
+          {
+            "entity": "baker",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.bakerAt"
+              },
+              "right": "bakery"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "hands": {
+        "title": "荷運びの男の戸口",
+        "place": "door",
+        "cast": [
+          {
+            "entity": "porter",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.porterAt"
+              },
+              "right": "door"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "shadow",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.shadowAt"
+              },
+              "right": "door"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "owner": {
+        "title": "荷運びの男の戸口",
+        "place": "door",
+        "cast": [
+          {
+            "entity": "porter",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.porterAt"
+              },
+              "right": "door"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "shadow",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.shadowAt"
+              },
+              "right": "door"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "rule": {
+        "title": "夜市の抜け道",
+        "place": "alley",
+        "cast": [
+          {
+            "entity": "mage",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.mageAt"
+              },
+              "right": "alley"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "invite": {
+        "title": "荷運びの男の戸口",
+        "place": "door",
+        "cast": [
+          {
+            "entity": "porter",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.porterAt"
+              },
+              "right": "door"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "shadow",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.shadowAt"
+              },
+              "right": "door"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "supper": {
+        "title": "荷運びの家の食卓",
+        "place": "table",
+        "cast": [
+          {
+            "entity": "porter",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.porterAt"
+              },
+              "right": "table"
+            },
+            "display": {
+              "x": 17,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "shadow",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.shadowAt"
+              },
+              "right": "table"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          },
+          {
+            "entity": "family",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.familyAt"
+              },
+              "right": "table"
+            },
+            "display": {
+              "x": 83,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 2
+            }
+          }
+        ],
+        "requires": true
+      },
+      "meal": {
+        "title": "荷運びの家の食卓",
+        "place": "table",
+        "cast": [
+          {
+            "entity": "porter",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.porterAt"
+              },
+              "right": "table"
+            },
+            "display": {
+              "x": 17,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "shadow",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.shadowAt"
+              },
+              "right": "table"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          },
+          {
+            "entity": "family",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.familyAt"
+              },
+              "right": "table"
+            },
+            "display": {
+              "x": 83,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 2
+            }
+          }
+        ],
+        "requires": true
+      },
+      "fed": {
+        "title": "荷運びの家の食卓",
+        "place": "table",
+        "cast": [
+          {
+            "entity": "porter",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.porterAt"
+              },
+              "right": "table"
+            },
+            "display": {
+              "x": 17,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "shadow",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.shadowAt"
+              },
+              "right": "table"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          },
+          {
+            "entity": "family",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.familyAt"
+              },
+              "right": "table"
+            },
+            "display": {
+              "x": 83,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 2
+            }
+          }
+        ],
+        "requires": true
+      },
+      "watch": {
+        "title": "夜市のパン屋",
+        "place": "bakery",
+        "cast": [
+          {
+            "entity": "baker",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.bakerAt"
+              },
+              "right": "bakery"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "dawn": {
+        "title": "夜市のパン屋",
+        "place": "bakery",
+        "cast": [
+          {
+            "entity": "baker",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.bakerAt"
+              },
+              "right": "bakery"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_chase": {
+        "from": [
+          "entry"
+        ],
+        "to": "trail",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "alley"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "alley",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "theft",
+            "value": true
+          },
+          {
+            "op": "move",
+            "entities": [
+              "shadow"
+            ],
+            "path": [
+              "bakery",
+              "alley"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ]
+      },
+      "trail_owner": {
+        "from": [
+          "trail"
+        ],
+        "to": "hands",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "door"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "door",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "move",
+            "entities": [
+              "shadow"
+            ],
+            "path": [
+              "alley",
+              "door"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ]
+      },
+      "trail_seal": {
+        "from": [
+          "trail"
+        ],
+        "to": "sealed",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "shadowState",
+            "value": "sealed"
+          }
+        ],
+        "cost": {
+          "gold": 30
+        },
+        "once": true
+      },
+      "trail_guard": {
+        "from": [
+          "trail"
+        ],
+        "to": "watch",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "bakery"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "bakery",
+          "companions": []
+        },
+        "depart": []
+      },
+      "sealed_report": {
+        "from": [
+          "sealed"
+        ],
+        "to": "report",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "bakery"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "bakery",
+          "companions": []
+        },
+        "depart": []
+      },
+      "report_finish": {
+        "from": [
+          "report"
+        ],
+        "ending": "seal",
+        "requires": true,
+        "effects": [],
+        "once": true
+      },
+      "hands_compare": {
+        "from": [
+          "hands"
+        ],
+        "to": "owner",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "owner",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "owner_learn": {
+        "from": [
+          "owner"
+        ],
+        "to": "rule",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "alley"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "alley",
+          "companions": []
+        },
+        "depart": []
+      },
+      "owner_guard": {
+        "from": [
+          "owner"
+        ],
+        "to": "watch",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "bakery"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "bakery",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "deferred",
+            "value": true
+          }
+        ]
+      },
+      "rule_back": {
+        "from": [
+          "rule"
+        ],
+        "to": "invite",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "door"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "door",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "rule",
+            "value": true
+          }
+        ]
+      },
+      "invite_ask": {
+        "from": [
+          "invite"
+        ],
+        "to": "supper",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "porter",
+              "shadow"
+            ],
+            "path": [
+              "transit",
+              "table"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "table",
+          "companions": [
+            "porter",
+            "shadow"
+          ]
+        },
+        "depart": []
+      },
+      "supper_admit": {
+        "from": [
+          "supper"
+        ],
+        "to": "meal",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "admitted",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "meal_eat": {
+        "from": [
+          "meal"
+        ],
+        "to": "fed",
+        "requires": {
+          "op": "and",
+          "args": [
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.owner"
+              },
+              "right": true
+            },
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.rule"
+              },
+              "right": true
+            },
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q106.values.admitted"
+              },
+              "right": true
+            }
+          ]
+        },
+        "effects": [
+          {
+            "op": "set",
+            "key": "shared",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "shadowState",
+            "value": "rejoined"
+          }
+        ],
+        "cost": {
+          "ration": 1
+        },
+        "once": true
+      },
+      "meal_guard": {
+        "from": [
+          "meal"
+        ],
+        "to": "watch",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "bakery"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "bakery",
+          "companions": []
+        },
+        "depart": []
+      },
+      "fed_finish": {
+        "from": [
+          "fed"
+        ],
+        "ending": "meal",
+        "requires": true,
+        "effects": [],
+        "once": true
+      },
+      "watch_keep": {
+        "from": [
+          "watch"
+        ],
+        "to": "dawn",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q106.values.guarded"
+            },
+            "right": true
+          }
+        },
+        "effects": [
+          {
+            "op": "set",
+            "key": "guarded",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "watch_finish": {
+        "from": [
+          "watch"
+        ],
+        "ending": "guard",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q106.values.guarded"
+          },
+          "right": true
+        },
+        "effects": [],
+        "once": true
+      },
+      "dawn_finish": {
+        "from": [
+          "dawn"
+        ],
+        "ending": "guard",
+        "requires": true,
+        "effects": [],
+        "once": true
+      },
+      "dawn_retry": {
+        "from": [
+          "dawn"
+        ],
+        "to": "owner",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q106.values.deferred"
+          },
+          "right": true
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "door"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "door",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "retried",
+            "value": true
+          }
+        ]
+      }
+    },
+    "endings": {
+      "seal": {
+        "op": "eq",
+        "left": {
+          "ref": "stories.q106.values.shadowState"
+        },
+        "right": "sealed"
+      },
+      "guard": {
+        "op": "eq",
+        "left": {
+          "ref": "stories.q106.values.guarded"
+        },
+        "right": true
+      },
+      "meal": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.owner"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.rule"
+                },
+                "right": true
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q106.values.admitted"
+                },
+                "right": true
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q106.values.shared"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q106.values.shadowState"
+            },
+            "right": "rejoined"
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "bakery": {
+        "kind": "town",
+        "location": "e2_q106_bakery"
+      },
+      "alley": {
+        "kind": "town",
+        "location": "e2_q106_alley"
+      },
+      "door": {
+        "kind": "town",
+        "location": "e2_q106_door"
+      },
+      "table": {
+        "kind": "town",
+        "location": "e2_q106_table"
+      }
+    },
+    "revision": 1
+  }
+}
