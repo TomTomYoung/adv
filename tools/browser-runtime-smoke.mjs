@@ -133,6 +133,7 @@ try{
   assert.equal(await guide.locator('#level').inputValue(),'11');
   assert.equal(await guide.locator('#gear').inputValue(),'town');
   await guide.getByRole('link',{name:'魔物図鑑',exact:true}).click();
+  await guide.locator('#monster-index').waitFor();
   const enemies = JSON.parse(await fs.readFile(path.join(root,'data/enemies.json'),'utf8'));
   assert.deepEqual((await guide.locator('#monster option').evaluateAll(opts=>opts.map(o=>o.value))).sort(), Object.keys(enemies).sort());
   const monsterCards = guide.locator('#monster-index .guide-entry:visible');
