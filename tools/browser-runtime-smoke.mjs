@@ -106,7 +106,38 @@ try{
   const mobile=await browser.newContext({viewport:{width:390,height:844}});page=await mobile.newPage();page.on('pageerror',e=>errors.push(e.message));
   await page.goto(origin+'/adv/');await page.waitForSelector('.scene-stage');
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
-  await page.screenshot({path:path.join(output,'mobile-start.png')});await mobile.close();
+  await page.screenshot({path:path.join(output,'mobile-start.png')});
+  await page.getByRole('button',{name:'遊び方',exact:true}).click();
+  const [guide] = await Promise.all([
+    mobile.waitForEvent('page'),
+    page.getByRole('button',{name:'敵編成・仲間の成長'}).click()
+  ]);
+  guide.on('pageerror',error=>errors.push(error.message));
+  await guide.locator('#enemies').waitFor();
+  assert.equal(await guide.locator('.band').count(),9);
+  await guide.locator('#band').selectOption('3');
+  assert.deepEqual(await guide.locator('.chance').allTextContents(),['30%','35%','25%','10%']);
+  await guide.locator('#source').selectOption('common');
+  assert.equal(await guide.locator('.chance:visible').count(),0);
+  await guide.locator('#nav-allies').click();
+  await guide.locator('#level').fill('3');
+  await guide.waitForFunction(()=>document.querySelector('#sheet h3')?.textContent.includes('Lv3'));
+  assert.match(await guide.locator('.kit').innerText(),/鉄の剣/);
+  await guide.locator('#gear').selectOption('none');
+  await guide.locator('#levels summary').click();
+  await guide.waitForFunction(()=>document.querySelectorAll('#growth tbody tr').length===100);
+  await guide.locator('#actor').selectOption('nio');
+  await guide.locator('#job').selectOption('mage');
+  await guide.locator('#level').fill('100');
+  await guide.waitForFunction(()=>document.querySelector('#sheet h3')?.textContent.includes('Lv100'));
+  assert.equal(await guide.locator('#growth tbody tr.picked th').innerText(),'100');
+  assert.equal(await guide.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+  await guide.setViewportSize({width:1440,height:900});
+  await guide.reload();
+  await guide.locator('#allies').waitFor();
+  assert.equal(await guide.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+  checks.push('in-game guide opens in a new tab; floor odds, ally growth, equipment, job selection and both widths verified');
+  await mobile.close();
   assert.deepEqual(errors,[]);checks.push('390px actual entry loads without overflow or JavaScript errors');
   await fs.writeFile(path.join(output,'results.json'),JSON.stringify({checks,errors},null,2)+'\n');console.log(JSON.stringify({checks,errors},null,2));
 }finally{await browser?.close();server.closeAllConnections();await new Promise(resolve=>server.close(resolve));}
