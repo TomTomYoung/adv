@@ -17053,6 +17053,36 @@ export const referenceData={
       "id": "soft_fiber"
     },
     {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "kagaribi_chimney_rat",
+        "item"
+      ],
+      "kind": "items",
+      "id": "torch"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "kagaribi_soot_ball",
+        "item"
+      ],
+      "kind": "items",
+      "id": "torch"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "kagaribi_torch_thief",
+        "item"
+      ],
+      "kind": "items",
+      "id": "kagaribi_torch_stub"
+    },
+    {
       "file": "cell-layers.json",
       "path": [
         "presets",
@@ -18151,6 +18181,16 @@ export const referenceData={
       ],
       "kind": "images",
       "id": "dungeon_walls"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "items",
+        "kagaribi_torch_stub",
+        "script"
+      ],
+      "kind": "scripts",
+      "id": "item.kagaribi_torch_stub"
     },
     {
       "file": "dungeon-content.json",
@@ -27023,7 +27063,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_wax"
+      "id": "kagaribi_soot_ball_solo"
     },
     {
       "file": "kagaribi-content.json",
@@ -27032,6 +27072,18 @@ export const referenceData={
         "kagaribi_f1",
         "encounterPool",
         2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_wax"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_f1",
+        "encounterPool",
+        3,
         "encounter"
       ],
       "kind": "encounters",
@@ -27431,7 +27483,7 @@ export const referenceData={
         "encounter"
       ],
       "kind": "encounters",
-      "id": "kagaribi_oil_slime"
+      "id": "kagaribi_torch_thief_solo"
     },
     {
       "file": "kagaribi-content.json",
@@ -27440,6 +27492,18 @@ export const referenceData={
         "kagaribi_crossroads",
         "encounterPool",
         2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_oil_slime"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_crossroads",
+        "encounterPool",
+        3,
         "encounter"
       ],
       "kind": "encounters",
@@ -27542,6 +27606,18 @@ export const referenceData={
         "kagaribi_kilns",
         "encounterPool",
         2,
+        "encounter"
+      ],
+      "kind": "encounters",
+      "id": "kagaribi_chimney_rat_solo"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "maps",
+        "kagaribi_kilns",
+        "encounterPool",
+        3,
         "encounter"
       ],
       "kind": "encounters",
@@ -28872,7 +28948,7 @@ export const referenceData={
         "sprite"
       ],
       "kind": "images",
-      "id": "monster_vault_mouse"
+      "id": "monster_kagaribi_soot_rat"
     },
     {
       "file": "kagaribi-content.json",
@@ -29257,6 +29333,84 @@ export const referenceData={
     {
       "file": "kagaribi-content.json",
       "path": [
+        "enemies",
+        "kagaribi_chimney_rat",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_kagaribi_chimney_rat"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_chimney_rat",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_soot_ball",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_kagaribi_soot_ball"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_soot_ball",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "guard"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_soot_ball",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_torch_thief",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_kagaribi_torch_thief"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_torch_thief",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
         "encounters",
         "kuragari_hunt",
         "enemies",
@@ -29627,6 +29781,39 @@ export const referenceData={
       ],
       "kind": "enemies",
       "id": "kagaribi_kiln_golem"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_chimney_rat_solo",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_chimney_rat"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_soot_ball_solo",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_soot_ball"
+    },
+    {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_torch_thief_solo",
+        "enemies",
+        0
+      ],
+      "kind": "enemies",
+      "id": "kagaribi_torch_thief"
     },
     {
       "file": "kagaribi-content.json",
@@ -43963,6 +44150,9 @@ export const referenceData={
       },
       "exp_t2_ticket": {
         "name": "第2段階の武器引換券"
+      },
+      "kagaribi_torch_stub": {
+        "name": "燃えさしの松明"
       }
     },
     "enemies": {
@@ -44204,7 +44394,7 @@ export const referenceData={
       },
       "kagaribi_soot_rat": {
         "name": "煤ネズミ",
-        "sprite": "monster_vault_mouse"
+        "sprite": "monster_kagaribi_soot_rat"
       },
       "kagaribi_wax_slime": {
         "name": "燭蝋スライム",
@@ -44321,6 +44511,18 @@ export const referenceData={
       "mine_low_scissors": {
         "name": "結晶ハサミ（低位）",
         "sprite": "construct"
+      },
+      "kagaribi_chimney_rat": {
+        "name": "煤ネズミ（煙突掃除屋）",
+        "sprite": "monster_kagaribi_chimney_rat"
+      },
+      "kagaribi_soot_ball": {
+        "name": "煤ネズミ（煤玉）",
+        "sprite": "monster_kagaribi_soot_ball"
+      },
+      "kagaribi_torch_thief": {
+        "name": "煤ネズミ（松明泥棒）",
+        "sprite": "monster_kagaribi_torch_thief"
       }
     },
     "encounters": {
@@ -44671,6 +44873,15 @@ export const referenceData={
       },
       "mine_shallow_c": {
         "name": "低位の試錐群"
+      },
+      "kagaribi_chimney_rat_solo": {
+        "name": "煙突掃除屋"
+      },
+      "kagaribi_soot_ball_solo": {
+        "name": "煤玉"
+      },
+      "kagaribi_torch_thief_solo": {
+        "name": "松明泥棒"
       }
     },
     "encounterGroups": {
@@ -59518,6 +59729,10 @@ export const referenceData={
       "name": "garden.root_gate.10",
       "file": "config/dungeon-content.json"
     },
+    "item.kagaribi_torch_stub": {
+      "name": "松明の先に残った火がふっと明るくなった。見えた通路を地図に写すと、火は消えた。",
+      "file": "config/dungeon-content.json"
+    },
     "cell.poison_step": {
       "name": "毒の沼地を踏んだ。",
       "file": "config/cell-layers.json"
@@ -69919,6 +70134,13 @@ export const referenceData={
         "garden.root_gate.10"
       ]
     },
+    "item.kagaribi_torch_stub": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "item.kagaribi_torch_stub"
+      ]
+    },
     "kagaribi.exit": {
       "file": "kagaribi-content.json",
       "path": [
@@ -70255,6 +70477,13 @@ export const referenceData={
       "path": [
         "items",
         "diving_kit"
+      ]
+    },
+    "items/kagaribi_torch_stub": {
+      "file": "dungeon-content.json",
+      "path": [
+        "items",
+        "kagaribi_torch_stub"
       ]
     },
     "enemies/valley_hexer": {
@@ -72202,6 +72431,27 @@ export const referenceData={
         "kagaribi_ossuary_remnant"
       ]
     },
+    "enemies/kagaribi_chimney_rat": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_chimney_rat"
+      ]
+    },
+    "enemies/kagaribi_soot_ball": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_soot_ball"
+      ]
+    },
+    "enemies/kagaribi_torch_thief": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "enemies",
+        "kagaribi_torch_thief"
+      ]
+    },
     "encounters/kuragari_hunt": {
       "file": "kagaribi-content.json",
       "path": [
@@ -72375,6 +72625,27 @@ export const referenceData={
       "path": [
         "encounters",
         "kagaribi_ossuary_deep_pair"
+      ]
+    },
+    "encounters/kagaribi_chimney_rat_solo": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_chimney_rat_solo"
+      ]
+    },
+    "encounters/kagaribi_soot_ball_solo": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_soot_ball_solo"
+      ]
+    },
+    "encounters/kagaribi_torch_thief_solo": {
+      "file": "kagaribi-content.json",
+      "path": [
+        "encounters",
+        "kagaribi_torch_thief_solo"
       ]
     },
     "sounds/se_step": {
@@ -77185,6 +77456,13 @@ export const referenceData={
         "garden.root_gate.10"
       ]
     },
+    "scripts/item.kagaribi_torch_stub": {
+      "file": "dungeon-content.json",
+      "path": [
+        "scripts",
+        "item.kagaribi_torch_stub"
+      ]
+    },
     "scripts/kagaribi.exit": {
       "file": "kagaribi-content.json",
       "path": [
@@ -78320,7 +78598,11 @@ export const referenceData={
       "npc_q162_niece": "assets/images/characters/relocated/q162_niece.webp",
       "npc_q163_som": "assets/images/characters/relocated/q163_som.webp",
       "npc_q163_owner": "assets/images/characters/relocated/q163_owner.webp",
-      "npc_q165_lina": "assets/images/characters/relocated/q165_lina.webp"
+      "npc_q165_lina": "assets/images/characters/relocated/q165_lina.webp",
+      "monster_kagaribi_soot_rat": "assets/images/monsters/kagaribi_soot_rat.webp",
+      "monster_kagaribi_chimney_rat": "assets/images/monsters/kagaribi_chimney_rat.webp",
+      "monster_kagaribi_soot_ball": "assets/images/monsters/kagaribi_soot_ball.webp",
+      "monster_kagaribi_torch_thief": "assets/images/monsters/kagaribi_torch_thief.webp"
     },
     "audio": {
       "exploration": "assets/audio/exploration-v2.ogg",
