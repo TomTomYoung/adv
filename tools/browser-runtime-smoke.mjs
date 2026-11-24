@@ -110,13 +110,35 @@ try{
   await page.getByRole('button',{name:'遊び方',exact:true}).click();
   const [guide] = await Promise.all([
     mobile.waitForEvent('page'),
-    page.getByRole('button',{name:'敵編成・仲間の成長'}).click()
+    page.getByRole('button',{name:'迷宮図鑑',exact:true}).click()
   ]);
   guide.on('pageerror',error=>errors.push(error.message));
+  await guide.locator('#allies').waitFor();
+  assert.deepEqual(await guide.locator('nav a').allTextContents(), ['キャラ図鑑','魔物図鑑','魔物編成']);
+  await guide.getByRole('link',{name:'魔物図鑑',exact:true}).click();
+  const enemies = JSON.parse(await fs.readFile(path.join(root,'data/enemies.json'),'utf8'));
+  assert.deepEqual((await guide.locator('#monster option').evaluateAll(opts=>opts.map(o=>o.value))).sort(), Object.keys(enemies).sort());
+  await guide.locator('#monster').selectOption('garden_nectar_bee');
+  await guide.waitForURL('**/labyrinth-guide.html#monsters/garden_nectar_bee');
+  await guide.reload();
+  await guide.locator('#monster-sheet h3').waitFor();
+  assert.equal(await guide.locator('#monster').inputValue(),'garden_nectar_bee');
+  assert.equal(await guide.locator('#monster-sheet h3').innerText(),enemies.garden_nectar_bee.name);
+  assert.deepEqual(await guide.locator('#monster-sheet dd').allTextContents(),Object.values(enemies.garden_nectar_bee.stats).map(String));
+  assert.equal(await guide.locator('#monster-sheet li').count(),enemies.garden_nectar_bee.ai.length);
+  assert.equal(await guide.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+  await guide.getByRole('link',{name:'魔物編成',exact:true}).click();
   await guide.locator('#enemies').waitFor();
   assert.equal(await guide.locator('.band').count(),9);
   await guide.locator('#band').selectOption('3');
   assert.deepEqual(await guide.locator('.chance').allTextContents(),['30%','35%','25%','10%']);
+  await guide.getByRole('link',{name:'煤ネズミ ×5',exact:true}).click();
+  await guide.locator('#monsters').waitFor();
+  assert.equal(await guide.locator('#monster').inputValue(),'kagaribi_soot_rat');
+  assert.equal(await guide.locator('#monster-sheet h3').innerText(),'煤ネズミ');
+  await guide.goBack();
+  await guide.locator('#enemies').waitFor();
+  assert.equal(await guide.locator('#band').inputValue(),'3');
   await guide.locator('#source').selectOption('common');
   assert.equal(await guide.locator('.chance:visible').count(),0);
   await guide.locator('#nav-allies').click();
@@ -136,7 +158,7 @@ try{
   await guide.reload();
   await guide.locator('#allies').waitFor();
   assert.equal(await guide.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
-  checks.push('in-game guide opens in a new tab; floor odds, ally growth, equipment, job selection and both widths verified');
+  checks.push('in-game guide: ordered catalogs, all monster IDs, monster links and history, floor odds, ally growth, equipment, jobs and both widths verified');
   await mobile.close();
   assert.deepEqual(errors,[]);checks.push('390px actual entry loads without overflow or JavaScript errors');
   await fs.writeFile(path.join(output,'results.json'),JSON.stringify({checks,errors},null,2)+'\n');console.log(JSON.stringify({checks,errors},null,2));

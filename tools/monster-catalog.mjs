@@ -1,3 +1,5 @@
+import {conditionText, monsterGroups, targetText} from '../src/application/monster-catalog.js';
+
 // Catalogs describe loaded definitions and references, not proven playthrough reachability.
 export function encounterReferences(data) {
   const refs=Object.fromEntries(Object.keys(data.encounters).map(id=>[id,{maps:[],systems:[],scripts:[]}]));
@@ -24,26 +26,6 @@ export function encounterReferences(data) {
   return refs;
 }
 
-function conditionText(value) {
-  if(value===undefined||value===null)return '条件なし';
-  if(value.op==='contains'&&value.left?.ref==='self.buffs')return `自身に補助 ${value.right} がある間`;
-  if(value.op==='and')return value.args.map(conditionText).join('、かつ');
-  if(value.op==='eq'&&value.left?.op==='mod'&&value.left.args?.[0]?.ref==='self.round'&&value.left.args[1]===2)return value.right===0?'偶数ラウンド':'奇数ラウンド';
-  if(value.left?.ref==='self.round'&&value.op==='eq')return `第${value.right}ラウンド`;
-  if(value.left?.ref==='self.hp_ratio'&&typeof value.right==='number'&&['lt','eq'].includes(value.op))return `自身のHPが${value.right*100}％${value.op==='lt'?'未満':'と等しい'}`;
-  return `条件式 ${JSON.stringify(value)}`;
-}
-
-function targetText(rule,skill) {
-  if(skill.target==='all_enemies')return '探索隊の生存者全員';
-  if(skill.target==='all_allies')return '敵側の生存者全員';
-  if(rule.target==='self'||skill.target==='self')return '自身';
-  if(rule.target==='unbuffed')return '敵側の生存者のうち、技能が付ける補助を持たない1体（遭遇順）';
-  if(rule.target==='afflicted')return '敵側の生存者のうち、解除可能な状態異常を持つ1体（遭遇順）';
-  if(skill.target==='ally')return '敵側でHP割合が最も低い1体';
-  return rule.target==='weakest'?'探索隊で現在HPの実数が最も低い1人':'探索隊の生存者からランダムに1人';
-}
-
 const shortList=values=>values.length?values.slice(0,6).join('・')+(values.length>6?` ほか${values.length-6}件`:''):'なし';
 const stats=value=>Object.entries(value).map(([key,n])=>`${key.toUpperCase()} ${n}`).join(' / ');
 const escape=value=>String(value).replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;').replaceAll('>','&gt;');
@@ -51,16 +33,10 @@ const escape=value=>String(value).replaceAll('&','&amp;').replaceAll('"','&quot;
 export function monsterCatalog(data) {
   const enemies=Object.values(data.enemies),refs=encounterReferences(data);
   const idsIn=encounter=>[...encounter.enemies.map(e=>typeof e==='string'?e:e.id??e.enemy),...(encounter.reinforcements??[]).map(r=>r.enemy)];
-  const special=['kuragari','salt_eater','valley_hexer','water_darter','water_predator','water_giant'];
-  const groups=[
-    ['固有環境の敵',enemies.filter(e=>special.includes(e.id))],
-    ['個別デザインの通常魔物',enemies.filter(e=>e.source)],
-    ['依頼に追加した敵',enemies.filter(e=>!e.source&&!special.includes(e.id)&&!/^guard_\d+(?:_elite)?$/.test(e.id))],
-    ['地域の迷宮獣と守護者',enemies.filter(e=>/^guard_\d+(?:_elite)?$/.test(e.id))]
-  ];
+  const groups = monsterGroups(enemies);
   const imageUsers=new Map();
   for(const e of enemies){const file=data.assets.images[e.sprite];if(!imageUsers.has(file))imageUsers.set(file,[]);imageUsers.get(file).push(e.name);}
-  const out=['# 魔物一覧と戦闘画像','',
+  const out=['# 魔物一覧と戦闘画像','','[ゲーム内の魔物図鑑を開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters)','',
     `作品版${data.game.version}。配布中の敵は${enemies.length}定義、遭遇編成は${Object.keys(data.encounters).length}定義、敵が参照する画像ファイルは${imageUsers.size}点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。`,'',
     '敵・技能・画像・通常ロードのマップと迷宮・スクリプトから全文を生成します。数値を重ねて手書きせず、原稿を更新してから `npm run build:docs` で反映します。','',
     ...groups.map(([title,list])=>`[${title}](#${title})：${list.length}定義。`),'',
@@ -80,7 +56,7 @@ export function monsterCatalog(data) {
     out.push(`## ${title}`,'');
     for(const e of list){
       const file=data.assets.images[e.sprite],shared=imageUsers.get(file).filter(name=>name!==e.name);
-      out.push(`### ${e.name} (${e.id})`,'',`<img src="../${file}" width="160" alt="${escape(e.name)}">`,'',`画像ID：${e.sprite}。実ファイル：[${file}](../${file})。`,
+      out.push(`<a id="monster-${e.id}"></a>`,'',`### ${e.name} (${e.id})`,'',`<img src="../${file}" width="160" alt="${escape(e.name)}">`,'',`画像ID：${e.sprite}。実ファイル：[${file}](../${file})。`,
         `画像共有：${shared.length?shared.join('・'):'他の敵定義との共有なし'}。`,'');
       if(e.ideas)out.push(`発想：${e.ideas.join('＋')}。参照：${e.source}。地域分類：${data.regions.find(r=>r.id===e.region)?.name??e.region}。`,'',`外見：${e.appearance}`,'',`設計上の役割：${e.role}`,'');
       if(e.id==='kuragari')out.push('通常点灯の守りが届かないときは7成功歩ごとに基本22％で歩行抽選し、現状の候補はくらがり100％です。普通の火で通常魔物まで消えることはなく、通常遭遇の完全抑止は深火の効果です。q001の老人同行中は北・南の帰路配置で同じイベント戦闘を起こし、途中の通常抽選でくらがりに遭遇した場合も、その実セルで同じ戦闘と新人救援へ進みます。火切れだけでは即戦闘にせず、救援後は繰り返しません。撃退・救助による強制終了と撃破を区別します。[火と遭遇仕様](KAGARIBI_DUNGEON.md)。','');

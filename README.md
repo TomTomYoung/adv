@@ -1,6 +1,6 @@
 # 灯帰りの迷宮
 
-[千変の迷宮の敵編成・仲間の成長と想定装備](labyrinth-guide.html)
+[キャラ図鑑](labyrinth-guide.html#allies) ／ [魔物図鑑](labyrinth-guide.html#monsters) ／ [魔物編成](labyrinth-guide.html#enemies)
 
 [クエスト攻略パーティー試遊](quest-party-playtest.html) ／ [想定と操作方法](doc/battle/QUEST_PARTY_PLAYTEST.md)。
 

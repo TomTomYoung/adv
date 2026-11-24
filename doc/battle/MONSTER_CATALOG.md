@@ -1,5 +1,7 @@
 # 魔物一覧と戦闘画像
 
+[ゲーム内の魔物図鑑を開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters)
+
 作品版1.34.0。配布中の敵は89定義、遭遇編成は116定義、敵が参照する画像ファイルは25点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
 
 敵・技能・画像・通常ロードのマップと迷宮・スクリプトから全文を生成します。数値を重ねて手書きせず、原稿を更新してから `npm run build:docs` で反映します。
@@ -33,6 +35,8 @@ AIは優先度の高い順に、条件成立・MP充足・環境による使用�
 
 ## 固有環境の敵
 
+<a id="monster-kuragari"></a>
+
 ### くらがり (kuragari)
 
 <img src="../../assets/images/monsters/wraith.webp" width="160" alt="くらがり">
@@ -56,6 +60,8 @@ kuragari_hunt：くらがり×1。逃走可。
 仕掛けからの参照：篝火の迷宮 / fires.threat.encounterPool.0.encounter。
 戦闘開始命令：1スクリプト。q001.v11.outage。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
 
+<a id="monster-valley_hexer"></a>
+
 ### 境渡りの呪詠み (valley_hexer)
 
 <img src="../../assets/images/monsters/dragon.webp" width="160" alt="境渡りの呪詠み">
@@ -77,6 +83,8 @@ AIの選択順：
 valley_roamers：境渡りの呪詠み×1。逃走可。
 通常遭遇候補：祈りの届かない谷 (prayerless_valley_f1)、重み50。
 仕掛けからの参照：祈りの届かない谷 / boundary.threat.encounter。
+
+<a id="monster-water_darter"></a>
 
 ### 水路の小魚 (water_darter)
 
@@ -100,6 +108,8 @@ AIの選択順：
 water_small：水路の小魚×1。逃走可。
 通常ロードのマップ候補・有効な仕掛け・戦闘開始命令からの参照なし。遭遇定義のみ保持しています。
 
+<a id="monster-water_predator"></a>
+
 ### 水路の牙魚 (water_predator)
 
 <img src="../../assets/images/monsters/slime.webp" width="160" alt="水路の牙魚">
@@ -122,6 +132,8 @@ AIの選択順：
 water_predator：水路の牙魚×1。逃走可。
 通常ロードのマップ候補・有効な仕掛け・戦闘開始命令からの参照なし。遭遇定義のみ保持しています。
 
+<a id="monster-water_giant"></a>
+
 ### 大水喰い (water_giant)
 
 <img src="../../assets/images/monsters/slime.webp" width="160" alt="大水喰い">
@@ -143,6 +155,8 @@ AIの選択順：
 
 water_giant：大水喰い×1。逃走可。
 通常ロードのマップ候補・有効な仕掛け・戦闘開始命令からの参照なし。遭遇定義のみ保持しています。
+
+<a id="monster-salt_eater"></a>
 
 ### ソルトイーター (salt_eater)
 
@@ -167,6 +181,8 @@ salt_eater_feeding：ソルトイーター×1。逃走可。
 仕掛けからの参照：塩哭きの廃坑 / salt.eater.encounter。
 
 ## 個別デザインの通常魔物
+
+<a id="monster-waterwheel_beaver"></a>
 
 ### 水車ビーバー (waterwheel_beaver)
 
@@ -197,6 +213,8 @@ wild_waterwheel_beaver：水車ビーバー×1。逃走可。
 
 wild_pair_1：水車ビーバー×1・水門ワニ×1。逃走可。
 通常ロードのマップ候補・有効な仕掛け・戦闘開始命令からの参照なし。遭遇定義のみ保持しています。
+
+<a id="monster-sluice_crocodile"></a>
 
 ### 水門ワニ (sluice_crocodile)
 
@@ -232,6 +250,8 @@ wild_pair_1：水車ビーバー×1・水門ワニ×1。逃走可。
 waterway_croc_eel：水門ワニ×1・通電ウナギの幼体×1。逃走可。
 通常遭遇候補：灯守の地下水道・7F 給金箱の水路 (region_1_canal_c)、重み70 / 灯守の地下水道・8F 棺の待避場 (region_1_lower_landing)、重み35。
 
+<a id="monster-drill_mole"></a>
+
 ### ドリルモグラ (drill_mole)
 
 <img src="../../assets/images/monsters/drill_mole.webp" width="160" alt="ドリルモグラ">
@@ -261,6 +281,8 @@ wild_drill_mole：ドリルモグラ×1。逃走可。
 
 wild_pair_2：ドリルモグラ×1・陶器アルマジロ×1。逃走可。
 通常遭遇候補：塩哭きの廃坑・地下2層 (region_2_f2)、重み10 / 塩哭きの廃坑・3F 砕石場 (region_2_f3)、重み20 / 塩哭きの廃坑・4F 選鉱詰所 (region_2_f4)、重み20 / 塩哭きの廃坑・5F 塩の吹溜まり (region_2_f5)、重み20 / 塩哭きの廃坑・7F 巻上詰所 (region_2_f7)、重み40 / 塩哭きの廃坑・10F 大選鉱室 (region_2_f10)、重み20。
+
+<a id="monster-ceramic_armadillo"></a>
 
 ### 陶器アルマジロ (ceramic_armadillo)
 
@@ -293,6 +315,8 @@ wild_ceramic_armadillo：陶器アルマジロ×1。逃走可。
 wild_pair_2：ドリルモグラ×1・陶器アルマジロ×1。逃走可。
 通常遭遇候補：塩哭きの廃坑・地下2層 (region_2_f2)、重み10 / 塩哭きの廃坑・3F 砕石場 (region_2_f3)、重み20 / 塩哭きの廃坑・4F 選鉱詰所 (region_2_f4)、重み20 / 塩哭きの廃坑・5F 塩の吹溜まり (region_2_f5)、重み20 / 塩哭きの廃坑・7F 巻上詰所 (region_2_f7)、重み40 / 塩哭きの廃坑・10F 大選鉱室 (region_2_f10)、重み20。
 
+<a id="monster-candle_bee"></a>
+
 ### 蜜蝋ランプバチ (candle_bee)
 
 <img src="../../assets/images/monsters/candle_bee.webp" width="160" alt="蜜蝋ランプバチ">
@@ -323,6 +347,8 @@ wild_candle_bee：蜜蝋ランプバチ×1。逃走可。
 wild_pair_3：蜜蝋ランプバチ×1・鋸刃カマキリ×1。逃走可。
 通常遭遇候補：根喰みの地下庭園・地下2層 (region_3_f2)、重み10 / 根喰みの地下庭園・3F 灌漑溝 (region_3_f3)、重み30 / 根喰みの地下庭園・4F 苗床詰所 (region_3_f4)、重み30 / 根喰みの地下庭園・5F 絡み根の道 (region_3_f5)、重み30 / 根喰みの地下庭園・6F 蜜の回廊 (region_3_f6)、重み30 / 根喰みの地下庭園・7F 庭師の休憩所 (region_3_f7)、重み30 / 根喰みの地下庭園・8F 虫媒棚 (region_3_f8)、重み30 / 根喰みの地下庭園・9F 薬草温室 (region_3_f9)、重み30 / 根喰みの地下庭園・10F 根門前庭 (region_3_f10)、重み30。
 
+<a id="monster-saw_mantis"></a>
+
 ### 鋸刃カマキリ (saw_mantis)
 
 <img src="../../assets/images/monsters/saw_mantis.webp" width="160" alt="鋸刃カマキリ">
@@ -352,6 +378,8 @@ wild_saw_mantis：鋸刃カマキリ×1。逃走可。
 
 wild_pair_3：蜜蝋ランプバチ×1・鋸刃カマキリ×1。逃走可。
 通常遭遇候補：根喰みの地下庭園・地下2層 (region_3_f2)、重み10 / 根喰みの地下庭園・3F 灌漑溝 (region_3_f3)、重み30 / 根喰みの地下庭園・4F 苗床詰所 (region_3_f4)、重み30 / 根喰みの地下庭園・5F 絡み根の道 (region_3_f5)、重み30 / 根喰みの地下庭園・6F 蜜の回廊 (region_3_f6)、重み30 / 根喰みの地下庭園・7F 庭師の休憩所 (region_3_f7)、重み30 / 根喰みの地下庭園・8F 虫媒棚 (region_3_f8)、重み30 / 根喰みの地下庭園・9F 薬草温室 (region_3_f9)、重み30 / 根喰みの地下庭園・10F 根門前庭 (region_3_f10)、重み30。
+
+<a id="monster-kaleidoscope_owl"></a>
 
 ### 万華鏡フクロウ (kaleidoscope_owl)
 
@@ -384,6 +412,8 @@ wild_kaleidoscope_owl：万華鏡フクロウ×1。逃走可。
 wild_pair_4：万華鏡フクロウ×1・硝子クラゲ×1。逃走可。
 通常遭遇候補：鏡沈みの礼拝堂・地下2層 (region_4_f2)、重み10。
 
+<a id="monster-glass_jellyfish"></a>
+
 ### 硝子クラゲ (glass_jellyfish)
 
 <img src="../../assets/images/monsters/glass_jellyfish.webp" width="160" alt="硝子クラゲ">
@@ -413,6 +443,8 @@ wild_glass_jellyfish：硝子クラゲ×1。逃走可。
 
 wild_pair_4：万華鏡フクロウ×1・硝子クラゲ×1。逃走可。
 通常遭遇候補：鏡沈みの礼拝堂・地下2層 (region_4_f2)、重み10。
+
+<a id="monster-type_porcupine"></a>
 
 ### 活字ヤマアラシ (type_porcupine)
 
@@ -444,6 +476,8 @@ wild_type_porcupine：活字ヤマアラシ×1。逃走可。
 wild_pair_5：活字ヤマアラシ×1・書庫シミ×1。逃走可。
 通常遭遇候補：灰時計の書庫・地下2層 (region_5_f2)、重み10。
 
+<a id="monster-book_silverfish"></a>
+
 ### 書庫シミ (book_silverfish)
 
 <img src="../../assets/images/monsters/book_silverfish.webp" width="160" alt="書庫シミ">
@@ -473,6 +507,8 @@ wild_book_silverfish：書庫シミ×1。逃走可。
 
 wild_pair_5：活字ヤマアラシ×1・書庫シミ×1。逃走可。
 通常遭遇候補：灰時計の書庫・地下2層 (region_5_f2)、重み10。
+
+<a id="monster-vault_mouse"></a>
 
 ### 金庫ネズミ (vault_mouse)
 
@@ -505,6 +541,8 @@ wild_vault_mouse：金庫ネズミ×1。逃走可。
 wild_pair_6：金庫ネズミ×1・裁縫ミノムシ×1。逃走可。
 通常遭遇候補：眠れる地下市場・地下2層 (region_6_f2)、重み10。
 
+<a id="monster-patchwork_bagworm"></a>
+
 ### 裁縫ミノムシ (patchwork_bagworm)
 
 <img src="../../assets/images/monsters/patchwork_bagworm.webp" width="160" alt="裁縫ミノムシ">
@@ -535,6 +573,8 @@ wild_patchwork_bagworm：裁縫ミノムシ×1。逃走可。
 wild_pair_6：金庫ネズミ×1・裁縫ミノムシ×1。逃走可。
 通常遭遇候補：眠れる地下市場・地下2層 (region_6_f2)、重み10。
 
+<a id="monster-bone_whale"></a>
+
 ### 骨くじら (bone_whale)
 
 <img src="../../assets/images/monsters/bone_whale.webp" width="160" alt="骨くじら">
@@ -564,6 +604,8 @@ wild_bone_whale：骨くじら×1。逃走可。
 
 wild_pair_7：骨くじら×1・碇イカ×1。逃走可。
 通常遭遇候補：黒潮の沈没城・地下2層 (region_7_f2)、重み10。
+
+<a id="monster-anchor_squid"></a>
 
 ### 碇イカ (anchor_squid)
 
@@ -596,6 +638,8 @@ wild_anchor_squid：碇イカ×1。逃走可。
 wild_pair_7：骨くじら×1・碇イカ×1。逃走可。
 通常遭遇候補：黒潮の沈没城・地下2層 (region_7_f2)、重み10。
 
+<a id="monster-battery_hermit"></a>
+
 ### 蓄電ヤドカリ (battery_hermit)
 
 <img src="../../assets/images/monsters/battery_hermit.webp" width="160" alt="蓄電ヤドカリ">
@@ -626,6 +670,8 @@ wild_battery_hermit：蓄電ヤドカリ×1。逃走可。
 
 wild_pair_8：蓄電ヤドカリ×1・脱線ムカデ×1。逃走可。
 通常遭遇候補：鉄胎の機関廟・地下2層 (region_8_f2)、重み10。
+
+<a id="monster-derail_centipede"></a>
 
 ### 脱線ムカデ (derail_centipede)
 
@@ -658,6 +704,8 @@ wild_derail_centipede：脱線ムカデ×1。逃走可。
 wild_pair_8：蓄電ヤドカリ×1・脱線ムカデ×1。逃走可。
 通常遭遇候補：鉄胎の機関廟・地下2層 (region_8_f2)、重み10。
 
+<a id="monster-iris_butterfly"></a>
+
 ### 虹彩チョウ (iris_butterfly)
 
 <img src="../../assets/images/monsters/iris_butterfly.webp" width="160" alt="虹彩チョウ">
@@ -687,6 +735,8 @@ wild_iris_butterfly：虹彩チョウ×1。逃走可。
 
 wild_pair_9：虹彩チョウ×1・羅針盤カササギ×1。逃走可。
 通常遭遇候補：星欠けの地下観測所・地下2層 (region_9_f2)、重み10。
+
+<a id="monster-compass_magpie"></a>
 
 ### 羅針盤カササギ (compass_magpie)
 
@@ -718,6 +768,8 @@ wild_compass_magpie：羅針盤カササギ×1。逃走可。
 wild_pair_9：虹彩チョウ×1・羅針盤カササギ×1。逃走可。
 通常遭遇候補：星欠けの地下観測所・地下2層 (region_9_f2)、重み10。
 
+<a id="monster-moon_wolf"></a>
+
 ### 月輪オオカミ (moon_wolf)
 
 <img src="../../assets/images/monsters/moon_wolf.webp" width="160" alt="月輪オオカミ">
@@ -747,6 +799,8 @@ wild_moon_wolf：月輪オオカミ×1。逃走可。
 
 wild_pair_10：月輪オオカミ×1・ジャックナイフ×1。逃走可。
 通常遭遇候補：帰還者の深淵・地下2層 (region_10_f2)、重み10。
+
+<a id="monster-jackknife"></a>
 
 ### ジャックナイフ (jackknife)
 
@@ -778,6 +832,8 @@ wild_jackknife：ジャックナイフ×1。逃走可。
 wild_pair_10：月輪オオカミ×1・ジャックナイフ×1。逃走可。
 通常遭遇候補：帰還者の深淵・地下2層 (region_10_f2)、重み10。
 
+<a id="monster-garden_nectar_bee"></a>
+
 ### 蜜蝋ランプバチ (garden_nectar_bee)
 
 <img src="../../assets/images/monsters/candle_bee.webp" width="160" alt="蜜蝋ランプバチ">
@@ -808,6 +864,8 @@ garden_root_guardian：大剪定虫×1・根殻甲×1。逃走可。
 
 ## 依頼に追加した敵
 
+<a id="monster-moor_wolf"></a>
+
 ### 荒野狼 (moor_wolf)
 
 <img src="../../assets/images/monsters/moon_wolf.webp" width="160" alt="荒野狼">
@@ -829,6 +887,8 @@ AIの選択順：
 
 story_121：荒野狼×1。逃走可。
 戦闘開始命令：1スクリプト。q121.scene.talk。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
+
+<a id="monster-valley_drake"></a>
 
 ### 谷の飛竜 (valley_drake)
 
@@ -852,6 +912,8 @@ AIの選択順：
 story_122：谷の飛竜×1。逃走可。
 戦闘開始命令：1スクリプト。q122.scene.nest。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
 
+<a id="monster-carrion_ghoul"></a>
+
 ### 腐肉鬼 (carrion_ghoul)
 
 <img src="../../assets/images/monsters/wraith.webp" width="160" alt="腐肉鬼">
@@ -873,6 +935,8 @@ AIの選択順：
 
 story_123：腐肉鬼×1。逃走可。
 戦闘開始命令：1スクリプト。q123.scene.gate。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
+
+<a id="monster-thorn_stag"></a>
 
 ### 荊角獣 (thorn_stag)
 
@@ -896,6 +960,8 @@ AIの選択順：
 story_125：荊角獣×1。逃走可。
 戦闘開始命令：6スクリプト。q125.scene.entry・q125.flow.entry・q125.flow.after・q125.flow.village・q126.scene.entry・q126.flow.entry。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
 
+<a id="monster-debt_golem"></a>
+
 ### 借証の泥人形 (debt_golem)
 
 <img src="../../assets/images/monsters/construct.webp" width="160" alt="借証の泥人形">
@@ -917,6 +983,8 @@ AIの選択順：
 
 story_127：借証の泥人形×1。逃走可。
 戦闘開始命令：2スクリプト。q127.scene.entry・q127.scene.terms。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
+
+<a id="monster-iron_moth"></a>
 
 ### 鉄喰い蛾 (iron_moth)
 
@@ -940,6 +1008,8 @@ AIの選択順：
 story_128：鉄喰い蛾×1。逃走可。
 戦闘開始命令：2スクリプト。q128.scene.entry・q128.scene.test。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
 
+<a id="monster-last_fort_guard"></a>
+
 ### 砦の守護獣 (last_fort_guard)
 
 <img src="../../assets/images/monsters/construct.webp" width="160" alt="砦の守護獣">
@@ -961,6 +1031,8 @@ AIの選択順：
 
 story_129：砦の守護獣×1。逃走可。
 戦闘開始命令：1スクリプト。q129.scene.plan。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
+
+<a id="monster-moss_crawler"></a>
 
 ### 苔冠の小魔 (moss_crawler)
 
@@ -984,6 +1056,8 @@ AIの選択順：
 story_130：苔冠の小魔×1。逃走可。
 戦闘開始命令：2スクリプト。q130.scene.entry・q130.scene.crown。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
 
+<a id="monster-watchbox_mimic"></a>
+
 ### 詰所の擬態箱 (watchbox_mimic)
 
 <img src="../../assets/images/monsters/construct.webp" width="160" alt="詰所の擬態箱">
@@ -1005,6 +1079,8 @@ AIの選択順：
 
 story_132：詰所の擬態箱×1。逃走可。
 戦闘開始命令：3スクリプト。q132.scene.entry・q132.scene.test・q132.scene.isolate。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
+
+<a id="monster-stone_eater"></a>
 
 ### 石喰い獣 (stone_eater)
 
@@ -1028,6 +1104,8 @@ AIの選択順：
 story_166：石喰い獣×1。逃走可。
 戦闘開始命令：1スクリプト。q166.scene.trial。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
 
+<a id="monster-footstep_stalker"></a>
+
 ### 足跡の追跡者 (footstep_stalker)
 
 <img src="../../assets/images/monsters/wraith.webp" width="160" alt="足跡の追跡者">
@@ -1049,6 +1127,8 @@ AIの選択順：
 
 story_171：足跡の追跡者×1。逃走可。
 戦闘開始命令：1スクリプト。q171.scene.watch。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
+
+<a id="monster-mirror_fang"></a>
 
 ### 鏡牙獣 (mirror_fang)
 
@@ -1072,6 +1152,8 @@ AIの選択順：
 story_175：鏡牙獣×1。逃走可。
 戦闘開始命令：3スクリプト。q175.scene.entry・q175.flow.hidden・q175.flow.warning。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
 
+<a id="monster-battlefield_bonebeast"></a>
+
 ### 戦場の骸骨獣 (battlefield_bonebeast)
 
 <img src="../../assets/images/monsters/skeleton.webp" width="160" alt="戦場の骸骨獣">
@@ -1093,6 +1175,8 @@ AIの選択順：
 
 story_190：戦場の骸骨獣×1。逃走可。
 戦闘開始命令：1スクリプト。q190.scene.entry。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
+
+<a id="monster-kagaribi_soot_rat"></a>
 
 ### 煤ネズミ (kagaribi_soot_rat)
 
@@ -1121,6 +1205,8 @@ kagaribi_pests：煤ネズミ×1・燭蝋スライム×1。逃走可。
 kagaribi_manifold_pair：煤ネズミ×1・灯蛾×1。逃走可。
 通常ロードのマップ候補・有効な仕掛け・戦闘開始命令からの参照なし。遭遇定義のみ保持しています。
 
+<a id="monster-kagaribi_wax_slime"></a>
+
 ### 燭蝋スライム (kagaribi_wax_slime)
 
 <img src="../../assets/images/monsters/slime.webp" width="160" alt="燭蝋スライム">
@@ -1145,6 +1231,8 @@ kagaribi_wax：燭蝋スライム×1。逃走可。
 kagaribi_pests：煤ネズミ×1・燭蝋スライム×1。逃走可。
 通常遭遇候補：篝火の迷宮・1F 灯番の巡回路 (kagaribi_f1)、重み15。
 戦闘開始命令：1スクリプト。q205.v11.ash。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
+
+<a id="monster-kagaribi_ember_moth"></a>
 
 ### 灯蛾 (kagaribi_ember_moth)
 
@@ -1173,6 +1261,8 @@ kagaribi_patrol_pair：灯蛾×1・赤錆の番兵×1。逃走可。
 kagaribi_manifold_pair：煤ネズミ×1・灯蛾×1。逃走可。
 通常ロードのマップ候補・有効な仕掛け・戦闘開始命令からの参照なし。遭遇定義のみ保持しています。
 
+<a id="monster-kagaribi_ash_guard"></a>
+
 ### 赤錆の番兵 (kagaribi_ash_guard)
 
 <img src="../../assets/images/monsters/skeleton.webp" width="160" alt="赤錆の番兵">
@@ -1195,6 +1285,8 @@ kagaribi_guards：赤錆の番兵×1。逃走可。
 
 kagaribi_patrol_pair：灯蛾×1・赤錆の番兵×1。逃走可。
 通常ロードのマップ候補・有効な仕掛け・戦闘開始命令からの参照なし。遭遇定義のみ保持しています。
+
+<a id="monster-kagaribi_cinder_golem"></a>
 
 ### 灰積みゴーレム (kagaribi_cinder_golem)
 
@@ -1219,6 +1311,8 @@ kagaribi_golem：灰積みゴーレム×1。逃走可。
 kagaribi_deep_pair：鎖引き骸骨×1・灰積みゴーレム×1。逃走可。
 通常ロードのマップ候補・有効な仕掛け・戦闘開始命令からの参照なし。遭遇定義のみ保持しています。
 
+<a id="monster-kagaribi_chain_bone"></a>
+
 ### 鎖引き骸骨 (kagaribi_chain_bone)
 
 <img src="../../assets/images/monsters/skeleton.webp" width="160" alt="鎖引き骸骨">
@@ -1242,6 +1336,8 @@ kagaribi_bones：鎖引き骸骨×1。逃走可。
 kagaribi_deep_pair：鎖引き骸骨×1・灰積みゴーレム×1。逃走可。
 通常ロードのマップ候補・有効な仕掛け・戦闘開始命令からの参照なし。遭遇定義のみ保持しています。
 
+<a id="monster-kagaribi_kiln_warden"></a>
+
 ### 炉守りの亡霊 (kagaribi_kiln_warden)
 
 <img src="../../assets/images/monsters/wraith.webp" width="160" alt="炉守りの亡霊">
@@ -1262,6 +1358,8 @@ AIの選択順：
 
 kagaribi_kiln_guard：炉守りの亡霊×1。逃走可。
 戦闘開始命令：1スクリプト。kagaribi.kiln_hunt。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
+
+<a id="monster-kagaribi_altar_keeper"></a>
 
 ### 祭壇の火守 (kagaribi_altar_keeper)
 
@@ -1284,6 +1382,8 @@ AIの選択順：
 
 kagaribi_altar_guardian：祭壇の火守×1。逃走可。
 戦闘開始命令：1スクリプト。kagaribi.altar_keeper。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
+
+<a id="monster-kagaribi_oil_rat"></a>
 
 ### 油染みの煤ネズミ (kagaribi_oil_rat)
 
@@ -1311,6 +1411,8 @@ kagaribi_oil_pair：油染みの煤ネズミ×1・油蔵の燭蝋スライム×1
 kagaribi_shallow_manifold_pair：油染みの煤ネズミ×1・煤けた灯蛾×1。逃走可。
 通常遭遇候補：篝火の迷宮・3F 配油分岐室 (kagaribi_manifold)、重み40。
 
+<a id="monster-kagaribi_oil_wax"></a>
+
 ### 油蔵の燭蝋スライム (kagaribi_oil_wax)
 
 <img src="../../assets/images/monsters/slime.webp" width="160" alt="油蔵の燭蝋スライム">
@@ -1333,6 +1435,8 @@ kagaribi_oil_slime：油蔵の燭蝋スライム×1。逃走可。
 
 kagaribi_oil_pair：油染みの煤ネズミ×1・油蔵の燭蝋スライム×1。逃走可。
 通常遭遇候補：篝火の迷宮・2F 油蔵 (kagaribi_oilstore)、重み15 / 篝火の迷宮・4F 交差路の詰所前 (kagaribi_crossroads)、重み15 / 篝火の迷宮・3F 配油分岐室 (kagaribi_manifold)、重み60。
+
+<a id="monster-kagaribi_soot_moth"></a>
 
 ### 煤けた灯蛾 (kagaribi_soot_moth)
 
@@ -1361,6 +1465,8 @@ kagaribi_shallow_patrol_pair：煤けた灯蛾×1・巡回路の赤錆番兵×1�
 kagaribi_shallow_manifold_pair：油染みの煤ネズミ×1・煤けた灯蛾×1。逃走可。
 通常遭遇候補：篝火の迷宮・3F 配油分岐室 (kagaribi_manifold)、重み40。
 
+<a id="monster-kagaribi_patrol_guard"></a>
+
 ### 巡回路の赤錆番兵 (kagaribi_patrol_guard)
 
 <img src="../../assets/images/monsters/skeleton.webp" width="160" alt="巡回路の赤錆番兵">
@@ -1383,6 +1489,8 @@ kagaribi_shallow_guards：巡回路の赤錆番兵×1。逃走可。
 
 kagaribi_shallow_patrol_pair：煤けた灯蛾×1・巡回路の赤錆番兵×1。逃走可。
 通常遭遇候補：篝火の迷宮・5F 煤けた回廊 (kagaribi_f2)、重み15 / 篝火の迷宮・6F 旧炭焼き場 (kagaribi_kilns)、重み15 / 篝火の迷宮・7F 中継篝火の広間 (kagaribi_relay)、重み15。
+
+<a id="monster-kagaribi_kiln_golem"></a>
 
 ### 炭焼き場の灰積み (kagaribi_kiln_golem)
 
@@ -1410,6 +1518,8 @@ kagaribi_shallow_deep_pair：納骨堂の鎖引き×1・炭焼き場の灰積み
 kagaribi_ossuary_deep_pair：納骨堂の残骸兵×1・炭焼き場の灰積み×1。逃走可。
 通常遭遇候補：篝火の迷宮・9F 帰らずの納骨堂 (kagaribi_ossuary)、重み15。
 
+<a id="monster-kagaribi_ossuary_bone"></a>
+
 ### 納骨堂の鎖引き (kagaribi_ossuary_bone)
 
 <img src="../../assets/images/monsters/skeleton.webp" width="160" alt="納骨堂の鎖引き">
@@ -1432,6 +1542,8 @@ kagaribi_shallow_bones：納骨堂の鎖引き×1。逃走可。
 
 kagaribi_shallow_deep_pair：納骨堂の鎖引き×1・炭焼き場の灰積み×1。逃走可。
 通常遭遇候補：篝火の迷宮・10F 深火の祭壇 (kagaribi_f3)、重み15 / 篝火の迷宮・8F 最後の巡回路 (kagaribi_last_patrol)、重み15。
+
+<a id="monster-kagaribi_ossuary_remnant"></a>
 
 ### 納骨堂の残骸兵 (kagaribi_ossuary_remnant)
 
@@ -1456,6 +1568,8 @@ kagaribi_ossuary_bones：納骨堂の残骸兵×1。逃走可。
 kagaribi_ossuary_deep_pair：納骨堂の残骸兵×1・炭焼き場の灰積み×1。逃走可。
 通常遭遇候補：篝火の迷宮・9F 帰らずの納骨堂 (kagaribi_ossuary)、重み15。
 
+<a id="monster-waterway_sluice_beast"></a>
+
 ### 水門獣 (waterway_sluice_beast)
 
 <img src="../../assets/images/monsters/sluice_crocodile.webp" width="160" alt="水門獣">
@@ -1477,6 +1591,8 @@ AIの選択順：
 
 waterway_sluice_guardian：水門獣×1。逃走可。
 戦闘開始命令：1スクリプト。waterway.sluice_beast。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
+
+<a id="monster-mine_shellbreaker"></a>
 
 ### 殻砕き獣 (mine_shellbreaker)
 
@@ -1501,6 +1617,8 @@ AIの選択順：
 mine_shell_guardian：殻砕き獣×1。逃走可。
 戦闘開始命令：1スクリプト。mine.shellbreaker.10。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
 
+<a id="monster-garden_great_pruner"></a>
+
 ### 大剪定虫 (garden_great_pruner)
 
 <img src="../../assets/images/monsters/saw_mantis.webp" width="160" alt="大剪定虫">
@@ -1521,6 +1639,8 @@ AIの選択順：
 garden_root_guardian：大剪定虫×1・根殻甲×1。逃走可。
 有限増援予定：蜜蝋ランプバチ（最短3巡、enemy_1撃破後、enemy_0生存中）。初期配置には含めません。
 戦闘開始命令：1スクリプト。garden.root_gate.10。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
+
+<a id="monster-garden_root_shell"></a>
 
 ### 根殻甲 (garden_root_shell)
 
@@ -1543,6 +1663,8 @@ AIの選択順：
 garden_root_guardian：大剪定虫×1・根殻甲×1。逃走可。
 有限増援予定：蜜蝋ランプバチ（最短3巡、enemy_1撃破後、enemy_0生存中）。初期配置には含めません。
 戦闘開始命令：1スクリプト。garden.root_gate.10。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
+
+<a id="monster-waterway_young_eel"></a>
 
 ### 通電ウナギの幼体 (waterway_young_eel)
 
@@ -1568,6 +1690,8 @@ waterway_eel_lesson：通電ウナギの幼体×1。逃走可。
 waterway_croc_eel：水門ワニ×1・通電ウナギの幼体×1。逃走可。
 通常遭遇候補：灯守の地下水道・7F 給金箱の水路 (region_1_canal_c)、重み70 / 灯守の地下水道・8F 棺の待避場 (region_1_lower_landing)、重み35。
 
+<a id="monster-waterway_low_crocodile"></a>
+
 ### 深水門ワニ（低位） (waterway_low_crocodile)
 
 <img src="../../assets/images/monsters/sluice_crocodile.webp" width="160" alt="深水門ワニ（低位）">
@@ -1592,6 +1716,8 @@ waterway_shallow_a：深水門ワニ（低位）×2・通電ウナギ（低位�
 waterway_shallow_b：深水門ワニ（低位）×1・大水車ビーバー（低位）×1・通電ウナギ（低位）×1・泥濾し貝（低位）×1。逃走可。
 通常遭遇候補：灯守の地下水道・9F 避難水路 (region_1_canal_d)、重み60。
 
+<a id="monster-waterway_low_beaver"></a>
+
 ### 大水車ビーバー（低位） (waterway_low_beaver)
 
 <img src="../../assets/images/monsters/waterwheel_beaver.webp" width="160" alt="大水車ビーバー（低位）">
@@ -1612,6 +1738,8 @@ AIの選択順：
 
 waterway_shallow_b：深水門ワニ（低位）×1・大水車ビーバー（低位）×1・通電ウナギ（低位）×1・泥濾し貝（低位）×1。逃走可。
 通常遭遇候補：灯守の地下水道・9F 避難水路 (region_1_canal_d)、重み60。
+
+<a id="monster-waterway_low_eel"></a>
 
 ### 通電ウナギ（低位） (waterway_low_eel)
 
@@ -1637,6 +1765,8 @@ waterway_shallow_a：深水門ワニ（低位）×2・通電ウナギ（低位�
 waterway_shallow_b：深水門ワニ（低位）×1・大水車ビーバー（低位）×1・通電ウナギ（低位）×1・泥濾し貝（低位）×1。逃走可。
 通常遭遇候補：灯守の地下水道・9F 避難水路 (region_1_canal_d)、重み60。
 
+<a id="monster-waterway_low_clam"></a>
+
 ### 泥濾し貝（低位） (waterway_low_clam)
 
 <img src="../../assets/images/monsters/slime.webp" width="160" alt="泥濾し貝（低位）">
@@ -1657,6 +1787,8 @@ AIの選択順：
 
 waterway_shallow_b：深水門ワニ（低位）×1・大水車ビーバー（低位）×1・通電ウナギ（低位）×1・泥濾し貝（低位）×1。逃走可。
 通常遭遇候補：灯守の地下水道・9F 避難水路 (region_1_canal_d)、重み60。
+
+<a id="monster-mine_low_armadillo"></a>
 
 ### 厚殻アルマジロ（低位） (mine_low_armadillo)
 
@@ -1681,6 +1813,8 @@ mine_shallow_a：厚殻アルマジロ（低位）×1・深掘りモグラ（低
 
 mine_shallow_b：厚殻アルマジロ（低位）×2・塩噴き蟹（低位）×1・鉱脈の見張り（低位）×1。逃走可。
 通常遭遇候補：塩哭きの廃坑・8F 割晶坑 (region_2_f8)、重み60 / 塩哭きの廃坑・9F 試錐場 (region_2_f9)、重み40。
+
+<a id="monster-mine_low_mole"></a>
 
 ### 深掘りモグラ（低位） (mine_low_mole)
 
@@ -1710,6 +1844,8 @@ mine_shallow_a：厚殻アルマジロ（低位）×1・深掘りモグラ（低
 mine_shallow_c：深掘りモグラ（低位）×1・結晶ハサミ（低位）×1・塩噴き蟹（低位）×1・鉱脈の見張り（低位）×1。逃走可。
 通常遭遇候補：塩哭きの廃坑・9F 試錐場 (region_2_f9)、重み60。
 
+<a id="monster-mine_low_crab"></a>
+
 ### 塩噴き蟹（低位） (mine_low_crab)
 
 <img src="../../assets/images/monsters/construct.webp" width="160" alt="塩噴き蟹（低位）">
@@ -1737,6 +1873,8 @@ mine_shallow_b：厚殻アルマジロ（低位）×2・塩噴き蟹（低位）
 mine_shallow_c：深掘りモグラ（低位）×1・結晶ハサミ（低位）×1・塩噴き蟹（低位）×1・鉱脈の見張り（低位）×1。逃走可。
 通常遭遇候補：塩哭きの廃坑・9F 試錐場 (region_2_f9)、重み60。
 
+<a id="monster-mine_low_sentinel"></a>
+
 ### 鉱脈の見張り（低位） (mine_low_sentinel)
 
 <img src="../../assets/images/monsters/construct.webp" width="160" alt="鉱脈の見張り（低位）">
@@ -1761,6 +1899,8 @@ mine_shallow_b：厚殻アルマジロ（低位）×2・塩噴き蟹（低位）
 mine_shallow_c：深掘りモグラ（低位）×1・結晶ハサミ（低位）×1・塩噴き蟹（低位）×1・鉱脈の見張り（低位）×1。逃走可。
 通常遭遇候補：塩哭きの廃坑・9F 試錐場 (region_2_f9)、重み60。
 
+<a id="monster-mine_low_scissors"></a>
+
 ### 結晶ハサミ（低位） (mine_low_scissors)
 
 <img src="../../assets/images/monsters/construct.webp" width="160" alt="結晶ハサミ（低位）">
@@ -1783,6 +1923,8 @@ mine_shallow_c：深掘りモグラ（低位）×1・結晶ハサミ（低位）
 通常遭遇候補：塩哭きの廃坑・9F 試錐場 (region_2_f9)、重み60。
 
 ## 地域の迷宮獣と守護者
+
+<a id="monster-guard_1"></a>
 
 ### 灯守の地下水道の迷宮獣 (guard_1)
 
@@ -1812,6 +1954,8 @@ guard_1：灯守の地下水道の迷宮獣×2。逃走可。
 boss_1：灯守の地下水道の守護者×1・灯守の地下水道の迷宮獣×1。逃走不可。
 戦闘開始命令：3スクリプト。q010.decision・q010.review・q010.flow.entry。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
 
+<a id="monster-guard_1_elite"></a>
+
 ### 灯守の地下水道の守護者 (guard_1_elite)
 
 <img src="../../assets/images/monsters/slime.webp" width="160" alt="灯守の地下水道の守護者">
@@ -1834,6 +1978,8 @@ AIの選択順：
 
 boss_1：灯守の地下水道の守護者×1・灯守の地下水道の迷宮獣×1。逃走不可。
 戦闘開始命令：3スクリプト。q010.decision・q010.review・q010.flow.entry。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
+
+<a id="monster-guard_2"></a>
 
 ### 塩哭きの廃坑の迷宮獣 (guard_2)
 
@@ -1863,6 +2009,8 @@ guard_2：塩哭きの廃坑の迷宮獣×2。逃走可。
 boss_2：塩哭きの廃坑の守護者×1・塩哭きの廃坑の迷宮獣×1。逃走不可。
 戦闘開始命令：4スクリプト。q020.decision・q020.review・q020.flow.entry・q020.catalog1.entry。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
 
+<a id="monster-guard_2_elite"></a>
+
 ### 塩哭きの廃坑の守護者 (guard_2_elite)
 
 <img src="../../assets/images/monsters/skeleton.webp" width="160" alt="塩哭きの廃坑の守護者">
@@ -1885,6 +2033,8 @@ AIの選択順：
 
 boss_2：塩哭きの廃坑の守護者×1・塩哭きの廃坑の迷宮獣×1。逃走不可。
 戦闘開始命令：4スクリプト。q020.decision・q020.review・q020.flow.entry・q020.catalog1.entry。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
+
+<a id="monster-guard_3"></a>
 
 ### 根喰みの地下庭園の迷宮獣 (guard_3)
 
@@ -1914,6 +2064,8 @@ guard_3：根喰みの地下庭園の迷宮獣×2。逃走可。
 boss_3：根喰みの地下庭園の守護者×1・根喰みの地下庭園の迷宮獣×1。逃走不可。
 戦闘開始命令：3スクリプト。q030.decision・q030.review・q030.flow.entry。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
 
+<a id="monster-guard_3_elite"></a>
+
 ### 根喰みの地下庭園の守護者 (guard_3_elite)
 
 <img src="../../assets/images/monsters/slime.webp" width="160" alt="根喰みの地下庭園の守護者">
@@ -1936,6 +2088,8 @@ AIの選択順：
 
 boss_3：根喰みの地下庭園の守護者×1・根喰みの地下庭園の迷宮獣×1。逃走不可。
 戦闘開始命令：3スクリプト。q030.decision・q030.review・q030.flow.entry。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
+
+<a id="monster-guard_4"></a>
 
 ### 鏡沈みの礼拝堂の迷宮獣 (guard_4)
 
@@ -1965,6 +2119,8 @@ guard_4：鏡沈みの礼拝堂の迷宮獣×2。逃走可。
 boss_4：鏡沈みの礼拝堂の守護者×1・鏡沈みの礼拝堂の迷宮獣×1。逃走不可。
 戦闘開始命令：5スクリプト。q040.decision・q040.review・q040.flow.entry・q040.flow.witness・q040.flow.shadow。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
 
+<a id="monster-guard_4_elite"></a>
+
 ### 鏡沈みの礼拝堂の守護者 (guard_4_elite)
 
 <img src="../../assets/images/monsters/wraith.webp" width="160" alt="鏡沈みの礼拝堂の守護者">
@@ -1987,6 +2143,8 @@ AIの選択順：
 
 boss_4：鏡沈みの礼拝堂の守護者×1・鏡沈みの礼拝堂の迷宮獣×1。逃走不可。
 戦闘開始命令：5スクリプト。q040.decision・q040.review・q040.flow.entry・q040.flow.witness・q040.flow.shadow。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
+
+<a id="monster-guard_5"></a>
 
 ### 灰時計の書庫の迷宮獣 (guard_5)
 
@@ -2016,6 +2174,8 @@ guard_5：灰時計の書庫の迷宮獣×2。逃走可。
 boss_5：灰時計の書庫の守護者×1・灰時計の書庫の迷宮獣×1。逃走不可。
 戦闘開始命令：2スクリプト。q050.decision・q050.review。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
 
+<a id="monster-guard_5_elite"></a>
+
 ### 灰時計の書庫の守護者 (guard_5_elite)
 
 <img src="../../assets/images/monsters/wraith.webp" width="160" alt="灰時計の書庫の守護者">
@@ -2038,6 +2198,8 @@ AIの選択順：
 
 boss_5：灰時計の書庫の守護者×1・灰時計の書庫の迷宮獣×1。逃走不可。
 戦闘開始命令：2スクリプト。q050.decision・q050.review。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
+
+<a id="monster-guard_6"></a>
 
 ### 眠れる地下市場の迷宮獣 (guard_6)
 
@@ -2070,6 +2232,8 @@ boss_6：眠れる地下市場の守護者×1・眠れる地下市場の迷宮�
 market_enforcers：眠れる地下市場の迷宮獣×2。逃走可。
 通常ロードのマップ候補・有効な仕掛け・戦闘開始命令からの参照なし。遭遇定義のみ保持しています。
 
+<a id="monster-guard_6_elite"></a>
+
 ### 眠れる地下市場の守護者 (guard_6_elite)
 
 <img src="../../assets/images/monsters/construct.webp" width="160" alt="眠れる地下市場の守護者">
@@ -2092,6 +2256,8 @@ AIの選択順：
 
 boss_6：眠れる地下市場の守護者×1・眠れる地下市場の迷宮獣×1。逃走不可。
 戦闘開始命令：3スクリプト。q060.decision・q060.review・q060.flow.entry。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
+
+<a id="monster-guard_7"></a>
 
 ### 黒潮の沈没城の迷宮獣 (guard_7)
 
@@ -2121,6 +2287,8 @@ guard_7：黒潮の沈没城の迷宮獣×2。逃走可。
 boss_7：黒潮の沈没城の守護者×1・黒潮の沈没城の迷宮獣×1。逃走不可。
 戦闘開始命令：3スクリプト。q070.decision・q070.review・q070.flow.entry。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
 
+<a id="monster-guard_7_elite"></a>
+
 ### 黒潮の沈没城の守護者 (guard_7_elite)
 
 <img src="../../assets/images/monsters/dragon.webp" width="160" alt="黒潮の沈没城の守護者">
@@ -2143,6 +2311,8 @@ AIの選択順：
 
 boss_7：黒潮の沈没城の守護者×1・黒潮の沈没城の迷宮獣×1。逃走不可。
 戦闘開始命令：3スクリプト。q070.decision・q070.review・q070.flow.entry。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
+
+<a id="monster-guard_8"></a>
 
 ### 鉄胎の機関廟の迷宮獣 (guard_8)
 
@@ -2175,6 +2345,8 @@ boss_8：鉄胎の機関廟の守護者×1・鉄胎の機関廟の迷宮獣×1�
 machine_sentry：鉄胎の機関廟の迷宮獣×1。逃走可。
 通常ロードのマップ候補・有効な仕掛け・戦闘開始命令からの参照なし。遭遇定義のみ保持しています。
 
+<a id="monster-guard_8_elite"></a>
+
 ### 鉄胎の機関廟の守護者 (guard_8_elite)
 
 <img src="../../assets/images/monsters/construct.webp" width="160" alt="鉄胎の機関廟の守護者">
@@ -2197,6 +2369,8 @@ AIの選択順：
 
 boss_8：鉄胎の機関廟の守護者×1・鉄胎の機関廟の迷宮獣×1。逃走不可。
 戦闘開始命令：5スクリプト。q080.decision・q080.review・q080.flow.entry・q175.scene.entry・q175.flow.entry。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
+
+<a id="monster-guard_9"></a>
 
 ### 星欠けの地下観測所の迷宮獣 (guard_9)
 
@@ -2226,6 +2400,8 @@ guard_9：星欠けの地下観測所の迷宮獣×2。逃走可。
 boss_9：星欠けの地下観測所の守護者×1・星欠けの地下観測所の迷宮獣×1。逃走不可。
 戦闘開始命令：3スクリプト。q090.decision・q090.review・q090.flow.entry。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
 
+<a id="monster-guard_9_elite"></a>
+
 ### 星欠けの地下観測所の守護者 (guard_9_elite)
 
 <img src="../../assets/images/monsters/wraith.webp" width="160" alt="星欠けの地下観測所の守護者">
@@ -2248,6 +2424,8 @@ AIの選択順：
 
 boss_9：星欠けの地下観測所の守護者×1・星欠けの地下観測所の迷宮獣×1。逃走不可。
 戦闘開始命令：3スクリプト。q090.decision・q090.review・q090.flow.entry。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
+
+<a id="monster-guard_10"></a>
 
 ### 帰還者の深淵の迷宮獣 (guard_10)
 
@@ -2276,6 +2454,8 @@ guard_10：帰還者の深淵の迷宮獣×2。逃走可。
 
 boss_10：帰還者の深淵の守護者×1・帰還者の深淵の迷宮獣×1。逃走不可。
 戦闘開始命令：3スクリプト。q100.decision・q100.review・q100.flow.entry。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
+
+<a id="monster-guard_10_elite"></a>
 
 ### 帰還者の深淵の守護者 (guard_10_elite)
 
