@@ -35,6 +35,9 @@ export async function buildDungeons(){
     definitions[d.id]=d;
   }
   const content=await read('config/kagaribi-content.json'),terrain=await read('config/terrain-content.json'),extra=await read('config/dungeon-content.json'),voxel=await read('config/voxel-content.json'),game=await read('data/game.json');
+  const assets=await read('data/assets.json');
+  Object.assign(assets.images,content.images);
+  await write('data/assets.json',assets);
   for(const type of ['items','enemies','encounters'])await write(`data/${type}.json`,{...await read(`data/${type}.json`),...content[type]});
   for(const [id,map] of Object.entries(content.maps))await write(`data/maps/${id}.json`,map);
   for(const type of ['items','enemies','encounters','statuses'])await write(`data/${type}.json`,{...await read(`data/${type}.json`),...extra[type]});

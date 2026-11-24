@@ -1,8 +1,8 @@
 # シナリオ一覧
 
-全 210 本・659 結末。作品版 1.34.0。更新日: 2026-11-16。
+全 210 本・659 結末。作品版 1.34.0。更新日: 2026-11-24。
 
-<!-- quest-catalog-source:e96d6ad5ccd0622c43a34b48be14747fbb883c56b4c7b549b9c4cc96dce61b90 -->
+<!-- quest-catalog-source:2d78d2f7007e65f1ab1739775ef60064ac2abb76291e20ec9351af4f5572b14c -->
 
 表示順の正本は [quest-order.json](../../authoring/quest-order.json) です。掲載順と表示番号はこの一覧から決まり、見出し・リンク・進行状態の内部IDは固定です。
 

@@ -2,13 +2,13 @@
 
 [ゲーム内の魔物図鑑を開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters)
 
-作品版1.34.0。配布中の敵は89定義、遭遇編成は116定義、敵が参照する画像ファイルは25点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
+作品版1.34.0。配布中の敵は92定義、遭遇編成は119定義、敵が参照する画像ファイルは29点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
 
 敵・技能・画像・通常ロードのマップと迷宮・スクリプトから全文を生成します。数値を重ねて手書きせず、原稿を更新してから `npm run build:docs` で反映します。
 
 [固有環境の敵](#固有環境の敵)：6定義。
 [個別デザインの通常魔物](#個別デザインの通常魔物)：21定義。
-[依頼に追加した敵](#依頼に追加した敵)：42定義。
+[依頼に追加した敵](#依頼に追加した敵)：45定義。
 [地域の迷宮獣と守護者](#地域の迷宮獣と守護者)：20定義。
 
 ## 現在の読み方
@@ -29,7 +29,7 @@ AIは優先度の高い順に、条件成立・MP充足・環境による使用�
 
 [config/entities.json](../../config/entities.json)：個別デザイン20種の名称・発想・外見・数値・代表技能。AIの組立は[build-entities.mjs](../../tools/build-entities.mjs)です。参照した発想元は[RPGエンティティ生成モデル](https://app.notion.com/p/RPG-3d6c3c1966b380489592dbeafc72b9dd)と[魔物100](https://app.notion.com/p/3d6c3c1966b38172b0a6fd15e23be419)です。
 
-[kagaribi-content.json](../../config/kagaribi-content.json)：くらがり、篝火の迷宮の通常魔物6種と炉守りの亡霊。[dungeon-content.json](../../config/dungeon-content.json)：水路の魚・ソルトイーター・境渡りの呪詠み。出現・特殊処理の設定は各 `config/dungeons/*.json` です。
+[kagaribi-content.json](../../config/kagaribi-content.json)：くらがり、煤ネズミとその仲間を含む篝火の迷宮の通常魔物、炉守りの亡霊。[dungeon-content.json](../../config/dungeon-content.json)：水路の魚・ソルトイーター・境渡りの呪詠み。出現・特殊処理の設定は各 `config/dungeons/*.json` です。
 
 [build-content.mjs](../../tools/build-content.mjs)：地域の迷宮獣・守護者。[build-scenarios.mjs](../../tools/build-scenarios.mjs)と `authoring/scenarios-*.mjs`：依頼ごとの追加敵。通常遭遇の原稿は[編集先の対応](../authoring/CONFIG_EDITOR_SOURCES.md)、画像IDと実ファイルの対応は[data/assets.json](../../data/assets.json)を確認してください。
 
@@ -515,7 +515,7 @@ wild_pair_5：活字ヤマアラシ×1・書庫シミ×1。逃走可。
 <img src="../../assets/images/monsters/vault_mouse.webp" width="160" alt="金庫ネズミ">
 
 画像ID：monster_vault_mouse。実ファイル：[assets/images/monsters/vault_mouse.webp](../../assets/images/monsters/vault_mouse.webp)。
-画像共有：煤ネズミ・油染みの煤ネズミ。
+画像共有：油染みの煤ネズミ。
 
 発想：ネズミ＋金庫。参照：M013。地域分類：眠れる地下市場。
 
@@ -1180,10 +1180,12 @@ story_190：戦場の骸骨獣×1。逃走可。
 
 ### 煤ネズミ (kagaribi_soot_rat)
 
-<img src="../../assets/images/monsters/vault_mouse.webp" width="160" alt="煤ネズミ">
+<img src="../../assets/images/monsters/kagaribi_soot_rat.webp" width="160" alt="煤ネズミ">
 
-画像ID：monster_vault_mouse。実ファイル：[assets/images/monsters/vault_mouse.webp](../../assets/images/monsters/vault_mouse.webp)。
-画像共有：金庫ネズミ・油染みの煤ネズミ。
+画像ID：monster_kagaribi_soot_rat。実ファイル：[assets/images/monsters/kagaribi_soot_rat.webp](../../assets/images/monsters/kagaribi_soot_rat.webp)。
+画像共有：他の敵定義との共有なし。
+
+外見：額から背に乾いた煤がこびりつき、喉と脇腹には灰褐色の地毛がのぞきます。
 
 基礎能力：HP 27 / MP 0 / STR 8 / VIT 3 / AGI 8 / INT 3。報酬：4G / 9EXP。
 宝箱：予備灯油 1個 / 12.5％。
@@ -1196,7 +1198,7 @@ AIの選択順：
 遭遇と参照先：
 
 kagaribi_roaming：煤ネズミ×1。逃走可。
-通常遭遇候補：篝火の迷宮・1F 灯番の巡回路 (kagaribi_f1)、重み50。
+通常遭遇候補：篝火の迷宮・1F 灯番の巡回路 (kagaribi_f1)、重み40。
 
 kagaribi_pests：煤ネズミ×1・燭蝋スライム×1。逃走可。
 通常遭遇候補：篝火の迷宮・1F 灯番の巡回路 (kagaribi_f1)、重み15。
@@ -1390,7 +1392,7 @@ kagaribi_altar_guardian：祭壇の火守×1。逃走可。
 <img src="../../assets/images/monsters/vault_mouse.webp" width="160" alt="油染みの煤ネズミ">
 
 画像ID：monster_vault_mouse。実ファイル：[assets/images/monsters/vault_mouse.webp](../../assets/images/monsters/vault_mouse.webp)。
-画像共有：金庫ネズミ・煤ネズミ。
+画像共有：金庫ネズミ。
 
 基礎能力：HP 54 / MP 0 / STR 10 / VIT 5 / AGI 8 / INT 3。報酬：12G / 50EXP。
 宝箱：予備灯油 1個 / 12.5％。
@@ -1403,7 +1405,7 @@ AIの選択順：
 遭遇と参照先：
 
 kagaribi_oil_roaming：油染みの煤ネズミ×1。逃走可。
-通常遭遇候補：篝火の迷宮・2F 油蔵 (kagaribi_oilstore)、重み50 / 篝火の迷宮・4F 交差路の詰所前 (kagaribi_crossroads)、重み50 / 篝火の迷宮・3F 配油分岐室 (kagaribi_manifold)、重み20。
+通常遭遇候補：篝火の迷宮・2F 油蔵 (kagaribi_oilstore)、重み50 / 篝火の迷宮・4F 交差路の詰所前 (kagaribi_crossroads)、重み40 / 篝火の迷宮・3F 配油分岐室 (kagaribi_manifold)、重み20。
 
 kagaribi_oil_pair：油染みの煤ネズミ×1・油蔵の燭蝋スライム×1。逃走可。
 通常遭遇候補：篝火の迷宮・2F 油蔵 (kagaribi_oilstore)、重み15 / 篝火の迷宮・4F 交差路の詰所前 (kagaribi_crossroads)、重み15 / 篝火の迷宮・3F 配油分岐室 (kagaribi_manifold)、重み60。
@@ -1457,7 +1459,7 @@ AIの選択順：
 遭遇と参照先：
 
 kagaribi_shallow_moths：煤けた灯蛾×1。逃走可。
-通常遭遇候補：篝火の迷宮・5F 煤けた回廊 (kagaribi_f2)、重み50 / 篝火の迷宮・6F 旧炭焼き場 (kagaribi_kilns)、重み35 / 篝火の迷宮・7F 中継篝火の広間 (kagaribi_relay)、重み50。
+通常遭遇候補：篝火の迷宮・5F 煤けた回廊 (kagaribi_f2)、重み50 / 篝火の迷宮・6F 旧炭焼き場 (kagaribi_kilns)、重み25 / 篝火の迷宮・7F 中継篝火の広間 (kagaribi_relay)、重み50。
 
 kagaribi_shallow_patrol_pair：煤けた灯蛾×1・巡回路の赤錆番兵×1。逃走可。
 通常遭遇候補：篝火の迷宮・5F 煤けた回廊 (kagaribi_f2)、重み15 / 篝火の迷宮・6F 旧炭焼き場 (kagaribi_kilns)、重み15 / 篝火の迷宮・7F 中継篝火の広間 (kagaribi_relay)、重み15。
@@ -1673,6 +1675,8 @@ garden_root_guardian：大剪定虫×1・根殻甲×1。逃走可。
 画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
 画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム・通電ウナギ（低位）・泥濾し貝（低位）。
 
+設計上の役割：6〜7Fの単体雷術役。MP切れは弱い遠隔攻撃。
+
 基礎能力：HP 38 / MP 12 / STR 9 / VIT 5 / AGI 10 / INT 13。報酬：8G / 20EXP。
 宝箱：機関部品 1個 / 12.5％。
 属性倍率：lightning 0.6 / ice 1.3。
@@ -1698,6 +1702,8 @@ waterway_croc_eel：水門ワニ×1・通電ウナギの幼体×1。逃走可。
 
 画像ID：monster_sluice_crocodile。実ファイル：[assets/images/monsters/sluice_crocodile.webp](../../assets/images/monsters/sluice_crocodile.webp)。
 画像共有：水門ワニ・水門獣。
+
+設計上の役割：初回だけ防御する前衛。火が弱点。
 
 基礎能力：HP 115 / MP 12 / STR 24 / VIT 25 / AGI 6 / INT 7。報酬：12G / 45EXP。
 宝箱：機関部品 1個 / 12.5％。
@@ -1725,6 +1731,8 @@ waterway_shallow_b：深水門ワニ（低位）×1・大水車ビーバー（�
 画像ID：monster_waterwheel_beaver。実ファイル：[assets/images/monsters/waterwheel_beaver.webp](../../assets/images/monsters/waterwheel_beaver.webp)。
 画像共有：水車ビーバー。
 
+設計上の役割：2・5・8…巡目に尾を構え、次の攻撃が強打になる。防御・妨害・先行撃破で対処。
+
 基礎能力：HP 79 / MP 18 / STR 31 / VIT 14 / AGI 11 / INT 9。報酬：12G / 40EXP。
 宝箱：柔らかな植物繊維 1個 / 12.5％。
 属性倍率：water 0.7 / lightning 1.3。
@@ -1747,6 +1755,8 @@ waterway_shallow_b：深水門ワニ（低位）×1・大水車ビーバー（�
 
 画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
 画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム・通電ウナギの幼体・泥濾し貝（低位）。
+
+設計上の役割：中列から単体雷術。濡れは付けず、MP切れは弱い遠隔攻撃。
 
 基礎能力：HP 60 / MP 36 / STR 16 / VIT 12 / AGI 16 / INT 28。報酬：12G / 40EXP。
 宝箱：機関部品 1個 / 12.5％。
@@ -1774,6 +1784,8 @@ waterway_shallow_b：深水門ワニ（低位）×1・大水車ビーバー（�
 画像ID：slime。実ファイル：[assets/images/monsters/slime.webp](../../assets/images/monsters/slime.webp)。
 画像共有：灯守の地下水道の迷宮獣・灯守の地下水道の守護者・根喰みの地下庭園の迷宮獣・根喰みの地下庭園の守護者・苔冠の小魔・水路の小魚・水路の牙魚・大水喰い・ソルトイーター・燭蝋スライム・油蔵の燭蝋スライム・通電ウナギの幼体・通電ウナギ（低位）。
 
+設計上の役割：偶数巡だけ、生存する仲間一体の通常状態異常を一つ解除。回復はしない。
+
 基礎能力：HP 63 / MP 32 / STR 15 / VIT 12 / AGI 9 / INT 24。報酬：10G / 35EXP。
 宝箱：柔らかな植物繊維 1個 / 12.5％。
 属性倍率：water 0.7。
@@ -1796,6 +1808,8 @@ waterway_shallow_b：深水門ワニ（低位）×1・大水車ビーバー（�
 
 画像ID：monster_ceramic_armadillo。実ファイル：[assets/images/monsters/ceramic_armadillo.webp](../../assets/images/monsters/ceramic_armadillo.webp)。
 画像共有：陶器アルマジロ・殻砕き獣・根殻甲。
+
+設計上の役割：初回だけ防御。硬い殻には火が有効。
 
 基礎能力：HP 115 / MP 12 / STR 24 / VIT 25 / AGI 6 / INT 7。報酬：12G / 45EXP。
 宝箱：機関部品 1個 / 12.5％。
@@ -1822,6 +1836,8 @@ mine_shallow_b：厚殻アルマジロ（低位）×2・塩噴き蟹（低位）
 
 画像ID：monster_drill_mole。実ファイル：[assets/images/monsters/drill_mole.webp](../../assets/images/monsters/drill_mole.webp)。
 画像共有：ドリルモグラ。
+
+設計上の役割：2・5・8…巡目に構え、次の行動で防御の一部を貫く突進。防御行動は有効。突進後は次巡まで自身の防御が低下。
 
 基礎能力：HP 79 / MP 18 / STR 31 / VIT 14 / AGI 11 / INT 9。報酬：12G / 40EXP。
 宝箱：機関部品 1個 / 12.5％。
@@ -1853,6 +1869,8 @@ mine_shallow_c：深掘りモグラ（低位）×1・結晶ハサミ（低位）
 画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
 画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣・灰積みゴーレム・炭焼き場の灰積み・鉱脈の見張り（低位）・結晶ハサミ（低位）。
 
+設計上の役割：中列から単体の土術。MP切れは弱い晶片投げ。装備の塩は戦闘開始時以外に増やさない。
+
 基礎能力：HP 60 / MP 36 / STR 16 / VIT 12 / AGI 16 / INT 28。報酬：12G / 40EXP。
 宝箱：機関部品 1個 / 12.5％。
 属性倍率：ice 1.2。
@@ -1882,6 +1900,8 @@ mine_shallow_c：深掘りモグラ（低位）×1・結晶ハサミ（低位）
 画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
 画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣・灰積みゴーレム・炭焼き場の灰積み・塩噴き蟹（低位）・結晶ハサミ（低位）。
 
+設計上の役割：奇数巡に未補強の生存者一体へ2巡の防御補助。同じ補助は重複せず、対象がなければ晶片投げ。
+
 基礎能力：HP 63 / MP 32 / STR 15 / VIT 12 / AGI 9 / INT 24。報酬：10G / 35EXP。
 宝箱：柔らかな植物繊維 1個 / 12.5％。
 属性倍率：fire 1.2。
@@ -1908,6 +1928,8 @@ mine_shallow_c：深掘りモグラ（低位）×1・結晶ハサミ（低位）
 画像ID：construct。実ファイル：[assets/images/monsters/construct.webp](../../assets/images/monsters/construct.webp)。
 画像共有：眠れる地下市場の迷宮獣・眠れる地下市場の守護者・鉄胎の機関廟の迷宮獣・鉄胎の機関廟の守護者・借証の泥人形・砦の守護獣・詰所の擬態箱・石喰い獣・灰積みゴーレム・炭焼き場の灰積み・塩噴き蟹（低位）・鉱脈の見張り（低位）。
 
+設計上の役割：奇数巡は単体強打、偶数巡は弱い爪。装備を壊さず、塩を追加しない。
+
 基礎能力：HP 60 / MP 24 / STR 27 / VIT 11 / AGI 19 / INT 14。報酬：12G / 40EXP。
 宝箱：柔らかな植物繊維 1個 / 12.5％。
 属性倍率：physical 0.9。
@@ -1921,6 +1943,79 @@ AIの選択順：
 
 mine_shallow_c：深掘りモグラ（低位）×1・結晶ハサミ（低位）×1・塩噴き蟹（低位）×1・鉱脈の見張り（低位）×1。逃走可。
 通常遭遇候補：塩哭きの廃坑・9F 試錐場 (region_2_f9)、重み60。
+
+<a id="monster-kagaribi_chimney_rat"></a>
+
+### 煤ネズミ（煙突掃除屋） (kagaribi_chimney_rat)
+
+<img src="../../assets/images/monsters/kagaribi_chimney_rat.webp" width="160" alt="煤ネズミ（煙突掃除屋）">
+
+画像ID：monster_kagaribi_chimney_rat。実ファイル：[assets/images/monsters/kagaribi_chimney_rat.webp](../../assets/images/monsters/kagaribi_chimney_rat.webp)。
+画像共有：他の敵定義との共有なし。
+
+外見：細い身体を低く構えています。高く反った尾の先には、煙突をこすって煤を集めるブラシ状の毛束があります。
+
+基礎能力：HP 92 / MP 0 / STR 16 / VIT 7 / AGI 16 / INT 3。報酬：16G / 95EXP。
+宝箱：予備灯油 1個 / 12.5％。
+属性倍率：physical 1 / fire 1 / light 1 / dark 1。
+
+AIの選択順：
+
+1. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊で現在HPの実数が最も低い1人。
+
+遭遇と参照先：
+
+kagaribi_chimney_rat_solo：煤ネズミ（煙突掃除屋）×1。逃走可。
+通常遭遇候補：篝火の迷宮・6F 旧炭焼き場 (kagaribi_kilns)、重み10。
+
+<a id="monster-kagaribi_soot_ball"></a>
+
+### 煤ネズミ（煤玉） (kagaribi_soot_ball)
+
+<img src="../../assets/images/monsters/kagaribi_soot_ball.webp" width="160" alt="煤ネズミ（煤玉）">
+
+画像ID：monster_kagaribi_soot_ball。実ファイル：[assets/images/monsters/kagaribi_soot_ball.webp](../../assets/images/monsters/kagaribi_soot_ball.webp)。
+画像共有：他の敵定義との共有なし。
+
+外見：丸い煤まみれの毛玉から大きな耳が突き出ています。前足でよくぬぐう両頬だけは白く見えます。
+
+基礎能力：HP 27 / MP 0 / STR 8 / VIT 4 / AGI 7 / INT 3。報酬：4G / 9EXP。
+宝箱：予備灯油 1個 / 12.5％。
+属性倍率：physical 1 / fire 1 / light 1 / dark 1。
+
+AIの選択順：
+
+1. 優先度10、第1ラウンド：防御 (guard)、MP0、対象は自身。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊で現在HPの実数が最も低い1人。
+
+遭遇と参照先：
+
+kagaribi_soot_ball_solo：煤ネズミ（煤玉）×1。逃走可。
+通常遭遇候補：篝火の迷宮・1F 灯番の巡回路 (kagaribi_f1)、重み10。
+
+<a id="monster-kagaribi_torch_thief"></a>
+
+### 煤ネズミ（松明泥棒） (kagaribi_torch_thief)
+
+<img src="../../assets/images/monsters/kagaribi_torch_thief.webp" width="160" alt="煤ネズミ（松明泥棒）">
+
+画像ID：monster_kagaribi_torch_thief。実ファイル：[assets/images/monsters/kagaribi_torch_thief.webp](../../assets/images/monsters/kagaribi_torch_thief.webp)。
+画像共有：他の敵定義との共有なし。
+
+外見：鼻先と目の周りを煤で黒くしたネズミです。燃えさしの松明を両前足で抱え、肩越しに振り返ります。
+
+基礎能力：HP 54 / MP 0 / STR 10 / VIT 5 / AGI 10 / INT 3。報酬：12G / 50EXP。
+宝箱：燃えさしの松明 1個 / 100％。
+属性倍率：physical 1 / fire 1 / light 1 / dark 1。
+
+AIの選択順：
+
+1. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊で現在HPの実数が最も低い1人。
+
+遭遇と参照先：
+
+kagaribi_torch_thief_solo：煤ネズミ（松明泥棒）×1。逃走可。
+通常遭遇候補：篝火の迷宮・4F 交差路の詰所前 (kagaribi_crossroads)、重み10。
 
 ## 地域の迷宮獣と守護者
 
