@@ -5,6 +5,8 @@ function enemyStats(catalog, template, level) {
     [key, Math.floor(value + (level - 1) * perLevel[key])]));
 }
 
+export const encounterWeightsForFloor = (profile, floor) => ({...profile.weights, ...profile.floors?.[floor]});
+
 // The band defines eligible rosters. A dungeon assigns weights to them and a
 // floor can add, reweight or disable an individual roster (weight zero).
 export function floorEncounterGroups(data, map) {
@@ -15,7 +17,7 @@ export function floorEncounterGroups(data, map) {
   const band = catalog.bands.find(b => b.minLevel <= level && level <= b.maxLevel);
   if (!band) return;
 
-  const weights = {...profile.weights, ...profile.floors?.[map.floor]};
+  const weights = encounterWeightsForFloor(profile, map.floor);
   const encounterPool = [];
   for (const [group, roster] of Object.entries(band.groups)) {
     const weight = weights[group] ?? 0;
