@@ -100,7 +100,7 @@ function keyConfig(){openKeyConfig({dialog,controls:systemControls,config:settin
   settings=next;render();return true;
 }});}
 function help(){modal('遊び方');
-  dialog.append(btn('敵編成・仲間の成長',()=>window.open('labyrinth-guide.html','_blank','noopener')));
+  dialog.append(btn('迷宮図鑑',()=>window.open('labyrinth-guide.html','_blank','noopener')));
   for(const paragraph of [
  '1. 町の依頼掲示板で受注します。複数受注でき、メインクエストを切り替えられます。最初の依頼「帰らない灯番」は篝火の迷宮で進めます。',
  `2. ダンジョン探索中：${inputHint(settings.keyBindings.bindings,true)}。上下は前進・後退、左右は方向転換です。会話・選択肢・町・管理画面：${inputHint(settings.keyBindings.bindings)}。キャンセルを重ねると町では広場、ダンジョンでは探索へ戻れます。キーは「記録 → キー設定」で変更できます。`,

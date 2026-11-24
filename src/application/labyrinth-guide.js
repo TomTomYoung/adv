@@ -32,7 +32,7 @@ export function guideBands(data, common) {
       const groups = Object.entries(band.groups).map(([id, roster]) => {
         const members = Object.entries(roster).map(([species, count]) => {
           const enemy = data.enemies[species];
-          return {name: enemy.name, image: data.assets.images[enemy.sprite], count};
+          return {id: species, name: enemy.name, image: data.assets.images[enemy.sprite], count};
         });
         const weight = weights[id] ?? 0;
         const override = !common && Object.hasOwn(profile.floors?.[first] ?? {}, id);

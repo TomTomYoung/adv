@@ -1,4 +1,5 @@
 import {gearStages, guideActor, guideBands, loadGuide} from './application/labyrinth-guide.js';
+import {conditionText, monsterGroups, targetText} from './application/monster-catalog.js';
 import {STAT_KEYS} from './core/jobs.js';
 
 const $ = id => document.getElementById(id);
@@ -32,7 +33,8 @@ function drawGroups() {
     for (const group of section.groups) {
       const row = el('div', undefined, 'group'), roster = el('div'), members = el('div', undefined, 'members');
       for (const member of group.members) {
-        const label = el('span', undefined, 'member');
+        const label = el('a', undefined, 'member');
+        label.href = '#monsters/' + member.id;
         label.append(image(member.image), el('span', member.name + ' ×' + member.count));
         members.append(label);
       }
@@ -56,6 +58,63 @@ function block(title) {
   const div = el('div', undefined, 'block');
   if (title) div.append(el('h4', title));
   return div;
+}
+function fillMonsterList() {
+  const enemies = Object.values(data.enemies);
+  const names = new Set(), duplicates = new Set();
+  for (const {name} of enemies) {
+    if (names.has(name)) duplicates.add(name);
+    names.add(name);
+  }
+  for (const [category, entries] of monsterGroups(enemies)) {
+    const group = el('optgroup');
+    group.label = category;
+    for (const {id, name} of entries) {
+      group.append(new Option(duplicates.has(name) ? name + '（' + id + '）' : name, id));
+    }
+    $('monster').append(group);
+  }
+}
+
+function drawMonster(id) {
+  const enemy = data.enemies[id];
+  const card = el('article', undefined, 'card');
+  const header = el('div', undefined, 'card-head'), heading = el('div');
+  heading.append(el('h3', enemy.name));
+  if (enemy.role) heading.append(el('p', enemy.role));
+  if (enemy.appearance) heading.append(el('p', enemy.appearance));
+  header.append(image(data.assets.images[enemy.sprite]), heading);
+
+  const parameters = block('基礎能力'), stats = el('dl', undefined, 'stats');
+  for (const key of STAT_KEYS) {
+    const cell = el('div');
+    cell.append(el('dt', data.jobProfile.statNames[key]), el('dd', String(enemy.stats[key])));
+    stats.append(cell);
+  }
+  parameters.append(stats);
+  const rewards = block('報酬・宝箱');
+  const loot = enemy.drop?.chance ? data.items[enemy.drop.item].name + '（' + percent.format(enemy.drop.chance) + '）' : 'なし';
+  rewards.append(el('p', enemy.rewards.gold + 'G ／ ' + enemy.rewards.xp + 'EXP　宝箱　' + loot));
+  const affinity = block('属性倍率');
+  const elements = {physical:'物理', fire:'炎', ice:'氷', lightning:'雷', water:'水', light:'光', earth:'地', dark:'闇'};
+  const modified = Object.entries(enemy.resist ?? {}).filter(([,rate]) => rate !== 1);
+  affinity.append(el('p', modified.length
+    ? modified.map(([key, rate]) => (elements[key] ?? key) + ' ×' + rate).join(' ／ ') + '　その他 ×1'
+    : '全属性 ×1'));
+  const actions = block('行動と使用条件'), list = el('ol');
+  for (const rule of [...enemy.ai].sort((a, b) => b.priority - a.priority)) {
+    const skill = data.skills[rule.skill];
+    const item = el('li');
+    item.append(el('strong', skill.name), el('small', 'MP' + skill.mp, 'tag'),
+      el('p', conditionText(rule.condition) + ' ／ 対象　' + targetText(rule, skill)));
+    list.append(item);
+  }
+  actions.append(list);
+  const detail = block(), link = el('a', '出現場所・遭遇条件の詳細');
+  link.href = 'https://github.com/TomTomYoung/adv/blob/master/doc/battle/MONSTER_CATALOG.md#monster-' + id;
+  detail.append(link);
+  card.append(header, parameters, rewards, affinity, actions, detail);
+  $('monster-sheet').replaceChildren(card);
 }
 function drawActor(id, job, level, mode) {
   const def = data.actors[id], row = guideActor(data, id, job, level, mode);
@@ -143,11 +202,17 @@ function changeActor() {
   refreshAlly();
 }
 function switchPage() {
-  const allies = location.hash === '#allies';
-  $('allies').hidden = !allies;
-  $('enemies').hidden = allies;
-  $('nav-allies').setAttribute('aria-current', allies ? 'page' : 'false');
-  $('nav-enemies').setAttribute('aria-current', allies ? 'false' : 'page');
+  const [section, monsterId] = location.hash.slice(1).split('/');
+  const active = ['monsters', 'enemies'].includes(section) ? section : 'allies';
+  for (const id of ['allies', 'monsters', 'enemies']) {
+    $(id).hidden = id !== active;
+    $('nav-' + id).setAttribute('aria-current', id === active ? 'page' : 'false');
+  }
+  if (active === 'monsters') {
+    const select = $('monster');
+    if (monsterId && Object.hasOwn(data.enemies, monsterId)) select.value = monsterId;
+    drawMonster(select.value);
+  }
 }
 async function init() {
   data = await loadGuide();
@@ -155,6 +220,8 @@ async function init() {
   for (const b of data.encounterGroups.bands) option($('band'), String(b.minLevel), 'Lv' + range(b.minLevel, b.maxLevel));
   for (const [key, def] of Object.entries(data.actors)) option($('actor'), key, def.name);
   for (const [key, label] of Object.entries(gearStages)) option($('gear'), key, label);
+  fillMonsterList();
+  $('monster').addEventListener('change', () => { location.hash = 'monsters/' + $('monster').value; });
   $('level').max = data.system.maxLevel;
   $('source').addEventListener('change', drawGroups); $('band').addEventListener('change', drawGroups);
   $('actor').addEventListener('change', changeActor); $('job').addEventListener('change', refreshAlly);
