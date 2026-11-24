@@ -59,7 +59,7 @@ function block(title) {
   if (title) div.append(el('h4', title));
   return div;
 }
-function summaryCard(section, id, name, picture, subtitle, stats, footer) {
+function summaryCard(section, id, name, picture, subtitle) {
   const card = el('article', undefined, 'guide-entry');
   const head = el('div', undefined, 'entry-head'), text = el('div'), title = el('h4');
   const link = el('a', name);
@@ -71,21 +71,32 @@ function summaryCard(section, id, name, picture, subtitle, stats, footer) {
   const numbers = el('dl', undefined, 'entry-stats');
   for (const key of STAT_KEYS) {
     const pair = el('div');
-    pair.append(el('dt', data.jobProfile.statNames[key]), el('dd', String(stats[key])));
+    pair.append(el('dt', data.jobProfile.statNames[key]), el('dd'));
     numbers.append(pair);
   }
-  card.append(head, numbers, el('p', footer, 'entry-footer'));
+  card.append(head, numbers, el('p', undefined, 'entry-footer'));
   return card;
 }
 
+function updateSummary(card, stats, footer) {
+  const values = card.querySelectorAll('dd');
+  STAT_KEYS.forEach((key, index) => { values[index].textContent = stats[key]; });
+  card.querySelector('.entry-footer').textContent = footer;
+}
+
 function drawAllyGrid(level, mode) {
-  const cards = Object.entries(data.actors).map(([id, actor]) => {
+  const grid = $('ally-grid');
+  for (const [id, actor] of Object.entries(data.actors)) {
     const job = actor.initialJob;
+    let card = $('ally-card-' + id);
+    if (!card) {
+      card = summaryCard('allies', id, actor.name, data.assets.images[actor.portrait], data.jobs[job].name);
+      card.id = 'ally-card-' + id;
+      grid.append(card);
+    }
     const {stats, gear} = guideActor(data, id, job, level, mode);
-    return summaryCard('allies', id, actor.name, data.assets.images[actor.portrait],
-      data.jobs[job].name, stats, equipmentText(gear));
-  });
-  $('ally-grid').replaceChildren(...cards);
+    updateSummary(card, stats, equipmentText(gear));
+  }
 }
 
 function filterMonsters() {
@@ -122,8 +133,8 @@ function fillMonsterList() {
       const {id, name, sprite, stats, rewards} = enemy;
       const variant = duplicates.has(name) ? id : '';
       group.append(new Option(variant ? name + '（' + variant + '）' : name, id));
-      const card = summaryCard('monsters', id, name, data.assets.images[sprite], variant, stats,
-        rewards.xp + ' EXP　' + rewards.gold + ' G');
+      const card = summaryCard('monsters', id, name, data.assets.images[sprite], variant);
+      updateSummary(card, stats, rewards.xp + ' EXP　' + rewards.gold + ' G');
       if (variant) card.querySelector('a').setAttribute('aria-label', name + '（' + variant + '）');
       card.dataset.search = (name + ' ' + id).normalize('NFKC').toLowerCase();
       grid.append(card);
