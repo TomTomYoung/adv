@@ -897,6 +897,91 @@
         "gold": 12
       },
       "role": "奇数巡は単体強打、偶数巡は弱い爪。装備を壊さず、塩を追加しない。"
+    },
+    "moss_beetle": {
+      "id": "moss_beetle",
+      "name": "苔虫",
+      "source": "千変の迷宮の魔物原画",
+      "sprite": "monster_moss_beetle",
+      "appearance": "丸い上翅に苔が二山に分かれて茂り、その間に褐色の継ぎ目が走っています。",
+      "role": "六本の脚で身を押し出し、硬い殻で体当たりします。",
+      "stats": {
+        "hp": 17,
+        "mp": 0,
+        "str": 8,
+        "vit": 4,
+        "agi": 5,
+        "int": 4
+      },
+      "resist": {
+        "physical": 1,
+        "fire": 1.25
+      },
+      "rewards": {
+        "gold": 6,
+        "xp": 32
+      },
+      "ai": [
+        {
+          "priority": 10,
+          "skill": "shell_roll",
+          "target": "random"
+        },
+        {
+          "priority": 0,
+          "skill": "attack",
+          "target": "random"
+        }
+      ]
+    },
+    "tank_beaver": {
+      "id": "tank_beaver",
+      "name": "戦車ビーバー",
+      "source": "千変の迷宮の魔物原画",
+      "sprite": "monster_tank_beaver",
+      "appearance": "前歯の跡が残る木製の砲塔と履帯を背負い、後ろへ平たい尾を張り出しています。",
+      "role": "偶数ラウンドに丸太砲で敵1体を狙います。木の装甲は物理に強く、火に弱いです。",
+      "stats": {
+        "hp": 69,
+        "mp": 4,
+        "str": 12,
+        "vit": 14,
+        "agi": 5,
+        "int": 8
+      },
+      "resist": {
+        "physical": 0.85,
+        "fire": 1.25
+      },
+      "rewards": {
+        "gold": 6,
+        "xp": 32
+      },
+      "ai": [
+        {
+          "priority": 20,
+          "condition": {
+            "op": "eq",
+            "left": {
+              "op": "mod",
+              "args": [
+                {
+                  "ref": "self.round"
+                },
+                2
+              ]
+            },
+            "right": 0
+          },
+          "skill": "beaver_log_shot",
+          "target": "random"
+        },
+        {
+          "priority": 0,
+          "skill": "attack",
+          "target": "random"
+        }
+      ]
     }
   },
   "encounters": {
@@ -4976,5 +5061,9 @@
     "region_9_f2": [
       "1,2"
     ]
+  },
+  "images": {
+    "monster_moss_beetle": "assets/images/monsters/moss_beetle.webp",
+    "monster_tank_beaver": "assets/images/monsters/tank_beaver.webp"
   }
 }
