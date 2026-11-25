@@ -4387,6 +4387,19 @@
         }
       ],
       "description": "単体の弱い爪。塩付与・装備破壊なし。"
+    },
+    "beaver_log_shot": {
+      "name": "丸太砲",
+      "mp": 2,
+      "target": "enemy",
+      "description": "木の砲塔から丸太を放ち、離れた敵1体に物理ダメージを与えます。",
+      "effects": [
+        {
+          "type": "damage",
+          "formula": "heavy",
+          "element": "physical"
+        }
+      ]
     }
   },
   "formulas": {
@@ -6186,7 +6199,8 @@
     "mine_shard_shot": "skill_thrust",
     "mine_vein_ward": "skill_ward",
     "mine_crystal_claw": "skill_cleave",
-    "mine_light_claw": "skill_cleave"
+    "mine_light_claw": "skill_cleave",
+    "beaver_log_shot": "skill_smash"
   },
   "gridProfiles": {
     "power": {
@@ -7454,6 +7468,18 @@
         "shape": "single"
       },
       "trajectory": "direct",
+      "friendlyFire": false
+    },
+    "beaver_log_shot": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "lob",
       "friendlyFire": false
     }
   },
@@ -10038,6 +10064,30 @@
       }
     },
     "mine_light_claw": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "beaver_log_shot": {
       "aim": "unit",
       "range": {
         "min": 1,

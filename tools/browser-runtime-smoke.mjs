@@ -165,7 +165,7 @@ try{
   await guide.locator('#enemies').waitFor();
   assert.equal(await guide.locator('.band').count(),9);
   await guide.locator('#band').selectOption('3');
-  assert.deepEqual(await guide.locator('.chance').allTextContents(),['30%','35%','25%','10%']);
+  assert.deepEqual(await guide.locator('.chance').allTextContents(),['30%','20%','25%','10%','15%']);
   await guide.getByRole('link',{name:'煤ネズミ ×5',exact:true}).click();
   await guide.locator('#monsters').waitFor();
   assert.equal(await guide.locator('#monster').inputValue(),'kagaribi_soot_rat');

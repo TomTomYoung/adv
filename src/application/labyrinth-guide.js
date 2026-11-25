@@ -46,6 +46,19 @@ export function guideBands(data, common) {
   return sections;
 }
 
+export function monsterFloorText(sections, species) {
+  const ranges = [];
+  for (const section of sections) {
+    const present = section.groups.some(group =>
+      group.weight > 0 && group.members.some(member => member.id === species));
+    if (!present) continue;
+    const last = ranges.at(-1);
+    if (last && last.to + 1 === section.first) last.to = section.last;
+    else ranges.push({from: section.first, to: section.last});
+  }
+  return ranges.map(({from, to}) => from === to ? `地下${from}階` : `地下${from}〜${to}階`).join('、');
+}
+
 export const gearStages = {
   auto: 'レベル帯の想定', none: '装備なし', town: '町の店売り', tier1: '第1段階の武器', tier2: '第2段階の武器'
 };
