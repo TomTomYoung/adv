@@ -4,7 +4,7 @@ import {compileQuestInterruptions} from './build-quest-interruptions.mjs';
 
 function narrate(text) {
   if (Array.isArray(text)) return text.flatMap(narrate);
-  if (typeof text === 'string') return [{op:'narrate',text}];
+  if (typeof text === 'string' || Object.hasOwn(text, 'format')) return [{op:'narrate',text}];
   return [{op:'if',condition:text.when,then:narrate(text.yes),else:narrate(text.no)}];
 }
 

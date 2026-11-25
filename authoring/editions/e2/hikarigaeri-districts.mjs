@@ -33,7 +33,9 @@ export function buildRiverside(bundle){
     ['e2_canal_cat_market','魚屋と鳥屋','隣り合う二軒の店と、魚屋が借りる遠い倉庫へ続く道。','location_shop',[
       ['e2_q108_stall','魚屋の売り台'],['e2_q108_feeder','鳥屋の餌場'],['e2_q108_warehouse','遠い倉庫']]],
     ['e2_canal_forge','エンの鍛冶場','炉材を受け取る裏戸から、師弟の作業場と注文を受ける店先へ回れる。','location_shop',[
-      ['e2_q109_yard','搬入口'],['e2_q109_forge','炉場'],['e2_q109_bench','弟子の作業台'],['e2_q109_counter','店先']]]
+      ['e2_q109_yard','搬入口'],['e2_q109_forge','炉場'],['e2_q109_bench','弟子の作業台'],['e2_q109_counter','店先']]],
+    ['e2_canal_festival','運河祭の会場','衣装を合わせる部屋と祭係の詰所から、行列の集合路と広場へ通じる。','location_square',[
+      ['e2_q110_fitting','衣装部屋'],['e2_q110_desk','祭係の詰所'],['e2_q110_lane','行列の集合路'],['e2_q110_square','祭の広場']]]
   ];
   for(const [id,name,description,background,stops] of groups){
     add(id,name,canal,description,background);
