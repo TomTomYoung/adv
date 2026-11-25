@@ -33020,7 +33020,7 @@ export const referenceData={
         "sprite"
       ],
       "kind": "images",
-      "id": "monster_iris_butterfly"
+      "id": "monster_kagaribi_ember_moth"
     },
     {
       "file": "kagaribi-content.json",
@@ -33244,7 +33244,7 @@ export const referenceData={
         "sprite"
       ],
       "kind": "images",
-      "id": "monster_iris_butterfly"
+      "id": "monster_kagaribi_soot_moth"
     },
     {
       "file": "kagaribi-content.json",
@@ -48600,7 +48600,7 @@ export const referenceData={
       },
       "iron_moth": {
         "name": "鉄喰い蛾",
-        "sprite": "monster_iris_butterfly"
+        "sprite": "monster_iron_moth"
       },
       "last_fort_guard": {
         "name": "砦の守護獣",
@@ -48664,7 +48664,7 @@ export const referenceData={
       },
       "kagaribi_ember_moth": {
         "name": "灯蛾",
-        "sprite": "monster_iris_butterfly"
+        "sprite": "monster_kagaribi_ember_moth"
       },
       "kagaribi_ash_guard": {
         "name": "赤錆の番兵",
@@ -48696,7 +48696,7 @@ export const referenceData={
       },
       "kagaribi_soot_moth": {
         "name": "煤けた灯蛾",
-        "sprite": "monster_iris_butterfly"
+        "sprite": "monster_kagaribi_soot_moth"
       },
       "kagaribi_patrol_guard": {
         "name": "巡回路の赤錆番兵",
@@ -84361,7 +84361,10 @@ export const referenceData={
       "monster_ogre_25_greatbell": "assets/images/monsters/families/ogre_25_greatbell.webp",
       "monster_ogre_25_mountainking": "assets/images/monsters/families/ogre_25_mountainking.webp",
       "monster_stone_beetle": "assets/images/monsters/stone_beetle.webp",
-      "monster_soot_beetle": "assets/images/monsters/soot_beetle.webp"
+      "monster_soot_beetle": "assets/images/monsters/soot_beetle.webp",
+      "monster_kagaribi_ember_moth": "assets/images/monsters/kagaribi_ember_moth.webp",
+      "monster_kagaribi_soot_moth": "assets/images/monsters/kagaribi_soot_moth.webp",
+      "monster_iron_moth": "assets/images/monsters/iron_moth.webp"
     },
     "audio": {
       "exploration": "assets/audio/exploration-v2.ogg",
