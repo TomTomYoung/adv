@@ -1,0 +1,4526 @@
+{
+  "schemaVersion": 1,
+  "id": "q109",
+  "number": 109,
+  "title": "火のない鍛冶場",
+  "client": "老鍛冶師エン",
+  "brief": "弟子に見つからないよう、炉材を運んでください。",
+  "region": 1,
+  "type": "scene_graph",
+  "recommendedLevel": 1,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。荷揚げ河岸から運河通りへ進み、手帳に示される現場を訪ねる。",
+  "events": [
+    {
+      "id": "q109_scene",
+      "title": "火のない鍛冶場：老鍛冶師エン",
+      "points": [
+        {
+          "map": "region_1_f2",
+          "x": 5,
+          "y": 1,
+          "dungeon": "region_1"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q109.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q109.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q109.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q109"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_1"
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_1_f2",
+      "x": 5,
+      "y": 1,
+      "object": "q109_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "rest": {
+      "label": "火を休める",
+      "text": "返金が済み、炉の前が片付いた。エンは留め金を一つだけ仕上げ、看板を外す弟子へ渡した。",
+      "gold": 57,
+      "xp": 51,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q109.values.refunded"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q109.values.advanceAt"
+            },
+            "right": "buyer"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q109.values.signDown"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    "tools": {
+      "label": "暮らしの鍛冶場",
+      "text": "エンは生活道具の注文を受けると決めた。名剣の隣に鍋の取手が並び、最初の客はその取手を選んだ。",
+      "gold": 57,
+      "xp": 51,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q109.values.toolsChosen"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q109.values.samples"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q109.values.handleAt"
+            },
+            "right": "buyer"
+          }
+        ]
+      }
+    },
+    "inherit": {
+      "label": "二人の銘",
+      "text": "師は槌を持たず、弟子の打つ間隔を指で数えた。火花が落ち着いたところに、二人分の銘が残った。",
+      "gold": 57,
+      "xp": 51,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q109.values.sedoAgrees"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q109.values.enAgrees"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q109.values.signed"
+            },
+            "right": true
+          }
+        ]
+      }
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/story-q109.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3813d958cf10f9782f264",
+    "revision": "scenario-edition-e2-q109-r1",
+    "world": {
+      "truth": "床には重い剣でなく、小さな留め金の試作品が増えている。師は戦具を作れなくても、暮らしの道具なら仕事を続けられると知っているが、名工の看板を下ろせない。能力の高い主人公が一度鍛造を代行しても、この選択は解決しない。",
+      "fixedPast": "老鍛冶師エンが、弟子に見つからないよう炉材の運搬を頼む。炉は壊れていない。手が震えるため火を入れず、注文を断る口実を作っている。弟子セドは技術を教わりたい一方、師が自分を信用していないと感じている。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "老鍛冶師エン",
+        "beliefsAndGoals": "老鍛冶師エンが、弟子に見つからないよう炉材の運搬を頼む。炉は壊れていない。手が震えるため火を入れず、注文を断る口実を作っている。弟子セドは技術を教わりたい一方、師が自分を信用していないと感じている。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "弟子に見つからないよう、炉材を運んでください。"
+      }
+    ],
+    "conflict": {
+      "design": "運搬→師の試作を手伝う／弟子へ嘘の伝言をする→次の注文への回答。弟子に任せる、生活道具へ転向する、一旦休業する道がある。弟子の独立を望む場合、無期限の介護役に留める条件は設けない。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q109.canal.entry",
+          "assertion": {
+            "title": "鍛冶場の搬入口",
+            "place": "yard",
+            "cast": [
+              {
+                "entity": "en",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q109.values.enAt"
+                  },
+                  "right": "yard"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "packing",
+          "script": "q109.canal.packing",
+          "assertion": {
+            "title": "鍛冶場の搬入口",
+            "place": "yard",
+            "cast": [
+              {
+                "entity": "en",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q109.values.enAt"
+                  },
+                  "right": "yard"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "delivery",
+          "script": "q109.canal.delivery",
+          "assertion": {
+            "title": "エンの炉場",
+            "place": "forge",
+            "cast": [
+              {
+                "entity": "en",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q109.values.enAt"
+                  },
+                  "right": "forge"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "order",
+          "script": "q109.canal.order",
+          "assertion": {
+            "title": "エンの炉場",
+            "place": "forge",
+            "cast": [
+              {
+                "entity": "en",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q109.values.enAt"
+                  },
+                  "right": "forge"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "message",
+          "script": "q109.canal.message",
+          "assertion": {
+            "title": "セドの作業台",
+            "place": "bench",
+            "cast": [
+              {
+                "entity": "sedo",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q109.values.sedoAt"
+                  },
+                  "right": "bench"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "confidence",
+          "script": "q109.canal.confidence",
+          "assertion": {
+            "title": "エンの炉場",
+            "place": "forge",
+            "cast": [
+              {
+                "entity": "en",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q109.values.enAt"
+                  },
+                  "right": "forge"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "smith",
+          "script": "q109.canal.smith",
+          "assertion": {
+            "title": "エンの炉場",
+            "place": "forge",
+            "cast": [
+              {
+                "entity": "en",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q109.values.enAt"
+                  },
+                  "right": "forge"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "pupil",
+          "script": "q109.canal.pupil",
+          "assertion": {
+            "title": "セドの作業台",
+            "place": "bench",
+            "cast": [
+              {
+                "entity": "sedo",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q109.values.sedoAt"
+                  },
+                  "right": "bench"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "terms",
+          "script": "q109.canal.terms",
+          "assertion": {
+            "title": "エンの炉場",
+            "place": "forge",
+            "cast": [
+              {
+                "entity": "en",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q109.values.enAt"
+                  },
+                  "right": "forge"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "sedo",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q109.values.sedoAt"
+                  },
+                  "right": "forge"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "sign",
+          "script": "q109.canal.sign",
+          "assertion": {
+            "title": "エンの炉場",
+            "place": "forge",
+            "cast": [
+              {
+                "entity": "en",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q109.values.enAt"
+                  },
+                  "right": "forge"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "sedo",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q109.values.sedoAt"
+                  },
+                  "right": "forge"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "display",
+          "script": "q109.canal.display",
+          "assertion": {
+            "title": "鍛冶場の店先",
+            "place": "counter",
+            "cast": [
+              {
+                "entity": "en",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q109.values.enAt"
+                  },
+                  "right": "counter"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "buyer",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q109.values.buyerAt"
+                  },
+                  "right": "counter"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "refund",
+          "script": "q109.canal.refund",
+          "assertion": {
+            "title": "鍛冶場の店先",
+            "place": "counter",
+            "cast": [
+              {
+                "entity": "buyer",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q109.values.buyerAt"
+                  },
+                  "right": "counter"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "close",
+          "script": "q109.canal.close",
+          "assertion": {
+            "title": "セドの作業台",
+            "place": "bench",
+            "cast": [
+              {
+                "entity": "sedo",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q109.values.sedoAt"
+                  },
+                  "right": "bench"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "shutter",
+          "script": "q109.canal.shutter",
+          "assertion": {
+            "title": "エンの炉場",
+            "place": "forge",
+            "cast": [
+              {
+                "entity": "en",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q109.values.enAt"
+                  },
+                  "right": "forge"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "sedo",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q109.values.sedoAt"
+                  },
+                  "right": "forge"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "弟子に見つからないよう、炉材を運んでください。"
+    },
+    "reveal": {
+      "newInformation": "床には重い剣でなく、小さな留め金の試作品が増えている。師は戦具を作れなくても、暮らしの道具なら仕事を続けられると知っているが、名工の看板を下ろせない。能力の高い主人公が一度鍛造を代行しても、この選択は解決しない。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q109.canal.entry",
+        "assertion": {
+          "title": "鍛冶場の搬入口",
+          "place": "yard",
+          "cast": [
+            {
+              "entity": "en",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q109.values.enAt"
+                },
+                "right": "yard"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "packing",
+        "script": "q109.canal.packing",
+        "assertion": {
+          "title": "鍛冶場の搬入口",
+          "place": "yard",
+          "cast": [
+            {
+              "entity": "en",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q109.values.enAt"
+                },
+                "right": "yard"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "delivery",
+        "script": "q109.canal.delivery",
+        "assertion": {
+          "title": "エンの炉場",
+          "place": "forge",
+          "cast": [
+            {
+              "entity": "en",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q109.values.enAt"
+                },
+                "right": "forge"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "order",
+        "script": "q109.canal.order",
+        "assertion": {
+          "title": "エンの炉場",
+          "place": "forge",
+          "cast": [
+            {
+              "entity": "en",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q109.values.enAt"
+                },
+                "right": "forge"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "message",
+        "script": "q109.canal.message",
+        "assertion": {
+          "title": "セドの作業台",
+          "place": "bench",
+          "cast": [
+            {
+              "entity": "sedo",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q109.values.sedoAt"
+                },
+                "right": "bench"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "confidence",
+        "script": "q109.canal.confidence",
+        "assertion": {
+          "title": "エンの炉場",
+          "place": "forge",
+          "cast": [
+            {
+              "entity": "en",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q109.values.enAt"
+                },
+                "right": "forge"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "smith",
+        "script": "q109.canal.smith",
+        "assertion": {
+          "title": "エンの炉場",
+          "place": "forge",
+          "cast": [
+            {
+              "entity": "en",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q109.values.enAt"
+                },
+                "right": "forge"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "pupil",
+        "script": "q109.canal.pupil",
+        "assertion": {
+          "title": "セドの作業台",
+          "place": "bench",
+          "cast": [
+            {
+              "entity": "sedo",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q109.values.sedoAt"
+                },
+                "right": "bench"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "terms",
+        "script": "q109.canal.terms",
+        "assertion": {
+          "title": "エンの炉場",
+          "place": "forge",
+          "cast": [
+            {
+              "entity": "en",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q109.values.enAt"
+                },
+                "right": "forge"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "sedo",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q109.values.sedoAt"
+                },
+                "right": "forge"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "sign",
+        "script": "q109.canal.sign",
+        "assertion": {
+          "title": "エンの炉場",
+          "place": "forge",
+          "cast": [
+            {
+              "entity": "en",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q109.values.enAt"
+                },
+                "right": "forge"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "sedo",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q109.values.sedoAt"
+                },
+                "right": "forge"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "display",
+        "script": "q109.canal.display",
+        "assertion": {
+          "title": "鍛冶場の店先",
+          "place": "counter",
+          "cast": [
+            {
+              "entity": "en",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q109.values.enAt"
+                },
+                "right": "counter"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "buyer",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q109.values.buyerAt"
+                },
+                "right": "counter"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "refund",
+        "script": "q109.canal.refund",
+        "assertion": {
+          "title": "鍛冶場の店先",
+          "place": "counter",
+          "cast": [
+            {
+              "entity": "buyer",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q109.values.buyerAt"
+                },
+                "right": "counter"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "close",
+        "script": "q109.canal.close",
+        "assertion": {
+          "title": "セドの作業台",
+          "place": "bench",
+          "cast": [
+            {
+              "entity": "sedo",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q109.values.sedoAt"
+                },
+                "right": "bench"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "shutter",
+        "script": "q109.canal.shutter",
+        "assertion": {
+          "title": "エンの炉場",
+          "place": "forge",
+          "cast": [
+            {
+              "entity": "en",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q109.values.enAt"
+                },
+                "right": "forge"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "sedo",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q109.values.sedoAt"
+                },
+                "right": "forge"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "stories.q109.values.partyAt",
+        "type": "enum",
+        "initial": "yard",
+        "values": [
+          "yard",
+          "forge",
+          "bench",
+          "counter",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q109.values.enAt",
+        "type": "enum",
+        "initial": "yard",
+        "values": [
+          "yard",
+          "forge",
+          "bench",
+          "counter",
+          "transit"
+        ],
+        "meaning": "en の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q109.values.sedoAt",
+        "type": "enum",
+        "initial": "bench",
+        "values": [
+          "yard",
+          "forge",
+          "bench",
+          "counter",
+          "transit"
+        ],
+        "meaning": "sedo の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q109.values.buyerAt",
+        "type": "enum",
+        "initial": "counter",
+        "values": [
+          "yard",
+          "forge",
+          "bench",
+          "counter",
+          "transit"
+        ],
+        "meaning": "buyer の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q109.values.liningAt",
+        "type": "enum",
+        "initial": "yard",
+        "values": [
+          "yard",
+          "forge",
+          "bench",
+          "counter",
+          "transit",
+          "party",
+          "en",
+          "sedo",
+          "buyer",
+          "advance",
+          "handle"
+        ],
+        "meaning": "lining の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q109.values.advanceAt",
+        "type": "enum",
+        "initial": "en",
+        "values": [
+          "yard",
+          "forge",
+          "bench",
+          "counter",
+          "transit",
+          "party",
+          "en",
+          "sedo",
+          "buyer",
+          "lining",
+          "handle"
+        ],
+        "meaning": "advance の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q109.values.handleAt",
+        "type": "enum",
+        "initial": "en",
+        "values": [
+          "yard",
+          "forge",
+          "bench",
+          "counter",
+          "transit",
+          "party",
+          "en",
+          "sedo",
+          "buyer",
+          "lining",
+          "advance"
+        ],
+        "meaning": "handle の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q109.values.haul",
+        "type": "enum",
+        "initial": "unset",
+        "values": [
+          "unset",
+          "hand",
+          "cart"
+        ],
+        "meaning": "炉材の運び方",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q109.values.tremor",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "tremor",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q109.values.samples",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "samples",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q109.values.lied",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "lied",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q109.values.corrected",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "corrected",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q109.values.sedoAgrees",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "sedoAgrees",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q109.values.enAgrees",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "enAgrees",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q109.values.signed",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "signed",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q109.values.refunded",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "refunded",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q109.values.signDown",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "signDown",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q109.values.toolsChosen",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "toolsChosen",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "「弟子には内緒で、これを中へ頼む」。エンが炉材に手を置いた。火は落ちているのに、材料はもうひと炉ぶん揃っている。脇には小さな荷車もある。",
+        "options": [
+          {
+            "id": "hand",
+            "text": "手で運ぶ",
+            "to": "packing",
+            "action": "entry_hand"
+          },
+          {
+            "id": "cart",
+            "text": "荷車で運ぶ",
+            "to": "delivery",
+            "action": "entry_cart"
+          }
+        ]
+      },
+      {
+        "id": "packing",
+        "text": {
+          "when": {
+            "op": "gte",
+            "left": {
+              "ref": "leaderStats.str"
+            },
+            "right": 15
+          },
+          "yes": "先頭の隊員が試しに持つと、炉材はひと束のまま浮いた。エンが裏戸を押さえて待った。",
+          "no": "ひと束では腕が回らない。エンが縄を解き、一人で持てる小分けの束を裏戸まで並べた。"
+        },
+        "options": [
+          {
+            "id": "carry",
+            "text": "炉場へ運ぶ",
+            "to": "delivery",
+            "action": "packing_carry"
+          }
+        ]
+      },
+      {
+        "id": "delivery",
+        "text": {
+          "when": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q109.values.haul"
+            },
+            "right": "cart"
+          },
+          "yes": "エンが荷車の車輪に木片をかませた。炉の内側にひびはなく、新しい炉材を置ける場所が空いている。",
+          "no": "運び終えた炉材を炉の脇にまとめた。欠けたと思っていた炉の縁は、指を滑らせてもなめらかだった。"
+        },
+        "options": [
+          {
+            "id": "unload",
+            "text": "炉材を引き渡す",
+            "to": "order",
+            "action": "delivery_unload"
+          }
+        ]
+      },
+      {
+        "id": "order",
+        "text": {
+          "when": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q109.values.lied"
+            },
+            "right": true
+          },
+          "yes": "エンは弟子の作業台の方を見た。「炉のせいにしておけば、あと一日はもつと思ってな」。店先では注文主が返事を待っている。",
+          "no": "「セドが聞いたら、炉の修理待ちだと言ってくれ」。エンが紐を結び損ねた。足元には剣よりずっと小さい留め金の試作品がいくつもある。"
+        },
+        "options": [
+          {
+            "id": "ask",
+            "text": "エンに事情を聞く",
+            "to": "confidence",
+            "action": "order_ask"
+          },
+          {
+            "id": "lie",
+            "text": "弟子への伝言を預かる",
+            "to": "message",
+            "action": "order_lie",
+            "when": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q109.values.lied"
+                },
+                "right": true
+              }
+            },
+            "visibleWhen": {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q109.values.lied"
+                },
+                "right": true
+              }
+            }
+          },
+          {
+            "id": "rest",
+            "text": "休業の返金を手伝う",
+            "to": "refund",
+            "action": "order_rest"
+          }
+        ]
+      },
+      {
+        "id": "message",
+        "text": "セドは研ぎかけの鏨を置いた。「火が入らないのはなぜですか。俺には、まだ任せられないってことかな」。手には朝のうちに研ぎ終えた鏨がもう一本ある。",
+        "options": [
+          {
+            "id": "return",
+            "text": "修理待ちと伝えて戻る",
+            "to": "order",
+            "action": "message_return"
+          }
+        ]
+      },
+      {
+        "id": "confidence",
+        "text": "エンは手を開いた。「この震えだ。長い剣を真っすぐに打てない」。炉のせいにして注文を断っていたという。小ぶりな金具を一つ、手のひらに載せてくれた。",
+        "options": [
+          {
+            "id": "sample",
+            "text": "留め金を一緒に試す",
+            "to": "smith",
+            "action": "confidence_sample"
+          }
+        ]
+      },
+      {
+        "id": "smith",
+        "text": "エンの留め金を古い鍋に合わせて引く。取手はびくともしない。「鍋ならまだ十通りは直せる。だが、名剣で知られた店にこれを並べられるかな」",
+        "options": [
+          {
+            "id": "pupil",
+            "text": "セドの希望を聞く",
+            "to": "pupil",
+            "action": "smith_pupil"
+          },
+          {
+            "id": "tools",
+            "text": "生活道具の注文を取る",
+            "to": "display",
+            "action": "smith_tools"
+          },
+          {
+            "id": "rest",
+            "text": "休業の返金を手伝う",
+            "to": "refund",
+            "action": "smith_rest"
+          }
+        ]
+      },
+      {
+        "id": "pupil",
+        "text": {
+          "when": {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q109.values.lied"
+                },
+                "right": true
+              },
+              {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q109.values.corrected"
+                  },
+                  "right": true
+                }
+              }
+            ]
+          },
+          "yes": "セドは「まだ修理待ちなんだろう」と目を伏せた。引継ぎを相談する前に、伝言を訂正する必要がある。",
+          "no": "手の震えと試作品のことを聞いたセドは、自分の銘の下書きを見せた。「いつか自分の店を出したい。それでもいいなら、俺は主作業を習いたい」"
+        },
+        "options": [
+          {
+            "id": "correct",
+            "text": "先ほどの伝言を訂正する",
+            "to": "pupil",
+            "action": "pupil_correct",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q109.values.lied"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "not",
+                  "arg": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q109.values.corrected"
+                    },
+                    "right": true
+                  }
+                }
+              ]
+            },
+            "visibleWhen": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q109.values.lied"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "not",
+                  "arg": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q109.values.corrected"
+                    },
+                    "right": true
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "id": "agree",
+            "text": "独立を条件に引継ぎを頼む",
+            "to": "terms",
+            "action": "pupil_agree",
+            "when": {
+              "op": "or",
+              "args": [
+                {
+                  "op": "not",
+                  "arg": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q109.values.lied"
+                    },
+                    "right": true
+                  }
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q109.values.corrected"
+                  },
+                  "right": true
+                }
+              ]
+            }
+          },
+          {
+            "id": "back",
+            "text": "まだ決めずエンのもとへ",
+            "to": "smith",
+            "action": "pupil_back"
+          }
+        ]
+      },
+      {
+        "id": "terms",
+        "text": "「独り立ちしたくなったら、自分の銘で出ていけ。店のために残る約束はいらん」。エンが空いた炉前を譲り、セドが自分から槌を取った。",
+        "options": [
+          {
+            "id": "fire",
+            "text": "二人の条件で火を入れる",
+            "to": "sign",
+            "action": "terms_fire"
+          }
+        ]
+      },
+      {
+        "id": "sign",
+        "text": "火が回る。セドの打つ音を聞きながら、エンは膝の上で指を折って間を数えた。打ち上がった金具に、銘を二つ入れる幅がある。",
+        "options": [
+          {
+            "id": "sign",
+            "text": "二人の銘を見届ける",
+            "to": "@inherit",
+            "action": "sign_sign"
+          }
+        ]
+      },
+      {
+        "id": "display",
+        "text": "エンは自分で名剣の隣に鍋の取手を置いた。返事を待っていた客が、そちらを手に取る。「同じ取手を、うちの鍋にも付けてもらえるかい」",
+        "options": [
+          {
+            "id": "take",
+            "text": "取手の注文を受ける",
+            "to": "@tools",
+            "action": "display_take"
+          }
+        ]
+      },
+      {
+        "id": "refund",
+        "text": "エンから預かった前金を注文帳と突き合わせた。注文主が金額を確かめ、受け取りの印を押せるよう帳面をこちらに向けた。",
+        "options": [
+          {
+            "id": "refund",
+            "text": "前金を返してセドを呼ぶ",
+            "to": "close",
+            "action": "refund_refund"
+          }
+        ]
+      },
+      {
+        "id": "close",
+        "text": "返金の受取印を見て、セドは道具を片付けた。「看板は俺が外すよ」。店を閉じる間の身の振り方は、自分で決めるという。",
+        "options": [
+          {
+            "id": "join",
+            "text": "セドと炉場へ戻る",
+            "to": "shutter",
+            "action": "close_join"
+          }
+        ]
+      },
+      {
+        "id": "shutter",
+        "text": "店先への戸に掛かった看板に、セドが手を伸ばした。エンは作り終えた留め金を一つ、弟子の手に置いた。",
+        "options": [
+          {
+            "id": "shut",
+            "text": "看板を下ろす",
+            "to": "@rest",
+            "action": "shutter_shut"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.1",
+      "source": "https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4",
+      "adapter": "adv-story-state/1",
+      "scope": "quest-episode"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "entryScript": "q109.canal.visit",
+    "preserveAcceptedRoute": true,
+    "currentStoryScriptPrefix": "q109.canal.",
+    "interruptionRoutes": [],
+    "interruptionEntries": []
+  },
+  "scripts": {
+    "q109.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q109.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "炉は壊れていない。床に増えているのは剣ではなく、鍋の留め金だった。エンの手が袋の口で震えた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "ask",
+              "text": "本人に仕事の様子を尋ねる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q109.scene.smith"
+                }
+              ]
+            },
+            {
+              "id": "rest",
+              "text": "新しい注文を断り、休業の返金を手伝う",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q109.end.rest"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q109.scene.smith": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q109.node",
+          "value": "smith"
+        },
+        {
+          "op": "say",
+          "text": "「名工の看板で、鍋の取手を売れるかね」エンは小さな試作品なら作れると話した。弟子セドは主作業を覚えたが、独立も望んでいる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "pupil",
+              "text": "セドが望む引継ぎを聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q109.scene.pupil"
+                }
+              ]
+            },
+            {
+              "id": "tools",
+              "text": "生活道具へ仕事を変える意思をエンに確かめる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q109.end.tools"
+                }
+              ]
+            },
+            {
+              "id": "rest",
+              "text": "今は休業し、前払い金を返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q109.end.rest"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q109.scene.pupil": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q109.node",
+          "value": "pupil"
+        },
+        {
+          "op": "say",
+          "text": "セドは主作業を引き受け、二人の銘を付けたいと答えた。「いつか独立する。それまで教えてくれますか」師はうなずいた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "独立を妨げない条件で引継ぎを結ぶ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q109.end.inherit"
+                }
+              ]
+            },
+            {
+              "id": "back",
+              "text": "まだ決めず師へ戻る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q109.scene.smith"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q109.end.rest": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q109.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "返金が済み、炉の前が片付いた。エンは留め金を一つだけ仕上げ、看板を外す弟子へ渡した。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q109",
+              "outcome": "rest"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q109.end.tools": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q109.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "エンは生活道具の注文を受けると決めた。名剣の隣に鍋の取手が並び、最初の客はその取手を選んだ。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q109",
+              "outcome": "tools"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q109.end.inherit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q109.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "師は槌を持たず、弟子の打つ間隔を指で数えた。火花が落ち着いたところに、二人分の銘が残った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q109",
+              "outcome": "inherit"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q109.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q109.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q109.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "rest",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "返金が済み、炉の前が片付いた。エンは留め金を一つだけ仕上げ、看板を外す弟子へ渡した。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "tools",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "エンは生活道具の注文を受けると決めた。名剣の隣に鍋の取手が並び、最初の客はその取手を選んだ。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "inherit",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "師は槌を持たず、弟子の打つ間隔を指で数えた。火花が落ち着いたところに、二人分の銘が残った。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q109.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q109.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "smith",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q109.scene.smith"
+                    }
+                  ]
+                },
+                {
+                  "equals": "pupil",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q109.scene.pupil"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q109.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q109.canal.entry": {
+      "storyQuest": "q109",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q109",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "「弟子には内緒で、これを中へ頼む」。エンが炉材に手を置いた。火は落ちているのに、材料はもうひと炉ぶん揃っている。脇には小さな荷車もある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hand",
+              "text": "手で運ぶ",
+              "storyAction": {
+                "quest": "q109",
+                "action": "entry_hand"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q109",
+                  "action": "entry_hand"
+                },
+                {
+                  "op": "jump",
+                  "script": "q109.canal.packing"
+                }
+              ]
+            },
+            {
+              "id": "cart",
+              "text": "荷車で運ぶ",
+              "storyAction": {
+                "quest": "q109",
+                "action": "entry_cart"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q109",
+                  "action": "entry_cart"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q109.canal.packing": {
+      "storyQuest": "q109",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q109",
+          "scene": "packing"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "gte",
+            "left": {
+              "ref": "leaderStats.str"
+            },
+            "right": 15
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "先頭の隊員が試しに持つと、炉材はひと束のまま浮いた。エンが裏戸を押さえて待った。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "ひと束では腕が回らない。エンが縄を解き、一人で持てる小分けの束を裏戸まで並べた。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "carry",
+              "text": "炉場へ運ぶ",
+              "storyAction": {
+                "quest": "q109",
+                "action": "packing_carry"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q109",
+                  "action": "packing_carry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q109.canal.delivery": {
+      "storyQuest": "q109",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q109",
+          "scene": "delivery"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q109.values.haul"
+            },
+            "right": "cart"
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "エンが荷車の車輪に木片をかませた。炉の内側にひびはなく、新しい炉材を置ける場所が空いている。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "運び終えた炉材を炉の脇にまとめた。欠けたと思っていた炉の縁は、指を滑らせてもなめらかだった。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "unload",
+              "text": "炉材を引き渡す",
+              "storyAction": {
+                "quest": "q109",
+                "action": "delivery_unload"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q109",
+                  "action": "delivery_unload"
+                },
+                {
+                  "op": "jump",
+                  "script": "q109.canal.order"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q109.canal.order": {
+      "storyQuest": "q109",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q109",
+          "scene": "order"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q109.values.lied"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "エンは弟子の作業台の方を見た。「炉のせいにしておけば、あと一日はもつと思ってな」。店先では注文主が返事を待っている。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "「セドが聞いたら、炉の修理待ちだと言ってくれ」。エンが紐を結び損ねた。足元には剣よりずっと小さい留め金の試作品がいくつもある。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "ask",
+              "text": "エンに事情を聞く",
+              "storyAction": {
+                "quest": "q109",
+                "action": "order_ask"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q109",
+                  "action": "order_ask"
+                },
+                {
+                  "op": "jump",
+                  "script": "q109.canal.confidence"
+                }
+              ]
+            },
+            {
+              "id": "lie",
+              "text": "弟子への伝言を預かる",
+              "storyAction": {
+                "quest": "q109",
+                "action": "order_lie"
+              },
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q109.values.lied"
+                  },
+                  "right": true
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q109.values.lied"
+                  },
+                  "right": true
+                }
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q109",
+                  "action": "order_lie"
+                }
+              ]
+            },
+            {
+              "id": "rest",
+              "text": "休業の返金を手伝う",
+              "storyAction": {
+                "quest": "q109",
+                "action": "order_rest"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q109",
+                  "action": "order_rest"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q109.canal.message": {
+      "storyQuest": "q109",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q109",
+          "scene": "message"
+        },
+        {
+          "op": "narrate",
+          "text": "セドは研ぎかけの鏨を置いた。「火が入らないのはなぜですか。俺には、まだ任せられないってことかな」。手には朝のうちに研ぎ終えた鏨がもう一本ある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "return",
+              "text": "修理待ちと伝えて戻る",
+              "storyAction": {
+                "quest": "q109",
+                "action": "message_return"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q109",
+                  "action": "message_return"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q109.canal.confidence": {
+      "storyQuest": "q109",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q109",
+          "scene": "confidence"
+        },
+        {
+          "op": "narrate",
+          "text": "エンは手を開いた。「この震えだ。長い剣を真っすぐに打てない」。炉のせいにして注文を断っていたという。小ぶりな金具を一つ、手のひらに載せてくれた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sample",
+              "text": "留め金を一緒に試す",
+              "storyAction": {
+                "quest": "q109",
+                "action": "confidence_sample"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q109",
+                  "action": "confidence_sample"
+                },
+                {
+                  "op": "jump",
+                  "script": "q109.canal.smith"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q109.canal.smith": {
+      "storyQuest": "q109",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q109",
+          "scene": "smith"
+        },
+        {
+          "op": "narrate",
+          "text": "エンの留め金を古い鍋に合わせて引く。取手はびくともしない。「鍋ならまだ十通りは直せる。だが、名剣で知られた店にこれを並べられるかな」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "pupil",
+              "text": "セドの希望を聞く",
+              "storyAction": {
+                "quest": "q109",
+                "action": "smith_pupil"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q109",
+                  "action": "smith_pupil"
+                }
+              ]
+            },
+            {
+              "id": "tools",
+              "text": "生活道具の注文を取る",
+              "storyAction": {
+                "quest": "q109",
+                "action": "smith_tools"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q109",
+                  "action": "smith_tools"
+                }
+              ]
+            },
+            {
+              "id": "rest",
+              "text": "休業の返金を手伝う",
+              "storyAction": {
+                "quest": "q109",
+                "action": "smith_rest"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q109",
+                  "action": "smith_rest"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q109.canal.pupil": {
+      "storyQuest": "q109",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q109",
+          "scene": "pupil"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q109.values.lied"
+                },
+                "right": true
+              },
+              {
+                "op": "not",
+                "arg": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q109.values.corrected"
+                  },
+                  "right": true
+                }
+              }
+            ]
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "セドは「まだ修理待ちなんだろう」と目を伏せた。引継ぎを相談する前に、伝言を訂正する必要がある。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "手の震えと試作品のことを聞いたセドは、自分の銘の下書きを見せた。「いつか自分の店を出したい。それでもいいなら、俺は主作業を習いたい」"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "correct",
+              "text": "先ほどの伝言を訂正する",
+              "storyAction": {
+                "quest": "q109",
+                "action": "pupil_correct"
+              },
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q109.values.lied"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q109.values.corrected"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q109.values.lied"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q109.values.corrected"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q109",
+                  "action": "pupil_correct"
+                },
+                {
+                  "op": "jump",
+                  "script": "q109.canal.pupil"
+                }
+              ]
+            },
+            {
+              "id": "agree",
+              "text": "独立を条件に引継ぎを頼む",
+              "storyAction": {
+                "quest": "q109",
+                "action": "pupil_agree"
+              },
+              "condition": {
+                "op": "or",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q109.values.lied"
+                      },
+                      "right": true
+                    }
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q109.values.corrected"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q109",
+                  "action": "pupil_agree"
+                }
+              ]
+            },
+            {
+              "id": "back",
+              "text": "まだ決めずエンのもとへ",
+              "storyAction": {
+                "quest": "q109",
+                "action": "pupil_back"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q109",
+                  "action": "pupil_back"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q109.canal.terms": {
+      "storyQuest": "q109",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q109",
+          "scene": "terms"
+        },
+        {
+          "op": "narrate",
+          "text": "「独り立ちしたくなったら、自分の銘で出ていけ。店のために残る約束はいらん」。エンが空いた炉前を譲り、セドが自分から槌を取った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fire",
+              "text": "二人の条件で火を入れる",
+              "storyAction": {
+                "quest": "q109",
+                "action": "terms_fire"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q109",
+                  "action": "terms_fire"
+                },
+                {
+                  "op": "jump",
+                  "script": "q109.canal.sign"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q109.canal.sign": {
+      "storyQuest": "q109",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q109",
+          "scene": "sign"
+        },
+        {
+          "op": "narrate",
+          "text": "火が回る。セドの打つ音を聞きながら、エンは膝の上で指を折って間を数えた。打ち上がった金具に、銘を二つ入れる幅がある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sign",
+              "text": "二人の銘を見届ける",
+              "storyAction": {
+                "quest": "q109",
+                "action": "sign_sign"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q109",
+                  "action": "sign_sign"
+                },
+                {
+                  "op": "jump",
+                  "script": "q109.canal.end.inherit"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q109.canal.display": {
+      "storyQuest": "q109",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q109",
+          "scene": "display"
+        },
+        {
+          "op": "narrate",
+          "text": "エンは自分で名剣の隣に鍋の取手を置いた。返事を待っていた客が、そちらを手に取る。「同じ取手を、うちの鍋にも付けてもらえるかい」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "take",
+              "text": "取手の注文を受ける",
+              "storyAction": {
+                "quest": "q109",
+                "action": "display_take"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q109",
+                  "action": "display_take"
+                },
+                {
+                  "op": "jump",
+                  "script": "q109.canal.end.tools"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q109.canal.refund": {
+      "storyQuest": "q109",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q109",
+          "scene": "refund"
+        },
+        {
+          "op": "narrate",
+          "text": "エンから預かった前金を注文帳と突き合わせた。注文主が金額を確かめ、受け取りの印を押せるよう帳面をこちらに向けた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "refund",
+              "text": "前金を返してセドを呼ぶ",
+              "storyAction": {
+                "quest": "q109",
+                "action": "refund_refund"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q109",
+                  "action": "refund_refund"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q109.canal.close": {
+      "storyQuest": "q109",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q109",
+          "scene": "close"
+        },
+        {
+          "op": "narrate",
+          "text": "返金の受取印を見て、セドは道具を片付けた。「看板は俺が外すよ」。店を閉じる間の身の振り方は、自分で決めるという。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "join",
+              "text": "セドと炉場へ戻る",
+              "storyAction": {
+                "quest": "q109",
+                "action": "close_join"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q109",
+                  "action": "close_join"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q109.canal.shutter": {
+      "storyQuest": "q109",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q109",
+          "scene": "shutter"
+        },
+        {
+          "op": "narrate",
+          "text": "店先への戸に掛かった看板に、セドが手を伸ばした。エンは作り終えた留め金を一つ、弟子の手に置いた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "shut",
+              "text": "看板を下ろす",
+              "storyAction": {
+                "quest": "q109",
+                "action": "shutter_shut"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q109",
+                  "action": "shutter_shut"
+                },
+                {
+                  "op": "jump",
+                  "script": "q109.canal.end.rest"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q109.canal.end.rest": {
+      "commands": [
+        {
+          "op": "jump",
+          "script": "q109.end.rest"
+        }
+      ]
+    },
+    "q109.canal.end.tools": {
+      "commands": [
+        {
+          "op": "jump",
+          "script": "q109.end.tools"
+        }
+      ]
+    },
+    "q109.canal.end.inherit": {
+      "commands": [
+        {
+          "op": "jump",
+          "script": "q109.end.inherit"
+        }
+      ]
+    },
+    "q109.canal.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q109"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q109.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q109.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q109.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "rest",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "返金が済み、炉の前が片付いた。エンは留め金を一つだけ仕上げ、看板を外す弟子へ渡した。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "tools",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "エンは生活道具の注文を受けると決めた。名剣の隣に鍋の取手が並び、最初の客はその取手を選んだ。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "inherit",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "師は槌を持たず、弟子の打つ間隔を指で数えた。火花が落ち着いたところに、二人分の銘が残った。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q109"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q109.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q109.canal.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "packing",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q109.canal.packing"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "delivery",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q109.canal.delivery"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "order",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q109.canal.order"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "message",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q109.canal.message"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "confidence",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q109.canal.confidence"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "smith",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q109.canal.smith"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "pupil",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q109.canal.pupil"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "terms",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q109.canal.terms"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "sign",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q109.canal.sign"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "display",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q109.canal.display"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "refund",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q109.canal.refund"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "close",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q109.canal.close"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "shutter",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q109.canal.shutter"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q109.canal.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "yard": "鍛冶場の搬入口",
+      "forge": "エンの炉場",
+      "bench": "セドの作業台",
+      "counter": "鍛冶場の店先",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "yard"
+      ],
+      [
+        "transit",
+        "forge"
+      ],
+      [
+        "transit",
+        "bench"
+      ],
+      [
+        "transit",
+        "counter"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "yard",
+        "values": [
+          "yard",
+          "forge",
+          "bench",
+          "counter",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "enAt": {
+        "type": "enum",
+        "initial": "yard",
+        "values": [
+          "yard",
+          "forge",
+          "bench",
+          "counter",
+          "transit"
+        ],
+        "meaning": "en の所在または保持者"
+      },
+      "sedoAt": {
+        "type": "enum",
+        "initial": "bench",
+        "values": [
+          "yard",
+          "forge",
+          "bench",
+          "counter",
+          "transit"
+        ],
+        "meaning": "sedo の所在または保持者"
+      },
+      "buyerAt": {
+        "type": "enum",
+        "initial": "counter",
+        "values": [
+          "yard",
+          "forge",
+          "bench",
+          "counter",
+          "transit"
+        ],
+        "meaning": "buyer の所在または保持者"
+      },
+      "liningAt": {
+        "type": "enum",
+        "initial": "yard",
+        "values": [
+          "yard",
+          "forge",
+          "bench",
+          "counter",
+          "transit",
+          "party",
+          "en",
+          "sedo",
+          "buyer",
+          "advance",
+          "handle"
+        ],
+        "meaning": "lining の所在または保持者"
+      },
+      "advanceAt": {
+        "type": "enum",
+        "initial": "en",
+        "values": [
+          "yard",
+          "forge",
+          "bench",
+          "counter",
+          "transit",
+          "party",
+          "en",
+          "sedo",
+          "buyer",
+          "lining",
+          "handle"
+        ],
+        "meaning": "advance の所在または保持者"
+      },
+      "handleAt": {
+        "type": "enum",
+        "initial": "en",
+        "values": [
+          "yard",
+          "forge",
+          "bench",
+          "counter",
+          "transit",
+          "party",
+          "en",
+          "sedo",
+          "buyer",
+          "lining",
+          "advance"
+        ],
+        "meaning": "handle の所在または保持者"
+      },
+      "haul": {
+        "type": "enum",
+        "initial": "unset",
+        "values": [
+          "unset",
+          "hand",
+          "cart"
+        ],
+        "meaning": "炉材の運び方"
+      },
+      "tremor": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "tremor"
+      },
+      "samples": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "samples"
+      },
+      "lied": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "lied"
+      },
+      "corrected": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "corrected"
+      },
+      "sedoAgrees": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "sedoAgrees"
+      },
+      "enAgrees": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "enAgrees"
+      },
+      "signed": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "signed"
+      },
+      "refunded": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "refunded"
+      },
+      "signDown": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "signDown"
+      },
+      "toolsChosen": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "toolsChosen"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "en": {
+        "holder": "enAt",
+        "kind": "person",
+        "character": "e2_q109_en"
+      },
+      "sedo": {
+        "holder": "sedoAt",
+        "kind": "person",
+        "character": "e2_q109_sedo"
+      },
+      "buyer": {
+        "holder": "buyerAt",
+        "kind": "person",
+        "character": "e2_q109_buyer"
+      },
+      "lining": {
+        "holder": "liningAt",
+        "kind": "item"
+      },
+      "advance": {
+        "holder": "advanceAt",
+        "kind": "item"
+      },
+      "handle": {
+        "holder": "handleAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {},
+    "initialKnowledge": {},
+    "invariants": [
+      {
+        "id": "informedConsent",
+        "condition": {
+          "op": "or",
+          "args": [
+            {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q109.values.sedoAgrees"
+                },
+                "right": true
+              }
+            },
+            {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q109.values.tremor"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q109.values.samples"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "or",
+                  "args": [
+                    {
+                      "op": "not",
+                      "arg": {
+                        "op": "eq",
+                        "left": {
+                          "ref": "stories.q109.values.lied"
+                        },
+                        "right": true
+                      }
+                    },
+                    {
+                      "op": "eq",
+                      "left": {
+                        "ref": "stories.q109.values.corrected"
+                      },
+                      "right": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "message": "セドは師の事情と試作品を知ってから引継ぎを決める。"
+      },
+      {
+        "id": "bothSign",
+        "condition": {
+          "op": "or",
+          "args": [
+            {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q109.values.signed"
+                },
+                "right": true
+              }
+            },
+            {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q109.values.sedoAgrees"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q109.values.enAgrees"
+                  },
+                  "right": true
+                }
+              ]
+            }
+          ]
+        },
+        "message": "二人の銘は双方が同意してから打つ。"
+      }
+    ],
+    "scenes": {
+      "entry": {
+        "title": "鍛冶場の搬入口",
+        "place": "yard",
+        "cast": [
+          {
+            "entity": "en",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q109.values.enAt"
+              },
+              "right": "yard"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "packing": {
+        "title": "鍛冶場の搬入口",
+        "place": "yard",
+        "cast": [
+          {
+            "entity": "en",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q109.values.enAt"
+              },
+              "right": "yard"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "delivery": {
+        "title": "エンの炉場",
+        "place": "forge",
+        "cast": [
+          {
+            "entity": "en",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q109.values.enAt"
+              },
+              "right": "forge"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "order": {
+        "title": "エンの炉場",
+        "place": "forge",
+        "cast": [
+          {
+            "entity": "en",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q109.values.enAt"
+              },
+              "right": "forge"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "message": {
+        "title": "セドの作業台",
+        "place": "bench",
+        "cast": [
+          {
+            "entity": "sedo",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q109.values.sedoAt"
+              },
+              "right": "bench"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "confidence": {
+        "title": "エンの炉場",
+        "place": "forge",
+        "cast": [
+          {
+            "entity": "en",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q109.values.enAt"
+              },
+              "right": "forge"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "smith": {
+        "title": "エンの炉場",
+        "place": "forge",
+        "cast": [
+          {
+            "entity": "en",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q109.values.enAt"
+              },
+              "right": "forge"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "pupil": {
+        "title": "セドの作業台",
+        "place": "bench",
+        "cast": [
+          {
+            "entity": "sedo",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q109.values.sedoAt"
+              },
+              "right": "bench"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "terms": {
+        "title": "エンの炉場",
+        "place": "forge",
+        "cast": [
+          {
+            "entity": "en",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q109.values.enAt"
+              },
+              "right": "forge"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "sedo",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q109.values.sedoAt"
+              },
+              "right": "forge"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "sign": {
+        "title": "エンの炉場",
+        "place": "forge",
+        "cast": [
+          {
+            "entity": "en",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q109.values.enAt"
+              },
+              "right": "forge"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "sedo",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q109.values.sedoAt"
+              },
+              "right": "forge"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "display": {
+        "title": "鍛冶場の店先",
+        "place": "counter",
+        "cast": [
+          {
+            "entity": "en",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q109.values.enAt"
+              },
+              "right": "counter"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "buyer",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q109.values.buyerAt"
+              },
+              "right": "counter"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "refund": {
+        "title": "鍛冶場の店先",
+        "place": "counter",
+        "cast": [
+          {
+            "entity": "buyer",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q109.values.buyerAt"
+              },
+              "right": "counter"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "close": {
+        "title": "セドの作業台",
+        "place": "bench",
+        "cast": [
+          {
+            "entity": "sedo",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q109.values.sedoAt"
+              },
+              "right": "bench"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "shutter": {
+        "title": "エンの炉場",
+        "place": "forge",
+        "cast": [
+          {
+            "entity": "en",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q109.values.enAt"
+              },
+              "right": "forge"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "sedo",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q109.values.sedoAt"
+              },
+              "right": "forge"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_hand": {
+        "from": [
+          "entry"
+        ],
+        "to": "packing",
+        "requires": true,
+        "effects": [],
+        "once": true
+      },
+      "entry_cart": {
+        "from": [
+          "entry"
+        ],
+        "to": "delivery",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "en"
+            ],
+            "path": [
+              "transit",
+              "forge"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "forge",
+          "companions": [
+            "en"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "lining",
+            "from": "yard",
+            "to": "party"
+          },
+          {
+            "op": "set",
+            "key": "haul",
+            "value": "cart"
+          }
+        ]
+      },
+      "packing_carry": {
+        "from": [
+          "packing"
+        ],
+        "to": "delivery",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "en"
+            ],
+            "path": [
+              "transit",
+              "forge"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "forge",
+          "companions": [
+            "en"
+          ]
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "lining",
+            "from": "yard",
+            "to": "party"
+          },
+          {
+            "op": "set",
+            "key": "haul",
+            "value": "hand"
+          }
+        ]
+      },
+      "delivery_unload": {
+        "from": [
+          "delivery"
+        ],
+        "to": "order",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "lining",
+            "from": "party",
+            "to": "forge"
+          }
+        ],
+        "once": true
+      },
+      "order_ask": {
+        "from": [
+          "order"
+        ],
+        "to": "confidence",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "tremor",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "order_lie": {
+        "from": [
+          "order"
+        ],
+        "to": "message",
+        "requires": {
+          "op": "not",
+          "arg": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q109.values.lied"
+            },
+            "right": true
+          }
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "bench"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "bench",
+          "companions": []
+        },
+        "depart": []
+      },
+      "order_rest": {
+        "from": [
+          "order"
+        ],
+        "to": "refund",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "counter"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "counter",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "advance",
+            "from": "en",
+            "to": "party"
+          }
+        ]
+      },
+      "message_return": {
+        "from": [
+          "message"
+        ],
+        "to": "order",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "forge"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "forge",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "lied",
+            "value": true
+          }
+        ]
+      },
+      "confidence_sample": {
+        "from": [
+          "confidence"
+        ],
+        "to": "smith",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "samples",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "smith_pupil": {
+        "from": [
+          "smith"
+        ],
+        "to": "pupil",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "bench"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "bench",
+          "companions": []
+        },
+        "depart": []
+      },
+      "smith_tools": {
+        "from": [
+          "smith"
+        ],
+        "to": "display",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "en"
+            ],
+            "path": [
+              "transit",
+              "counter"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "counter",
+          "companions": [
+            "en"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "toolsChosen",
+            "value": true
+          }
+        ]
+      },
+      "smith_rest": {
+        "from": [
+          "smith"
+        ],
+        "to": "refund",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "counter"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "counter",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "advance",
+            "from": "en",
+            "to": "party"
+          }
+        ]
+      },
+      "pupil_correct": {
+        "from": [
+          "pupil"
+        ],
+        "to": "pupil",
+        "requires": {
+          "op": "and",
+          "args": [
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q109.values.lied"
+              },
+              "right": true
+            },
+            {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q109.values.corrected"
+                },
+                "right": true
+              }
+            }
+          ]
+        },
+        "effects": [
+          {
+            "op": "set",
+            "key": "corrected",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "pupil_agree": {
+        "from": [
+          "pupil"
+        ],
+        "to": "terms",
+        "requires": {
+          "op": "or",
+          "args": [
+            {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q109.values.lied"
+                },
+                "right": true
+              }
+            },
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q109.values.corrected"
+              },
+              "right": true
+            }
+          ]
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "sedo"
+            ],
+            "path": [
+              "transit",
+              "forge"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "forge",
+          "companions": [
+            "sedo"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "sedoAgrees",
+            "value": true
+          }
+        ]
+      },
+      "pupil_back": {
+        "from": [
+          "pupil"
+        ],
+        "to": "smith",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "forge"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": false,
+        "journey": {
+          "to": "forge",
+          "companions": []
+        },
+        "depart": []
+      },
+      "terms_fire": {
+        "from": [
+          "terms"
+        ],
+        "to": "sign",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "enAgrees",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "sign_sign": {
+        "from": [
+          "sign"
+        ],
+        "ending": "inherit",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "signed",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "display_take": {
+        "from": [
+          "display"
+        ],
+        "ending": "tools",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "handle",
+            "from": "en",
+            "to": "buyer"
+          }
+        ],
+        "once": true
+      },
+      "refund_refund": {
+        "from": [
+          "refund"
+        ],
+        "to": "close",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "bench"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "bench",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "advance",
+            "from": "party",
+            "to": "buyer"
+          },
+          {
+            "op": "set",
+            "key": "refunded",
+            "value": true
+          }
+        ]
+      },
+      "close_join": {
+        "from": [
+          "close"
+        ],
+        "to": "shutter",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "sedo"
+            ],
+            "path": [
+              "transit",
+              "forge"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "forge",
+          "companions": [
+            "sedo"
+          ]
+        },
+        "depart": []
+      },
+      "shutter_shut": {
+        "from": [
+          "shutter"
+        ],
+        "ending": "rest",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "signDown",
+            "value": true
+          }
+        ],
+        "once": true
+      }
+    },
+    "endings": {
+      "rest": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q109.values.refunded"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q109.values.advanceAt"
+            },
+            "right": "buyer"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q109.values.signDown"
+            },
+            "right": true
+          }
+        ]
+      },
+      "tools": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q109.values.toolsChosen"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q109.values.samples"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q109.values.handleAt"
+            },
+            "right": "buyer"
+          }
+        ]
+      },
+      "inherit": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q109.values.sedoAgrees"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q109.values.enAgrees"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q109.values.signed"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "yard": {
+        "kind": "town",
+        "location": "e2_q109_yard"
+      },
+      "forge": {
+        "kind": "town",
+        "location": "e2_q109_forge"
+      },
+      "bench": {
+        "kind": "town",
+        "location": "e2_q109_bench"
+      },
+      "counter": {
+        "kind": "town",
+        "location": "e2_q109_counter"
+      }
+    },
+    "revision": 1
+  }
+}
