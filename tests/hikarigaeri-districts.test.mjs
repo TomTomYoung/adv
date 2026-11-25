@@ -23,7 +23,8 @@ test('town districts expose all destinations, with all canal sites reachable aft
     }
     town(g,'e2_canal_quarter');
   }
-  assert.equal(sites.size,28);
+  assert.equal(sites.size,31);
+  for(const stop of ['stall','feeder','warehouse'])assert.ok(sites.has('e2_q108_'+stop));
   for(const stop of ['desk','dining','door','room'])assert.ok(sites.has('e2_q107_'+stop));
   for(const stop of ['bakery','alley','door','table'])assert.ok(sites.has('e2_q106_'+stop));
   town(g,'hikarigaeri_medical_specimens');

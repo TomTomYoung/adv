@@ -171,7 +171,7 @@ if(quest==='q095'&&['back','match','deliver','carry','hand'].includes(intent.id)
         const title=await page.evaluate(()=>questPlaytest.trial.engine.state.ending?.title);
         assert.equal(title,{informed:'道を次へ渡す者',contract:'迷宮の鍵を持つ者',compromise:'灯を守って帰る者'}[route.outcome]);
       }
-      console.log('PUBLIC',quest,route.old.join('/'),result.report.outcome,result.report.steps);
+      console.log('PUBLIC',quest,route.path.join('/'),result.report.outcome,result.report.steps);
     }
   }
 if(suite==='--q095'){
@@ -212,7 +212,8 @@ if(suite==='--q095'){
       ['q104',['sound','learn','find'],['buy'],'buy'],
       ['q105',['canal','roles','back','report'],['roles','agree'],'roles'],
       ['q106',['owner','ask'],['eat'],'meal'],
-      ['q107',['courier','letter'],['sleep','meet'],'meet']
+      ['q107',['courier','letter'],['sleep','meet'],'meet'],
+      ['q108',['catch','rats','cost'],['build'],'shared']
     ].filter(([id])=>quests.includes(id))});
   }
   let attempts=0;const first=q038.length;

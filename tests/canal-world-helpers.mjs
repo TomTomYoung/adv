@@ -8,7 +8,7 @@ import {choose} from './world-route-helpers.mjs';
 export {data,catalog,migrated};
 export {arrive} from './world-route-helpers.mjs';
 
-const ids=['q101','q102','q103','q104','q105','q106','q107'];
+const ids=['q101','q102','q103','q104','q105','q106','q107','q108'];
 export const routes=Object.fromEntries(ids.map(id=>[id,[]]));
 function add(q,old,path,outcome){
   const words=text=>text.trim().split(/\s+/);
@@ -67,6 +67,22 @@ add('q107','courier letter alive',sent+'alive finish','alive');
 add('q107','courier letter sleep alive',replied+'alive','alive');
 add('q107','courier letter sleep meet',replied+'meet invite enter sit','meet');
 
+add('q108','bird','bird hand','bird');
+add('q108','catch fish','catch fish hand','fish');
+add('q108','catch bird','catch bird hand','bird');
+for(const [old,prefix] of [['shelf','shelf'],['catch rats','catch rats open']]){
+  add('q108',old+' bird',prefix+' bird hand','bird');
+  add('q108',old+' cost build',prefix+' cost check build feeder share','shared');
+  add('q108',old+' cost warehouse',prefix+' cost check warehouse carry hand','fish');
+  add('q108',old+' bird',prefix+' cost check bird hand','bird');
+}
+for(const prefix of ['', 'catch ', 'shelf cost check ', 'catch rats open cost check ']){
+  routes.q108.push({old:[],path:(prefix+'decline').split(' '),outcome:'decline'});
+}
+export function legacyProgress(g,q){
+  return g.state.flags.flow?.[q] ?? g.state.flags.quest?.[q];
+}
+
 const breadShortages=[
   {choice:'seal',old:[],path:['chase'],legacyScene:'entry',scene:'trail',place:'alley',cost:{gold:30},finish:['report','finish'],outcome:'seal'},
   {choice:'eat',old:['owner','ask'],path:['chase','owner','compare','learn','back','ask','admit'],legacyScene:'meal',scene:'meal',place:'table',cost:{ration:1},finish:['finish'],outcome:'meal'}
@@ -95,6 +111,14 @@ export function expectedValues(q,r){
         letterAt:sent&&!slept?'courier':'guests',parcelAt:'courier',courierAt:sent&&!slept?'neighbor':'door',
         missingAt:met?'dining':'neighbor',guestsAt:'dining',moraAt:'desk'};
     }
+    case 'q108':{
+      const took=id=>r.path.includes(id), paid=end==='shared', fish=end==='fish';
+      const atMarket=end==='decline'&&!took('check');
+      return {caught:took('catch'),caged:false,shelfRaised:took('shelf')||paid,fishRoute:took('shelf')||took('check'),
+        ratWork:took('shelf')||took('open'),paid,enclosure:paid,custody:end==='decline'?'none':end,
+        declined:end==='decline',catAt:fish?'warehouse':atMarket?'stall':'feeder',sellerAt:fish?'warehouse':'stall',
+        keeperAt:end==='decline'?'stall':'feeder'};
+    }
     case 'q106':{
       const took=id=>r.path.includes(id);
       return {theft:true,owner:took('compare'),rule:took('back'),admitted:took('admit'),shared:end==='meal',
@@ -108,9 +132,10 @@ export function expectedValues(q,r){
 export function states(q){
   const current=new Map(),legacy=new Map();
   for(const route of routes[q])for(const [old,collection,choices] of [[false,current,route.path],[true,legacy,route.old]]){
+    if(old&&!choices.length)continue;
     const g=ready(q,{old});
     for(const id of choices){
-      const state=old?g.state.flags.quest[q]:g.state.stories[q],scene=old?state.node:state.scene;
+      const state=old?legacyProgress(g,q):g.state.stories[q],scene=old?state.node:state.scene;
       // Distinct local histories matter even if the visible scene has the same name.
       const key=JSON.stringify(state);
       if(!collection.has(key))collection.set(key,{scene,save:g.save()});
@@ -128,6 +153,15 @@ export function states(q){
     const g=ready(q,{old});for(const id of old?row.old:row.path)choose(g,q,id);
     if(row.cost.gold)g.state.gold=row.cost.gold-1;else delete g.state.inventory.ration;
     rows.set('short-'+row.choice,{scene:old?row.legacyScene:row.scene,save:g.save(),availableChoice:row.choice+'_supplies'});
+  }
+  if(q==='q108')for(const [old,rows] of [[false,current],[true,legacy]]){
+    for(const [first,choices] of [['shelf',['shelf','cost']],['catch',['catch','rats','cost']]]){
+      const g=ready(q,{old});
+      const path=old?choices:first==='shelf'?['shelf','cost','check']:['catch','rats','open','cost','check'];
+      for(const id of path)choose(g,q,id);
+      g.state.gold=29;
+      rows.set('short-'+first,{scene:'agreement',save:g.save(),availableChoice:'build_supplies'});
+    }
   }
   return {current:[...current.values()],legacy:[...legacy.values()]};
 }

@@ -23,7 +23,7 @@ export function measureWorldRoutes({data,catalog,routes,expectedValues,arrive,se
       assert.equal(report.status,'cleared');assert.equal(report.outcome,route.outcome);
       for(const [key,value] of Object.entries(expectedValues(quest,route)))assert.equal(g.state.stories[quest].values[key],value,quest+'/'+key);
       assert.equal(report.records.losses,0);assert.equal(report.rescues,0);
-      results.push({quest,start,level,party,path:route.old,...report});
+      results.push({quest,start,level,party,path:route.path,...report});
     }
   }
   return results;
