@@ -29,7 +29,9 @@ export function buildRiverside(bundle){
     ['e2_canal_night_market','夜市','パンを売る店から、路地の抜け道を通って荷運びの家へ出られる。','location_square',[
       ['e2_q106_bakery','パン屋'],['e2_q106_alley','抜け道'],['e2_q106_door','荷運びの家の戸口'],['e2_q106_table','家族の食卓']]],
     ['e2_canal_mora_inn','モラの宿','帳場の先に食堂があり、配達人の通う戸口が通りに開く。','location_tavern',[
-      ['e2_q107_desk','帳場'],['e2_q107_dining','食堂'],['e2_q107_door','配達口'],['e2_q107_room','客室']]]
+      ['e2_q107_desk','帳場'],['e2_q107_dining','食堂'],['e2_q107_door','配達口'],['e2_q107_room','客室']]],
+    ['e2_canal_cat_market','魚屋と鳥屋','隣り合う二軒の店と、魚屋が借りる遠い倉庫へ続く道。','location_shop',[
+      ['e2_q108_stall','魚屋の売り台'],['e2_q108_feeder','鳥屋の餌場'],['e2_q108_warehouse','遠い倉庫']]]
   ];
   for(const [id,name,description,background,stops] of groups){
     add(id,name,canal,description,background);

@@ -1,0 +1,5169 @@
+{
+  "schemaVersion": 1,
+  "id": "q108",
+  "number": 108,
+  "title": "猫に付いた懸賞",
+  "client": "魚屋と隣の鳥屋",
+  "brief": "懸賞の付いた大猫を捕まえ、引渡し先を相談してください。",
+  "region": 1,
+  "type": "authored_progression",
+  "recommendedLevel": 1,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。荷揚げ河岸から運河通りへ進み、手帳に示される現場を訪ねる。",
+  "events": [
+    {
+      "id": "q108_scene",
+      "title": "猫に付いた懸賞：魚屋と隣の鳥屋",
+      "points": [
+        {
+          "map": "region_1_f2",
+          "x": 4,
+          "y": 1,
+          "dungeon": "region_1"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q108.flow.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q108.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q108.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q108"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_1"
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_1_f2",
+      "x": 4,
+      "y": 1,
+      "object": "q108_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "shared": {
+      "label": "二つの昼寝場所",
+      "text": "両店は被害を減らす設備と餌代を分担した。猫の昼寝場所が二つになり、配達人の声だけで起きる癖は変わらなかった。",
+      "gold": 57,
+      "xp": 51,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q108.values.enclosure"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q108.values.custody"
+            },
+            "right": "shared"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q108.values.catAt"
+            },
+            "right": "feeder"
+          }
+        ]
+      }
+    },
+    "fish": {
+      "label": "倉庫の猫",
+      "text": "魚の被害は止まった。鳥屋には鼠対策が残った。猫は倉庫でも魚屋の付けた名に返事をしなかった。",
+      "gold": 57,
+      "xp": 51,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q108.values.custody"
+            },
+            "right": "fish"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q108.values.catAt"
+            },
+            "right": "warehouse"
+          }
+        ]
+      }
+    },
+    "bird": {
+      "label": "鳥屋の保護",
+      "text": "鳥屋は餌代を引き受け、魚屋は仕入れの相談を断った。昔の喧嘩まで猫に解決させることはできなかった。",
+      "gold": 57,
+      "xp": 51,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q108.values.custody"
+            },
+            "right": "bird"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q108.values.catAt"
+            },
+            "right": "feeder"
+          }
+        ]
+      }
+    },
+    "decline": {
+      "label": "懸賞を辞退する",
+      "text": "どちらにも猫を引き渡さず、隊は懸賞を辞退した。",
+      "gold": 0,
+      "xp": 0,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q108.values.declined"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q108.values.custody"
+            },
+            "right": "none"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.caged"
+              },
+              "right": true
+            }
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.paid"
+              },
+              "right": true
+            }
+          }
+        ]
+      }
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/story-q108.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3813d958cf10f9782f264",
+    "revision": "scenario-edition-e2-q108-r1",
+    "world": {
+      "truth": "猫は魚を盗むが、鼠除けの働きも本当だ。善良な動物だから無罪とせず、店の置き方を変えれば被害を減らせると観察で示す。猫を捕まえた直後、二人が同時に違う名前で呼び、猫がどちらにも返事をしない場面を置く。",
+      "fixedPast": "魚屋が、巨大な猫に懸賞を出す。隣の鳥屋は、その猫が鼠を追うので保護したいと主張する。猫は飼い主を選ばず、どちらの店でも可愛がられてきた。二人は猫の問題より、昔の共同仕入れの喧嘩を続けている。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "魚屋と隣の鳥屋",
+        "beliefsAndGoals": "魚屋が、巨大な猫に懸賞を出す。隣の鳥屋は、その猫が鼠を追うので保護したいと主張する。猫は飼い主を選ばず、どちらの店でも可愛がられてきた。二人は猫の問題より、昔の共同仕入れの喧嘩を続けている。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "懸賞の付いた大猫を捕まえ、引渡し先を相談してください。"
+      }
+    ],
+    "conflict": {
+      "request": "懸賞の付いた大猫を捕まえ、引渡し先を相談してください。",
+      "progression": "捕獲で猫を動かした後に別の店の被害が現れ、引渡しで終えるか設備へ戻るかを選ぶ。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q108.canal.entry",
+          "assertion": {
+            "title": "魚屋の売り台",
+            "place": "stall",
+            "cast": [
+              {
+                "entity": "seller",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.sellerAt"
+                  },
+                  "right": "stall"
+                },
+                "display": {
+                  "x": 17,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "keeper",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.keeperAt"
+                  },
+                  "right": "stall"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              },
+              {
+                "entity": "cat",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.catAt"
+                  },
+                  "right": "stall"
+                },
+                "display": {
+                  "x": 83,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 2
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "caught",
+          "script": "q108.canal.caught",
+          "assertion": {
+            "title": "魚屋の売り台",
+            "place": "stall",
+            "cast": [
+              {
+                "entity": "seller",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.sellerAt"
+                  },
+                  "right": "stall"
+                },
+                "display": {
+                  "x": 17,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "keeper",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.keeperAt"
+                  },
+                  "right": "stall"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              },
+              {
+                "entity": "cat",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.catAt"
+                  },
+                  "right": "stall"
+                },
+                "display": {
+                  "x": 83,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 2
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "tracks",
+          "script": "q108.canal.tracks",
+          "assertion": {
+            "title": "鳥屋の餌場",
+            "place": "feeder",
+            "cast": [
+              {
+                "entity": "keeper",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.keeperAt"
+                  },
+                  "right": "feeder"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "cat",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.catAt"
+                  },
+                  "right": "feeder"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "hunting",
+          "script": "q108.canal.hunting",
+          "assertion": {
+            "title": "鳥屋の餌場",
+            "place": "feeder",
+            "cast": [
+              {
+                "entity": "keeper",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.keeperAt"
+                  },
+                  "right": "feeder"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "cat",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.catAt"
+                  },
+                  "right": "feeder"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "inspect",
+          "script": "q108.canal.inspect",
+          "assertion": {
+            "title": "魚屋の売り台",
+            "place": "stall",
+            "cast": [
+              {
+                "entity": "seller",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.sellerAt"
+                  },
+                  "right": "stall"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "keeper",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.keeperAt"
+                  },
+                  "right": "stall"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "agreement",
+          "script": "q108.canal.agreement",
+          "assertion": {
+            "title": "魚屋の売り台",
+            "place": "stall",
+            "cast": [
+              {
+                "entity": "seller",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.sellerAt"
+                  },
+                  "right": "stall"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "keeper",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.keeperAt"
+                  },
+                  "right": "stall"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "paid",
+          "script": "q108.canal.paid",
+          "assertion": {
+            "title": "魚屋の売り台",
+            "place": "stall",
+            "cast": [
+              {
+                "entity": "seller",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.sellerAt"
+                  },
+                  "right": "stall"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "keeper",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.keeperAt"
+                  },
+                  "right": "stall"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "repair",
+          "script": "q108.canal.repair",
+          "assertion": {
+            "title": "鳥屋の餌場",
+            "place": "feeder",
+            "cast": [
+              {
+                "entity": "keeper",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.keeperAt"
+                  },
+                  "right": "feeder"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "cat",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.catAt"
+                  },
+                  "right": "feeder"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "collect",
+          "script": "q108.canal.collect",
+          "assertion": {
+            "title": "鳥屋の餌場",
+            "place": "feeder",
+            "cast": [
+              {
+                "entity": "seller",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.sellerAt"
+                  },
+                  "right": "feeder"
+                },
+                "display": {
+                  "x": 17,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "keeper",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.keeperAt"
+                  },
+                  "right": "feeder"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              },
+              {
+                "entity": "cat",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.catAt"
+                  },
+                  "right": "feeder"
+                },
+                "display": {
+                  "x": 83,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 2
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "warehouse",
+          "script": "q108.canal.warehouse",
+          "assertion": {
+            "title": "魚屋の遠い倉庫",
+            "place": "warehouse",
+            "cast": [
+              {
+                "entity": "seller",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.sellerAt"
+                  },
+                  "right": "warehouse"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "cat",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.catAt"
+                  },
+                  "right": "warehouse"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "protection",
+          "script": "q108.canal.protection",
+          "assertion": {
+            "title": "鳥屋の餌場",
+            "place": "feeder",
+            "cast": [
+              {
+                "entity": "keeper",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.keeperAt"
+                  },
+                  "right": "feeder"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "cat",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.catAt"
+                  },
+                  "right": "feeder"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "懸賞の付いた大猫を捕まえ、引渡し先を相談してください。"
+    },
+    "reveal": {
+      "newInformation": "猫は魚を盗むが、鼠除けの働きも本当だ。善良な動物だから無罪とせず、店の置き方を変えれば被害を減らせると観察で示す。猫を捕まえた直後、二人が同時に違う名前で呼び、猫がどちらにも返事をしない場面を置く。",
+      "retroactiveTargets": [],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする",
+      "gate": null,
+      "window": "個別の場面・行為・当事者の応答に沿って開示する",
+      "earlyDiscovery": "原稿の各選択で定義。二地点の回収は要求しない",
+      "missedProof": "その場で得た情報と選んだ行為が、次の場面を決める"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q108.canal.entry",
+        "assertion": {
+          "title": "魚屋の売り台",
+          "place": "stall",
+          "cast": [
+            {
+              "entity": "seller",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q108.values.sellerAt"
+                },
+                "right": "stall"
+              },
+              "display": {
+                "x": 17,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "keeper",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q108.values.keeperAt"
+                },
+                "right": "stall"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            },
+            {
+              "entity": "cat",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q108.values.catAt"
+                },
+                "right": "stall"
+              },
+              "display": {
+                "x": 83,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 2
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "caught",
+        "script": "q108.canal.caught",
+        "assertion": {
+          "title": "魚屋の売り台",
+          "place": "stall",
+          "cast": [
+            {
+              "entity": "seller",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q108.values.sellerAt"
+                },
+                "right": "stall"
+              },
+              "display": {
+                "x": 17,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "keeper",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q108.values.keeperAt"
+                },
+                "right": "stall"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            },
+            {
+              "entity": "cat",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q108.values.catAt"
+                },
+                "right": "stall"
+              },
+              "display": {
+                "x": 83,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 2
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "tracks",
+        "script": "q108.canal.tracks",
+        "assertion": {
+          "title": "鳥屋の餌場",
+          "place": "feeder",
+          "cast": [
+            {
+              "entity": "keeper",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q108.values.keeperAt"
+                },
+                "right": "feeder"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "cat",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q108.values.catAt"
+                },
+                "right": "feeder"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "hunting",
+        "script": "q108.canal.hunting",
+        "assertion": {
+          "title": "鳥屋の餌場",
+          "place": "feeder",
+          "cast": [
+            {
+              "entity": "keeper",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q108.values.keeperAt"
+                },
+                "right": "feeder"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "cat",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q108.values.catAt"
+                },
+                "right": "feeder"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "inspect",
+        "script": "q108.canal.inspect",
+        "assertion": {
+          "title": "魚屋の売り台",
+          "place": "stall",
+          "cast": [
+            {
+              "entity": "seller",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q108.values.sellerAt"
+                },
+                "right": "stall"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "keeper",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q108.values.keeperAt"
+                },
+                "right": "stall"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "agreement",
+        "script": "q108.canal.agreement",
+        "assertion": {
+          "title": "魚屋の売り台",
+          "place": "stall",
+          "cast": [
+            {
+              "entity": "seller",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q108.values.sellerAt"
+                },
+                "right": "stall"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "keeper",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q108.values.keeperAt"
+                },
+                "right": "stall"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "paid",
+        "script": "q108.canal.paid",
+        "assertion": {
+          "title": "魚屋の売り台",
+          "place": "stall",
+          "cast": [
+            {
+              "entity": "seller",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q108.values.sellerAt"
+                },
+                "right": "stall"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "keeper",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q108.values.keeperAt"
+                },
+                "right": "stall"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "repair",
+        "script": "q108.canal.repair",
+        "assertion": {
+          "title": "鳥屋の餌場",
+          "place": "feeder",
+          "cast": [
+            {
+              "entity": "keeper",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q108.values.keeperAt"
+                },
+                "right": "feeder"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "cat",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q108.values.catAt"
+                },
+                "right": "feeder"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "collect",
+        "script": "q108.canal.collect",
+        "assertion": {
+          "title": "鳥屋の餌場",
+          "place": "feeder",
+          "cast": [
+            {
+              "entity": "seller",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q108.values.sellerAt"
+                },
+                "right": "feeder"
+              },
+              "display": {
+                "x": 17,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "keeper",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q108.values.keeperAt"
+                },
+                "right": "feeder"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            },
+            {
+              "entity": "cat",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q108.values.catAt"
+                },
+                "right": "feeder"
+              },
+              "display": {
+                "x": 83,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 2
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "warehouse",
+        "script": "q108.canal.warehouse",
+        "assertion": {
+          "title": "魚屋の遠い倉庫",
+          "place": "warehouse",
+          "cast": [
+            {
+              "entity": "seller",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q108.values.sellerAt"
+                },
+                "right": "warehouse"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "cat",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q108.values.catAt"
+                },
+                "right": "warehouse"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "protection",
+        "script": "q108.canal.protection",
+        "assertion": {
+          "title": "鳥屋の餌場",
+          "place": "feeder",
+          "cast": [
+            {
+              "entity": "keeper",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q108.values.keeperAt"
+                },
+                "right": "feeder"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "cat",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q108.values.catAt"
+                },
+                "right": "feeder"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "stories.q108.values.partyAt",
+        "type": "enum",
+        "initial": "stall",
+        "values": [
+          "stall",
+          "feeder",
+          "warehouse",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q108.values.sellerAt",
+        "type": "enum",
+        "initial": "stall",
+        "values": [
+          "stall",
+          "feeder",
+          "warehouse",
+          "transit"
+        ],
+        "meaning": "seller の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q108.values.keeperAt",
+        "type": "enum",
+        "initial": "stall",
+        "values": [
+          "stall",
+          "feeder",
+          "warehouse",
+          "transit"
+        ],
+        "meaning": "keeper の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q108.values.catAt",
+        "type": "enum",
+        "initial": "stall",
+        "values": [
+          "stall",
+          "feeder",
+          "warehouse",
+          "transit"
+        ],
+        "meaning": "cat の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q108.values.fishRoute",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "fishRoute",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q108.values.ratWork",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "ratWork",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q108.values.shelfRaised",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "shelfRaised",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q108.values.caught",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "caught",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q108.values.caged",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "caged",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q108.values.paid",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "paid",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q108.values.enclosure",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "enclosure",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q108.values.declined",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "declined",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q108.values.custody",
+        "type": "enum",
+        "initial": "none",
+        "values": [
+          "none",
+          "fish",
+          "bird",
+          "shared"
+        ],
+        "meaning": "大猫を預かる店",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "魚が一尾、大猫の口に消えた。「捕まえてくれたら懸賞を出す。ここから遠い、うちの倉庫で飼うよ」と魚屋。隣の鳥屋が首を振る。「あの子が鼠を追ってくれるのに」。昔の共同仕入れでも、この二人は口を利かなくなった。",
+        "options": [
+          {
+            "id": "shelf",
+            "text": "棚を上げて餌場を見る",
+            "to": "hunting",
+            "action": "entry_shelf"
+          },
+          {
+            "id": "catch",
+            "text": "餌で猫を籠に誘う",
+            "to": "caught",
+            "action": "entry_catch"
+          },
+          {
+            "id": "bird",
+            "text": "鳥屋に預ける",
+            "to": "protection",
+            "action": "entry_bird"
+          },
+          {
+            "id": "decline",
+            "text": "懸賞を辞退する",
+            "to": "@decline",
+            "action": "entry_decline"
+          }
+        ]
+      },
+      {
+        "id": "caught",
+        "text": "籠が閉まるなり、二人が別々の名を同時に呼んだ。大猫はどちらにも返事をしない。魚屋は倉庫の鍵を出し、鳥屋は「せめて餌場を見てから決めて」と頼んだ。",
+        "options": [
+          {
+            "id": "fish",
+            "text": "魚屋の倉庫へ運ぶ",
+            "to": "warehouse",
+            "action": "caught_fish"
+          },
+          {
+            "id": "rats",
+            "text": "引き渡す前に餌場を見る",
+            "to": "tracks",
+            "action": "caught_rats"
+          },
+          {
+            "id": "bird",
+            "text": "鳥屋に預ける",
+            "to": "protection",
+            "action": "caught_bird"
+          },
+          {
+            "id": "decline",
+            "text": "籠を開けて懸賞を辞退",
+            "to": "@decline",
+            "action": "caught_decline"
+          }
+        ]
+      },
+      {
+        "id": "tracks",
+        "text": "籠の中の猫が耳を立てた。その鼻先を鼠が横切り、鳥の餌に潜り込む。鳥屋が空になった餌入れを見せた。",
+        "options": [
+          {
+            "id": "open",
+            "text": "籠を開けて見守る",
+            "to": "hunting",
+            "action": "tracks_open"
+          }
+        ]
+      },
+      {
+        "id": "hunting",
+        "text": {
+          "when": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q108.values.shelfRaised"
+            },
+            "right": true
+          },
+          "yes": "猫が棚に前脚を掛けても、もう魚には届かない。餌場に来た鼠を見つけると、鳥籠の下に飛び込んだ。",
+          "no": "籠から出た大猫が、たちまち鼠を餌場の外へ追った。鳥屋が餌入れを置き直す。猫が見張るあいだ、今度は鼠が近づかない。"
+        },
+        "options": [
+          {
+            "id": "cost",
+            "text": "両店で改修を相談する",
+            "to": "inspect",
+            "action": "hunting_cost"
+          },
+          {
+            "id": "bird",
+            "text": "鳥屋に保護を頼む",
+            "to": "protection",
+            "action": "hunting_bird"
+          }
+        ]
+      },
+      {
+        "id": "inspect",
+        "text": {
+          "when": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q108.values.shelfRaised"
+            },
+            "right": true
+          },
+          "yes": "売り台の下についた足跡は、持ち上げた棚の手前で途切れている。魚屋はこの高さで棚を固定することにした。",
+          "no": "低い棚には猫の濡れた足跡が続き、魚の頭が一つ落ちていた。魚屋が棚板を持ち上げると、売り台まで続いていた足掛かりが途切れた。"
+        },
+        "options": [
+          {
+            "id": "check",
+            "text": "棚と餌場の分担を決める",
+            "to": "agreement",
+            "action": "inspect_check"
+          }
+        ]
+      },
+      {
+        "id": "agreement",
+        "text": "魚屋が棚を受け持ち、鳥屋が餌場を直す。隊の負担は道具代三十。魚屋は倉庫の鍵もまだ持っている。",
+        "options": [
+          {
+            "id": "build",
+            "text": "30Gで改修する",
+            "to": "paid",
+            "action": "agreement_build",
+            "when": {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.fishRoute"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.ratWork"
+                  },
+                  "right": true
+                }
+              ]
+            }
+          },
+          {
+            "id": "warehouse",
+            "text": "倉庫への引き渡しにする",
+            "to": "collect",
+            "action": "agreement_warehouse"
+          },
+          {
+            "id": "bird",
+            "text": "鳥屋の保護に任せる",
+            "to": "protection",
+            "action": "agreement_bird"
+          },
+          {
+            "id": "decline",
+            "text": "懸賞を辞退する",
+            "to": "@decline",
+            "action": "agreement_decline"
+          }
+        ]
+      },
+      {
+        "id": "paid",
+        "text": "道具代を渡すと、魚屋は棚板を高い位置にしっかり留めた。魚を並べ直す音を背に、鳥屋が隣の餌場へ向かう。",
+        "options": [
+          {
+            "id": "feeder",
+            "text": "鳥屋と餌場を直しに行く",
+            "to": "repair",
+            "action": "paid_feeder"
+          }
+        ]
+      },
+      {
+        "id": "repair",
+        "text": "鳥屋が餌入れを据え直した。餌が棚の下にこぼれず、猫が鼠を追う場所も空いている。軒越しに魚屋と鳥屋が、どちらも昼寝の場所を一つずつ空けておくと約束した。",
+        "options": [
+          {
+            "id": "share",
+            "text": "両店で猫を見守る",
+            "to": "@shared",
+            "action": "repair_share"
+          }
+        ]
+      },
+      {
+        "id": "collect",
+        "text": "魚屋は倉庫の鍵を持って猫を迎えに来た。鳥屋には鼠対策が残る。魚屋が連れて行く先を、ここでもう一度確かめた。",
+        "options": [
+          {
+            "id": "carry",
+            "text": "魚屋と猫を倉庫へ",
+            "to": "warehouse",
+            "action": "collect_carry"
+          }
+        ]
+      },
+      {
+        "id": "warehouse",
+        "text": "魚屋が倉庫の戸を開けた。売り台からは遠く、ここから鳥屋の餌場へも通えない。魚屋は荷の間に猫の居場所を空けて待った。",
+        "options": [
+          {
+            "id": "hand",
+            "text": "魚屋に引き渡す",
+            "to": "@fish",
+            "action": "warehouse_hand"
+          }
+        ]
+      },
+      {
+        "id": "protection",
+        "text": {
+          "when": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q108.values.caged"
+            },
+            "right": true
+          },
+          "yes": "鳥屋が籠の戸に手を掛けた。「餌代はうちが持つ」。猫は勝手知った餌場の匂いをかいでいる。",
+          "no": "鳥屋が猫のために餌を用意した。「餌代はうちが持つよ」。魚屋との仕入れの話は、まだ折り合っていない。"
+        },
+        "options": [
+          {
+            "id": "hand",
+            "text": "鳥屋に引き渡す",
+            "to": "@bird",
+            "action": "protection_hand"
+          }
+        ]
+      }
+    ],
+    "progression": "捕獲で猫を動かした後に別の店の被害が現れ、引渡しで終えるか設備へ戻るかを選ぶ。",
+    "flowVersion": 2,
+    "entryScript": "q108.canal.visit",
+    "choiceContract": {
+      "progression": "捕獲で猫を動かした後に別の店の被害が現れ、引渡しで終えるか設備へ戻るかを選ぶ。",
+      "resources": "明記した資材・金のみ消費。戦闘付き作業は勝利まで消費しない",
+      "residue": "完了後の結末・各場面で得た合意と行為を保持"
+    },
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.1",
+      "source": "https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4",
+      "adapter": "adv-story-state/1",
+      "scope": "quest-episode"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "preserveAcceptedRoute": true,
+    "currentStoryScriptPrefix": "q108.canal.",
+    "interruptionEntries": [
+      "q108.visit",
+      "q108.flow.visit",
+      "q108.canal.visit"
+    ],
+    "interruptionRoutes": [
+      {
+        "from": "q108.scene.entry",
+        "action": "shared",
+        "option": "shared_supplies",
+        "shortage": "q108.scene.entry.shared.shortage",
+        "resume": "q108.scene.entry.shared.resume",
+        "cost": {
+          "gold": 30
+        }
+      },
+      {
+        "from": "q108.flow.agreement",
+        "action": "build",
+        "option": "build_supplies",
+        "shortage": "q108.flow.agreement.build.shortage",
+        "resume": "q108.flow.agreement.build.resume",
+        "cost": {
+          "gold": 30
+        }
+      },
+      {
+        "from": "q108.canal.agreement",
+        "action": "build",
+        "option": "build_supplies",
+        "shortage": "q108.canal.agreement.build.shortage",
+        "resume": "q108.canal.agreement.build.resume",
+        "cost": {
+          "gold": 30
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "q108.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q108.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "魚屋と鳥屋が違う名前で猫を呼んだ。猫はどちらも見ずに眠る。魚屋は遠い倉庫へ移すと言い、鳥屋は鼠を追う働きを挙げた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fish",
+              "text": "魚を盗む経路を見る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q108.fish"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q108.fish",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "猫は低い棚から魚へ届いている。棚を上げれば経路を切れそうだ。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q108.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "rat",
+              "text": "鳥屋の鼠対策を見る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "eq",
+                      "left": {
+                        "ref": "flags.quest.q108.rat"
+                      },
+                      "right": true
+                    }
+                  }
+                ]
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q108.rat",
+                  "value": true
+                },
+                {
+                  "op": "say",
+                  "text": "猫が鼠を追うと、籠の餌がこぼれなくなった。働きも実在する。"
+                },
+                {
+                  "op": "jump",
+                  "script": "q108.scene.entry"
+                }
+              ]
+            },
+            {
+              "id": "shared",
+              "text": "両店と棚・餌場を改修する（30G）",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q108.fish"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q108.rat"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 30
+                  }
+                ]
+              },
+              "requirement": "先に関係者との確認が必要・G 30消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -30
+                },
+                {
+                  "op": "jump",
+                  "script": "q108.end.shared"
+                }
+              ]
+            },
+            {
+              "id": "fish_end",
+              "text": "魚屋へ渡し、遠い倉庫へ移す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.end.fish"
+                }
+              ]
+            },
+            {
+              "id": "bird_end",
+              "text": "鳥屋の保護に任せる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.end.bird"
+                }
+              ]
+            },
+            {
+              "id": "shared_supplies",
+              "text": "30Gを用意しに戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q108.fish"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q108.rat"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "gte",
+                      "left": {
+                        "ref": "gold"
+                      },
+                      "right": 30
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q108.fish"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.quest.q108.rat"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "gte",
+                      "left": {
+                        "ref": "gold"
+                      },
+                      "right": 30
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.scene.entry.shared.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q108.end.shared": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q108.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "両店は被害を減らす設備と餌代を分担した。猫の昼寝場所が二つになり、配達人の声だけで起きる癖は変わらなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q108",
+              "outcome": "shared"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q108.end.fish": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q108.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "魚の被害は止まった。鳥屋には鼠対策が残った。猫は倉庫でも魚屋の付けた名に返事をしなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q108",
+              "outcome": "fish"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q108.end.bird": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q108.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "鳥屋は餌代を引き受け、魚屋は仕入れの相談を断った。昔の喧嘩まで猫に解決させることはできなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q108",
+              "outcome": "bird"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q108.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q108"
+          },
+          "cases": [
+            {
+              "equals": "q108.scene.entry.shared.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.scene.entry.shared.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q108.flow.agreement.build.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.flow.agreement.build.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q108.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q108.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "shared",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "両店は被害を減らす設備と餌代を分担した。猫の昼寝場所が二つになり、配達人の声だけで起きる癖は変わらなかった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "fish",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "魚の被害は止まった。鳥屋には鼠対策が残った。猫は倉庫でも魚屋の付けた名に返事をしなかった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "bird",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "鳥屋は餌代を引き受け、魚屋は仕入れの相談を断った。昔の喧嘩まで猫に解決させることはできなかった。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "flags.quest.q108.node"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q108.scene.entry"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q108.scene.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q108.flow.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q108.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "魚屋の棚から大猫が魚をくわえた。鳥屋は捕まえるより追い払わないでほしいと頼む。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "shelf",
+              "text": "魚の棚を高くして盗み道を塞ぐ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.flow.q108.shelf",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q108.flow.birds"
+                }
+              ]
+            },
+            {
+              "id": "catch",
+              "text": "猫を籠へ入れて捕獲する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.flow.caught"
+                }
+              ]
+            },
+            {
+              "id": "bird",
+              "text": "鳥屋の保護に任せる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.flow.end.bird"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q108.flow.caught": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q108.node",
+          "value": "caught"
+        },
+        {
+          "op": "say",
+          "text": "捕獲は済んだ。魚屋は遠い倉庫へ運ぼうとし、鳥屋は籠の餌を鼠に荒らされたと駆けて来る。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fish",
+              "text": "捕獲依頼として精算し、猫を倉庫へ渡す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.flow.end.fish"
+                }
+              ]
+            },
+            {
+              "id": "rats",
+              "text": "引渡しを止め、鳥屋の餌場を見に行く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.flow.birds"
+                }
+              ]
+            },
+            {
+              "id": "bird",
+              "text": "猫を鳥屋の保護へ渡す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.flow.end.bird"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q108.flow.birds": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q108.node",
+          "value": "birds"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.flow.q108.shelf"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "魚は棚の上で守られた。猫は鳥屋の鼠を追い、鳥の餌を守っている。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "猫を捕まえた間に鼠が餌場へ来た。魚への侵入を棚で止められれば、猫の仕事を残せる。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "cost",
+              "text": "両店へ棚と餌場の改修・費用分担を相談する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.flow.agreement"
+                }
+              ]
+            },
+            {
+              "id": "bird",
+              "text": "改修を組まず、鳥屋の保護に任せる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.flow.end.bird"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q108.flow.agreement": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.flow.q108.node",
+          "value": "agreement"
+        },
+        {
+          "op": "say",
+          "text": "両店は改修に同意した。魚屋は棚、鳥屋は餌場を管理し、道具代30Gを今回の隊が負担する。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "build",
+              "text": "30Gを出し、棚と餌場を改修して猫を放す",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "gte",
+                    "left": {
+                      "ref": "gold"
+                    },
+                    "right": 30
+                  }
+                ]
+              },
+              "requirement": "G 30消費",
+              "commands": [
+                {
+                  "op": "gold.change",
+                  "amount": -30
+                },
+                {
+                  "op": "jump",
+                  "script": "q108.flow.end.shared"
+                }
+              ]
+            },
+            {
+              "id": "warehouse",
+              "text": "費用を出さず、魚屋の倉庫へ渡す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.flow.end.fish"
+                }
+              ]
+            },
+            {
+              "id": "build_supplies",
+              "text": "30Gを用意しに戻る",
+              "condition": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 30
+                }
+              },
+              "visibleWhen": {
+                "op": "not",
+                "arg": {
+                  "op": "gte",
+                  "left": {
+                    "ref": "gold"
+                  },
+                  "right": 30
+                }
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.flow.agreement.build.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q108.flow.end.shared": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q108.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "両店は被害を減らす設備と餌代を分担した。猫の昼寝場所が二つになり、配達人の声だけで起きる癖は変わらなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q108",
+              "outcome": "shared"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q108.flow.end.fish": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q108.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "魚の被害は止まった。鳥屋には鼠対策が残った。猫は倉庫でも魚屋の付けた名に返事をしなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q108",
+              "outcome": "fish"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q108.flow.end.bird": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q108.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "鳥屋は餌代を引き受け、魚屋は仕入れの相談を断った。昔の喧嘩まで猫に解決させることはできなかった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q108",
+              "outcome": "bird"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q108.flow.visit": {
+      "commands": [
+        {
+          "op": "switch",
+          "value": {
+            "ref": "flags.questResume.q108"
+          },
+          "cases": [
+            {
+              "equals": "q108.scene.entry.shared.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.scene.entry.shared.resume"
+                }
+              ]
+            },
+            {
+              "equals": "q108.flow.agreement.build.resume",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.flow.agreement.build.resume"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q108.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q108.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "shared",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "両店は被害を減らす設備と餌代を分担した。猫の昼寝場所が二つになり、配達人の声だけで起きる癖は変わらなかった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "fish",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "魚の被害は止まった。鳥屋には鼠対策が残った。猫は倉庫でも魚屋の付けた名に返事をしなかった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "bird",
+                      "commands": [
+                        {
+                          "op": "say",
+                          "text": "鳥屋は餌代を引き受け、魚屋は仕入れの相談を断った。昔の喧嘩まで猫に解決させることはできなかった。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "flags.legacyQuestRoutes.q108"
+                    },
+                    "right": true
+                  },
+                  "then": [
+                    {
+                      "op": "jump",
+                      "script": "q108.visit"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "flags.flow.q108.node"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q108.flow.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "caught",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q108.flow.caught"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "birds",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q108.flow.birds"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "agreement",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q108.flow.agreement"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
+                        {
+                          "op": "jump",
+                          "script": "q108.flow.entry"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q108.scene.entry.shared.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q108",
+          "value": "q108.scene.entry.shared.resume"
+        },
+        {
+          "op": "say",
+          "text": "30Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q108.scene.entry.shared.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q108",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "30Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q108.scene.entry"
+        }
+      ]
+    },
+    "q108.flow.agreement.build.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q108",
+          "value": "q108.flow.agreement.build.resume"
+        },
+        {
+          "op": "say",
+          "text": "30Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q108.flow.agreement.build.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q108",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "30Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q108.flow.agreement"
+        }
+      ]
+    },
+    "q108.canal.entry": {
+      "storyQuest": "q108",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q108",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "魚が一尾、大猫の口に消えた。「捕まえてくれたら懸賞を出す。ここから遠い、うちの倉庫で飼うよ」と魚屋。隣の鳥屋が首を振る。「あの子が鼠を追ってくれるのに」。昔の共同仕入れでも、この二人は口を利かなくなった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "shelf",
+              "text": "棚を上げて餌場を見る",
+              "storyAction": {
+                "quest": "q108",
+                "action": "entry_shelf"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q108",
+                  "action": "entry_shelf"
+                }
+              ]
+            },
+            {
+              "id": "catch",
+              "text": "餌で猫を籠に誘う",
+              "storyAction": {
+                "quest": "q108",
+                "action": "entry_catch"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q108",
+                  "action": "entry_catch"
+                },
+                {
+                  "op": "jump",
+                  "script": "q108.canal.caught"
+                }
+              ]
+            },
+            {
+              "id": "bird",
+              "text": "鳥屋に預ける",
+              "storyAction": {
+                "quest": "q108",
+                "action": "entry_bird"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q108",
+                  "action": "entry_bird"
+                }
+              ]
+            },
+            {
+              "id": "decline",
+              "text": "懸賞を辞退する",
+              "storyAction": {
+                "quest": "q108",
+                "action": "entry_decline"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q108",
+                  "action": "entry_decline"
+                },
+                {
+                  "op": "jump",
+                  "script": "q108.canal.end.decline"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q108.canal.caught": {
+      "storyQuest": "q108",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q108",
+          "scene": "caught"
+        },
+        {
+          "op": "narrate",
+          "text": "籠が閉まるなり、二人が別々の名を同時に呼んだ。大猫はどちらにも返事をしない。魚屋は倉庫の鍵を出し、鳥屋は「せめて餌場を見てから決めて」と頼んだ。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fish",
+              "text": "魚屋の倉庫へ運ぶ",
+              "storyAction": {
+                "quest": "q108",
+                "action": "caught_fish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q108",
+                  "action": "caught_fish"
+                }
+              ]
+            },
+            {
+              "id": "rats",
+              "text": "引き渡す前に餌場を見る",
+              "storyAction": {
+                "quest": "q108",
+                "action": "caught_rats"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q108",
+                  "action": "caught_rats"
+                }
+              ]
+            },
+            {
+              "id": "bird",
+              "text": "鳥屋に預ける",
+              "storyAction": {
+                "quest": "q108",
+                "action": "caught_bird"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q108",
+                  "action": "caught_bird"
+                }
+              ]
+            },
+            {
+              "id": "decline",
+              "text": "籠を開けて懸賞を辞退",
+              "storyAction": {
+                "quest": "q108",
+                "action": "caught_decline"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q108",
+                  "action": "caught_decline"
+                },
+                {
+                  "op": "jump",
+                  "script": "q108.canal.end.decline"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q108.canal.tracks": {
+      "storyQuest": "q108",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q108",
+          "scene": "tracks"
+        },
+        {
+          "op": "narrate",
+          "text": "籠の中の猫が耳を立てた。その鼻先を鼠が横切り、鳥の餌に潜り込む。鳥屋が空になった餌入れを見せた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "open",
+              "text": "籠を開けて見守る",
+              "storyAction": {
+                "quest": "q108",
+                "action": "tracks_open"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q108",
+                  "action": "tracks_open"
+                },
+                {
+                  "op": "jump",
+                  "script": "q108.canal.hunting"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q108.canal.hunting": {
+      "storyQuest": "q108",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q108",
+          "scene": "hunting"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q108.values.shelfRaised"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "猫が棚に前脚を掛けても、もう魚には届かない。餌場に来た鼠を見つけると、鳥籠の下に飛び込んだ。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "籠から出た大猫が、たちまち鼠を餌場の外へ追った。鳥屋が餌入れを置き直す。猫が見張るあいだ、今度は鼠が近づかない。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "cost",
+              "text": "両店で改修を相談する",
+              "storyAction": {
+                "quest": "q108",
+                "action": "hunting_cost"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q108",
+                  "action": "hunting_cost"
+                }
+              ]
+            },
+            {
+              "id": "bird",
+              "text": "鳥屋に保護を頼む",
+              "storyAction": {
+                "quest": "q108",
+                "action": "hunting_bird"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q108",
+                  "action": "hunting_bird"
+                },
+                {
+                  "op": "jump",
+                  "script": "q108.canal.protection"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q108.canal.inspect": {
+      "storyQuest": "q108",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q108",
+          "scene": "inspect"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q108.values.shelfRaised"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "売り台の下についた足跡は、持ち上げた棚の手前で途切れている。魚屋はこの高さで棚を固定することにした。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "低い棚には猫の濡れた足跡が続き、魚の頭が一つ落ちていた。魚屋が棚板を持ち上げると、売り台まで続いていた足掛かりが途切れた。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "check",
+              "text": "棚と餌場の分担を決める",
+              "storyAction": {
+                "quest": "q108",
+                "action": "inspect_check"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q108",
+                  "action": "inspect_check"
+                },
+                {
+                  "op": "jump",
+                  "script": "q108.canal.agreement"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q108.canal.agreement": {
+      "storyQuest": "q108",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q108",
+          "scene": "agreement"
+        },
+        {
+          "op": "narrate",
+          "text": "魚屋が棚を受け持ち、鳥屋が餌場を直す。隊の負担は道具代三十。魚屋は倉庫の鍵もまだ持っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "build",
+              "text": "30Gで改修する",
+              "storyAction": {
+                "quest": "q108",
+                "action": "agreement_build"
+              },
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q108.values.fishRoute"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q108.values.ratWork"
+                    },
+                    "right": true
+                  }
+                ]
+              },
+              "requirement": "30Gを支払う。",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q108",
+                  "action": "agreement_build"
+                },
+                {
+                  "op": "jump",
+                  "script": "q108.canal.paid"
+                }
+              ]
+            },
+            {
+              "id": "warehouse",
+              "text": "倉庫への引き渡しにする",
+              "storyAction": {
+                "quest": "q108",
+                "action": "agreement_warehouse"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q108",
+                  "action": "agreement_warehouse"
+                }
+              ]
+            },
+            {
+              "id": "bird",
+              "text": "鳥屋の保護に任せる",
+              "storyAction": {
+                "quest": "q108",
+                "action": "agreement_bird"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q108",
+                  "action": "agreement_bird"
+                }
+              ]
+            },
+            {
+              "id": "decline",
+              "text": "懸賞を辞退する",
+              "storyAction": {
+                "quest": "q108",
+                "action": "agreement_decline"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q108",
+                  "action": "agreement_decline"
+                },
+                {
+                  "op": "jump",
+                  "script": "q108.canal.end.decline"
+                }
+              ]
+            },
+            {
+              "id": "build_supplies",
+              "text": "30Gを用意しに戻る",
+              "condition": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q108.values.fishRoute"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q108.values.ratWork"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "gte",
+                      "left": {
+                        "ref": "gold"
+                      },
+                      "right": 30
+                    }
+                  }
+                ]
+              },
+              "visibleWhen": {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q108.values.fishRoute"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q108.values.ratWork"
+                    },
+                    "right": true
+                  },
+                  {
+                    "op": "not",
+                    "arg": {
+                      "op": "gte",
+                      "left": {
+                        "ref": "gold"
+                      },
+                      "right": 30
+                    }
+                  }
+                ]
+              },
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q108.canal.agreement.build.shortage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q108.canal.paid": {
+      "storyQuest": "q108",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q108",
+          "scene": "paid"
+        },
+        {
+          "op": "narrate",
+          "text": "道具代を渡すと、魚屋は棚板を高い位置にしっかり留めた。魚を並べ直す音を背に、鳥屋が隣の餌場へ向かう。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "feeder",
+              "text": "鳥屋と餌場を直しに行く",
+              "storyAction": {
+                "quest": "q108",
+                "action": "paid_feeder"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q108",
+                  "action": "paid_feeder"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q108.canal.repair": {
+      "storyQuest": "q108",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q108",
+          "scene": "repair"
+        },
+        {
+          "op": "narrate",
+          "text": "鳥屋が餌入れを据え直した。餌が棚の下にこぼれず、猫が鼠を追う場所も空いている。軒越しに魚屋と鳥屋が、どちらも昼寝の場所を一つずつ空けておくと約束した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "share",
+              "text": "両店で猫を見守る",
+              "storyAction": {
+                "quest": "q108",
+                "action": "repair_share"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q108",
+                  "action": "repair_share"
+                },
+                {
+                  "op": "jump",
+                  "script": "q108.canal.end.shared"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q108.canal.collect": {
+      "storyQuest": "q108",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q108",
+          "scene": "collect"
+        },
+        {
+          "op": "narrate",
+          "text": "魚屋は倉庫の鍵を持って猫を迎えに来た。鳥屋には鼠対策が残る。魚屋が連れて行く先を、ここでもう一度確かめた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "carry",
+              "text": "魚屋と猫を倉庫へ",
+              "storyAction": {
+                "quest": "q108",
+                "action": "collect_carry"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q108",
+                  "action": "collect_carry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q108.canal.warehouse": {
+      "storyQuest": "q108",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q108",
+          "scene": "warehouse"
+        },
+        {
+          "op": "narrate",
+          "text": "魚屋が倉庫の戸を開けた。売り台からは遠く、ここから鳥屋の餌場へも通えない。魚屋は荷の間に猫の居場所を空けて待った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hand",
+              "text": "魚屋に引き渡す",
+              "storyAction": {
+                "quest": "q108",
+                "action": "warehouse_hand"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q108",
+                  "action": "warehouse_hand"
+                },
+                {
+                  "op": "jump",
+                  "script": "q108.canal.end.fish"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q108.canal.protection": {
+      "storyQuest": "q108",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q108",
+          "scene": "protection"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q108.values.caged"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "鳥屋が籠の戸に手を掛けた。「餌代はうちが持つ」。猫は勝手知った餌場の匂いをかいでいる。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "鳥屋が猫のために餌を用意した。「餌代はうちが持つよ」。魚屋との仕入れの話は、まだ折り合っていない。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hand",
+              "text": "鳥屋に引き渡す",
+              "storyAction": {
+                "quest": "q108",
+                "action": "protection_hand"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q108",
+                  "action": "protection_hand"
+                },
+                {
+                  "op": "jump",
+                  "script": "q108.canal.end.bird"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q108.canal.end.shared": {
+      "commands": [
+        {
+          "op": "jump",
+          "script": "q108.end.shared"
+        }
+      ]
+    },
+    "q108.canal.end.fish": {
+      "commands": [
+        {
+          "op": "jump",
+          "script": "q108.end.fish"
+        }
+      ]
+    },
+    "q108.canal.end.bird": {
+      "commands": [
+        {
+          "op": "jump",
+          "script": "q108.end.bird"
+        }
+      ]
+    },
+    "q108.canal.end.decline": {
+      "commands": [
+        {
+          "op": "quest.complete",
+          "quest": "q108",
+          "outcome": "decline"
+        },
+        {
+          "op": "add",
+          "target": "vars.decline",
+          "value": 1
+        },
+        {
+          "op": "narrate",
+          "text": "どちらにも猫を引き渡さず、隊は懸賞を辞退した。"
+        }
+      ]
+    },
+    "q108.canal.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q108"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q108.flow.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.questResume.q108"
+              },
+              "cases": [
+                {
+                  "equals": "q108.canal.agreement.build.resume",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q108.canal.agreement.build.resume"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "if",
+                  "condition": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "quests.q108.stage"
+                    },
+                    "right": "completed"
+                  },
+                  "then": [
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "quests.q108.outcome"
+                      },
+                      "cases": [
+                        {
+                          "equals": "shared",
+                          "commands": [
+                            {
+                              "op": "narrate",
+                              "text": "両店は被害を減らす設備と餌代を分担した。猫の昼寝場所が二つになり、配達人の声だけで起きる癖は変わらなかった。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "fish",
+                          "commands": [
+                            {
+                              "op": "narrate",
+                              "text": "魚の被害は止まった。鳥屋には鼠対策が残った。猫は倉庫でも魚屋の付けた名に返事をしなかった。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "bird",
+                          "commands": [
+                            {
+                              "op": "narrate",
+                              "text": "鳥屋は餌代を引き受け、魚屋は仕入れの相談を断った。昔の喧嘩まで猫に解決させることはできなかった。"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "decline",
+                          "commands": [
+                            {
+                              "op": "narrate",
+                              "text": "どちらにも猫を引き渡さず、隊は懸賞を辞退した。"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": []
+                    }
+                  ],
+                  "else": [
+                    {
+                      "op": "story.init",
+                      "quest": "q108"
+                    },
+                    {
+                      "op": "switch",
+                      "value": {
+                        "ref": "stories.q108.scene"
+                      },
+                      "cases": [
+                        {
+                          "equals": "entry",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q108.canal.entry"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "caught",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q108.canal.caught"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "tracks",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q108.canal.tracks"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "hunting",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q108.canal.hunting"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "inspect",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q108.canal.inspect"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "agreement",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q108.canal.agreement"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "paid",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q108.canal.paid"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "repair",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q108.canal.repair"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "collect",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q108.canal.collect"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "warehouse",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q108.canal.warehouse"
+                            }
+                          ]
+                        },
+                        {
+                          "equals": "protection",
+                          "commands": [
+                            {
+                              "op": "jump",
+                              "script": "q108.canal.protection"
+                            }
+                          ]
+                        }
+                      ],
+                      "default": [
+                        {
+                          "op": "jump",
+                          "script": "q108.canal.entry"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q108.canal.agreement.build.shortage": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q108",
+          "value": "q108.canal.agreement.build.resume"
+        },
+        {
+          "op": "say",
+          "text": "30Gが足りない。この作業はまだ行っていない。必要な品と費用をそろえてから、ここで続けよう。"
+        }
+      ]
+    },
+    "q108.canal.agreement.build.resume": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.questResume.q108",
+          "value": null
+        },
+        {
+          "op": "say",
+          "text": "30Gを使う作業の続きだ。準備を確かめよう。"
+        },
+        {
+          "op": "jump",
+          "script": "q108.canal.agreement"
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "stall": "魚屋の売り台",
+      "feeder": "鳥屋の餌場",
+      "warehouse": "魚屋の遠い倉庫",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "stall",
+        "feeder"
+      ],
+      [
+        "transit",
+        "stall"
+      ],
+      [
+        "transit",
+        "feeder"
+      ],
+      [
+        "transit",
+        "warehouse"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "stall",
+        "values": [
+          "stall",
+          "feeder",
+          "warehouse",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "sellerAt": {
+        "type": "enum",
+        "initial": "stall",
+        "values": [
+          "stall",
+          "feeder",
+          "warehouse",
+          "transit"
+        ],
+        "meaning": "seller の所在または保持者"
+      },
+      "keeperAt": {
+        "type": "enum",
+        "initial": "stall",
+        "values": [
+          "stall",
+          "feeder",
+          "warehouse",
+          "transit"
+        ],
+        "meaning": "keeper の所在または保持者"
+      },
+      "catAt": {
+        "type": "enum",
+        "initial": "stall",
+        "values": [
+          "stall",
+          "feeder",
+          "warehouse",
+          "transit"
+        ],
+        "meaning": "cat の所在または保持者"
+      },
+      "fishRoute": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "fishRoute"
+      },
+      "ratWork": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "ratWork"
+      },
+      "shelfRaised": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "shelfRaised"
+      },
+      "caught": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "caught"
+      },
+      "caged": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "caged"
+      },
+      "paid": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "paid"
+      },
+      "enclosure": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "enclosure"
+      },
+      "declined": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "declined"
+      },
+      "custody": {
+        "type": "enum",
+        "initial": "none",
+        "values": [
+          "none",
+          "fish",
+          "bird",
+          "shared"
+        ],
+        "meaning": "大猫を預かる店"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "seller": {
+        "holder": "sellerAt",
+        "kind": "person",
+        "character": "e2_q108_seller"
+      },
+      "keeper": {
+        "holder": "keeperAt",
+        "kind": "person",
+        "character": "e2_q108_keeper"
+      },
+      "cat": {
+        "holder": "catAt",
+        "kind": "person",
+        "character": "e2_q108_cat"
+      }
+    },
+    "propositions": {},
+    "initialKnowledge": {},
+    "invariants": [
+      {
+        "id": "paidAfterObservation",
+        "condition": {
+          "op": "or",
+          "args": [
+            {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q108.values.paid"
+                },
+                "right": true
+              }
+            },
+            {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.fishRoute"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.ratWork"
+                  },
+                  "right": true
+                }
+              ]
+            }
+          ]
+        },
+        "message": "両店で実際に観察してから改修費を支払う。"
+      },
+      {
+        "id": "completedRepairs",
+        "condition": {
+          "op": "or",
+          "args": [
+            {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q108.values.enclosure"
+                },
+                "right": true
+              }
+            },
+            {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.shelfRaised"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q108.values.paid"
+                  },
+                  "right": true
+                }
+              ]
+            }
+          ]
+        },
+        "message": "両店の改修には支払いと棚の工事が必要。"
+      }
+    ],
+    "scenes": {
+      "entry": {
+        "title": "魚屋の売り台",
+        "place": "stall",
+        "cast": [
+          {
+            "entity": "seller",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.sellerAt"
+              },
+              "right": "stall"
+            },
+            "display": {
+              "x": 17,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "keeper",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.keeperAt"
+              },
+              "right": "stall"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          },
+          {
+            "entity": "cat",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.catAt"
+              },
+              "right": "stall"
+            },
+            "display": {
+              "x": 83,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 2
+            }
+          }
+        ],
+        "requires": true
+      },
+      "caught": {
+        "title": "魚屋の売り台",
+        "place": "stall",
+        "cast": [
+          {
+            "entity": "seller",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.sellerAt"
+              },
+              "right": "stall"
+            },
+            "display": {
+              "x": 17,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "keeper",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.keeperAt"
+              },
+              "right": "stall"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          },
+          {
+            "entity": "cat",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.catAt"
+              },
+              "right": "stall"
+            },
+            "display": {
+              "x": 83,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 2
+            }
+          }
+        ],
+        "requires": true
+      },
+      "tracks": {
+        "title": "鳥屋の餌場",
+        "place": "feeder",
+        "cast": [
+          {
+            "entity": "keeper",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.keeperAt"
+              },
+              "right": "feeder"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "cat",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.catAt"
+              },
+              "right": "feeder"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "hunting": {
+        "title": "鳥屋の餌場",
+        "place": "feeder",
+        "cast": [
+          {
+            "entity": "keeper",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.keeperAt"
+              },
+              "right": "feeder"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "cat",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.catAt"
+              },
+              "right": "feeder"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "inspect": {
+        "title": "魚屋の売り台",
+        "place": "stall",
+        "cast": [
+          {
+            "entity": "seller",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.sellerAt"
+              },
+              "right": "stall"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "keeper",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.keeperAt"
+              },
+              "right": "stall"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "agreement": {
+        "title": "魚屋の売り台",
+        "place": "stall",
+        "cast": [
+          {
+            "entity": "seller",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.sellerAt"
+              },
+              "right": "stall"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "keeper",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.keeperAt"
+              },
+              "right": "stall"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "paid": {
+        "title": "魚屋の売り台",
+        "place": "stall",
+        "cast": [
+          {
+            "entity": "seller",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.sellerAt"
+              },
+              "right": "stall"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "keeper",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.keeperAt"
+              },
+              "right": "stall"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "repair": {
+        "title": "鳥屋の餌場",
+        "place": "feeder",
+        "cast": [
+          {
+            "entity": "keeper",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.keeperAt"
+              },
+              "right": "feeder"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "cat",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.catAt"
+              },
+              "right": "feeder"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "collect": {
+        "title": "鳥屋の餌場",
+        "place": "feeder",
+        "cast": [
+          {
+            "entity": "seller",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.sellerAt"
+              },
+              "right": "feeder"
+            },
+            "display": {
+              "x": 17,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "keeper",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.keeperAt"
+              },
+              "right": "feeder"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          },
+          {
+            "entity": "cat",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.catAt"
+              },
+              "right": "feeder"
+            },
+            "display": {
+              "x": 83,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 2
+            }
+          }
+        ],
+        "requires": true
+      },
+      "warehouse": {
+        "title": "魚屋の遠い倉庫",
+        "place": "warehouse",
+        "cast": [
+          {
+            "entity": "seller",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.sellerAt"
+              },
+              "right": "warehouse"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "cat",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.catAt"
+              },
+              "right": "warehouse"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "protection": {
+        "title": "鳥屋の餌場",
+        "place": "feeder",
+        "cast": [
+          {
+            "entity": "keeper",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.keeperAt"
+              },
+              "right": "feeder"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "cat",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.catAt"
+              },
+              "right": "feeder"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_shelf": {
+        "from": [
+          "entry"
+        ],
+        "to": "hunting",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "keeper",
+              "cat"
+            ],
+            "path": [
+              "transit",
+              "feeder"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "feeder",
+          "companions": [
+            "keeper",
+            "cat"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "fishRoute",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "shelfRaised",
+            "value": true
+          }
+        ]
+      },
+      "entry_catch": {
+        "from": [
+          "entry"
+        ],
+        "to": "caught",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "caught",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "caged",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "entry_bird": {
+        "from": [
+          "entry"
+        ],
+        "to": "protection",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "keeper",
+              "cat"
+            ],
+            "path": [
+              "transit",
+              "feeder"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "feeder",
+          "companions": [
+            "keeper",
+            "cat"
+          ]
+        },
+        "depart": []
+      },
+      "entry_decline": {
+        "from": [
+          "entry"
+        ],
+        "ending": "decline",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "declined",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "caught_fish": {
+        "from": [
+          "caught"
+        ],
+        "to": "warehouse",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "seller",
+              "cat"
+            ],
+            "path": [
+              "transit",
+              "warehouse"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "warehouse",
+          "companions": [
+            "seller",
+            "cat"
+          ]
+        },
+        "depart": [
+          {
+            "op": "move",
+            "entities": [
+              "keeper"
+            ],
+            "path": [
+              "stall",
+              "feeder"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ]
+      },
+      "caught_rats": {
+        "from": [
+          "caught"
+        ],
+        "to": "tracks",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "keeper",
+              "cat"
+            ],
+            "path": [
+              "transit",
+              "feeder"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "feeder",
+          "companions": [
+            "keeper",
+            "cat"
+          ]
+        },
+        "depart": []
+      },
+      "caught_bird": {
+        "from": [
+          "caught"
+        ],
+        "to": "protection",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "keeper",
+              "cat"
+            ],
+            "path": [
+              "transit",
+              "feeder"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "feeder",
+          "companions": [
+            "keeper",
+            "cat"
+          ]
+        },
+        "depart": []
+      },
+      "caught_decline": {
+        "from": [
+          "caught"
+        ],
+        "ending": "decline",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "caged",
+            "value": false
+          },
+          {
+            "op": "set",
+            "key": "declined",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "tracks_open": {
+        "from": [
+          "tracks"
+        ],
+        "to": "hunting",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "caged",
+            "value": false
+          }
+        ],
+        "once": true
+      },
+      "hunting_cost": {
+        "from": [
+          "hunting"
+        ],
+        "to": "inspect",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "keeper"
+            ],
+            "path": [
+              "transit",
+              "stall"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "stall",
+          "companions": [
+            "keeper"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "ratWork",
+            "value": true
+          }
+        ]
+      },
+      "hunting_bird": {
+        "from": [
+          "hunting"
+        ],
+        "to": "protection",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "ratWork",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "inspect_check": {
+        "from": [
+          "inspect"
+        ],
+        "to": "agreement",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "fishRoute",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "agreement_build": {
+        "from": [
+          "agreement"
+        ],
+        "to": "paid",
+        "requires": {
+          "op": "and",
+          "args": [
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.fishRoute"
+              },
+              "right": true
+            },
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.ratWork"
+              },
+              "right": true
+            }
+          ]
+        },
+        "effects": [
+          {
+            "op": "set",
+            "key": "paid",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "shelfRaised",
+            "value": true
+          }
+        ],
+        "cost": {
+          "gold": 30
+        },
+        "once": true
+      },
+      "agreement_warehouse": {
+        "from": [
+          "agreement"
+        ],
+        "to": "collect",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "seller",
+              "keeper"
+            ],
+            "path": [
+              "transit",
+              "feeder"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "feeder",
+          "companions": [
+            "seller",
+            "keeper"
+          ]
+        },
+        "depart": []
+      },
+      "agreement_bird": {
+        "from": [
+          "agreement"
+        ],
+        "to": "protection",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "keeper"
+            ],
+            "path": [
+              "transit",
+              "feeder"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "feeder",
+          "companions": [
+            "keeper"
+          ]
+        },
+        "depart": []
+      },
+      "agreement_decline": {
+        "from": [
+          "agreement"
+        ],
+        "ending": "decline",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "declined",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "paid_feeder": {
+        "from": [
+          "paid"
+        ],
+        "to": "repair",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "keeper"
+            ],
+            "path": [
+              "transit",
+              "feeder"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "feeder",
+          "companions": [
+            "keeper"
+          ]
+        },
+        "depart": []
+      },
+      "repair_share": {
+        "from": [
+          "repair"
+        ],
+        "ending": "shared",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "enclosure",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "custody",
+            "value": "shared"
+          }
+        ],
+        "once": true
+      },
+      "collect_carry": {
+        "from": [
+          "collect"
+        ],
+        "to": "warehouse",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "seller",
+              "cat"
+            ],
+            "path": [
+              "transit",
+              "warehouse"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "warehouse",
+          "companions": [
+            "seller",
+            "cat"
+          ]
+        },
+        "depart": []
+      },
+      "warehouse_hand": {
+        "from": [
+          "warehouse"
+        ],
+        "ending": "fish",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "caged",
+            "value": false
+          },
+          {
+            "op": "set",
+            "key": "custody",
+            "value": "fish"
+          }
+        ],
+        "once": true
+      },
+      "protection_hand": {
+        "from": [
+          "protection"
+        ],
+        "ending": "bird",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "caged",
+            "value": false
+          },
+          {
+            "op": "set",
+            "key": "custody",
+            "value": "bird"
+          }
+        ],
+        "once": true
+      }
+    },
+    "endings": {
+      "shared": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q108.values.enclosure"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q108.values.custody"
+            },
+            "right": "shared"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q108.values.catAt"
+            },
+            "right": "feeder"
+          }
+        ]
+      },
+      "fish": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q108.values.custody"
+            },
+            "right": "fish"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q108.values.catAt"
+            },
+            "right": "warehouse"
+          }
+        ]
+      },
+      "bird": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q108.values.custody"
+            },
+            "right": "bird"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q108.values.catAt"
+            },
+            "right": "feeder"
+          }
+        ]
+      },
+      "decline": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q108.values.declined"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q108.values.custody"
+            },
+            "right": "none"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.caged"
+              },
+              "right": true
+            }
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q108.values.paid"
+              },
+              "right": true
+            }
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "stall": {
+        "kind": "town",
+        "location": "e2_q108_stall"
+      },
+      "feeder": {
+        "kind": "town",
+        "location": "e2_q108_feeder"
+      },
+      "warehouse": {
+        "kind": "town",
+        "location": "e2_q108_warehouse"
+      }
+    },
+    "revision": 1
+  }
+}

@@ -5,13 +5,14 @@ import {objectVisible} from '../src/core/quest-events.js';
 import {nextQuestPlace} from '../src/core/quest-navigation.js';
 import {drain,goWorldLocation} from './helpers.mjs';
 import {arrive,checkpoint,choose,depart,go,resume} from './world-route-helpers.mjs';
-import {data,previous,ready,migrated,routes,states,expectedValues} from './canal-world-helpers.mjs';
+import {data,previous,ready,migrated,routes,states,expectedValues,legacyProgress} from './canal-world-helpers.mjs';
 
 for(const [q,paths] of Object.entries(routes)){
   const quest=data.quests[q],story=quest.story,graph=states(q);
   test(q+' preserves the original entry, scripts, results and active saves',()=>{
     for(const [id,script] of Object.entries(previous.quests[q].scripts))assert.deepEqual(data.scripts[id],script);
-    assert.deepEqual(Object.keys(quest.outcomes),Object.keys(previous.quests[q].outcomes));
+    const originalEndings=Object.keys(previous.quests[q].outcomes);
+    assert.deepEqual(Object.keys(quest.outcomes),q==='q108'?[...originalEndings,'decline']:originalEndings);
     const old=migrated(ready(q,{old:true,start:'reception'})),fresh=ready(q,{start:'reception'});
     assert.equal(nextQuestPlace(data,old.state,q).map,previous.quests[q].locations[0].map);
     assert.deepEqual(nextQuestPlace(data,fresh.state,q),story.worldPlaces[story.scenes.entry.place]);
@@ -22,12 +23,12 @@ for(const [q,paths] of Object.entries(routes)){
     }
     for(const p of Object.values(story.worldPlaces))assert.equal(data.locations[data.locations[p.location].parent].parent,'e2_canal_quarter');
   });
-  for(const r of paths)test(q+' '+r.old.join('/')+' retains the manuscript ending and payment',()=>{
+  for(const r of paths.filter(r=>r.old.length))test(q+' '+r.path.join('/')+' retains the manuscript ending and payment',()=>{
     const g=ready(q),old=ready(q,{old:true});
     for(const id of r.path){choose(g,q,id);checkpoint(g);}
     for(const id of r.old){
       const restored=migrated(old);choose(old,q,id);choose(restored,q,id);checkpoint(restored);
-      assert.deepEqual(restored.state.flags.quest[q],old.state.flags.quest[q]);
+      assert.deepEqual(legacyProgress(restored,q),legacyProgress(old,q));
       assert.deepEqual(restored.state.quests[q],old.state.quests[q]);assert.deepEqual(restored.state.inventory,old.state.inventory);assert.equal(restored.state.gold,old.state.gold);
     }
     assert.equal(g.state.quests[q].outcome,r.outcome);assert.equal(old.state.quests[q].outcome,r.outcome);
