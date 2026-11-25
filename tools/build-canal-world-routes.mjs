@@ -4,10 +4,11 @@ import tickets from '../authoring/editions/e2/story-q103.mjs';
 import rain from '../authoring/editions/e2/story-q104.mjs';
 import wedding from '../authoring/editions/e2/story-q105.mjs';
 import bread from '../authoring/editions/e2/story-q106.mjs';
+import sixthGuest from '../authoring/editions/e2/story-q107.mjs';
 import {quarter} from '../authoring/editions/e2/canal-quarter.mjs';
 import {compilePreservedWorldQuest,buildPreservedWorldFile} from './preserved-world-quest.mjs';
 
-export const canalQuests=[locks,bells,tickets,rain,wedding,bread];
+export const canalQuests=[locks,bells,tickets,rain,wedding,bread,sixthGuest];
 export function extendCanalQuarter(bundle){
   const locations=bundle.additions.locations;
   locations[quarter.id]=quarter;

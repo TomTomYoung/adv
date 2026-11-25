@@ -8,7 +8,7 @@ import {choose} from './world-route-helpers.mjs';
 export {data,catalog,migrated};
 export {arrive} from './world-route-helpers.mjs';
 
-const ids=['q101','q102','q103','q104','q105','q106'];
+const ids=['q101','q102','q103','q104','q105','q106','q107'];
 export const routes=Object.fromEntries(ids.map(id=>[id,[]]));
 function add(q,old,path,outcome){
   const words=text=>text.trim().split(/\s+/);
@@ -56,6 +56,17 @@ for(const retry of [false,true]){
   add('q106','owner ask guard',meal+'guard '+finish,'guard');
   add('q106','owner ask eat',meal+'eat finish','meal');
 }
+const observed='look watch ';
+const spoken=observed+'courier ';
+const sent=spoken+'letter carry send ';
+const replied=sent+'sleep receive share ';
+add('q107','stop',observed+'stop close','stop');
+add('q107','courier stop',spoken+'stop close','stop');
+add('q107','courier alive',spoken+'alive finish','alive');
+add('q107','courier letter alive',sent+'alive finish','alive');
+add('q107','courier letter sleep alive',replied+'alive','alive');
+add('q107','courier letter sleep meet',replied+'meet invite enter sit','meet');
+
 const breadShortages=[
   {choice:'seal',old:[],path:['chase'],legacyScene:'entry',scene:'trail',place:'alley',cost:{gold:30},finish:['report','finish'],outcome:'seal'},
   {choice:'eat',old:['owner','ask'],path:['chase','owner','compare','learn','back','ask','admit'],legacyScene:'meal',scene:'meal',place:'table',cost:{ration:1},finish:['finish'],outcome:'meal'}
@@ -78,6 +89,12 @@ export function expectedValues(q,r){
     case 'q102':return {family:has('family'),inn:has('inn'),notice:has('notice'),time:['family','inn','notice'].filter(has).length,sound:end,rouAt:'lane',familyAt:'lane'};
     case 'q103':return {asked:end==='write',filed:end==='write',formAt:end==='write'?'toma':'elder',paid:end==='joint',shared:end==='joint',stopped:end==='stop',hostAt:end==='joint'?'kitchen':'inn'};
     case 'q104':return {rule:has('find'),paid:end==='buy',lease:end==='lease',owner:end==='buy'?'vero':'boy',bottleAt:end==='return'?'stall':'vero',use:{return:'returned',buy:'gift',lease:'overnight'}[end]};
+    case 'q107':{
+      const sent=has('letter'),slept=has('sleep'),met=end==='meet';
+      return {courierSeen:true,message:sent,slept,reply:slept,meeting:slept,seated:met,reported:end==='alive',stopped:end==='stop',
+        letterAt:sent&&!slept?'courier':'guests',parcelAt:'courier',courierAt:sent&&!slept?'neighbor':'door',
+        missingAt:met?'dining':'neighbor',guestsAt:'dining',moraAt:'desk'};
+    }
     case 'q106':{
       const took=id=>r.path.includes(id);
       return {theft:true,owner:took('compare'),rule:took('back'),admitted:took('admit'),shared:end==='meal',

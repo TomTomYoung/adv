@@ -1,0 +1,4192 @@
+{
+  "schemaVersion": 1,
+  "id": "q107",
+  "number": 107,
+  "title": "六人目の客",
+  "client": "宿主モラ",
+  "brief": "五人の客が六人分注文する。空席の事情を確かめてください。",
+  "region": 1,
+  "type": "scene_graph",
+  "recommendedLevel": 1,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。荷揚げ河岸から運河通りへ進み、手帳に示される現場を訪ねる。",
+  "events": [
+    {
+      "id": "q107_scene",
+      "title": "六人目の客：宿主モラ",
+      "points": [
+        {
+          "map": "region_1_f2",
+          "x": 3,
+          "y": 1,
+          "dungeon": "region_1"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q107.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q107.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q107.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q107"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_1"
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_1_f2",
+      "x": 3,
+      "y": 1,
+      "object": "q107_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "stop": {
+      "label": "詮索を終える",
+      "text": "モラは空席の理由を尋ねなくなった。六人分の代金は、これまで通り受け取った。",
+      "gold": 57,
+      "xp": 51,
+      "requires": {
+        "op": "eq",
+        "left": {
+          "ref": "stories.q107.values.stopped"
+        },
+        "right": true
+      }
+    },
+    "alive": {
+      "label": "消息を届ける",
+      "text": "客は五人分の食事を頼み、旅を再開した。空席を減らすことと忘れることを、同じにしなくてよくなった。",
+      "gold": 57,
+      "xp": 51,
+      "requires": {
+        "op": "eq",
+        "left": {
+          "ref": "stories.q107.values.reported"
+        },
+        "right": true
+      }
+    },
+    "meet": {
+      "label": "椅子を引く人",
+      "text": "六人目が自分で椅子を引いた。最初の話題は借金と仕事で、昔話は食事の終わりに出た。",
+      "gold": 57,
+      "xp": 51,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q107.values.meeting"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q107.values.missingAt"
+            },
+            "right": "dining"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q107.values.seated"
+            },
+            "right": true
+          }
+        ]
+      }
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/story-q107.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3813d958cf10f9782f264",
+    "revision": "scenario-edition-e2-q107-r1",
+    "world": {
+      "truth": "怪談のように空席の皿が減るが、食べているのは夜に来る配達人だ。失踪者から「仲間が食べきれない分を受け取ってくれ」と頼まれていた。本人は失敗の借金を恐れて隣町に潜み、帰る勇気がない。配達人は住所を売らない。",
+      "fixedPast": "宿主モラは、五人組の旅客が六人分の食事を注文する理由を調べてほしいと頼む。客は失踪した仲間を待つ元運送隊だ。一人は捜索費のため席を減らしたいと言えず、一人は空席を埋めることを裏切りと思っている。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "宿主モラ",
+        "beliefsAndGoals": "宿主モラは、五人組の旅客が六人分の食事を注文する理由を調べてほしいと頼む。客は失踪した仲間を待つ元運送隊だ。一人は捜索費のため席を減らしたいと言えず、一人は空席を埋めることを裏切りと思っている。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "五人の客が六人分注文する。空席の事情を確かめてください。"
+      }
+    ],
+    "conflict": {
+      "design": "食堂の観察→配達人との対話→消息だけ伝える／返事を仲介／無理な捜索を中止する。返事は「一晩泊まる」の明示選択後に届く。住所の強要で即時解決する道はない。返事を待たずとも消息報告で完了できる。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q107.canal.entry",
+          "assertion": {
+            "title": "宿主モラの帳場",
+            "place": "desk",
+            "cast": [
+              {
+                "entity": "mora",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q107.values.moraAt"
+                  },
+                  "right": "desk"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "dining",
+          "script": "q107.canal.dining",
+          "assertion": {
+            "title": "六人分の食卓",
+            "place": "dining",
+            "cast": [
+              {
+                "entity": "guests",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q107.values.guestsAt"
+                  },
+                  "right": "dining"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "seen",
+          "script": "q107.canal.seen",
+          "assertion": {
+            "title": "六人分の食卓",
+            "place": "dining",
+            "cast": [
+              {
+                "entity": "guests",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q107.values.guestsAt"
+                  },
+                  "right": "dining"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "courier",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q107.values.courierAt"
+                  },
+                  "right": "dining"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "courier",
+          "script": "q107.canal.courier",
+          "assertion": {
+            "title": "宿の配達口",
+            "place": "door",
+            "cast": [
+              {
+                "entity": "courier",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q107.values.courierAt"
+                  },
+                  "right": "door"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "stop",
+          "script": "q107.canal.stop",
+          "assertion": {
+            "title": "宿主モラの帳場",
+            "place": "desk",
+            "cast": [
+              {
+                "entity": "mora",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q107.values.moraAt"
+                  },
+                  "right": "desk"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "news",
+          "script": "q107.canal.news",
+          "assertion": {
+            "title": "六人分の食卓",
+            "place": "dining",
+            "cast": [
+              {
+                "entity": "guests",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q107.values.guestsAt"
+                  },
+                  "right": "dining"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "write",
+          "script": "q107.canal.write",
+          "assertion": {
+            "title": "六人分の食卓",
+            "place": "dining",
+            "cast": [
+              {
+                "entity": "guests",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q107.values.guestsAt"
+                  },
+                  "right": "dining"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "hand",
+          "script": "q107.canal.hand",
+          "assertion": {
+            "title": "宿の配達口",
+            "place": "door",
+            "cast": [
+              {
+                "entity": "courier",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q107.values.courierAt"
+                  },
+                  "right": "door"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "wait",
+          "script": "q107.canal.wait",
+          "assertion": {
+            "title": "モラの宿の客室",
+            "place": "room",
+            "cast": [],
+            "requires": true
+          }
+        },
+        {
+          "id": "delivery",
+          "script": "q107.canal.delivery",
+          "assertion": {
+            "title": "宿の配達口",
+            "place": "door",
+            "cast": [
+              {
+                "entity": "courier",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q107.values.courierAt"
+                  },
+                  "right": "door"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "read",
+          "script": "q107.canal.read",
+          "assertion": {
+            "title": "六人分の食卓",
+            "place": "dining",
+            "cast": [
+              {
+                "entity": "guests",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q107.values.guestsAt"
+                  },
+                  "right": "dining"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "decision",
+          "script": "q107.canal.decision",
+          "assertion": {
+            "title": "六人分の食卓",
+            "place": "dining",
+            "cast": [
+              {
+                "entity": "guests",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q107.values.guestsAt"
+                  },
+                  "right": "dining"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "arrange",
+          "script": "q107.canal.arrange",
+          "assertion": {
+            "title": "宿の配達口",
+            "place": "door",
+            "cast": [
+              {
+                "entity": "courier",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q107.values.courierAt"
+                  },
+                  "right": "door"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "arrival",
+          "script": "q107.canal.arrival",
+          "assertion": {
+            "title": "宿の配達口",
+            "place": "door",
+            "cast": [
+              {
+                "entity": "courier",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q107.values.courierAt"
+                  },
+                  "right": "door"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "missing",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q107.values.missingAt"
+                  },
+                  "right": "door"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "reunion",
+          "script": "q107.canal.reunion",
+          "assertion": {
+            "title": "六人分の食卓",
+            "place": "dining",
+            "cast": [
+              {
+                "entity": "guests",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q107.values.guestsAt"
+                  },
+                  "right": "dining"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "missing",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q107.values.missingAt"
+                  },
+                  "right": "dining"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "五人の客が六人分注文する。空席の事情を確かめてください。"
+    },
+    "reveal": {
+      "newInformation": "怪談のように空席の皿が減るが、食べているのは夜に来る配達人だ。失踪者から「仲間が食べきれない分を受け取ってくれ」と頼まれていた。本人は失敗の借金を恐れて隣町に潜み、帰る勇気がない。配達人は住所を売らない。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q107.canal.entry",
+        "assertion": {
+          "title": "宿主モラの帳場",
+          "place": "desk",
+          "cast": [
+            {
+              "entity": "mora",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q107.values.moraAt"
+                },
+                "right": "desk"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "dining",
+        "script": "q107.canal.dining",
+        "assertion": {
+          "title": "六人分の食卓",
+          "place": "dining",
+          "cast": [
+            {
+              "entity": "guests",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q107.values.guestsAt"
+                },
+                "right": "dining"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "seen",
+        "script": "q107.canal.seen",
+        "assertion": {
+          "title": "六人分の食卓",
+          "place": "dining",
+          "cast": [
+            {
+              "entity": "guests",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q107.values.guestsAt"
+                },
+                "right": "dining"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "courier",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q107.values.courierAt"
+                },
+                "right": "dining"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "courier",
+        "script": "q107.canal.courier",
+        "assertion": {
+          "title": "宿の配達口",
+          "place": "door",
+          "cast": [
+            {
+              "entity": "courier",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q107.values.courierAt"
+                },
+                "right": "door"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "stop",
+        "script": "q107.canal.stop",
+        "assertion": {
+          "title": "宿主モラの帳場",
+          "place": "desk",
+          "cast": [
+            {
+              "entity": "mora",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q107.values.moraAt"
+                },
+                "right": "desk"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "news",
+        "script": "q107.canal.news",
+        "assertion": {
+          "title": "六人分の食卓",
+          "place": "dining",
+          "cast": [
+            {
+              "entity": "guests",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q107.values.guestsAt"
+                },
+                "right": "dining"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "write",
+        "script": "q107.canal.write",
+        "assertion": {
+          "title": "六人分の食卓",
+          "place": "dining",
+          "cast": [
+            {
+              "entity": "guests",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q107.values.guestsAt"
+                },
+                "right": "dining"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "hand",
+        "script": "q107.canal.hand",
+        "assertion": {
+          "title": "宿の配達口",
+          "place": "door",
+          "cast": [
+            {
+              "entity": "courier",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q107.values.courierAt"
+                },
+                "right": "door"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "wait",
+        "script": "q107.canal.wait",
+        "assertion": {
+          "title": "モラの宿の客室",
+          "place": "room",
+          "cast": [],
+          "requires": true
+        }
+      },
+      {
+        "id": "delivery",
+        "script": "q107.canal.delivery",
+        "assertion": {
+          "title": "宿の配達口",
+          "place": "door",
+          "cast": [
+            {
+              "entity": "courier",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q107.values.courierAt"
+                },
+                "right": "door"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "read",
+        "script": "q107.canal.read",
+        "assertion": {
+          "title": "六人分の食卓",
+          "place": "dining",
+          "cast": [
+            {
+              "entity": "guests",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q107.values.guestsAt"
+                },
+                "right": "dining"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "decision",
+        "script": "q107.canal.decision",
+        "assertion": {
+          "title": "六人分の食卓",
+          "place": "dining",
+          "cast": [
+            {
+              "entity": "guests",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q107.values.guestsAt"
+                },
+                "right": "dining"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "arrange",
+        "script": "q107.canal.arrange",
+        "assertion": {
+          "title": "宿の配達口",
+          "place": "door",
+          "cast": [
+            {
+              "entity": "courier",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q107.values.courierAt"
+                },
+                "right": "door"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "arrival",
+        "script": "q107.canal.arrival",
+        "assertion": {
+          "title": "宿の配達口",
+          "place": "door",
+          "cast": [
+            {
+              "entity": "courier",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q107.values.courierAt"
+                },
+                "right": "door"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "missing",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q107.values.missingAt"
+                },
+                "right": "door"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "reunion",
+        "script": "q107.canal.reunion",
+        "assertion": {
+          "title": "六人分の食卓",
+          "place": "dining",
+          "cast": [
+            {
+              "entity": "guests",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q107.values.guestsAt"
+                },
+                "right": "dining"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "missing",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q107.values.missingAt"
+                },
+                "right": "dining"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "stories.q107.values.partyAt",
+        "type": "enum",
+        "initial": "desk",
+        "values": [
+          "desk",
+          "dining",
+          "door",
+          "room",
+          "neighbor",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q107.values.moraAt",
+        "type": "enum",
+        "initial": "desk",
+        "values": [
+          "desk",
+          "dining",
+          "door",
+          "room",
+          "neighbor",
+          "transit"
+        ],
+        "meaning": "mora の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q107.values.guestsAt",
+        "type": "enum",
+        "initial": "dining",
+        "values": [
+          "desk",
+          "dining",
+          "door",
+          "room",
+          "neighbor",
+          "transit"
+        ],
+        "meaning": "guests の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q107.values.courierAt",
+        "type": "enum",
+        "initial": "door",
+        "values": [
+          "desk",
+          "dining",
+          "door",
+          "room",
+          "neighbor",
+          "transit"
+        ],
+        "meaning": "courier の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q107.values.missingAt",
+        "type": "enum",
+        "initial": "neighbor",
+        "values": [
+          "desk",
+          "dining",
+          "door",
+          "room",
+          "neighbor",
+          "transit"
+        ],
+        "meaning": "missing の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q107.values.parcelAt",
+        "type": "enum",
+        "initial": "guests",
+        "values": [
+          "desk",
+          "dining",
+          "door",
+          "room",
+          "neighbor",
+          "transit",
+          "party",
+          "mora",
+          "guests",
+          "courier",
+          "missing",
+          "letter"
+        ],
+        "meaning": "parcel の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q107.values.letterAt",
+        "type": "enum",
+        "initial": "guests",
+        "values": [
+          "desk",
+          "dining",
+          "door",
+          "room",
+          "neighbor",
+          "transit",
+          "party",
+          "mora",
+          "guests",
+          "courier",
+          "missing",
+          "parcel"
+        ],
+        "meaning": "letter の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q107.values.courierSeen",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "courierSeen",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q107.values.message",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "message",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q107.values.slept",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "slept",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q107.values.reply",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "reply",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q107.values.meeting",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "meeting",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q107.values.seated",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "seated",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q107.values.reported",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "reported",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q107.values.stopped",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "stopped",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "モラが帳面をこちらに向けた。「お泊まりは五人なのに、夕食は毎晩六人分。あの席には、いつお客さんが来るんでしょう」",
+        "options": [
+          {
+            "id": "look",
+            "text": "食堂へ行く",
+            "to": "dining",
+            "action": "entry_look"
+          }
+        ]
+      },
+      {
+        "id": "dining",
+        "text": "一人が「一皿ぶんでも捜し賃に回せたら」と小声で言った。隣の客は空いた椅子を卓に引き寄せる。「ここまで片付けたら、あいつはどこに座るんだ」。夜更け、空席の皿から料理が減り始めた。",
+        "options": [
+          {
+            "id": "watch",
+            "text": "空席の皿を見守る",
+            "to": "seen",
+            "action": "dining_watch"
+          }
+        ]
+      },
+      {
+        "id": "seen",
+        "text": "皿に手を伸ばしたのは、戸口から入ってきた配達人だった。ひと口食べると残りを包み、空いた椅子をそのままにして帰りかけた。",
+        "options": [
+          {
+            "id": "courier",
+            "text": "配達口で話を聞く",
+            "to": "courier",
+            "action": "seen_courier"
+          },
+          {
+            "id": "stop",
+            "text": "モラに詮索をやめてもらう",
+            "to": "stop",
+            "action": "seen_stop"
+          }
+        ]
+      },
+      {
+        "id": "courier",
+        "text": "「食べきれない分を受け取ってくれって、あの席の人に頼まれた」。本人は隣町で生きている。仕事の失敗で借金を負い、戻るのが怖いという。「住所は売らないよ。手紙なら届ける」",
+        "options": [
+          {
+            "id": "alive",
+            "text": "無事だけ伝える",
+            "to": "news",
+            "action": "courier_alive"
+          },
+          {
+            "id": "letter",
+            "text": "五人の便りを預かる",
+            "to": "write",
+            "action": "courier_letter"
+          },
+          {
+            "id": "stop",
+            "text": "仲介を断る",
+            "to": "stop",
+            "action": "courier_stop"
+          }
+        ]
+      },
+      {
+        "id": "stop",
+        "text": "モラは六人分の注文を帳面に残した。「あの席のことは、もうこちらからは聞きません」",
+        "options": [
+          {
+            "id": "close",
+            "text": "帳場を辞す",
+            "to": "@stop",
+            "action": "stop_close"
+          }
+        ]
+      },
+      {
+        "id": "news",
+        "text": "五人に、仲間は生きていると伝えた。誰も住所を聞き出そうとしなかった。一人が空いた皿を重ね、「次の宿からは五人分にしようか」と、ほかの四人を見た。",
+        "options": [
+          {
+            "id": "finish",
+            "text": "消息の報告を終える",
+            "to": "@alive",
+            "action": "news_finish"
+          }
+        ]
+      },
+      {
+        "id": "write",
+        "text": "五人は同じ紙に言葉を寄せた。最後の一人が「一度、顔を見て話せるか」と書き、返事を受け取れるよう宿の名を添えた。",
+        "options": [
+          {
+            "id": "carry",
+            "text": "手紙を配達口へ",
+            "to": "hand",
+            "action": "write_carry"
+          }
+        ]
+      },
+      {
+        "id": "hand",
+        "text": "配達人が手を出した。「返事をもらえたら、次の配達でここに持ってくるよ」",
+        "options": [
+          {
+            "id": "send",
+            "text": "手紙を託して宿へ",
+            "to": "wait",
+            "action": "hand_send"
+          }
+        ]
+      },
+      {
+        "id": "wait",
+        "text": "五人の手紙は配達人に託した。窓の下の配達口はまだ閉じている。今夜はここに泊まるか、もう分かっている無事だけを知らせに行くか。",
+        "options": [
+          {
+            "id": "sleep",
+            "text": "一晩泊まって配達口へ",
+            "to": "delivery",
+            "action": "wait_sleep",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q107.values.message"
+              },
+              "right": true
+            }
+          },
+          {
+            "id": "alive",
+            "text": "返事を待たずに報告",
+            "to": "news",
+            "action": "wait_alive"
+          }
+        ]
+      },
+      {
+        "id": "delivery",
+        "text": "一夜明けて、配達人が五人の手紙を差し出した。折り返した面に別の筆跡がある。「借金が消えなくても、一度話したい」",
+        "options": [
+          {
+            "id": "receive",
+            "text": "返事を受け取って食堂へ",
+            "to": "read",
+            "action": "delivery_receive",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q107.values.slept"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "read",
+        "text": "返事を読み上げると、さっきは捜し賃の話をした客が、空いた椅子に目をやった。「借金の話でもいい。俺たちも会って話したい」。残る四人もうなずいた。",
+        "options": [
+          {
+            "id": "share",
+            "text": "返事を五人に渡す",
+            "to": "decision",
+            "action": "read_share",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q107.values.reply"
+              },
+              "right": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "decision",
+        "text": "会いたいという答えは、双方から出た。五人は返事を手元に置いている。ここで仲介を終えるか、配達人に再会の手配まで頼むか。",
+        "options": [
+          {
+            "id": "meet",
+            "text": "再会を手配する",
+            "to": "arrange",
+            "action": "decision_meet",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q107.values.meeting"
+              },
+              "right": true
+            }
+          },
+          {
+            "id": "alive",
+            "text": "消息の報告で終える",
+            "to": "@alive",
+            "action": "decision_alive"
+          }
+        ]
+      },
+      {
+        "id": "arrange",
+        "text": "「五人とも、ここで会いたいって？」。配達人は宿の食堂を振り返った。「分かった。本人にそう伝える」",
+        "options": [
+          {
+            "id": "invite",
+            "text": "五人の返事を託す",
+            "to": "arrival",
+            "action": "arrange_invite"
+          }
+        ]
+      },
+      {
+        "id": "arrival",
+        "text": "配達人が宿へ戻った。今度は傍らにもう一人いる。戸口に立ったその人は食堂から聞こえる声に耳を澄まし、自分から一歩、中へ入った。",
+        "options": [
+          {
+            "id": "enter",
+            "text": "一緒に食堂へ",
+            "to": "reunion",
+            "action": "arrival_enter"
+          }
+        ]
+      },
+      {
+        "id": "reunion",
+        "text": "五人は椅子を引かずに待った。戻ってきた仲間が背に手を掛け、自分で席を取る。「仕事のことから、話していいか」",
+        "options": [
+          {
+            "id": "sit",
+            "text": "六人の食卓を見届ける",
+            "to": "@meet",
+            "action": "reunion_sit"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.1",
+      "source": "https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4",
+      "adapter": "adv-story-state/1",
+      "scope": "quest-episode"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "entryScript": "q107.canal.visit",
+    "preserveAcceptedRoute": true,
+    "currentStoryScriptPrefix": "q107.canal.",
+    "interruptionRoutes": [],
+    "interruptionEntries": []
+  },
+  "scripts": {
+    "q107.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q107.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "空いた椅子の皿だけが夜中に減る。戸口に来た配達人は、残り物の包みを持っていた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "courier",
+              "text": "配達人に、空席の人を知っているか尋ねる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q107.scene.courier"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "私事の詮索をやめるよう宿主へ話す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q107.end.stop"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q107.scene.courier": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q107.node",
+          "value": "courier"
+        },
+        {
+          "op": "say",
+          "text": "失踪した仲間は隣町で生きている。借金を恐れ、戻れないという。「住所は売らない。手紙なら届ける」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "alive",
+              "text": "住所を出さず、無事だけ客に伝える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q107.end.alive"
+                }
+              ]
+            },
+            {
+              "id": "letter",
+              "text": "再会を望むか双方へ手紙を送る",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q107.message",
+                  "value": true
+                },
+                {
+                  "op": "jump",
+                  "script": "q107.scene.wait"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "仲介を断り、宿主へ詮索の中止を頼む",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q107.end.stop"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q107.scene.wait": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q107.node",
+          "value": "wait"
+        },
+        {
+          "op": "say",
+          "text": "返事は次の配達で届く。実際の時間を待つ必要はない。今夜ここへ泊まるか決める。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sleep",
+              "text": "一晩泊まり、次の配達を待つ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q107.scene.reply"
+                }
+              ]
+            },
+            {
+              "id": "alive",
+              "text": "返事を待たず、消息だけを報告する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q107.end.alive"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q107.scene.reply": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q107.node",
+          "value": "reply"
+        },
+        {
+          "op": "say",
+          "text": "「借金が消えなくても、一度話したい」返事を読んだ五人は席を空けると答えた。昔の役割へ戻る約束まではしない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "meet",
+              "text": "双方の同意した再会を手配する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q107.end.meet"
+                }
+              ]
+            },
+            {
+              "id": "alive",
+              "text": "再会の手配はせず、無事の報告で終える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q107.end.alive"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q107.end.stop": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q107.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "モラは空席の理由を尋ねなくなった。六人分の代金は、これまで通り受け取った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q107",
+              "outcome": "stop"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q107.end.alive": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q107.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "客は五人分の食事を頼み、旅を再開した。空席を減らすことと忘れることを、同じにしなくてよくなった。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q107",
+              "outcome": "alive"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q107.end.meet": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q107.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "六人目が自分で椅子を引いた。最初の話題は借金と仕事で、昔話は食事の終わりに出た。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q107",
+              "outcome": "meet"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q107.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q107.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q107.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "stop",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "モラは空席の理由を尋ねなくなった。六人分の代金は、これまで通り受け取った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "alive",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "客は五人分の食事を頼み、旅を再開した。空席を減らすことと忘れることを、同じにしなくてよくなった。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "meet",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "六人目が自分で椅子を引いた。最初の話題は借金と仕事で、昔話は食事の終わりに出た。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q107.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q107.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "courier",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q107.scene.courier"
+                    }
+                  ]
+                },
+                {
+                  "equals": "wait",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q107.scene.wait"
+                    }
+                  ]
+                },
+                {
+                  "equals": "reply",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q107.scene.reply"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q107.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q107.canal.entry": {
+      "storyQuest": "q107",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q107",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "モラが帳面をこちらに向けた。「お泊まりは五人なのに、夕食は毎晩六人分。あの席には、いつお客さんが来るんでしょう」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "look",
+              "text": "食堂へ行く",
+              "storyAction": {
+                "quest": "q107",
+                "action": "entry_look"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q107",
+                  "action": "entry_look"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q107.canal.dining": {
+      "storyQuest": "q107",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q107",
+          "scene": "dining"
+        },
+        {
+          "op": "narrate",
+          "text": "一人が「一皿ぶんでも捜し賃に回せたら」と小声で言った。隣の客は空いた椅子を卓に引き寄せる。「ここまで片付けたら、あいつはどこに座るんだ」。夜更け、空席の皿から料理が減り始めた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "watch",
+              "text": "空席の皿を見守る",
+              "storyAction": {
+                "quest": "q107",
+                "action": "dining_watch"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q107",
+                  "action": "dining_watch"
+                },
+                {
+                  "op": "jump",
+                  "script": "q107.canal.seen"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q107.canal.seen": {
+      "storyQuest": "q107",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q107",
+          "scene": "seen"
+        },
+        {
+          "op": "narrate",
+          "text": "皿に手を伸ばしたのは、戸口から入ってきた配達人だった。ひと口食べると残りを包み、空いた椅子をそのままにして帰りかけた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "courier",
+              "text": "配達口で話を聞く",
+              "storyAction": {
+                "quest": "q107",
+                "action": "seen_courier"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q107",
+                  "action": "seen_courier"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "モラに詮索をやめてもらう",
+              "storyAction": {
+                "quest": "q107",
+                "action": "seen_stop"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q107",
+                  "action": "seen_stop"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q107.canal.courier": {
+      "storyQuest": "q107",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q107",
+          "scene": "courier"
+        },
+        {
+          "op": "narrate",
+          "text": "「食べきれない分を受け取ってくれって、あの席の人に頼まれた」。本人は隣町で生きている。仕事の失敗で借金を負い、戻るのが怖いという。「住所は売らないよ。手紙なら届ける」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "alive",
+              "text": "無事だけ伝える",
+              "storyAction": {
+                "quest": "q107",
+                "action": "courier_alive"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q107",
+                  "action": "courier_alive"
+                }
+              ]
+            },
+            {
+              "id": "letter",
+              "text": "五人の便りを預かる",
+              "storyAction": {
+                "quest": "q107",
+                "action": "courier_letter"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q107",
+                  "action": "courier_letter"
+                }
+              ]
+            },
+            {
+              "id": "stop",
+              "text": "仲介を断る",
+              "storyAction": {
+                "quest": "q107",
+                "action": "courier_stop"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q107",
+                  "action": "courier_stop"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q107.canal.stop": {
+      "storyQuest": "q107",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q107",
+          "scene": "stop"
+        },
+        {
+          "op": "narrate",
+          "text": "モラは六人分の注文を帳面に残した。「あの席のことは、もうこちらからは聞きません」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "close",
+              "text": "帳場を辞す",
+              "storyAction": {
+                "quest": "q107",
+                "action": "stop_close"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q107",
+                  "action": "stop_close"
+                },
+                {
+                  "op": "jump",
+                  "script": "q107.canal.end.stop"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q107.canal.news": {
+      "storyQuest": "q107",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q107",
+          "scene": "news"
+        },
+        {
+          "op": "narrate",
+          "text": "五人に、仲間は生きていると伝えた。誰も住所を聞き出そうとしなかった。一人が空いた皿を重ね、「次の宿からは五人分にしようか」と、ほかの四人を見た。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "消息の報告を終える",
+              "storyAction": {
+                "quest": "q107",
+                "action": "news_finish"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q107",
+                  "action": "news_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q107.canal.end.alive"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q107.canal.write": {
+      "storyQuest": "q107",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q107",
+          "scene": "write"
+        },
+        {
+          "op": "narrate",
+          "text": "五人は同じ紙に言葉を寄せた。最後の一人が「一度、顔を見て話せるか」と書き、返事を受け取れるよう宿の名を添えた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "carry",
+              "text": "手紙を配達口へ",
+              "storyAction": {
+                "quest": "q107",
+                "action": "write_carry"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q107",
+                  "action": "write_carry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q107.canal.hand": {
+      "storyQuest": "q107",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q107",
+          "scene": "hand"
+        },
+        {
+          "op": "narrate",
+          "text": "配達人が手を出した。「返事をもらえたら、次の配達でここに持ってくるよ」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "send",
+              "text": "手紙を託して宿へ",
+              "storyAction": {
+                "quest": "q107",
+                "action": "hand_send"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q107",
+                  "action": "hand_send"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q107.canal.wait": {
+      "storyQuest": "q107",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q107",
+          "scene": "wait"
+        },
+        {
+          "op": "narrate",
+          "text": "五人の手紙は配達人に託した。窓の下の配達口はまだ閉じている。今夜はここに泊まるか、もう分かっている無事だけを知らせに行くか。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sleep",
+              "text": "一晩泊まって配達口へ",
+              "storyAction": {
+                "quest": "q107",
+                "action": "wait_sleep"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q107.values.message"
+                },
+                "right": true
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q107",
+                  "action": "wait_sleep"
+                }
+              ]
+            },
+            {
+              "id": "alive",
+              "text": "返事を待たずに報告",
+              "storyAction": {
+                "quest": "q107",
+                "action": "wait_alive"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q107",
+                  "action": "wait_alive"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q107.canal.delivery": {
+      "storyQuest": "q107",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q107",
+          "scene": "delivery"
+        },
+        {
+          "op": "narrate",
+          "text": "一夜明けて、配達人が五人の手紙を差し出した。折り返した面に別の筆跡がある。「借金が消えなくても、一度話したい」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "receive",
+              "text": "返事を受け取って食堂へ",
+              "storyAction": {
+                "quest": "q107",
+                "action": "delivery_receive"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q107.values.slept"
+                },
+                "right": true
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q107",
+                  "action": "delivery_receive"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q107.canal.read": {
+      "storyQuest": "q107",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q107",
+          "scene": "read"
+        },
+        {
+          "op": "narrate",
+          "text": "返事を読み上げると、さっきは捜し賃の話をした客が、空いた椅子に目をやった。「借金の話でもいい。俺たちも会って話したい」。残る四人もうなずいた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "share",
+              "text": "返事を五人に渡す",
+              "storyAction": {
+                "quest": "q107",
+                "action": "read_share"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q107.values.reply"
+                },
+                "right": true
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q107",
+                  "action": "read_share"
+                },
+                {
+                  "op": "jump",
+                  "script": "q107.canal.decision"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q107.canal.decision": {
+      "storyQuest": "q107",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q107",
+          "scene": "decision"
+        },
+        {
+          "op": "narrate",
+          "text": "会いたいという答えは、双方から出た。五人は返事を手元に置いている。ここで仲介を終えるか、配達人に再会の手配まで頼むか。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "meet",
+              "text": "再会を手配する",
+              "storyAction": {
+                "quest": "q107",
+                "action": "decision_meet"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q107.values.meeting"
+                },
+                "right": true
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q107",
+                  "action": "decision_meet"
+                }
+              ]
+            },
+            {
+              "id": "alive",
+              "text": "消息の報告で終える",
+              "storyAction": {
+                "quest": "q107",
+                "action": "decision_alive"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q107",
+                  "action": "decision_alive"
+                },
+                {
+                  "op": "jump",
+                  "script": "q107.canal.end.alive"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q107.canal.arrange": {
+      "storyQuest": "q107",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q107",
+          "scene": "arrange"
+        },
+        {
+          "op": "narrate",
+          "text": "「五人とも、ここで会いたいって？」。配達人は宿の食堂を振り返った。「分かった。本人にそう伝える」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "invite",
+              "text": "五人の返事を託す",
+              "storyAction": {
+                "quest": "q107",
+                "action": "arrange_invite"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q107",
+                  "action": "arrange_invite"
+                },
+                {
+                  "op": "jump",
+                  "script": "q107.canal.arrival"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q107.canal.arrival": {
+      "storyQuest": "q107",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q107",
+          "scene": "arrival"
+        },
+        {
+          "op": "narrate",
+          "text": "配達人が宿へ戻った。今度は傍らにもう一人いる。戸口に立ったその人は食堂から聞こえる声に耳を澄まし、自分から一歩、中へ入った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "enter",
+              "text": "一緒に食堂へ",
+              "storyAction": {
+                "quest": "q107",
+                "action": "arrival_enter"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q107",
+                  "action": "arrival_enter"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q107.canal.reunion": {
+      "storyQuest": "q107",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q107",
+          "scene": "reunion"
+        },
+        {
+          "op": "narrate",
+          "text": "五人は椅子を引かずに待った。戻ってきた仲間が背に手を掛け、自分で席を取る。「仕事のことから、話していいか」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "sit",
+              "text": "六人の食卓を見届ける",
+              "storyAction": {
+                "quest": "q107",
+                "action": "reunion_sit"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q107",
+                  "action": "reunion_sit"
+                },
+                {
+                  "op": "jump",
+                  "script": "q107.canal.end.meet"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q107.canal.end.stop": {
+      "commands": [
+        {
+          "op": "jump",
+          "script": "q107.end.stop"
+        }
+      ]
+    },
+    "q107.canal.end.alive": {
+      "commands": [
+        {
+          "op": "jump",
+          "script": "q107.end.alive"
+        }
+      ]
+    },
+    "q107.canal.end.meet": {
+      "commands": [
+        {
+          "op": "jump",
+          "script": "q107.end.meet"
+        }
+      ]
+    },
+    "q107.canal.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q107"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q107.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q107.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q107.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "stop",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "モラは空席の理由を尋ねなくなった。六人分の代金は、これまで通り受け取った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "alive",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "客は五人分の食事を頼み、旅を再開した。空席を減らすことと忘れることを、同じにしなくてよくなった。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "meet",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "六人目が自分で椅子を引いた。最初の話題は借金と仕事で、昔話は食事の終わりに出た。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q107"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q107.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q107.canal.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "dining",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q107.canal.dining"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "seen",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q107.canal.seen"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "courier",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q107.canal.courier"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "stop",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q107.canal.stop"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "news",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q107.canal.news"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "write",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q107.canal.write"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "hand",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q107.canal.hand"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "wait",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q107.canal.wait"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "delivery",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q107.canal.delivery"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "read",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q107.canal.read"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "decision",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q107.canal.decision"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "arrange",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q107.canal.arrange"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "arrival",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q107.canal.arrival"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "reunion",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q107.canal.reunion"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q107.canal.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "desk": "宿主モラの帳場",
+      "dining": "六人分の食卓",
+      "door": "宿の配達口",
+      "room": "モラの宿の客室",
+      "neighbor": "隣町",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "dining",
+        "door"
+      ],
+      [
+        "door",
+        "neighbor"
+      ],
+      [
+        "transit",
+        "desk"
+      ],
+      [
+        "transit",
+        "dining"
+      ],
+      [
+        "transit",
+        "door"
+      ],
+      [
+        "transit",
+        "room"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "desk",
+        "values": [
+          "desk",
+          "dining",
+          "door",
+          "room",
+          "neighbor",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "moraAt": {
+        "type": "enum",
+        "initial": "desk",
+        "values": [
+          "desk",
+          "dining",
+          "door",
+          "room",
+          "neighbor",
+          "transit"
+        ],
+        "meaning": "mora の所在または保持者"
+      },
+      "guestsAt": {
+        "type": "enum",
+        "initial": "dining",
+        "values": [
+          "desk",
+          "dining",
+          "door",
+          "room",
+          "neighbor",
+          "transit"
+        ],
+        "meaning": "guests の所在または保持者"
+      },
+      "courierAt": {
+        "type": "enum",
+        "initial": "door",
+        "values": [
+          "desk",
+          "dining",
+          "door",
+          "room",
+          "neighbor",
+          "transit"
+        ],
+        "meaning": "courier の所在または保持者"
+      },
+      "missingAt": {
+        "type": "enum",
+        "initial": "neighbor",
+        "values": [
+          "desk",
+          "dining",
+          "door",
+          "room",
+          "neighbor",
+          "transit"
+        ],
+        "meaning": "missing の所在または保持者"
+      },
+      "parcelAt": {
+        "type": "enum",
+        "initial": "guests",
+        "values": [
+          "desk",
+          "dining",
+          "door",
+          "room",
+          "neighbor",
+          "transit",
+          "party",
+          "mora",
+          "guests",
+          "courier",
+          "missing",
+          "letter"
+        ],
+        "meaning": "parcel の所在または保持者"
+      },
+      "letterAt": {
+        "type": "enum",
+        "initial": "guests",
+        "values": [
+          "desk",
+          "dining",
+          "door",
+          "room",
+          "neighbor",
+          "transit",
+          "party",
+          "mora",
+          "guests",
+          "courier",
+          "missing",
+          "parcel"
+        ],
+        "meaning": "letter の所在または保持者"
+      },
+      "courierSeen": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "courierSeen"
+      },
+      "message": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "message"
+      },
+      "slept": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "slept"
+      },
+      "reply": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "reply"
+      },
+      "meeting": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "meeting"
+      },
+      "seated": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "seated"
+      },
+      "reported": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "reported"
+      },
+      "stopped": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "stopped"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "mora": {
+        "holder": "moraAt",
+        "kind": "person",
+        "character": "e2_q107_mora"
+      },
+      "guests": {
+        "holder": "guestsAt",
+        "kind": "person",
+        "character": "e2_q107_guests"
+      },
+      "courier": {
+        "holder": "courierAt",
+        "kind": "person",
+        "character": "e2_q107_courier"
+      },
+      "missing": {
+        "holder": "missingAt",
+        "kind": "person",
+        "character": "e2_q107_missing"
+      },
+      "parcel": {
+        "holder": "parcelAt",
+        "kind": "item"
+      },
+      "letter": {
+        "holder": "letterAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {},
+    "initialKnowledge": {},
+    "invariants": [
+      {
+        "id": "overnight",
+        "condition": {
+          "op": "or",
+          "args": [
+            {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q107.values.slept"
+                },
+                "right": true
+              }
+            },
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q107.values.message"
+              },
+              "right": true
+            }
+          ]
+        },
+        "message": "宿で待つ前に手紙を託す。"
+      },
+      {
+        "id": "replyAfterNight",
+        "condition": {
+          "op": "or",
+          "args": [
+            {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q107.values.reply"
+                },
+                "right": true
+              }
+            },
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q107.values.slept"
+              },
+              "right": true
+            }
+          ]
+        },
+        "message": "次の配達で返事を受け取る。"
+      },
+      {
+        "id": "consentAfterReply",
+        "condition": {
+          "op": "or",
+          "args": [
+            {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q107.values.meeting"
+                },
+                "right": true
+              }
+            },
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q107.values.reply"
+              },
+              "right": true
+            }
+          ]
+        },
+        "message": "本人の返事を五人に届けてから再会を決める。"
+      }
+    ],
+    "scenes": {
+      "entry": {
+        "title": "宿主モラの帳場",
+        "place": "desk",
+        "cast": [
+          {
+            "entity": "mora",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q107.values.moraAt"
+              },
+              "right": "desk"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "dining": {
+        "title": "六人分の食卓",
+        "place": "dining",
+        "cast": [
+          {
+            "entity": "guests",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q107.values.guestsAt"
+              },
+              "right": "dining"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "seen": {
+        "title": "六人分の食卓",
+        "place": "dining",
+        "cast": [
+          {
+            "entity": "guests",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q107.values.guestsAt"
+              },
+              "right": "dining"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "courier",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q107.values.courierAt"
+              },
+              "right": "dining"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "courier": {
+        "title": "宿の配達口",
+        "place": "door",
+        "cast": [
+          {
+            "entity": "courier",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q107.values.courierAt"
+              },
+              "right": "door"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "stop": {
+        "title": "宿主モラの帳場",
+        "place": "desk",
+        "cast": [
+          {
+            "entity": "mora",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q107.values.moraAt"
+              },
+              "right": "desk"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "news": {
+        "title": "六人分の食卓",
+        "place": "dining",
+        "cast": [
+          {
+            "entity": "guests",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q107.values.guestsAt"
+              },
+              "right": "dining"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "write": {
+        "title": "六人分の食卓",
+        "place": "dining",
+        "cast": [
+          {
+            "entity": "guests",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q107.values.guestsAt"
+              },
+              "right": "dining"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "hand": {
+        "title": "宿の配達口",
+        "place": "door",
+        "cast": [
+          {
+            "entity": "courier",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q107.values.courierAt"
+              },
+              "right": "door"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "wait": {
+        "title": "モラの宿の客室",
+        "place": "room",
+        "cast": [],
+        "requires": true
+      },
+      "delivery": {
+        "title": "宿の配達口",
+        "place": "door",
+        "cast": [
+          {
+            "entity": "courier",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q107.values.courierAt"
+              },
+              "right": "door"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "read": {
+        "title": "六人分の食卓",
+        "place": "dining",
+        "cast": [
+          {
+            "entity": "guests",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q107.values.guestsAt"
+              },
+              "right": "dining"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "decision": {
+        "title": "六人分の食卓",
+        "place": "dining",
+        "cast": [
+          {
+            "entity": "guests",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q107.values.guestsAt"
+              },
+              "right": "dining"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "arrange": {
+        "title": "宿の配達口",
+        "place": "door",
+        "cast": [
+          {
+            "entity": "courier",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q107.values.courierAt"
+              },
+              "right": "door"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "arrival": {
+        "title": "宿の配達口",
+        "place": "door",
+        "cast": [
+          {
+            "entity": "courier",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q107.values.courierAt"
+              },
+              "right": "door"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "missing",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q107.values.missingAt"
+              },
+              "right": "door"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "reunion": {
+        "title": "六人分の食卓",
+        "place": "dining",
+        "cast": [
+          {
+            "entity": "guests",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q107.values.guestsAt"
+              },
+              "right": "dining"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "missing",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q107.values.missingAt"
+              },
+              "right": "dining"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_look": {
+        "from": [
+          "entry"
+        ],
+        "to": "dining",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "dining"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "dining",
+          "companions": []
+        },
+        "depart": []
+      },
+      "dining_watch": {
+        "from": [
+          "dining"
+        ],
+        "to": "seen",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "courier"
+            ],
+            "path": [
+              "door",
+              "dining"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "transfer",
+            "entity": "parcel",
+            "from": "guests",
+            "to": "courier"
+          },
+          {
+            "op": "set",
+            "key": "courierSeen",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "seen_courier": {
+        "from": [
+          "seen"
+        ],
+        "to": "courier",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "courier"
+            ],
+            "path": [
+              "transit",
+              "door"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "door",
+          "companions": [
+            "courier"
+          ]
+        },
+        "depart": []
+      },
+      "seen_stop": {
+        "from": [
+          "seen"
+        ],
+        "to": "stop",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "desk"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "desk",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "move",
+            "entities": [
+              "courier"
+            ],
+            "path": [
+              "dining",
+              "door"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ]
+      },
+      "courier_alive": {
+        "from": [
+          "courier"
+        ],
+        "to": "news",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "dining"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "dining",
+          "companions": []
+        },
+        "depart": []
+      },
+      "courier_letter": {
+        "from": [
+          "courier"
+        ],
+        "to": "write",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "dining"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "dining",
+          "companions": []
+        },
+        "depart": []
+      },
+      "courier_stop": {
+        "from": [
+          "courier"
+        ],
+        "to": "stop",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "desk"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "desk",
+          "companions": []
+        },
+        "depart": []
+      },
+      "stop_close": {
+        "from": [
+          "stop"
+        ],
+        "ending": "stop",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "stopped",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "news_finish": {
+        "from": [
+          "news"
+        ],
+        "ending": "alive",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "reported",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "write_carry": {
+        "from": [
+          "write"
+        ],
+        "to": "hand",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "door"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "door",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "letter",
+            "from": "guests",
+            "to": "party"
+          }
+        ]
+      },
+      "hand_send": {
+        "from": [
+          "hand"
+        ],
+        "to": "wait",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "room"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "room",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "letter",
+            "from": "party",
+            "to": "courier"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "courier"
+            ],
+            "path": [
+              "door",
+              "neighbor"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "message",
+            "value": true
+          }
+        ]
+      },
+      "wait_sleep": {
+        "from": [
+          "wait"
+        ],
+        "to": "delivery",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q107.values.message"
+          },
+          "right": true
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "door"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "door",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "letter",
+            "from": "courier",
+            "to": "missing"
+          },
+          {
+            "op": "transfer",
+            "entity": "letter",
+            "from": "missing",
+            "to": "courier"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "courier"
+            ],
+            "path": [
+              "neighbor",
+              "door"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "set",
+            "key": "slept",
+            "value": true
+          }
+        ]
+      },
+      "wait_alive": {
+        "from": [
+          "wait"
+        ],
+        "to": "news",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "dining"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "dining",
+          "companions": []
+        },
+        "depart": []
+      },
+      "delivery_receive": {
+        "from": [
+          "delivery"
+        ],
+        "to": "read",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q107.values.slept"
+          },
+          "right": true
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "dining"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "dining",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "letter",
+            "from": "courier",
+            "to": "party"
+          },
+          {
+            "op": "set",
+            "key": "reply",
+            "value": true
+          }
+        ]
+      },
+      "read_share": {
+        "from": [
+          "read"
+        ],
+        "to": "decision",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q107.values.reply"
+          },
+          "right": true
+        },
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "letter",
+            "from": "party",
+            "to": "guests"
+          },
+          {
+            "op": "set",
+            "key": "meeting",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "decision_meet": {
+        "from": [
+          "decision"
+        ],
+        "to": "arrange",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q107.values.meeting"
+          },
+          "right": true
+        },
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "door"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "door",
+          "companions": []
+        },
+        "depart": []
+      },
+      "decision_alive": {
+        "from": [
+          "decision"
+        ],
+        "ending": "alive",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "reported",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "arrange_invite": {
+        "from": [
+          "arrange"
+        ],
+        "to": "arrival",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "courier"
+            ],
+            "path": [
+              "door",
+              "neighbor"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "courier",
+              "missing"
+            ],
+            "path": [
+              "neighbor",
+              "door"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true
+      },
+      "arrival_enter": {
+        "from": [
+          "arrival"
+        ],
+        "to": "reunion",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "missing"
+            ],
+            "path": [
+              "transit",
+              "dining"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "dining",
+          "companions": [
+            "missing"
+          ]
+        },
+        "depart": []
+      },
+      "reunion_sit": {
+        "from": [
+          "reunion"
+        ],
+        "ending": "meet",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "seated",
+            "value": true
+          }
+        ],
+        "once": true
+      }
+    },
+    "endings": {
+      "stop": {
+        "op": "eq",
+        "left": {
+          "ref": "stories.q107.values.stopped"
+        },
+        "right": true
+      },
+      "alive": {
+        "op": "eq",
+        "left": {
+          "ref": "stories.q107.values.reported"
+        },
+        "right": true
+      },
+      "meet": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q107.values.meeting"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q107.values.missingAt"
+            },
+            "right": "dining"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q107.values.seated"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "desk": {
+        "kind": "town",
+        "location": "e2_q107_desk"
+      },
+      "dining": {
+        "kind": "town",
+        "location": "e2_q107_dining"
+      },
+      "door": {
+        "kind": "town",
+        "location": "e2_q107_door"
+      },
+      "room": {
+        "kind": "town",
+        "location": "e2_q107_room"
+      }
+    },
+    "revision": 1
+  }
+}
