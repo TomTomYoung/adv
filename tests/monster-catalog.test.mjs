@@ -21,6 +21,14 @@ test('every enemy has one entry with its real image and AI, including enemies wi
   assert.ok(entry('waterwheel_beaver').includes('地域分類：灯守の地下水道'));
 });
 
+test('灯蛾・煤けた灯蛾・鉄喰い蛾・虹彩チョウをそれぞれの絵で掲載する',()=>{
+  for(const id of ['kagaribi_ember_moth','kagaribi_soot_moth','iron_moth','iris_butterfly']){
+    const file='assets/images/monsters/'+id+'.webp';
+    assert.equal(data.assets.images[data.enemies[id].sprite],file);
+    assert.ok(entry(id).includes(file));
+  }
+});
+
 test('single map candidates and direct field battles count as references',()=>{
   const refs=encounterReferences({
     encounters:{direct:{},unused:{}},

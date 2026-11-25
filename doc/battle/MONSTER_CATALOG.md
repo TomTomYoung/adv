@@ -2,7 +2,7 @@
 
 [ゲーム内の魔物図鑑を開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters)
 
-作品版1.34.0。配布中の敵は171定義、遭遇編成は119定義、敵が参照する画像ファイルは108点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
+作品版1.34.0。配布中の敵は171定義、遭遇編成は119定義、敵が参照する画像ファイルは111点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
 
 敵・技能・画像・通常ロードのマップと迷宮・スクリプトから全文を生成します。数値を重ねて手書きせず、原稿を更新してから `npm run build:docs` で反映します。
 
@@ -721,7 +721,7 @@ wild_pair_8：蓄電ヤドカリ×1・脱線ムカデ×1。逃走可。
 <img src="../../assets/images/monsters/iris_butterfly.webp" width="160" alt="虹彩チョウ">
 
 画像ID：monster_iris_butterfly。実ファイル：[assets/images/monsters/iris_butterfly.webp](../../assets/images/monsters/iris_butterfly.webp)。
-画像共有：鉄喰い蛾・灯蛾・煤けた灯蛾。
+画像共有：他の敵定義との共有なし。
 
 発想：チョウ＋虹彩絞り。参照：M050。地域分類：星欠けの地下観測所。
 
@@ -3061,10 +3061,10 @@ story_127：借証の泥人形×1。逃走可。
 
 ### 鉄喰い蛾 (iron_moth)
 
-<img src="../../assets/images/monsters/iris_butterfly.webp" width="160" alt="鉄喰い蛾">
+<img src="../../assets/images/monsters/iron_moth.webp" width="160" alt="鉄喰い蛾">
 
-画像ID：monster_iris_butterfly。実ファイル：[assets/images/monsters/iris_butterfly.webp](../../assets/images/monsters/iris_butterfly.webp)。
-画像共有：虹彩チョウ・灯蛾・煤けた灯蛾。
+画像ID：monster_iron_moth。実ファイル：[assets/images/monsters/iron_moth.webp](../../assets/images/monsters/iron_moth.webp)。
+画像共有：他の敵定義との共有なし。
 
 基礎能力：HP 49 / MP 8 / STR 14 / VIT 6 / AGI 8 / INT 12。報酬：11G / 17EXP。
 宝箱：機関部品 1個 / 12.5％。
@@ -3319,10 +3319,10 @@ kagaribi_pests：煤ネズミ×1・燭蝋スライム×1。逃走可。
 
 ### 灯蛾 (kagaribi_ember_moth)
 
-<img src="../../assets/images/monsters/iris_butterfly.webp" width="160" alt="灯蛾">
+<img src="../../assets/images/monsters/kagaribi_ember_moth.webp" width="160" alt="灯蛾">
 
-画像ID：monster_iris_butterfly。実ファイル：[assets/images/monsters/iris_butterfly.webp](../../assets/images/monsters/iris_butterfly.webp)。
-画像共有：虹彩チョウ・鉄喰い蛾・煤けた灯蛾。
+画像ID：monster_kagaribi_ember_moth。実ファイル：[assets/images/monsters/kagaribi_ember_moth.webp](../../assets/images/monsters/kagaribi_ember_moth.webp)。
+画像共有：他の敵定義との共有なし。
 
 基礎能力：HP 42 / MP 8 / STR 11 / VIT 5 / AGI 12 / INT 10。報酬：7G / 17EXP。
 宝箱：予備灯油 1個 / 12.5％。
@@ -3525,10 +3525,10 @@ kagaribi_oil_pair：油染みの煤ネズミ×1・油蔵の燭蝋スライム×1
 
 ### 煤けた灯蛾 (kagaribi_soot_moth)
 
-<img src="../../assets/images/monsters/iris_butterfly.webp" width="160" alt="煤けた灯蛾">
+<img src="../../assets/images/monsters/kagaribi_soot_moth.webp" width="160" alt="煤けた灯蛾">
 
-画像ID：monster_iris_butterfly。実ファイル：[assets/images/monsters/iris_butterfly.webp](../../assets/images/monsters/iris_butterfly.webp)。
-画像共有：虹彩チョウ・鉄喰い蛾・灯蛾。
+画像ID：monster_kagaribi_soot_moth。実ファイル：[assets/images/monsters/kagaribi_soot_moth.webp](../../assets/images/monsters/kagaribi_soot_moth.webp)。
+画像共有：他の敵定義との共有なし。
 
 基礎能力：HP 95 / MP 12 / STR 16 / VIT 7 / AGI 12 / INT 14。報酬：16G / 95EXP。
 宝箱：予備灯油 1個 / 12.5％。
