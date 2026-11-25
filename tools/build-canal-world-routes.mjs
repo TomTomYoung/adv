@@ -7,10 +7,11 @@ import bread from '../authoring/editions/e2/story-q106.mjs';
 import sixthGuest from '../authoring/editions/e2/story-q107.mjs';
 import catBounty from '../authoring/editions/e2/story-q108.mjs';
 import forge from '../authoring/editions/e2/story-q109.mjs';
+import hero from '../authoring/editions/e2/story-q110.mjs';
 import {quarter} from '../authoring/editions/e2/canal-quarter.mjs';
 import {compilePreservedWorldQuest,buildPreservedWorldFile} from './preserved-world-quest.mjs';
 
-export const canalQuests=[locks,bells,tickets,rain,wedding,bread,sixthGuest,catBounty,forge];
+export const canalQuests=[locks,bells,tickets,rain,wedding,bread,sixthGuest,catBounty,forge,hero];
 export function extendCanalQuarter(bundle){
   const locations=bundle.additions.locations;
   locations[quarter.id]=quarter;

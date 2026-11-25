@@ -8,7 +8,7 @@ import {choose,go,resume} from './world-route-helpers.mjs';
 export {data,catalog,migrated};
 export {arrive} from './world-route-helpers.mjs';
 
-const ids=['q101','q102','q103','q104','q105','q106','q107','q108','q109'];
+const ids=['q101','q102','q103','q104','q105','q106','q107','q108','q109','q110'];
 export const routes=Object.fromEntries(ids.map(id=>[id,[]]));
 function add(q,old,path,outcome){
   const words=text=>text.trim().split(/\s+/);
@@ -94,6 +94,30 @@ for(const [old,path,end] of [
   ['ask pupil back pupil agree','cart unload lie return ask sample pupil correct back pupil agree fire sign','inherit']
 ])add('q109',old,path,end);
 
+add('q110','guard','fit guard walk finish','legend');
+for(const hearing of ['consult','show listen consult']){
+  const start='fit hear '+hearing+' ';
+  add('q110','hear legend',start+'legend walk finish','legend');
+  add('q110','hear retreat',start+'retreat approve walk watch','retreat');
+  add('q110','hear all',start+'all approve invite seat','all');
+  add('q110','hear legend',start+'retreat back all back legend walk finish','legend');
+  add('q110','hear retreat',start+'all back retreat back retreat approve walk watch','retreat');
+  add('q110','hear all',start+'retreat back all approve invite seat','all');
+}
+for(const [history,outcome,steps] of [
+  [{escapes:0,complete:false},'legend','legend walk finish'],
+  [{escapes:2,complete:true},'retreat','retreat approve walk watch'],
+  [{escapes:3,complete:false},'all','all approve invite seat']
+]){
+  routes.q110.push({history,old:['hear',outcome],path:('fit hear show listen consult '+steps).split(' '),outcome});
+}
+export function setupRoute(g,q,route){
+  if(q!=='q110'||!route.history)return;
+  const records=g.state.records;
+  records.historyComplete=route.history.complete;
+  records.battles+=route.history.escapes;
+  records.escapes+=route.history.escapes;
+}
 export function legacyProgress(g,q){
   return g.state.flags.flow?.[q] ?? g.state.flags.quest?.[q];
 }
@@ -132,6 +156,13 @@ export function expectedValues(q,r){
         letterAt:sent&&!slept?'courier':'guests',parcelAt:'courier',courierAt:sent&&!slept?'neighbor':'door',
         missingAt:met?'dining':'neighbor',guestsAt:'dining',moraAt:'desk'};
     }
+    case 'q110':{
+      const shown=r.path.includes('show');
+      return {retreatStory:true,heard:r.path.includes('hear'),recordShared:shown,
+        sharedEscapes:shown?(r.history?.escapes??0):0,partialRecord:shown&&r.history?.complete===false,
+        speech:end==='all'?'none':end,approved:end!=='legend',invited:end==='all',walkedTogether:true,
+        iroAt:'square',stewardAt:'square',friendsAt:'square'};
+    }
     case 'q109':{
       const took=k=>r.path.includes(k), rest=end==='rest', tools=end==='tools', inherit=end==='inherit';
       return {haul:took('cart')?'cart':'hand',liningAt:'forge',tremor:took('ask'),samples:took('sample'),
@@ -161,7 +192,7 @@ export function states(q){
   const current=new Map(),legacy=new Map();
   for(const route of routes[q])for(const [old,collection,choices] of [[false,current,route.path],[true,legacy,route.old]]){
     if(old&&!choices.length)continue;
-    const g=ready(q,{old});
+    const g=ready(q,{old});setupRoute(g,q,route);
     for(const id of choices){
       const state=old?legacyProgress(g,q):g.state.stories[q],scene=old?state.node:state.scene;
       // Distinct local histories matter even if the visible scene has the same name.
