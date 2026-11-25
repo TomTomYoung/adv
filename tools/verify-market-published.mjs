@@ -213,7 +213,8 @@ if(suite==='--q095'){
       ['q105',['canal','roles','back','report'],['roles','agree'],'roles'],
       ['q106',['owner','ask'],['eat'],'meal'],
       ['q107',['courier','letter'],['sleep','meet'],'meet'],
-      ['q108',['catch','rats','cost'],['build'],'shared']
+      ['q108',['catch','rats','cost'],['build'],'shared'],
+      ['q109',['ask','pupil','back'],['pupil','agree'],'inherit']
     ].filter(([id])=>quests.includes(id))});
   }
   let attempts=0;const first=q038.length;

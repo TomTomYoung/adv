@@ -74,7 +74,11 @@ export class GameEngine {
   }
   cue(id,targets){playCue(this,id,targets);}
   eventCue(event,targets){this.cue(this.data.presentation?.bindings.events[event],targets);}
-  context(extra={}) {return {...this.state,local:this.state.vm.at(-1)?.local??{},...extra};}
+  context(extra={}) {
+    const {data,state}=this;
+    return {...state,local:state.vm.at(-1)?.local??{},
+      get leaderStats(){return state.members.length?actorStats(data,state,state.members[0],false):{};},...extra};
+  }
   value(value,extra={}) {return evaluate(value,this.context(extra));}
   random(){return random(this.state);}
   log(text){this.state.log.push(String(text));this.state.log=this.state.log.slice(-80);}
