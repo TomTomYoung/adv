@@ -114,7 +114,7 @@ try{
   ]);
   guide.on('pageerror',error=>errors.push(error.message));
   await guide.locator('#allies').waitFor();
-  assert.deepEqual(await guide.locator('nav a').allTextContents(), ['キャラ図鑑','魔物図鑑','魔物編成']);
+  assert.deepEqual(await guide.getByRole('navigation',{name:'図鑑のページ'}).getByRole('link').allTextContents(), ['キャラ図鑑','魔物図鑑','魔物編成']);
   const allyCards = guide.locator('#ally-grid .guide-entry');
   assert.equal(await allyCards.count(),10);
   const columns = selector => guide.locator(selector).first().evaluate(node=>getComputedStyle(node).gridTemplateColumns.split(' ').length);
@@ -140,6 +140,23 @@ try{
   assert.equal(await monsterCards.count(),Object.keys(enemies).length);
   assert.equal(await columns('#monster-index .guide-grid'),2);
   assert.equal(await guide.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+  const families = guide.getByRole('navigation',{name:'魔物の種別'});
+  assert.deepEqual(await families.getByRole('link').allTextContents(),['すべて','ゴブリン','オーク','オーガ']);
+  for (const [family,name] of Object.entries({goblin:'ゴブリン',orc:'オーク',ogre:'オーガ'})) {
+    await families.getByRole('link',{name,exact:true}).click();
+    await guide.waitForFunction(id => document.querySelector('.monster-families [aria-current=page]')?.dataset.family===id,family);
+    assert.equal(await monsterCards.count(),25);
+    const ids = await monsterCards.locator('a').evaluateAll(nodes=>nodes.map(a=>a.hash.split('/').at(-1)));
+    assert.deepEqual(ids.sort(),Object.keys(enemies).filter(id=>enemies[id].family===family).sort());
+    assert.deepEqual(await guide.locator('#monster-index h3 small').allTextContents(),Array(5).fill('5件'));
+    await monsterCards.first().getByRole('link').click();
+    await guide.locator('#monster-sheet').waitFor();
+    await guide.locator('#monsters-back').click();
+    await guide.locator('#monster-index').waitFor();
+    assert.equal(await guide.evaluate(()=>location.hash),'#monsters/'+family);
+  }
+  await families.getByRole('link',{name:'すべて',exact:true}).click();
+  await guide.waitForFunction(total => document.querySelectorAll('#monster-index .guide-entry').length===total,Object.keys(enemies).length);
   const search = guide.getByRole('searchbox',{name:'名前で絞り込み'});
   await search.fill('該当なし');
   assert.ok(await guide.locator('#monster-empty').isVisible());
@@ -163,7 +180,8 @@ try{
   assert.equal(await guide.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
   await guide.getByRole('link',{name:'魔物編成',exact:true}).click();
   await guide.locator('#enemies').waitFor();
-  assert.equal(await guide.locator('.band').count(),9);
+  const catalog = JSON.parse(await fs.readFile(path.join(root,'data/encounter-groups.json'),'utf8'));
+  assert.equal(await guide.locator('.band').count(),catalog.bands.length);
   await guide.locator('#band').selectOption('3');
   assert.deepEqual(await guide.locator('.chance').allTextContents(),['30%','20%','25%','10%','15%']);
   await guide.getByRole('link',{name:'煤ネズミ ×5',exact:true}).click();

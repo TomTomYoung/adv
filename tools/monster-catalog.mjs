@@ -62,6 +62,7 @@ export function monsterCatalog(data) {
         `画像共有：${shared.length?shared.join('・'):'他の敵定義との共有なし'}。`,'');
       if(e.ideas)out.push(`発想：${e.ideas.join('＋')}。参照：${e.source}。地域分類：${data.regions.find(r=>r.id===e.region)?.name??e.region}。`,'');
       if(e.appearance)out.push(`外見：${e.appearance}`,'');
+      if(e.family)out.push(`レベル帯：Lv${e.levelBand}　種名：${e.breed}。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/${e.family}/${e.id})。`, '');
       if(e.role)out.push(`設計上の役割：${e.role}`,'');
       if(e.id==='kuragari')out.push('通常点灯の守りが届かないときは7成功歩ごとに基本22％で歩行抽選し、現状の候補はくらがり100％です。普通の火で通常魔物まで消えることはなく、通常遭遇の完全抑止は深火の効果です。q001の老人同行中は北・南の帰路配置で同じイベント戦闘を起こし、途中の通常抽選でくらがりに遭遇した場合も、その実セルで同じ戦闘と新人救援へ進みます。火切れだけでは即戦闘にせず、救援後は繰り返しません。撃退・救助による強制終了と撃破を区別します。[火と遭遇仕様](KAGARIBI_DUNGEON.md)。','');
       if(e.id==='salt_eater')out.push('塩の蓄積した装備個体があると、廃坑の腐食部品が遭遇候補を切り替えます。敵ラウンド開始時、この敵が生存していれば閾値以上で塩が最も多い装備個体を1個消失させます。これは下記AIの攻撃とは別の `corrosion.battleRound` 処理です。[塩の仕様](WATERWAYS_SALT_MINE.md)。','');
@@ -71,6 +72,7 @@ export function monsterCatalog(data) {
         `属性倍率：${Object.entries(e.resist??{}).map(([key,n])=>`${key} ${n}`).join(' / ')||'すべて既定値'}。`,'','AIの選択順：','');
       for(const [i,rule] of [...e.ai].sort((a,b)=>b.priority-a.priority).entries()){
         const skill=data.skills[rule.skill];
+        if (rule.skill === e.classSkill) { out.push(`${i+1}. ${skill.name} (${rule.skill})：${skill.description}`); continue; }
         out.push(`${i+1}. 優先度${rule.priority}、${conditionText(rule.condition)}：${skill.name} (${rule.skill})、MP${skill.mp}、対象は${targetText(rule,skill)}。`);
       }
       out.push('','遭遇と参照先：','');

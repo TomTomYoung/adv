@@ -230,7 +230,11 @@ test('a tank escort resumes on the sixth floor and fires a log on its second tur
   const map = g.data.maps[id + '_f6'];
   g.teleport(map.id, map.entrance.x, map.entrance.y, map.entrance.facing);
   g.state.steps = g.data.system.encounterCheckSteps - 1;
-  const rolls = [0, 0.93];
+  const tankIndex = map.encounterPool.findIndex(row => row.encounter.endsWith('_tank_pair'));
+  assert.ok(tankIndex >= 0);
+  const sum = rows => rows.reduce((n, row) => n + row.weight, 0);
+  const tankWeight = map.encounterPool[tankIndex].weight;
+  const rolls = [0, (sum(map.encounterPool.slice(0, tankIndex)) + tankWeight / 2) / sum(map.encounterPool)];
   g.random = () => rolls.shift() ?? 0.5;
   assert.ok(g.dispatch({type: 'move', direction: 'forward'}));
   const copy = newGame();

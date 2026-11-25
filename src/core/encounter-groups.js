@@ -35,6 +35,17 @@ export function floorEncounterGroups(data, map) {
     if (!enemies.length) throw Error(map.id + ': 空の敵編成です ' + group);
     const encounter = map.id + '_lv' + level + '_' + group;
     data.encounters[encounter] = {id: encounter, text: names.join('、') + 'が現れた。', escape: true, enemies};
+    if (enemies.length <= 15 && enemies.some(id => data.enemies[id].family)) {
+      // A shield can start in front of its pikeman in all three battle modes.
+      const lanes = [2, 1, 3, 0, 4], counts = [0, 0, 0];
+      const formation = enemies.map(id => {
+        const preferred = data.enemies[id].combatRow ?? 0;
+        const depth = counts[preferred] < lanes.length ? preferred : counts.findIndex(n => n < lanes.length);
+        return {depth, lane: lanes[counts[depth]++]};
+      });
+      data.encounters[encounter].frontlinePositions = formation;
+      data.encounters[encounter].enemyPositions = formation.map(p => ({x: p.lane, y: 2 - p.depth}));
+    }
     encounterPool.push({encounter, weight});
   }
   if (encounterPool.length) {

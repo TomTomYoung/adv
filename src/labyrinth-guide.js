@@ -17,6 +17,9 @@ const image = src => {
   const img = el('img'); img.src = src; img.alt = ''; img.loading = 'lazy'; return img;
 };
 let data;
+let listedFamily;
+const familyLabels = {goblin: 'ゴブリン', orc: 'オーク', ogre: 'オーガ'};
+const familyPath = family => family ? 'monsters/' + family : 'monsters';
 
 function drawGroups() {
   const common = $('source').value === 'common';
@@ -115,14 +118,25 @@ function filterMonsters() {
   $('monster-empty').hidden = count > 0;
 }
 
-function fillMonsterList() {
-  const enemies = Object.values(data.enemies);
+function fillMonsterList(family) {
+  if (family === listedFamily) return;
+  if (listedFamily !== undefined) $('monster-search').value = '';
+  listedFamily = family;
+  $('monster').replaceChildren();
+  $('monster-index').replaceChildren();
+  const enemies = Object.values(data.enemies).filter(e => !family || e.family === family);
+  const groups = family
+    ? [...new Set(enemies.map(e => e.levelBand))].sort((a, b) => a - b).map(level => {
+        const entries = enemies.filter(e => e.levelBand === level);
+        return ['Lv' + level + '帯　' + entries[0].breed, entries];
+      })
+    : monsterGroups(enemies);
   const names = new Set(), duplicates = new Set();
   for (const {name} of enemies) {
     if (names.has(name)) duplicates.add(name);
     names.add(name);
   }
-  for (const [category, entries] of monsterGroups(enemies)) {
+  for (const [category, entries] of groups) {
     const group = el('optgroup');
     group.label = category;
     const section = el('section', undefined, 'monster-category');
@@ -133,10 +147,11 @@ function fillMonsterList() {
       const {id, name, sprite, stats, rewards} = enemy;
       const variant = duplicates.has(name) ? id : '';
       group.append(new Option(variant ? name + '（' + variant + '）' : name, id));
-      const card = summaryCard('monsters', id, name, data.assets.images[sprite], variant);
+      const subtitle = enemy.family ? 'Lv' + enemy.levelBand + '帯　' + enemy.breed : variant;
+      const card = summaryCard(familyPath(family), id, name, data.assets.images[sprite], subtitle);
       updateSummary(card, stats, rewards.xp + ' EXP　' + rewards.gold + ' G');
       if (variant) card.querySelector('a').setAttribute('aria-label', name + '（' + variant + '）');
-      card.dataset.search = (name + ' ' + id).normalize('NFKC').toLowerCase();
+      card.dataset.search = (name + ' ' + id + ' ' + (enemy.breed ?? '')).normalize('NFKC').toLowerCase();
       grid.append(card);
     }
     $('monster').append(group);
@@ -146,6 +161,7 @@ function fillMonsterList() {
   empty.id = 'monster-empty';
   empty.hidden = true;
   $('monster-index').append(empty);
+  filterMonsters();
 }
 
 function drawMonster(id) {
@@ -153,6 +169,7 @@ function drawMonster(id) {
   const card = el('article', undefined, 'card');
   const header = el('div', undefined, 'card-head'), heading = el('div');
   heading.append(el('h3', enemy.name));
+  if (enemy.family) heading.append(el('small', 'Lv' + enemy.levelBand + '帯　' + enemy.breed));
   if (enemy.role) heading.append(el('p', enemy.role));
   if (enemy.appearance) heading.append(el('p', enemy.appearance));
   header.append(image(data.assets.images[enemy.sprite]), heading);
@@ -178,7 +195,7 @@ function drawMonster(id) {
     const skill = data.skills[rule.skill];
     const item = el('li');
     item.append(el('strong', skill.name), el('small', 'MP' + skill.mp, 'tag'),
-      el('p', conditionText(rule.condition) + ' ／ 対象　' + targetText(rule, skill)));
+      el('p', enemy.classSkill === rule.skill ? skill.description : conditionText(rule.condition) + ' ／ 対象　' + targetText(rule, skill)));
     list.append(item);
   }
   actions.append(list);
@@ -280,7 +297,9 @@ function changeActor() {
   jobs.value = initial;
 }
 function switchPage(event) {
-  const [section, entryId] = location.hash.slice(1).split('/');
+  const [section, key, child] = location.hash.slice(1).split('/');
+  const family = section === 'monsters' && Object.hasOwn(familyLabels, key ?? '') ? key : '';
+  const entryId = family ? child : key;
   const active = ['monsters', 'enemies'].includes(section) ? section : 'allies';
   for (const id of ['allies', 'monsters', 'enemies']) {
     $(id).hidden = id !== active;
@@ -288,7 +307,16 @@ function switchPage(event) {
   }
   if (active === 'enemies') return;
   const allies = active === 'allies';
-  const detail = Object.hasOwn(allies ? data.actors : data.enemies, entryId ?? '');
+  if (!allies) {
+    fillMonsterList(family);
+    $('monsters-back').href = '#' + familyPath(family);
+    $('monsters-back').textContent = (familyLabels[family] ?? '魔物') + '一覧に戻る';
+    for (const link of document.querySelectorAll('.monster-families a')) {
+      link.setAttribute('aria-current', link.dataset.family === family ? 'page' : 'false');
+    }
+  }
+  const detail = Object.hasOwn(allies ? data.actors : data.enemies, entryId ?? '') &&
+    (!family || data.enemies[entryId].family === family);
   const select = $(allies ? 'actor' : 'monster');
   const fromAllyGrid = allies && $('ally-detail').hidden;
   select.closest('label').hidden = !detail;
@@ -310,10 +338,11 @@ function switchPage(event) {
     }
   }
   if (!event) return;
-  const [previous, previousId] = new URL(event.oldURL).hash.slice(1).split('/');
+  const previousHash = new URL(event.oldURL).hash;
+  const [previous, previousId] = previousHash.slice(1).split('/');
   if (!detail && previous === active && previousId) {
     const index = $(allies ? 'ally-grid' : 'monster-index');
-    const link = Array.from(index.querySelectorAll('a')).find(a => a.hash === '#' + active + '/' + previousId);
+    const link = Array.from(index.querySelectorAll('a')).find(a => a.hash === previousHash);
     if (link && link.getClientRects().length) link.focus();
   } else if (detail && document.activeElement !== select) {
     $(allies ? 'ally-title' : 'monster-title').focus();
@@ -325,9 +354,8 @@ async function init() {
   for (const b of data.encounterGroups.bands) option($('band'), String(b.minLevel), 'Lv' + range(b.minLevel, b.maxLevel));
   for (const [key, def] of Object.entries(data.actors)) option($('actor'), key, def.name);
   for (const [key, label] of Object.entries(gearStages)) option($('gear'), key, label);
-  fillMonsterList();
   $('monster-search').addEventListener('input', filterMonsters);
-  $('monster').addEventListener('change', () => { location.hash = 'monsters/' + $('monster').value; });
+  $('monster').addEventListener('change', () => { location.hash = familyPath(listedFamily) + '/' + $('monster').value; });
   $('level').max = data.system.maxLevel;
   $('source').addEventListener('change', drawGroups); $('band').addEventListener('change', drawGroups);
   $('actor').addEventListener('change', () => {
