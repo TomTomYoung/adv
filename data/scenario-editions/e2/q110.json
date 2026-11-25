@@ -1,0 +1,4038 @@
+{
+  "schemaVersion": 1,
+  "id": "q110",
+  "number": 110,
+  "title": "明日までの英雄",
+  "client": "退役兵イーロ",
+  "brief": "祭の行列で、一日だけ護衛してください。",
+  "region": 1,
+  "type": "scene_graph",
+  "recommendedLevel": 1,
+  "requires": null,
+  "unlockHint": "いつでも受注できる。荷揚げ河岸から運河通りへ進み、手帳に示される現場を訪ねる。",
+  "events": [
+    {
+      "id": "q110_scene",
+      "title": "明日までの英雄：退役兵イーロ",
+      "points": [
+        {
+          "map": "region_1_f2",
+          "x": 8,
+          "y": 1,
+          "dungeon": "region_1"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q110.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q110.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q110.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q110"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_1"
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_1_f2",
+      "x": 8,
+      "y": 1,
+      "object": "q110_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "legend": {
+      "label": "伝説の行列",
+      "text": "拍手は大きかった。イーロは短く礼を述べ、行列の最後で歩みの遅い友人を待った。",
+      "gold": 57,
+      "xp": 51,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q110.values.speech"
+            },
+            "right": "legend"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q110.values.walkedTogether"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    "retreat": {
+      "label": "帰還路の祭",
+      "text": "祭係は子供たちに、皆で帰還路を作る遊びを用意した。イーロは友人の隣でその出口を見ていた。",
+      "gold": 57,
+      "xp": 51,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q110.values.speech"
+            },
+            "right": "retreat"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q110.values.approved"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q110.values.walkedTogether"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    "all": {
+      "label": "足りない英雄席",
+      "text": "生還者の椅子が足りなくなった。イーロは自分の椅子を運び、いちばん足の悪い友人を呼んだ。",
+      "gold": 57,
+      "xp": 51,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q110.values.speech"
+            },
+            "right": "none"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q110.values.approved"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q110.values.invited"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q110.values.walkedTogether"
+            },
+            "right": true
+          }
+        ]
+      }
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/story-q110.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b3813d958cf10f9782f264",
+    "revision": "scenario-edition-e2-q110-r1",
+    "world": {
+      "truth": "旧兵の証言は初めから得られ、隠し真相にしない。問題は、祝う席でどの言葉を使うかだ。自分の逃走戦績を見せればイーロは具体的に話すが、逃走経験のない主人公も話を聞ける。記録から人格を決めない。",
+      "fixedPast": "退役兵イーロが、祭の行列へ一日だけ護衛してほしいと頼む。町は彼を「一度も退かなかった英雄」と紹介しているが、彼が誇るのは、撤退を決めて部隊を救った夜だ。祭係は嘘を守りたいのではなく、子どもに勇気を伝える物語が必要だと考えている。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "退役兵イーロ",
+        "beliefsAndGoals": "退役兵イーロが、祭の行列へ一日だけ護衛してほしいと頼む。町は彼を「一度も退かなかった英雄」と紹介しているが、彼が誇るのは、撤退を決めて部隊を救った夜だ。祭係は嘘を守りたいのではなく、子どもに勇気を伝える物語が必要だと考えている。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "祭の行列で、一日だけ護衛してください。"
+      }
+    ],
+    "conflict": {
+      "design": "依頼→衣装合わせと証言→演説文の相談→祭。伝説のまま祝う、撤退を中心に語る、演説をやめて生還者全員を招く道がある。演説変更は本人の同意で確定する。護衛だけを務めて語り方に介入しなくても報酬は出る。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q110.canal.entry",
+          "assertion": {
+            "title": "祭の衣装部屋",
+            "place": "fitting",
+            "cast": [
+              {
+                "entity": "iro",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q110.values.iroAt"
+                  },
+                  "right": "fitting"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "fitted",
+          "script": "q110.canal.fitted",
+          "assertion": {
+            "title": "祭の衣装部屋",
+            "place": "fitting",
+            "cast": [
+              {
+                "entity": "iro",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q110.values.iroAt"
+                  },
+                  "right": "fitting"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "talk",
+          "script": "q110.canal.talk",
+          "assertion": {
+            "title": "祭の衣装部屋",
+            "place": "fitting",
+            "cast": [
+              {
+                "entity": "iro",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q110.values.iroAt"
+                  },
+                  "right": "fitting"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "ledger",
+          "script": "q110.canal.ledger",
+          "assertion": {
+            "title": "祭の衣装部屋",
+            "place": "fitting",
+            "cast": [
+              {
+                "entity": "iro",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q110.values.iroAt"
+                  },
+                  "right": "fitting"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "memory",
+          "script": "q110.canal.memory",
+          "assertion": {
+            "title": "祭の衣装部屋",
+            "place": "fitting",
+            "cast": [
+              {
+                "entity": "iro",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q110.values.iroAt"
+                  },
+                  "right": "fitting"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "council",
+          "script": "q110.canal.council",
+          "assertion": {
+            "title": "祭係の詰所",
+            "place": "desk",
+            "cast": [
+              {
+                "entity": "iro",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q110.values.iroAt"
+                  },
+                  "right": "desk"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "steward",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q110.values.stewardAt"
+                  },
+                  "right": "desk"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "askRetreat",
+          "script": "q110.canal.askRetreat",
+          "assertion": {
+            "title": "祭係の詰所",
+            "place": "desk",
+            "cast": [
+              {
+                "entity": "iro",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q110.values.iroAt"
+                  },
+                  "right": "desk"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "steward",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q110.values.stewardAt"
+                  },
+                  "right": "desk"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "askAll",
+          "script": "q110.canal.askAll",
+          "assertion": {
+            "title": "祭係の詰所",
+            "place": "desk",
+            "cast": [
+              {
+                "entity": "iro",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q110.values.iroAt"
+                  },
+                  "right": "desk"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "steward",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q110.values.stewardAt"
+                  },
+                  "right": "desk"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "invite",
+          "script": "q110.canal.invite",
+          "assertion": {
+            "title": "行列の集合路",
+            "place": "lane",
+            "cast": [
+              {
+                "entity": "iro",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q110.values.iroAt"
+                  },
+                  "right": "lane"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "friends",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q110.values.friendsAt"
+                  },
+                  "right": "lane"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "march",
+          "script": "q110.canal.march",
+          "assertion": {
+            "title": "行列の集合路",
+            "place": "lane",
+            "cast": [
+              {
+                "entity": "iro",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q110.values.iroAt"
+                  },
+                  "right": "lane"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "friends",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q110.values.friendsAt"
+                  },
+                  "right": "lane"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "festival",
+          "script": "q110.canal.festival",
+          "assertion": {
+            "title": "祭の広場",
+            "place": "square",
+            "cast": [
+              {
+                "entity": "iro",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q110.values.iroAt"
+                  },
+                  "right": "square"
+                },
+                "display": {
+                  "x": 17,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "steward",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q110.values.stewardAt"
+                  },
+                  "right": "square"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              },
+              {
+                "entity": "friends",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q110.values.friendsAt"
+                  },
+                  "right": "square"
+                },
+                "display": {
+                  "x": 83,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 2
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "seats",
+          "script": "q110.canal.seats",
+          "assertion": {
+            "title": "祭の広場",
+            "place": "square",
+            "cast": [
+              {
+                "entity": "iro",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q110.values.iroAt"
+                  },
+                  "right": "square"
+                },
+                "display": {
+                  "x": 17,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "steward",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q110.values.stewardAt"
+                  },
+                  "right": "square"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              },
+              {
+                "entity": "friends",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q110.values.friendsAt"
+                  },
+                  "right": "square"
+                },
+                "display": {
+                  "x": 83,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 2
+                }
+              }
+            ],
+            "requires": true
+          }
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "祭の行列で、一日だけ護衛してください。"
+    },
+    "reveal": {
+      "newInformation": "旧兵の証言は初めから得られ、隠し真相にしない。問題は、祝う席でどの言葉を使うかだ。自分の逃走戦績を見せればイーロは具体的に話すが、逃走経験のない主人公も話を聞ける。記録から人格を決めない。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q110.canal.entry",
+        "assertion": {
+          "title": "祭の衣装部屋",
+          "place": "fitting",
+          "cast": [
+            {
+              "entity": "iro",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q110.values.iroAt"
+                },
+                "right": "fitting"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "fitted",
+        "script": "q110.canal.fitted",
+        "assertion": {
+          "title": "祭の衣装部屋",
+          "place": "fitting",
+          "cast": [
+            {
+              "entity": "iro",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q110.values.iroAt"
+                },
+                "right": "fitting"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "talk",
+        "script": "q110.canal.talk",
+        "assertion": {
+          "title": "祭の衣装部屋",
+          "place": "fitting",
+          "cast": [
+            {
+              "entity": "iro",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q110.values.iroAt"
+                },
+                "right": "fitting"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "ledger",
+        "script": "q110.canal.ledger",
+        "assertion": {
+          "title": "祭の衣装部屋",
+          "place": "fitting",
+          "cast": [
+            {
+              "entity": "iro",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q110.values.iroAt"
+                },
+                "right": "fitting"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "memory",
+        "script": "q110.canal.memory",
+        "assertion": {
+          "title": "祭の衣装部屋",
+          "place": "fitting",
+          "cast": [
+            {
+              "entity": "iro",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q110.values.iroAt"
+                },
+                "right": "fitting"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "council",
+        "script": "q110.canal.council",
+        "assertion": {
+          "title": "祭係の詰所",
+          "place": "desk",
+          "cast": [
+            {
+              "entity": "iro",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q110.values.iroAt"
+                },
+                "right": "desk"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "steward",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q110.values.stewardAt"
+                },
+                "right": "desk"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "askRetreat",
+        "script": "q110.canal.askRetreat",
+        "assertion": {
+          "title": "祭係の詰所",
+          "place": "desk",
+          "cast": [
+            {
+              "entity": "iro",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q110.values.iroAt"
+                },
+                "right": "desk"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "steward",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q110.values.stewardAt"
+                },
+                "right": "desk"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "askAll",
+        "script": "q110.canal.askAll",
+        "assertion": {
+          "title": "祭係の詰所",
+          "place": "desk",
+          "cast": [
+            {
+              "entity": "iro",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q110.values.iroAt"
+                },
+                "right": "desk"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "steward",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q110.values.stewardAt"
+                },
+                "right": "desk"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "invite",
+        "script": "q110.canal.invite",
+        "assertion": {
+          "title": "行列の集合路",
+          "place": "lane",
+          "cast": [
+            {
+              "entity": "iro",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q110.values.iroAt"
+                },
+                "right": "lane"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "friends",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q110.values.friendsAt"
+                },
+                "right": "lane"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "march",
+        "script": "q110.canal.march",
+        "assertion": {
+          "title": "行列の集合路",
+          "place": "lane",
+          "cast": [
+            {
+              "entity": "iro",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q110.values.iroAt"
+                },
+                "right": "lane"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "friends",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q110.values.friendsAt"
+                },
+                "right": "lane"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "festival",
+        "script": "q110.canal.festival",
+        "assertion": {
+          "title": "祭の広場",
+          "place": "square",
+          "cast": [
+            {
+              "entity": "iro",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q110.values.iroAt"
+                },
+                "right": "square"
+              },
+              "display": {
+                "x": 17,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "steward",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q110.values.stewardAt"
+                },
+                "right": "square"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            },
+            {
+              "entity": "friends",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q110.values.friendsAt"
+                },
+                "right": "square"
+              },
+              "display": {
+                "x": 83,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 2
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "seats",
+        "script": "q110.canal.seats",
+        "assertion": {
+          "title": "祭の広場",
+          "place": "square",
+          "cast": [
+            {
+              "entity": "iro",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q110.values.iroAt"
+                },
+                "right": "square"
+              },
+              "display": {
+                "x": 17,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "steward",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q110.values.stewardAt"
+                },
+                "right": "square"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            },
+            {
+              "entity": "friends",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q110.values.friendsAt"
+                },
+                "right": "square"
+              },
+              "display": {
+                "x": 83,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 2
+              }
+            }
+          ],
+          "requires": true
+        }
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "stories.q110.values.partyAt",
+        "type": "enum",
+        "initial": "fitting",
+        "values": [
+          "fitting",
+          "desk",
+          "lane",
+          "square",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q110.values.iroAt",
+        "type": "enum",
+        "initial": "fitting",
+        "values": [
+          "fitting",
+          "desk",
+          "lane",
+          "square",
+          "transit"
+        ],
+        "meaning": "iro の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q110.values.stewardAt",
+        "type": "enum",
+        "initial": "desk",
+        "values": [
+          "fitting",
+          "desk",
+          "lane",
+          "square",
+          "transit"
+        ],
+        "meaning": "steward の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q110.values.friendsAt",
+        "type": "enum",
+        "initial": "lane",
+        "values": [
+          "fitting",
+          "desk",
+          "lane",
+          "square",
+          "transit"
+        ],
+        "meaning": "friends の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q110.values.retreatStory",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "retreatStory",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q110.values.heard",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "heard",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q110.values.recordShared",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "recordShared",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q110.values.partialRecord",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "partialRecord",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q110.values.sharedEscapes",
+        "type": "integer",
+        "initial": 0,
+        "min": 0,
+        "max": 1000000000,
+        "meaning": "見せた時点の逃走回数",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q110.values.speech",
+        "type": "enum",
+        "initial": "unset",
+        "values": [
+          "unset",
+          "legend",
+          "retreat",
+          "none"
+        ],
+        "meaning": "本人が選んだ紹介",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q110.values.approved",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "approved",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q110.values.invited",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "invited",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q110.values.walkedTogether",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "walkedTogether",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "退役兵イーロが頼んだのは、祭の行列一日だけの護衛だ。祭係の仕立てた肩掛けには「一度も退かなかった英雄」と縫ってある。",
+        "options": [
+          {
+            "id": "fit",
+            "text": "肩掛けを合わせる",
+            "to": "fitted",
+            "action": "entry_fit"
+          }
+        ]
+      },
+      {
+        "id": "fitted",
+        "text": "「私が誇るのは、退くと決めた夜だよ。あれで皆が帰れた」。鏡の中で字が逆さに映る。イーロは襟元を直して、行列の支度を続けた。",
+        "options": [
+          {
+            "id": "hear",
+            "text": "あの夜の話を聞く",
+            "to": "talk",
+            "action": "fitted_hear"
+          },
+          {
+            "id": "guard",
+            "text": "護衛だけを引き受ける",
+            "to": "march",
+            "action": "fitted_guard"
+          }
+        ]
+      },
+      {
+        "id": "talk",
+        "text": "「帰って点呼したら、いつも最後に返事をする男の声がした。あんなに嬉しい返事はない」。イーロは肩掛けを畳まず、膝に置いた。隊の戦績を見せるかは、こちらに任せている。",
+        "options": [
+          {
+            "id": "consult",
+            "text": "祭係と相談する",
+            "to": "council",
+            "action": "talk_consult"
+          },
+          {
+            "id": "show",
+            "text": "自分たちの戦績を見せる",
+            "to": "ledger",
+            "action": "talk_show"
+          }
+        ]
+      },
+      {
+        "id": "ledger",
+        "text": {
+          "when": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q110.values.partialRecord"
+            },
+            "right": true
+          },
+          "yes": {
+            "format": "手帳には「記録開始後の逃走は{count}回」とある。イーロは記録の最初の日付を指で押さえた。",
+            "values": {
+              "count": {
+                "ref": "stories.q110.values.sharedEscapes"
+              }
+            }
+          },
+          "no": {
+            "format": "隊の戦績を本人に開く。これまでの逃走は{count}回と書いてある。イーロは回数の下に並ぶ日付に目を落とした。",
+            "values": {
+              "count": {
+                "ref": "stories.q110.values.sharedEscapes"
+              }
+            }
+          }
+        },
+        "options": [
+          {
+            "id": "listen",
+            "text": "イーロの続きを聞く",
+            "to": "memory",
+            "action": "ledger_listen"
+          }
+        ]
+      },
+      {
+        "id": "memory",
+        "text": {
+          "when": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q110.values.sharedEscapes"
+            },
+            "right": 0
+          },
+          "yes": "「君らに同じ経験がなくても、あの声のことは話せる」。イーロは、一番遅く帰った戦友が門の名札を裏返したところまで話した。",
+          "no": "「記録には、最後の一人を待っていた時間までは書かれないね」。イーロは、友人が門に着くまで冷たくなった夕飯に誰も手を付けなかった話をした。"
+        },
+        "options": [
+          {
+            "id": "consult",
+            "text": "祭係と相談する",
+            "to": "council",
+            "action": "memory_consult"
+          }
+        ]
+      },
+      {
+        "id": "council",
+        "text": "「子どもたちに、勇気を持ち帰ってほしいんです」。祭係は下書きを二人の間に置いた。イーロが椅子を寄せる。今の紹介で歩くか、帰還の話にするか、仲間を全員招くか。",
+        "options": [
+          {
+            "id": "legend",
+            "text": "今の紹介で護衛する",
+            "to": "march",
+            "action": "council_legend"
+          },
+          {
+            "id": "retreat",
+            "text": "撤退を演説の中心に提案",
+            "to": "askRetreat",
+            "action": "council_retreat"
+          },
+          {
+            "id": "all",
+            "text": "演説をやめて皆を招く案",
+            "to": "askAll",
+            "action": "council_all"
+          }
+        ]
+      },
+      {
+        "id": "askRetreat",
+        "text": "祭係が「皆を連れて帰ると決めた」と下書きを読み直した。イーロがその一行に指を置く。「ここは、私の口からそう話したい」",
+        "options": [
+          {
+            "id": "approve",
+            "text": "本人の言葉で紹介を決める",
+            "to": "march",
+            "action": "askRetreat_approve"
+          },
+          {
+            "id": "back",
+            "text": "下書きに戻る",
+            "to": "council",
+            "action": "askRetreat_back"
+          }
+        ]
+      },
+      {
+        "id": "askAll",
+        "text": "「私一人の演説をやめて、帰ってきた連中を皆、客として呼んでほしい」。イーロが自分で言い、祭係が招待状を差し出した。",
+        "options": [
+          {
+            "id": "approve",
+            "text": "本人の希望で招待状を預かる",
+            "to": "invite",
+            "action": "askAll_approve"
+          },
+          {
+            "id": "back",
+            "text": "下書きに戻る",
+            "to": "council",
+            "action": "askAll_back"
+          }
+        ]
+      },
+      {
+        "id": "invite",
+        "text": "集まった戦友にイーロが一人ずつ招待状を渡した。最後の一人は杖をついて来た。「席が足りなきゃ、俺のを使えよ」とイーロが笑った。",
+        "options": [
+          {
+            "id": "invite",
+            "text": "全員そろって広場へ",
+            "to": "seats",
+            "action": "invite_invite"
+          }
+        ]
+      },
+      {
+        "id": "march",
+        "text": "行列の先頭を譲って、イーロは杖をついた戦友を待った。護衛隊が歩幅を合わせると、ほかの仲間もその速さで広場へ向かった。",
+        "options": [
+          {
+            "id": "walk",
+            "text": "戦友に付き添って広場へ",
+            "to": "festival",
+            "action": "march_walk"
+          }
+        ]
+      },
+      {
+        "id": "festival",
+        "text": {
+          "when": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q110.values.speech"
+            },
+            "right": "retreat"
+          },
+          "yes": "イーロが帰還の夜を話し終えると、祭係は子どもたちに色紐を渡した。全員が出口に着くまで終わらない、帰還路を作る遊びが始まった。",
+          "no": "祭係が肩掛けの文字を読み上げると、大きな拍手が起きた。イーロは短く礼を述べ、歩みの遅い友人の隣へ戻った。"
+        },
+        "options": [
+          {
+            "id": "finish",
+            "text": "友人の隣で護衛を終える",
+            "to": "@legend",
+            "action": "festival_finish",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q110.values.speech"
+              },
+              "right": "legend"
+            },
+            "visibleWhen": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q110.values.speech"
+              },
+              "right": "legend"
+            }
+          },
+          {
+            "id": "watch",
+            "text": "二人と帰還路を見届ける",
+            "to": "@retreat",
+            "action": "festival_watch",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q110.values.speech"
+              },
+              "right": "retreat"
+            },
+            "visibleWhen": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q110.values.speech"
+              },
+              "right": "retreat"
+            }
+          }
+        ]
+      },
+      {
+        "id": "seats",
+        "text": "英雄席に並べた椅子が一つ足りない。イーロは演壇から自分の椅子を運び、杖をついた友人に渡して、その隣に立った。",
+        "options": [
+          {
+            "id": "seat",
+            "text": "仲間たちの席を見届ける",
+            "to": "@all",
+            "action": "seats_seat"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.1",
+      "source": "https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4",
+      "adapter": "adv-story-state/1",
+      "scope": "quest-episode"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "entryScript": "q110.canal.visit",
+    "preserveAcceptedRoute": true,
+    "currentStoryScriptPrefix": "q110.canal.",
+    "interruptionRoutes": [],
+    "interruptionEntries": []
+  },
+  "scripts": {
+    "q110.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q110.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "「一度も退かなかった英雄」と衣装に縫われている。イーロは笑わない。「私が誇るのは、撤退を決めた夜なんだ」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hear",
+              "text": "退役兵の話を聞く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q110.scene.speech"
+                }
+              ]
+            },
+            {
+              "id": "guard",
+              "text": "語り方に介入せず護衛を務める",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q110.end.legend"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q110.scene.speech": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q110.node",
+          "value": "speech"
+        },
+        {
+          "op": "say",
+          "text": "退いたため部隊が帰った。祭係は子供に勇気を見せたいと言う。イーロは撤退の話をすることも、仲間全員を呼ぶことも受け入れた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "retreat",
+              "text": "本人の同意のもと、撤退を演説の中心にする",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q110.end.retreat"
+                }
+              ]
+            },
+            {
+              "id": "all",
+              "text": "演説をやめ、生還者を皆招く",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q110.end.all"
+                }
+              ]
+            },
+            {
+              "id": "legend",
+              "text": "今の紹介のまま護衛する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q110.end.legend"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q110.end.legend": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q110.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "拍手は大きかった。イーロは短く礼を述べ、行列の最後で歩みの遅い友人を待った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q110",
+              "outcome": "legend"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q110.end.retreat": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q110.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "祭係は子供たちに、皆で帰還路を作る遊びを用意した。イーロは友人の隣でその出口を見ていた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q110",
+              "outcome": "retreat"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q110.end.all": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q110.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "生還者の椅子が足りなくなった。イーロは自分の椅子を運び、いちばん足の悪い友人を呼んだ。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q110",
+              "outcome": "all"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q110.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q110.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q110.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "legend",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "拍手は大きかった。イーロは短く礼を述べ、行列の最後で歩みの遅い友人を待った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "retreat",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "祭係は子供たちに、皆で帰還路を作る遊びを用意した。イーロは友人の隣でその出口を見ていた。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "all",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "生還者の椅子が足りなくなった。イーロは自分の椅子を運び、いちばん足の悪い友人を呼んだ。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q110.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q110.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "speech",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q110.scene.speech"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q110.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q110.canal.entry": {
+      "storyQuest": "q110",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q110",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "退役兵イーロが頼んだのは、祭の行列一日だけの護衛だ。祭係の仕立てた肩掛けには「一度も退かなかった英雄」と縫ってある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fit",
+              "text": "肩掛けを合わせる",
+              "storyAction": {
+                "quest": "q110",
+                "action": "entry_fit"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q110",
+                  "action": "entry_fit"
+                },
+                {
+                  "op": "jump",
+                  "script": "q110.canal.fitted"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q110.canal.fitted": {
+      "storyQuest": "q110",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q110",
+          "scene": "fitted"
+        },
+        {
+          "op": "narrate",
+          "text": "「私が誇るのは、退くと決めた夜だよ。あれで皆が帰れた」。鏡の中で字が逆さに映る。イーロは襟元を直して、行列の支度を続けた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hear",
+              "text": "あの夜の話を聞く",
+              "storyAction": {
+                "quest": "q110",
+                "action": "fitted_hear"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q110",
+                  "action": "fitted_hear"
+                },
+                {
+                  "op": "jump",
+                  "script": "q110.canal.talk"
+                }
+              ]
+            },
+            {
+              "id": "guard",
+              "text": "護衛だけを引き受ける",
+              "storyAction": {
+                "quest": "q110",
+                "action": "fitted_guard"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q110",
+                  "action": "fitted_guard"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q110.canal.talk": {
+      "storyQuest": "q110",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q110",
+          "scene": "talk"
+        },
+        {
+          "op": "narrate",
+          "text": "「帰って点呼したら、いつも最後に返事をする男の声がした。あんなに嬉しい返事はない」。イーロは肩掛けを畳まず、膝に置いた。隊の戦績を見せるかは、こちらに任せている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "consult",
+              "text": "祭係と相談する",
+              "storyAction": {
+                "quest": "q110",
+                "action": "talk_consult"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q110",
+                  "action": "talk_consult"
+                }
+              ]
+            },
+            {
+              "id": "show",
+              "text": "自分たちの戦績を見せる",
+              "storyAction": {
+                "quest": "q110",
+                "action": "talk_show"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q110",
+                  "action": "talk_show"
+                },
+                {
+                  "op": "jump",
+                  "script": "q110.canal.ledger"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q110.canal.ledger": {
+      "storyQuest": "q110",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q110",
+          "scene": "ledger"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q110.values.partialRecord"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": {
+                "format": "手帳には「記録開始後の逃走は{count}回」とある。イーロは記録の最初の日付を指で押さえた。",
+                "values": {
+                  "count": {
+                    "ref": "stories.q110.values.sharedEscapes"
+                  }
+                }
+              }
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": {
+                "format": "隊の戦績を本人に開く。これまでの逃走は{count}回と書いてある。イーロは回数の下に並ぶ日付に目を落とした。",
+                "values": {
+                  "count": {
+                    "ref": "stories.q110.values.sharedEscapes"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "listen",
+              "text": "イーロの続きを聞く",
+              "storyAction": {
+                "quest": "q110",
+                "action": "ledger_listen"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q110",
+                  "action": "ledger_listen"
+                },
+                {
+                  "op": "jump",
+                  "script": "q110.canal.memory"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q110.canal.memory": {
+      "storyQuest": "q110",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q110",
+          "scene": "memory"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q110.values.sharedEscapes"
+            },
+            "right": 0
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "「君らに同じ経験がなくても、あの声のことは話せる」。イーロは、一番遅く帰った戦友が門の名札を裏返したところまで話した。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "「記録には、最後の一人を待っていた時間までは書かれないね」。イーロは、友人が門に着くまで冷たくなった夕飯に誰も手を付けなかった話をした。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "consult",
+              "text": "祭係と相談する",
+              "storyAction": {
+                "quest": "q110",
+                "action": "memory_consult"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q110",
+                  "action": "memory_consult"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q110.canal.council": {
+      "storyQuest": "q110",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q110",
+          "scene": "council"
+        },
+        {
+          "op": "narrate",
+          "text": "「子どもたちに、勇気を持ち帰ってほしいんです」。祭係は下書きを二人の間に置いた。イーロが椅子を寄せる。今の紹介で歩くか、帰還の話にするか、仲間を全員招くか。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "legend",
+              "text": "今の紹介で護衛する",
+              "storyAction": {
+                "quest": "q110",
+                "action": "council_legend"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q110",
+                  "action": "council_legend"
+                }
+              ]
+            },
+            {
+              "id": "retreat",
+              "text": "撤退を演説の中心に提案",
+              "storyAction": {
+                "quest": "q110",
+                "action": "council_retreat"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q110",
+                  "action": "council_retreat"
+                },
+                {
+                  "op": "jump",
+                  "script": "q110.canal.askRetreat"
+                }
+              ]
+            },
+            {
+              "id": "all",
+              "text": "演説をやめて皆を招く案",
+              "storyAction": {
+                "quest": "q110",
+                "action": "council_all"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q110",
+                  "action": "council_all"
+                },
+                {
+                  "op": "jump",
+                  "script": "q110.canal.askAll"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q110.canal.askRetreat": {
+      "storyQuest": "q110",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q110",
+          "scene": "askRetreat"
+        },
+        {
+          "op": "narrate",
+          "text": "祭係が「皆を連れて帰ると決めた」と下書きを読み直した。イーロがその一行に指を置く。「ここは、私の口からそう話したい」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "approve",
+              "text": "本人の言葉で紹介を決める",
+              "storyAction": {
+                "quest": "q110",
+                "action": "askRetreat_approve"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q110",
+                  "action": "askRetreat_approve"
+                }
+              ]
+            },
+            {
+              "id": "back",
+              "text": "下書きに戻る",
+              "storyAction": {
+                "quest": "q110",
+                "action": "askRetreat_back"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q110",
+                  "action": "askRetreat_back"
+                },
+                {
+                  "op": "jump",
+                  "script": "q110.canal.council"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q110.canal.askAll": {
+      "storyQuest": "q110",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q110",
+          "scene": "askAll"
+        },
+        {
+          "op": "narrate",
+          "text": "「私一人の演説をやめて、帰ってきた連中を皆、客として呼んでほしい」。イーロが自分で言い、祭係が招待状を差し出した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "approve",
+              "text": "本人の希望で招待状を預かる",
+              "storyAction": {
+                "quest": "q110",
+                "action": "askAll_approve"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q110",
+                  "action": "askAll_approve"
+                }
+              ]
+            },
+            {
+              "id": "back",
+              "text": "下書きに戻る",
+              "storyAction": {
+                "quest": "q110",
+                "action": "askAll_back"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q110",
+                  "action": "askAll_back"
+                },
+                {
+                  "op": "jump",
+                  "script": "q110.canal.council"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q110.canal.invite": {
+      "storyQuest": "q110",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q110",
+          "scene": "invite"
+        },
+        {
+          "op": "narrate",
+          "text": "集まった戦友にイーロが一人ずつ招待状を渡した。最後の一人は杖をついて来た。「席が足りなきゃ、俺のを使えよ」とイーロが笑った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "invite",
+              "text": "全員そろって広場へ",
+              "storyAction": {
+                "quest": "q110",
+                "action": "invite_invite"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q110",
+                  "action": "invite_invite"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q110.canal.march": {
+      "storyQuest": "q110",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q110",
+          "scene": "march"
+        },
+        {
+          "op": "narrate",
+          "text": "行列の先頭を譲って、イーロは杖をついた戦友を待った。護衛隊が歩幅を合わせると、ほかの仲間もその速さで広場へ向かった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "walk",
+              "text": "戦友に付き添って広場へ",
+              "storyAction": {
+                "quest": "q110",
+                "action": "march_walk"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q110",
+                  "action": "march_walk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q110.canal.festival": {
+      "storyQuest": "q110",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q110",
+          "scene": "festival"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q110.values.speech"
+            },
+            "right": "retreat"
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "イーロが帰還の夜を話し終えると、祭係は子どもたちに色紐を渡した。全員が出口に着くまで終わらない、帰還路を作る遊びが始まった。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "祭係が肩掛けの文字を読み上げると、大きな拍手が起きた。イーロは短く礼を述べ、歩みの遅い友人の隣へ戻った。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "finish",
+              "text": "友人の隣で護衛を終える",
+              "storyAction": {
+                "quest": "q110",
+                "action": "festival_finish"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q110.values.speech"
+                },
+                "right": "legend"
+              },
+              "visibleWhen": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q110.values.speech"
+                },
+                "right": "legend"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q110",
+                  "action": "festival_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q110.canal.end.legend"
+                }
+              ]
+            },
+            {
+              "id": "watch",
+              "text": "二人と帰還路を見届ける",
+              "storyAction": {
+                "quest": "q110",
+                "action": "festival_watch"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q110.values.speech"
+                },
+                "right": "retreat"
+              },
+              "visibleWhen": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q110.values.speech"
+                },
+                "right": "retreat"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q110",
+                  "action": "festival_watch"
+                },
+                {
+                  "op": "jump",
+                  "script": "q110.canal.end.retreat"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q110.canal.seats": {
+      "storyQuest": "q110",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q110",
+          "scene": "seats"
+        },
+        {
+          "op": "narrate",
+          "text": "英雄席に並べた椅子が一つ足りない。イーロは演壇から自分の椅子を運び、杖をついた友人に渡して、その隣に立った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "seat",
+              "text": "仲間たちの席を見届ける",
+              "storyAction": {
+                "quest": "q110",
+                "action": "seats_seat"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q110",
+                  "action": "seats_seat"
+                },
+                {
+                  "op": "jump",
+                  "script": "q110.canal.end.all"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q110.canal.end.legend": {
+      "commands": [
+        {
+          "op": "jump",
+          "script": "q110.end.legend"
+        }
+      ]
+    },
+    "q110.canal.end.retreat": {
+      "commands": [
+        {
+          "op": "jump",
+          "script": "q110.end.retreat"
+        }
+      ]
+    },
+    "q110.canal.end.all": {
+      "commands": [
+        {
+          "op": "jump",
+          "script": "q110.end.all"
+        }
+      ]
+    },
+    "q110.canal.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q110"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q110.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q110.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q110.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "legend",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "拍手は大きかった。イーロは短く礼を述べ、行列の最後で歩みの遅い友人を待った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "retreat",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "祭係は子供たちに、皆で帰還路を作る遊びを用意した。イーロは友人の隣でその出口を見ていた。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "all",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "生還者の椅子が足りなくなった。イーロは自分の椅子を運び、いちばん足の悪い友人を呼んだ。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q110"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q110.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q110.canal.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "fitted",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q110.canal.fitted"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "talk",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q110.canal.talk"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "ledger",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q110.canal.ledger"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "memory",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q110.canal.memory"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "council",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q110.canal.council"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "askRetreat",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q110.canal.askRetreat"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "askAll",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q110.canal.askAll"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "invite",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q110.canal.invite"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "march",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q110.canal.march"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "festival",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q110.canal.festival"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "seats",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q110.canal.seats"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q110.canal.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "fitting": "祭の衣装部屋",
+      "desk": "祭係の詰所",
+      "lane": "行列の集合路",
+      "square": "祭の広場",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "desk",
+        "square"
+      ],
+      [
+        "transit",
+        "fitting"
+      ],
+      [
+        "transit",
+        "desk"
+      ],
+      [
+        "transit",
+        "lane"
+      ],
+      [
+        "transit",
+        "square"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "fitting",
+        "values": [
+          "fitting",
+          "desk",
+          "lane",
+          "square",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "iroAt": {
+        "type": "enum",
+        "initial": "fitting",
+        "values": [
+          "fitting",
+          "desk",
+          "lane",
+          "square",
+          "transit"
+        ],
+        "meaning": "iro の所在または保持者"
+      },
+      "stewardAt": {
+        "type": "enum",
+        "initial": "desk",
+        "values": [
+          "fitting",
+          "desk",
+          "lane",
+          "square",
+          "transit"
+        ],
+        "meaning": "steward の所在または保持者"
+      },
+      "friendsAt": {
+        "type": "enum",
+        "initial": "lane",
+        "values": [
+          "fitting",
+          "desk",
+          "lane",
+          "square",
+          "transit"
+        ],
+        "meaning": "friends の所在または保持者"
+      },
+      "retreatStory": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "retreatStory"
+      },
+      "heard": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "heard"
+      },
+      "recordShared": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "recordShared"
+      },
+      "partialRecord": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "partialRecord"
+      },
+      "sharedEscapes": {
+        "type": "integer",
+        "initial": 0,
+        "min": 0,
+        "max": 1000000000,
+        "meaning": "見せた時点の逃走回数"
+      },
+      "speech": {
+        "type": "enum",
+        "initial": "unset",
+        "values": [
+          "unset",
+          "legend",
+          "retreat",
+          "none"
+        ],
+        "meaning": "本人が選んだ紹介"
+      },
+      "approved": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "approved"
+      },
+      "invited": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "invited"
+      },
+      "walkedTogether": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "walkedTogether"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "iro": {
+        "holder": "iroAt",
+        "kind": "person",
+        "character": "e2_q110_iro"
+      },
+      "steward": {
+        "holder": "stewardAt",
+        "kind": "person",
+        "character": "e2_q110_steward"
+      },
+      "friends": {
+        "holder": "friendsAt",
+        "kind": "person",
+        "character": "e2_q110_friends"
+      }
+    },
+    "propositions": {},
+    "initialKnowledge": {},
+    "invariants": [
+      {
+        "id": "speechConsent",
+        "condition": {
+          "op": "or",
+          "args": [
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q110.values.speech"
+              },
+              "right": "unset"
+            },
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q110.values.speech"
+              },
+              "right": "legend"
+            },
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q110.values.approved"
+              },
+              "right": true
+            }
+          ]
+        },
+        "message": "紹介を変更するにはイーロの同意がいる。"
+      },
+      {
+        "id": "invitation",
+        "condition": {
+          "op": "or",
+          "args": [
+            {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q110.values.invited"
+                },
+                "right": true
+              }
+            },
+            {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q110.values.speech"
+              },
+              "right": "none"
+            }
+          ]
+        },
+        "message": "皆を英雄席に招くのは演説を取りやめた場合。"
+      }
+    ],
+    "scenes": {
+      "entry": {
+        "title": "祭の衣装部屋",
+        "place": "fitting",
+        "cast": [
+          {
+            "entity": "iro",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q110.values.iroAt"
+              },
+              "right": "fitting"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "fitted": {
+        "title": "祭の衣装部屋",
+        "place": "fitting",
+        "cast": [
+          {
+            "entity": "iro",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q110.values.iroAt"
+              },
+              "right": "fitting"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "talk": {
+        "title": "祭の衣装部屋",
+        "place": "fitting",
+        "cast": [
+          {
+            "entity": "iro",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q110.values.iroAt"
+              },
+              "right": "fitting"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "ledger": {
+        "title": "祭の衣装部屋",
+        "place": "fitting",
+        "cast": [
+          {
+            "entity": "iro",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q110.values.iroAt"
+              },
+              "right": "fitting"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "memory": {
+        "title": "祭の衣装部屋",
+        "place": "fitting",
+        "cast": [
+          {
+            "entity": "iro",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q110.values.iroAt"
+              },
+              "right": "fitting"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "council": {
+        "title": "祭係の詰所",
+        "place": "desk",
+        "cast": [
+          {
+            "entity": "iro",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q110.values.iroAt"
+              },
+              "right": "desk"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "steward",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q110.values.stewardAt"
+              },
+              "right": "desk"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "askRetreat": {
+        "title": "祭係の詰所",
+        "place": "desk",
+        "cast": [
+          {
+            "entity": "iro",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q110.values.iroAt"
+              },
+              "right": "desk"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "steward",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q110.values.stewardAt"
+              },
+              "right": "desk"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "askAll": {
+        "title": "祭係の詰所",
+        "place": "desk",
+        "cast": [
+          {
+            "entity": "iro",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q110.values.iroAt"
+              },
+              "right": "desk"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "steward",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q110.values.stewardAt"
+              },
+              "right": "desk"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "invite": {
+        "title": "行列の集合路",
+        "place": "lane",
+        "cast": [
+          {
+            "entity": "iro",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q110.values.iroAt"
+              },
+              "right": "lane"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "friends",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q110.values.friendsAt"
+              },
+              "right": "lane"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "march": {
+        "title": "行列の集合路",
+        "place": "lane",
+        "cast": [
+          {
+            "entity": "iro",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q110.values.iroAt"
+              },
+              "right": "lane"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "friends",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q110.values.friendsAt"
+              },
+              "right": "lane"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "festival": {
+        "title": "祭の広場",
+        "place": "square",
+        "cast": [
+          {
+            "entity": "iro",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q110.values.iroAt"
+              },
+              "right": "square"
+            },
+            "display": {
+              "x": 17,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "steward",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q110.values.stewardAt"
+              },
+              "right": "square"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          },
+          {
+            "entity": "friends",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q110.values.friendsAt"
+              },
+              "right": "square"
+            },
+            "display": {
+              "x": 83,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 2
+            }
+          }
+        ],
+        "requires": true
+      },
+      "seats": {
+        "title": "祭の広場",
+        "place": "square",
+        "cast": [
+          {
+            "entity": "iro",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q110.values.iroAt"
+              },
+              "right": "square"
+            },
+            "display": {
+              "x": 17,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "steward",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q110.values.stewardAt"
+              },
+              "right": "square"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          },
+          {
+            "entity": "friends",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q110.values.friendsAt"
+              },
+              "right": "square"
+            },
+            "display": {
+              "x": 83,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 2
+            }
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_fit": {
+        "from": [
+          "entry"
+        ],
+        "to": "fitted",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "retreatStory",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "fitted_hear": {
+        "from": [
+          "fitted"
+        ],
+        "to": "talk",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "heard",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "fitted_guard": {
+        "from": [
+          "fitted"
+        ],
+        "to": "march",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "iro"
+            ],
+            "path": [
+              "transit",
+              "lane"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "lane",
+          "companions": [
+            "iro"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "speech",
+            "value": "legend"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "steward"
+            ],
+            "path": [
+              "desk",
+              "square"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ]
+      },
+      "talk_consult": {
+        "from": [
+          "talk"
+        ],
+        "to": "council",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "iro"
+            ],
+            "path": [
+              "transit",
+              "desk"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "desk",
+          "companions": [
+            "iro"
+          ]
+        },
+        "depart": []
+      },
+      "talk_show": {
+        "from": [
+          "talk"
+        ],
+        "to": "ledger",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "recordShared",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "sharedEscapes",
+            "value": {
+              "op": "record_count",
+              "metric": "escapes"
+            }
+          },
+          {
+            "op": "set",
+            "key": "partialRecord",
+            "value": {
+              "op": "not",
+              "arg": {
+                "ref": "records.historyComplete"
+              }
+            }
+          }
+        ],
+        "once": true
+      },
+      "ledger_listen": {
+        "from": [
+          "ledger"
+        ],
+        "to": "memory",
+        "requires": true,
+        "effects": [],
+        "once": true
+      },
+      "memory_consult": {
+        "from": [
+          "memory"
+        ],
+        "to": "council",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "iro"
+            ],
+            "path": [
+              "transit",
+              "desk"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "desk",
+          "companions": [
+            "iro"
+          ]
+        },
+        "depart": []
+      },
+      "council_legend": {
+        "from": [
+          "council"
+        ],
+        "to": "march",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "iro"
+            ],
+            "path": [
+              "transit",
+              "lane"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "lane",
+          "companions": [
+            "iro"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "speech",
+            "value": "legend"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "steward"
+            ],
+            "path": [
+              "desk",
+              "square"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ]
+      },
+      "council_retreat": {
+        "from": [
+          "council"
+        ],
+        "to": "askRetreat",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "council_all": {
+        "from": [
+          "council"
+        ],
+        "to": "askAll",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "askRetreat_approve": {
+        "from": [
+          "askRetreat"
+        ],
+        "to": "march",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "iro"
+            ],
+            "path": [
+              "transit",
+              "lane"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "lane",
+          "companions": [
+            "iro"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "approved",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "speech",
+            "value": "retreat"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "steward"
+            ],
+            "path": [
+              "desk",
+              "square"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ]
+      },
+      "askRetreat_back": {
+        "from": [
+          "askRetreat"
+        ],
+        "to": "council",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "askAll_approve": {
+        "from": [
+          "askAll"
+        ],
+        "to": "invite",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "iro"
+            ],
+            "path": [
+              "transit",
+              "lane"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "lane",
+          "companions": [
+            "iro"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "approved",
+            "value": true
+          },
+          {
+            "op": "set",
+            "key": "speech",
+            "value": "none"
+          },
+          {
+            "op": "move",
+            "entities": [
+              "steward"
+            ],
+            "path": [
+              "desk",
+              "square"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ]
+      },
+      "askAll_back": {
+        "from": [
+          "askAll"
+        ],
+        "to": "council",
+        "requires": true,
+        "effects": [],
+        "once": false
+      },
+      "invite_invite": {
+        "from": [
+          "invite"
+        ],
+        "to": "seats",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "iro",
+              "friends"
+            ],
+            "path": [
+              "transit",
+              "square"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "square",
+          "companions": [
+            "iro",
+            "friends"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "invited",
+            "value": true
+          }
+        ]
+      },
+      "march_walk": {
+        "from": [
+          "march"
+        ],
+        "to": "festival",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "iro",
+              "friends"
+            ],
+            "path": [
+              "transit",
+              "square"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "square",
+          "companions": [
+            "iro",
+            "friends"
+          ]
+        },
+        "depart": []
+      },
+      "festival_finish": {
+        "from": [
+          "festival"
+        ],
+        "ending": "legend",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q110.values.speech"
+          },
+          "right": "legend"
+        },
+        "effects": [
+          {
+            "op": "set",
+            "key": "walkedTogether",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "festival_watch": {
+        "from": [
+          "festival"
+        ],
+        "ending": "retreat",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q110.values.speech"
+          },
+          "right": "retreat"
+        },
+        "effects": [
+          {
+            "op": "set",
+            "key": "walkedTogether",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "seats_seat": {
+        "from": [
+          "seats"
+        ],
+        "ending": "all",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "walkedTogether",
+            "value": true
+          }
+        ],
+        "once": true
+      }
+    },
+    "endings": {
+      "legend": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q110.values.speech"
+            },
+            "right": "legend"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q110.values.walkedTogether"
+            },
+            "right": true
+          }
+        ]
+      },
+      "retreat": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q110.values.speech"
+            },
+            "right": "retreat"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q110.values.approved"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q110.values.walkedTogether"
+            },
+            "right": true
+          }
+        ]
+      },
+      "all": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q110.values.speech"
+            },
+            "right": "none"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q110.values.approved"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q110.values.invited"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q110.values.walkedTogether"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "fitting": {
+        "kind": "town",
+        "location": "e2_q110_fitting"
+      },
+      "desk": {
+        "kind": "town",
+        "location": "e2_q110_desk"
+      },
+      "lane": {
+        "kind": "town",
+        "location": "e2_q110_lane"
+      },
+      "square": {
+        "kind": "town",
+        "location": "e2_q110_square"
+      }
+    },
+    "revision": 1
+  }
+}

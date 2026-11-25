@@ -5,7 +5,7 @@ import {objectVisible} from '../src/core/quest-events.js';
 import {nextQuestPlace} from '../src/core/quest-navigation.js';
 import {drain,goWorldLocation} from './helpers.mjs';
 import {arrive,checkpoint,choose,depart,go,resume} from './world-route-helpers.mjs';
-import {data,previous,ready,migrated,routes,states,expectedValues,legacyProgress} from './canal-world-helpers.mjs';
+import {data,previous,ready,migrated,routes,states,expectedValues,legacyProgress,setupRoute} from './canal-world-helpers.mjs';
 
 for(const [q,paths] of Object.entries(routes)){
   const quest=data.quests[q],story=quest.story,graph=states(q);
@@ -24,7 +24,7 @@ for(const [q,paths] of Object.entries(routes)){
     for(const p of Object.values(story.worldPlaces))assert.equal(data.locations[data.locations[p.location].parent].parent,'e2_canal_quarter');
   });
   for(const r of paths.filter(r=>r.old.length))test(q+' '+r.path.join('/')+' retains the manuscript ending and payment',()=>{
-    const g=ready(q),old=ready(q,{old:true});
+    const g=ready(q),old=ready(q,{old:true});setupRoute(g,q,r);setupRoute(old,q,r);
     for(const id of r.path){choose(g,q,id);checkpoint(g);}
     for(const id of r.old){
       const restored=migrated(old);choose(old,q,id);choose(restored,q,id);checkpoint(restored);
