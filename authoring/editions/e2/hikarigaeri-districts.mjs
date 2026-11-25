@@ -31,7 +31,9 @@ export function buildRiverside(bundle){
     ['e2_canal_mora_inn','モラの宿','帳場の先に食堂があり、配達人の通う戸口が通りに開く。','location_tavern',[
       ['e2_q107_desk','帳場'],['e2_q107_dining','食堂'],['e2_q107_door','配達口'],['e2_q107_room','客室']]],
     ['e2_canal_cat_market','魚屋と鳥屋','隣り合う二軒の店と、魚屋が借りる遠い倉庫へ続く道。','location_shop',[
-      ['e2_q108_stall','魚屋の売り台'],['e2_q108_feeder','鳥屋の餌場'],['e2_q108_warehouse','遠い倉庫']]]
+      ['e2_q108_stall','魚屋の売り台'],['e2_q108_feeder','鳥屋の餌場'],['e2_q108_warehouse','遠い倉庫']]],
+    ['e2_canal_forge','エンの鍛冶場','炉材を受け取る裏戸から、師弟の作業場と注文を受ける店先へ回れる。','location_shop',[
+      ['e2_q109_yard','搬入口'],['e2_q109_forge','炉場'],['e2_q109_bench','弟子の作業台'],['e2_q109_counter','店先']]]
   ];
   for(const [id,name,description,background,stops] of groups){
     add(id,name,canal,description,background);

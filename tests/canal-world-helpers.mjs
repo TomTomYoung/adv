@@ -4,11 +4,11 @@ import {loadContent} from '../src/core/loader.js';
 import {createQuestTrial} from '../src/application/quest-playtest.js';
 import {data,catalog,migrated} from './abyss-world-helpers.mjs';
 import {drain} from './helpers.mjs';
-import {choose} from './world-route-helpers.mjs';
+import {choose,go,resume} from './world-route-helpers.mjs';
 export {data,catalog,migrated};
 export {arrive} from './world-route-helpers.mjs';
 
-const ids=['q101','q102','q103','q104','q105','q106','q107','q108'];
+const ids=['q101','q102','q103','q104','q105','q106','q107','q108','q109'];
 export const routes=Object.fromEntries(ids.map(id=>[id,[]]));
 function add(q,old,path,outcome){
   const words=text=>text.trim().split(/\s+/);
@@ -79,6 +79,21 @@ for(const [old,prefix] of [['shelf','shelf'],['catch rats','catch rats open']]){
 for(const prefix of ['', 'catch ', 'shelf cost check ', 'catch rats open cost check ']){
   routes.q108.push({old:[],path:(prefix+'decline').split(' '),outcome:'decline'});
 }
+for(const haul of ['cart','hand carry'])for(const message of ['', 'lie return ']){
+  const start=haul+' unload '+message, smith=start+'ask sample ';
+  const tell=message?'correct ':'';
+  add('q109','rest',start+'rest refund join shut','rest');
+  add('q109','ask rest',smith+'rest refund join shut','rest');
+  add('q109','ask tools',smith+'tools take','tools');
+  add('q109','ask pupil agree',smith+'pupil '+tell+'agree fire sign','inherit');
+}
+for(const [old,path,end] of [
+  ['ask pupil back tools','cart unload ask sample pupil back tools take','tools'],
+  ['ask pupil back rest','hand carry unload lie return ask sample pupil back rest refund join shut','rest'],
+  ['ask pupil back pupil back pupil agree','hand carry unload ask sample pupil back pupil back pupil agree fire sign','inherit'],
+  ['ask pupil back pupil agree','cart unload lie return ask sample pupil correct back pupil agree fire sign','inherit']
+])add('q109',old,path,end);
+
 export function legacyProgress(g,q){
   return g.state.flags.flow?.[q] ?? g.state.flags.quest?.[q];
 }
@@ -98,6 +113,12 @@ export function ready(quest,{old=false,start='site'}={}){
   const {engine}=createQuestTrial(old?previous:data,catalog,{quest,start,party:'balanced',level:1,seed:1907});
   engine.random=()=>0.999999;drain(engine);return engine;
 }
+export function forgePacking(leader){
+  const q='q109',g=ready(q,{start:'reception'}),index=g.state.members.indexOf(leader);
+  assert.ok(index>=0);
+  for(let i=0;i<index;i++)assert.ok(g.dispatch({type:'party.order',group:'party',actor:leader,direction:'up'}));
+  go(g,q,'yard');resume(g,q);choose(g,q,'hand');return g;
+}
 export function expectedValues(q,r){
   const has=k=>r.old.includes(k),end=r.outcome;
   switch(q){
@@ -110,6 +131,13 @@ export function expectedValues(q,r){
       return {courierSeen:true,message:sent,slept,reply:slept,meeting:slept,seated:met,reported:end==='alive',stopped:end==='stop',
         letterAt:sent&&!slept?'courier':'guests',parcelAt:'courier',courierAt:sent&&!slept?'neighbor':'door',
         missingAt:met?'dining':'neighbor',guestsAt:'dining',moraAt:'desk'};
+    }
+    case 'q109':{
+      const took=k=>r.path.includes(k), rest=end==='rest', tools=end==='tools', inherit=end==='inherit';
+      return {haul:took('cart')?'cart':'hand',liningAt:'forge',tremor:took('ask'),samples:took('sample'),
+        lied:took('return'),corrected:took('correct'),sedoAgrees:inherit,enAgrees:inherit,signed:inherit,toolsChosen:tools,
+        refunded:rest,signDown:rest,advanceAt:rest?'buyer':'en',handleAt:tools?'buyer':'en',
+        enAt:tools?'counter':'forge',sedoAt:tools?'bench':'forge',buyerAt:'counter'};
     }
     case 'q108':{
       const took=id=>r.path.includes(id), paid=end==='shared', fish=end==='fish';
@@ -163,5 +191,6 @@ export function states(q){
       rows.set('short-'+first,{scene:'agreement',save:g.save(),availableChoice:'build_supplies'});
     }
   }
+  if(q==='q109')current.set('split-load',{scene:'packing',save:forgePacking('sera').save()});
   return {current:[...current.values()],legacy:[...legacy.values()]};
 }
