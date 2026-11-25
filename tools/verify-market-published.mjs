@@ -7,11 +7,11 @@ import {createQuestTrial,questTrialReport} from '../src/application/quest-playte
 import {drain,fight} from '../tests/helpers.mjs';
 
 const suite=process.argv[2]??'market';
-const suites={'--canal':()=>import('../tests/canal-world-helpers.mjs'),market:()=>import('../tests/market-world-helpers.mjs'),'--deep-abyss':()=>import('../tests/deep-abyss-helpers.mjs'),'--q091':()=>import('../tests/q091-helpers.mjs'),'--q092':()=>import('../tests/q092-helpers.mjs'),'--q093':()=>import('../tests/q093-helpers.mjs'),'--q094':()=>import('../tests/q094-helpers.mjs'),'--q095':()=>import('../tests/q095-helpers.mjs')};
+const suites={'--q111':()=>import('../tests/q111-world-helpers.mjs'),'--canal':()=>import('../tests/canal-world-helpers.mjs'),market:()=>import('../tests/market-world-helpers.mjs'),'--deep-abyss':()=>import('../tests/deep-abyss-helpers.mjs'),'--q091':()=>import('../tests/q091-helpers.mjs'),'--q092':()=>import('../tests/q092-helpers.mjs'),'--q093':()=>import('../tests/q093-helpers.mjs'),'--q094':()=>import('../tests/q094-helpers.mjs'),'--q095':()=>import('../tests/q095-helpers.mjs')};
 assert.ok(Object.hasOwn(suites,suite),'Unknown published trial suite');
-const {data,catalog,routes,arrive,expectedValues,setupRoute}=await suites[suite]();
-const level=suite==='--canal'?1:suite==='market'?6:10;
-const checkEachChoice=suite==='--deep-abyss'||suite==='--canal';
+const {data,catalog,routes,arrive,expectedValues,setupRoute,settleBattle=fight}=await suites[suite]();
+const level=suite==='--q111'?2:suite==='--canal'?1:suite==='market'?6:10;
+const checkEachChoice=['--deep-abyss','--canal','--q111'].includes(suite);
 const base=process.env.ADV_TRIAL_BASE_URL??'https://tomtomyoung.github.io/adv/',hash=b=>createHash('sha256').update(b).digest('hex');
 const filterQuest=process.argv[3];
 if(filterQuest)assert.ok(Object.hasOwn(routes,filterQuest),'Unknown quest in published trial suite');
@@ -48,7 +48,7 @@ function trace(quest,route){
   drain(g);
   for(const id of route.path){
     assert.ok(g.dispatch({type:'choose',id}));drain(g);
-    if(g.state.battle){fight(g);drain(g);}
+    if(g.state.battle){settleBattle(g,quest,route);drain(g);}
     if(g.state.journey)arrive(g,quest);
   }
   return {commands,checkpoints,initial,report:questTrialReport(trial)};
@@ -202,6 +202,13 @@ if(suite==='--q095'){
     console.log('PUBLIC_LEGACY_BATTLE_SAVE',q,'guard_10','contract');
   }
   if(suite==='--deep-abyss')await (await import('./verify-deep-abyss-saves.mjs')).verifyDeepAbyssSaves(page);
+  if(suite==='--q111'){
+    const {previous}=await suites[suite]();
+    const {verifyPublishedSaves}=await import('./verify-published-saves.mjs');
+    await verifyPublishedSaves(page,{previous,catalog,level,cases:[
+      ['q111',['flag'],['name','agree'],'named'],['q111',['ferry'],['home'],'home']
+    ]});
+  }
   if(suite==='--canal'){
     const {previous}=await suites[suite]();
     const {verifyPublishedSaves}=await import('./verify-published-saves.mjs');

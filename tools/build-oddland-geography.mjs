@@ -1,4 +1,5 @@
 import {buildRiverside} from '../authoring/editions/e2/hikarigaeri-districts.mjs';
+import wagonQuest, {pass} from '../authoring/editions/e2/story-q111.mjs';
 import {extendCanalQuarter} from './build-canal-world-routes.mjs';
 import {extendTwoGravesGeography} from '../authoring/editions/e2/story-q017.mjs';
 import {extendWhiteDebtGeography} from '../authoring/editions/e2/story-q018.mjs';
@@ -67,6 +68,8 @@ export async function buildOddlandGeography({check=false}={}){
   extendWeepingPillarGeography(bundle);
   extendTwoGravesGeography(bundle);
   extendCanalQuarter(bundle);
+  bundle.additions.locations[pass.id]=pass;
+  Object.assign(bundle.additions.locations,wagonQuest.locations);
   extendWhiteDebtGeography(bundle);
   extendCrownGeography(bundle);
   buildRiverside(bundle);

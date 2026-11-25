@@ -1,3 +1,5 @@
+import wagonQuest from '../authoring/editions/e2/story-q111.mjs';
+import {compilePreservedWorldQuest,buildPreservedWorldFile} from './preserved-world-quest.mjs';
 import {buildCanalWorldRoutes} from './build-canal-world-routes.mjs';
 import {buildDeepAbyssWorldRoutes} from './build-deep-abyss-world-routes.mjs';
 import {buildHeroMemorial} from './build-q095-world-route.mjs';
@@ -189,6 +191,12 @@ export async function buildScenarioEditions({check=false}={}){
  await buildHeroMemorial({check});
  await buildDeepAbyssWorldRoutes({check});
  await buildCanalWorldRoutes({check});
+ await buildPreservedWorldFile(wagonQuest.id,(original,items)=>{
+  const q=compilePreservedWorldQuest(original,items,wagonQuest.source(),'pass');
+  q.unlockHint='荷揚げ河岸の廃坑搬出口から、農具返却の峠道の荷倉へ向かう。';
+  for(const key of Object.keys(original.outcomes))q.scripts[q.id+'.pass.end.'+key]={commands:[{op:'jump',script:q.id+'.end.'+key}]};
+  return q;
+ },{check});
  await buildCompanionEdition({check});
  const geography=await buildOddlandGeography({check});
  await buildSalomeGeography(geography,{check});
