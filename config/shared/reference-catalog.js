@@ -17103,6 +17103,756 @@ export const referenceData={
       "id": "machine_part"
     },
     {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "goblin_5_slinger",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "goblin_5_trapper",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "goblin_5_dagger",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "goblin_5_herbalist",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "goblin_5_piper",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "orc_5_cleaver",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "orc_5_hunter",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "orc_5_drummer",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "orc_5_cook",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "orc_5_diviner",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "ogre_5_club",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "ogre_5_rock",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "ogre_5_gate",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "ogre_5_wrestler",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "ogre_5_bell",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "goblin_10_shield",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "goblin_10_spear",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "goblin_10_standard",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "goblin_10_sergeant",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "goblin_10_engineer",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "orc_10_stoker",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "orc_10_smith",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "orc_10_shieldsmith",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "orc_10_charcoal",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "orc_10_cart",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "ogre_10_quarry",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "ogre_10_roller",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "ogre_10_wall",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "ogre_10_statue",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "ogre_10_flute",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "goblin_15_snuffer",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "goblin_15_firefly",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "goblin_15_shadow",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "goblin_15_thief",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "goblin_15_owl",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "orc_15_mud",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "orc_15_harpoon",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "orc_15_hound",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "orc_15_ferry",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "orc_15_doctor",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "ogre_15_charger",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "ogre_15_brawler",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "ogre_15_breaker",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "ogre_15_firewalker",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "ogre_15_peacemaker",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "goblin_20_heavyshield",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "goblin_20_double",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "goblin_20_chain",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "goblin_20_maskmaker",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "goblin_20_cadence",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "orc_20_greatshield",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "orc_20_ram",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "orc_20_axe",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "orc_20_armorer",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "orc_20_marshal",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "ogre_20_twinclubs",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "ogre_20_warden",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "ogre_20_hex",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "ogre_20_quarrel",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "ogre_20_singer",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "goblin_25_king",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "goblin_25_guard",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "goblin_25_herald",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "goblin_25_jester",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "goblin_25_steward",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "orc_25_bonemask",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "orc_25_grave",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "orc_25_poet",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "orc_25_spirit",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "orc_25_chief",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "ogre_25_summit",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "ogre_25_bridge",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "ogre_25_avalanche",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "ogre_25_greatbell",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "ogre_25_mountainking",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
       "file": "cell-layers.json",
       "path": [
         "presets",
@@ -18962,6 +19712,2556 @@ export const referenceData={
       "path": [
         "enemies",
         "tank_beaver",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_5_slinger",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_goblin_5_slinger"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_5_slinger",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_goblin_5_slinger"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_5_slinger",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_5_trapper",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_goblin_5_trapper"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_5_trapper",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_goblin_5_trapper"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_5_trapper",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_5_dagger",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_goblin_5_dagger"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_5_dagger",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_goblin_5_dagger"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_5_dagger",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_5_herbalist",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_goblin_5_herbalist"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_5_herbalist",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_goblin_5_herbalist"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_5_herbalist",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_5_piper",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_goblin_5_piper"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_5_piper",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_goblin_5_piper"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_5_piper",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_5_cleaver",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_orc_5_cleaver"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_5_cleaver",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_orc_5_cleaver"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_5_cleaver",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_5_hunter",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_orc_5_hunter"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_5_hunter",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_orc_5_hunter"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_5_hunter",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_5_drummer",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_orc_5_drummer"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_5_drummer",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_orc_5_drummer"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_5_drummer",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_5_cook",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_orc_5_cook"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_5_cook",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_orc_5_cook"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_5_cook",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_5_diviner",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_orc_5_diviner"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_5_diviner",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_orc_5_diviner"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_5_diviner",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_5_club",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_ogre_5_club"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_5_club",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_ogre_5_club"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_5_club",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_5_rock",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_ogre_5_rock"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_5_rock",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_ogre_5_rock"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_5_rock",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_5_gate",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_ogre_5_gate"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_5_gate",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_ogre_5_gate"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_5_gate",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_5_wrestler",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_ogre_5_wrestler"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_5_wrestler",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_ogre_5_wrestler"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_5_wrestler",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_5_bell",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_ogre_5_bell"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_5_bell",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_ogre_5_bell"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_5_bell",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_10_shield",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_goblin_10_shield"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_10_shield",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_goblin_10_shield"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_10_shield",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_10_spear",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_goblin_10_spear"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_10_spear",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_goblin_10_spear"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_10_spear",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_10_standard",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_goblin_10_standard"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_10_standard",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_goblin_10_standard"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_10_standard",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_10_sergeant",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_goblin_10_sergeant"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_10_sergeant",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_goblin_10_sergeant"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_10_sergeant",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_10_engineer",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_goblin_10_engineer"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_10_engineer",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_goblin_10_engineer"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_10_engineer",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_10_stoker",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_orc_10_stoker"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_10_stoker",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_orc_10_stoker"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_10_stoker",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_10_smith",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_orc_10_smith"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_10_smith",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_orc_10_smith"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_10_smith",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_10_shieldsmith",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_orc_10_shieldsmith"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_10_shieldsmith",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_orc_10_shieldsmith"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_10_shieldsmith",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_10_charcoal",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_orc_10_charcoal"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_10_charcoal",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_orc_10_charcoal"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_10_charcoal",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_10_cart",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_orc_10_cart"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_10_cart",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_orc_10_cart"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_10_cart",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_10_quarry",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_ogre_10_quarry"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_10_quarry",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_ogre_10_quarry"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_10_quarry",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_10_roller",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_ogre_10_roller"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_10_roller",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_ogre_10_roller"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_10_roller",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_10_wall",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_ogre_10_wall"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_10_wall",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_ogre_10_wall"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_10_wall",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_10_statue",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_ogre_10_statue"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_10_statue",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_ogre_10_statue"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_10_statue",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_10_flute",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_ogre_10_flute"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_10_flute",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_ogre_10_flute"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_10_flute",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_15_snuffer",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_goblin_15_snuffer"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_15_snuffer",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_goblin_15_snuffer"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_15_snuffer",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_15_firefly",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_goblin_15_firefly"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_15_firefly",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_goblin_15_firefly"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_15_firefly",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_15_shadow",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_goblin_15_shadow"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_15_shadow",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_goblin_15_shadow"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_15_shadow",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_15_thief",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_goblin_15_thief"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_15_thief",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_goblin_15_thief"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_15_thief",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_15_owl",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_goblin_15_owl"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_15_owl",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_goblin_15_owl"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_15_owl",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_15_mud",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_orc_15_mud"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_15_mud",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_orc_15_mud"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_15_mud",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_15_harpoon",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_orc_15_harpoon"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_15_harpoon",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_orc_15_harpoon"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_15_harpoon",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_15_hound",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_orc_15_hound"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_15_hound",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_orc_15_hound"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_15_hound",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_15_ferry",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_orc_15_ferry"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_15_ferry",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_orc_15_ferry"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_15_ferry",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_15_doctor",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_orc_15_doctor"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_15_doctor",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_orc_15_doctor"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_15_doctor",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_15_charger",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_ogre_15_charger"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_15_charger",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_ogre_15_charger"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_15_charger",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_15_brawler",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_ogre_15_brawler"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_15_brawler",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_ogre_15_brawler"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_15_brawler",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_15_breaker",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_ogre_15_breaker"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_15_breaker",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_ogre_15_breaker"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_15_breaker",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_15_firewalker",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_ogre_15_firewalker"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_15_firewalker",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_ogre_15_firewalker"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_15_firewalker",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_15_peacemaker",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_ogre_15_peacemaker"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_15_peacemaker",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_ogre_15_peacemaker"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_15_peacemaker",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_20_heavyshield",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_goblin_20_heavyshield"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_20_heavyshield",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_goblin_20_heavyshield"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_20_heavyshield",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_20_double",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_goblin_20_double"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_20_double",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_goblin_20_double"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_20_double",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_20_chain",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_goblin_20_chain"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_20_chain",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_goblin_20_chain"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_20_chain",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_20_maskmaker",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_goblin_20_maskmaker"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_20_maskmaker",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_goblin_20_maskmaker"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_20_maskmaker",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_20_cadence",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_goblin_20_cadence"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_20_cadence",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_goblin_20_cadence"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_20_cadence",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_20_greatshield",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_orc_20_greatshield"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_20_greatshield",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_orc_20_greatshield"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_20_greatshield",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_20_ram",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_orc_20_ram"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_20_ram",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_orc_20_ram"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_20_ram",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_20_axe",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_orc_20_axe"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_20_axe",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_orc_20_axe"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_20_axe",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_20_armorer",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_orc_20_armorer"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_20_armorer",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_orc_20_armorer"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_20_armorer",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_20_marshal",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_orc_20_marshal"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_20_marshal",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_orc_20_marshal"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_20_marshal",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_20_twinclubs",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_ogre_20_twinclubs"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_20_twinclubs",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_ogre_20_twinclubs"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_20_twinclubs",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_20_warden",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_ogre_20_warden"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_20_warden",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_ogre_20_warden"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_20_warden",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_20_hex",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_ogre_20_hex"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_20_hex",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_ogre_20_hex"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_20_hex",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_20_quarrel",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_ogre_20_quarrel"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_20_quarrel",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_ogre_20_quarrel"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_20_quarrel",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_20_singer",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_ogre_20_singer"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_20_singer",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_ogre_20_singer"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_20_singer",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_25_king",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_goblin_25_king"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_25_king",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_goblin_25_king"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_25_king",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_25_guard",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_goblin_25_guard"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_25_guard",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_goblin_25_guard"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_25_guard",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_25_herald",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_goblin_25_herald"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_25_herald",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_goblin_25_herald"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_25_herald",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_25_jester",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_goblin_25_jester"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_25_jester",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_goblin_25_jester"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_25_jester",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_25_steward",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_goblin_25_steward"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_25_steward",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_goblin_25_steward"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_25_steward",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_25_bonemask",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_orc_25_bonemask"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_25_bonemask",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_orc_25_bonemask"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_25_bonemask",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_25_grave",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_orc_25_grave"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_25_grave",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_orc_25_grave"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_25_grave",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_25_poet",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_orc_25_poet"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_25_poet",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_orc_25_poet"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_25_poet",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_25_spirit",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_orc_25_spirit"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_25_spirit",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_orc_25_spirit"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_25_spirit",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_25_chief",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_orc_25_chief"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_25_chief",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_orc_25_chief"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_25_chief",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_25_summit",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_ogre_25_summit"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_25_summit",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_ogre_25_summit"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_25_summit",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_25_bridge",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_ogre_25_bridge"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_25_bridge",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_ogre_25_bridge"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_25_bridge",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_25_avalanche",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_ogre_25_avalanche"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_25_avalanche",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_ogre_25_avalanche"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_25_avalanche",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_25_greatbell",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_ogre_25_greatbell"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_25_greatbell",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_ogre_25_greatbell"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_25_greatbell",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_25_mountainking",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_ogre_25_mountainking"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_25_mountainking",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_ogre_25_mountainking"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_25_mountainking",
         "ai",
         1,
         "skill"
@@ -26884,6 +30184,510 @@ export const referenceData={
       ],
       "kind": "formulas",
       "id": "heavy"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_5_slinger",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_5_trapper",
+        "effects",
+        0,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "exp_rooted"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_5_dagger",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_5_herbalist",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heal"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_5_cleaver",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heavy"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_5_hunter",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_5_drummer",
+        "effects",
+        0,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "exp_breath30"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_5_cook",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heal"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_5_club",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "job_sweep"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_5_rock",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heavy"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_5_wrestler",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_10_spear",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "pierce"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_10_stoker",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "fire"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_10_stoker",
+        "effects",
+        1,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "forge_burn"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_10_smith",
+        "effects",
+        0,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "exp_breath30"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_10_cart",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heavy"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_10_quarry",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heavy"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_10_roller",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "job_sweep"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_15_shadow",
+        "effects",
+        0,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "exp_rooted"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_15_thief",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "pierce"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_15_mud",
+        "effects",
+        0,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "trip"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_15_harpoon",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "pierce"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_15_hound",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heavy"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_15_doctor",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heal"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_15_charger",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "job_sweep"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_15_brawler",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_15_breaker",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heavy"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_15_firewalker",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "fire"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_15_peacemaker",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heal"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_20_ram",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "job_sweep"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_20_axe",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heavy"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_20_armorer",
+        "effects",
+        0,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "mine_vein_ward"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_20_twinclubs",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_20_twinclubs",
+        "effects",
+        1,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heavy"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_20_hex",
+        "effects",
+        0,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "hollow_curse"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_20_singer",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "group_heal"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_25_bonemask",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_25_grave",
+        "effects",
+        0,
+        "buff"
+      ],
+      "kind": "buffs",
+      "id": "mine_vein_ward"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_25_chief",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heavy"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_25_summit",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "job_sweep"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_25_avalanche",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "job_sweep"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_25_mountainking",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "job_sweep"
     },
     {
       "file": "jobs.json",
@@ -44059,6 +47863,231 @@ export const referenceData={
       },
       "beaver_log_shot": {
         "name": "丸太砲"
+      },
+      "family_goblin_5_slinger": {
+        "name": "飛礫"
+      },
+      "family_goblin_5_trapper": {
+        "name": "足くくり"
+      },
+      "family_goblin_5_dagger": {
+        "name": "追い刃"
+      },
+      "family_goblin_5_herbalist": {
+        "name": "薬草の手当"
+      },
+      "family_goblin_5_piper": {
+        "name": "合図笛"
+      },
+      "family_orc_5_cleaver": {
+        "name": "鉈おろし"
+      },
+      "family_orc_5_hunter": {
+        "name": "狩人の追撃"
+      },
+      "family_orc_5_drummer": {
+        "name": "骨太鼓"
+      },
+      "family_orc_5_cook": {
+        "name": "干し肉"
+      },
+      "family_orc_5_diviner": {
+        "name": "牙占い"
+      },
+      "family_ogre_5_club": {
+        "name": "棍棒薙ぎ"
+      },
+      "family_ogre_5_rock": {
+        "name": "大岩投げ"
+      },
+      "family_ogre_5_gate": {
+        "name": "扉の盾"
+      },
+      "family_ogre_5_wrestler": {
+        "name": "押し出し"
+      },
+      "family_ogre_5_bell": {
+        "name": "鐘の一撞き"
+      },
+      "family_goblin_10_shield": {
+        "name": "盾構え"
+      },
+      "family_goblin_10_spear": {
+        "name": "盾越しの長槍"
+      },
+      "family_goblin_10_standard": {
+        "name": "軍旗掲揚"
+      },
+      "family_goblin_10_sergeant": {
+        "name": "整列号令"
+      },
+      "family_goblin_10_engineer": {
+        "name": "杭柵づくり"
+      },
+      "family_orc_10_stoker": {
+        "name": "赤鉄突き"
+      },
+      "family_orc_10_smith": {
+        "name": "刃の打ち直し"
+      },
+      "family_orc_10_shieldsmith": {
+        "name": "盾修理"
+      },
+      "family_orc_10_charcoal": {
+        "name": "炭煙"
+      },
+      "family_orc_10_cart": {
+        "name": "鉱車突進"
+      },
+      "family_ogre_10_quarry": {
+        "name": "二度割り"
+      },
+      "family_ogre_10_roller": {
+        "name": "岩転がり"
+      },
+      "family_ogre_10_wall": {
+        "name": "石壁"
+      },
+      "family_ogre_10_statue": {
+        "name": "石像の構え"
+      },
+      "family_ogre_10_flute": {
+        "name": "岩鳴らし"
+      },
+      "family_goblin_15_snuffer": {
+        "name": "闇とばり"
+      },
+      "family_goblin_15_firefly": {
+        "name": "蛍の目印"
+      },
+      "family_goblin_15_shadow": {
+        "name": "影縫い"
+      },
+      "family_goblin_15_thief": {
+        "name": "暗がりの奇襲"
+      },
+      "family_goblin_15_owl": {
+        "name": "梟の見張り"
+      },
+      "family_orc_15_mud": {
+        "name": "泥まき"
+      },
+      "family_orc_15_harpoon": {
+        "name": "引き銛"
+      },
+      "family_orc_15_hound": {
+        "name": "猟犬放ち"
+      },
+      "family_orc_15_ferry": {
+        "name": "渡し舟"
+      },
+      "family_orc_15_doctor": {
+        "name": "薬泥包み"
+      },
+      "family_ogre_15_charger": {
+        "name": "赤角突進"
+      },
+      "family_ogre_15_brawler": {
+        "name": "怒り拳"
+      },
+      "family_ogre_15_breaker": {
+        "name": "怒角の盾割り"
+      },
+      "family_ogre_15_firewalker": {
+        "name": "火渡り"
+      },
+      "family_ogre_15_peacemaker": {
+        "name": "怒り鎮め"
+      },
+      "family_goblin_20_heavyshield": {
+        "name": "重盾交代"
+      },
+      "family_goblin_20_double": {
+        "name": "替え面"
+      },
+      "family_goblin_20_chain": {
+        "name": "双鉤鎖"
+      },
+      "family_goblin_20_maskmaker": {
+        "name": "仮面修繕"
+      },
+      "family_goblin_20_cadence": {
+        "name": "陣替え太鼓"
+      },
+      "family_orc_20_greatshield": {
+        "name": "大盾設置"
+      },
+      "family_orc_20_ram": {
+        "name": "破城突進"
+      },
+      "family_orc_20_axe": {
+        "name": "戦斧連断"
+      },
+      "family_orc_20_armorer": {
+        "name": "装甲修理"
+      },
+      "family_orc_20_marshal": {
+        "name": "督戦"
+      },
+      "family_ogre_20_twinclubs": {
+        "name": "左右打ち"
+      },
+      "family_ogre_20_warden": {
+        "name": "双頭警戒"
+      },
+      "family_ogre_20_hex": {
+        "name": "双頭呪法"
+      },
+      "family_ogre_20_quarrel": {
+        "name": "二声の挑発"
+      },
+      "family_ogre_20_singer": {
+        "name": "双声の和音"
+      },
+      "family_goblin_25_king": {
+        "name": "小王の号令"
+      },
+      "family_goblin_25_guard": {
+        "name": "王冠護衛"
+      },
+      "family_goblin_25_herald": {
+        "name": "号令伝達"
+      },
+      "family_goblin_25_jester": {
+        "name": "偽の戴冠"
+      },
+      "family_goblin_25_steward": {
+        "name": "王冠継承"
+      },
+      "family_orc_25_bonemask": {
+        "name": "戦技継承"
+      },
+      "family_orc_25_grave": {
+        "name": "骨杭の守り"
+      },
+      "family_orc_25_poet": {
+        "name": "最期の武勲"
+      },
+      "family_orc_25_spirit": {
+        "name": "魂呼び"
+      },
+      "family_orc_25_chief": {
+        "name": "族長の大斧"
+      },
+      "family_ogre_25_summit": {
+        "name": "峰砕き"
+      },
+      "family_ogre_25_bridge": {
+        "name": "丸太橋"
+      },
+      "family_ogre_25_avalanche": {
+        "name": "岩雪崩"
+      },
+      "family_ogre_25_greatbell": {
+        "name": "山鐘三打"
+      },
+      "family_ogre_25_mountainking": {
+        "name": "山王踏み"
       }
     },
     "items": {
@@ -44634,6 +48663,306 @@ export const referenceData={
       "tank_beaver": {
         "name": "戦車ビーバー",
         "sprite": "monster_tank_beaver"
+      },
+      "goblin_5_slinger": {
+        "name": "ゴブリン投石手",
+        "sprite": "monster_goblin_5_slinger"
+      },
+      "goblin_5_trapper": {
+        "name": "ゴブリン罠師",
+        "sprite": "monster_goblin_5_trapper"
+      },
+      "goblin_5_dagger": {
+        "name": "ゴブリン短剣士",
+        "sprite": "monster_goblin_5_dagger"
+      },
+      "goblin_5_herbalist": {
+        "name": "ゴブリン薬草師",
+        "sprite": "monster_goblin_5_herbalist"
+      },
+      "goblin_5_piper": {
+        "name": "ゴブリン笛吹き",
+        "sprite": "monster_goblin_5_piper"
+      },
+      "orc_5_cleaver": {
+        "name": "鉈戦士オーク",
+        "sprite": "monster_orc_5_cleaver"
+      },
+      "orc_5_hunter": {
+        "name": "猪狩りオーク",
+        "sprite": "monster_orc_5_hunter"
+      },
+      "orc_5_drummer": {
+        "name": "骨太鼓オーク",
+        "sprite": "monster_orc_5_drummer"
+      },
+      "orc_5_cook": {
+        "name": "料理番オーク",
+        "sprite": "monster_orc_5_cook"
+      },
+      "orc_5_diviner": {
+        "name": "牙占いオーク",
+        "sprite": "monster_orc_5_diviner"
+      },
+      "ogre_5_club": {
+        "name": "棍棒オーガ",
+        "sprite": "monster_ogre_5_club"
+      },
+      "ogre_5_rock": {
+        "name": "岩投げオーガ",
+        "sprite": "monster_ogre_5_rock"
+      },
+      "ogre_5_gate": {
+        "name": "門番オーガ",
+        "sprite": "monster_ogre_5_gate"
+      },
+      "ogre_5_wrestler": {
+        "name": "力士オーガ",
+        "sprite": "monster_ogre_5_wrestler"
+      },
+      "ogre_5_bell": {
+        "name": "鐘撞きオーガ",
+        "sprite": "monster_ogre_5_bell"
+      },
+      "goblin_10_shield": {
+        "name": "ゴブリン盾兵",
+        "sprite": "monster_goblin_10_shield"
+      },
+      "goblin_10_spear": {
+        "name": "ゴブリン槍兵",
+        "sprite": "monster_goblin_10_spear"
+      },
+      "goblin_10_standard": {
+        "name": "ゴブリン旗手",
+        "sprite": "monster_goblin_10_standard"
+      },
+      "goblin_10_sergeant": {
+        "name": "ゴブリン軍曹",
+        "sprite": "monster_goblin_10_sergeant"
+      },
+      "goblin_10_engineer": {
+        "name": "ゴブリン工兵",
+        "sprite": "monster_goblin_10_engineer"
+      },
+      "orc_10_stoker": {
+        "name": "炉番オーク",
+        "sprite": "monster_orc_10_stoker"
+      },
+      "orc_10_smith": {
+        "name": "鍛冶屋オーク",
+        "sprite": "monster_orc_10_smith"
+      },
+      "orc_10_shieldsmith": {
+        "name": "盾鍛冶オーク",
+        "sprite": "monster_orc_10_shieldsmith"
+      },
+      "orc_10_charcoal": {
+        "name": "炭焼きオーク",
+        "sprite": "monster_orc_10_charcoal"
+      },
+      "orc_10_cart": {
+        "name": "トロッコオーク",
+        "sprite": "monster_orc_10_cart"
+      },
+      "ogre_10_quarry": {
+        "name": "石切りオーガ",
+        "sprite": "monster_ogre_10_quarry"
+      },
+      "ogre_10_roller": {
+        "name": "転がりオーガ",
+        "sprite": "monster_ogre_10_roller"
+      },
+      "ogre_10_wall": {
+        "name": "石積みオーガ",
+        "sprite": "monster_ogre_10_wall"
+      },
+      "ogre_10_statue": {
+        "name": "石像番オーガ",
+        "sprite": "monster_ogre_10_statue"
+      },
+      "ogre_10_flute": {
+        "name": "岩笛オーガ",
+        "sprite": "monster_ogre_10_flute"
+      },
+      "goblin_15_snuffer": {
+        "name": "ゴブリン灯消し",
+        "sprite": "monster_goblin_15_snuffer"
+      },
+      "goblin_15_firefly": {
+        "name": "ゴブリン蛍飼い",
+        "sprite": "monster_goblin_15_firefly"
+      },
+      "goblin_15_shadow": {
+        "name": "ゴブリン影縫い",
+        "sprite": "monster_goblin_15_shadow"
+      },
+      "goblin_15_thief": {
+        "name": "ゴブリン夜盗",
+        "sprite": "monster_goblin_15_thief"
+      },
+      "goblin_15_owl": {
+        "name": "ゴブリン梟使い",
+        "sprite": "monster_goblin_15_owl"
+      },
+      "orc_15_mud": {
+        "name": "泥まきオーク",
+        "sprite": "monster_orc_15_mud"
+      },
+      "orc_15_harpoon": {
+        "name": "銛打ちオーク",
+        "sprite": "monster_orc_15_harpoon"
+      },
+      "orc_15_hound": {
+        "name": "猟犬使いオーク",
+        "sprite": "monster_orc_15_hound"
+      },
+      "orc_15_ferry": {
+        "name": "渡し守オーク",
+        "sprite": "monster_orc_15_ferry"
+      },
+      "orc_15_doctor": {
+        "name": "泥医者オーク",
+        "sprite": "monster_orc_15_doctor"
+      },
+      "ogre_15_charger": {
+        "name": "突撃オーガ",
+        "sprite": "monster_ogre_15_charger"
+      },
+      "ogre_15_brawler": {
+        "name": "喧嘩屋オーガ",
+        "sprite": "monster_ogre_15_brawler"
+      },
+      "ogre_15_breaker": {
+        "name": "盾割りオーガ",
+        "sprite": "monster_ogre_15_breaker"
+      },
+      "ogre_15_firewalker": {
+        "name": "火渡りオーガ",
+        "sprite": "monster_ogre_15_firewalker"
+      },
+      "ogre_15_peacemaker": {
+        "name": "なだめ屋オーガ",
+        "sprite": "monster_ogre_15_peacemaker"
+      },
+      "goblin_20_heavyshield": {
+        "name": "ゴブリン重盾兵",
+        "sprite": "monster_goblin_20_heavyshield"
+      },
+      "goblin_20_double": {
+        "name": "ゴブリン影武者",
+        "sprite": "monster_goblin_20_double"
+      },
+      "goblin_20_chain": {
+        "name": "ゴブリン鎖使い",
+        "sprite": "monster_goblin_20_chain"
+      },
+      "goblin_20_maskmaker": {
+        "name": "ゴブリン仮面職人",
+        "sprite": "monster_goblin_20_maskmaker"
+      },
+      "goblin_20_cadence": {
+        "name": "ゴブリン鼓手",
+        "sprite": "monster_goblin_20_cadence"
+      },
+      "orc_20_greatshield": {
+        "name": "大盾オーク",
+        "sprite": "monster_orc_20_greatshield"
+      },
+      "orc_20_ram": {
+        "name": "破城槌オーク",
+        "sprite": "monster_orc_20_ram"
+      },
+      "orc_20_axe": {
+        "name": "戦斧オーク",
+        "sprite": "monster_orc_20_axe"
+      },
+      "orc_20_armorer": {
+        "name": "甲冑師オーク",
+        "sprite": "monster_orc_20_armorer"
+      },
+      "orc_20_marshal": {
+        "name": "オーク督戦官",
+        "sprite": "monster_orc_20_marshal"
+      },
+      "ogre_20_twinclubs": {
+        "name": "双棍オーガ",
+        "sprite": "monster_ogre_20_twinclubs"
+      },
+      "ogre_20_warden": {
+        "name": "双頭門衛オーガ",
+        "sprite": "monster_ogre_20_warden"
+      },
+      "ogre_20_hex": {
+        "name": "呪い師オーガ",
+        "sprite": "monster_ogre_20_hex"
+      },
+      "ogre_20_quarrel": {
+        "name": "口喧嘩オーガ",
+        "sprite": "monster_ogre_20_quarrel"
+      },
+      "ogre_20_singer": {
+        "name": "歌い手オーガ",
+        "sprite": "monster_ogre_20_singer"
+      },
+      "goblin_25_king": {
+        "name": "ゴブリン小王",
+        "sprite": "monster_goblin_25_king"
+      },
+      "goblin_25_guard": {
+        "name": "ゴブリン近衛兵",
+        "sprite": "monster_goblin_25_guard"
+      },
+      "goblin_25_herald": {
+        "name": "ゴブリン伝令兵",
+        "sprite": "monster_goblin_25_herald"
+      },
+      "goblin_25_jester": {
+        "name": "ゴブリン道化師",
+        "sprite": "monster_goblin_25_jester"
+      },
+      "goblin_25_steward": {
+        "name": "ゴブリン侍従長",
+        "sprite": "monster_goblin_25_steward"
+      },
+      "orc_25_bonemask": {
+        "name": "骨面戦士オーク",
+        "sprite": "monster_orc_25_bonemask"
+      },
+      "orc_25_grave": {
+        "name": "墓守オーク",
+        "sprite": "monster_orc_25_grave"
+      },
+      "orc_25_poet": {
+        "name": "戦詩人オーク",
+        "sprite": "monster_orc_25_poet"
+      },
+      "orc_25_spirit": {
+        "name": "魂呼びオーク",
+        "sprite": "monster_orc_25_spirit"
+      },
+      "orc_25_chief": {
+        "name": "オーク族長",
+        "sprite": "monster_orc_25_chief"
+      },
+      "ogre_25_summit": {
+        "name": "峰砕きオーガ",
+        "sprite": "monster_ogre_25_summit"
+      },
+      "ogre_25_bridge": {
+        "name": "橋大工オーガ",
+        "sprite": "monster_ogre_25_bridge"
+      },
+      "ogre_25_avalanche": {
+        "name": "雪崩呼びオーガ",
+        "sprite": "monster_ogre_25_avalanche"
+      },
+      "ogre_25_greatbell": {
+        "name": "大鐘守オーガ",
+        "sprite": "monster_ogre_25_greatbell"
+      },
+      "ogre_25_mountainking": {
+        "name": "山王オーガ",
+        "sprite": "monster_ogre_25_mountainking"
       }
     },
     "encounters": {
@@ -45075,6 +49404,9 @@ export const referenceData={
       },
       "guaranteed_critical_vulnerability": {
         "name": "被確定クリティカル"
+      },
+      "forge_burn": {
+        "name": "火傷"
       }
     },
     "shops": {
@@ -70751,6 +75083,531 @@ export const referenceData={
         "tank_beaver"
       ]
     },
+    "enemies/goblin_5_slinger": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_5_slinger"
+      ]
+    },
+    "enemies/goblin_5_trapper": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_5_trapper"
+      ]
+    },
+    "enemies/goblin_5_dagger": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_5_dagger"
+      ]
+    },
+    "enemies/goblin_5_herbalist": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_5_herbalist"
+      ]
+    },
+    "enemies/goblin_5_piper": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_5_piper"
+      ]
+    },
+    "enemies/orc_5_cleaver": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_5_cleaver"
+      ]
+    },
+    "enemies/orc_5_hunter": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_5_hunter"
+      ]
+    },
+    "enemies/orc_5_drummer": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_5_drummer"
+      ]
+    },
+    "enemies/orc_5_cook": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_5_cook"
+      ]
+    },
+    "enemies/orc_5_diviner": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_5_diviner"
+      ]
+    },
+    "enemies/ogre_5_club": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_5_club"
+      ]
+    },
+    "enemies/ogre_5_rock": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_5_rock"
+      ]
+    },
+    "enemies/ogre_5_gate": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_5_gate"
+      ]
+    },
+    "enemies/ogre_5_wrestler": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_5_wrestler"
+      ]
+    },
+    "enemies/ogre_5_bell": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_5_bell"
+      ]
+    },
+    "enemies/goblin_10_shield": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_10_shield"
+      ]
+    },
+    "enemies/goblin_10_spear": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_10_spear"
+      ]
+    },
+    "enemies/goblin_10_standard": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_10_standard"
+      ]
+    },
+    "enemies/goblin_10_sergeant": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_10_sergeant"
+      ]
+    },
+    "enemies/goblin_10_engineer": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_10_engineer"
+      ]
+    },
+    "enemies/orc_10_stoker": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_10_stoker"
+      ]
+    },
+    "enemies/orc_10_smith": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_10_smith"
+      ]
+    },
+    "enemies/orc_10_shieldsmith": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_10_shieldsmith"
+      ]
+    },
+    "enemies/orc_10_charcoal": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_10_charcoal"
+      ]
+    },
+    "enemies/orc_10_cart": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_10_cart"
+      ]
+    },
+    "enemies/ogre_10_quarry": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_10_quarry"
+      ]
+    },
+    "enemies/ogre_10_roller": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_10_roller"
+      ]
+    },
+    "enemies/ogre_10_wall": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_10_wall"
+      ]
+    },
+    "enemies/ogre_10_statue": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_10_statue"
+      ]
+    },
+    "enemies/ogre_10_flute": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_10_flute"
+      ]
+    },
+    "enemies/goblin_15_snuffer": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_15_snuffer"
+      ]
+    },
+    "enemies/goblin_15_firefly": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_15_firefly"
+      ]
+    },
+    "enemies/goblin_15_shadow": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_15_shadow"
+      ]
+    },
+    "enemies/goblin_15_thief": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_15_thief"
+      ]
+    },
+    "enemies/goblin_15_owl": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_15_owl"
+      ]
+    },
+    "enemies/orc_15_mud": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_15_mud"
+      ]
+    },
+    "enemies/orc_15_harpoon": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_15_harpoon"
+      ]
+    },
+    "enemies/orc_15_hound": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_15_hound"
+      ]
+    },
+    "enemies/orc_15_ferry": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_15_ferry"
+      ]
+    },
+    "enemies/orc_15_doctor": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_15_doctor"
+      ]
+    },
+    "enemies/ogre_15_charger": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_15_charger"
+      ]
+    },
+    "enemies/ogre_15_brawler": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_15_brawler"
+      ]
+    },
+    "enemies/ogre_15_breaker": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_15_breaker"
+      ]
+    },
+    "enemies/ogre_15_firewalker": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_15_firewalker"
+      ]
+    },
+    "enemies/ogre_15_peacemaker": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_15_peacemaker"
+      ]
+    },
+    "enemies/goblin_20_heavyshield": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_20_heavyshield"
+      ]
+    },
+    "enemies/goblin_20_double": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_20_double"
+      ]
+    },
+    "enemies/goblin_20_chain": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_20_chain"
+      ]
+    },
+    "enemies/goblin_20_maskmaker": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_20_maskmaker"
+      ]
+    },
+    "enemies/goblin_20_cadence": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_20_cadence"
+      ]
+    },
+    "enemies/orc_20_greatshield": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_20_greatshield"
+      ]
+    },
+    "enemies/orc_20_ram": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_20_ram"
+      ]
+    },
+    "enemies/orc_20_axe": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_20_axe"
+      ]
+    },
+    "enemies/orc_20_armorer": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_20_armorer"
+      ]
+    },
+    "enemies/orc_20_marshal": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_20_marshal"
+      ]
+    },
+    "enemies/ogre_20_twinclubs": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_20_twinclubs"
+      ]
+    },
+    "enemies/ogre_20_warden": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_20_warden"
+      ]
+    },
+    "enemies/ogre_20_hex": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_20_hex"
+      ]
+    },
+    "enemies/ogre_20_quarrel": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_20_quarrel"
+      ]
+    },
+    "enemies/ogre_20_singer": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_20_singer"
+      ]
+    },
+    "enemies/goblin_25_king": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_25_king"
+      ]
+    },
+    "enemies/goblin_25_guard": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_25_guard"
+      ]
+    },
+    "enemies/goblin_25_herald": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_25_herald"
+      ]
+    },
+    "enemies/goblin_25_jester": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_25_jester"
+      ]
+    },
+    "enemies/goblin_25_steward": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "goblin_25_steward"
+      ]
+    },
+    "enemies/orc_25_bonemask": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_25_bonemask"
+      ]
+    },
+    "enemies/orc_25_grave": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_25_grave"
+      ]
+    },
+    "enemies/orc_25_poet": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_25_poet"
+      ]
+    },
+    "enemies/orc_25_spirit": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_25_spirit"
+      ]
+    },
+    "enemies/orc_25_chief": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "orc_25_chief"
+      ]
+    },
+    "enemies/ogre_25_summit": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_25_summit"
+      ]
+    },
+    "enemies/ogre_25_bridge": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_25_bridge"
+      ]
+    },
+    "enemies/ogre_25_avalanche": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_25_avalanche"
+      ]
+    },
+    "enemies/ogre_25_greatbell": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_25_greatbell"
+      ]
+    },
+    "enemies/ogre_25_mountainking": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "ogre_25_mountainking"
+      ]
+    },
     "encounters/market_enforcers": {
       "file": "dungeon-content.json",
       "path": [
@@ -72008,6 +76865,531 @@ export const referenceData={
       "path": [
         "skills",
         "beaver_log_shot"
+      ]
+    },
+    "skills/family_goblin_5_slinger": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_5_slinger"
+      ]
+    },
+    "skills/family_goblin_5_trapper": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_5_trapper"
+      ]
+    },
+    "skills/family_goblin_5_dagger": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_5_dagger"
+      ]
+    },
+    "skills/family_goblin_5_herbalist": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_5_herbalist"
+      ]
+    },
+    "skills/family_goblin_5_piper": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_5_piper"
+      ]
+    },
+    "skills/family_orc_5_cleaver": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_5_cleaver"
+      ]
+    },
+    "skills/family_orc_5_hunter": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_5_hunter"
+      ]
+    },
+    "skills/family_orc_5_drummer": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_5_drummer"
+      ]
+    },
+    "skills/family_orc_5_cook": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_5_cook"
+      ]
+    },
+    "skills/family_orc_5_diviner": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_5_diviner"
+      ]
+    },
+    "skills/family_ogre_5_club": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_5_club"
+      ]
+    },
+    "skills/family_ogre_5_rock": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_5_rock"
+      ]
+    },
+    "skills/family_ogre_5_gate": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_5_gate"
+      ]
+    },
+    "skills/family_ogre_5_wrestler": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_5_wrestler"
+      ]
+    },
+    "skills/family_ogre_5_bell": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_5_bell"
+      ]
+    },
+    "skills/family_goblin_10_shield": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_10_shield"
+      ]
+    },
+    "skills/family_goblin_10_spear": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_10_spear"
+      ]
+    },
+    "skills/family_goblin_10_standard": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_10_standard"
+      ]
+    },
+    "skills/family_goblin_10_sergeant": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_10_sergeant"
+      ]
+    },
+    "skills/family_goblin_10_engineer": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_10_engineer"
+      ]
+    },
+    "skills/family_orc_10_stoker": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_10_stoker"
+      ]
+    },
+    "skills/family_orc_10_smith": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_10_smith"
+      ]
+    },
+    "skills/family_orc_10_shieldsmith": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_10_shieldsmith"
+      ]
+    },
+    "skills/family_orc_10_charcoal": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_10_charcoal"
+      ]
+    },
+    "skills/family_orc_10_cart": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_10_cart"
+      ]
+    },
+    "skills/family_ogre_10_quarry": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_10_quarry"
+      ]
+    },
+    "skills/family_ogre_10_roller": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_10_roller"
+      ]
+    },
+    "skills/family_ogre_10_wall": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_10_wall"
+      ]
+    },
+    "skills/family_ogre_10_statue": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_10_statue"
+      ]
+    },
+    "skills/family_ogre_10_flute": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_10_flute"
+      ]
+    },
+    "skills/family_goblin_15_snuffer": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_15_snuffer"
+      ]
+    },
+    "skills/family_goblin_15_firefly": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_15_firefly"
+      ]
+    },
+    "skills/family_goblin_15_shadow": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_15_shadow"
+      ]
+    },
+    "skills/family_goblin_15_thief": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_15_thief"
+      ]
+    },
+    "skills/family_goblin_15_owl": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_15_owl"
+      ]
+    },
+    "skills/family_orc_15_mud": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_15_mud"
+      ]
+    },
+    "skills/family_orc_15_harpoon": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_15_harpoon"
+      ]
+    },
+    "skills/family_orc_15_hound": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_15_hound"
+      ]
+    },
+    "skills/family_orc_15_ferry": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_15_ferry"
+      ]
+    },
+    "skills/family_orc_15_doctor": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_15_doctor"
+      ]
+    },
+    "skills/family_ogre_15_charger": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_15_charger"
+      ]
+    },
+    "skills/family_ogre_15_brawler": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_15_brawler"
+      ]
+    },
+    "skills/family_ogre_15_breaker": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_15_breaker"
+      ]
+    },
+    "skills/family_ogre_15_firewalker": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_15_firewalker"
+      ]
+    },
+    "skills/family_ogre_15_peacemaker": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_15_peacemaker"
+      ]
+    },
+    "skills/family_goblin_20_heavyshield": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_20_heavyshield"
+      ]
+    },
+    "skills/family_goblin_20_double": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_20_double"
+      ]
+    },
+    "skills/family_goblin_20_chain": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_20_chain"
+      ]
+    },
+    "skills/family_goblin_20_maskmaker": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_20_maskmaker"
+      ]
+    },
+    "skills/family_goblin_20_cadence": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_20_cadence"
+      ]
+    },
+    "skills/family_orc_20_greatshield": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_20_greatshield"
+      ]
+    },
+    "skills/family_orc_20_ram": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_20_ram"
+      ]
+    },
+    "skills/family_orc_20_axe": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_20_axe"
+      ]
+    },
+    "skills/family_orc_20_armorer": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_20_armorer"
+      ]
+    },
+    "skills/family_orc_20_marshal": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_20_marshal"
+      ]
+    },
+    "skills/family_ogre_20_twinclubs": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_20_twinclubs"
+      ]
+    },
+    "skills/family_ogre_20_warden": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_20_warden"
+      ]
+    },
+    "skills/family_ogre_20_hex": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_20_hex"
+      ]
+    },
+    "skills/family_ogre_20_quarrel": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_20_quarrel"
+      ]
+    },
+    "skills/family_ogre_20_singer": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_20_singer"
+      ]
+    },
+    "skills/family_goblin_25_king": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_25_king"
+      ]
+    },
+    "skills/family_goblin_25_guard": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_25_guard"
+      ]
+    },
+    "skills/family_goblin_25_herald": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_25_herald"
+      ]
+    },
+    "skills/family_goblin_25_jester": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_25_jester"
+      ]
+    },
+    "skills/family_goblin_25_steward": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_goblin_25_steward"
+      ]
+    },
+    "skills/family_orc_25_bonemask": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_25_bonemask"
+      ]
+    },
+    "skills/family_orc_25_grave": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_25_grave"
+      ]
+    },
+    "skills/family_orc_25_poet": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_25_poet"
+      ]
+    },
+    "skills/family_orc_25_spirit": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_25_spirit"
+      ]
+    },
+    "skills/family_orc_25_chief": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_orc_25_chief"
+      ]
+    },
+    "skills/family_ogre_25_summit": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_25_summit"
+      ]
+    },
+    "skills/family_ogre_25_bridge": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_25_bridge"
+      ]
+    },
+    "skills/family_ogre_25_avalanche": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_25_avalanche"
+      ]
+    },
+    "skills/family_ogre_25_greatbell": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_25_greatbell"
+      ]
+    },
+    "skills/family_ogre_25_mountainking": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_ogre_25_mountainking"
       ]
     },
     "fieldAbilities/survey": {
@@ -78736,7 +84118,82 @@ export const referenceData={
       "monster_kagaribi_soot_ball": "assets/images/monsters/kagaribi_soot_ball.webp",
       "monster_kagaribi_torch_thief": "assets/images/monsters/kagaribi_torch_thief.webp",
       "monster_moss_beetle": "assets/images/monsters/moss_beetle.webp",
-      "monster_tank_beaver": "assets/images/monsters/tank_beaver.webp"
+      "monster_tank_beaver": "assets/images/monsters/tank_beaver.webp",
+      "monster_goblin_5_slinger": "assets/images/monsters/families/goblin_5_slinger.webp",
+      "monster_goblin_5_trapper": "assets/images/monsters/families/goblin_5_trapper.webp",
+      "monster_goblin_5_dagger": "assets/images/monsters/families/goblin_5_dagger.webp",
+      "monster_goblin_5_herbalist": "assets/images/monsters/families/goblin_5_herbalist.webp",
+      "monster_goblin_5_piper": "assets/images/monsters/families/goblin_5_piper.webp",
+      "monster_orc_5_cleaver": "assets/images/monsters/families/orc_5_cleaver.webp",
+      "monster_orc_5_hunter": "assets/images/monsters/families/orc_5_hunter.webp",
+      "monster_orc_5_drummer": "assets/images/monsters/families/orc_5_drummer.webp",
+      "monster_orc_5_cook": "assets/images/monsters/families/orc_5_cook.webp",
+      "monster_orc_5_diviner": "assets/images/monsters/families/orc_5_diviner.webp",
+      "monster_ogre_5_club": "assets/images/monsters/families/ogre_5_club.webp",
+      "monster_ogre_5_rock": "assets/images/monsters/families/ogre_5_rock.webp",
+      "monster_ogre_5_gate": "assets/images/monsters/families/ogre_5_gate.webp",
+      "monster_ogre_5_wrestler": "assets/images/monsters/families/ogre_5_wrestler.webp",
+      "monster_ogre_5_bell": "assets/images/monsters/families/ogre_5_bell.webp",
+      "monster_goblin_10_shield": "assets/images/monsters/families/goblin_10_shield.webp",
+      "monster_goblin_10_spear": "assets/images/monsters/families/goblin_10_spear.webp",
+      "monster_goblin_10_standard": "assets/images/monsters/families/goblin_10_standard.webp",
+      "monster_goblin_10_sergeant": "assets/images/monsters/families/goblin_10_sergeant.webp",
+      "monster_goblin_10_engineer": "assets/images/monsters/families/goblin_10_engineer.webp",
+      "monster_orc_10_stoker": "assets/images/monsters/families/orc_10_stoker.webp",
+      "monster_orc_10_smith": "assets/images/monsters/families/orc_10_smith.webp",
+      "monster_orc_10_shieldsmith": "assets/images/monsters/families/orc_10_shieldsmith.webp",
+      "monster_orc_10_charcoal": "assets/images/monsters/families/orc_10_charcoal.webp",
+      "monster_orc_10_cart": "assets/images/monsters/families/orc_10_cart.webp",
+      "monster_ogre_10_quarry": "assets/images/monsters/families/ogre_10_quarry.webp",
+      "monster_ogre_10_roller": "assets/images/monsters/families/ogre_10_roller.webp",
+      "monster_ogre_10_wall": "assets/images/monsters/families/ogre_10_wall.webp",
+      "monster_ogre_10_statue": "assets/images/monsters/families/ogre_10_statue.webp",
+      "monster_ogre_10_flute": "assets/images/monsters/families/ogre_10_flute.webp",
+      "monster_goblin_15_snuffer": "assets/images/monsters/families/goblin_15_snuffer.webp",
+      "monster_goblin_15_firefly": "assets/images/monsters/families/goblin_15_firefly.webp",
+      "monster_goblin_15_shadow": "assets/images/monsters/families/goblin_15_shadow.webp",
+      "monster_goblin_15_thief": "assets/images/monsters/families/goblin_15_thief.webp",
+      "monster_goblin_15_owl": "assets/images/monsters/families/goblin_15_owl.webp",
+      "monster_orc_15_mud": "assets/images/monsters/families/orc_15_mud.webp",
+      "monster_orc_15_harpoon": "assets/images/monsters/families/orc_15_harpoon.webp",
+      "monster_orc_15_hound": "assets/images/monsters/families/orc_15_hound.webp",
+      "monster_orc_15_ferry": "assets/images/monsters/families/orc_15_ferry.webp",
+      "monster_orc_15_doctor": "assets/images/monsters/families/orc_15_doctor.webp",
+      "monster_ogre_15_charger": "assets/images/monsters/families/ogre_15_charger.webp",
+      "monster_ogre_15_brawler": "assets/images/monsters/families/ogre_15_brawler.webp",
+      "monster_ogre_15_breaker": "assets/images/monsters/families/ogre_15_breaker.webp",
+      "monster_ogre_15_firewalker": "assets/images/monsters/families/ogre_15_firewalker.webp",
+      "monster_ogre_15_peacemaker": "assets/images/monsters/families/ogre_15_peacemaker.webp",
+      "monster_goblin_20_heavyshield": "assets/images/monsters/families/goblin_20_heavyshield.webp",
+      "monster_goblin_20_double": "assets/images/monsters/families/goblin_20_double.webp",
+      "monster_goblin_20_chain": "assets/images/monsters/families/goblin_20_chain.webp",
+      "monster_goblin_20_maskmaker": "assets/images/monsters/families/goblin_20_maskmaker.webp",
+      "monster_goblin_20_cadence": "assets/images/monsters/families/goblin_20_cadence.webp",
+      "monster_orc_20_greatshield": "assets/images/monsters/families/orc_20_greatshield.webp",
+      "monster_orc_20_ram": "assets/images/monsters/families/orc_20_ram.webp",
+      "monster_orc_20_axe": "assets/images/monsters/families/orc_20_axe.webp",
+      "monster_orc_20_armorer": "assets/images/monsters/families/orc_20_armorer.webp",
+      "monster_orc_20_marshal": "assets/images/monsters/families/orc_20_marshal.webp",
+      "monster_ogre_20_twinclubs": "assets/images/monsters/families/ogre_20_twinclubs.webp",
+      "monster_ogre_20_warden": "assets/images/monsters/families/ogre_20_warden.webp",
+      "monster_ogre_20_hex": "assets/images/monsters/families/ogre_20_hex.webp",
+      "monster_ogre_20_quarrel": "assets/images/monsters/families/ogre_20_quarrel.webp",
+      "monster_ogre_20_singer": "assets/images/monsters/families/ogre_20_singer.webp",
+      "monster_goblin_25_king": "assets/images/monsters/families/goblin_25_king.webp",
+      "monster_goblin_25_guard": "assets/images/monsters/families/goblin_25_guard.webp",
+      "monster_goblin_25_herald": "assets/images/monsters/families/goblin_25_herald.webp",
+      "monster_goblin_25_jester": "assets/images/monsters/families/goblin_25_jester.webp",
+      "monster_goblin_25_steward": "assets/images/monsters/families/goblin_25_steward.webp",
+      "monster_orc_25_bonemask": "assets/images/monsters/families/orc_25_bonemask.webp",
+      "monster_orc_25_grave": "assets/images/monsters/families/orc_25_grave.webp",
+      "monster_orc_25_poet": "assets/images/monsters/families/orc_25_poet.webp",
+      "monster_orc_25_spirit": "assets/images/monsters/families/orc_25_spirit.webp",
+      "monster_orc_25_chief": "assets/images/monsters/families/orc_25_chief.webp",
+      "monster_ogre_25_summit": "assets/images/monsters/families/ogre_25_summit.webp",
+      "monster_ogre_25_bridge": "assets/images/monsters/families/ogre_25_bridge.webp",
+      "monster_ogre_25_avalanche": "assets/images/monsters/families/ogre_25_avalanche.webp",
+      "monster_ogre_25_greatbell": "assets/images/monsters/families/ogre_25_greatbell.webp",
+      "monster_ogre_25_mountainking": "assets/images/monsters/families/ogre_25_mountainking.webp"
     },
     "audio": {
       "exploration": "assets/audio/exploration-v2.ogg",

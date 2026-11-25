@@ -2,12 +2,12 @@
 
 [ゲーム内の魔物図鑑を開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters)
 
-作品版1.34.0。配布中の敵は94定義、遭遇編成は119定義、敵が参照する画像ファイルは31点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
+作品版1.34.0。配布中の敵は169定義、遭遇編成は119定義、敵が参照する画像ファイルは106点です。敵の定義数と、独自の外見を持つ魔物の数は同じではありません。
 
 敵・技能・画像・通常ロードのマップと迷宮・スクリプトから全文を生成します。数値を重ねて手書きせず、原稿を更新してから `npm run build:docs` で反映します。
 
 [固有環境の敵](#固有環境の敵)：6定義。
-[個別デザインの通常魔物](#個別デザインの通常魔物)：23定義。
+[個別デザインの通常魔物](#個別デザインの通常魔物)：98定義。
 [依頼に追加した敵](#依頼に追加した敵)：45定義。
 [地域の迷宮獣と守護者](#地域の迷宮獣と守護者)：20定義。
 
@@ -927,6 +927,1956 @@ AIの選択順：
 遭遇と参照先：
 
 千変の迷宮の通常遭遇：地下6〜24階。
+
+<a id="monster-goblin_5_slinger"></a>
+
+### ゴブリン投石手 (goblin_5_slinger)
+
+<img src="../../assets/images/monsters/families/goblin_5_slinger.webp" width="160" alt="ゴブリン投石手">
+
+画像ID：monster_goblin_5_slinger。実ファイル：[assets/images/monsters/families/goblin_5_slinger.webp](../../assets/images/monsters/families/goblin_5_slinger.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv5　種名：ゴブリン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/goblin/goblin_5_slinger)。
+
+設計上の役割：味方越しに後列を優先して投石します。
+
+基礎能力：HP 53 / MP 3 / STR 13 / VIT 6 / AGI 8 / INT 7。報酬：4G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 飛礫 (family_goblin_5_slinger)：味方越しに後列を優先して投石します。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下5〜9階。
+
+<a id="monster-goblin_5_trapper"></a>
+
+### ゴブリン罠師 (goblin_5_trapper)
+
+<img src="../../assets/images/monsters/families/goblin_5_trapper.webp" width="160" alt="ゴブリン罠師">
+
+画像ID：monster_goblin_5_trapper。実ファイル：[assets/images/monsters/families/goblin_5_trapper.webp](../../assets/images/monsters/families/goblin_5_trapper.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv5　種名：ゴブリン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/goblin/goblin_5_trapper)。
+
+設計上の役割：縄で相手一人の移動を封じます。
+
+基礎能力：HP 53 / MP 3 / STR 13 / VIT 6 / AGI 8 / INT 7。報酬：4G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 足くくり (family_goblin_5_trapper)：縄で相手一人の移動を封じます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下5〜9階。
+
+<a id="monster-goblin_5_dagger"></a>
+
+### ゴブリン短剣士 (goblin_5_dagger)
+
+<img src="../../assets/images/monsters/families/goblin_5_dagger.webp" width="160" alt="ゴブリン短剣士">
+
+画像ID：monster_goblin_5_dagger。実ファイル：[assets/images/monsters/families/goblin_5_dagger.webp](../../assets/images/monsters/families/goblin_5_dagger.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv5　種名：ゴブリン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/goblin/goblin_5_dagger)。
+
+設計上の役割：仲間が直前に傷を負わせた相手へ短剣で追撃します。
+
+基礎能力：HP 53 / MP 3 / STR 13 / VIT 6 / AGI 8 / INT 7。報酬：4G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 追い刃 (family_goblin_5_dagger)：仲間が直前に傷を負わせた相手へ短剣で追撃します。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下5〜9階。
+
+<a id="monster-goblin_5_herbalist"></a>
+
+### ゴブリン薬草師 (goblin_5_herbalist)
+
+<img src="../../assets/images/monsters/families/goblin_5_herbalist.webp" width="160" alt="ゴブリン薬草師">
+
+画像ID：monster_goblin_5_herbalist。実ファイル：[assets/images/monsters/families/goblin_5_herbalist.webp](../../assets/images/monsters/families/goblin_5_herbalist.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv5　種名：ゴブリン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/goblin/goblin_5_herbalist)。
+
+設計上の役割：傷ついた仲間を一度だけ回復します。
+
+基礎能力：HP 35 / MP 8 / STR 9 / VIT 5 / AGI 8 / INT 10。報酬：4G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 薬草の手当 (family_goblin_5_herbalist)：傷ついた仲間を一度だけ回復します。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下5〜9階。
+
+<a id="monster-goblin_5_piper"></a>
+
+### ゴブリン笛吹き (goblin_5_piper)
+
+<img src="../../assets/images/monsters/families/goblin_5_piper.webp" width="160" alt="ゴブリン笛吹き">
+
+画像ID：monster_goblin_5_piper。実ファイル：[assets/images/monsters/families/goblin_5_piper.webp](../../assets/images/monsters/families/goblin_5_piper.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv5　種名：ゴブリン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/goblin/goblin_5_piper)。
+
+設計上の役割：標的に笛を吹き、次のゴブリンの攻撃を集中させます。
+
+基礎能力：HP 35 / MP 8 / STR 9 / VIT 5 / AGI 8 / INT 10。報酬：4G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 合図笛 (family_goblin_5_piper)：標的に笛を吹き、次のゴブリンの攻撃を集中させます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下5〜9階。
+
+<a id="monster-orc_5_cleaver"></a>
+
+### 鉈戦士オーク (orc_5_cleaver)
+
+<img src="../../assets/images/monsters/families/orc_5_cleaver.webp" width="160" alt="鉈戦士オーク">
+
+画像ID：monster_orc_5_cleaver。実ファイル：[assets/images/monsters/families/orc_5_cleaver.webp](../../assets/images/monsters/families/orc_5_cleaver.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv5　種名：ファングオーク。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/orc/orc_5_cleaver)。
+
+設計上の役割：鉈を振りかぶった次の手番に強打します。
+
+基礎能力：HP 60 / MP 4 / STR 11 / VIT 12 / AGI 5 / INT 7。報酬：4G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 鉈おろし (family_orc_5_cleaver)：鉈を振りかぶった次の手番に強打します。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下5〜9階。
+
+<a id="monster-orc_5_hunter"></a>
+
+### 猪狩りオーク (orc_5_hunter)
+
+<img src="../../assets/images/monsters/families/orc_5_hunter.webp" width="160" alt="猪狩りオーク">
+
+画像ID：monster_orc_5_hunter。実ファイル：[assets/images/monsters/families/orc_5_hunter.webp](../../assets/images/monsters/families/orc_5_hunter.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv5　種名：ファングオーク。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/orc/orc_5_hunter)。
+
+設計上の役割：後列に退いた相手を直ちに追い打ちします。
+
+基礎能力：HP 60 / MP 4 / STR 11 / VIT 12 / AGI 5 / INT 7。報酬：4G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 狩人の追撃 (family_orc_5_hunter)：後列に退いた相手を直ちに追い打ちします。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下5〜9階。
+
+<a id="monster-orc_5_drummer"></a>
+
+### 骨太鼓オーク (orc_5_drummer)
+
+<img src="../../assets/images/monsters/families/orc_5_drummer.webp" width="160" alt="骨太鼓オーク">
+
+画像ID：monster_orc_5_drummer。実ファイル：[assets/images/monsters/families/orc_5_drummer.webp](../../assets/images/monsters/families/orc_5_drummer.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv5　種名：ファングオーク。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/orc/orc_5_drummer)。
+
+設計上の役割：仲間の次の一撃を強化します。一人になると自ら攻撃します。
+
+基礎能力：HP 35 / MP 8 / STR 9 / VIT 5 / AGI 8 / INT 10。報酬：4G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 骨太鼓 (family_orc_5_drummer)：仲間の次の一撃を強化します。一人になると自ら攻撃します。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下5〜9階。
+
+<a id="monster-orc_5_cook"></a>
+
+### 料理番オーク (orc_5_cook)
+
+<img src="../../assets/images/monsters/families/orc_5_cook.webp" width="160" alt="料理番オーク">
+
+画像ID：monster_orc_5_cook。実ファイル：[assets/images/monsters/families/orc_5_cook.webp](../../assets/images/monsters/families/orc_5_cook.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv5　種名：ファングオーク。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/orc/orc_5_cook)。
+
+設計上の役割：干し肉で一度回復し、空鍋で次の一撃を防ぎます。
+
+基礎能力：HP 35 / MP 8 / STR 9 / VIT 5 / AGI 8 / INT 10。報酬：4G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 干し肉 (family_orc_5_cook)：干し肉で一度回復し、空鍋で次の一撃を防ぎます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下5〜9階。
+
+<a id="monster-orc_5_diviner"></a>
+
+### 牙占いオーク (orc_5_diviner)
+
+<img src="../../assets/images/monsters/families/orc_5_diviner.webp" width="160" alt="牙占いオーク">
+
+画像ID：monster_orc_5_diviner。実ファイル：[assets/images/monsters/families/orc_5_diviner.webp](../../assets/images/monsters/families/orc_5_diviner.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv5　種名：ファングオーク。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/orc/orc_5_diviner)。
+
+設計上の役割：標的を占い、最初にその相手を傷つけた仲間のHPを回復します。
+
+基礎能力：HP 35 / MP 8 / STR 9 / VIT 5 / AGI 8 / INT 10。報酬：4G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 牙占い (family_orc_5_diviner)：標的を占い、最初にその相手を傷つけた仲間のHPを回復します。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下5〜9階。
+
+<a id="monster-ogre_5_club"></a>
+
+### 棍棒オーガ (ogre_5_club)
+
+<img src="../../assets/images/monsters/families/ogre_5_club.webp" width="160" alt="棍棒オーガ">
+
+画像ID：monster_ogre_5_club。実ファイル：[assets/images/monsters/families/ogre_5_club.webp](../../assets/images/monsters/families/ogre_5_club.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv5　種名：ヤングオーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_5_club)。
+
+設計上の役割：一手構え、次の手番に前列を薙ぎ払います。
+
+基礎能力：HP 60 / MP 4 / STR 11 / VIT 12 / AGI 5 / INT 7。報酬：4G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 棍棒薙ぎ (family_ogre_5_club)：一手構え、次の手番に前列を薙ぎ払います。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下5〜9階。
+
+<a id="monster-ogre_5_rock"></a>
+
+### 岩投げオーガ (ogre_5_rock)
+
+<img src="../../assets/images/monsters/families/ogre_5_rock.webp" width="160" alt="岩投げオーガ">
+
+画像ID：monster_ogre_5_rock。実ファイル：[assets/images/monsters/families/ogre_5_rock.webp](../../assets/images/monsters/families/ogre_5_rock.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv5　種名：ヤングオーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_5_rock)。
+
+設計上の役割：一度だけ後列へ大岩を投げ、以後は身軽になります。
+
+基礎能力：HP 60 / MP 4 / STR 11 / VIT 12 / AGI 5 / INT 7。報酬：4G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 大岩投げ (family_ogre_5_rock)：一度だけ後列へ大岩を投げ、以後は身軽になります。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下5〜9階。
+
+<a id="monster-ogre_5_gate"></a>
+
+### 門番オーガ (ogre_5_gate)
+
+<img src="../../assets/images/monsters/families/ogre_5_gate.webp" width="160" alt="門番オーガ">
+
+画像ID：monster_ogre_5_gate。実ファイル：[assets/images/monsters/families/ogre_5_gate.webp](../../assets/images/monsters/families/ogre_5_gate.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv5　種名：ヤングオーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_5_gate)。
+
+設計上の役割：外した扉を構え、仲間一人への単体攻撃を肩代わりします。
+
+基礎能力：HP 60 / MP 4 / STR 11 / VIT 12 / AGI 5 / INT 7。報酬：4G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 扉の盾 (family_ogre_5_gate)：外した扉を構え、仲間一人への単体攻撃を肩代わりします。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下5〜9階。
+
+<a id="monster-ogre_5_wrestler"></a>
+
+### 力士オーガ (ogre_5_wrestler)
+
+<img src="../../assets/images/monsters/families/ogre_5_wrestler.webp" width="160" alt="力士オーガ">
+
+画像ID：monster_ogre_5_wrestler。実ファイル：[assets/images/monsters/families/ogre_5_wrestler.webp](../../assets/images/monsters/families/ogre_5_wrestler.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv5　種名：ヤングオーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_5_wrestler)。
+
+設計上の役割：正面の相手を後列へ押し込み、自分は前へ出ます。
+
+基礎能力：HP 60 / MP 4 / STR 11 / VIT 12 / AGI 5 / INT 7。報酬：4G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 押し出し (family_ogre_5_wrestler)：正面の相手を後列へ押し込み、自分は前へ出ます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下5〜9階。
+
+<a id="monster-ogre_5_bell"></a>
+
+### 鐘撞きオーガ (ogre_5_bell)
+
+<img src="../../assets/images/monsters/families/ogre_5_bell.webp" width="160" alt="鐘撞きオーガ">
+
+画像ID：monster_ogre_5_bell。実ファイル：[assets/images/monsters/families/ogre_5_bell.webp](../../assets/images/monsters/families/ogre_5_bell.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv5　種名：ヤングオーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_5_bell)。
+
+設計上の役割：一手かけて大鐘を据え、次に鳴らして敵全員をひるませます。
+
+基礎能力：HP 60 / MP 4 / STR 11 / VIT 12 / AGI 5 / INT 7。報酬：4G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 鐘の一撞き (family_ogre_5_bell)：一手かけて大鐘を据え、次に鳴らして敵全員をひるませます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下5〜9階。
+
+<a id="monster-goblin_10_shield"></a>
+
+### ゴブリン盾兵 (goblin_10_shield)
+
+<img src="../../assets/images/monsters/families/goblin_10_shield.webp" width="160" alt="ゴブリン盾兵">
+
+画像ID：monster_goblin_10_shield。実ファイル：[assets/images/monsters/families/goblin_10_shield.webp](../../assets/images/monsters/families/goblin_10_shield.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv10　種名：ゴブリン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/goblin/goblin_10_shield)。
+
+設計上の役割：後ろの仲間を盾でかばいます。
+
+基礎能力：HP 93 / MP 3 / STR 20 / VIT 10 / AGI 9 / INT 10。報酬：6G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 盾構え (family_goblin_10_shield)：後ろの仲間を盾でかばいます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下10〜14階。
+
+<a id="monster-goblin_10_spear"></a>
+
+### ゴブリン槍兵 (goblin_10_spear)
+
+<img src="../../assets/images/monsters/families/goblin_10_spear.webp" width="160" alt="ゴブリン槍兵">
+
+画像ID：monster_goblin_10_spear。実ファイル：[assets/images/monsters/families/goblin_10_spear.webp](../../assets/images/monsters/families/goblin_10_spear.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv10　種名：ゴブリン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/goblin/goblin_10_spear)。
+
+設計上の役割：仲間の背後から長槍で前列を突きます。
+
+基礎能力：HP 93 / MP 3 / STR 20 / VIT 10 / AGI 9 / INT 10。報酬：6G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 盾越しの長槍 (family_goblin_10_spear)：仲間の背後から長槍で前列を突きます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下10〜14階。
+
+<a id="monster-goblin_10_standard"></a>
+
+### ゴブリン旗手 (goblin_10_standard)
+
+<img src="../../assets/images/monsters/families/goblin_10_standard.webp" width="160" alt="ゴブリン旗手">
+
+画像ID：monster_goblin_10_standard。実ファイル：[assets/images/monsters/families/goblin_10_standard.webp](../../assets/images/monsters/families/goblin_10_standard.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv10　種名：ゴブリン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/goblin/goblin_10_standard)。
+
+設計上の役割：軍旗を掲げている間、仲間の受けるダメージを軽減します。
+
+基礎能力：HP 60 / MP 8 / STR 14 / VIT 7 / AGI 9 / INT 16。報酬：6G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 軍旗掲揚 (family_goblin_10_standard)：軍旗を掲げている間、仲間の受けるダメージを軽減します。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下10〜14階。
+
+<a id="monster-goblin_10_sergeant"></a>
+
+### ゴブリン軍曹 (goblin_10_sergeant)
+
+<img src="../../assets/images/monsters/families/goblin_10_sergeant.webp" width="160" alt="ゴブリン軍曹">
+
+画像ID：monster_goblin_10_sergeant。実ファイル：[assets/images/monsters/families/goblin_10_sergeant.webp](../../assets/images/monsters/families/goblin_10_sergeant.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv10　種名：ゴブリン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/goblin/goblin_10_sergeant)。
+
+設計上の役割：押し出された兵を元の列へ戻します。
+
+基礎能力：HP 60 / MP 8 / STR 14 / VIT 7 / AGI 9 / INT 16。報酬：6G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 整列号令 (family_goblin_10_sergeant)：押し出された兵を元の列へ戻します。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下10〜14階。
+
+<a id="monster-goblin_10_engineer"></a>
+
+### ゴブリン工兵 (goblin_10_engineer)
+
+<img src="../../assets/images/monsters/families/goblin_10_engineer.webp" width="160" alt="ゴブリン工兵">
+
+画像ID：monster_goblin_10_engineer。実ファイル：[assets/images/monsters/families/goblin_10_engineer.webp](../../assets/images/monsters/families/goblin_10_engineer.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv10　種名：ゴブリン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/goblin/goblin_10_engineer)。
+
+設計上の役割：杭柵で槍兵を守り、追加の一突きをさせます。
+
+基礎能力：HP 93 / MP 3 / STR 20 / VIT 10 / AGI 9 / INT 10。報酬：6G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 杭柵づくり (family_goblin_10_engineer)：杭柵で槍兵を守り、追加の一突きをさせます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下10〜14階。
+
+<a id="monster-orc_10_stoker"></a>
+
+### 炉番オーク (orc_10_stoker)
+
+<img src="../../assets/images/monsters/families/orc_10_stoker.webp" width="160" alt="炉番オーク">
+
+画像ID：monster_orc_10_stoker。実ファイル：[assets/images/monsters/families/orc_10_stoker.webp](../../assets/images/monsters/families/orc_10_stoker.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv10　種名：フォージオーク。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/orc/orc_10_stoker)。
+
+設計上の役割：火かき棒を熱し、次の手番に熱傷を伴う一撃を放ちます。
+
+基礎能力：HP 105 / MP 4 / STR 17 / VIT 19 / AGI 6 / INT 11。報酬：6G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 赤鉄突き (family_orc_10_stoker)：火かき棒を熱し、次の手番に熱傷を伴う一撃を放ちます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下10〜14階。
+
+<a id="monster-orc_10_smith"></a>
+
+### 鍛冶屋オーク (orc_10_smith)
+
+<img src="../../assets/images/monsters/families/orc_10_smith.webp" width="160" alt="鍛冶屋オーク">
+
+画像ID：monster_orc_10_smith。実ファイル：[assets/images/monsters/families/orc_10_smith.webp](../../assets/images/monsters/families/orc_10_smith.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv10　種名：フォージオーク。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/orc/orc_10_smith)。
+
+設計上の役割：仲間の武器を打ち直し、次の一撃を強めます。
+
+基礎能力：HP 60 / MP 8 / STR 14 / VIT 7 / AGI 9 / INT 16。報酬：6G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 刃の打ち直し (family_orc_10_smith)：仲間の武器を打ち直し、次の一撃を強めます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下10〜14階。
+
+<a id="monster-orc_10_shieldsmith"></a>
+
+### 盾鍛冶オーク (orc_10_shieldsmith)
+
+<img src="../../assets/images/monsters/families/orc_10_shieldsmith.webp" width="160" alt="盾鍛冶オーク">
+
+画像ID：monster_orc_10_shieldsmith。実ファイル：[assets/images/monsters/families/orc_10_shieldsmith.webp](../../assets/images/monsters/families/orc_10_shieldsmith.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv10　種名：フォージオーク。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/orc/orc_10_shieldsmith)。
+
+設計上の役割：使い終えた仲間の盾を直し、再び攻撃を肩代わりできるようにします。
+
+基礎能力：HP 60 / MP 8 / STR 14 / VIT 7 / AGI 9 / INT 16。報酬：6G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 盾修理 (family_orc_10_shieldsmith)：使い終えた仲間の盾を直し、再び攻撃を肩代わりできるようにします。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下10〜14階。
+
+<a id="monster-orc_10_charcoal"></a>
+
+### 炭焼きオーク (orc_10_charcoal)
+
+<img src="../../assets/images/monsters/families/orc_10_charcoal.webp" width="160" alt="炭焼きオーク">
+
+画像ID：monster_orc_10_charcoal。実ファイル：[assets/images/monsters/families/orc_10_charcoal.webp](../../assets/images/monsters/families/orc_10_charcoal.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv10　種名：フォージオーク。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/orc/orc_10_charcoal)。
+
+設計上の役割：炭煙で後列を隠し、そこを狙う攻撃を外れやすくします。
+
+基礎能力：HP 60 / MP 8 / STR 14 / VIT 7 / AGI 9 / INT 16。報酬：6G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 炭煙 (family_orc_10_charcoal)：炭煙で後列を隠し、そこを狙う攻撃を外れやすくします。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下10〜14階。
+
+<a id="monster-orc_10_cart"></a>
+
+### トロッコオーク (orc_10_cart)
+
+<img src="../../assets/images/monsters/families/orc_10_cart.webp" width="160" alt="トロッコオーク">
+
+画像ID：monster_orc_10_cart。実ファイル：[assets/images/monsters/families/orc_10_cart.webp](../../assets/images/monsters/families/orc_10_cart.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv10　種名：フォージオーク。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/orc/orc_10_cart)。
+
+設計上の役割：満載のトロッコで一度突進し、その後は鉱石を投げます。
+
+基礎能力：HP 105 / MP 4 / STR 17 / VIT 19 / AGI 6 / INT 11。報酬：6G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 鉱車突進 (family_orc_10_cart)：満載のトロッコで一度突進し、その後は鉱石を投げます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下10〜14階。
+
+<a id="monster-ogre_10_quarry"></a>
+
+### 石切りオーガ (ogre_10_quarry)
+
+<img src="../../assets/images/monsters/families/ogre_10_quarry.webp" width="160" alt="石切りオーガ">
+
+画像ID：monster_ogre_10_quarry。実ファイル：[assets/images/monsters/families/ogre_10_quarry.webp](../../assets/images/monsters/families/ogre_10_quarry.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv10　種名：ストーンバックオーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_10_quarry)。
+
+設計上の役割：同じ相手を続けて狙い、二打目で防御を崩します。
+
+基礎能力：HP 105 / MP 4 / STR 17 / VIT 19 / AGI 6 / INT 11。報酬：6G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 二度割り (family_ogre_10_quarry)：同じ相手を続けて狙い、二打目で防御を崩します。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下10〜14階。
+
+<a id="monster-ogre_10_roller"></a>
+
+### 転がりオーガ (ogre_10_roller)
+
+<img src="../../assets/images/monsters/families/ogre_10_roller.webp" width="160" alt="転がりオーガ">
+
+画像ID：monster_ogre_10_roller。実ファイル：[assets/images/monsters/families/ogre_10_roller.webp](../../assets/images/monsters/families/ogre_10_roller.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv10　種名：ストーンバックオーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_10_roller)。
+
+設計上の役割：体を丸めて前列を轢き、次の手番に起き上がります。
+
+基礎能力：HP 105 / MP 4 / STR 17 / VIT 19 / AGI 6 / INT 11。報酬：6G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 岩転がり (family_ogre_10_roller)：体を丸めて前列を轢き、次の手番に起き上がります。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下10〜14階。
+
+<a id="monster-ogre_10_wall"></a>
+
+### 石積みオーガ (ogre_10_wall)
+
+<img src="../../assets/images/monsters/families/ogre_10_wall.webp" width="160" alt="石積みオーガ">
+
+画像ID：monster_ogre_10_wall。実ファイル：[assets/images/monsters/families/ogre_10_wall.webp](../../assets/images/monsters/families/ogre_10_wall.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv10　種名：ストーンバックオーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_10_wall)。
+
+設計上の役割：石壁を築き、仲間へ向かう一撃を遮ります。
+
+基礎能力：HP 105 / MP 4 / STR 17 / VIT 19 / AGI 6 / INT 11。報酬：6G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 石壁 (family_ogre_10_wall)：石壁を築き、仲間へ向かう一撃を遮ります。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下10〜14階。
+
+<a id="monster-ogre_10_statue"></a>
+
+### 石像番オーガ (ogre_10_statue)
+
+<img src="../../assets/images/monsters/families/ogre_10_statue.webp" width="160" alt="石像番オーガ">
+
+画像ID：monster_ogre_10_statue。実ファイル：[assets/images/monsters/families/ogre_10_statue.webp](../../assets/images/monsters/families/ogre_10_statue.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv10　種名：ストーンバックオーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_10_statue)。
+
+設計上の役割：静止中に仲間を狙った相手へ体当たりで反撃します。
+
+基礎能力：HP 60 / MP 8 / STR 14 / VIT 7 / AGI 9 / INT 16。報酬：6G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 石像の構え (family_ogre_10_statue)：静止中に仲間を狙った相手へ体当たりで反撃します。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下10〜14階。
+
+<a id="monster-ogre_10_flute"></a>
+
+### 岩笛オーガ (ogre_10_flute)
+
+<img src="../../assets/images/monsters/families/ogre_10_flute.webp" width="160" alt="岩笛オーガ">
+
+画像ID：monster_ogre_10_flute。実ファイル：[assets/images/monsters/families/ogre_10_flute.webp](../../assets/images/monsters/families/ogre_10_flute.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv10　種名：ストーンバックオーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_10_flute)。
+
+設計上の役割：背中の岩穴を鳴らし、転がった同族を即座に起こします。
+
+基礎能力：HP 60 / MP 8 / STR 14 / VIT 7 / AGI 9 / INT 16。報酬：6G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 岩鳴らし (family_ogre_10_flute)：背中の岩穴を鳴らし、転がった同族を即座に起こします。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下10〜14階。
+
+<a id="monster-goblin_15_snuffer"></a>
+
+### ゴブリン灯消し (goblin_15_snuffer)
+
+<img src="../../assets/images/monsters/families/goblin_15_snuffer.webp" width="160" alt="ゴブリン灯消し">
+
+画像ID：monster_goblin_15_snuffer。実ファイル：[assets/images/monsters/families/goblin_15_snuffer.webp](../../assets/images/monsters/families/goblin_15_snuffer.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv15　種名：ナイトアイゴブリン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/goblin/goblin_15_snuffer)。
+
+設計上の役割：戦場の灯りを二巡消し、夜目を持たない者の命中を下げます。
+
+基礎能力：HP 85 / MP 8 / STR 19 / VIT 10 / AGI 11 / INT 22。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 闇とばり (family_goblin_15_snuffer)：戦場の灯りを二巡消し、夜目を持たない者の命中を下げます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下15〜19階。
+
+<a id="monster-goblin_15_firefly"></a>
+
+### ゴブリン蛍飼い (goblin_15_firefly)
+
+<img src="../../assets/images/monsters/families/goblin_15_firefly.webp" width="160" alt="ゴブリン蛍飼い">
+
+画像ID：monster_goblin_15_firefly。実ファイル：[assets/images/monsters/families/goblin_15_firefly.webp](../../assets/images/monsters/families/goblin_15_firefly.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv15　種名：ナイトアイゴブリン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/goblin/goblin_15_firefly)。
+
+設計上の役割：一人に蛍をまとわせ、暗闇でも仲間がその相手を外さず狙えます。
+
+基礎能力：HP 85 / MP 8 / STR 19 / VIT 10 / AGI 11 / INT 22。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 蛍の目印 (family_goblin_15_firefly)：一人に蛍をまとわせ、暗闇でも仲間がその相手を外さず狙えます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下15〜19階。
+
+<a id="monster-goblin_15_shadow"></a>
+
+### ゴブリン影縫い (goblin_15_shadow)
+
+<img src="../../assets/images/monsters/families/goblin_15_shadow.webp" width="160" alt="ゴブリン影縫い">
+
+画像ID：monster_goblin_15_shadow。実ファイル：[assets/images/monsters/families/goblin_15_shadow.webp](../../assets/images/monsters/families/goblin_15_shadow.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv15　種名：ナイトアイゴブリン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/goblin/goblin_15_shadow)。
+
+設計上の役割：灯りが戻った瞬間に影を踏み、相手の列移動を封じます。
+
+基礎能力：HP 133 / MP 3 / STR 26 / VIT 13 / AGI 10 / INT 14。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 影縫い (family_goblin_15_shadow)：灯りが戻った瞬間に影を踏み、相手の列移動を封じます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下15〜19階。
+
+<a id="monster-goblin_15_thief"></a>
+
+### ゴブリン夜盗 (goblin_15_thief)
+
+<img src="../../assets/images/monsters/families/goblin_15_thief.webp" width="160" alt="ゴブリン夜盗">
+
+画像ID：monster_goblin_15_thief。実ファイル：[assets/images/monsters/families/goblin_15_thief.webp](../../assets/images/monsters/families/goblin_15_thief.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv15　種名：ナイトアイゴブリン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/goblin/goblin_15_thief)。
+
+設計上の役割：暗闇に紛れて後列へ忍び込み、背後から狙います。
+
+基礎能力：HP 133 / MP 3 / STR 26 / VIT 13 / AGI 10 / INT 14。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 暗がりの奇襲 (family_goblin_15_thief)：暗闇に紛れて後列へ忍び込み、背後から狙います。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下15〜19階。
+
+<a id="monster-goblin_15_owl"></a>
+
+### ゴブリン梟使い (goblin_15_owl)
+
+<img src="../../assets/images/monsters/families/goblin_15_owl.webp" width="160" alt="ゴブリン梟使い">
+
+画像ID：monster_goblin_15_owl。実ファイル：[assets/images/monsters/families/goblin_15_owl.webp](../../assets/images/monsters/families/goblin_15_owl.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv15　種名：ナイトアイゴブリン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/goblin/goblin_15_owl)。
+
+設計上の役割：梟の警戒声で仲間が単体攻撃を一度回避します。
+
+基礎能力：HP 85 / MP 8 / STR 19 / VIT 10 / AGI 11 / INT 22。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 梟の見張り (family_goblin_15_owl)：梟の警戒声で仲間が単体攻撃を一度回避します。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下15〜19階。
+
+<a id="monster-orc_15_mud"></a>
+
+### 泥まきオーク (orc_15_mud)
+
+<img src="../../assets/images/monsters/families/orc_15_mud.webp" width="160" alt="泥まきオーク">
+
+画像ID：monster_orc_15_mud。実ファイル：[assets/images/monsters/families/orc_15_mud.webp](../../assets/images/monsters/families/orc_15_mud.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv15　種名：マーシュオーク。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/orc/orc_15_mud)。
+
+設計上の役割：一列をぬかるませ、そこにいる相手の行動を遅らせます。
+
+基礎能力：HP 150 / MP 4 / STR 23 / VIT 26 / AGI 7 / INT 15。報酬：10G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 泥まき (family_orc_15_mud)：一列をぬかるませ、そこにいる相手の行動を遅らせます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下15〜19階。
+
+<a id="monster-orc_15_harpoon"></a>
+
+### 銛打ちオーク (orc_15_harpoon)
+
+<img src="../../assets/images/monsters/families/orc_15_harpoon.webp" width="160" alt="銛打ちオーク">
+
+画像ID：monster_orc_15_harpoon。実ファイル：[assets/images/monsters/families/orc_15_harpoon.webp](../../assets/images/monsters/families/orc_15_harpoon.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv15　種名：マーシュオーク。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/orc/orc_15_harpoon)。
+
+設計上の役割：後列の相手を銛で引き寄せ、手前のぬかるみへ引き込みます。
+
+基礎能力：HP 150 / MP 4 / STR 23 / VIT 26 / AGI 7 / INT 15。報酬：10G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 引き銛 (family_orc_15_harpoon)：後列の相手を銛で引き寄せ、手前のぬかるみへ引き込みます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下15〜19階。
+
+<a id="monster-orc_15_hound"></a>
+
+### 猟犬使いオーク (orc_15_hound)
+
+<img src="../../assets/images/monsters/families/orc_15_hound.webp" width="160" alt="猟犬使いオーク">
+
+画像ID：monster_orc_15_hound。実ファイル：[assets/images/monsters/families/orc_15_hound.webp](../../assets/images/monsters/families/orc_15_hound.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv15　種名：マーシュオーク。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/orc/orc_15_hound)。
+
+設計上の役割：ぬかるみに足を取られた相手へ猟犬を放ちます。
+
+基礎能力：HP 150 / MP 4 / STR 23 / VIT 26 / AGI 7 / INT 15。報酬：10G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 猟犬放ち (family_orc_15_hound)：ぬかるみに足を取られた相手へ猟犬を放ちます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下15〜19階。
+
+<a id="monster-orc_15_ferry"></a>
+
+### 渡し守オーク (orc_15_ferry)
+
+<img src="../../assets/images/monsters/families/orc_15_ferry.webp" width="160" alt="渡し守オーク">
+
+画像ID：monster_orc_15_ferry。実ファイル：[assets/images/monsters/families/orc_15_ferry.webp](../../assets/images/monsters/families/orc_15_ferry.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv15　種名：マーシュオーク。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/orc/orc_15_ferry)。
+
+設計上の役割：平底舟で仲間一人を別の列へ運びます。
+
+基礎能力：HP 85 / MP 8 / STR 19 / VIT 10 / AGI 11 / INT 22。報酬：10G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 渡し舟 (family_orc_15_ferry)：平底舟で仲間一人を別の列へ運びます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下15〜19階。
+
+<a id="monster-orc_15_doctor"></a>
+
+### 泥医者オーク (orc_15_doctor)
+
+<img src="../../assets/images/monsters/families/orc_15_doctor.webp" width="160" alt="泥医者オーク">
+
+画像ID：monster_orc_15_doctor。実ファイル：[assets/images/monsters/families/orc_15_doctor.webp](../../assets/images/monsters/families/orc_15_doctor.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv15　種名：マーシュオーク。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/orc/orc_15_doctor)。
+
+設計上の役割：仲間を薬泥で包み、一手休ませてHPを回復します。
+
+基礎能力：HP 85 / MP 8 / STR 19 / VIT 10 / AGI 11 / INT 22。報酬：10G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 薬泥包み (family_orc_15_doctor)：仲間を薬泥で包み、一手休ませてHPを回復します。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下15〜19階。
+
+<a id="monster-ogre_15_charger"></a>
+
+### 突撃オーガ (ogre_15_charger)
+
+<img src="../../assets/images/monsters/families/ogre_15_charger.webp" width="160" alt="突撃オーガ">
+
+画像ID：monster_ogre_15_charger。実ファイル：[assets/images/monsters/families/ogre_15_charger.webp](../../assets/images/monsters/families/ogre_15_charger.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv15　種名：レッドホーンオーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_15_charger)。
+
+設計上の役割：狙った列に角を向け、角が真紅に染まると列を貫きます。
+
+基礎能力：HP 150 / MP 4 / STR 23 / VIT 26 / AGI 7 / INT 15。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 赤角突進 (family_ogre_15_charger)：狙った列に角を向け、角が真紅に染まると列を貫きます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下15〜19階。
+
+<a id="monster-ogre_15_brawler"></a>
+
+### 喧嘩屋オーガ (ogre_15_brawler)
+
+<img src="../../assets/images/monsters/families/ogre_15_brawler.webp" width="160" alt="喧嘩屋オーガ">
+
+画像ID：monster_ogre_15_brawler。実ファイル：[assets/images/monsters/families/ogre_15_brawler.webp](../../assets/images/monsters/families/ogre_15_brawler.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv15　種名：レッドホーンオーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_15_brawler)。
+
+設計上の役割：殴られるほど角が赤くなり、次の拳が強くなります。
+
+基礎能力：HP 150 / MP 4 / STR 23 / VIT 26 / AGI 7 / INT 15。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 怒り拳 (family_ogre_15_brawler)：殴られるほど角が赤くなり、次の拳が強くなります。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下15〜19階。
+
+<a id="monster-ogre_15_breaker"></a>
+
+### 盾割りオーガ (ogre_15_breaker)
+
+<img src="../../assets/images/monsters/families/ogre_15_breaker.webp" width="160" alt="盾割りオーガ">
+
+画像ID：monster_ogre_15_breaker。実ファイル：[assets/images/monsters/families/ogre_15_breaker.webp](../../assets/images/monsters/families/ogre_15_breaker.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv15　種名：レッドホーンオーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_15_breaker)。
+
+設計上の役割：防御中の相手に蓄えた怒りを叩きつけます。
+
+基礎能力：HP 150 / MP 4 / STR 23 / VIT 26 / AGI 7 / INT 15。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 怒角の盾割り (family_ogre_15_breaker)：防御中の相手に蓄えた怒りを叩きつけます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下15〜19階。
+
+<a id="monster-ogre_15_firewalker"></a>
+
+### 火渡りオーガ (ogre_15_firewalker)
+
+<img src="../../assets/images/monsters/families/ogre_15_firewalker.webp" width="160" alt="火渡りオーガ">
+
+画像ID：monster_ogre_15_firewalker。実ファイル：[assets/images/monsters/families/ogre_15_firewalker.webp](../../assets/images/monsters/families/ogre_15_firewalker.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv15　種名：レッドホーンオーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_15_firewalker)。
+
+設計上の役割：炎を受けると角が即座に真紅になり、次の攻撃を強化します。
+
+基礎能力：HP 150 / MP 4 / STR 23 / VIT 26 / AGI 7 / INT 15。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 火渡り (family_ogre_15_firewalker)：炎を受けると角が即座に真紅になり、次の攻撃を強化します。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下15〜19階。
+
+<a id="monster-ogre_15_peacemaker"></a>
+
+### なだめ屋オーガ (ogre_15_peacemaker)
+
+<img src="../../assets/images/monsters/families/ogre_15_peacemaker.webp" width="160" alt="なだめ屋オーガ">
+
+画像ID：monster_ogre_15_peacemaker。実ファイル：[assets/images/monsters/families/ogre_15_peacemaker.webp](../../assets/images/monsters/families/ogre_15_peacemaker.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv15　種名：レッドホーンオーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_15_peacemaker)。
+
+設計上の役割：同族をなだめ、鎮めた怒りに応じてHPを回復します。
+
+基礎能力：HP 85 / MP 8 / STR 19 / VIT 10 / AGI 11 / INT 22。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 怒り鎮め (family_ogre_15_peacemaker)：同族をなだめ、鎮めた怒りに応じてHPを回復します。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下15〜19階。
+
+<a id="monster-goblin_20_heavyshield"></a>
+
+### ゴブリン重盾兵 (goblin_20_heavyshield)
+
+<img src="../../assets/images/monsters/families/goblin_20_heavyshield.webp" width="160" alt="ゴブリン重盾兵">
+
+画像ID：monster_goblin_20_heavyshield。実ファイル：[assets/images/monsters/families/goblin_20_heavyshield.webp](../../assets/images/monsters/families/goblin_20_heavyshield.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv20　種名：アイアンマスクゴブリン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/goblin/goblin_20_heavyshield)。
+
+設計上の役割：後列の味方と位置を入れ替え、その味方を重盾でかばいます。
+
+基礎能力：HP 173 / MP 3 / STR 33 / VIT 17 / AGI 12 / INT 18。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 重盾交代 (family_goblin_20_heavyshield)：後列の味方と位置を入れ替え、その味方を重盾でかばいます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下20〜24階。
+
+<a id="monster-goblin_20_double"></a>
+
+### ゴブリン影武者 (goblin_20_double)
+
+<img src="../../assets/images/monsters/families/goblin_20_double.webp" width="160" alt="ゴブリン影武者">
+
+画像ID：monster_goblin_20_double。実ファイル：[assets/images/monsters/families/goblin_20_double.webp](../../assets/images/monsters/families/goblin_20_double.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv20　種名：アイアンマスクゴブリン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/goblin/goblin_20_double)。
+
+設計上の役割：傷ついた仲間の鉄仮面をかぶり、攻撃を一度引き受けます。
+
+基礎能力：HP 173 / MP 3 / STR 33 / VIT 17 / AGI 12 / INT 18。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 替え面 (family_goblin_20_double)：傷ついた仲間の鉄仮面をかぶり、攻撃を一度引き受けます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下20〜24階。
+
+<a id="monster-goblin_20_chain"></a>
+
+### ゴブリン鎖使い (goblin_20_chain)
+
+<img src="../../assets/images/monsters/families/goblin_20_chain.webp" width="160" alt="ゴブリン鎖使い">
+
+画像ID：monster_goblin_20_chain。実ファイル：[assets/images/monsters/families/goblin_20_chain.webp](../../assets/images/monsters/families/goblin_20_chain.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv20　種名：アイアンマスクゴブリン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/goblin/goblin_20_chain)。
+
+設計上の役割：相手二人を鎖で結び、一人が列を移るともう一人も引きずります。
+
+基礎能力：HP 110 / MP 8 / STR 24 / VIT 12 / AGI 13 / INT 28。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 双鉤鎖 (family_goblin_20_chain)：相手二人を鎖で結び、一人が列を移るともう一人も引きずります。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下20〜24階。
+
+<a id="monster-goblin_20_maskmaker"></a>
+
+### ゴブリン仮面職人 (goblin_20_maskmaker)
+
+<img src="../../assets/images/monsters/families/goblin_20_maskmaker.webp" width="160" alt="ゴブリン仮面職人">
+
+画像ID：monster_goblin_20_maskmaker。実ファイル：[assets/images/monsters/families/goblin_20_maskmaker.webp](../../assets/images/monsters/families/goblin_20_maskmaker.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv20　種名：アイアンマスクゴブリン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/goblin/goblin_20_maskmaker)。
+
+設計上の役割：割れた鉄仮面を直して影武者を再び働かせます。
+
+基礎能力：HP 110 / MP 8 / STR 24 / VIT 12 / AGI 13 / INT 28。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 仮面修繕 (family_goblin_20_maskmaker)：割れた鉄仮面を直して影武者を再び働かせます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下20〜24階。
+
+<a id="monster-goblin_20_cadence"></a>
+
+### ゴブリン鼓手 (goblin_20_cadence)
+
+<img src="../../assets/images/monsters/families/goblin_20_cadence.webp" width="160" alt="ゴブリン鼓手">
+
+画像ID：monster_goblin_20_cadence。実ファイル：[assets/images/monsters/families/goblin_20_cadence.webp](../../assets/images/monsters/families/goblin_20_cadence.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv20　種名：アイアンマスクゴブリン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/goblin/goblin_20_cadence)。
+
+設計上の役割：陣太鼓に合わせて味方の前後列を入れ替えます。
+
+基礎能力：HP 110 / MP 8 / STR 24 / VIT 12 / AGI 13 / INT 28。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 陣替え太鼓 (family_goblin_20_cadence)：陣太鼓に合わせて味方の前後列を入れ替えます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下20〜24階。
+
+<a id="monster-orc_20_greatshield"></a>
+
+### 大盾オーク (orc_20_greatshield)
+
+<img src="../../assets/images/monsters/families/orc_20_greatshield.webp" width="160" alt="大盾オーク">
+
+画像ID：monster_orc_20_greatshield。実ファイル：[assets/images/monsters/families/orc_20_greatshield.webp](../../assets/images/monsters/families/orc_20_greatshield.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv20　種名：ブラックプレートオーク。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/orc/orc_20_greatshield)。
+
+設計上の役割：盾を据え、その列へ向かう最初の一撃を止めます。
+
+基礎能力：HP 110 / MP 8 / STR 24 / VIT 12 / AGI 13 / INT 28。報酬：10G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 大盾設置 (family_orc_20_greatshield)：盾を据え、その列へ向かう最初の一撃を止めます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下20〜24階。
+
+<a id="monster-orc_20_ram"></a>
+
+### 破城槌オーク (orc_20_ram)
+
+<img src="../../assets/images/monsters/families/orc_20_ram.webp" width="160" alt="破城槌オーク">
+
+画像ID：monster_orc_20_ram。実ファイル：[assets/images/monsters/families/orc_20_ram.webp](../../assets/images/monsters/families/orc_20_ram.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv20　種名：ブラックプレートオーク。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/orc/orc_20_ram)。
+
+設計上の役割：一手助走し、一列の防御を崩して打ちます。
+
+基礎能力：HP 195 / MP 4 / STR 28 / VIT 33 / AGI 8 / INT 20。報酬：10G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 破城突進 (family_orc_20_ram)：一手助走し、一列の防御を崩して打ちます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下20〜24階。
+
+<a id="monster-orc_20_axe"></a>
+
+### 戦斧オーク (orc_20_axe)
+
+<img src="../../assets/images/monsters/families/orc_20_axe.webp" width="160" alt="戦斧オーク">
+
+画像ID：monster_orc_20_axe。実ファイル：[assets/images/monsters/families/orc_20_axe.webp](../../assets/images/monsters/families/orc_20_axe.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv20　種名：ブラックプレートオーク。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/orc/orc_20_axe)。
+
+設計上の役割：守りを崩された相手に限り、戦斧を二度振り下ろします。
+
+基礎能力：HP 195 / MP 4 / STR 28 / VIT 33 / AGI 8 / INT 20。報酬：10G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 戦斧連断 (family_orc_20_axe)：守りを崩された相手に限り、戦斧を二度振り下ろします。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下20〜24階。
+
+<a id="monster-orc_20_armorer"></a>
+
+### 甲冑師オーク (orc_20_armorer)
+
+<img src="../../assets/images/monsters/families/orc_20_armorer.webp" width="160" alt="甲冑師オーク">
+
+画像ID：monster_orc_20_armorer。実ファイル：[assets/images/monsters/families/orc_20_armorer.webp](../../assets/images/monsters/families/orc_20_armorer.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv20　種名：ブラックプレートオーク。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/orc/orc_20_armorer)。
+
+設計上の役割：装甲を締め直し、味方の崩れた守りを回復します。
+
+基礎能力：HP 110 / MP 8 / STR 24 / VIT 12 / AGI 13 / INT 28。報酬：10G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 装甲修理 (family_orc_20_armorer)：装甲を締め直し、味方の崩れた守りを回復します。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下20〜24階。
+
+<a id="monster-orc_20_marshal"></a>
+
+### オーク督戦官 (orc_20_marshal)
+
+<img src="../../assets/images/monsters/families/orc_20_marshal.webp" width="160" alt="オーク督戦官">
+
+画像ID：monster_orc_20_marshal。実ファイル：[assets/images/monsters/families/orc_20_marshal.webp](../../assets/images/monsters/families/orc_20_marshal.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv20　種名：ブラックプレートオーク。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/orc/orc_20_marshal)。
+
+設計上の役割：まだ行動していない兵を選び、その場で手番を取らせます。
+
+基礎能力：HP 110 / MP 8 / STR 24 / VIT 12 / AGI 13 / INT 28。報酬：10G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 督戦 (family_orc_20_marshal)：まだ行動していない兵を選び、その場で手番を取らせます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下20〜24階。
+
+<a id="monster-ogre_20_twinclubs"></a>
+
+### 双棍オーガ (ogre_20_twinclubs)
+
+<img src="../../assets/images/monsters/families/ogre_20_twinclubs.webp" width="160" alt="双棍オーガ">
+
+画像ID：monster_ogre_20_twinclubs。実ファイル：[assets/images/monsters/families/ogre_20_twinclubs.webp](../../assets/images/monsters/families/ogre_20_twinclubs.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv20　種名：ツインヘッドオーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_20_twinclubs)。
+
+設計上の役割：左の小振りと右の強打を同じ相手へ重ねます。
+
+基礎能力：HP 195 / MP 4 / STR 28 / VIT 33 / AGI 8 / INT 20。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 左右打ち (family_ogre_20_twinclubs)：左の小振りと右の強打を同じ相手へ重ねます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下20〜24階。
+
+<a id="monster-ogre_20_warden"></a>
+
+### 双頭門衛オーガ (ogre_20_warden)
+
+<img src="../../assets/images/monsters/families/ogre_20_warden.webp" width="160" alt="双頭門衛オーガ">
+
+画像ID：monster_ogre_20_warden。実ファイル：[assets/images/monsters/families/ogre_20_warden.webp](../../assets/images/monsters/families/ogre_20_warden.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv20　種名：ツインヘッドオーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_20_warden)。
+
+設計上の役割：二つの頭を使って後列への攻撃を見張り、肩代わりします。
+
+基礎能力：HP 195 / MP 4 / STR 28 / VIT 33 / AGI 8 / INT 20。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 双頭警戒 (family_ogre_20_warden)：二つの頭を使って後列への攻撃を見張り、肩代わりします。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下20〜24階。
+
+<a id="monster-ogre_20_hex"></a>
+
+### 呪い師オーガ (ogre_20_hex)
+
+<img src="../../assets/images/monsters/families/ogre_20_hex.webp" width="160" alt="呪い師オーガ">
+
+画像ID：monster_ogre_20_hex。実ファイル：[assets/images/monsters/families/ogre_20_hex.webp](../../assets/images/monsters/families/ogre_20_hex.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv20　種名：ツインヘッドオーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_20_hex)。
+
+設計上の役割：一方の頭で詠唱し、詠唱中に攻撃した相手にはもう一方が噛みつきます。
+
+基礎能力：HP 195 / MP 4 / STR 28 / VIT 33 / AGI 8 / INT 20。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 双頭呪法 (family_ogre_20_hex)：一方の頭で詠唱し、詠唱中に攻撃した相手にはもう一方が噛みつきます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下20〜24階。
+
+<a id="monster-ogre_20_quarrel"></a>
+
+### 口喧嘩オーガ (ogre_20_quarrel)
+
+<img src="../../assets/images/monsters/families/ogre_20_quarrel.webp" width="160" alt="口喧嘩オーガ">
+
+画像ID：monster_ogre_20_quarrel。実ファイル：[assets/images/monsters/families/ogre_20_quarrel.webp](../../assets/images/monsters/families/ogre_20_quarrel.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv20　種名：ツインヘッドオーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_20_quarrel)。
+
+設計上の役割：二人を挑発し、片方だけが応じると頭同士が揉めて一手休みます。
+
+基礎能力：HP 110 / MP 8 / STR 24 / VIT 12 / AGI 13 / INT 28。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 二声の挑発 (family_ogre_20_quarrel)：二人を挑発し、片方だけが応じると頭同士が揉めて一手休みます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下20〜24階。
+
+<a id="monster-ogre_20_singer"></a>
+
+### 歌い手オーガ (ogre_20_singer)
+
+<img src="../../assets/images/monsters/families/ogre_20_singer.webp" width="160" alt="歌い手オーガ">
+
+画像ID：monster_ogre_20_singer。実ファイル：[assets/images/monsters/families/ogre_20_singer.webp](../../assets/images/monsters/families/ogre_20_singer.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv20　種名：ツインヘッドオーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_20_singer)。
+
+設計上の役割：二つの声を揃え、味方全員のHPを回復します。
+
+基礎能力：HP 110 / MP 8 / STR 24 / VIT 12 / AGI 13 / INT 28。報酬：10G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 双声の和音 (family_ogre_20_singer)：二つの声を揃え、味方全員のHPを回復します。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下20〜24階。
+
+<a id="monster-goblin_25_king"></a>
+
+### ゴブリン小王 (goblin_25_king)
+
+<img src="../../assets/images/monsters/families/goblin_25_king.webp" width="160" alt="ゴブリン小王">
+
+画像ID：monster_goblin_25_king。実ファイル：[assets/images/monsters/families/goblin_25_king.webp](../../assets/images/monsters/families/goblin_25_king.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv25　種名：クラウンゴブリン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/goblin/goblin_25_king)。
+
+設計上の役割：王冠を掲げ、配下一人に追加行動を命じます。
+
+基礎能力：HP 135 / MP 8 / STR 28 / VIT 15 / AGI 14 / INT 35。報酬：18G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 小王の号令 (family_goblin_25_king)：王冠を掲げ、配下一人に追加行動を命じます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下25〜29階。
+
+<a id="monster-goblin_25_guard"></a>
+
+### ゴブリン近衛兵 (goblin_25_guard)
+
+<img src="../../assets/images/monsters/families/goblin_25_guard.webp" width="160" alt="ゴブリン近衛兵">
+
+画像ID：monster_goblin_25_guard。実ファイル：[assets/images/monsters/families/goblin_25_guard.webp](../../assets/images/monsters/families/goblin_25_guard.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv25　種名：クラウンゴブリン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/goblin/goblin_25_guard)。
+
+設計上の役割：今の王冠の持ち主を狙った攻撃を肩代わりします。
+
+基礎能力：HP 213 / MP 3 / STR 40 / VIT 20 / AGI 13 / INT 22。報酬：18G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 王冠護衛 (family_goblin_25_guard)：今の王冠の持ち主を狙った攻撃を肩代わりします。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下25〜29階。
+
+<a id="monster-goblin_25_herald"></a>
+
+### ゴブリン伝令兵 (goblin_25_herald)
+
+<img src="../../assets/images/monsters/families/goblin_25_herald.webp" width="160" alt="ゴブリン伝令兵">
+
+画像ID：monster_goblin_25_herald。実ファイル：[assets/images/monsters/families/goblin_25_herald.webp](../../assets/images/monsters/families/goblin_25_herald.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv25　種名：クラウンゴブリン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/goblin/goblin_25_herald)。
+
+設計上の役割：小王の直近の号令を別の兵にも伝え、続けて行動させます。
+
+基礎能力：HP 135 / MP 8 / STR 28 / VIT 15 / AGI 14 / INT 35。報酬：18G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 号令伝達 (family_goblin_25_herald)：小王の直近の号令を別の兵にも伝え、続けて行動させます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下25〜29階。
+
+<a id="monster-goblin_25_jester"></a>
+
+### ゴブリン道化師 (goblin_25_jester)
+
+<img src="../../assets/images/monsters/families/goblin_25_jester.webp" width="160" alt="ゴブリン道化師">
+
+画像ID：monster_goblin_25_jester。実ファイル：[assets/images/monsters/families/goblin_25_jester.webp](../../assets/images/monsters/families/goblin_25_jester.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv25　種名：クラウンゴブリン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/goblin/goblin_25_jester)。
+
+設計上の役割：偽の王冠で、近衛兵の護衛先を一時的に自分へ移します。
+
+基礎能力：HP 135 / MP 8 / STR 28 / VIT 15 / AGI 14 / INT 35。報酬：18G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 偽の戴冠 (family_goblin_25_jester)：偽の王冠で、近衛兵の護衛先を一時的に自分へ移します。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下25〜29階。
+
+<a id="monster-goblin_25_steward"></a>
+
+### ゴブリン侍従長 (goblin_25_steward)
+
+<img src="../../assets/images/monsters/families/goblin_25_steward.webp" width="160" alt="ゴブリン侍従長">
+
+画像ID：monster_goblin_25_steward。実ファイル：[assets/images/monsters/families/goblin_25_steward.webp](../../assets/images/monsters/families/goblin_25_steward.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv25　種名：クラウンゴブリン。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/goblin/goblin_25_steward)。
+
+設計上の役割：王が倒れると冠を生き残った兵に渡し、新王に号令を引き継がせます。
+
+基礎能力：HP 135 / MP 8 / STR 28 / VIT 15 / AGI 14 / INT 35。報酬：18G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 王冠継承 (family_goblin_25_steward)：王が倒れると冠を生き残った兵に渡し、新王に号令を引き継がせます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下25〜29階。
+
+<a id="monster-orc_25_bonemask"></a>
+
+### 骨面戦士オーク (orc_25_bonemask)
+
+<img src="../../assets/images/monsters/families/orc_25_bonemask.webp" width="160" alt="骨面戦士オーク">
+
+画像ID：monster_orc_25_bonemask。実ファイル：[assets/images/monsters/families/orc_25_bonemask.webp](../../assets/images/monsters/families/orc_25_bonemask.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv25　種名：アンセストラルオーク。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/orc/orc_25_bonemask)。
+
+設計上の役割：最初に倒れた仲間の攻撃技を継ぎ、その後も使い続けます。
+
+基礎能力：HP 240 / MP 4 / STR 34 / VIT 40 / AGI 9 / INT 24。報酬：18G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 戦技継承 (family_orc_25_bonemask)：最初に倒れた仲間の攻撃技を継ぎ、その後も使い続けます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下25〜29階。
+
+<a id="monster-orc_25_grave"></a>
+
+### 墓守オーク (orc_25_grave)
+
+<img src="../../assets/images/monsters/families/orc_25_grave.webp" width="160" alt="墓守オーク">
+
+画像ID：monster_orc_25_grave。実ファイル：[assets/images/monsters/families/orc_25_grave.webp](../../assets/images/monsters/families/orc_25_grave.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv25　種名：アンセストラルオーク。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/orc/orc_25_grave)。
+
+設計上の役割：倒れた仲間に骨杭を立て、生き残った一人の防御を固めます。
+
+基礎能力：HP 135 / MP 8 / STR 28 / VIT 15 / AGI 14 / INT 35。報酬：18G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 骨杭の守り (family_orc_25_grave)：倒れた仲間に骨杭を立て、生き残った一人の防御を固めます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下25〜29階。
+
+<a id="monster-orc_25_poet"></a>
+
+### 戦詩人オーク (orc_25_poet)
+
+<img src="../../assets/images/monsters/families/orc_25_poet.webp" width="160" alt="戦詩人オーク">
+
+画像ID：monster_orc_25_poet。実ファイル：[assets/images/monsters/families/orc_25_poet.webp](../../assets/images/monsters/families/orc_25_poet.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv25　種名：アンセストラルオーク。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/orc/orc_25_poet)。
+
+設計上の役割：倒れた仲間が最後に放った大技を一度だけ再現します。
+
+基礎能力：HP 135 / MP 8 / STR 28 / VIT 15 / AGI 14 / INT 35。報酬：18G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 最期の武勲 (family_orc_25_poet)：倒れた仲間が最後に放った大技を一度だけ再現します。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下25〜29階。
+
+<a id="monster-orc_25_spirit"></a>
+
+### 魂呼びオーク (orc_25_spirit)
+
+<img src="../../assets/images/monsters/families/orc_25_spirit.webp" width="160" alt="魂呼びオーク">
+
+画像ID：monster_orc_25_spirit。実ファイル：[assets/images/monsters/families/orc_25_spirit.webp](../../assets/images/monsters/families/orc_25_spirit.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv25　種名：アンセストラルオーク。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/orc/orc_25_spirit)。
+
+設計上の役割：戦死者の霊を呼び、最後の攻撃を一度だけさせます。
+
+基礎能力：HP 135 / MP 8 / STR 28 / VIT 15 / AGI 14 / INT 35。報酬：18G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 魂呼び (family_orc_25_spirit)：戦死者の霊を呼び、最後の攻撃を一度だけさせます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下25〜29階。
+
+<a id="monster-orc_25_chief"></a>
+
+### オーク族長 (orc_25_chief)
+
+<img src="../../assets/images/monsters/families/orc_25_chief.webp" width="160" alt="オーク族長">
+
+画像ID：monster_orc_25_chief。実ファイル：[assets/images/monsters/families/orc_25_chief.webp](../../assets/images/monsters/families/orc_25_chief.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv25　種名：アンセストラルオーク。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/orc/orc_25_chief)。
+
+設計上の役割：開戦時に後継者を指名し、自分が倒れると大斧の力を託します。
+
+基礎能力：HP 240 / MP 4 / STR 34 / VIT 40 / AGI 9 / INT 24。報酬：18G / 32EXP。
+宝箱：機関部品 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 族長の大斧 (family_orc_25_chief)：開戦時に後継者を指名し、自分が倒れると大斧の力を託します。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下25〜29階。
+
+<a id="monster-ogre_25_summit"></a>
+
+### 峰砕きオーガ (ogre_25_summit)
+
+<img src="../../assets/images/monsters/families/ogre_25_summit.webp" width="160" alt="峰砕きオーガ">
+
+画像ID：monster_ogre_25_summit。実ファイル：[assets/images/monsters/families/ogre_25_summit.webp](../../assets/images/monsters/families/ogre_25_summit.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv25　種名：ハイランドオーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_25_summit)。
+
+設計上の役割：地面にひびを入れ、次の手番に予告した列の足場を砕きます。
+
+基礎能力：HP 240 / MP 4 / STR 34 / VIT 40 / AGI 9 / INT 24。報酬：18G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 峰砕き (family_ogre_25_summit)：地面にひびを入れ、次の手番に予告した列の足場を砕きます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下25〜29階。
+
+<a id="monster-ogre_25_bridge"></a>
+
+### 橋大工オーガ (ogre_25_bridge)
+
+<img src="../../assets/images/monsters/families/ogre_25_bridge.webp" width="160" alt="橋大工オーガ">
+
+画像ID：monster_ogre_25_bridge。実ファイル：[assets/images/monsters/families/ogre_25_bridge.webp](../../assets/images/monsters/families/ogre_25_bridge.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv25　種名：ハイランドオーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_25_bridge)。
+
+設計上の役割：大木を渡し、続く仲間一人を敵後列へ攻め込ませます。
+
+基礎能力：HP 135 / MP 8 / STR 28 / VIT 15 / AGI 14 / INT 35。報酬：18G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 丸太橋 (family_ogre_25_bridge)：大木を渡し、続く仲間一人を敵後列へ攻め込ませます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下25〜29階。
+
+<a id="monster-ogre_25_avalanche"></a>
+
+### 雪崩呼びオーガ (ogre_25_avalanche)
+
+<img src="../../assets/images/monsters/families/ogre_25_avalanche.webp" width="160" alt="雪崩呼びオーガ">
+
+画像ID：monster_ogre_25_avalanche。実ファイル：[assets/images/monsters/families/ogre_25_avalanche.webp](../../assets/images/monsters/families/ogre_25_avalanche.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv25　種名：ハイランドオーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_25_avalanche)。
+
+設計上の役割：小石の落ちた列へ、次の手番に岩雪崩を起こします。
+
+基礎能力：HP 240 / MP 4 / STR 34 / VIT 40 / AGI 9 / INT 24。報酬：18G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 岩雪崩 (family_ogre_25_avalanche)：小石の落ちた列へ、次の手番に岩雪崩を起こします。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下25〜29階。
+
+<a id="monster-ogre_25_greatbell"></a>
+
+### 大鐘守オーガ (ogre_25_greatbell)
+
+<img src="../../assets/images/monsters/families/ogre_25_greatbell.webp" width="160" alt="大鐘守オーガ">
+
+画像ID：monster_ogre_25_greatbell。実ファイル：[assets/images/monsters/families/ogre_25_greatbell.webp](../../assets/images/monsters/families/ogre_25_greatbell.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv25　種名：ハイランドオーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_25_greatbell)。
+
+設計上の役割：二度の予鈴のあと、防御を構えなかった全員を転倒させます。
+
+基礎能力：HP 240 / MP 4 / STR 34 / VIT 40 / AGI 9 / INT 24。報酬：18G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 山鐘三打 (family_ogre_25_greatbell)：二度の予鈴のあと、防御を構えなかった全員を転倒させます。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下25〜29階。
+
+<a id="monster-ogre_25_mountainking"></a>
+
+### 山王オーガ (ogre_25_mountainking)
+
+<img src="../../assets/images/monsters/families/ogre_25_mountainking.webp" width="160" alt="山王オーガ">
+
+画像ID：monster_ogre_25_mountainking。実ファイル：[assets/images/monsters/families/ogre_25_mountainking.webp](../../assets/images/monsters/families/ogre_25_mountainking.webp)。
+画像共有：他の敵定義との共有なし。
+
+レベル帯：Lv25　種名：ハイランドオーガ。[種別図鑑で開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters/ogre/ogre_25_mountainking)。
+
+設計上の役割：上げた片足で次の手番に一列を踏みます。構え中の軸足を攻めると転倒します。
+
+基礎能力：HP 240 / MP 4 / STR 34 / VIT 40 / AGI 9 / INT 24。報酬：18G / 32EXP。
+宝箱：薬効葉 1個 / 12.5％。
+属性倍率：すべて既定値。
+
+AIの選択順：
+
+1. 山王踏み (family_ogre_25_mountainking)：上げた片足で次の手番に一列を踏みます。構え中の軸足を攻めると転倒します。
+2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
+
+遭遇と参照先：
+
+千変の迷宮の通常遭遇：地下25〜29階。
 
 ## 依頼に追加した敵
 

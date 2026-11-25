@@ -1,3 +1,4 @@
+import {syncFamilyBattle} from './monster-family-field.js';
 import {isRecord} from './expression.js';
 import {scaledEnemy} from './enemy.js';
 import {unitKey} from './buffs.js';
@@ -50,5 +51,5 @@ export function joinReinforcements(engine){
   b.reinforcements.push({id:row.id,round:b.round});joined.push(unitKey(enemy));b.log.push(`${enemy.name}が増援として現れた。`);
  }
  // One snapshot after the whole batch: all joins in this round share its roster.
- if(joined.length)traceFrontline(engine,'reinforcements',{units:joined});
+ if(joined.length){syncFamilyBattle(engine);traceFrontline(engine,'reinforcements',{units:joined});}
 }

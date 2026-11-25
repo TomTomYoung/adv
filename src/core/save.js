@@ -1,3 +1,4 @@
+import {familySaveValid} from './monster-family-field.js';
 import {freshWorldTravel,worldTravelSaveErrors} from './world-travel.js';
 import {SHIFTING_DUNGEON,shiftingDungeonData,savedShiftingSeed} from './shifting-dungeon.js';
 import {acceptedStoryRouteData} from './accepted-story-routes.js';
@@ -403,6 +404,7 @@ export function validateSave(save,data){
     const b=s.battle,e=data.encounters[b?.encounter],roster=reinforcementRoster(e,b?.reinforcements,b?.round);
     if(!isRecord(b)||!e||!Array.isArray(b.enemies)||!roster||b.enemies.length!==roster.length||!Array.isArray(b.acted)||!Array.isArray(b.guards)||!Array.isArray(b.log)||!integer(b.round,1,1e6)){fail('戦闘状態不正');}
     else{
+      if(!familySaveValid(data,s))fail('魔物職種の戦闘状態不正');
       if(e.reinforcements&&b.enemies.filter(u=>u?.hp>0&&!b.frontline?.removed?.[`enemy:${u.instance}`]).length>5)fail('増援戦の生存数超過');
       if(b.pacedExperience!==undefined&&(b.pacedExperience!==true||!data.encounters[b.encounter]?.progression))fail('経験値設定不正');
       if(b.enemyScale!==undefined&&(!Number.isFinite(b.enemyScale)||b.enemyScale<.1||b.enemyScale>5))fail('敵の環境倍率不正');

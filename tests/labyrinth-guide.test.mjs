@@ -47,7 +47,7 @@ test('一つの帯の途中にある優先設定と、重みゼロの候補を�
   const id = Object.keys(band.groups)[0];
   data.encounterGroups.dungeons.shifting_labyrinth.floors[8] = {[id]: 0};
   const sections = guideBands(data, false).filter(s => s.band === band);
-  assert.deepEqual(sections.map(s => [s.first, s.last]), [[6, 7], [8, 8], [9, 10]]);
+  assert.deepEqual(sections.map(s => [s.first, s.last]), [[6, 7], [8, 8], [9, 9]]);
   const disabled = sections[1].groups.find(g => g.id === id);
   assert.equal(disabled.weight, 0);
   assert.equal(disabled.override, true);
