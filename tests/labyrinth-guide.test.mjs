@@ -9,11 +9,13 @@ import {newGame} from './helpers.mjs';
 
 const guide = await loadGuide(file => readFile(new URL('../' + file, import.meta.url), 'utf8').then(JSON.parse));
 
-test('苔虫と戦車ビーバーの生息階は有効な編成から表示する', () => {
+test('個別原画の魔物の生息階は有効な編成から表示する', () => {
   const sections = guideBands(guide, false);
   assert.equal(monsterFloorText(sections, 'moss_beetle'), '地下1〜10階');
   assert.equal(monsterFloorText(sections, 'tank_beaver'), '地下6〜24階');
-  for (const id of ['moss_beetle', 'tank_beaver']) {
+  assert.equal(monsterFloorText(sections, 'stone_beetle'), '地下6〜14階');
+  assert.equal(monsterFloorText(sections, 'soot_beetle'), '地下4〜9階');
+  for (const id of ['moss_beetle', 'tank_beaver', 'stone_beetle', 'soot_beetle']) {
     assert.equal(guide.assets.images[guide.enemies[id].sprite], 'assets/images/monsters/' + id + '.webp');
   }
 });
