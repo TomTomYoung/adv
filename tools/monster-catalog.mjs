@@ -49,7 +49,7 @@ export function monsterCatalog(data) {
     '正常な1.25.0〜1.33.0のセーブを現行版へ検証後に移行し、その他の内容版や破損セーブは受け付けません。地域の迷宮獣・守護者は現行の依頼戦・通常遭遇から参照されているため残っています。保存方針は[SPEC.md](SPEC.md)、調整と旧測定は[BALANCE_PLAN.md](BALANCE_PLAN.md)を参照してください。','',
     '## 編集元','',
     '[config/entities.json](../config/entities.json)：個別デザイン20種の名称・発想・外見・数値・代表技能。AIの組立は[build-entities.mjs](../tools/build-entities.mjs)です。参照した発想元は[RPGエンティティ生成モデル](https://app.notion.com/p/RPG-3d6c3c1966b380489592dbeafc72b9dd)と[魔物100](https://app.notion.com/p/3d6c3c1966b38172b0a6fd15e23be419)です。','',
-    '[kagaribi-content.json](../config/kagaribi-content.json)：くらがり、篝火の迷宮の通常魔物6種と炉守りの亡霊。[dungeon-content.json](../config/dungeon-content.json)：水路の魚・ソルトイーター・境渡りの呪詠み。出現・特殊処理の設定は各 `config/dungeons/*.json` です。','',
+    '[kagaribi-content.json](../config/kagaribi-content.json)：くらがり、煤ネズミとその仲間を含む篝火の迷宮の通常魔物、炉守りの亡霊。[dungeon-content.json](../config/dungeon-content.json)：水路の魚・ソルトイーター・境渡りの呪詠み。出現・特殊処理の設定は各 `config/dungeons/*.json` です。','',
     '[build-content.mjs](../tools/build-content.mjs)：地域の迷宮獣・守護者。[build-scenarios.mjs](../tools/build-scenarios.mjs)と `authoring/scenarios-*.mjs`：依頼ごとの追加敵。通常遭遇の原稿は[編集先の対応](CONFIG_EDITOR_SOURCES.md)、画像IDと実ファイルの対応は[data/assets.json](../data/assets.json)を確認してください。','',
     ];
   for(const [title,list] of groups){
@@ -58,7 +58,9 @@ export function monsterCatalog(data) {
       const file=data.assets.images[e.sprite],shared=imageUsers.get(file).filter(name=>name!==e.name);
       out.push(`<a id="monster-${e.id}"></a>`,'',`### ${e.name} (${e.id})`,'',`<img src="../${file}" width="160" alt="${escape(e.name)}">`,'',`画像ID：${e.sprite}。実ファイル：[${file}](../${file})。`,
         `画像共有：${shared.length?shared.join('・'):'他の敵定義との共有なし'}。`,'');
-      if(e.ideas)out.push(`発想：${e.ideas.join('＋')}。参照：${e.source}。地域分類：${data.regions.find(r=>r.id===e.region)?.name??e.region}。`,'',`外見：${e.appearance}`,'',`設計上の役割：${e.role}`,'');
+      if(e.ideas)out.push(`発想：${e.ideas.join('＋')}。参照：${e.source}。地域分類：${data.regions.find(r=>r.id===e.region)?.name??e.region}。`,'');
+      if(e.appearance)out.push(`外見：${e.appearance}`,'');
+      if(e.role)out.push(`設計上の役割：${e.role}`,'');
       if(e.id==='kuragari')out.push('通常点灯の守りが届かないときは7成功歩ごとに基本22％で歩行抽選し、現状の候補はくらがり100％です。普通の火で通常魔物まで消えることはなく、通常遭遇の完全抑止は深火の効果です。q001の老人同行中は北・南の帰路配置で同じイベント戦闘を起こし、途中の通常抽選でくらがりに遭遇した場合も、その実セルで同じ戦闘と新人救援へ進みます。火切れだけでは即戦闘にせず、救援後は繰り返しません。撃退・救助による強制終了と撃破を区別します。[火と遭遇仕様](KAGARIBI_DUNGEON.md)。','');
       if(e.id==='salt_eater')out.push('塩の蓄積した装備個体があると、廃坑の腐食部品が遭遇候補を切り替えます。敵ラウンド開始時、この敵が生存していれば閾値以上で塩が最も多い装備個体を1個消失させます。これは下記AIの攻撃とは別の `corrosion.battleRound` 処理です。[塩の仕様](WATERWAYS_SALT_MINE.md)。','');
       if(e.id.startsWith('water_'))out.push('旧地下水道の水位に応じて使う魚です。現在の2D区画給排水はこの水位別遭遇を使用しません。敵と遭遇定義は配布DBに残っていますが、退避した旧水道の通常出現と現行の水路を混同しません。','');
