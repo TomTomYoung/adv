@@ -1,4 +1,4 @@
-import {gearStages, guideActor, guideBands, loadGuide} from './application/labyrinth-guide.js';
+import {gearStages, guideActor, guideBands, loadGuide, monsterFloorText} from './application/labyrinth-guide.js';
 import {conditionText, monsterGroups, targetText} from './application/monster-catalog.js';
 import {STAT_KEYS} from './core/jobs.js';
 
@@ -184,6 +184,8 @@ function drawMonster(id) {
   actions.append(list);
   const detail = block(), link = el('a', '出現場所・遭遇条件の詳細');
   link.href = 'https://github.com/TomTomYoung/adv/blob/master/doc/battle/MONSTER_CATALOG.md#monster-' + id;
+  const floors = monsterFloorText(guideBands(data, false), id);
+  if (floors) detail.append(el('p', '千変の迷宮　' + floors));
   detail.append(link);
   card.append(header, parameters, rewards, affinity, actions, detail);
   $('monster-sheet').replaceChildren(card);

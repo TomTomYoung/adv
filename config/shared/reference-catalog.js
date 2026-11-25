@@ -17083,6 +17083,26 @@ export const referenceData={
       "id": "kagaribi_torch_stub"
     },
     {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "moss_beetle",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "tank_beaver",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
       "file": "cell-layers.json",
       "path": [
         "presets",
@@ -18880,6 +18900,74 @@ export const referenceData={
       ],
       "kind": "images",
       "id": "construct"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "moss_beetle",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_moss_beetle"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "moss_beetle",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "shell_roll"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "moss_beetle",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "tank_beaver",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_tank_beaver"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "tank_beaver",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "beaver_log_shot"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "tank_beaver",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
     },
     {
       "file": "dungeon-content.json",
@@ -26784,6 +26872,18 @@ export const referenceData={
       ],
       "kind": "formulas",
       "id": "mine_shard_shot"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "beaver_log_shot",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heavy"
     },
     {
       "file": "jobs.json",
@@ -43956,6 +44056,9 @@ export const referenceData={
       },
       "mine_light_claw": {
         "name": "結晶の小爪"
+      },
+      "beaver_log_shot": {
+        "name": "丸太砲"
       }
     },
     "items": {
@@ -44523,6 +44626,14 @@ export const referenceData={
       "kagaribi_torch_thief": {
         "name": "煤ネズミ（松明泥棒）",
         "sprite": "monster_kagaribi_torch_thief"
+      },
+      "moss_beetle": {
+        "name": "苔虫",
+        "sprite": "monster_moss_beetle"
+      },
+      "tank_beaver": {
+        "name": "戦車ビーバー",
+        "sprite": "monster_tank_beaver"
       }
     },
     "encounters": {
@@ -70626,6 +70737,20 @@ export const referenceData={
         "mine_low_scissors"
       ]
     },
+    "enemies/moss_beetle": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "moss_beetle"
+      ]
+    },
+    "enemies/tank_beaver": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "tank_beaver"
+      ]
+    },
     "encounters/market_enforcers": {
       "file": "dungeon-content.json",
       "path": [
@@ -71876,6 +72001,13 @@ export const referenceData={
       "path": [
         "skills",
         "mine_light_claw"
+      ]
+    },
+    "skills/beaver_log_shot": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "beaver_log_shot"
       ]
     },
     "fieldAbilities/survey": {
@@ -78602,7 +78734,9 @@ export const referenceData={
       "monster_kagaribi_soot_rat": "assets/images/monsters/kagaribi_soot_rat.webp",
       "monster_kagaribi_chimney_rat": "assets/images/monsters/kagaribi_chimney_rat.webp",
       "monster_kagaribi_soot_ball": "assets/images/monsters/kagaribi_soot_ball.webp",
-      "monster_kagaribi_torch_thief": "assets/images/monsters/kagaribi_torch_thief.webp"
+      "monster_kagaribi_torch_thief": "assets/images/monsters/kagaribi_torch_thief.webp",
+      "monster_moss_beetle": "assets/images/monsters/moss_beetle.webp",
+      "monster_tank_beaver": "assets/images/monsters/tank_beaver.webp"
     },
     "audio": {
       "exploration": "assets/audio/exploration-v2.ogg",
