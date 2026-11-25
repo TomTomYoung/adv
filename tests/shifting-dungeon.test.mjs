@@ -253,6 +253,41 @@ test('a tank escort resumes on the sixth floor and fires a log on its second tur
   assert.ok(battle.log.some(line => line.includes('丸太砲')));
 });
 
+test('石虫は防御と岩殻突進を交互に使い、煤虫は初手だけくらやみを狙う', () => {
+  const g = newGame();
+  g.award(0, xpThreshold(data, 6));
+  enter(g);
+  const map = g.data.maps[id + '_f6'];
+  g.teleport(map.id, map.entrance.x, map.entrance.y, map.entrance.facing);
+  const pair = map.encounterPool.find(row => row.encounter.endsWith('_stone_soot_pair'));
+  assert.ok(pair?.weight > 0);
+  g.startBattle(pair.encounter, {win: [], lose: [], escape: []});
+  g.random = () => 0.4;
+  const defendRound = engine => {
+    const round = engine.state.battle.round;
+    while (engine.state.battle.round === round) {
+      assert.ok(engine.dispatch({type: 'battle', action: 'skill', skill: 'guard', target: activeActor(engine)}));
+    }
+  };
+  defendRound(g);
+  const [stone, soot] = g.state.battle.enemies;
+  assert.deepEqual([stone.name, soot.name], ['石虫 Lv6', '煤虫 Lv6']);
+  assert.ok(stone.guard);
+  assert.equal(soot.mp, 0);
+  assert.ok(g.state.members.some(id => g.state.actors[id].statuses.includes('blindness')));
+  assert.ok(!g.state.battle.log.some(line => line.includes('岩殻突進')));
+
+  const copy = newGame();
+  copy.load(g.save());
+  copy.random = () => 0.4;
+  defendRound(copy);
+  assert.ok(!copy.state.battle.enemies[0].guard);
+  assert.ok(copy.state.battle.log.some(line => line.includes('石虫 Lv6の岩殻突進')));
+  assert.ok(copy.state.battle.log.some(line => line.includes('煤虫 Lv6の攻撃')));
+  defendRound(copy);
+  assert.ok(copy.state.battle.enemies[0].guard);
+});
+
 test('authored dungeons can assign band groups and add or disable them on one floor', async () => {
   const source = await loadContent(async file => {
     const value = JSON.parse(await fs.readFile(file, 'utf8'));

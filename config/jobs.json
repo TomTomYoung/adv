@@ -5175,6 +5175,32 @@
           "element": "physical"
         }
       ]
+    },
+    "stone_beetle_charge": {
+      "name": "岩殻突進",
+      "mp": 0,
+      "target": "enemy",
+      "description": "石の殻を前に傾けて突進し、敵1体に強い物理ダメージを与えます。",
+      "effects": [
+        {
+          "type": "damage",
+          "formula": "heavy",
+          "element": "physical"
+        }
+      ]
+    },
+    "soot_beetle_dust": {
+      "name": "煤払い",
+      "mp": 3,
+      "target": "enemy",
+      "description": "後脚で煤を払い、敵1体に60%の確率でくらやみLv1を与えます。",
+      "effects": [
+        {
+          "type": "status",
+          "status": "blindness",
+          "chance": 0.6
+        }
+      ]
     }
   },
   "formulas": {
@@ -7050,7 +7076,9 @@
     "family_ogre_25_bridge": "guard",
     "family_ogre_25_avalanche": "skill_cleave",
     "family_ogre_25_greatbell": "skill_cleave",
-    "family_ogre_25_mountainking": "skill_cleave"
+    "family_ogre_25_mountainking": "skill_cleave",
+    "stone_beetle_charge": "skill_smash",
+    "soot_beetle_dust": "skill_shadow"
   },
   "gridProfiles": {
     "power": {
@@ -9232,6 +9260,30 @@
         "shape": "row"
       },
       "trajectory": "piercing",
+      "friendlyFire": false
+    },
+    "stone_beetle_charge": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 3
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "direct",
+      "friendlyFire": false
+    },
+    "soot_beetle_dust": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "indirect",
       "friendlyFire": false
     }
   },
@@ -13651,6 +13703,54 @@
       },
       "area": {
         "shape": "side_all"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "stone_beetle_charge": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "soot_beetle_dust": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
       },
       "friendlyFire": false,
       "resolution": "simultaneous",

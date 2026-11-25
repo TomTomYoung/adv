@@ -17853,6 +17853,26 @@ export const referenceData={
       "id": "medicinal_leaf"
     },
     {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "stone_beetle",
+        "item"
+      ],
+      "kind": "items",
+      "id": "focus"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "soot_beetle",
+        "item"
+      ],
+      "kind": "items",
+      "id": "torch"
+    },
+    {
       "file": "cell-layers.json",
       "path": [
         "presets",
@@ -22262,6 +22282,86 @@ export const referenceData={
       "path": [
         "enemies",
         "ogre_25_mountainking",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "stone_beetle",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_stone_beetle"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "stone_beetle",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "guard"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "stone_beetle",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "stone_beetle_charge"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "stone_beetle",
+        "ai",
+        2,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "soot_beetle",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_soot_beetle"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "soot_beetle",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "soot_beetle_dust"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "soot_beetle",
         "ai",
         1,
         "skill"
@@ -30688,6 +30788,30 @@ export const referenceData={
       ],
       "kind": "formulas",
       "id": "job_sweep"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "stone_beetle_charge",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heavy"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "soot_beetle_dust",
+        "effects",
+        0,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "blindness"
     },
     {
       "file": "jobs.json",
@@ -48088,6 +48212,12 @@ export const referenceData={
       },
       "family_ogre_25_mountainking": {
         "name": "山王踏み"
+      },
+      "stone_beetle_charge": {
+        "name": "岩殻突進"
+      },
+      "soot_beetle_dust": {
+        "name": "煤払い"
       }
     },
     "items": {
@@ -48963,6 +49093,14 @@ export const referenceData={
       "ogre_25_mountainking": {
         "name": "山王オーガ",
         "sprite": "monster_ogre_25_mountainking"
+      },
+      "stone_beetle": {
+        "name": "石虫",
+        "sprite": "monster_stone_beetle"
+      },
+      "soot_beetle": {
+        "name": "煤虫",
+        "sprite": "monster_soot_beetle"
       }
     },
     "encounters": {
@@ -75608,6 +75746,20 @@ export const referenceData={
         "ogre_25_mountainking"
       ]
     },
+    "enemies/stone_beetle": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "stone_beetle"
+      ]
+    },
+    "enemies/soot_beetle": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "soot_beetle"
+      ]
+    },
     "encounters/market_enforcers": {
       "file": "dungeon-content.json",
       "path": [
@@ -77390,6 +77542,20 @@ export const referenceData={
       "path": [
         "skills",
         "family_ogre_25_mountainking"
+      ]
+    },
+    "skills/stone_beetle_charge": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "stone_beetle_charge"
+      ]
+    },
+    "skills/soot_beetle_dust": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "soot_beetle_dust"
       ]
     },
     "fieldAbilities/survey": {
@@ -84193,7 +84359,9 @@ export const referenceData={
       "monster_ogre_25_bridge": "assets/images/monsters/families/ogre_25_bridge.webp",
       "monster_ogre_25_avalanche": "assets/images/monsters/families/ogre_25_avalanche.webp",
       "monster_ogre_25_greatbell": "assets/images/monsters/families/ogre_25_greatbell.webp",
-      "monster_ogre_25_mountainking": "assets/images/monsters/families/ogre_25_mountainking.webp"
+      "monster_ogre_25_mountainking": "assets/images/monsters/families/ogre_25_mountainking.webp",
+      "monster_stone_beetle": "assets/images/monsters/stone_beetle.webp",
+      "monster_soot_beetle": "assets/images/monsters/soot_beetle.webp"
     },
     "audio": {
       "exploration": "assets/audio/exploration-v2.ogg",
