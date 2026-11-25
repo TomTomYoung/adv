@@ -3,7 +3,7 @@ import {createQuestTrial,dispatchQuestTrial,questTrialReport} from '../src/appli
 import {go,resume} from '../tests/world-route-helpers.mjs';
 import {drain,fight} from '../tests/helpers.mjs';
 
-export function measureWorldRoutes({data,catalog,routes,expectedValues,arrive,setupRoute},levels,parties){
+export function measureWorldRoutes({data,catalog,routes,expectedValues,arrive,setupRoute,settleBattle=fight},levels,parties){
   const results=[];
   for(const [quest,paths] of Object.entries(routes))for(const route of paths){
     for(const start of ['site','reception'])for(const level of levels)for(const party of parties){
@@ -15,7 +15,7 @@ export function measureWorldRoutes({data,catalog,routes,expectedValues,arrive,se
       }
       for(const id of route.path){
         assert.ok(dispatchQuestTrial(trial,{type:'choose',id}),[quest,start,level,party,id,g.state.notice].join('/'));drain(g);
-        if(g.state.battle){fight(g);drain(g);}
+        if(g.state.battle){settleBattle(g,quest,route);drain(g);}
         if(g.state.journey)arrive(g,quest);
         const save=g.save();g.load(save);assert.equal(g.save(),save);
       }

@@ -1,0 +1,5805 @@
+{
+  "schemaVersion": 1,
+  "id": "q111",
+  "number": 111,
+  "title": "白旗の荷馬車",
+  "client": "御者ハンナ",
+  "brief": "徴発された農具を返す荷馬車を、峠の向こうまで護衛してください。",
+  "region": 2,
+  "type": "scene_graph",
+  "recommendedLevel": 2,
+  "requires": null,
+  "unlockHint": "荷揚げ河岸の廃坑搬出口から、農具返却の峠道の荷倉へ向かう。",
+  "events": [
+    {
+      "id": "q111_scene",
+      "title": "白旗の荷馬車：御者ハンナ",
+      "points": [
+        {
+          "map": "region_2_f1",
+          "x": 2,
+          "y": 1,
+          "dungeon": "region_2"
+        }
+      ],
+      "kind": "decision",
+      "trigger": "interact",
+      "safe": true,
+      "script": "q111.visit",
+      "role": "decision",
+      "visibleWhen": {
+        "op": "and",
+        "args": [
+          {
+            "op": "or",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q111.stage"
+                },
+                "right": "active"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q111.stage"
+                },
+                "right": "completed"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q111"
+            },
+            "right": true
+          }
+        ]
+      },
+      "dungeon": "region_2"
+    }
+  ],
+  "locations": [
+    {
+      "map": "region_2_f1",
+      "x": 2,
+      "y": 1,
+      "object": "q111_scene",
+      "role": "decision"
+    }
+  ],
+  "outcomes": {
+    "home": {
+      "label": "返却を次便へ残す",
+      "text": "護衛分の精算を終え、農具は倉へ戻された。白い布は洗われ、次の荷造りを待つ。",
+      "gold": 69,
+      "xp": 57,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q111.values.stored"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q111.values.toolsAt"
+            },
+            "right": "depot"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q111.values.form"
+            },
+            "right": "unset"
+          }
+        ]
+      }
+    },
+    "anonymous": {
+      "label": "名のない返却",
+      "text": "農具は持ち主へ戻った。白旗が洗濯紐に掛かり、枕カバーだったと分かった。グスはその下を黙って通った。",
+      "gold": 69,
+      "xp": 57,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.toolsAt"
+                },
+                "right": "owner"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.clothAt"
+                },
+                "right": "owner"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q111.values.form"
+            },
+            "right": "anonymous"
+          }
+        ]
+      }
+    },
+    "named": {
+      "label": "名を添えた返却",
+      "text": "礼を言う者も非難する者もいた。グスは次の修繕日を書き、白旗の下で受取人と工具を数えた。",
+      "gold": 69,
+      "xp": 57,
+      "requires": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.toolsAt"
+                },
+                "right": "owner"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.clothAt"
+                },
+                "right": "owner"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q111.values.form"
+            },
+            "right": "named"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q111.values.repairDate"
+            },
+            "right": true
+          }
+        ]
+      }
+    }
+  },
+  "model": {
+    "source": "authoring/editions/e2/story-q111.mjs",
+    "sourceDraft": "https://app.notion.com/p/3d7c3c1966b38100aaf9f909757edbf6",
+    "revision": "scenario-edition-e2-q111-r1",
+    "world": {
+      "truth": "峠の検問は布ではなく、返却農具の刻印を確認する。グスが恥じるのは敗北ではなく、徴発に自分も加わったことだ。柄に残る印を彼が指で隠す場面を先に置き、持ち主の名を聞かれた時に事情を明かす。",
+      "fixedPast": "御者ハンナは、白い布を掲げた荷馬車の護衛を依頼する。荷は敵対領へ返す農具だ。息子を失った雇い主は和解を望むが、荷台に乗る元兵士グスは、白旗を掲げることを降伏と思い、布を何度も下ろす。"
+    },
+    "agents": [
+      {
+        "id": "cast",
+        "name": "御者ハンナ",
+        "beliefsAndGoals": "御者ハンナは、白い布を掲げた荷馬車の護衛を依頼する。荷は敵対領へ返す農具だ。息子を失った雇い主は和解を望むが、荷台に乗る元兵士グスは、白旗を掲げることを降伏と思い、布を何度も下ろす。"
+      },
+      {
+        "id": "party",
+        "name": "冒険者の隊",
+        "goal": "徴発された農具を返す荷馬車を、峠の向こうまで護衛してください。"
+      }
+    ],
+    "conflict": {
+      "design": "出発→野盗のいる本道／迂回の渡し→検問→引渡し。本道の戦闘から逃げれば渡しへ移れる。グスの名を出すには本人の同意が必要だ。農具の由来が不明なら現地の職人へ照合を頼み、引渡しを待機できる。"
+    },
+    "narrative": {
+      "viewpoint": "冒険者の観察と当事者の発言",
+      "units": [
+        {
+          "id": "entry",
+          "script": "q111.pass.entry",
+          "assertion": {
+            "title": "荷馬車の荷倉",
+            "place": "depot",
+            "cast": [
+              {
+                "entity": "hanna",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.hannaAt"
+                  },
+                  "right": "depot"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "gus",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.gusAt"
+                  },
+                  "right": "depot"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "ambush",
+          "script": "q111.pass.ambush",
+          "assertion": {
+            "title": "峠の本道",
+            "place": "road",
+            "cast": [
+              {
+                "entity": "hanna",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.hannaAt"
+                  },
+                  "right": "road"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "gus",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.gusAt"
+                  },
+                  "right": "road"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "clear",
+          "script": "q111.pass.clear",
+          "assertion": {
+            "title": "峠の本道",
+            "place": "road",
+            "cast": [
+              {
+                "entity": "hanna",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.hannaAt"
+                  },
+                  "right": "road"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "gus",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.gusAt"
+                  },
+                  "right": "road"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "landing",
+          "script": "q111.pass.landing",
+          "assertion": {
+            "title": "迂回の渡し",
+            "place": "ferry",
+            "cast": [
+              {
+                "entity": "hanna",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.hannaAt"
+                  },
+                  "right": "ferry"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "gus",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.gusAt"
+                  },
+                  "right": "ferry"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "inspection",
+          "script": "q111.pass.inspection",
+          "assertion": {
+            "title": "峠の検問",
+            "place": "gate",
+            "cast": [
+              {
+                "entity": "hanna",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.hannaAt"
+                  },
+                  "right": "gate"
+                },
+                "display": {
+                  "x": 17,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "gus",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.gusAt"
+                  },
+                  "right": "gate"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              },
+              {
+                "entity": "guard",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.guardAt"
+                  },
+                  "right": "gate"
+                },
+                "display": {
+                  "x": 83,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 2
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "request",
+          "script": "q111.pass.request",
+          "assertion": {
+            "title": "峠の職人小屋",
+            "place": "workshop",
+            "cast": [
+              {
+                "entity": "smith",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.smithAt"
+                  },
+                  "right": "workshop"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "waiting",
+          "script": "q111.pass.waiting",
+          "assertion": {
+            "title": "峠の検問",
+            "place": "gate",
+            "cast": [
+              {
+                "entity": "hanna",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.hannaAt"
+                  },
+                  "right": "gate"
+                },
+                "display": {
+                  "x": 17,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "gus",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.gusAt"
+                  },
+                  "right": "gate"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              },
+              {
+                "entity": "guard",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.guardAt"
+                  },
+                  "right": "gate"
+                },
+                "display": {
+                  "x": 83,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 2
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "result",
+          "script": "q111.pass.result",
+          "assertion": {
+            "title": "峠の職人小屋",
+            "place": "workshop",
+            "cast": [
+              {
+                "entity": "smith",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.smithAt"
+                  },
+                  "right": "workshop"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "proof",
+          "script": "q111.pass.proof",
+          "assertion": {
+            "title": "峠の検問",
+            "place": "gate",
+            "cast": [
+              {
+                "entity": "hanna",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.hannaAt"
+                  },
+                  "right": "gate"
+                },
+                "display": {
+                  "x": 17,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "gus",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.gusAt"
+                  },
+                  "right": "gate"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              },
+              {
+                "entity": "guard",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.guardAt"
+                  },
+                  "right": "gate"
+                },
+                "display": {
+                  "x": 83,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 2
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "matched",
+          "script": "q111.pass.matched",
+          "assertion": {
+            "title": "峠の検問",
+            "place": "gate",
+            "cast": [
+              {
+                "entity": "hanna",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.hannaAt"
+                  },
+                  "right": "gate"
+                },
+                "display": {
+                  "x": 17,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "gus",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.gusAt"
+                  },
+                  "right": "gate"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              },
+              {
+                "entity": "guard",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.guardAt"
+                  },
+                  "right": "gate"
+                },
+                "display": {
+                  "x": 83,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 2
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "decision",
+          "script": "q111.pass.decision",
+          "assertion": {
+            "title": "峠の検問",
+            "place": "gate",
+            "cast": [
+              {
+                "entity": "hanna",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.hannaAt"
+                  },
+                  "right": "gate"
+                },
+                "display": {
+                  "x": 17,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "gus",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.gusAt"
+                  },
+                  "right": "gate"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              },
+              {
+                "entity": "guard",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.guardAt"
+                  },
+                  "right": "gate"
+                },
+                "display": {
+                  "x": 83,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 2
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "offer",
+          "script": "q111.pass.offer",
+          "assertion": {
+            "title": "峠の検問",
+            "place": "gate",
+            "cast": [
+              {
+                "entity": "hanna",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.hannaAt"
+                  },
+                  "right": "gate"
+                },
+                "display": {
+                  "x": 17,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "gus",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.gusAt"
+                  },
+                  "right": "gate"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              },
+              {
+                "entity": "guard",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.guardAt"
+                  },
+                  "right": "gate"
+                },
+                "display": {
+                  "x": 83,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 2
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "handover",
+          "script": "q111.pass.handover",
+          "assertion": {
+            "title": "返却先の村",
+            "place": "village",
+            "cast": [
+              {
+                "entity": "hanna",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.hannaAt"
+                  },
+                  "right": "village"
+                },
+                "display": {
+                  "x": 17,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "gus",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.gusAt"
+                  },
+                  "right": "village"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              },
+              {
+                "entity": "owner",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.ownerAt"
+                  },
+                  "right": "village"
+                },
+                "display": {
+                  "x": 83,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 2
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "receipt",
+          "script": "q111.pass.receipt",
+          "assertion": {
+            "title": "返却先の村",
+            "place": "village",
+            "cast": [
+              {
+                "entity": "hanna",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.hannaAt"
+                  },
+                  "right": "village"
+                },
+                "display": {
+                  "x": 17,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "gus",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.gusAt"
+                  },
+                  "right": "village"
+                },
+                "display": {
+                  "x": 50,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              },
+              {
+                "entity": "owner",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.ownerAt"
+                  },
+                  "right": "village"
+                },
+                "display": {
+                  "x": 83,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 2
+                }
+              }
+            ],
+            "requires": true
+          }
+        },
+        {
+          "id": "home",
+          "script": "q111.pass.home",
+          "assertion": {
+            "title": "荷馬車の荷倉",
+            "place": "depot",
+            "cast": [
+              {
+                "entity": "hanna",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.hannaAt"
+                  },
+                  "right": "depot"
+                },
+                "display": {
+                  "x": 30,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 0
+                }
+              },
+              {
+                "entity": "gus",
+                "when": {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.gusAt"
+                  },
+                  "right": "depot"
+                },
+                "display": {
+                  "x": 70,
+                  "y": 10,
+                  "scale": 1,
+                  "cardScale": 1,
+                  "layer": 1
+                }
+              }
+            ],
+            "requires": true
+          }
+        }
+      ]
+    },
+    "audience": {
+      "initialHypothesis": "徴発された農具を返す荷馬車を、峠の向こうまで護衛してください。"
+    },
+    "reveal": {
+      "newInformation": "峠の検問は布ではなく、返却農具の刻印を確認する。グスが恥じるのは敗北ではなく、徴発に自分も加わったことだ。柄に残る印を彼が指で隠す場面を先に置き、持ち主の名を聞かれた時に事情を明かす。",
+      "retroactiveTargets": [
+        "source.request",
+        "source.disclosure"
+      ],
+      "policy": "各経路で提示した本文だけを後続の選択の根拠とする"
+    },
+    "beats": [
+      {
+        "id": "entry",
+        "script": "q111.pass.entry",
+        "assertion": {
+          "title": "荷馬車の荷倉",
+          "place": "depot",
+          "cast": [
+            {
+              "entity": "hanna",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.hannaAt"
+                },
+                "right": "depot"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "gus",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.gusAt"
+                },
+                "right": "depot"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "ambush",
+        "script": "q111.pass.ambush",
+        "assertion": {
+          "title": "峠の本道",
+          "place": "road",
+          "cast": [
+            {
+              "entity": "hanna",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.hannaAt"
+                },
+                "right": "road"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "gus",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.gusAt"
+                },
+                "right": "road"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "clear",
+        "script": "q111.pass.clear",
+        "assertion": {
+          "title": "峠の本道",
+          "place": "road",
+          "cast": [
+            {
+              "entity": "hanna",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.hannaAt"
+                },
+                "right": "road"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "gus",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.gusAt"
+                },
+                "right": "road"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "landing",
+        "script": "q111.pass.landing",
+        "assertion": {
+          "title": "迂回の渡し",
+          "place": "ferry",
+          "cast": [
+            {
+              "entity": "hanna",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.hannaAt"
+                },
+                "right": "ferry"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "gus",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.gusAt"
+                },
+                "right": "ferry"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "inspection",
+        "script": "q111.pass.inspection",
+        "assertion": {
+          "title": "峠の検問",
+          "place": "gate",
+          "cast": [
+            {
+              "entity": "hanna",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.hannaAt"
+                },
+                "right": "gate"
+              },
+              "display": {
+                "x": 17,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "gus",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.gusAt"
+                },
+                "right": "gate"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            },
+            {
+              "entity": "guard",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.guardAt"
+                },
+                "right": "gate"
+              },
+              "display": {
+                "x": 83,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 2
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "request",
+        "script": "q111.pass.request",
+        "assertion": {
+          "title": "峠の職人小屋",
+          "place": "workshop",
+          "cast": [
+            {
+              "entity": "smith",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.smithAt"
+                },
+                "right": "workshop"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "waiting",
+        "script": "q111.pass.waiting",
+        "assertion": {
+          "title": "峠の検問",
+          "place": "gate",
+          "cast": [
+            {
+              "entity": "hanna",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.hannaAt"
+                },
+                "right": "gate"
+              },
+              "display": {
+                "x": 17,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "gus",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.gusAt"
+                },
+                "right": "gate"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            },
+            {
+              "entity": "guard",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.guardAt"
+                },
+                "right": "gate"
+              },
+              "display": {
+                "x": 83,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 2
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "result",
+        "script": "q111.pass.result",
+        "assertion": {
+          "title": "峠の職人小屋",
+          "place": "workshop",
+          "cast": [
+            {
+              "entity": "smith",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.smithAt"
+                },
+                "right": "workshop"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "proof",
+        "script": "q111.pass.proof",
+        "assertion": {
+          "title": "峠の検問",
+          "place": "gate",
+          "cast": [
+            {
+              "entity": "hanna",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.hannaAt"
+                },
+                "right": "gate"
+              },
+              "display": {
+                "x": 17,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "gus",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.gusAt"
+                },
+                "right": "gate"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            },
+            {
+              "entity": "guard",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.guardAt"
+                },
+                "right": "gate"
+              },
+              "display": {
+                "x": 83,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 2
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "matched",
+        "script": "q111.pass.matched",
+        "assertion": {
+          "title": "峠の検問",
+          "place": "gate",
+          "cast": [
+            {
+              "entity": "hanna",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.hannaAt"
+                },
+                "right": "gate"
+              },
+              "display": {
+                "x": 17,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "gus",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.gusAt"
+                },
+                "right": "gate"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            },
+            {
+              "entity": "guard",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.guardAt"
+                },
+                "right": "gate"
+              },
+              "display": {
+                "x": 83,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 2
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "decision",
+        "script": "q111.pass.decision",
+        "assertion": {
+          "title": "峠の検問",
+          "place": "gate",
+          "cast": [
+            {
+              "entity": "hanna",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.hannaAt"
+                },
+                "right": "gate"
+              },
+              "display": {
+                "x": 17,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "gus",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.gusAt"
+                },
+                "right": "gate"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            },
+            {
+              "entity": "guard",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.guardAt"
+                },
+                "right": "gate"
+              },
+              "display": {
+                "x": 83,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 2
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "offer",
+        "script": "q111.pass.offer",
+        "assertion": {
+          "title": "峠の検問",
+          "place": "gate",
+          "cast": [
+            {
+              "entity": "hanna",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.hannaAt"
+                },
+                "right": "gate"
+              },
+              "display": {
+                "x": 17,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "gus",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.gusAt"
+                },
+                "right": "gate"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            },
+            {
+              "entity": "guard",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.guardAt"
+                },
+                "right": "gate"
+              },
+              "display": {
+                "x": 83,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 2
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "handover",
+        "script": "q111.pass.handover",
+        "assertion": {
+          "title": "返却先の村",
+          "place": "village",
+          "cast": [
+            {
+              "entity": "hanna",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.hannaAt"
+                },
+                "right": "village"
+              },
+              "display": {
+                "x": 17,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "gus",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.gusAt"
+                },
+                "right": "village"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            },
+            {
+              "entity": "owner",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.ownerAt"
+                },
+                "right": "village"
+              },
+              "display": {
+                "x": 83,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 2
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "receipt",
+        "script": "q111.pass.receipt",
+        "assertion": {
+          "title": "返却先の村",
+          "place": "village",
+          "cast": [
+            {
+              "entity": "hanna",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.hannaAt"
+                },
+                "right": "village"
+              },
+              "display": {
+                "x": 17,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "gus",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.gusAt"
+                },
+                "right": "village"
+              },
+              "display": {
+                "x": 50,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            },
+            {
+              "entity": "owner",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.ownerAt"
+                },
+                "right": "village"
+              },
+              "display": {
+                "x": 83,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 2
+              }
+            }
+          ],
+          "requires": true
+        }
+      },
+      {
+        "id": "home",
+        "script": "q111.pass.home",
+        "assertion": {
+          "title": "荷馬車の荷倉",
+          "place": "depot",
+          "cast": [
+            {
+              "entity": "hanna",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.hannaAt"
+                },
+                "right": "depot"
+              },
+              "display": {
+                "x": 30,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 0
+              }
+            },
+            {
+              "entity": "gus",
+              "when": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.gusAt"
+                },
+                "right": "depot"
+              },
+              "display": {
+                "x": 70,
+                "y": 10,
+                "scale": 1,
+                "cardScale": 1,
+                "layer": 1
+              }
+            }
+          ],
+          "requires": true
+        }
+      }
+    ],
+    "adaptation": {
+      "setting": "各地域の地下居住区・周辺集落への出張。場面内の移動は文章で表現",
+      "reward": "原稿の修理券・紹介等の報酬は、この版ではギルドの定額金・経験値へ換算。特殊な権利のUIや自動加入は提供しない",
+      "npc": "固有NPCは物語内の同行者。戦闘パーティーへ自動追加しない",
+      "limits": []
+    },
+    "stateRegistry": [
+      {
+        "path": "stories.q111.values.partyAt",
+        "type": "enum",
+        "initial": "depot",
+        "values": [
+          "depot",
+          "road",
+          "ferry",
+          "gate",
+          "workshop",
+          "village",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q111.values.hannaAt",
+        "type": "enum",
+        "initial": "depot",
+        "values": [
+          "depot",
+          "road",
+          "ferry",
+          "gate",
+          "workshop",
+          "village",
+          "transit"
+        ],
+        "meaning": "hanna の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q111.values.gusAt",
+        "type": "enum",
+        "initial": "depot",
+        "values": [
+          "depot",
+          "road",
+          "ferry",
+          "gate",
+          "workshop",
+          "village",
+          "transit"
+        ],
+        "meaning": "gus の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q111.values.guardAt",
+        "type": "enum",
+        "initial": "gate",
+        "values": [
+          "depot",
+          "road",
+          "ferry",
+          "gate",
+          "workshop",
+          "village",
+          "transit"
+        ],
+        "meaning": "guard の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q111.values.smithAt",
+        "type": "enum",
+        "initial": "workshop",
+        "values": [
+          "depot",
+          "road",
+          "ferry",
+          "gate",
+          "workshop",
+          "village",
+          "transit"
+        ],
+        "meaning": "smith の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q111.values.ownerAt",
+        "type": "enum",
+        "initial": "village",
+        "values": [
+          "depot",
+          "road",
+          "ferry",
+          "gate",
+          "workshop",
+          "village",
+          "transit"
+        ],
+        "meaning": "owner の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q111.values.wagonAt",
+        "type": "enum",
+        "initial": "hanna",
+        "values": [
+          "depot",
+          "road",
+          "ferry",
+          "gate",
+          "workshop",
+          "village",
+          "transit",
+          "party",
+          "hanna",
+          "gus",
+          "guard",
+          "smith",
+          "owner",
+          "tools",
+          "rubbing",
+          "cloth"
+        ],
+        "meaning": "wagon の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q111.values.toolsAt",
+        "type": "enum",
+        "initial": "wagon",
+        "values": [
+          "depot",
+          "road",
+          "ferry",
+          "gate",
+          "workshop",
+          "village",
+          "transit",
+          "party",
+          "hanna",
+          "gus",
+          "guard",
+          "smith",
+          "owner",
+          "wagon",
+          "rubbing",
+          "cloth"
+        ],
+        "meaning": "tools の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q111.values.rubbingAt",
+        "type": "enum",
+        "initial": "wagon",
+        "values": [
+          "depot",
+          "road",
+          "ferry",
+          "gate",
+          "workshop",
+          "village",
+          "transit",
+          "party",
+          "hanna",
+          "gus",
+          "guard",
+          "smith",
+          "owner",
+          "wagon",
+          "tools",
+          "cloth"
+        ],
+        "meaning": "rubbing の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q111.values.clothAt",
+        "type": "enum",
+        "initial": "wagon",
+        "values": [
+          "depot",
+          "road",
+          "ferry",
+          "gate",
+          "workshop",
+          "village",
+          "transit",
+          "party",
+          "hanna",
+          "gus",
+          "guard",
+          "smith",
+          "owner",
+          "wagon",
+          "tools",
+          "rubbing"
+        ],
+        "meaning": "cloth の所在または保持者",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q111.values.flag",
+        "type": "enum",
+        "initial": "unset",
+        "values": [
+          "unset",
+          "white",
+          "covered"
+        ],
+        "meaning": "白い布の掲げ方",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q111.values.form",
+        "type": "enum",
+        "initial": "unset",
+        "values": [
+          "unset",
+          "anonymous",
+          "named"
+        ],
+        "meaning": "受取人へ伝える名義",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q111.values.cleared",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "cleared",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q111.values.marks",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "marks",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q111.values.consulted",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "consulted",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q111.values.appraised",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "appraised",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q111.values.confession",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "confession",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q111.values.consent",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "consent",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q111.values.repairDate",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "repairDate",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      },
+      {
+        "path": "stories.q111.values.stored",
+        "type": "boolean",
+        "initial": false,
+        "meaning": "stored",
+        "writer": "story.action",
+        "scope": "quest",
+        "lifetime": "保存・再開・完了後まで保持"
+      }
+    ],
+    "graph": [
+      {
+        "id": "entry",
+        "text": "ハンナの荷馬車に並ぶのは、かつて徴発された鍬や鋤だ。「息子を失くした旦那様が、それでも返したいって」。グスは白い布を下ろし、鍬の柄の焼印を親指で隠した。",
+        "options": [
+          {
+            "id": "flag",
+            "text": "白旗を掲げて本道へ",
+            "to": "ambush",
+            "action": "entry_flag"
+          },
+          {
+            "id": "ferry",
+            "text": "旗を包んで渡しへ",
+            "to": "landing",
+            "action": "entry_ferry"
+          }
+        ]
+      },
+      {
+        "id": "ambush",
+        "text": "坂の上で野盗が荷馬車を止めた。ハンナは手綱を握ったまま、渡しへ下る道も確かめた。",
+        "options": [
+          {
+            "id": "fight",
+            "text": "荷馬車を守る",
+            "to": "clear",
+            "action": "ambush_fight",
+            "combat": true
+          },
+          {
+            "id": "detour",
+            "text": "白旗を包んで渡しへ",
+            "to": "landing",
+            "action": "ambush_detour"
+          }
+        ]
+      },
+      {
+        "id": "clear",
+        "text": "車輪の前から人影が消えた。ハンナが荷紐を確かめる。白い布は荷台の上に残っている。",
+        "options": [
+          {
+            "id": "advance",
+            "text": "本道から検問へ",
+            "to": "inspection",
+            "action": "clear_advance"
+          }
+        ]
+      },
+      {
+        "id": "landing",
+        "text": "舟が岸につくと、グスが包んだ白布を膝に抱えた。「名前さえ聞かれなければ」。農具はひとつも荷台から落ちていない。",
+        "options": [
+          {
+            "id": "cross",
+            "text": "荷馬車で川を渡る",
+            "to": "inspection",
+            "action": "landing_cross"
+          },
+          {
+            "id": "home",
+            "text": "荷を持ち帰る",
+            "to": "home",
+            "action": "landing_home"
+          }
+        ]
+      },
+      {
+        "id": "inspection",
+        "text": {
+          "when": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q111.values.flag"
+            },
+            "right": "white"
+          },
+          "yes": "白旗を見た番兵は武器を下げたまま近づいた。「どなたの鍬だい」。見ているのは旗より、柄の端の焼印だ。",
+          "no": "番兵が先に荷馬車を止めた。「布はそのままでいい。柄の印を台帳と合わせよう」。グスの親指の下に、二筋の刻みがある。"
+        },
+        "options": [
+          {
+            "id": "match",
+            "text": "刻印を台帳と照合する",
+            "to": "matched",
+            "action": "inspection_match"
+          },
+          {
+            "id": "smith",
+            "text": "職人に印の写しを持っていく",
+            "to": "request",
+            "action": "inspection_smith"
+          },
+          {
+            "id": "home",
+            "text": "荷を持ち帰る",
+            "to": "home",
+            "action": "inspection_home"
+          }
+        ]
+      },
+      {
+        "id": "request",
+        "text": "柄の印を写した紙を広げると、職人は古い帳面の束を出した。「照合する間、荷馬車は検問で待たせておくれ」。",
+        "options": [
+          {
+            "id": "leave",
+            "text": "写しを預けて検問へ",
+            "to": "waiting",
+            "action": "request_leave"
+          }
+        ]
+      },
+      {
+        "id": "waiting",
+        "text": "荷と二人は検問で待っていた。番兵は引渡しの欄を空けたままにした。写しはまだ職人の手元にある。",
+        "options": [
+          {
+            "id": "collect",
+            "text": "職人の照合結果を受け取りに行く",
+            "to": "result",
+            "action": "waiting_collect"
+          }
+        ]
+      },
+      {
+        "id": "result",
+        "text": "職人が写しの隣に、同じ印の控えと持ち主の名を書き添えた。「この二筋は、うちで打った鍬の印だよ」。",
+        "options": [
+          {
+            "id": "bring",
+            "text": "照合した写しを検問へ",
+            "to": "proof",
+            "action": "result_bring"
+          }
+        ]
+      },
+      {
+        "id": "proof",
+        "text": "番兵は職人の控えと荷台の農具を一つずつ突き合わせた。柄に残る二筋が控えの印と重なる。",
+        "options": [
+          {
+            "id": "confirm",
+            "text": "写しを戻して照合を終える",
+            "to": "matched",
+            "action": "proof_confirm"
+          }
+        ]
+      },
+      {
+        "id": "matched",
+        "text": "番兵が持ち主の名を読み上げると、グスが柄から指を離した。「その家から持ち出したのは俺たちだ。白い布を下ろしたくなったのは、そのせいだ」",
+        "options": [
+          {
+            "id": "hear",
+            "text": "グスの話を聞く",
+            "to": "decision",
+            "action": "matched_hear"
+          }
+        ]
+      },
+      {
+        "id": "decision",
+        "text": "農具の持ち主は分かった。ハンナは「誰の名も出さずに返せるよ」と伝え、グスの言葉を待った。",
+        "options": [
+          {
+            "id": "anonymous",
+            "text": "名前を出さず村へ",
+            "to": "handover",
+            "action": "decision_anonymous"
+          },
+          {
+            "id": "name",
+            "text": "グスの意思を聞く",
+            "to": "offer",
+            "action": "decision_name"
+          },
+          {
+            "id": "home",
+            "text": "返却を次便に延ばす",
+            "to": "home",
+            "action": "decision_home"
+          }
+        ]
+      },
+      {
+        "id": "offer",
+        "text": "「俺の名で返してくれ。壊れた柄を直しに来る話も、俺からする」。グスは受取帳に書く自分の名を、番兵に一字ずつ伝えた。",
+        "options": [
+          {
+            "id": "agree",
+            "text": "申し出を受けて村へ",
+            "to": "handover",
+            "action": "offer_agree"
+          },
+          {
+            "id": "anonymous",
+            "text": "農具だけを返しに行く",
+            "to": "handover",
+            "action": "offer_anonymous"
+          }
+        ]
+      },
+      {
+        "id": "handover",
+        "text": "受取人は荷台の前で、鍬の柄の印に指を置いた。「うちのだ」。ハンナが荷紐をほどくと、受取人は白い布も引き取って洗濯紐に掛けた。口の開いた、古い枕カバーだった。",
+        "options": [
+          {
+            "id": "unload",
+            "text": "農具を持ち主に渡す",
+            "to": "receipt",
+            "action": "handover_unload"
+          }
+        ]
+      },
+      {
+        "id": "receipt",
+        "text": {
+          "when": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q111.values.form"
+            },
+            "right": "named"
+          },
+          "yes": "グスが名乗ると、礼の言葉の隣から「なぜ今になった」と声がした。彼は両方を聞いて、受取帳を開いた。",
+          "no": "受取人は数え終えた鍬を軒下へ運んだ。帳面に残すのは農具の数だけだ。グスは洗濯紐の下を黙って通った。"
+        },
+        "options": [
+          {
+            "id": "date",
+            "text": "次の修繕日を記す",
+            "to": "@named",
+            "action": "receipt_date",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.form"
+              },
+              "right": "named"
+            },
+            "visibleWhen": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.form"
+              },
+              "right": "named"
+            }
+          },
+          {
+            "id": "finish",
+            "text": "匿名の受取を見届ける",
+            "to": "@anonymous",
+            "action": "receipt_finish",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.form"
+              },
+              "right": "anonymous"
+            },
+            "visibleWhen": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.form"
+              },
+              "right": "anonymous"
+            }
+          }
+        ]
+      },
+      {
+        "id": "home",
+        "text": "ハンナは荷馬車を元の倉に寄せた。農具は次便に載せられるよう、受け取り手ごとに置く場所を空けてある。",
+        "options": [
+          {
+            "id": "store",
+            "text": "農具を倉へ戻す",
+            "to": "@home",
+            "action": "home_store"
+          }
+        ]
+      }
+    ],
+    "standard": {
+      "id": "game-scenario-model",
+      "version": "1.1",
+      "source": "https://app.notion.com/p/v1-1-3dac3c1966b38069ab3bf87729e453c4",
+      "adapter": "adv-story-state/1",
+      "scope": "quest-episode"
+    },
+    "edition": {
+      "id": "e2",
+      "revision": 1,
+      "inherits": "e1"
+    },
+    "entryScript": "q111.pass.visit",
+    "preserveAcceptedRoute": true,
+    "currentStoryScriptPrefix": "q111.pass.",
+    "interruptionRoutes": [],
+    "interruptionEntries": []
+  },
+  "scripts": {
+    "q111.scene.entry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q111.node",
+          "value": "entry"
+        },
+        {
+          "op": "say",
+          "text": "元兵士グスが白旗を下ろした。農具の柄に触れた指が、焼印を隠す。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "flag",
+              "text": "白旗を掲げて本道を進む",
+              "requirement": "戦闘。勝利時に行為を確定",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_2",
+                  "on_win": [
+                    {
+                      "op": "set",
+                      "target": "flags.quest.q111.flag",
+                      "value": "white"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q111.scene.gate"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "say",
+                      "text": "退路へ戻った。作戦は確定していない。"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q111.scene.ferry"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "say",
+                      "text": "地上の救助班が隊を回収した。依頼の場を訪ねれば相談を再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "ferry",
+              "text": "旗を包み、渡しを迂回する",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "set",
+                  "target": "flags.quest.q111.flag",
+                  "value": "covered"
+                },
+                {
+                  "op": "jump",
+                  "script": "q111.scene.ferry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q111.scene.ferry": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q111.node",
+          "value": "ferry"
+        },
+        {
+          "op": "say",
+          "text": "迂回した荷馬車が渡しへ着いた。農具は傷まなかったが、予定より遅い。「名前さえ聞かれなければ」とグスが漏らす。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "cross",
+              "text": "渡しを越えて検問へ",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q111.scene.gate"
+                }
+              ]
+            },
+            {
+              "id": "home",
+              "text": "今回は荷を持って引き返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q111.end.home"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q111.scene.gate": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q111.node",
+          "value": "gate"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.quest.q111.flag"
+            },
+            "right": "white"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "番兵は武器を下げたまま近づいた。"
+            }
+          ],
+          "else": [
+            {
+              "op": "say",
+              "text": "番兵は荷を止め、先に刻印を見せるよう求めた。"
+            }
+          ]
+        },
+        {
+          "op": "say",
+          "text": "照合するのは旗でなく農具だ。グスは自分も徴発に加わったと明かした。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "anonymous",
+              "text": "農具だけを照合し、匿名で返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q111.end.anonymous"
+                }
+              ]
+            },
+            {
+              "id": "name",
+              "text": "グスが名を出す意思を確かめる",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q111.scene.name"
+                }
+              ]
+            },
+            {
+              "id": "home",
+              "text": "返却を次便へ延ばし引き返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q111.end.home"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q111.scene.name": {
+      "commands": [
+        {
+          "op": "set",
+          "target": "flags.quest.q111.node",
+          "value": "name"
+        },
+        {
+          "op": "say",
+          "text": "「俺の名で返してくれ。直しに来る話も、俺がする」グスは焼印から指を離した。感謝だけを受け取れる返却ではない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "本人の名と修繕の申し出を伝える",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q111.end.named"
+                }
+              ]
+            },
+            {
+              "id": "anonymous",
+              "text": "責任の話は本人に任せ、農具は匿名で返す",
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "jump",
+                  "script": "q111.end.anonymous"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q111.end.home": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q111.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "護衛分の精算を終え、農具は倉へ戻された。白い布は洗われ、次の荷造りを待つ。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q111",
+              "outcome": "home"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q111.end.anonymous": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q111.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "農具は持ち主へ戻った。白旗が洗濯紐に掛かり、枕カバーだったと分かった。グスはその下を黙って通った。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q111",
+              "outcome": "anonymous"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q111.end.named": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q111.stage"
+            },
+            "right": "active"
+          },
+          "then": [
+            {
+              "op": "say",
+              "text": "礼を言う者も非難する者もいた。グスは次の修繕日を書き、白旗の下で受取人と工具を数えた。"
+            },
+            {
+              "op": "quest.complete",
+              "quest": "q111",
+              "outcome": "named"
+            }
+          ],
+          "else": []
+        }
+      ]
+    },
+    "q111.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "quests.q111.stage"
+            },
+            "right": "completed"
+          },
+          "then": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "quests.q111.outcome"
+              },
+              "cases": [
+                {
+                  "equals": "home",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "護衛分の精算を終え、農具は倉へ戻された。白い布は洗われ、次の荷造りを待つ。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "anonymous",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "農具は持ち主へ戻った。白旗が洗濯紐に掛かり、枕カバーだったと分かった。グスはその下を黙って通った。"
+                    }
+                  ]
+                },
+                {
+                  "equals": "named",
+                  "commands": [
+                    {
+                      "op": "say",
+                      "text": "礼を言う者も非難する者もいた。グスは次の修繕日を書き、白旗の下で受取人と工具を数えた。"
+                    }
+                  ]
+                }
+              ],
+              "default": []
+            }
+          ],
+          "else": [
+            {
+              "op": "switch",
+              "value": {
+                "ref": "flags.quest.q111.node"
+              },
+              "cases": [
+                {
+                  "equals": "entry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q111.scene.entry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "ferry",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q111.scene.ferry"
+                    }
+                  ]
+                },
+                {
+                  "equals": "gate",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q111.scene.gate"
+                    }
+                  ]
+                },
+                {
+                  "equals": "name",
+                  "commands": [
+                    {
+                      "op": "jump",
+                      "script": "q111.scene.name"
+                    }
+                  ]
+                }
+              ],
+              "default": [
+                {
+                  "op": "jump",
+                  "script": "q111.scene.entry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q111.pass.entry": {
+      "storyQuest": "q111",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q111",
+          "scene": "entry"
+        },
+        {
+          "op": "narrate",
+          "text": "ハンナの荷馬車に並ぶのは、かつて徴発された鍬や鋤だ。「息子を失くした旦那様が、それでも返したいって」。グスは白い布を下ろし、鍬の柄の焼印を親指で隠した。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "flag",
+              "text": "白旗を掲げて本道へ",
+              "storyAction": {
+                "quest": "q111",
+                "action": "entry_flag"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q111",
+                  "action": "entry_flag"
+                }
+              ]
+            },
+            {
+              "id": "ferry",
+              "text": "旗を包んで渡しへ",
+              "storyAction": {
+                "quest": "q111",
+                "action": "entry_ferry"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q111",
+                  "action": "entry_ferry"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q111.pass.ambush": {
+      "storyQuest": "q111",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q111",
+          "scene": "ambush"
+        },
+        {
+          "op": "narrate",
+          "text": "坂の上で野盗が荷馬車を止めた。ハンナは手綱を握ったまま、渡しへ下る道も確かめた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fight",
+              "text": "荷馬車を守る",
+              "storyAction": {
+                "quest": "q111",
+                "action": "ambush_fight"
+              },
+              "requirement": "勝てば本道が開く。逃げた場合は渡しへ回る。",
+              "commands": [
+                {
+                  "op": "battle.start",
+                  "encounter": "guard_2",
+                  "on_win": [
+                    {
+                      "op": "story.action",
+                      "quest": "q111",
+                      "action": "ambush_fight"
+                    },
+                    {
+                      "op": "jump",
+                      "script": "q111.pass.clear"
+                    }
+                  ],
+                  "on_escape": [
+                    {
+                      "op": "narrate",
+                      "text": "退路へ戻った。戦闘後に予定していた作業は、まだ成立していない。"
+                    },
+                    {
+                      "op": "story.journey",
+                      "quest": "q111",
+                      "action": "ambush_detour"
+                    }
+                  ],
+                  "on_lose": [
+                    {
+                      "op": "narrate",
+                      "text": "救助班に運び出された。現場へ戻ると直前の場面から再開できる。"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "detour",
+              "text": "白旗を包んで渡しへ",
+              "storyAction": {
+                "quest": "q111",
+                "action": "ambush_detour"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q111",
+                  "action": "ambush_detour"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q111.pass.clear": {
+      "storyQuest": "q111",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q111",
+          "scene": "clear"
+        },
+        {
+          "op": "narrate",
+          "text": "車輪の前から人影が消えた。ハンナが荷紐を確かめる。白い布は荷台の上に残っている。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "advance",
+              "text": "本道から検問へ",
+              "storyAction": {
+                "quest": "q111",
+                "action": "clear_advance"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q111",
+                  "action": "clear_advance"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q111.pass.landing": {
+      "storyQuest": "q111",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q111",
+          "scene": "landing"
+        },
+        {
+          "op": "narrate",
+          "text": "舟が岸につくと、グスが包んだ白布を膝に抱えた。「名前さえ聞かれなければ」。農具はひとつも荷台から落ちていない。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "cross",
+              "text": "荷馬車で川を渡る",
+              "storyAction": {
+                "quest": "q111",
+                "action": "landing_cross"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q111",
+                  "action": "landing_cross"
+                }
+              ]
+            },
+            {
+              "id": "home",
+              "text": "荷を持ち帰る",
+              "storyAction": {
+                "quest": "q111",
+                "action": "landing_home"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q111",
+                  "action": "landing_home"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q111.pass.inspection": {
+      "storyQuest": "q111",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q111",
+          "scene": "inspection"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q111.values.flag"
+            },
+            "right": "white"
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "白旗を見た番兵は武器を下げたまま近づいた。「どなたの鍬だい」。見ているのは旗より、柄の端の焼印だ。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "番兵が先に荷馬車を止めた。「布はそのままでいい。柄の印を台帳と合わせよう」。グスの親指の下に、二筋の刻みがある。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "match",
+              "text": "刻印を台帳と照合する",
+              "storyAction": {
+                "quest": "q111",
+                "action": "inspection_match"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q111",
+                  "action": "inspection_match"
+                },
+                {
+                  "op": "jump",
+                  "script": "q111.pass.matched"
+                }
+              ]
+            },
+            {
+              "id": "smith",
+              "text": "職人に印の写しを持っていく",
+              "storyAction": {
+                "quest": "q111",
+                "action": "inspection_smith"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q111",
+                  "action": "inspection_smith"
+                }
+              ]
+            },
+            {
+              "id": "home",
+              "text": "荷を持ち帰る",
+              "storyAction": {
+                "quest": "q111",
+                "action": "inspection_home"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q111",
+                  "action": "inspection_home"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q111.pass.request": {
+      "storyQuest": "q111",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q111",
+          "scene": "request"
+        },
+        {
+          "op": "narrate",
+          "text": "柄の印を写した紙を広げると、職人は古い帳面の束を出した。「照合する間、荷馬車は検問で待たせておくれ」。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "leave",
+              "text": "写しを預けて検問へ",
+              "storyAction": {
+                "quest": "q111",
+                "action": "request_leave"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q111",
+                  "action": "request_leave"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q111.pass.waiting": {
+      "storyQuest": "q111",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q111",
+          "scene": "waiting"
+        },
+        {
+          "op": "narrate",
+          "text": "荷と二人は検問で待っていた。番兵は引渡しの欄を空けたままにした。写しはまだ職人の手元にある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "collect",
+              "text": "職人の照合結果を受け取りに行く",
+              "storyAction": {
+                "quest": "q111",
+                "action": "waiting_collect"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q111",
+                  "action": "waiting_collect"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q111.pass.result": {
+      "storyQuest": "q111",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q111",
+          "scene": "result"
+        },
+        {
+          "op": "narrate",
+          "text": "職人が写しの隣に、同じ印の控えと持ち主の名を書き添えた。「この二筋は、うちで打った鍬の印だよ」。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "bring",
+              "text": "照合した写しを検問へ",
+              "storyAction": {
+                "quest": "q111",
+                "action": "result_bring"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q111",
+                  "action": "result_bring"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q111.pass.proof": {
+      "storyQuest": "q111",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q111",
+          "scene": "proof"
+        },
+        {
+          "op": "narrate",
+          "text": "番兵は職人の控えと荷台の農具を一つずつ突き合わせた。柄に残る二筋が控えの印と重なる。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "confirm",
+              "text": "写しを戻して照合を終える",
+              "storyAction": {
+                "quest": "q111",
+                "action": "proof_confirm"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q111",
+                  "action": "proof_confirm"
+                },
+                {
+                  "op": "jump",
+                  "script": "q111.pass.matched"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q111.pass.matched": {
+      "storyQuest": "q111",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q111",
+          "scene": "matched"
+        },
+        {
+          "op": "narrate",
+          "text": "番兵が持ち主の名を読み上げると、グスが柄から指を離した。「その家から持ち出したのは俺たちだ。白い布を下ろしたくなったのは、そのせいだ」"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "hear",
+              "text": "グスの話を聞く",
+              "storyAction": {
+                "quest": "q111",
+                "action": "matched_hear"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q111",
+                  "action": "matched_hear"
+                },
+                {
+                  "op": "jump",
+                  "script": "q111.pass.decision"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q111.pass.decision": {
+      "storyQuest": "q111",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q111",
+          "scene": "decision"
+        },
+        {
+          "op": "narrate",
+          "text": "農具の持ち主は分かった。ハンナは「誰の名も出さずに返せるよ」と伝え、グスの言葉を待った。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "anonymous",
+              "text": "名前を出さず村へ",
+              "storyAction": {
+                "quest": "q111",
+                "action": "decision_anonymous"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q111",
+                  "action": "decision_anonymous"
+                }
+              ]
+            },
+            {
+              "id": "name",
+              "text": "グスの意思を聞く",
+              "storyAction": {
+                "quest": "q111",
+                "action": "decision_name"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q111",
+                  "action": "decision_name"
+                },
+                {
+                  "op": "jump",
+                  "script": "q111.pass.offer"
+                }
+              ]
+            },
+            {
+              "id": "home",
+              "text": "返却を次便に延ばす",
+              "storyAction": {
+                "quest": "q111",
+                "action": "decision_home"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q111",
+                  "action": "decision_home"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q111.pass.offer": {
+      "storyQuest": "q111",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q111",
+          "scene": "offer"
+        },
+        {
+          "op": "narrate",
+          "text": "「俺の名で返してくれ。壊れた柄を直しに来る話も、俺からする」。グスは受取帳に書く自分の名を、番兵に一字ずつ伝えた。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "agree",
+              "text": "申し出を受けて村へ",
+              "storyAction": {
+                "quest": "q111",
+                "action": "offer_agree"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q111",
+                  "action": "offer_agree"
+                }
+              ]
+            },
+            {
+              "id": "anonymous",
+              "text": "農具だけを返しに行く",
+              "storyAction": {
+                "quest": "q111",
+                "action": "offer_anonymous"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.journey",
+                  "quest": "q111",
+                  "action": "offer_anonymous"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q111.pass.handover": {
+      "storyQuest": "q111",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q111",
+          "scene": "handover"
+        },
+        {
+          "op": "narrate",
+          "text": "受取人は荷台の前で、鍬の柄の印に指を置いた。「うちのだ」。ハンナが荷紐をほどくと、受取人は白い布も引き取って洗濯紐に掛けた。口の開いた、古い枕カバーだった。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "unload",
+              "text": "農具を持ち主に渡す",
+              "storyAction": {
+                "quest": "q111",
+                "action": "handover_unload"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q111",
+                  "action": "handover_unload"
+                },
+                {
+                  "op": "jump",
+                  "script": "q111.pass.receipt"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q111.pass.receipt": {
+      "storyQuest": "q111",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q111",
+          "scene": "receipt"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q111.values.form"
+            },
+            "right": "named"
+          },
+          "then": [
+            {
+              "op": "narrate",
+              "text": "グスが名乗ると、礼の言葉の隣から「なぜ今になった」と声がした。彼は両方を聞いて、受取帳を開いた。"
+            }
+          ],
+          "else": [
+            {
+              "op": "narrate",
+              "text": "受取人は数え終えた鍬を軒下へ運んだ。帳面に残すのは農具の数だけだ。グスは洗濯紐の下を黙って通った。"
+            }
+          ]
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "date",
+              "text": "次の修繕日を記す",
+              "storyAction": {
+                "quest": "q111",
+                "action": "receipt_date"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.form"
+                },
+                "right": "named"
+              },
+              "visibleWhen": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.form"
+                },
+                "right": "named"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q111",
+                  "action": "receipt_date"
+                },
+                {
+                  "op": "jump",
+                  "script": "q111.pass.end.named"
+                }
+              ]
+            },
+            {
+              "id": "finish",
+              "text": "匿名の受取を見届ける",
+              "storyAction": {
+                "quest": "q111",
+                "action": "receipt_finish"
+              },
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.form"
+                },
+                "right": "anonymous"
+              },
+              "visibleWhen": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.form"
+                },
+                "right": "anonymous"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q111",
+                  "action": "receipt_finish"
+                },
+                {
+                  "op": "jump",
+                  "script": "q111.pass.end.anonymous"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q111.pass.home": {
+      "storyQuest": "q111",
+      "commands": [
+        {
+          "op": "story.scene",
+          "quest": "q111",
+          "scene": "home"
+        },
+        {
+          "op": "narrate",
+          "text": "ハンナは荷馬車を元の倉に寄せた。農具は次便に載せられるよう、受け取り手ごとに置く場所を空けてある。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "store",
+              "text": "農具を倉へ戻す",
+              "storyAction": {
+                "quest": "q111",
+                "action": "home_store"
+              },
+              "requirement": "",
+              "commands": [
+                {
+                  "op": "story.action",
+                  "quest": "q111",
+                  "action": "home_store"
+                },
+                {
+                  "op": "jump",
+                  "script": "q111.pass.end.home"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "q111.pass.end.home": {
+      "commands": [
+        {
+          "op": "jump",
+          "script": "q111.end.home"
+        }
+      ]
+    },
+    "q111.pass.end.anonymous": {
+      "commands": [
+        {
+          "op": "jump",
+          "script": "q111.end.anonymous"
+        }
+      ]
+    },
+    "q111.pass.end.named": {
+      "commands": [
+        {
+          "op": "jump",
+          "script": "q111.end.named"
+        }
+      ]
+    },
+    "q111.pass.visit": {
+      "commands": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "eq",
+            "left": {
+              "ref": "flags.legacyStoryRoutes.q111"
+            },
+            "right": true
+          },
+          "then": [
+            {
+              "op": "jump",
+              "script": "q111.visit"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "eq",
+                "left": {
+                  "ref": "quests.q111.stage"
+                },
+                "right": "completed"
+              },
+              "then": [
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "quests.q111.outcome"
+                  },
+                  "cases": [
+                    {
+                      "equals": "home",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "護衛分の精算を終え、農具は倉へ戻された。白い布は洗われ、次の荷造りを待つ。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "anonymous",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "農具は持ち主へ戻った。白旗が洗濯紐に掛かり、枕カバーだったと分かった。グスはその下を黙って通った。"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "named",
+                      "commands": [
+                        {
+                          "op": "narrate",
+                          "text": "礼を言う者も非難する者もいた。グスは次の修繕日を書き、白旗の下で受取人と工具を数えた。"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": []
+                }
+              ],
+              "else": [
+                {
+                  "op": "story.init",
+                  "quest": "q111"
+                },
+                {
+                  "op": "switch",
+                  "value": {
+                    "ref": "stories.q111.scene"
+                  },
+                  "cases": [
+                    {
+                      "equals": "entry",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q111.pass.entry"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "ambush",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q111.pass.ambush"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "clear",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q111.pass.clear"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "landing",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q111.pass.landing"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "inspection",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q111.pass.inspection"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "request",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q111.pass.request"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "waiting",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q111.pass.waiting"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "result",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q111.pass.result"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "proof",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q111.pass.proof"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "matched",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q111.pass.matched"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "decision",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q111.pass.decision"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "offer",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q111.pass.offer"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "handover",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q111.pass.handover"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "receipt",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q111.pass.receipt"
+                        }
+                      ]
+                    },
+                    {
+                      "equals": "home",
+                      "commands": [
+                        {
+                          "op": "jump",
+                          "script": "q111.pass.home"
+                        }
+                      ]
+                    }
+                  ],
+                  "default": [
+                    {
+                      "op": "jump",
+                      "script": "q111.pass.entry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "story": {
+    "version": 1,
+    "modelVersion": "1.1",
+    "places": {
+      "depot": "荷馬車の荷倉",
+      "road": "峠の本道",
+      "ferry": "迂回の渡し",
+      "gate": "峠の検問",
+      "workshop": "峠の職人小屋",
+      "village": "返却先の村",
+      "transit": "移動中（現在地はワールド状態）"
+    },
+    "connections": [
+      [
+        "transit",
+        "depot"
+      ],
+      [
+        "transit",
+        "road"
+      ],
+      [
+        "transit",
+        "ferry"
+      ],
+      [
+        "transit",
+        "gate"
+      ],
+      [
+        "transit",
+        "workshop"
+      ],
+      [
+        "transit",
+        "village"
+      ]
+    ],
+    "registry": {
+      "partyAt": {
+        "type": "enum",
+        "initial": "depot",
+        "values": [
+          "depot",
+          "road",
+          "ferry",
+          "gate",
+          "workshop",
+          "village",
+          "transit"
+        ],
+        "meaning": "party の所在または保持者"
+      },
+      "hannaAt": {
+        "type": "enum",
+        "initial": "depot",
+        "values": [
+          "depot",
+          "road",
+          "ferry",
+          "gate",
+          "workshop",
+          "village",
+          "transit"
+        ],
+        "meaning": "hanna の所在または保持者"
+      },
+      "gusAt": {
+        "type": "enum",
+        "initial": "depot",
+        "values": [
+          "depot",
+          "road",
+          "ferry",
+          "gate",
+          "workshop",
+          "village",
+          "transit"
+        ],
+        "meaning": "gus の所在または保持者"
+      },
+      "guardAt": {
+        "type": "enum",
+        "initial": "gate",
+        "values": [
+          "depot",
+          "road",
+          "ferry",
+          "gate",
+          "workshop",
+          "village",
+          "transit"
+        ],
+        "meaning": "guard の所在または保持者"
+      },
+      "smithAt": {
+        "type": "enum",
+        "initial": "workshop",
+        "values": [
+          "depot",
+          "road",
+          "ferry",
+          "gate",
+          "workshop",
+          "village",
+          "transit"
+        ],
+        "meaning": "smith の所在または保持者"
+      },
+      "ownerAt": {
+        "type": "enum",
+        "initial": "village",
+        "values": [
+          "depot",
+          "road",
+          "ferry",
+          "gate",
+          "workshop",
+          "village",
+          "transit"
+        ],
+        "meaning": "owner の所在または保持者"
+      },
+      "wagonAt": {
+        "type": "enum",
+        "initial": "hanna",
+        "values": [
+          "depot",
+          "road",
+          "ferry",
+          "gate",
+          "workshop",
+          "village",
+          "transit",
+          "party",
+          "hanna",
+          "gus",
+          "guard",
+          "smith",
+          "owner",
+          "tools",
+          "rubbing",
+          "cloth"
+        ],
+        "meaning": "wagon の所在または保持者"
+      },
+      "toolsAt": {
+        "type": "enum",
+        "initial": "wagon",
+        "values": [
+          "depot",
+          "road",
+          "ferry",
+          "gate",
+          "workshop",
+          "village",
+          "transit",
+          "party",
+          "hanna",
+          "gus",
+          "guard",
+          "smith",
+          "owner",
+          "wagon",
+          "rubbing",
+          "cloth"
+        ],
+        "meaning": "tools の所在または保持者"
+      },
+      "rubbingAt": {
+        "type": "enum",
+        "initial": "wagon",
+        "values": [
+          "depot",
+          "road",
+          "ferry",
+          "gate",
+          "workshop",
+          "village",
+          "transit",
+          "party",
+          "hanna",
+          "gus",
+          "guard",
+          "smith",
+          "owner",
+          "wagon",
+          "tools",
+          "cloth"
+        ],
+        "meaning": "rubbing の所在または保持者"
+      },
+      "clothAt": {
+        "type": "enum",
+        "initial": "wagon",
+        "values": [
+          "depot",
+          "road",
+          "ferry",
+          "gate",
+          "workshop",
+          "village",
+          "transit",
+          "party",
+          "hanna",
+          "gus",
+          "guard",
+          "smith",
+          "owner",
+          "wagon",
+          "tools",
+          "rubbing"
+        ],
+        "meaning": "cloth の所在または保持者"
+      },
+      "flag": {
+        "type": "enum",
+        "initial": "unset",
+        "values": [
+          "unset",
+          "white",
+          "covered"
+        ],
+        "meaning": "白い布の掲げ方"
+      },
+      "form": {
+        "type": "enum",
+        "initial": "unset",
+        "values": [
+          "unset",
+          "anonymous",
+          "named"
+        ],
+        "meaning": "受取人へ伝える名義"
+      },
+      "cleared": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "cleared"
+      },
+      "marks": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "marks"
+      },
+      "consulted": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "consulted"
+      },
+      "appraised": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "appraised"
+      },
+      "confession": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "confession"
+      },
+      "consent": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "consent"
+      },
+      "repairDate": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "repairDate"
+      },
+      "stored": {
+        "type": "boolean",
+        "initial": false,
+        "meaning": "stored"
+      }
+    },
+    "entities": {
+      "party": {
+        "holder": "partyAt",
+        "kind": "group"
+      },
+      "hanna": {
+        "holder": "hannaAt",
+        "kind": "person",
+        "character": "e2_q111_hanna"
+      },
+      "gus": {
+        "holder": "gusAt",
+        "kind": "person",
+        "character": "e2_q111_gus"
+      },
+      "guard": {
+        "holder": "guardAt",
+        "kind": "person",
+        "character": "e2_q111_guard"
+      },
+      "smith": {
+        "holder": "smithAt",
+        "kind": "person",
+        "character": "e2_q111_smith"
+      },
+      "owner": {
+        "holder": "ownerAt",
+        "kind": "person",
+        "character": "e2_q111_owner"
+      },
+      "wagon": {
+        "holder": "wagonAt",
+        "kind": "item"
+      },
+      "tools": {
+        "holder": "toolsAt",
+        "kind": "item"
+      },
+      "rubbing": {
+        "holder": "rubbingAt",
+        "kind": "item"
+      },
+      "cloth": {
+        "holder": "clothAt",
+        "kind": "item"
+      }
+    },
+    "propositions": {},
+    "initialKnowledge": {},
+    "invariants": [
+      {
+        "id": "namedConsent",
+        "condition": {
+          "op": "or",
+          "args": [
+            {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.form"
+                },
+                "right": "named"
+              }
+            },
+            {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.confession"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.consent"
+                  },
+                  "right": true
+                }
+              ]
+            }
+          ]
+        },
+        "message": "グスが自分から承諾したときにだけ名前を伝える。"
+      },
+      {
+        "id": "rightfulOwner",
+        "condition": {
+          "op": "or",
+          "args": [
+            {
+              "op": "not",
+              "arg": {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.toolsAt"
+                },
+                "right": "owner"
+              }
+            },
+            {
+              "op": "and",
+              "args": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "ref": "stories.q111.values.marks"
+                  },
+                  "right": true
+                },
+                {
+                  "op": "not",
+                  "arg": {
+                    "op": "eq",
+                    "left": {
+                      "ref": "stories.q111.values.form"
+                    },
+                    "right": "unset"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "message": "刻印を照合してから持ち主に返す。"
+      }
+    ],
+    "scenes": {
+      "entry": {
+        "title": "荷馬車の荷倉",
+        "place": "depot",
+        "cast": [
+          {
+            "entity": "hanna",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.hannaAt"
+              },
+              "right": "depot"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "gus",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.gusAt"
+              },
+              "right": "depot"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "ambush": {
+        "title": "峠の本道",
+        "place": "road",
+        "cast": [
+          {
+            "entity": "hanna",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.hannaAt"
+              },
+              "right": "road"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "gus",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.gusAt"
+              },
+              "right": "road"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "clear": {
+        "title": "峠の本道",
+        "place": "road",
+        "cast": [
+          {
+            "entity": "hanna",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.hannaAt"
+              },
+              "right": "road"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "gus",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.gusAt"
+              },
+              "right": "road"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "landing": {
+        "title": "迂回の渡し",
+        "place": "ferry",
+        "cast": [
+          {
+            "entity": "hanna",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.hannaAt"
+              },
+              "right": "ferry"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "gus",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.gusAt"
+              },
+              "right": "ferry"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      },
+      "inspection": {
+        "title": "峠の検問",
+        "place": "gate",
+        "cast": [
+          {
+            "entity": "hanna",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.hannaAt"
+              },
+              "right": "gate"
+            },
+            "display": {
+              "x": 17,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "gus",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.gusAt"
+              },
+              "right": "gate"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          },
+          {
+            "entity": "guard",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.guardAt"
+              },
+              "right": "gate"
+            },
+            "display": {
+              "x": 83,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 2
+            }
+          }
+        ],
+        "requires": true
+      },
+      "request": {
+        "title": "峠の職人小屋",
+        "place": "workshop",
+        "cast": [
+          {
+            "entity": "smith",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.smithAt"
+              },
+              "right": "workshop"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "waiting": {
+        "title": "峠の検問",
+        "place": "gate",
+        "cast": [
+          {
+            "entity": "hanna",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.hannaAt"
+              },
+              "right": "gate"
+            },
+            "display": {
+              "x": 17,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "gus",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.gusAt"
+              },
+              "right": "gate"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          },
+          {
+            "entity": "guard",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.guardAt"
+              },
+              "right": "gate"
+            },
+            "display": {
+              "x": 83,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 2
+            }
+          }
+        ],
+        "requires": true
+      },
+      "result": {
+        "title": "峠の職人小屋",
+        "place": "workshop",
+        "cast": [
+          {
+            "entity": "smith",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.smithAt"
+              },
+              "right": "workshop"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          }
+        ],
+        "requires": true
+      },
+      "proof": {
+        "title": "峠の検問",
+        "place": "gate",
+        "cast": [
+          {
+            "entity": "hanna",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.hannaAt"
+              },
+              "right": "gate"
+            },
+            "display": {
+              "x": 17,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "gus",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.gusAt"
+              },
+              "right": "gate"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          },
+          {
+            "entity": "guard",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.guardAt"
+              },
+              "right": "gate"
+            },
+            "display": {
+              "x": 83,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 2
+            }
+          }
+        ],
+        "requires": true
+      },
+      "matched": {
+        "title": "峠の検問",
+        "place": "gate",
+        "cast": [
+          {
+            "entity": "hanna",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.hannaAt"
+              },
+              "right": "gate"
+            },
+            "display": {
+              "x": 17,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "gus",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.gusAt"
+              },
+              "right": "gate"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          },
+          {
+            "entity": "guard",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.guardAt"
+              },
+              "right": "gate"
+            },
+            "display": {
+              "x": 83,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 2
+            }
+          }
+        ],
+        "requires": true
+      },
+      "decision": {
+        "title": "峠の検問",
+        "place": "gate",
+        "cast": [
+          {
+            "entity": "hanna",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.hannaAt"
+              },
+              "right": "gate"
+            },
+            "display": {
+              "x": 17,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "gus",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.gusAt"
+              },
+              "right": "gate"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          },
+          {
+            "entity": "guard",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.guardAt"
+              },
+              "right": "gate"
+            },
+            "display": {
+              "x": 83,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 2
+            }
+          }
+        ],
+        "requires": true
+      },
+      "offer": {
+        "title": "峠の検問",
+        "place": "gate",
+        "cast": [
+          {
+            "entity": "hanna",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.hannaAt"
+              },
+              "right": "gate"
+            },
+            "display": {
+              "x": 17,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "gus",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.gusAt"
+              },
+              "right": "gate"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          },
+          {
+            "entity": "guard",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.guardAt"
+              },
+              "right": "gate"
+            },
+            "display": {
+              "x": 83,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 2
+            }
+          }
+        ],
+        "requires": true
+      },
+      "handover": {
+        "title": "返却先の村",
+        "place": "village",
+        "cast": [
+          {
+            "entity": "hanna",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.hannaAt"
+              },
+              "right": "village"
+            },
+            "display": {
+              "x": 17,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "gus",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.gusAt"
+              },
+              "right": "village"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          },
+          {
+            "entity": "owner",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.ownerAt"
+              },
+              "right": "village"
+            },
+            "display": {
+              "x": 83,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 2
+            }
+          }
+        ],
+        "requires": true
+      },
+      "receipt": {
+        "title": "返却先の村",
+        "place": "village",
+        "cast": [
+          {
+            "entity": "hanna",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.hannaAt"
+              },
+              "right": "village"
+            },
+            "display": {
+              "x": 17,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "gus",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.gusAt"
+              },
+              "right": "village"
+            },
+            "display": {
+              "x": 50,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          },
+          {
+            "entity": "owner",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.ownerAt"
+              },
+              "right": "village"
+            },
+            "display": {
+              "x": 83,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 2
+            }
+          }
+        ],
+        "requires": true
+      },
+      "home": {
+        "title": "荷馬車の荷倉",
+        "place": "depot",
+        "cast": [
+          {
+            "entity": "hanna",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.hannaAt"
+              },
+              "right": "depot"
+            },
+            "display": {
+              "x": 30,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 0
+            }
+          },
+          {
+            "entity": "gus",
+            "when": {
+              "op": "eq",
+              "left": {
+                "ref": "stories.q111.values.gusAt"
+              },
+              "right": "depot"
+            },
+            "display": {
+              "x": 70,
+              "y": 10,
+              "scale": 1,
+              "cardScale": 1,
+              "layer": 1
+            }
+          }
+        ],
+        "requires": true
+      }
+    },
+    "actions": {
+      "entry_flag": {
+        "from": [
+          "entry"
+        ],
+        "to": "ambush",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "hanna",
+              "gus"
+            ],
+            "path": [
+              "transit",
+              "road"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "road",
+          "companions": [
+            "hanna",
+            "gus"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "flag",
+            "value": "white"
+          }
+        ]
+      },
+      "entry_ferry": {
+        "from": [
+          "entry"
+        ],
+        "to": "landing",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "hanna",
+              "gus"
+            ],
+            "path": [
+              "transit",
+              "ferry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "ferry",
+          "companions": [
+            "hanna",
+            "gus"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "flag",
+            "value": "covered"
+          }
+        ]
+      },
+      "ambush_fight": {
+        "from": [
+          "ambush"
+        ],
+        "to": "clear",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "cleared",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "ambush_detour": {
+        "from": [
+          "ambush"
+        ],
+        "to": "landing",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "hanna",
+              "gus"
+            ],
+            "path": [
+              "transit",
+              "ferry"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "ferry",
+          "companions": [
+            "hanna",
+            "gus"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "flag",
+            "value": "covered"
+          }
+        ]
+      },
+      "clear_advance": {
+        "from": [
+          "clear"
+        ],
+        "to": "inspection",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "hanna",
+              "gus"
+            ],
+            "path": [
+              "transit",
+              "gate"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "gate",
+          "companions": [
+            "hanna",
+            "gus"
+          ]
+        },
+        "depart": []
+      },
+      "landing_cross": {
+        "from": [
+          "landing"
+        ],
+        "to": "inspection",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "hanna",
+              "gus"
+            ],
+            "path": [
+              "transit",
+              "gate"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "gate",
+          "companions": [
+            "hanna",
+            "gus"
+          ]
+        },
+        "depart": []
+      },
+      "landing_home": {
+        "from": [
+          "landing"
+        ],
+        "to": "home",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "hanna",
+              "gus"
+            ],
+            "path": [
+              "transit",
+              "depot"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "depot",
+          "companions": [
+            "hanna",
+            "gus"
+          ]
+        },
+        "depart": []
+      },
+      "inspection_match": {
+        "from": [
+          "inspection"
+        ],
+        "to": "matched",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "marks",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "inspection_smith": {
+        "from": [
+          "inspection"
+        ],
+        "to": "request",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "workshop"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "workshop",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "rubbing",
+            "from": "wagon",
+            "to": "party"
+          }
+        ]
+      },
+      "inspection_home": {
+        "from": [
+          "inspection"
+        ],
+        "to": "home",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "hanna",
+              "gus"
+            ],
+            "path": [
+              "transit",
+              "depot"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "depot",
+          "companions": [
+            "hanna",
+            "gus"
+          ]
+        },
+        "depart": []
+      },
+      "request_leave": {
+        "from": [
+          "request"
+        ],
+        "to": "waiting",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "gate"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "gate",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "rubbing",
+            "from": "party",
+            "to": "smith"
+          },
+          {
+            "op": "set",
+            "key": "consulted",
+            "value": true
+          }
+        ]
+      },
+      "waiting_collect": {
+        "from": [
+          "waiting"
+        ],
+        "to": "result",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "workshop"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "workshop",
+          "companions": []
+        },
+        "depart": []
+      },
+      "result_bring": {
+        "from": [
+          "result"
+        ],
+        "to": "proof",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party"
+            ],
+            "path": [
+              "transit",
+              "gate"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "gate",
+          "companions": []
+        },
+        "depart": [
+          {
+            "op": "transfer",
+            "entity": "rubbing",
+            "from": "smith",
+            "to": "party"
+          },
+          {
+            "op": "set",
+            "key": "appraised",
+            "value": true
+          }
+        ]
+      },
+      "proof_confirm": {
+        "from": [
+          "proof"
+        ],
+        "to": "matched",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "rubbing",
+            "from": "party",
+            "to": "wagon"
+          },
+          {
+            "op": "set",
+            "key": "marks",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "matched_hear": {
+        "from": [
+          "matched"
+        ],
+        "to": "decision",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "confession",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "decision_anonymous": {
+        "from": [
+          "decision"
+        ],
+        "to": "handover",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "hanna",
+              "gus"
+            ],
+            "path": [
+              "transit",
+              "village"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "village",
+          "companions": [
+            "hanna",
+            "gus"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "form",
+            "value": "anonymous"
+          }
+        ]
+      },
+      "decision_name": {
+        "from": [
+          "decision"
+        ],
+        "to": "offer",
+        "requires": true,
+        "effects": [
+          {
+            "op": "set",
+            "key": "consent",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "decision_home": {
+        "from": [
+          "decision"
+        ],
+        "to": "home",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "hanna",
+              "gus"
+            ],
+            "path": [
+              "transit",
+              "depot"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "depot",
+          "companions": [
+            "hanna",
+            "gus"
+          ]
+        },
+        "depart": []
+      },
+      "offer_agree": {
+        "from": [
+          "offer"
+        ],
+        "to": "handover",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "hanna",
+              "gus"
+            ],
+            "path": [
+              "transit",
+              "village"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "village",
+          "companions": [
+            "hanna",
+            "gus"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "form",
+            "value": "named"
+          }
+        ]
+      },
+      "offer_anonymous": {
+        "from": [
+          "offer"
+        ],
+        "to": "handover",
+        "requires": true,
+        "effects": [
+          {
+            "op": "move",
+            "entities": [
+              "party",
+              "hanna",
+              "gus"
+            ],
+            "path": [
+              "transit",
+              "village"
+            ],
+            "assistant": "party",
+            "carrier": "party"
+          }
+        ],
+        "once": true,
+        "journey": {
+          "to": "village",
+          "companions": [
+            "hanna",
+            "gus"
+          ]
+        },
+        "depart": [
+          {
+            "op": "set",
+            "key": "form",
+            "value": "anonymous"
+          }
+        ]
+      },
+      "handover_unload": {
+        "from": [
+          "handover"
+        ],
+        "to": "receipt",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "tools",
+            "from": "wagon",
+            "to": "owner"
+          },
+          {
+            "op": "transfer",
+            "entity": "cloth",
+            "from": "wagon",
+            "to": "owner"
+          }
+        ],
+        "once": true
+      },
+      "receipt_date": {
+        "from": [
+          "receipt"
+        ],
+        "ending": "named",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q111.values.form"
+          },
+          "right": "named"
+        },
+        "effects": [
+          {
+            "op": "set",
+            "key": "repairDate",
+            "value": true
+          }
+        ],
+        "once": true
+      },
+      "receipt_finish": {
+        "from": [
+          "receipt"
+        ],
+        "ending": "anonymous",
+        "requires": {
+          "op": "eq",
+          "left": {
+            "ref": "stories.q111.values.form"
+          },
+          "right": "anonymous"
+        },
+        "effects": [],
+        "once": true
+      },
+      "home_store": {
+        "from": [
+          "home"
+        ],
+        "ending": "home",
+        "requires": true,
+        "effects": [
+          {
+            "op": "transfer",
+            "entity": "tools",
+            "from": "wagon",
+            "to": "depot"
+          },
+          {
+            "op": "transfer",
+            "entity": "cloth",
+            "from": "wagon",
+            "to": "depot"
+          },
+          {
+            "op": "set",
+            "key": "stored",
+            "value": true
+          }
+        ],
+        "once": true
+      }
+    },
+    "endings": {
+      "home": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q111.values.stored"
+            },
+            "right": true
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q111.values.toolsAt"
+            },
+            "right": "depot"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q111.values.form"
+            },
+            "right": "unset"
+          }
+        ]
+      },
+      "anonymous": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.toolsAt"
+                },
+                "right": "owner"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.clothAt"
+                },
+                "right": "owner"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q111.values.form"
+            },
+            "right": "anonymous"
+          }
+        ]
+      },
+      "named": {
+        "op": "and",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.toolsAt"
+                },
+                "right": "owner"
+              },
+              {
+                "op": "eq",
+                "left": {
+                  "ref": "stories.q111.values.clothAt"
+                },
+                "right": "owner"
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q111.values.form"
+            },
+            "right": "named"
+          },
+          {
+            "op": "eq",
+            "left": {
+              "ref": "stories.q111.values.repairDate"
+            },
+            "right": true
+          }
+        ]
+      }
+    },
+    "worldPlaces": {
+      "depot": {
+        "kind": "town",
+        "location": "e2_q111_depot"
+      },
+      "road": {
+        "kind": "town",
+        "location": "e2_q111_road"
+      },
+      "ferry": {
+        "kind": "town",
+        "location": "e2_q111_ferry"
+      },
+      "gate": {
+        "kind": "town",
+        "location": "e2_q111_gate"
+      },
+      "workshop": {
+        "kind": "town",
+        "location": "e2_q111_workshop"
+      },
+      "village": {
+        "kind": "town",
+        "location": "e2_q111_village"
+      }
+    },
+    "revision": 1
+  }
+}

@@ -40,8 +40,14 @@ export function compilePreservedWorldQuest(original, items, source, namespace) {
     const local = [{op:'story.action',quest:id,action:o.action},jump(o.to.startsWith('@')?'end.'+o.to.slice(1):o.to)];
     let commands = local;
     if (action.journey) commands = [{op:'story.journey',quest:id,action:o.action}];
+    const escapeCommands=[{op:'narrate',text:'退路へ戻った。戦闘後に予定していた作業は、まだ成立していない。'}];
+    if (o.escapeVia) {
+      const detour=q.story.actions[o.escapeVia];
+      if (!o.combat || !detour?.journey || !detour.from.includes(action.from[0])) throw Error(id+' invalid escape journey: '+o.escapeVia);
+      escapeCommands.push({op:'story.journey',quest:id,action:o.escapeVia});
+    }
     if (o.combat) commands = [{op:'battle.start',encounter:o.combat,on_win:local,
-      on_escape:[{op:'narrate',text:'退路へ戻った。戦闘後に予定していた作業は、まだ成立していない。'}],
+      on_escape:escapeCommands,
       on_lose:[{op:'narrate',text:'救助班に運び出された。現場へ戻ると直前の場面から再開できる。'}]}];
     const requirements=o.costRequirement?[o.costRequirement]:Object.entries(action.cost??{}).map(([item,n])=>item==='gold'?n+'Gを支払う。':items[item].name+n+'個を使う。');
     if(o.combat) requirements.push(o.combatRequirement??'戦闘に勝つと次の場面へ進む。');

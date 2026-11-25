@@ -1,0 +1,90 @@
+name: Validate q111 white flag wagon in Chromium
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'data/**'
+      - 'authoring/editions/e2/story-q111.mjs'
+      - 'authoring/editions/e2/facility-quest.mjs'
+      - 'authoring/*story-kit.mjs'
+      - 'tools/build-scenario-editions.mjs'
+      - 'tools/build-oddland-geography.mjs'
+      - 'tools/build-companion-edition.mjs'
+      - 'tools/preserved-world-quest.mjs'
+      - 'tools/browser-q111-world-route.mjs'
+      - 'tools/world-route-browser-fixtures.mjs'
+      - 'tools/character-art-browser.mjs'
+      - 'tools/measure-world-routes.mjs'
+      - 'tools/verify-market-published.mjs'
+      - 'tools/verify-published-saves.mjs'
+      - 'tests/*world-helpers.mjs'
+      - 'tests/world-route-helpers.mjs'
+      - 'tests/q111-world-route.test.mjs'
+      - 'tests/helpers.mjs'
+      - 'playtests/quest-parties.json'
+      - '.github/workflows/q111-wagon.yml'
+  push:
+    branches: [master]
+    paths:
+      - 'data/scenario-editions/e2/q111.json'
+      - 'tools/verify-market-published.mjs'
+      - 'tools/verify-published-saves.mjs'
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+permissions:
+  contents: read
+jobs:
+  browser:
+    if: github.event_name != 'push'
+    runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned browser driver and Japanese fonts
+        run: |
+          npm install --no-save --package-lock=false playwright@1.58.2
+          test -n "$(fc-list :lang=ja)"
+      - name: Verify parties, saved scenes and original branches
+        run: node tools/browser-q111-world-route.mjs
+        env:
+          ADV_BROWSER_OUTPUT: /tmp/q111-wagon
+      - name: Exercise the release playthrough against this revision
+        env:
+          ADV_TRIAL_BASE_URL: http://127.0.0.1:8000/
+        run: |
+          python3 -m http.server 8000 --bind 127.0.0.1 >/tmp/abyss-http.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid"' EXIT
+          node tools/verify-market-published.mjs --q111
+      - name: Upload trial checkpoints and results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: q111-wagon-checkpoints
+          path: /tmp/q111-wagon
+          if-no-files-found: error
+          retention-days: 7
+
+  published:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --ipc=host
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --package-lock=false playwright@1.58.2
+      - name: Verify the deployed files, wagon playthroughs, pre-update saves and q038 retry
+        run: node tools/verify-market-published.mjs --q111
