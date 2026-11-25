@@ -1,3 +1,4 @@
+import {guideBands, monsterFloorText} from '../src/application/labyrinth-guide.js';
 import {conditionText, monsterGroups, targetText} from '../src/application/monster-catalog.js';
 
 // Catalogs describe loaded definitions and references, not proven playthrough reachability.
@@ -34,6 +35,7 @@ export function monsterCatalog(data) {
   const enemies=Object.values(data.enemies),refs=encounterReferences(data);
   const idsIn=encounter=>[...encounter.enemies.map(e=>typeof e==='string'?e:e.id??e.enemy),...(encounter.reinforcements??[]).map(r=>r.enemy)];
   const groups = monsterGroups(enemies);
+  const shiftingBands = guideBands(data, false);
   const imageUsers=new Map();
   for(const e of enemies){const file=data.assets.images[e.sprite];if(!imageUsers.has(file))imageUsers.set(file,[]);imageUsers.get(file).push(e.name);}
   const out=['# 魔物一覧と戦闘画像','','[ゲーム内の魔物図鑑を開く](https://tomtomyoung.github.io/adv/labyrinth-guide.html#monsters)','',
@@ -72,6 +74,8 @@ export function monsterCatalog(data) {
         out.push(`${i+1}. 優先度${rule.priority}、${conditionText(rule.condition)}：${skill.name} (${rule.skill})、MP${skill.mp}、対象は${targetText(rule,skill)}。`);
       }
       out.push('','遭遇と参照先：','');
+      const floors = monsterFloorText(shiftingBands, e.id);
+      if (floors) out.push('千変の迷宮の通常遭遇：' + floors + '。', '');
       for(const [id,encounter] of Object.entries(data.encounters).filter(([,c])=>idsIn(c).includes(e.id))){
         const r=refs[id],members=encounter.enemies,formation=[...new Set(members)].map(id=>`${data.enemies[id].name}×${members.filter(x=>x===id).length}`).join('・');
         out.push(`${id}：${formation}。逃走${encounter.escape?'可':'不可'}。`);

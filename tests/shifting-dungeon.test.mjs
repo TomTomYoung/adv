@@ -4,7 +4,7 @@ import fs from 'node:fs/promises';
 import {data, drain, inspect, pathTo, walk, fight} from './helpers.mjs';
 import {GameEngine} from '../src/core/engine.js';
 import {formationExperience, xpThreshold} from '../src/core/progression.js';
-import {endBattle, applySkill} from '../src/core/battle.js';
+import {activeActor, endBattle, applySkill} from '../src/core/battle.js';
 import {normalEncounterPool} from '../src/core/scouting.js';
 import {loadContent, loadPlayableContent} from '../src/core/loader.js';
 import {validateSave} from '../src/core/save.js';
@@ -155,9 +155,9 @@ test('an old level-30 save keeps banked XP and current HP, MP and statuses, exac
 
 test('early floors draw the weighted group on each walking encounter and resume that exact battle', () => {
   const expected = [
-    [[1, 60], [2, 25], [1, 15]],
-    [[2, 25], [2, 45], [3, 30]],
-    [[3, 30], [3, 35], [4, 25], [5, 10]]
+    [[1, 40], [2, 25], [1, 15], [1, 20]],
+    [[2, 25], [2, 30], [3, 30], [2, 15]],
+    [[3, 30], [3, 20], [4, 25], [5, 10], [3, 15]]
   ];
   for (const [index, groups] of expected.entries()) {
     const floor = index + 1, g = newGame();
@@ -204,7 +204,7 @@ test('Ada meets early-floor normal attack breakpoints with opening-shop weapons'
     enter(g);
     const map = g.data.maps[g.data.dungeons[id].maps[floor - 1]];
     const encounters = map.encounterPool.map(entry => entry.encounter);
-    // Both species must satisfy the target, including the moth in a mixed pack.
+    // Every species must satisfy the target, including those in mixed packs.
     const tested = new Set();
     for (const encounter of encounters) {
       const saved = g.save();
@@ -219,8 +219,34 @@ test('Ada meets early-floor normal attack breakpoints with opening-shop weapons'
       }
       g.load(saved);
     }
-    assert.equal(tested.size, 2);
+    assert.equal(tested.size, 3);
   }
+});
+
+test('a tank escort resumes on the sixth floor and fires a log on its second turn', () => {
+  const g = newGame();
+  g.award(0, xpThreshold(data, 6));
+  enter(g);
+  const map = g.data.maps[id + '_f6'];
+  g.teleport(map.id, map.entrance.x, map.entrance.y, map.entrance.facing);
+  g.state.steps = g.data.system.encounterCheckSteps - 1;
+  const rolls = [0, 0.93];
+  g.random = () => rolls.shift() ?? 0.5;
+  assert.ok(g.dispatch({type: 'move', direction: 'forward'}));
+  const copy = newGame();
+  copy.load(g.save());
+  const battle = copy.state.battle;
+  assert.deepEqual(battle.enemies.map(e => e.name), ['戦車ビーバー Lv6', '苔虫 Lv6']);
+  const tank = battle.enemies[0];
+  const initialMp = tank.mp;
+  for (const round of [1, 2]) {
+    while (battle.round === round) {
+      const actor = activeActor(copy);
+      assert.ok(copy.dispatch({type: 'battle', action: 'skill', skill: 'guard', target: actor}));
+    }
+    assert.equal(tank.mp, round === 1 ? initialMp : initialMp - data.skills.beaver_log_shot.mp);
+  }
+  assert.ok(battle.log.some(line => line.includes('丸太砲')));
 });
 
 test('authored dungeons can assign band groups and add or disable them on one floor', async () => {
