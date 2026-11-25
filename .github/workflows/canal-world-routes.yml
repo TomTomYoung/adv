@@ -1,10 +1,10 @@
-name: Validate q101–q105 canal quarter routes in Chromium
+name: Validate q101–q106 canal quarter routes in Chromium
 on:
   pull_request:
     paths:
       - 'src/**'
       - 'data/**'
-      - 'authoring/editions/e2/story-q10[1-5].mjs'
+      - 'authoring/editions/e2/story-q10[1-6].mjs'
       - 'authoring/editions/e2/canal-quarter.mjs'
       - 'authoring/*story-kit.mjs'
       - 'tools/build-scenario-editions.mjs'
@@ -20,6 +20,8 @@ on:
       - 'tools/build-oddland-geography.mjs'
       - 'playtests/quest-parties.json'
       - 'tests/canal-world-*.mjs'
+      - 'tests/q106-world-route.test.mjs'
+      - 'authoring/editions/e2/hikarigaeri-districts.mjs'
       - 'tools/verify-published-saves.mjs'
       - 'tools/verify-market-published.mjs'
       - 'tests/helpers.mjs'
@@ -27,7 +29,7 @@ on:
   push:
     branches: [master]
     paths:
-      - 'data/scenario-editions/e2/q10[1-5].json'
+      - 'data/scenario-editions/e2/q10[1-6].json'
       - 'tools/verify-published-saves.mjs'
       - 'tools/verify-market-published.mjs'
   workflow_dispatch:
@@ -41,7 +43,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        quest: [q101, q102, q103, q104, q105]
+        quest: [q101, q102, q103, q104, q105, q106]
     if: github.event_name != 'push'
     runs-on: ubuntu-24.04
     container:
@@ -62,14 +64,13 @@ jobs:
         env:
           ADV_BROWSER_OUTPUT: /tmp/canal-browser
       - name: Exercise the release playthrough against this revision
-        if: matrix.quest == 'q105'
         env:
           ADV_TRIAL_BASE_URL: http://127.0.0.1:8000/
         run: |
           python3 -m http.server 8000 --bind 127.0.0.1 >/tmp/abyss-http.log 2>&1 &
           server_pid=$!
           trap 'kill "$server_pid"' EXIT
-          node tools/verify-market-published.mjs --canal
+          node tools/verify-market-published.mjs --canal ${{ matrix.quest }}
       - name: Upload trial checkpoints and results
         if: always()
         uses: actions/upload-artifact@v4
@@ -92,5 +93,5 @@ jobs:
         with:
           node-version: '22'
       - run: npm install --no-save --package-lock=false playwright@1.58.2
-      - name: Verify the deployed files, canal playthroughs, five pre-update saves and q038 retry
+      - name: Verify the deployed files, canal playthroughs, pre-update saves and q038 retry
         run: node tools/verify-market-published.mjs --canal

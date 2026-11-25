@@ -25,7 +25,9 @@ export function buildRiverside(bundle){
     ['e2_canal_fountain_square','噴水広場','噴水を囲む露店の前で、通りに面した窓から楽器の音が聞こえる。','location_square',[
       ['e2_q104_stall','花売りの露店'],['e2_q104_fountain','噴水のある辻'],['e2_q104_window','楽師の窓辺']]],
     ['e2_canal_bridgehead','運河橋のたもと','橋の両岸に工房と船着場が向かい合い、婚礼の会場へ道が続く。','location_square',[
-      ['e2_q105_hall','婚礼の会場'],['e2_q105_bridge','運河橋'],['e2_q105_shop','工房'],['e2_q105_bank','運河の泥道'],['e2_q105_cart','船着場']]]
+      ['e2_q105_hall','婚礼の会場'],['e2_q105_bridge','運河橋'],['e2_q105_shop','工房'],['e2_q105_bank','運河の泥道'],['e2_q105_cart','船着場']]],
+    ['e2_canal_night_market','夜市','パンを売る店から、路地の抜け道を通って荷運びの家へ出られる。','location_square',[
+      ['e2_q106_bakery','パン屋'],['e2_q106_alley','抜け道'],['e2_q106_door','荷運びの家の戸口'],['e2_q106_table','家族の食卓']]]
   ];
   for(const [id,name,description,background,stops] of groups){
     add(id,name,canal,description,background);

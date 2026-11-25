@@ -13,7 +13,7 @@ for(const [q,paths] of Object.entries(routes)){
     for(const [id,script] of Object.entries(previous.quests[q].scripts))assert.deepEqual(data.scripts[id],script);
     assert.deepEqual(Object.keys(quest.outcomes),Object.keys(previous.quests[q].outcomes));
     const old=migrated(ready(q,{old:true,start:'reception'})),fresh=ready(q,{start:'reception'});
-    assert.equal(nextQuestPlace(data,old.state,q).map,'region_1_f1');
+    assert.equal(nextQuestPlace(data,old.state,q).map,previous.quests[q].locations[0].map);
     assert.deepEqual(nextQuestPlace(data,fresh.state,q),story.worldPlaces[story.scenes.entry.place]);
     for(const e of previous.quests[q].events){
       const {map}=e.points[0],original=previous.maps[map].objects.find(o=>o.id===e.id),current=data.maps[map].objects.find(o=>o.id===e.id);

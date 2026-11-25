@@ -8,7 +8,7 @@ import {choose} from './world-route-helpers.mjs';
 export {data,catalog,migrated};
 export {arrive} from './world-route-helpers.mjs';
 
-const ids=['q101','q102','q103','q104','q105'];
+const ids=['q101','q102','q103','q104','q105','q106'];
 export const routes=Object.fromEntries(ids.map(id=>[id,[]]));
 function add(q,old,path,outcome){
   const words=text=>text.trim().split(/\s+/);
@@ -46,6 +46,22 @@ for(const trail of ['shop','canal'])for(const pre of ['', 'report ', 'roles back
     add('q105',trail+' '+pre+old,'bridge '+trail+' follow '+pre.replace('report','report tell')+path,end);
 }
 
+add('q106','seal','chase seal report finish','seal');
+add('q106','guard','chase guard keep finish','guard');
+for(const retry of [false,true]){
+  const visit='chase owner compare '+(retry?'guard keep retry ':'');
+  const finish=retry?'finish':'keep finish';
+  add('q106','owner guard',visit+'guard '+finish,'guard');
+  const meal=visit+'learn back ask admit ';
+  add('q106','owner ask guard',meal+'guard '+finish,'guard');
+  add('q106','owner ask eat',meal+'eat finish','meal');
+}
+const breadShortages=[
+  {choice:'seal',old:[],path:['chase'],legacyScene:'entry',scene:'trail',place:'alley',cost:{gold:30},finish:['report','finish'],outcome:'seal'},
+  {choice:'eat',old:['owner','ask'],path:['chase','owner','compare','learn','back','ask','admit'],legacyScene:'meal',scene:'meal',place:'table',cost:{ration:1},finish:['finish'],outcome:'meal'}
+];
+export {breadShortages};
+
 export const previous=await loadContent(async f=>{
   const x=JSON.parse(await fs.readFile(new URL('../'+f,import.meta.url)));
   if(f==='data/scenario-editions.json')for(const id of ids)delete x.editions.e2.questOverrides[id];
@@ -62,6 +78,13 @@ export function expectedValues(q,r){
     case 'q102':return {family:has('family'),inn:has('inn'),notice:has('notice'),time:['family','inn','notice'].filter(has).length,sound:end,rouAt:'lane',familyAt:'lane'};
     case 'q103':return {asked:end==='write',filed:end==='write',formAt:end==='write'?'toma':'elder',paid:end==='joint',shared:end==='joint',stopped:end==='stop',hostAt:end==='joint'?'kitchen':'inn'};
     case 'q104':return {rule:has('find'),paid:end==='buy',lease:end==='lease',owner:end==='buy'?'vero':'boy',bottleAt:end==='return'?'stall':'vero',use:{return:'returned',buy:'gift',lease:'overnight'}[end]};
+    case 'q106':{
+      const took=id=>r.path.includes(id);
+      return {theft:true,owner:took('compare'),rule:took('back'),admitted:took('admit'),shared:end==='meal',
+        deferred:took('compare')&&r.path[r.path.indexOf('compare')+1]==='guard',guarded:took('keep'),retried:took('retry'),
+        shadowState:{seal:'sealed',guard:'loose',meal:'rejoined'}[end],porterAt:took('ask')?'table':'door',
+        shadowAt:took('ask')?'table':took('compare')?'door':'alley',mageAt:'alley',familyAt:'table',bakerAt:'bakery'};
+    }
     case 'q105':return {trail:r.old[0],reported:has('report')||end==='roles',work:end==='roles',postponed:end==='delay',returned:end==='return',shoeAt:{roles:'sister',return:'dan',delay:'lise'}[end],sisterAt:end==='roles'?'hall':'cart',liseAt:end==='delay'?'cart':'hall'};
   }
 }
@@ -83,6 +106,11 @@ export function states(q){
     for(const id of food?['source','join']:['ask','find'])choose(g,q,id);
     if(food)delete g.state.inventory.ration;else g.state.gold=39;
     rows.set('short',{scene:food?'joint':'found',save:g.save(),availableChoice:(food?'food':'buy')+'_supplies'});
+  }
+  if(q==='q106')for(const row of breadShortages)for(const [old,rows] of [[false,current],[true,legacy]]){
+    const g=ready(q,{old});for(const id of old?row.old:row.path)choose(g,q,id);
+    if(row.cost.gold)g.state.gold=row.cost.gold-1;else delete g.state.inventory.ration;
+    rows.set('short-'+row.choice,{scene:old?row.legacyScene:row.scene,save:g.save(),availableChoice:row.choice+'_supplies'});
   }
   return {current:[...current.values()],legacy:[...legacy.values()]};
 }

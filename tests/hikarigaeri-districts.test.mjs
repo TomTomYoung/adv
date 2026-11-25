@@ -4,7 +4,7 @@ import {fresh,town,checkpoint,drain} from './oddland-helpers.mjs';
 import {projectGame} from '../src/application/projection.js';
 import {nextQuestPlace} from '../src/core/quest-navigation.js';
 
-test('town districts expose all destinations, with the original twenty canal scenes reachable after loading',()=>{
+test('town districts expose all destinations, with all canal sites reachable after loading',()=>{
   const g=fresh(),model=()=>projectGame(g);
   const links=()=>model().town.links.map(link=>link.name);
   assert.deepEqual(links(),['帰り火亭','旅道具店','灯番組合','坂下町','荷揚げ河岸']);
@@ -23,7 +23,8 @@ test('town districts expose all destinations, with the original twenty canal sce
     }
     town(g,'e2_canal_quarter');
   }
-  assert.equal(sites.size,20);
+  assert.equal(sites.size,24);
+  for(const stop of ['bakery','alley','door','table'])assert.ok(sites.has('e2_q106_'+stop));
   town(g,'hikarigaeri_medical_specimens');
   assert.equal(model().town.name,'標本室');
   assert.equal(model().town.headingPath,'灯帰り › 坂下町 › 医学校');
