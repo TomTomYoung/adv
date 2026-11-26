@@ -36,11 +36,21 @@ export function wakeOnDamage(engine,target){
 export function clearBattleStatuses(data,target){
   for(const id of [...target.statuses])if(statusEffect(data,target,id)?.battleOnly)removeStatus(target,id);
 }
+export function hasActiveStatus(data,state,target,id) {
+  return target.statuses?.includes(id) && dungeonEffectActive(data,state,'status',id);
+}
+export function consumeWaterWard(data,state,target,threat) {
+  if (!hasActiveStatus(data,state,target,'water_ward')) return false;
+  removeStatus(target,'water_ward');
+  state.battle?.log.push(`${target.name ?? data.actors[target.id]?.name}の水の加護が${threat}を防いで消えた。`);
+  return true;
+}
 export function applyStatus(data,state,target,id,duration,level=1){
   if(!data.statuses[id])throw Error(`不明な状態異常: ${id}`);
   if(!statusLevelValid(level))throw Error('状態異常Lvが不正です');
   if(statusEffectAtLevel(data,id,level)?.battleOnly&&!state.battle)return false;
   if(target.hp<=0||!dungeonEffectActive(data,state,'status',id)||(target.statusImmune??data.actors[target.id]?.statusImmune??[]).includes(id))return false;
+  if (id === 'oiled' && consumeWaterWard(data,state,target,'油')) return false;
   const fresh=!target.statuses.includes(id),prior=fresh?1:statusLevel(target,id),nextLevel=fresh?level:Math.max(prior,level);
   if(fresh)target.statuses.push(id);
   if(nextLevel>1)(target.statusLevels??={})[id]=nextLevel;
@@ -127,6 +137,7 @@ export function applyStatusClock(data,state,target,id,clock,maxStats,{lethal=tru
   const mpFixed=effect[`${prefix}MpDamage`]??0,mpRate=effect[`${prefix}MpRate`]??0;
   const hp=Math.max(0,Math.floor(hpFixed)+Math.ceil((maxStats.hp??0)*hpRate));
   const mp=Math.max(0,Math.floor(mpFixed)+Math.ceil((maxStats.mp??0)*mpRate));
+  if (hp && id === 'ablaze' && consumeWaterWard(data,state,target,'火だるまの炎')) return {hp:0,mp:0};
   if(hp)target.hp=Math.max(lethal?0:1,target.hp-hp);
   if(mp)target.mp=Math.max(0,target.mp-mp);
   return {hp,mp};

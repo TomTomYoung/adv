@@ -39,6 +39,9 @@ for (const mode of ['classic', 'grid', 'frontline']) {
       assert.ok(g.dispatch({type:'battle.step'}));
       const spell = hp - actor.hp;
       assert.ok(spell > 0);
+      assert.equal(actor.statuses.includes('ablaze'), oiled);
+      assert.ok(!actor.statuses.includes('oiled'));
+      if (oiled) applyStatus(data, g.state, actor, 'oiled');
       actor.hp = hp;
       applySkill(g, actor, moth, data.skills.torch_play, 'torch_play');
       assert.equal(moth.hp, 0);
@@ -65,6 +68,7 @@ test('油は受け手だけに働き、丸めた火ダメージを倍にする�
   }
   assert.equal(hit('ice'), 9);
   assert.equal(hit('physical'), 9);
+  applyStatus(data, g.state, bug, 'oiled');
   tickStatuses(data, g.state, bug, 'turns');
   applyStatus(data, g.state, bug, 'oiled');
   assert.deepEqual(bug.statusDurations.oiled, {turns:3});

@@ -2,7 +2,7 @@ import {fatalHitHabit} from './monster-habits.js';
 import {familyTurn} from './monster-family-actions.js';
 import {depth, familyAccuracy, familyAfterHit, familyAfterMove, familyIntercept, familyPower, syncFamilyBattle} from './monster-family-field.js';
 import {EMBER_MOTH, hasWhistled, joinReinforcements, mothSummonPositions, summonMoths} from './battle-reinforcements.js';
-import {cleanseCandidates} from './status-effects.js';
+import {cleanseCandidates, consumeWaterWard, hasActiveStatus} from './status-effects.js';
 import {battleAlive,frontlinePresent,frontlineState,removeFrontline,knockbackFrontline,syncFrontlineDefeats} from './frontline-lifecycle.js';
 import {isFrontline,frontPosition,frontlineUnits,frontlineMovePlan,moveFrontline,prepareFrontlineRound,traceFrontline,frontlineRevivePosition} from './battle-frontline.js';
 import {frontlineTargetPlan,frontlineSelections,frontlineProfile} from './frontline-targeting.js';
@@ -191,25 +191,36 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
     const context={source:{...source,stats:{...sourceStats,str:sourceStats.str*factor,int:sourceStats.int*factor}},target:{...target,stats:targetStats}};
     const raw=Math.max(0,effect.formula?engine.value(engine.data.formulas[effect.formula],context):(effect.amount??0)*factor);
     if(effect.type==='damage'){
-      const habit=b && fatalHitHabit(engine.data,target,effect.element);
+      const physical = effect.element === 'physical';
+      const element = physical && hasActiveStatus(engine.data,s,source,'water_infusion') ? 'water' : effect.element;
+      const habit=b && fatalHitHabit(engine.data,target,element);
       if(habit){
+        if (consumeWaterWard(engine.data,s,target,'炎')) continue;
         damageTotal+=burstOnFatalHit(engine,target,habit,habitImpacts);
         break;
       }
       if(critical===null){const chance=checkAccuracy?(series?.snapshot.criticalChance??criticalChance(engine.data,s,source,target)):0;critical=chance>0&&(chance>=1||engine.random()<chance);}
       const guardRate=series?.snapshot.guardRate??guardDamageRate(engine.data,guardLevel(b,target));
-      const elementScale=series?.snapshot.resist[effect.element]??(target.resist?.[effect.element]??engine.data.actors[target.id]?.resist?.[effect.element]??1)*buffResistance(engine.data,dungeonBuffs(engine.data,s),unitKey(target),effect.element)*(dungeonEffectActive(engine.data,s,'status','wet')?wetResistance(engine.data,target,effect.element):1);
-      const power=(effect.element==='physical'?physicalPower:1)*dungeonDamageScale(engine.data,s,effect.element)*(powers[effect.element==='physical'?'physicalPower':'magicPower']??1)*(powers.elementPower?.[effect.element]??1);
-      const fireRate = effect.element === 'fire' ? series?.snapshot.fireDamageTaken ?? fireDamageTaken(engine.data, s, target) : 1;
+      const elementScale=series?.snapshot.resist[element]??(target.resist?.[element]??engine.data.actors[target.id]?.resist?.[element]??1)*buffResistance(engine.data,dungeonBuffs(engine.data,s),unitKey(target),element)*(dungeonEffectActive(engine.data,s,'status','wet')?wetResistance(engine.data,target,element):1);
+      const power=(physical?physicalPower:1)*dungeonDamageScale(engine.data,s,element)*(powers[physical?'physicalPower':'magicPower']??1)*(powers.elementPower?.[element]??1);
+      const fireRate = element === 'fire' ? fireDamageTaken(engine.data, s, target) : 1;
       if(feedback){feedback.critical=Boolean(critical);feedback.guarded=guardRate<1;feedback.weak=elementScale*fireRate>1;feedback.resisted=elementScale*fireRate<1;}
       const taken=series?.snapshot.taken??(target.instance?1:(passives(engine.data,s,target.id).damageTaken??1));
       const familyScale=familyPower(engine,source,target);
       let damage=guardRate===0?0:Math.max(1,Math.floor(Math.floor(raw)*power*guardRate*elementScale*taken*familyScale*(critical?CRITICAL_DAMAGE_MULTIPLIER:1)));
       if(series?.basis==='final'){const index=skill.effects.indexOf(effect);series.finalBase[index]??=damage;damage=Math.max(0,Math.floor(series.finalBase[index]*series.factor));}
       if(series?.basis==='power'&&series.factor===0)damage=0;
+      if (element === 'fire' && damage > 0 && consumeWaterWard(engine.data,s,target,'炎')) {
+        if (feedback) { feedback.guarded = true; feedback.weak = false; }
+        continue;
+      }
       if (fireRate !== 1) damage = Math.floor(damage * fireRate);
-      if(effect.element==='physical')damage=takePhysicalHit(engine.data,b,unitKey(target),damage,dungeonBuffs(engine.data,s));
+      if(physical)damage=takePhysicalHit(engine.data,b,unitKey(target),damage,dungeonBuffs(engine.data,s));
       target.hp=Math.max(0,target.hp-damage);damageTotal+=damage;recordDefeated(engine);(b?.log??s.log).push(`${enemySource?source.name:engine.data.actors[source.id].name}の${skill.name}。${critical?'クリティカル！':''}${targetName}に${damage}。`);
+      if (damage > 0 && element === 'fire' && hasActiveStatus(engine.data,s,target,'oiled')) {
+        removeStatus(target,'oiled');
+        if (applyStatus(engine.data,s,target,'ablaze')) (b?.log??s.log).push(`${targetName}の油に引火し、火だるまになった。`);
+      }
       if(damage>0&&!wakeChecked){wakeOnDamage(engine,target);wakeChecked=true;}
     }
     if(effect.type==='heal'){
@@ -641,7 +652,7 @@ function fireDamageTaken(data, state, target) {
 
 function damageSnapshot(engine,source,target,enemySource){
  const {data:d,state:s}=engine;
- return {fireDamageTaken:fireDamageTaken(d,s,target),accuracy:buffAccuracy(d,s.battle,source,statusAccuracy(d,s,source)),sourceStats:clone(enemySource?enemyStats(engine,source):engine.stats(source.id)),targetStats:clone(target.instance?enemyStats(engine,target):engine.stats(target.id)),guardRate:guardDamageRate(d,guardLevel(s.battle,target)),taken:target.instance?1:passives(d,s,target.id).damageTaken??1,criticalChance:criticalChance(d,s,source,target),resist:Object.fromEntries(['physical','fire','ice','lightning','water','light','earth','dark'].map(e=>[e,(target.resist?.[e]??d.actors[target.id]?.resist?.[e]??1)*buffResistance(d,dungeonBuffs(d,s),unitKey(target),e)*(dungeonEffectActive(d,s,'status','wet')?wetResistance(d,target,e):1)]))};
+ return {accuracy:buffAccuracy(d,s.battle,source,statusAccuracy(d,s,source)),sourceStats:clone(enemySource?enemyStats(engine,source):engine.stats(source.id)),targetStats:clone(target.instance?enemyStats(engine,target):engine.stats(target.id)),guardRate:guardDamageRate(d,guardLevel(s.battle,target)),taken:target.instance?1:passives(d,s,target.id).damageTaken??1,criticalChance:criticalChance(d,s,source,target),resist:Object.fromEntries(['physical','fire','ice','lightning','water','light','earth','dark'].map(e=>[e,(target.resist?.[e]??d.actors[target.id]?.resist?.[e]??1)*buffResistance(d,dungeonBuffs(d,s),unitKey(target),e)*(dungeonEffectActive(d,s,'status','wet')?wetResistance(d,target,e):1)]))};
 }
 function frontlineReact(engine,reactor,on,attacker){
  const {data:d,state:s}=engine,b=s.battle;if(!isFrontline(s)||!battleAlive(s,reactor))return false;

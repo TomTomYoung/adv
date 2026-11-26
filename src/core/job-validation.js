@@ -62,6 +62,17 @@ export function validateJobs(data){
   for(const id of Object.keys(data.skills))if(own(data.fieldAbilities,id))fail(id,'戦闘・探索技能のID重複');
   for(const spec of [...Object.values(data.enemies),...Object.values(data.encounters)])if(spec.preemptive!==undefined&&!preemptiveValid(spec.preemptive))fail(spec.id??'encounter','先制定義不正');
   if(!isRecord(profile)||!isRecord(profile.equipmentTypes)||!list(profile.commonSkills))return ['職業プロファイル不正'];
+  if (profile.personalSkills !== undefined) {
+    if (!isRecord(profile.personalSkills)) fail('personalSkills','隊員別技能の定義が不正です');
+    else for (const [actor, skills] of Object.entries(profile.personalSkills)) {
+      ref(data.actors,actor,'personalSkills');
+      if (!isRecord(skills)) { fail(actor,'個人技能の習得表が不正です'); continue; }
+      for (const [skill, level] of Object.entries(skills)) {
+        ref(data.skills,skill,actor);
+        if (!integer(level,1,data.system.maxLevel)) fail(skill,'個人技能の習得レベルが不正です');
+      }
+    }
+  }
   for(const id of profile.commonSkills){ref(data.skills,id,'commonSkills');if(!['attack','guard'].includes(id))fail('commonSkills','共通技能は攻撃・防御です');}
   if(!profile.commonSkills.includes('attack')||!profile.commonSkills.includes('guard'))fail('commonSkills','攻撃・防御が必要です');
   for(const slot of ['weapon','armor','charm'])if(!list(profile.equipmentTypes[slot])||!profile.equipmentTypes[slot].length)fail('equipmentTypes',`${slot}不正`);

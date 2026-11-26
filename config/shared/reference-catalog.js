@@ -30858,6 +30858,66 @@ export const referenceData={
     {
       "file": "jobs.json",
       "path": [
+        "skills",
+        "water_wall",
+        "effects",
+        0,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "water_ward"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "water_edge",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "water_edge",
+        "selfEffects",
+        0,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "water_infusion"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "water_bash",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "water_bash",
+        "selfEffects",
+        0,
+        "status"
+      ],
+      "kind": "statuses",
+      "id": "water_ward"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
         "shopGoods",
         0,
         "item"
@@ -48489,6 +48549,15 @@ export const referenceData={
       },
       "oil_spray": {
         "name": "油吹き"
+      },
+      "water_wall": {
+        "name": "ウォーターウォール"
+      },
+      "water_edge": {
+        "name": "ウォーターエッジ"
+      },
+      "water_bash": {
+        "name": "ウォーターバッシュ"
       }
     },
     "items": {
@@ -49843,6 +49912,15 @@ export const referenceData={
       },
       "oiled": {
         "name": "油状態"
+      },
+      "ablaze": {
+        "name": "火だるま"
+      },
+      "water_ward": {
+        "name": "水の加護"
+      },
+      "water_infusion": {
+        "name": "水属性付与"
       }
     },
     "shops": {
@@ -50259,6 +50337,9 @@ export const referenceData={
       },
       "skillActions": {
         "name": "skillActions"
+      },
+      "personalSkills": {
+        "name": "personalSkills"
       }
     },
     "buffs": {
@@ -77882,6 +77963,27 @@ export const referenceData={
       "path": [
         "skills",
         "oil_spray"
+      ]
+    },
+    "skills/water_wall": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "water_wall"
+      ]
+    },
+    "skills/water_edge": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "water_edge"
+      ]
+    },
+    "skills/water_bash": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "water_bash"
       ]
     },
     "fieldAbilities/survey": {

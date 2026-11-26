@@ -62,6 +62,7 @@ const statusLevelText=(id,def,level)=>{
   if(effect.criticalTakenChance!==undefined)parts.push(`被クリティカル率+${Math.round(effect.criticalTakenChance*1000)/10}ポイント`);
   if(effect.guaranteedCritical)parts.push('自分の命中したHP攻撃が確定クリティカル');
   if(effect.guaranteedCriticalTaken)parts.push('自分に命中したHP攻撃が確定クリティカル');
+  if (['oiled','water_ward','water_infusion'].includes(id)) parts.push(def.description);
   if(effect.fireDamageTaken!==undefined)parts.push(`受ける火属性ダメージ×${effect.fireDamageTaken}`);
   if(effect.battleOnly)parts.push(`持続${durationText(effect.duration)}`,'戦闘終了時に解除');
   for(const kind of effect.blockedActions??[])parts.push(`${{magic:'魔法',skills:'スキル',items:'アイテム'}[kind]}使用不可`);
@@ -83,6 +84,7 @@ export function statusCatalog(data,{date}={}){
     '## 共通管理の状態',''];
   for(const [id,def] of entries){
     const sources=[...statusSkillSources(data,id),...(trapSources[id]??[]).map(v=>`標準トラップ：${v}`)];
+    if (id === 'ablaze') sources.push('油状態で火属性ダメージを受けたとき');
     lines.push(`### ${def.name} (${id})`,'',`分類：${categoryLabels[def.category]??'身体・環境状態'}${def.beneficial?'・有利な状態':''}${def.battleOnly?'・戦闘限定':''}。`,`持続：${def.battleOnly?'各Lvの持続、または戦闘終了まで':durationText(def.duration)}。`,`付与元：${sources.join(' / ')||'環境・スクリプト'}。`,'');
     for(let level=1;level<=3;level++)lines.push(`#### Lv${level}`,'',def.levels?.[level]||level===1?`効果：${statusLevelText(id,def,level)}。`:'効果：未設定。','');
   }

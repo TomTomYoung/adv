@@ -157,7 +157,7 @@ test('early floors draw the weighted group on each walking encounter and resume 
   const expected = [
     [[1, 40], [2, 25], [1, 15], [1, 20]],
     [[2, 25], [2, 30], [3, 30], [2, 15]],
-    [[3, 30], [3, 20], [4, 25], [5, 10], [3, 15]]
+    [[3, 30], [3, 20], [4, 25], [5, 10], [3, 15], [3, 4], [3, 4], [3, 4], [3, 8]]
   ];
   for (const [index, groups] of expected.entries()) {
     const floor = index + 1, g = newGame();
@@ -166,11 +166,12 @@ test('early floors draw the weighted group on each walking encounter and resume 
     g.teleport(map.id, map.entrance.x, map.entrance.y, map.entrance.facing);
     assert.deepEqual(normalEncounterPool(g.data, g.state).pool, map.encounterPool);
     const saved = g.save();
+    const total = groups.reduce((sum, [,weight]) => sum + weight, 0);
     let boundary = 0;
     for (const [i, [count, weight]] of groups.entries()) {
       g.load(saved);
       g.state.steps = g.data.system.encounterCheckSteps - 1;
-      const rolls = [0, (boundary + 0.5) / 100];
+      const rolls = [0, (boundary + 0.5) / total];
       g.random = () => rolls.shift() ?? 0.5;
       assert.ok(g.dispatch({type: 'move', direction: 'forward'}));
       const battle = g.state.battle;
@@ -184,7 +185,7 @@ test('early floors draw the weighted group on each walking encounter and resume 
       assert.deepEqual(copy.state.battle, battle);
       boundary += weight;
     }
-    assert.equal(boundary, 100);
+    assert.equal(boundary, total);
   }
 });
 
@@ -219,7 +220,7 @@ test('Ada meets early-floor normal attack breakpoints with opening-shop weapons'
       }
       g.load(saved);
     }
-    assert.equal(tested.size, 3);
+    assert.equal(tested.size, floor === 3 ? 5 : 3);
   }
 });
 

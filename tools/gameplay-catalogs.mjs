@@ -28,6 +28,9 @@ const usage=(data,id,api)=>{
   const values=[];
   const product=data.expedition?.products[id];if(product)values.push(`技能教習所：宝石${product.price}、${product.tier===1?'給油修理':'中継起動'}後。対応職：${compact(product.jobs.map(j=>data.jobs[j].name))}`);
   if(api==='battle.skill'&&(data.jobProfile?.commonSkills??[]).includes(id))values.push('全職共通');
+  for (const [actor, skills] of Object.entries(data.jobProfile?.personalSkills ?? {})) {
+    if (skills[id]) values.push(`${data.actors[actor].name} Lv${skills[id]}`);
+  }
   const job=grants(data,id,api);if(job.length)values.push(`職業：${compact(job)}`);
   if(api==='battle.skill'){const enemies=enemyUsers(data,id);if(enemies.length)values.push(`魔物：${compact(enemies)}`);const items=itemUsers(data,id);if(items.length)values.push(`道具：${compact(items)}`);}
   return values.length?values.join(' / '):'定義のみ・直接参照';

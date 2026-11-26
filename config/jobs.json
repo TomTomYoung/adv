@@ -44,7 +44,14 @@
     },
     "skillActions": [
       "training_drill"
-    ]
+    ],
+    "personalSkills": {
+      "ada": {
+        "water_wall": 3,
+        "water_edge": 4,
+        "water_bash": 4
+      }
+    }
   },
   "initialJobs": {
     "ada": "warrior",
@@ -5239,11 +5246,62 @@
       "name": "油吹き",
       "mp": 3,
       "target": "enemy",
-      "description": "敵1体を油状態にします。3ターンの間、その対象が受ける火属性ダメージは2倍になります。",
+      "description": "敵1体を3ターン油状態にします。火属性ダメージを受けると、その一撃が2倍になり、火だるまに移行します。",
       "effects": [
         {
           "type": "status",
           "status": "oiled"
+        }
+      ]
+    },
+    "water_wall": {
+      "name": "ウォーターウォール",
+      "mp": 4,
+      "target": "all_allies",
+      "maxTargets": 5,
+      "description": "生存する味方全員に水の加護を付与。各自が次に受ける油か炎を1回防ぎます。",
+      "effects": [
+        {
+          "type": "status",
+          "status": "water_ward"
+        }
+      ]
+    },
+    "water_edge": {
+      "name": "ウォーターエッジ",
+      "mp": 3,
+      "target": "enemy",
+      "description": "敵1体を水属性で斬り、自分に3ターンの水属性付与。通常攻撃と物理技が水属性になります。",
+      "effects": [
+        {
+          "type": "damage",
+          "formula": "physical",
+          "element": "water"
+        }
+      ],
+      "selfEffects": [
+        {
+          "type": "status",
+          "status": "water_infusion"
+        }
+      ]
+    },
+    "water_bash": {
+      "name": "ウォーターバッシュ",
+      "mp": 4,
+      "target": "enemy",
+      "description": "敵1体を水属性で打ち、自分に水の加護を付与。次に受ける油か炎を1回防ぎます。",
+      "effects": [
+        {
+          "type": "damage",
+          "formula": "physical",
+          "element": "water"
+        }
+      ],
+      "selfEffects": [
+        {
+          "type": "status",
+          "status": "water_ward"
         }
       ]
     }
@@ -7127,7 +7185,10 @@
     "torch_play": "skill_fire",
     "moth_whistle": "guard",
     "torch_festival": "skill_fire",
-    "oil_spray": "skill_tide"
+    "oil_spray": "skill_tide",
+    "water_wall": "skill_ward",
+    "water_edge": "skill_tide",
+    "water_bash": "skill_tide"
   },
   "gridProfiles": {
     "power": {
@@ -9381,6 +9442,42 @@
         "shape": "single"
       },
       "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "water_wall": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 5
+      },
+      "area": {
+        "shape": "side_all"
+      },
+      "trajectory": "indirect",
+      "friendlyFire": false
+    },
+    "water_edge": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 1
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "direct",
+      "friendlyFire": false
+    },
+    "water_bash": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 1
+      },
+      "area": {
+        "shape": "single"
+      },
+      "trajectory": "direct",
       "friendlyFire": false
     }
   },
@@ -13933,6 +14030,78 @@
       }
     },
     "oil_spray": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "water_wall": {
+      "aim": "unit",
+      "range": {
+        "min": 0,
+        "max": 2
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "side_all"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "water_edge": {
+      "aim": "unit",
+      "range": {
+        "min": 1,
+        "max": 5
+      },
+      "allyRange": {
+        "min": 0,
+        "max": 2
+      },
+      "area": {
+        "shape": "single"
+      },
+      "friendlyFire": false,
+      "resolution": "simultaneous",
+      "order": "front_to_back",
+      "reevaluate": "alive",
+      "damageSeries": {
+        "mode": "constant",
+        "basis": "power",
+        "start": 1,
+        "step": 0
+      }
+    },
+    "water_bash": {
       "aim": "unit",
       "range": {
         "min": 1,
