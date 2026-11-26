@@ -65,11 +65,12 @@ const buffEffectText=(data,id)=>{
   values.push(b.consume==='next_action'?'次の本人の行動機会に消費':`持続 ${b.turns}ターン`);
   return values.join(' / ');
 };
-function effectCalculation(data,skillId,effect,prefix='計算式'){
+function effectCalculation(data,skillId,effect,prefix='計算式',priorEffects=[]){
   const base=`max(0, ${rawText(data,effect)})`;
   if(effect.type==='damage'){
+    const guardNote=priorEffects.some(e=>e.type==='stun'&&e.breakGuard)?'防御解除時のガード補正は1。':'防御Lv3では0。';
     const element=elementLabels[effect.element]??effect.element??'未指定';
-    return `${prefix}：基礎値 = ${base}。最終ダメージ = max(1, floor(floor(基礎値) × 威力補正 × ガード補正 × 属性補正 × 被ダメージ補正 × クリティカル補正))。防御Lv3では0。属性：${element}。`;
+    return `${prefix}：基礎値 = ${base}。最終ダメージ = max(1, floor(floor(基礎値) × 威力補正 × ガード補正 × 属性補正 × 被ダメージ補正 × クリティカル補正))。${guardNote}属性：${element}。`;
   }
   if(effect.type==='purge_undead')return `${prefix}：Frontlineで戦闘不能のまま残る不死者の敵だけを除去。生存者には後続の光攻撃を適用し、味方は除去しません。`;
   if(effect.type==='heal'){
@@ -80,6 +81,7 @@ function effectCalculation(data,skillId,effect,prefix='計算式'){
   if(effect.type==='restore_mp')return `${prefix}：MP回復量 = min(最大MP - 現在MP, floor(${base}))。`;
   if(effect.type==='drain_mp')return `${prefix}：MP減少量 = min(現在MP, floor(${base}))。`;
   if(effect.type==='status')return `${prefix}：状態異常「${data.statuses?.[effect.status]?.name??effect.status}」を ${chanceText(effect.chance)} で付与${effect.duration!==undefined?`、持続 ${effect.duration}`:''}。`;
+  if(effect.type==='stun'&&effect.breakGuard)return `${prefix}：防御中の対象の防御を解除し、次の行動機会を${effect.count??1}回封じる。`;
   if(effect.type==='stun')return `${prefix}：次の行動機会を${effect.count??1}回消費（${effect.stack==='add'?'加算':'更新'}）、付与率${chanceText(effect.chance)}。`;
   if(effect.type==='cleanse'&&effect.statuses)return `${prefix}：${effect.statuses.map(id=>data.statuses?.[id]?.name??id).join('・')}から指定順に一つ解除。`;
   if(effect.type==='cleanse')return `${prefix}：${effect.status?`状態異常「${data.statuses?.[effect.status]?.name??effect.status}」を解除`:'解除可能な状態異常を解除'}。`;
@@ -92,7 +94,7 @@ function effectCalculation(data,skillId,effect,prefix='計算式'){
 }
 const calculationLines=(data,id,spec)=>{
   const lines=[];
-  for(const effect of spec.effects??[])lines.push(effectCalculation(data,id,effect,'計算式'));
+  for(const [i,effect] of (spec.effects??[]).entries())lines.push(effectCalculation(data,id,effect,'計算式',spec.effects.slice(0,i)));
   for(const effect of spec.selfEffects??[])lines.push(effectCalculation(data,id,effect,'自己効果'));
   return lines;
 };

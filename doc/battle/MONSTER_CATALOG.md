@@ -293,7 +293,7 @@ wild_pair_2：ドリルモグラ×1・陶器アルマジロ×1。逃走可。
 <img src="../../assets/images/monsters/ceramic_armadillo.webp" width="160" alt="陶器アルマジロ">
 
 画像ID：monster_ceramic_armadillo。実ファイル：[assets/images/monsters/ceramic_armadillo.webp](../../assets/images/monsters/ceramic_armadillo.webp)。
-画像共有：殻砕き獣・根殻甲・厚殻アルマジロ（低位）。
+画像共有：殻砕き獣・殻甲アルマジロ・厚殻アルマジロ（低位）。
 
 発想：アルマジロ＋陶器。参照：M008。地域分類：塩哭きの廃坑。
 
@@ -872,7 +872,7 @@ AIの選択順：
 
 遭遇と参照先：
 
-garden_root_guardian：大剪定虫×1・根殻甲×1。逃走可。
+garden_root_guardian：大剪定虫×1・殻甲アルマジロ×1。逃走可。
 有限増援予定：蜜蝋ランプバチ（最短3巡、enemy_1撃破後、enemy_0生存中）。初期配置には含めません。
 戦闘開始命令：1スクリプト。garden.root_gate.10。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
 
@@ -3692,7 +3692,7 @@ waterway_sluice_guardian：水門獣×1。逃走可。
 <img src="../../assets/images/monsters/ceramic_armadillo.webp" width="160" alt="殻砕き獣">
 
 画像ID：monster_ceramic_armadillo。実ファイル：[assets/images/monsters/ceramic_armadillo.webp](../../assets/images/monsters/ceramic_armadillo.webp)。
-画像共有：陶器アルマジロ・根殻甲・厚殻アルマジロ（低位）。
+画像共有：陶器アルマジロ・殻甲アルマジロ・厚殻アルマジロ（低位）。
 
 基礎能力：HP 850 / MP 0 / STR 40 / VIT 30 / AGI 8 / INT 18。報酬：110G / 650EXP。
 宝箱：傷薬 1個 / 12.5％。
@@ -3729,24 +3729,26 @@ AIの選択順：
 
 遭遇と参照先：
 
-garden_root_guardian：大剪定虫×1・根殻甲×1。逃走可。
+garden_root_guardian：大剪定虫×1・殻甲アルマジロ×1。逃走可。
 有限増援予定：蜜蝋ランプバチ（最短3巡、enemy_1撃破後、enemy_0生存中）。初期配置には含めません。
 戦闘開始命令：1スクリプト。garden.root_gate.10。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
 
 <a id="monster-garden_root_shell"></a>
 
-### 根殻甲 (garden_root_shell)
+### 殻甲アルマジロ (garden_root_shell)
 
-<img src="../../assets/images/monsters/ceramic_armadillo.webp" width="160" alt="根殻甲">
+<img src="../../assets/images/monsters/ceramic_armadillo.webp" width="160" alt="殻甲アルマジロ">
 
 画像ID：monster_ceramic_armadillo。実ファイル：[assets/images/monsters/ceramic_armadillo.webp](../../assets/images/monsters/ceramic_armadillo.webp)。
 画像共有：陶器アルマジロ・殻砕き獣・厚殻アルマジロ（低位）。
+
+習性：転がり甲羅。2手番続けて防御し、各巡1回、仲間を狙った単体の物理攻撃に転がり込んで引き受ける。次の手番は甲羅を開いて通常攻撃する。
 
 基礎能力：HP 160 / MP 0 / STR 24 / VIT 18 / AGI 7 / INT 8。報酬：24G / 100EXP。
 宝箱：柔らかな植物繊維 1個 / 12.5％。
 属性倍率：physical 0.8 / fire 1.3。
 
-AIの選択順：
+転がり甲羅を外したときの行動：
 
 1. 優先度10、奇数ラウンド：防御 (guard)、MP0、対象は自身。
 2. 優先度0、条件なし：攻撃 (attack)、MP0、対象は探索隊の生存者からランダムに1人。
@@ -3755,7 +3757,7 @@ AIの選択順：
 
 千変の迷宮の通常遭遇：地下4〜10階、地下45〜69階。
 
-garden_root_guardian：大剪定虫×1・根殻甲×1。逃走可。
+garden_root_guardian：大剪定虫×1・殻甲アルマジロ×1。逃走可。
 有限増援予定：蜜蝋ランプバチ（最短3巡、enemy_1撃破後、enemy_0生存中）。初期配置には含めません。
 戦闘開始命令：1スクリプト。garden.root_gate.10。全配置の照合は[イベント一覧](../scenarios/EVENT_CATALOG.md)を参照してください。
 
@@ -3900,7 +3902,7 @@ waterway_shallow_b：深水門ワニ（低位）×1・大水車ビーバー（�
 <img src="../../assets/images/monsters/ceramic_armadillo.webp" width="160" alt="厚殻アルマジロ（低位）">
 
 画像ID：monster_ceramic_armadillo。実ファイル：[assets/images/monsters/ceramic_armadillo.webp](../../assets/images/monsters/ceramic_armadillo.webp)。
-画像共有：陶器アルマジロ・殻砕き獣・根殻甲。
+画像共有：陶器アルマジロ・殻砕き獣・殻甲アルマジロ。
 
 設計上の役割：初回だけ防御。硬い殻には火が有効。
 

@@ -1,3 +1,4 @@
+import {abilityCategory} from './ability-category.js';
 import {fatalHitHabit} from './monster-habits.js';
 import {familyTurn} from './monster-family-actions.js';
 import {depth, familyAccuracy, familyAfterHit, familyAfterMove, familyIntercept, familyPower, syncFamilyBattle} from './monster-family-field.js';
@@ -191,10 +192,23 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
     b.log.push(`${targetName}の飛び道具の結界が${skill.name}を防いで消えた。`);
     return 0;
   }
+  let brokeGuard=false;
   for(const effect of skill.effects){
     if(effect.type==='frontline_remove'){removeFrontline(engine,target);break;}
     if(effect.type==='frontline_knockback'){const loss=knockbackFrontline(engine,target,effect);damageTotal+=loss;if(loss)wakeOnDamage(engine,target);recordDefeated(engine);continue;}
-    if(effect.type==='stun'){if(applyStun(engine,target,effect))(b?.log??s.log).push(`${targetName}はスタンした。`);continue;}
+    if(effect.type==='stun'){
+      if(effect.breakGuard && !guardLevel(b,target))continue;
+      if(applyStun(engine,target,effect)){
+        if(effect.breakGuard){
+          clearGuard(b,target);
+          brokeGuard=true;
+          if(target.rollingShellTurns)target.rollingShellTurns=2;
+          b.log.push(`${targetName}の防御が崩れた。`);
+        }
+        b.log.push(`${targetName}はスタンした。`);
+      }
+      continue;
+    }
     if(effect.type==='guard'){
       applyGuard(b,target,effect.level??1);
       (b?.log??s.log).push(`${targetName}は守りを固めた。`);continue;
@@ -219,7 +233,7 @@ export function applySkill(engine,source,target,skill,skillId,enemySource=false,
         break;
       }
       if(critical===null){const chance=checkAccuracy?(series?.snapshot.criticalChance??criticalChance(engine.data,s,source,target)):0;critical=chance>0&&(chance>=1||engine.random()<chance);}
-      const guardRate=series?.snapshot.guardRate??guardDamageRate(engine.data,guardLevel(b,target));
+      const guardRate=brokeGuard?1:(series?.snapshot.guardRate??guardDamageRate(engine.data,guardLevel(b,target)));
       const elementScale=series?.snapshot.resist[element]??(target.resist?.[element]??engine.data.actors[target.id]?.resist?.[element]??1)*buffResistance(engine.data,dungeonBuffs(engine.data,s),unitKey(target),element)*(dungeonEffectActive(engine.data,s,'status','wet')?wetResistance(engine.data,target,element):1);
       const power=(physical?physicalPower:1)*dungeonDamageScale(engine.data,s,element)*(powers[physical?'physicalPower':'magicPower']??1)*(powers.elementPower?.[element]??1);
       const fireRate = element === 'fire' ? fireDamageTaken(engine.data, s, target) : 1;
@@ -307,6 +321,23 @@ function sampleSkillTargets(engine,source,skill,skillId,targets) {
   while (selected.length < limit) selected.push(pool.splice(Math.floor(engine.random()*pool.length),1)[0]);
   return selected;
 }
+const hasRollingShell=(data,unit)=>data.enemies[unit.id]?.habits?.includes('rolling_shell');
+
+function rollingShellIntercept(engine,source,targets,skill,id){
+  const {state:s,data}=engine,b=s.battle,target=targets[0];
+  if(source.instance || targets.length!==1 || !target.instance || !battleAlive(s,target) ||
+     skill.target!=='enemy' || abilityCategory(id)==='magic' ||
+     !skill.effects.some(e=>e.type==='damage' && (e.element==='physical' || e.formula==='physical')))return targets;
+  const profile=isFrontline(s)?frontlineProfile(data,source,skill,id):targetingProfile(data,source,skill,id);
+  if(profile.area.shape!=='single')return targets;
+  const shell=b.enemies.find(unit=>unit!==target && unit.guard && hasRollingShell(data,unit) &&
+    unit.rollingShellRound!==b.round && battleAlive(s,unit) && !stunned(b,unit) && !statusControl(data,s,unit));
+  if(!shell)return targets;
+  shell.rollingShellRound=b.round;
+  b.log.push(`${shell.name}は転がり甲羅で${target.name}への攻撃に割り込んだ。`);
+  return [shell];
+}
+
 function useSkill(engine,source,targets,skill,skillId,enemySource=false,itemId=null){
   const physicalPower=actionPower(engine.data,dungeonBuffs(engine.data,engine.state),unitKey(source));
   const origin=describeTarget(engine,unitKey(source)),sourceName=source.name??engine.data.actors[source.id]?.name??'対象';
@@ -327,7 +358,8 @@ function useSkill(engine,source,targets,skill,skillId,enemySource=false,itemId=n
   } else targets=misfireTargets(engine,source,targets,skill,skillId,itemId);
   if(!torchPool&&spatial(engine.state)&&targets.length===1&&!targets[0].instance)targets=[coveredTarget(engine,targets[0],skill)];
   targets=sampleSkillTargets(engine,source,skill,skillId,targets);
-  targets=familyIntercept(engine,source,targets,skill);
+  const defended=familyIntercept(engine,source,targets,skill);
+  targets=defended[0]===targets[0]?rollingShellIntercept(engine,source,defended,skill,skillId):defended;
   const strikes = skill.hitCount ? targets.flatMap(target => Array(skill.hitCount).fill(target)) : targets;
   const ignitesSource = hasActiveStatus(engine.data,engine.state,source,'oiled') && skill.effects.some(e=>e.type==='damage' && e.element==='fire');
   const habitImpacts=[];
@@ -501,10 +533,22 @@ function familyCast(engine,source,targets,skillId) {
   return performSkill(engine,source,{skill,skillId,targets});
 }
 
+const shellAttack=[{priority:0,skill:'attack',target:'random'}];
+
 function performEnemyAction(engine,enemy,bonus=false){
   const s=engine.state,b=s.battle;
     if(!battleAlive(s,enemy))return;clearGuard(b,enemy);if(consumeStun(engine,enemy)||actionOverridden(engine,enemy))return;
-    if(enemy.classSkill&&b.familyField) {
+    const rollingShell=hasRollingShell(engine.data,enemy);
+    if(rollingShell){
+      if((enemy.rollingShellTurns??0)<2 && !statusAbilityReason(engine.data,s,enemy,'guard') &&
+         !dungeonAbilityReason(engine.data,s,'guard','battle.skill') && dungeonEffectActive(engine.data,s,'skill','guard')){
+        performSkill(engine,enemy,{skill:engine.data.skills.guard,skillId:'guard',targets:[enemy]});
+        if(enemy.guard)enemy.rollingShellTurns=(enemy.rollingShellTurns??0)+1;
+        return;
+      }
+      delete enemy.rollingShellTurns;
+    }
+    if(!rollingShell&&enemy.classSkill&&b.familyField) {
       if (statusAbilityReason(engine.data,s,enemy,enemy.classSkill)||dungeonAbilityReason(engine.data,s,enemy.classSkill,'battle.skill')) {
         const victim=s.members.map(id=>s.actors[id]).find(u=>battleAlive(s,u));
         if(victim)familyCast(engine,enemy,[victim],'attack');
@@ -516,10 +560,11 @@ function performEnemyAction(engine,enemy,bonus=false){
       },bonus);
       return;
     }
-    if(isFrontline(s)){frontlineEnemyAction(engine,enemy);return;}
-    if(isGrid(s)){gridEnemyAction(engine,enemy);return;}
+    const rules=rollingShell?shellAttack:enemy.ai;
+    if(isFrontline(s)){frontlineEnemyAction(engine,enemy,rules);return;}
+    if(isGrid(s)){gridEnemyAction(engine,enemy,rules);return;}
     const alive=s.members.filter(id=>battleAlive(s,s.actors[id]));if(!alive.length)return;
-    const rule=[...enemy.ai].sort((a,c)=>c.priority-a.priority).find(r=>!statusAbilityReason(engine.data,s,enemy,r.skill)&&!dungeonAbilityReason(engine.data,s,r.skill,'battle.skill')&&(!r.condition||engine.value(r.condition,enemyContext(engine,enemy)))&&enemy.mp>=engine.data.skills[r.skill].mp&&supportTargets(engine,r)?.length!==0&&torchTargets(engine,enemy,r.skill)?.length!==0);
+    const rule=[...rules].sort((a,c)=>c.priority-a.priority).find(r=>!statusAbilityReason(engine.data,s,enemy,r.skill)&&!dungeonAbilityReason(engine.data,s,r.skill,'battle.skill')&&(!r.condition||engine.value(r.condition,enemyContext(engine,enemy)))&&enemy.mp>=engine.data.skills[r.skill].mp&&supportTargets(engine,r)?.length!==0&&torchTargets(engine,enemy,r.skill)?.length!==0);
     if(!rule){b.log.push(`${enemy.name}は使える行動がない。`);return;}
     const skill=engine.data.skills[rule.skill], torchPool=torchTargets(engine,enemy,rule.skill);
     if (torchPool) { performSkill(engine,enemy,{skill,skillId:rule.skill,targets:torchPool}); return; }
@@ -669,9 +714,9 @@ function gridConfusedAction(engine,source){
   if(choices.length)performSkill(engine,source,choices[Math.floor(engine.random()*choices.length)]);
   else s.battle.log.push(`${source.name??d.actors[source.id].name}は使える行動がない。`);
 }
-function gridEnemyAction(engine,enemy){
+function gridEnemyAction(engine,enemy,rules){
   const {state:s,data:d}=engine,b=s.battle;
-  for(const rule of [...enemy.ai].sort((a,c)=>c.priority-a.priority)){
+  for(const rule of [...rules].sort((a,c)=>c.priority-a.priority)){
     if(rule.condition&&!engine.value(rule.condition,enemyContext(engine,enemy)))continue;
     let choices=gridEnemyChoices(engine,enemy,rule.skill);
     if(rule.target==='self')choices=choices.filter(p=>p.targets.length===1&&p.targets[0]===enemy);
@@ -683,11 +728,11 @@ function gridEnemyAction(engine,enemy){
   // Score all legal steps without changing state or RNG. Prefer a step which
   // reaches any usable attack's distance band, then the closest opponent.
   const foes=s.members.map(id=>s.actors[id]).filter(a=>battleAlive(s,a)),from=position(s,enemy);
-  const skills=enemy.ai.filter(r=>(!r.condition||engine.value(r.condition,enemyContext(engine,enemy)))&&!statusAbilityReason(d,s,enemy,r.skill)&&!dungeonAbilityReason(d,s,r.skill,'battle.skill')&&enemy.mp>=d.skills[r.skill].mp).map(r=>targetingProfile(d,enemy,d.skills[r.skill],r.skill));
-  const score=p=>enemy.ai.some(r=>(!r.condition||engine.value(r.condition,enemyContext(engine,enemy)))&&gridEnemyChoices(engine,enemy,r.skill,{origin:p}).length)?-1:Math.min(...foes.flatMap(t=>skills.map(v=>{const n=distance(p,position(s,t));return Math.max(v.range.min-n,0,n-v.range.max)*10+n;})));
+  const skills=rules.filter(r=>(!r.condition||engine.value(r.condition,enemyContext(engine,enemy)))&&!statusAbilityReason(d,s,enemy,r.skill)&&!dungeonAbilityReason(d,s,r.skill,'battle.skill')&&enemy.mp>=d.skills[r.skill].mp).map(r=>targetingProfile(d,enemy,d.skills[r.skill],r.skill));
+  const score=p=>rules.some(r=>(!r.condition||engine.value(r.condition,enemyContext(engine,enemy)))&&gridEnemyChoices(engine,enemy,r.skill,{origin:p}).length)?-1:Math.min(...foes.flatMap(t=>skills.map(v=>{const n=distance(p,position(s,t));return Math.max(v.range.min-n,0,n-v.range.max)*10+n;})));
   const steps=gridCells().map(p=>gridMovePlan(s,enemy,p,engine.data)).filter(p=>p.ok).sort((a,c)=>score(a.to)-score(c.to));
   if(steps.length&&score(steps[0].to)<score(from)){b.grid.positions[unitKey(enemy)]=steps[0].to;b.log.push(`${enemy.name}は移動した。`);}
-  else{applyGuard(b,enemy);b.log.push(`${enemy.name}は守りを固めた。`);}
+  else if(rules!==shellAttack){applyGuard(b,enemy);b.log.push(`${enemy.name}は守りを固めた。`);}
 }
 
 function fireDamageTaken(data, state, target) {
@@ -710,7 +755,8 @@ function frontlineReact(engine,reactor,on,attacker){
   if(reactor.instance)reactor.mp-=skill.mp;else{payCost(engine,reactor.id,skill);recordSkillUse(engine,reactor.id,rule.skill);}
   // Reactions use shared effects but do not recursively trigger onHit reactions.
   const wasOiled=hasActiveStatus(d,s,reactor,'oiled');
-  for(const target of sampleSkillTargets(engine,reactor,skill,rule.skill,plan.targets)){
+  const selected=sampleSkillTargets(engine,reactor,skill,rule.skill,plan.targets);
+  for(const target of rollingShellIntercept(engine,reactor,selected,skill,rule.skill)){
     for(let hit=0;hit<(skill.hitCount??1);hit++){
       if(skill.hitCount && (!battleAlive(s,reactor)||!battleAlive(s,target)))break;
       applySkill(engine,reactor,target,skill,rule.skill,Boolean(reactor.instance));
@@ -723,9 +769,9 @@ function frontlineReact(engine,reactor,on,attacker){
  }
  return cancel;
 }
-function frontlineEnemyAction(engine,enemy){
+function frontlineEnemyAction(engine,enemy,rules){
  const {state:s}=engine,b=s.battle;
- for(const rule of [...enemy.ai].sort((a,c)=>c.priority-a.priority)){
+ for(const rule of [...rules].sort((a,c)=>c.priority-a.priority)){
   if(rule.condition&&!engine.value(rule.condition,enemyContext(engine,enemy)))continue;
   let choices=gridEnemyChoices(engine,enemy,rule.skill);if(rule.target==='self')choices=choices.filter(p=>p.targets.length===1&&p.targets[0]===enemy);
   if(supportTargets(engine,rule)){const valid=supportTargets(engine,rule);choices=choices.filter(p=>p.targets.length===1&&valid.includes(p.targets[0]));}
@@ -734,7 +780,7 @@ function frontlineEnemyAction(engine,enemy){
  }
  // Lack of range is not a move command. Hold formation until the side has no
  // living front and prepareFrontlineRound advances it at the next round start.
- applyGuard(b,enemy);b.log.push(`${enemy.name}は守りを固めた。`);
+ if(rules!==shellAttack){applyGuard(b,enemy);b.log.push(`${enemy.name}は守りを固めた。`);}
 }
 // Manual stepping is a diagnostic pacing option of the same queue, not another
 // battle implementation. Normal play still drains enemy turns automatically.

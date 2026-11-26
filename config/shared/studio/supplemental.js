@@ -8,7 +8,7 @@ export const effectSchema={oneOf:[
  obj({type:{const:'purge_undead'}},['type']),
  obj({type:{const:'frontline_remove'}}),
  obj({type:{const:'frontline_knockback'},distance:{type:'integer',minimum:1,maximum:3},collisionDamage:{type:'integer',minimum:0,maximum:1000000}}),
- obj({type:{const:'stun'},count:{type:'integer',minimum:1,maximum:20},stack:{enum:['refresh','add']},chance:{type:'number',minimum:0,maximum:1}},['type']),
+ obj({type:{const:'stun'},breakGuard:bool,count:{type:'integer',minimum:1,maximum:20},stack:{enum:['refresh','add']},chance:{type:'number',minimum:0,maximum:1}},['type']),
  obj({type:{const:'damage'},formula:str,amount:num,element:{enum:['physical','fire','ice','lightning','water','light','dark','earth']}},['type']),
  obj({type:{const:'heal'},formula:str,amount:num},['type']),obj({type:{const:'restore_mp'},amount:num,formula:str},['type']),obj({type:{const:'drain_mp'},amount:num,formula:str},['type']),
  obj({type:{const:'status'},status:str,level:{type:'integer',minimum:1,maximum:3},chance:{type:'number',minimum:0,maximum:1}},['type','status']),obj({type:{const:'buff'},buff:str},['type','buff']),

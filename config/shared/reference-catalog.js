@@ -30954,6 +30954,18 @@ export const referenceData={
     {
       "file": "jobs.json",
       "path": [
+        "skills",
+        "stun_break",
+        "effects",
+        1,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
         "shopGoods",
         0,
         "item"
@@ -48603,6 +48615,9 @@ export const referenceData={
       },
       "twin_thunder": {
         "name": "双雷"
+      },
+      "stun_break": {
+        "name": "スタンブレイク"
       }
     },
     "items": {
@@ -49112,7 +49127,7 @@ export const referenceData={
         "sprite": "monster_saw_mantis"
       },
       "garden_root_shell": {
-        "name": "根殻甲",
+        "name": "殻甲アルマジロ",
         "sprite": "monster_ceramic_armadillo"
       },
       "garden_nectar_bee": {
@@ -78053,6 +78068,13 @@ export const referenceData={
       "path": [
         "skills",
         "twin_thunder"
+      ]
+    },
+    "skills/stun_break": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "stun_break"
       ]
     },
     "fieldAbilities/survey": {

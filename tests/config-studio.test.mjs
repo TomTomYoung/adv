@@ -93,7 +93,9 @@ test('魔物の習性を未設定の種に付け、元の種から外して割�
  await change('kagaribi_soot_moth','引火爆弾',true);
  await change('kagaribi_oil_beetle','燃え尽き',false);
  await change('kagaribi_soot_rat','燃え尽き',true);
+ await change('garden_root_shell','転がり甲羅',false);
+ await change('kagaribi_soot_rat','転がり甲羅',true);
  await app.reviewChanges();
  assert.deepEqual(app.workspace.output.map(o=>o.file),['monster-habits.json']);
- assert.deepEqual(JSON.parse(app.workspace.output[0].text),{assignments:{kagaribi_soot_moth:['ignition_bomb'],kagaribi_soot_rat:['burn_out']}});
+ assert.deepEqual(JSON.parse(app.workspace.output[0].text),{assignments:{kagaribi_soot_moth:['ignition_bomb'],kagaribi_soot_rat:['burn_out','rolling_shell']}});
 });
