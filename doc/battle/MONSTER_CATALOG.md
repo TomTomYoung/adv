@@ -4118,7 +4118,7 @@ kagaribi_torch_thief_solo：煤ネズミ（松明泥棒）×1。逃走可。
 画像ID：monster_kagaribi_torch_prankster。実ファイル：[assets/images/monsters/torch_prankster.webp](../../assets/images/monsters/torch_prankster.webp)。
 画像共有：他の敵定義との共有なし。
 
-ぶかぶかの半纏に松明を隠す、前歯が一本抜けた小妖怪。灯蛾を連れ、敵味方かまわず火遊びをします。
+尾の先で松明を抱えた小さな火トカゲ。腹ばいで忍び寄り、よそを向いたまま火先だけをそっと突き出します。
 
 基礎能力：HP 56 / MP 0 / STR 11 / VIT 6 / AGI 13 / INT 6。報酬：12G / 54EXP。
 宝箱：予備灯油 1個 / 12.5％。
@@ -4142,7 +4142,7 @@ kagaribi_prankster_pair：火つけ小僧×1・灯蛾×1。逃走可。
 画像ID：monster_kagaribi_torch_ringleader。実ファイル：[assets/images/monsters/torch_ringleader.webp](../../assets/images/monsters/torch_ringleader.webp)。
 画像共有：他の敵定義との共有なし。
 
-指笛の得意なガキ大将。松明に灯蛾を集め、次の手番で残った灯蛾にまとめて火をつけます。
+太い尾で松明を持ち上げる、大きな火トカゲ。喉袋を膨らませてひと声鳴くと、灯蛾が火のまわりに集まります。
 
 基礎能力：HP 124 / MP 0 / STR 18 / VIT 10 / AGI 14 / INT 10。報酬：22G / 115EXP。
 宝箱：予備灯油 1個 / 12.5％。
