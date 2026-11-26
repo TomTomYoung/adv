@@ -15,7 +15,7 @@ export function gridSkillView(engine,id,skillId,skill){
 }
 function projectChoice(engine,id,p){
   const units=battleUnits(engine.state),unit=units.find(u=>unitKey(u)===id);
-  return {id,name:unit?`${unit.name??engine.data.actors[unit.id].name} HP ${unit.hp}/${unit.instance?unit.stats.hp:engine.stats(unit.id).hp}`:id.startsWith('cell:')?`地点 ${id.slice(5)}`:'全域',enabled:p.ok,reason:p.reason??'',aim:p.aim??position(engine.state,id)??null,cells:p.cells??[],targets:p.targets?.map(unitKey)??[],targetNames:p.targets?.map(u=>u.name??engine.data.actors[u.id].name)??[]};
+  return {id,name:unit?`${unit.name??engine.data.actors[unit.id].name}${unit.reviveRound?'・仮死':''} HP ${unit.hp}/${unit.instance?unit.stats.hp:engine.stats(unit.id).hp}`:id.startsWith('cell:')?`地点 ${id.slice(5)}`:'全域',enabled:p.ok,reason:p.reason??'',aim:p.aim??position(engine.state,id)??null,cells:p.cells??[],targets:p.targets?.map(unitKey)??[],targetNames:p.targets?.map(u=>u.name??engine.data.actors[u.id].name)??[]};
 }
 export function gridItemView(engine,id,itemId){
   const skillId=engine.data.items[itemId].battleSkill,skill=engine.data.skills[skillId],source=engine.state.actors[id];

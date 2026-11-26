@@ -411,6 +411,12 @@ export function validateSave(save,data){
       if(data.game.recordVersion===1&&(!Array.isArray(b.recordedKills)||new Set(b.recordedKills).size!==b.recordedKills.length||b.recordedKills.some(id=>!b.enemies.some(e=>e?.instance===id&&(e.hp===0||b.mode==='frontline')))))fail('撃破記録不正');
       if(new Set(b.acted).size!==b.acted.length||new Set(b.guards).size!==b.guards.length||b.acted.some(id=>!s.members.includes(id))||b.guards.some(id=>!s.members.includes(id)))fail('行動済み隊員不正');
       for(const enemy of b.enemies){
+        if(enemy?.reviveRound!==undefined||enemy?.sealed!==undefined){
+          const def=data.enemies[enemy.id];
+          if(!def?.habits?.includes('bone_revival')||enemy.hp!==0||
+             (enemy.sealed!==undefined ? enemy.sealed!==true||enemy.reviveRound!==undefined :
+              !integer(enemy.reviveRound,1,b.round+3)||b.recordedKills?.includes(enemy.instance)||b.frontline?.removed?.['enemy:'+enemy.instance]))fail('仮死・鎮魂状態不正');
+        }
         if(enemy?.rollingShellTurns!==undefined && !integer(enemy.rollingShellTurns,1,2))fail('転がり甲羅の防御手番不正');
         if(enemy?.rollingShellRound!==undefined && !integer(enemy.rollingShellRound,1,b.round))fail('転がり甲羅の割り込み巡不正');
       }

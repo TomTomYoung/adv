@@ -81,6 +81,7 @@ test('monster chest editor names each monster and validates its item and probabi
 
 test('魔物の習性を未設定の種に付け、元の種から外して割当原稿だけを出力する',async t=>{
  const {app,root}=await ui(t,'monster-habits.json');
+ const original=structuredClone(app.workspace.value('monster-habits.json').assignments);
  const change=async(id,habit,enabled)=>{
   await app.selectRecord(id);
   const label=root.querySelectorAll('.record-detail label').find(n=>n.textContent===habit);
@@ -97,5 +98,6 @@ test('魔物の習性を未設定の種に付け、元の種から外して割�
  await change('kagaribi_soot_rat','転がり甲羅',true);
  await app.reviewChanges();
  assert.deepEqual(app.workspace.output.map(o=>o.file),['monster-habits.json']);
- assert.deepEqual(JSON.parse(app.workspace.output[0].text),{assignments:{kagaribi_soot_moth:['ignition_bomb'],kagaribi_soot_rat:['burn_out','rolling_shell']}});
+ for(const id of ['kagaribi_ember_moth','kagaribi_oil_beetle','garden_root_shell'])delete original[id];
+ assert.deepEqual(JSON.parse(app.workspace.output[0].text),{assignments:{...original,kagaribi_soot_moth:['ignition_bomb'],kagaribi_soot_rat:['burn_out','rolling_shell']}});
 });

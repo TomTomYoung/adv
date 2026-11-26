@@ -20,7 +20,7 @@ const image = src => {
 };
 let data;
 let listedFamily;
-const familyLabels = {goblin: 'ゴブリン', orc: 'オーク', ogre: 'オーガ'};
+const familyLabels = {goblin: 'ゴブリン', orc: 'オーク', ogre: 'オーガ', skeleton: 'スケルトン'};
 const familyPath = family => family ? 'monsters/' + family : 'monsters';
 
 function drawGroups() {

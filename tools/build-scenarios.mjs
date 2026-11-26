@@ -63,7 +63,7 @@ export async function buildScenarios(){
   const id=`q${spec.number}`,r=Math.floor((spec.number-101)/10)+1;
   if(spec.encounter){
     const def=spec.encounter,eid=def.enemy;
-    enemies[eid]={...structuredClone(enemies[`guard_${r}`]),id:eid,name:def.name,sprite:def.sprite};
+    enemies[eid]={...structuredClone(enemies[`guard_${r}`]),id:eid,name:def.name,sprite:def.sprite,...(def.undead?{undead:true}:{})};
     encounters[`story_${spec.number}`]={id:`story_${spec.number}`,text:`${def.name}が行く手に現れた。`,escape:true,enemies:[eid]};
   }
   const draft=references.find(d=>d.number===spec.number),map=maps[`region_${r}_f${spec.number%10<6&&spec.number%10>0?1:2}`];

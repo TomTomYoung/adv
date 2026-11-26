@@ -141,8 +141,8 @@ try{
   assert.equal(await columns('#monster-index .guide-grid'),2);
   assert.equal(await guide.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
   const families = guide.getByRole('navigation',{name:'魔物の種別'});
-  assert.deepEqual(await families.getByRole('link').allTextContents(),['すべて','ゴブリン','オーク','オーガ']);
-  for (const [family,name] of Object.entries({goblin:'ゴブリン',orc:'オーク',ogre:'オーガ'})) {
+  assert.deepEqual(await families.getByRole('link').allTextContents(),['すべて','ゴブリン','オーク','オーガ','スケルトン']);
+  for (const [family,name] of Object.entries({goblin:'ゴブリン',orc:'オーク',ogre:'オーガ',skeleton:'スケルトン'})) {
     await families.getByRole('link',{name,exact:true}).click();
     await guide.waitForFunction(id => document.querySelector('.monster-families [aria-current=page]')?.dataset.family===id,family);
     assert.equal(await monsterCards.count(),25);

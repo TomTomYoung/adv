@@ -17903,6 +17903,256 @@ export const referenceData={
       "id": "torch"
     },
     {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "skeleton_5_blades",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "skeleton_5_buckler",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "skeleton_5_ribbow",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "skeleton_5_skullshot",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "skeleton_5_collector",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "skeleton_10_rustwall",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "skeleton_10_chainpull",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "skeleton_10_rustpike",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "skeleton_10_headless",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "skeleton_10_keyring",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "skeleton_15_remnant",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "skeleton_15_coffin",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "skeleton_15_stitcher",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "skeleton_15_bell",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "skeleton_15_lantern",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "skeleton_20_fourarms",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "skeleton_20_centipede",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "skeleton_20_bullshield",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "skeleton_20_wingbow",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "skeleton_20_twoheads",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "skeleton_25_royalguard",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "skeleton_25_standard",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "skeleton_25_musician",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "skeleton_25_headsman",
+        "item"
+      ],
+      "kind": "items",
+      "id": "machine_part"
+    },
+    {
+      "file": "battle-rewards.json",
+      "path": [
+        "drops",
+        "skeleton_25_crowned",
+        "item"
+      ],
+      "kind": "items",
+      "id": "medicinal_leaf"
+    },
+    {
       "file": "cell-layers.json",
       "path": [
         "presets",
@@ -22392,6 +22642,856 @@ export const referenceData={
       "path": [
         "enemies",
         "soot_beetle",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_5_blades",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_skeleton_5_blades"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_5_blades",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_skeleton_5_blades"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_5_blades",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_5_buckler",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_skeleton_5_buckler"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_5_buckler",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_skeleton_5_buckler"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_5_buckler",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_5_ribbow",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_skeleton_5_ribbow"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_5_ribbow",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_skeleton_5_ribbow"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_5_ribbow",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_5_skullshot",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_skeleton_5_skullshot"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_5_skullshot",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_skeleton_5_skullshot"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_5_skullshot",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_5_collector",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_skeleton_5_collector"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_5_collector",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_skeleton_5_collector"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_5_collector",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_10_rustwall",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_skeleton_10_rustwall"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_10_rustwall",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_skeleton_10_rustwall"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_10_rustwall",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_10_chainpull",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_skeleton_10_chainpull"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_10_chainpull",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_skeleton_10_chainpull"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_10_chainpull",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_10_rustpike",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_skeleton_10_rustpike"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_10_rustpike",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_skeleton_10_rustpike"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_10_rustpike",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_10_headless",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_skeleton_10_headless"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_10_headless",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_skeleton_10_headless"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_10_headless",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_10_keyring",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_skeleton_10_keyring"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_10_keyring",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_skeleton_10_keyring"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_10_keyring",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_15_remnant",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_skeleton_15_remnant"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_15_remnant",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_skeleton_15_remnant"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_15_remnant",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_15_coffin",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_skeleton_15_coffin"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_15_coffin",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_skeleton_15_coffin"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_15_coffin",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_15_stitcher",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_skeleton_15_stitcher"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_15_stitcher",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_skeleton_15_stitcher"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_15_stitcher",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_15_bell",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_skeleton_15_bell"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_15_bell",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_skeleton_15_bell"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_15_bell",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_15_lantern",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_skeleton_15_lantern"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_15_lantern",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_skeleton_15_lantern"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_15_lantern",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_20_fourarms",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_skeleton_20_fourarms"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_20_fourarms",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_skeleton_20_fourarms"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_20_fourarms",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_20_centipede",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_skeleton_20_centipede"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_20_centipede",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_skeleton_20_centipede"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_20_centipede",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_20_bullshield",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_skeleton_20_bullshield"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_20_bullshield",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_skeleton_20_bullshield"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_20_bullshield",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_20_wingbow",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_skeleton_20_wingbow"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_20_wingbow",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_skeleton_20_wingbow"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_20_wingbow",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_20_twoheads",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_skeleton_20_twoheads"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_20_twoheads",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_skeleton_20_twoheads"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_20_twoheads",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_25_royalguard",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_skeleton_25_royalguard"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_25_royalguard",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_skeleton_25_royalguard"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_25_royalguard",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_25_standard",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_skeleton_25_standard"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_25_standard",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_skeleton_25_standard"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_25_standard",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_25_musician",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_skeleton_25_musician"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_25_musician",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_skeleton_25_musician"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_25_musician",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_25_headsman",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_skeleton_25_headsman"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_25_headsman",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_skeleton_25_headsman"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_25_headsman",
+        "ai",
+        1,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "attack"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_25_crowned",
+        "sprite"
+      ],
+      "kind": "images",
+      "id": "monster_skeleton_25_crowned"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_25_crowned",
+        "ai",
+        0,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "family_skeleton_25_crowned"
+    },
+    {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_25_crowned",
         "ai",
         1,
         "skill"
@@ -28114,6 +29214,18 @@ export const referenceData={
       "file": "jobs.json",
       "path": [
         "jobs",
+        "priest",
+        "grants",
+        5,
+        "skill"
+      ],
+      "kind": "skills",
+      "id": "lay_to_rest"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "jobs",
         "paladin",
         "grants",
         0,
@@ -30958,6 +32070,186 @@ export const referenceData={
         "stun_break",
         "effects",
         1,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_5_blades",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heavy"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_5_ribbow",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_5_skullshot",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_10_chainpull",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_10_rustpike",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heavy"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_10_headless",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heavy"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_15_remnant",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_15_bell",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_20_fourarms",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_20_centipede",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_20_wingbow",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "physical"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "skeleton_frost",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "fire"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_20_twoheads",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "fire"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_25_headsman",
+        "effects",
+        0,
+        "formula"
+      ],
+      "kind": "formulas",
+      "id": "heavy"
+    },
+    {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_25_crowned",
+        "effects",
+        0,
         "formula"
       ],
       "kind": "formulas",
@@ -48618,6 +49910,87 @@ export const referenceData={
       },
       "stun_break": {
         "name": "スタンブレイク"
+      },
+      "family_skeleton_5_blades": {
+        "name": "腕ごと強打"
+      },
+      "family_skeleton_5_buckler": {
+        "name": "盾腕の構え"
+      },
+      "family_skeleton_5_ribbow": {
+        "name": "肋骨矢"
+      },
+      "family_skeleton_5_skullshot": {
+        "name": "髑髏投げ"
+      },
+      "family_skeleton_5_collector": {
+        "name": "骨拾い"
+      },
+      "family_skeleton_10_rustwall": {
+        "name": "錆盾の構え"
+      },
+      "family_skeleton_10_chainpull": {
+        "name": "鎖の引き寄せ"
+      },
+      "family_skeleton_10_rustpike": {
+        "name": "盾越し突き"
+      },
+      "family_skeleton_10_headless": {
+        "name": "足音割り"
+      },
+      "family_skeleton_10_keyring": {
+        "name": "巡回兵招集"
+      },
+      "family_skeleton_15_remnant": {
+        "name": "骨打ち"
+      },
+      "family_skeleton_15_coffin": {
+        "name": "棺収め"
+      },
+      "family_skeleton_15_stitcher": {
+        "name": "骨継ぎ"
+      },
+      "family_skeleton_15_bell": {
+        "name": "墓鐘"
+      },
+      "family_skeleton_15_lantern": {
+        "name": "墓守灯"
+      },
+      "family_skeleton_20_fourarms": {
+        "name": "四腕連斬"
+      },
+      "family_skeleton_20_centipede": {
+        "name": "百足貫き"
+      },
+      "family_skeleton_20_bullshield": {
+        "name": "角盾の構え"
+      },
+      "family_skeleton_20_wingbow": {
+        "name": "翼骨矢"
+      },
+      "skeleton_frost": {
+        "name": "蒼骨の冷気"
+      },
+      "family_skeleton_20_twoheads": {
+        "name": "双頭詠唱"
+      },
+      "family_skeleton_25_royalguard": {
+        "name": "王冠守護"
+      },
+      "family_skeleton_25_standard": {
+        "name": "弔旗進軍"
+      },
+      "family_skeleton_25_musician": {
+        "name": "肋骨三重奏"
+      },
+      "family_skeleton_25_headsman": {
+        "name": "処刑の印"
+      },
+      "family_skeleton_25_crowned": {
+        "name": "王冠渡り"
+      },
+      "lay_to_rest": {
+        "name": "鎮魂"
       }
     },
     "items": {
@@ -49513,6 +50886,106 @@ export const referenceData={
       "kagaribi_oil_beetle": {
         "name": "油虫",
         "sprite": "monster_oil_beetle"
+      },
+      "skeleton_5_blades": {
+        "name": "スケルトン剣士",
+        "sprite": "monster_skeleton_5_blades"
+      },
+      "skeleton_5_buckler": {
+        "name": "スケルトン盾兵",
+        "sprite": "monster_skeleton_5_buckler"
+      },
+      "skeleton_5_ribbow": {
+        "name": "スケルトン弓兵",
+        "sprite": "monster_skeleton_5_ribbow"
+      },
+      "skeleton_5_skullshot": {
+        "name": "髑髏投げ",
+        "sprite": "monster_skeleton_5_skullshot"
+      },
+      "skeleton_5_collector": {
+        "name": "骨拾い",
+        "sprite": "monster_skeleton_5_collector"
+      },
+      "skeleton_10_rustwall": {
+        "name": "赤錆番兵",
+        "sprite": "monster_skeleton_10_rustwall"
+      },
+      "skeleton_10_chainpull": {
+        "name": "鎖引き骸骨",
+        "sprite": "monster_skeleton_10_chainpull"
+      },
+      "skeleton_10_rustpike": {
+        "name": "錆槍兵",
+        "sprite": "monster_skeleton_10_rustpike"
+      },
+      "skeleton_10_headless": {
+        "name": "首なし斧兵",
+        "sprite": "monster_skeleton_10_headless"
+      },
+      "skeleton_10_keyring": {
+        "name": "鍵束番兵",
+        "sprite": "monster_skeleton_10_keyring"
+      },
+      "skeleton_15_remnant": {
+        "name": "納骨堂残骸兵",
+        "sprite": "monster_skeleton_15_remnant"
+      },
+      "skeleton_15_coffin": {
+        "name": "棺担ぎ",
+        "sprite": "monster_skeleton_15_coffin"
+      },
+      "skeleton_15_stitcher": {
+        "name": "骨継ぎ師",
+        "sprite": "monster_skeleton_15_stitcher"
+      },
+      "skeleton_15_bell": {
+        "name": "墓鐘打ち",
+        "sprite": "monster_skeleton_15_bell"
+      },
+      "skeleton_15_lantern": {
+        "name": "墓守灯兵",
+        "sprite": "monster_skeleton_15_lantern"
+      },
+      "skeleton_20_fourarms": {
+        "name": "四腕剣士",
+        "sprite": "monster_skeleton_20_fourarms"
+      },
+      "skeleton_20_centipede": {
+        "name": "百足槍兵",
+        "sprite": "monster_skeleton_20_centipede"
+      },
+      "skeleton_20_bullshield": {
+        "name": "角盾獣",
+        "sprite": "monster_skeleton_20_bullshield"
+      },
+      "skeleton_20_wingbow": {
+        "name": "翼骨射手",
+        "sprite": "monster_skeleton_20_wingbow"
+      },
+      "skeleton_20_twoheads": {
+        "name": "双頭呪術師",
+        "sprite": "monster_skeleton_20_twoheads"
+      },
+      "skeleton_25_royalguard": {
+        "name": "白骨近衛",
+        "sprite": "monster_skeleton_25_royalguard"
+      },
+      "skeleton_25_standard": {
+        "name": "弔旗騎士",
+        "sprite": "monster_skeleton_25_standard"
+      },
+      "skeleton_25_musician": {
+        "name": "宮廷骨楽師",
+        "sprite": "monster_skeleton_25_musician"
+      },
+      "skeleton_25_headsman": {
+        "name": "骸骨処刑人",
+        "sprite": "monster_skeleton_25_headsman"
+      },
+      "skeleton_25_crowned": {
+        "name": "骸骨王",
+        "sprite": "monster_skeleton_25_crowned"
       }
     },
     "encounters": {
@@ -76202,6 +77675,181 @@ export const referenceData={
         "soot_beetle"
       ]
     },
+    "enemies/skeleton_5_blades": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_5_blades"
+      ]
+    },
+    "enemies/skeleton_5_buckler": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_5_buckler"
+      ]
+    },
+    "enemies/skeleton_5_ribbow": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_5_ribbow"
+      ]
+    },
+    "enemies/skeleton_5_skullshot": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_5_skullshot"
+      ]
+    },
+    "enemies/skeleton_5_collector": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_5_collector"
+      ]
+    },
+    "enemies/skeleton_10_rustwall": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_10_rustwall"
+      ]
+    },
+    "enemies/skeleton_10_chainpull": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_10_chainpull"
+      ]
+    },
+    "enemies/skeleton_10_rustpike": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_10_rustpike"
+      ]
+    },
+    "enemies/skeleton_10_headless": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_10_headless"
+      ]
+    },
+    "enemies/skeleton_10_keyring": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_10_keyring"
+      ]
+    },
+    "enemies/skeleton_15_remnant": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_15_remnant"
+      ]
+    },
+    "enemies/skeleton_15_coffin": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_15_coffin"
+      ]
+    },
+    "enemies/skeleton_15_stitcher": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_15_stitcher"
+      ]
+    },
+    "enemies/skeleton_15_bell": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_15_bell"
+      ]
+    },
+    "enemies/skeleton_15_lantern": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_15_lantern"
+      ]
+    },
+    "enemies/skeleton_20_fourarms": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_20_fourarms"
+      ]
+    },
+    "enemies/skeleton_20_centipede": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_20_centipede"
+      ]
+    },
+    "enemies/skeleton_20_bullshield": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_20_bullshield"
+      ]
+    },
+    "enemies/skeleton_20_wingbow": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_20_wingbow"
+      ]
+    },
+    "enemies/skeleton_20_twoheads": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_20_twoheads"
+      ]
+    },
+    "enemies/skeleton_25_royalguard": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_25_royalguard"
+      ]
+    },
+    "enemies/skeleton_25_standard": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_25_standard"
+      ]
+    },
+    "enemies/skeleton_25_musician": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_25_musician"
+      ]
+    },
+    "enemies/skeleton_25_headsman": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_25_headsman"
+      ]
+    },
+    "enemies/skeleton_25_crowned": {
+      "file": "dungeon-content.json",
+      "path": [
+        "enemies",
+        "skeleton_25_crowned"
+      ]
+    },
     "encounters/market_enforcers": {
       "file": "dungeon-content.json",
       "path": [
@@ -78075,6 +79723,195 @@ export const referenceData={
       "path": [
         "skills",
         "stun_break"
+      ]
+    },
+    "skills/family_skeleton_5_blades": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_5_blades"
+      ]
+    },
+    "skills/family_skeleton_5_buckler": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_5_buckler"
+      ]
+    },
+    "skills/family_skeleton_5_ribbow": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_5_ribbow"
+      ]
+    },
+    "skills/family_skeleton_5_skullshot": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_5_skullshot"
+      ]
+    },
+    "skills/family_skeleton_5_collector": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_5_collector"
+      ]
+    },
+    "skills/family_skeleton_10_rustwall": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_10_rustwall"
+      ]
+    },
+    "skills/family_skeleton_10_chainpull": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_10_chainpull"
+      ]
+    },
+    "skills/family_skeleton_10_rustpike": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_10_rustpike"
+      ]
+    },
+    "skills/family_skeleton_10_headless": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_10_headless"
+      ]
+    },
+    "skills/family_skeleton_10_keyring": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_10_keyring"
+      ]
+    },
+    "skills/family_skeleton_15_remnant": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_15_remnant"
+      ]
+    },
+    "skills/family_skeleton_15_coffin": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_15_coffin"
+      ]
+    },
+    "skills/family_skeleton_15_stitcher": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_15_stitcher"
+      ]
+    },
+    "skills/family_skeleton_15_bell": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_15_bell"
+      ]
+    },
+    "skills/family_skeleton_15_lantern": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_15_lantern"
+      ]
+    },
+    "skills/family_skeleton_20_fourarms": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_20_fourarms"
+      ]
+    },
+    "skills/family_skeleton_20_centipede": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_20_centipede"
+      ]
+    },
+    "skills/family_skeleton_20_bullshield": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_20_bullshield"
+      ]
+    },
+    "skills/family_skeleton_20_wingbow": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_20_wingbow"
+      ]
+    },
+    "skills/skeleton_frost": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "skeleton_frost"
+      ]
+    },
+    "skills/family_skeleton_20_twoheads": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_20_twoheads"
+      ]
+    },
+    "skills/family_skeleton_25_royalguard": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_25_royalguard"
+      ]
+    },
+    "skills/family_skeleton_25_standard": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_25_standard"
+      ]
+    },
+    "skills/family_skeleton_25_musician": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_25_musician"
+      ]
+    },
+    "skills/family_skeleton_25_headsman": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_25_headsman"
+      ]
+    },
+    "skills/family_skeleton_25_crowned": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "family_skeleton_25_crowned"
+      ]
+    },
+    "skills/lay_to_rest": {
+      "file": "jobs.json",
+      "path": [
+        "skills",
+        "lay_to_rest"
       ]
     },
     "fieldAbilities/survey": {
@@ -84935,7 +86772,32 @@ export const referenceData={
       "monster_iron_moth": "assets/images/monsters/iron_moth.webp",
       "monster_kagaribi_torch_prankster": "assets/images/monsters/torch_prankster.webp",
       "monster_kagaribi_torch_ringleader": "assets/images/monsters/torch_ringleader.webp",
-      "monster_oil_beetle": "assets/images/monsters/oil_beetle.webp"
+      "monster_oil_beetle": "assets/images/monsters/oil_beetle.webp",
+      "monster_skeleton_5_blades": "assets/images/monsters/families/skeleton_5_blades.webp",
+      "monster_skeleton_5_buckler": "assets/images/monsters/families/skeleton_5_buckler.webp",
+      "monster_skeleton_5_ribbow": "assets/images/monsters/families/skeleton_5_ribbow.webp",
+      "monster_skeleton_5_skullshot": "assets/images/monsters/families/skeleton_5_skullshot.webp",
+      "monster_skeleton_5_collector": "assets/images/monsters/families/skeleton_5_collector.webp",
+      "monster_skeleton_10_rustwall": "assets/images/monsters/families/skeleton_10_rustwall.webp",
+      "monster_skeleton_10_chainpull": "assets/images/monsters/families/skeleton_10_chainpull.webp",
+      "monster_skeleton_10_rustpike": "assets/images/monsters/families/skeleton_10_rustpike.webp",
+      "monster_skeleton_10_headless": "assets/images/monsters/families/skeleton_10_headless.webp",
+      "monster_skeleton_10_keyring": "assets/images/monsters/families/skeleton_10_keyring.webp",
+      "monster_skeleton_15_remnant": "assets/images/monsters/families/skeleton_15_remnant.webp",
+      "monster_skeleton_15_coffin": "assets/images/monsters/families/skeleton_15_coffin.webp",
+      "monster_skeleton_15_stitcher": "assets/images/monsters/families/skeleton_15_stitcher.webp",
+      "monster_skeleton_15_bell": "assets/images/monsters/families/skeleton_15_bell.webp",
+      "monster_skeleton_15_lantern": "assets/images/monsters/families/skeleton_15_lantern.webp",
+      "monster_skeleton_20_fourarms": "assets/images/monsters/families/skeleton_20_fourarms.webp",
+      "monster_skeleton_20_centipede": "assets/images/monsters/families/skeleton_20_centipede.webp",
+      "monster_skeleton_20_bullshield": "assets/images/monsters/families/skeleton_20_bullshield.webp",
+      "monster_skeleton_20_wingbow": "assets/images/monsters/families/skeleton_20_wingbow.webp",
+      "monster_skeleton_20_twoheads": "assets/images/monsters/families/skeleton_20_twoheads.webp",
+      "monster_skeleton_25_royalguard": "assets/images/monsters/families/skeleton_25_royalguard.webp",
+      "monster_skeleton_25_standard": "assets/images/monsters/families/skeleton_25_standard.webp",
+      "monster_skeleton_25_musician": "assets/images/monsters/families/skeleton_25_musician.webp",
+      "monster_skeleton_25_headsman": "assets/images/monsters/families/skeleton_25_headsman.webp",
+      "monster_skeleton_25_crowned": "assets/images/monsters/families/skeleton_25_crowned.webp"
     },
     "audio": {
       "exploration": "assets/audio/exploration-v2.ogg",

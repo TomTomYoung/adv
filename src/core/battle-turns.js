@@ -3,6 +3,7 @@ import {unitKey} from './buffs.js';
 import {statusLevelValid} from './status-effects.js';
 
 export const BATTLE_STATUS_DEFINITIONS={
+  feigned_death:{id:'feigned_death',name:'仮死',kind:'status',battleOnly:true,rounds:3},
   guarded:{id:'guarded',name:'防御',kind:'status',battleOnly:true,maxLevel:3,levels:{1:{duration:'one_turn',damageTaken:'system.guardRate'},2:{duration:'one_turn',damageTaken:0.25},3:{duration:'one_turn',damageTaken:0}}},
   stun:{id:'stun',name:'スタン',kind:'status',battleOnly:true,maxLevel:3,levels:{1:{lostActions:1},2:{lostActions:2},3:{lostActions:3}}}
 };

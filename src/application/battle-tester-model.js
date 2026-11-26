@@ -1,4 +1,5 @@
 import {battleAlive,frontlineState,frontlineRows,frontlineObjectErrors} from '../core/frontline-lifecycle.js';
+import {xpThreshold} from '../core/progression.js';
 import {GameEngine} from '../core/engine.js';
 import {frontlineTargetingErrors,frontlineProfile,frontlineTargetPlan} from '../core/frontline-targeting.js';
 import {battleSkillPlan,activeActor,continuePreemptive} from '../core/battle.js';
@@ -22,6 +23,19 @@ export function testerPreset(data,name='ranks'){
  if(name==='two_rows'){allies[1].depth=1;}
  if(name==='zombies'){enemies=[{...enemy(0,0,0),down:true,remain:true},enemy(1,1,0),enemy(2,2,2)];}
  return {version:1,seed:20261014,mode:'frontline',allies,enemies,profile:testerProfile({area:{shape:name==='cross'?'cross4':name==='interrupt'?'row':'single'},resolution:name==='interrupt'?'sequential':'simultaneous'}),presentation:{overlap:.33,rowScale:[1,.85,.7]},preemptive:null};
+}
+// A normal battle with the real species AI and level-up grants.
+export function createSkeletonTrial(base,mode='frontline'){
+ if(!['classic','grid','frontline'].includes(mode))throw Error('戦闘方式が不正です。');
+ const id='skeleton_trial', encounter={id,text:'白骨の一団が現れた。',escape:true,
+   enemies:['skeleton_5_blades','skeleton_5_buckler','skeleton_5_ribbow'],
+   enemyPositions:[{x:2,y:2},{x:1,y:2},{x:2,y:0}],
+   frontlinePositions:[{lane:2,depth:0},{lane:1,depth:0},{lane:2,depth:2}]};
+ const g=new GameEngine({...base,encounters:{...base.encounters,[id]:encounter}},42);
+ while(g.state.waiting?.type==='text')g.dispatch({type:'advance'});
+ g.award(0,xpThreshold(base,7),g.state.members);
+ g.startBattle(id,{win:[],lose:[],escape:[]},{battleMode:mode});
+ return g;
 }
 export function validateTesterCase(data,c){
  const errors=[];if(c?.version!==1||!['classic','grid','frontline'].includes(c.mode)||!Number.isInteger(c.seed))return ['テストケースの版・方式・シードが不正です。'];

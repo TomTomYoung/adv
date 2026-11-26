@@ -5,6 +5,7 @@ const str={type:'string',minLength:1},num={type:'number'},uint={type:'integer',m
 const stats=obj(Object.fromEntries(['hp','mp','str','vit','agi','int'].map(k=>[k,{type:'number',minimum:0}]))),target={enum:['enemy','all_enemies','ally','all_allies','self','party']};
 const expression={$ref:'#/$defs/value'};
 export const effectSchema={oneOf:[
+ obj({type:{const:'lay_to_rest'}},['type']),
  obj({type:{const:'purge_undead'}},['type']),
  obj({type:{const:'frontline_remove'}}),
  obj({type:{const:'frontline_knockback'},distance:{type:'integer',minimum:1,maximum:3},collisionDamage:{type:'integer',minimum:0,maximum:1000000}}),

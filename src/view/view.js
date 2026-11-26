@@ -226,7 +226,7 @@ export class GameView {
     if(m.dungeon){const direction=node('span','compass',({north:'N 北',east:'E 東',south:'S 南',west:'W 西'})[m.dungeon.location.facing]);scene.append(direction);}
     if(m.battle?.frontline)frontlineScene(this,scene,m);
     else if(m.battle?.grid)gridScene(this,scene,m);
-    else if(m.battle){const enemies=node('div','enemy-line');for(const e of m.battle.enemies){if(e.hp<=0)continue;const b=button('',()=>{this.selectedTarget=e.id;this.render(m);},`enemy ${this.selectedTarget===e.id?'selected':''}`);b.setAttribute('aria-label',`${e.name}を狙う、HP${e.hp}/${e.maxHp}`);const image=node('img');image.src=e.sprite;image.alt=e.name;image.dataset.fx=`enemy:${e.id}`;b.append(image,node('span','enemy-name',e.name),battleVitals(meter(e.hp,e.maxHp,'enemy-meter'),`enemy:${e.id}`,e,'meter'),battleVitals(node('span','enemy-hp',`${e.hp} / ${e.maxHp}${e.guarded?'・防御中':''}${e.statuses.length?'・'+e.statuses.join('・'):''}${buffLabels(e).length?'・'+buffLabels(e).join(' / '):''}`),`enemy:${e.id}`,e));enemies.append(b);}scene.append(enemies);}
+    else if(m.battle){const enemies=node('div','enemy-line');for(const e of m.battle.enemies){if(e.feign){const marker=button(e.name+'（'+e.feign+'）',()=>{this.selectedTarget=e.id;this.render(m);},'enemy-dormant');enemies.append(marker);continue;}if(e.hp<=0)continue;const b=button('',()=>{this.selectedTarget=e.id;this.render(m);},`enemy ${this.selectedTarget===e.id?'selected':''}`);b.setAttribute('aria-label',`${e.name}を狙う、HP${e.hp}/${e.maxHp}`);const image=node('img');image.src=e.sprite;image.alt=e.name;image.dataset.fx=`enemy:${e.id}`;b.append(image,node('span','enemy-name',e.name),battleVitals(meter(e.hp,e.maxHp,'enemy-meter'),`enemy:${e.id}`,e,'meter'),battleVitals(node('span','enemy-hp',`${e.hp} / ${e.maxHp}${e.guarded?'・防御中':''}${e.statuses.length?'・'+e.statuses.join('・'):''}${buffLabels(e).length?'・'+buffLabels(e).join(' / '):''}`),`enemy:${e.id}`,e));enemies.append(b);}scene.append(enemies);}
     for(const layer of m.atmosphere??[]){if(!layer.opacity||!layer.lighting&&(this.ui.effectsMode?.()??'full')==='off')continue;const shade=node('div','field-atmosphere');shade.setAttribute('aria-hidden','true');shade.style.opacity=String(layer.opacity);shade.style.background=layer.shade?`radial-gradient(ellipse at center,transparent 20%,${layer.color} 100%)`:layer.color;scene.append(shade);}
     parent.append(scene);if(m.dungeon)requestAnimationFrame(()=>paintDungeon(canvas,m.dungeon,m.battle));
   }
@@ -279,7 +279,7 @@ export class GameView {
     return list;
   }
   battle(parent,m){
-    if(!m.battle.enemies.some(e=>e.id===this.selectedTarget&&e.hp>0))this.selectedTarget=m.battle.enemies.find(e=>e.hp>0)?.id;
+    if(!m.battle.enemies.some(e=>e.id===this.selectedTarget&&(e.hp>0||e.feign)))this.selectedTarget=m.battle.enemies.find(e=>e.hp>0)?.id;
     if(!m.party.some(a=>a.id===this.selectedAlly&&a.hp>0))this.selectedAlly=m.party.find(a=>a.hp>0)?.id;
     const turn=JSON.stringify([m.feedback?.session,m.battle.round,m.battle.actorId,m.battle.event,m.battle.preemptive,m.battle.stunned,m.battle.control]);
     if(turn!==this.battleTurn){this.pendingBattleAction=null;this.battleMenu=null;this.gridChoice=null;this.battleTurn=turn;}
@@ -287,8 +287,8 @@ export class GameView {
     const section=node('div','battle-panel'),commands=node('section','battle-commands');commands.setAttribute('aria-label','戦闘コマンド');
     if(m.battle.grid||m.battle.frontline){
       const vitals=node('div','battle-enemy-vitals');
-      for(const e of m.battle.enemies.filter(e=>e.hp>0)){
-        const card=node('div');card.append(node('span','',e.name),battleVitals(node('span','',`HP ${e.hp}/${e.maxHp}`),`enemy:${e.id}`,e),battleVitals(meter(e.hp,e.maxHp,'enemy-meter'),`enemy:${e.id}`,e,'meter'));vitals.append(card);
+      for(const e of m.battle.enemies.filter(e=>e.hp>0||e.feign)){
+        const card=node('div');card.append(node('span','',e.name+(e.feign?'（'+e.feign+'）':'')),battleVitals(node('span','',`HP ${e.hp}/${e.maxHp}`),`enemy:${e.id}`,e),battleVitals(meter(e.hp,e.maxHp,'enemy-meter'),`enemy:${e.id}`,e,'meter'));vitals.append(card);
       }section.append(vitals);
     }
     commands.append(node('h2','battle-actor',`${m.battle.actorName} の行動`));section.append(commands);
@@ -307,9 +307,9 @@ export class GameView {
     else if(pending){
       commands.append(node('h3','battle-menu-title',`${pending.name}の対象`));const targets=node('div','battle-targets');targets.setAttribute('aria-label',`${pending.name}の対象`);
       const skill=pending.intent.action==='skill'?m.battle.skills.find(s=>s.id===pending.intent.skill):null;
-      for(const target of (pending.target==='enemy'?m.battle.enemies:m.party).filter(t=>t.hp>0)){
+      for(const target of (pending.target==='enemy'?m.battle.enemies:m.party).filter(t=>t.hp>0||t.feign)){
         const available=skill?.availability?.[target.id]??{enabled:true};
-        const b=button(`${target.name}　HP ${target.hp}/${target.maxHp}`,()=>{
+        const b=button(`${target.name}　${target.feign??('HP '+target.hp+'/'+target.maxHp)}`,()=>{
           if(pending.target==='enemy')this.selectedTarget=target.id;else this.selectedAlly=target.id;
           this.pendingBattleAction=null;this.battleMenu=null;this.act({...pending.intent,target:target.id});
         },'battle-target',!available.enabled);b.dataset.focus=`target:${target.id}`;b.title=available.reason??'';targets.append(b);

@@ -1,3 +1,4 @@
+import {markFeignedDeaths,feigning} from './feigned-death.js';
 import {unitKey} from './buffs.js';
 import {clone,isRecord} from './expression.js';
 const front=s=>s.battle?.mode==='frontline';
@@ -6,7 +7,7 @@ const key=u=>typeof u==='string'?u:unitKey(u);
 const position=(s,u)=>s.battle.frontline.positions[key(u)];
 const same=(a,b)=>a.depth===b.depth&&a.lane===b.lane;
 export const frontlineRows=(s,enemy=false)=>enemy?3:s.battle?.frontline?.rows??3;
-export const frontlineState=(s,u)=>!u?'removed':front(s)&&(s.battle.frontline.removed?.[key(u)]||u.instance&&u.hp<=0&&u.frontlineDefeat!=='remain')?'removed':u.hp>0?'alive':'down';
+export const frontlineState=(s,u)=>!u?'removed':front(s)&&(s.battle.frontline.removed?.[key(u)]||u.instance&&u.hp<=0&&!feigning(u)&&(u.sealed||u.frontlineDefeat!=='remain'))?'removed':u.hp>0?'alive':'down';
 export const battleAlive=(s,u)=>Boolean(u)&&u.hp>0&&(!front(s)||frontlineState(s,u)==='alive');
 export const frontlinePresent=(s,u)=>frontlineState(s,u)!=='removed';
 export const frontlineTargetState=(s,u,profile)=>frontlinePresent(s,u)&&(profile.targetStates??['alive']).includes(frontlineState(s,u));
@@ -22,8 +23,8 @@ export function removeFrontline(engine,unit,reason='skill'){
  s.battle.log.push(`${unit.name??engine.data.actors[unit.id].name}は戦闘から離脱した。`);return true;
 }
 export function syncFrontlineDefeats(engine){
- const s=engine.state;if(!front(s))return;
- for(const u of s.battle.enemies)if(u.hp<=0&&u.frontlineDefeat!=='remain')removeFrontline(engine,u,'defeated');
+ const s=engine.state;markFeignedDeaths(engine);if(!front(s))return;
+ for(const u of s.battle.enemies)if(u.hp<=0&&!feigning(u)&&(u.sealed||u.frontlineDefeat!=='remain'))removeFrontline(engine,u,'defeated');
 }
 // Reserve every survivor destination first, then retain unaffected bodies.
 // Only displaced bodies move, nearest lane (left on ties), then rearward rows.
@@ -74,6 +75,6 @@ export function migrateFrontlineLifecycle(s){
  if(!front(s)||!isRecord(s.battle.frontline)||['rows','removed','objects'].some(k=>s.battle.frontline[k]!==undefined))return;
  const f=s.battle.frontline;f.rows=3;f.removed??={};f.objects??=[];
  if(!isRecord(f.positions)||units(s).some(u=>!isRecord(position(s,u))))return;
- for(const u of s.battle.enemies)if(u.hp<=0&&u.frontlineDefeat!=='remain')f.removed[key(u)]='defeated';
+ for(const u of s.battle.enemies)if(u.hp<=0&&!feigning(u)&&(u.sealed||u.frontlineDefeat!=='remain'))f.removed[key(u)]='defeated';
  for(const enemy of [false,true])displaceFrontlineDown(s,enemy,units(s).filter(u=>Boolean(u.instance)===enemy&&battleAlive(s,u)).map(u=>({to:position(s,u)})));
 }

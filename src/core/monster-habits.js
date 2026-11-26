@@ -1,6 +1,10 @@
 // Species definitions own the assignments, including the floor-scaled copies.
 // Consult them at hit time so battles restored from older saves use the same rules.
 export const MONSTER_HABITS = {
+  bone_revival: {
+    name: '骨の再生',
+    description: 'HPが0になると仮死になり、3巡後に最大HPの半分で復活する。仮死中は鎮魂でとどめを刺せる。'
+  },
   ignition_bomb: {
     name: '引火爆弾',
     description: '火属性の攻撃が命中すると即死する。散り際に爆ぜ、生存中の味方からランダムに1人を選び、灯火の術に相当する火属性ダメージを与える。',
